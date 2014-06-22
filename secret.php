@@ -4,9 +4,8 @@
 */
 class Secret
 {
-	public $host = 'localhost';
-	public $username = '##REDACTED##';
-	public $password = '##REDACTED##';
+	public $db_username = '##REDACTED##';
+	public $db_password = '##REDACTED##';
 	public function __construct()
 	{
 
