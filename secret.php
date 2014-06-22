@@ -1,4 +1,7 @@
 <?php
+/*
+ * Store variables not to be given to users here
+*/
 class Secret
 {
 	public $host = 'localhost';
