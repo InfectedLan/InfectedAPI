@@ -133,8 +133,8 @@ class Database {
 
 	/*
 	 * Game applications
+	 * This is the backend used on the main site where participants can sign up for game compos.
 	 */
-
 	public function getGameApplication($id) {
 		$con = $this->mysql->open();
 		
@@ -172,9 +172,9 @@ class Database {
 	}
 
 	/*
-	 * Games(For compo? halvors, please specify)
+	 * Games
+	 * This is the different game titles used by games application. Like COD, BF4, Minecraft...
 	 */
-
 	public function getGame($id) {
 		$con = $this->mysql->open();
 		
