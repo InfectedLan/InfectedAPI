@@ -4,11 +4,7 @@
 */
 class Secret
 {
-	public $db_username = '##REDACTED##';
-	public $db_password = '##REDACTED##';
-	public function __construct()
-	{
-
-	}
+	const db_username = '##REDACTED##';
+	const db_password = '##REDACTED##';
 }
 ?>
