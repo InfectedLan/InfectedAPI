@@ -46,9 +46,5 @@ class Settings {
 	// Create tables
 	const tablesSql = array();
 	const tablesDataSql = array();
-	
-	public function Settings() {
-		
-	}
 }
 ?>

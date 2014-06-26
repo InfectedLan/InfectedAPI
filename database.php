@@ -41,53 +41,6 @@ class Database {
 	}
 
 	/*
-	 * Games
-	 * This is the different game titles used by games application. Like COD, BF4, Minecraft...
-	 */
-	public function getGame($id) {
-		$con = $this->mysql->open();
-		
-		$result = mysqli_query($con, 'SELECT * FROM ' . $this->settings->tables[5] . ' WHERE id=\'' . $id . '\'');
-		$row = mysqli_fetch_array($result);
-		
-		if ($row) {
-			return new Game($row['id'], $row['name'], $row['title'], $row['price'], $row['mode'], $row['description'], $row['deadline'], $row['published']);
-		}
-		
-		$this->mysql->close($con);
-	}
-	
-	public function getGames() {
-		$con = $this->mysql->open();
-		
-		$result = mysqli_query($con, 'SELECT id FROM ' . $this->settings->tables[5]);
-		$gameList = array();
-		
-		while ($row = mysqli_fetch_array($result)) {
-			array_push($gameList, $this->getGame($row['id']));
-		}
-		
-		return $gameList;
-		
-		$this->mysql->close($con);
-	}
-	
-	public function getPublishedGames() {
-		$con = $this->mysql->open();
-		
-		$result = mysqli_query($con, 'SELECT id FROM ' . $this->settings->tables[5] . ' WHERE published=\'1\'');
-		$gameList = array();
-		
-		while ($row = mysqli_fetch_array($result)) {
-			array_push($gameList, $this->getGame($row['id']));
-		}
-		
-		return $gameList;
-		
-		$this->mysql->close($con);
-	}
-
-	/*
 	 * Article
 	 */
 
