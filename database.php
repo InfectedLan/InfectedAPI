@@ -44,54 +44,6 @@ class Database {
 	 * Agenda
 	 */
 
-	public function getAgenda($id) {
-		$con = $this->mysql->open();
-		
-		$result = mysqli_query($con, 'SELECT * FROM ' . $this->settings->tables[7] . ' WHERE id=\'' . $id . '\'');
-		$row = mysqli_fetch_array($result);
-		
-		if ($row) {
-			return new Agenda($row['id'], $row['datetime'], $row['name'], $row['description']);
-		}
-		
-		$this->mysql->close($con);
-	}
-	
-	public function getAgendas() {
-		$con = $this->mysql->open();
-		
-		$result = mysqli_query($con, 'SELECT id FROM ' . $this->settings->tables[7] . ' ORDER BY datetime');
-		$agendaList = array();
-		
-		while ($row = mysqli_fetch_array($result)) {
-			array_push($agendaList, $this->getAgenda($row['id']));
-		}
-		
-		return $agendaList;
-		
-		$this->mysql->close($con);
-	}
-	
-	public function getAgendasBetween($first, $last) {
-		$con = $this->mysql->open();
-		
-		$result = mysqli_query($con, 'SELECT id FROM ' . $this->settings->tables[7] . ' ORDER BY datetime');
-		$agendaList = array();
-		
-		while ($row = mysqli_fetch_array($result)) {
-			$agenda = $this->getAgenda($row['id']);
-			$now = date('U');
-			
-			if ($agenda->getDatetime() >= $now - $first * 60 * 60 ||
-				$agenda->getDatetime() + (60*90) >= $now + $last * 60 * 60) {
-				array_push($agendaList, $agenda);
-			}
-		}
-		
-		return $agendaList;
-		
-		$this->mysql->close($con);
-	}
 
 	/*
 	 * Game applications
