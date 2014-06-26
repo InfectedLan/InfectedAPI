@@ -1,0 +1,44 @@
+<?php
+require_once 'settings.php';
+require_once 'mysql.php';
+require_once 'gameApplication.php';
+
+	class GameApplicationHandler {
+		public static function getGameApplication($id) {
+			$con = MySQL::connect(Settings::db_name_infected);
+			
+			$result = mysqli_query($con, 'SELECT * FROM ' . Settings::db_table_gameapplications . ' WHERE id=\'' . $id . '\'');
+			$row = mysqli_fetch_array($result);
+			
+			if ($row) {
+				return new GameApplication($row['id'], $row['game'], $row['name'], $row['tag'], $row['contactname'], $row['contactnick'], $row['phone'], $row['email']);
+			}
+			
+			MySQL::close($con);
+		}
+		
+		public static function getGameApplications($game) {
+			$con = MySQL::connect(Settings::db_name_infected);
+			
+			$result = mysqli_query($con, 'SELECT id FROM ' . Settings::db_table_gameapplications . ' WHERE game=\'' . $game . '\'');
+			$gameApplicationList = array();
+			
+			while ($row = mysqli_fetch_array($result)) {
+				array_push($gameApplicationList, self::getGameApplication($row['id']));
+			}
+			
+			return $gameApplicationList;
+			
+			MySQL::close($con);
+		}
+		
+		public static function createGameApplication($game, $name, $tag, $contactname, $contactnick, $phone, $email) {
+			$con = MySQL::connect(Settings::db_name_infected);
+			
+			mysqli_query($con, 'INSERT INTO ' . Settings::db_table_gameapplications . ' (game, name, tag, contactname, contactnick, phone, email) VALUES (\'' . $game . '\', \'' . $name . '\', \'' . $tag . '\', \'' . $contactname . '\', \'' . $contactnick . '\', \'' . $phone . '\', \'' . $email . '\')');
+			
+			MySQL::close($con);
+		}
+	}
+
+?>

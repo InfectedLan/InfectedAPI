@@ -39,51 +39,6 @@ class Database {
 		
 		return false;
 	}
-	
-	/*
-	 * Agenda
-	 */
-
-
-	/*
-	 * Game applications
-	 * This is the backend used on the main site where participants can sign up for game compos.
-	 */
-	public function getGameApplication($id) {
-		$con = $this->mysql->open();
-		
-		$result = mysqli_query($con, 'SELECT * FROM ' . $this->settings->tables[6] . ' WHERE id=\'' . $id . '\'');
-		$row = mysqli_fetch_array($result);
-		
-		if ($row) {
-			return new GameApplication($row['id'], $row['game'], $row['name'], $row['tag'], $row['contactname'], $row['contactnick'], $row['phone'], $row['email']);
-		}
-		
-		$this->mysql->close($con);
-	}
-	
-	public function getGameApplications($game) {
-		$con = $this->mysql->open();
-		
-		$result = mysqli_query($con, 'SELECT id FROM ' . $this->settings->tables[6] . ' WHERE game=\'' . $game . '\'');
-		$gameApplicationList = array();
-		
-		while ($row = mysqli_fetch_array($result)) {
-			array_push($gameApplicationList, $this->getGameApplication($row['id']));
-		}
-		
-		return $gameApplicationList;
-		
-		$this->mysql->close($con);
-	}
-	
-	public function createGameApplication($game, $name, $tag, $contactname, $contactnick, $phone, $email) {
-		$con = $this->mysql->open();
-		
-		mysqli_query($con, 'INSERT INTO ' . $this->settings->tables[6] . ' (game, name, tag, contactname, contactnick, phone, email) VALUES (\'' . $game . '\', \'' . $name . '\', \'' . $tag . '\', \'' . $contactname . '\', \'' . $contactnick . '\', \'' . $phone . '\', \'' . $email . '\')');
-		
-		$this->mysql->close($con);
-	}
 
 	/*
 	 * Games
