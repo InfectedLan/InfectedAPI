@@ -1,6 +1,6 @@
 <?php
 class Settings {
-	// General.
+	// General
 	public $name = 'Infected Crew';
 	public $description = 'Infected er et av Akershus største datatreff (LAN-party), og holder til i kulturhuset i Asker kommune.';
 	public $keywords = 'infected, lan, party, asker, kulturhus, ungdom, gaming';
@@ -46,9 +46,5 @@ class Settings {
 	// Create tables
 	public $tablesSql = array();
 	public $tablesDataSql = array();
-	
-	public function Settings() {
-		
-	}
 }
 ?>

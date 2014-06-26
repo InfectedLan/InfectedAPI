@@ -18,7 +18,7 @@ class Database {
 	private $mysql;
 	private $utils;
 	
-	public function Database() {
+	public function __construct() {
 		$this->settings = new Settings();
 		$this->mysql = new MySQL();
 		$this->utils = new Utils();

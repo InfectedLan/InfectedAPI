@@ -6,14 +6,13 @@ class MySQL {
 	private $settings;
 	private $secret;
 	
-	public function MySQL() {
+	public function __construct() {
         $this->settings = new Settings();
         $this->secret = new Secret();
     }
 	
 	/* Opens a connection, to given database if specified */
 	public function open($database) {
-		
 		// Create connection
 		$con = mysqli_connect($this->settings->db_host, $this->secret->db_username, $this->secret->db_password, $database);
 		$con->set_charset("utf8");
