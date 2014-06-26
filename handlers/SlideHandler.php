@@ -1,6 +1,7 @@
 <?php
 require_once 'mysql.php';
 require_once 'settings.php';
+require_once 'slide.php';
 
 	class SlideHandler {
 		public static function getSlide($id) {
