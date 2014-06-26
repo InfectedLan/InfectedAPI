@@ -39,45 +39,7 @@ class Database {
 		
 		return false;
 	}
-
-	/*
-	 * Slides
-	 */
-
-	public function getSlide($id) {
-		$con = $this->mysql->open();
-		
-		$result = mysqli_query($con, 'SELECT * FROM ' . $this->settings->tables[8] . ' WHERE id=\'' . $id . '\'');
-		$row = mysqli_fetch_array($result);
-		
-		if ($row) {
-			return new Slide($row['id'], $row['start'], $row['end'], $row['title'], $row['content'], $row['published']);
-		}
-		
-		$this->mysql->close($con);
-	}
 	
-	public function getSlides() {
-		$con = $this->mysql->open();
-		
-		$result = mysqli_query($con, 'SELECT id FROM ' . $this->settings->tables[8] . ' ORDER BY start');
-		$slideList = array();
-		
-		while ($row = mysqli_fetch_array($result)) {
-			$slide = $this->getSlide($row['id']);
-			$now = date('U');
-			
-			if ($slide->getStart() >= $now - $first * 60 * 60 ||
-				$slide->getEnd() >= $now + $last * 60 * 60) {
-				array_push($slideList, $slide);
-			}
-		}
-		
-		return $slideList;
-		
-		$this->mysql->close($con);
-	}
-
 	/*
 	 * Agenda
 	 */
