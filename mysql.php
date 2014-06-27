@@ -12,9 +12,10 @@ class MySQL {
     }
 	
 	/* Opens a connection, to given database if specified */
-	public function open($database) {
+	public static function open($database) {
+		
 		// Create connection
-		$con = mysqli_connect($this->settings->db_host, $this->secret->db_username, $this->secret->db_password, $database);
+		$con = mysqli_connect(Settings::db_host, Secret::db_username, Secret::db_password, $database);
 		$con->set_charset("utf8");
 		
 		// Check connection
@@ -26,7 +27,7 @@ class MySQL {
 	}
 	
 	/* Closes connection */
-	public function close($con) {
+	public static function close($con) {
 		mysqli_close($con);
 	}
 }
