@@ -39,55 +39,7 @@ class Database {
 		
 		return false;
 	}
-
-	/*
-	 * Article
-	 */
-
-	// Get article.
-	public function getArticle($id) {
-		$con = $this->mysql->open();
-		
-		$result = mysqli_query($con, 'SELECT * FROM ' . $this->settings->tables[4] . ' WHERE id=\'' . $id . '\'');
-		$row = mysqli_fetch_array($result);
-		
-		if ($row) {
-			return new Article($row['id'], $row['name'], $row['title'], $row['content'], $row['image'], $row['author'], $row['datetime']);
-		}
-		
-		$this->mysql->close($con);
-	}
 	
-	// Get article by name article.
-	public function getArticleByName($name) {
-		$con = $this->mysql->open();
-		
-		$result = mysqli_query($con, 'SELECT id FROM ' . $this->settings->tables[4] . ' WHERE name=\'' . $name . '\'');
-		$row = mysqli_fetch_array($result);
-		
-		if ($row) {
-			return $this->getArticle($row['id']);
-		}
-		
-		$this->mysql->close($con);
-	}
-	
-	// Get a list of all articles.
-	public function getArticles() {
-		$con = $this->mysql->open();
-		
-		$result = mysqli_query($con, 'SELECT id FROM ' . $this->settings->tables[4]);
-		$articleList = array();
-		
-		while ($row = mysqli_fetch_array($result)) {
-			array_push($articleList, $this->getArticle($row['id']));
-		}
-		
-		return $articleList;
-		
-		$this->mysql->close($con);
-	}
-
 	/*
 	 * Main site page system
 	 */
