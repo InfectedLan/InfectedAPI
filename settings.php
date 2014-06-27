@@ -18,7 +18,7 @@ class Settings {
 	const db_prefixList = array('');
 
 	const db_table_events = 'events';
-	const db_table_pages = 'pages';
+	const db_table_site_pages = 'pages';
 	const db_table_games = 'games';
 	const db_table_gameapplications = 'gameapplications';
 	const db_table_crews = 'crews';
