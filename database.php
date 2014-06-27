@@ -41,41 +41,6 @@ class Database {
 	}
 
     /*
-     * Role
-     */
-
-    // Get a role by id.
-	public function getRole($id) {
-		$con = $this->mysql->open();
-		
-		$result = mysqli_query($con, 'SELECT * FROM ' . $this->settings->tables[2] . ' WHERE id=\'' . $id . '\'');
-		$row = mysqli_fetch_array($result);
-		
-		if ($row) {
-			return new Role($row['id'], $row['name']);
-		}
-		
-		$this->mysql->close($con);
-	}
-	
-	// Get a list of all roles.
-	public function getRoles() {
-		$con = $this->mysql->open();
-		
-		$result = mysqli_query($con, 'SELECT id FROM ' . $this->settings->tables[2]);
-		
-		$roleList = array();
-		
-		while ($row = mysqli_fetch_array($result)) {
-			array_push($roleList, $this->getRole($row['id']));
-		}
-		
-		return $roleList;
-		
-		$this->mysql->close($con);
-	}
-
-    /*
 	 * Event
 	 */
 

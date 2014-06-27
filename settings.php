@@ -28,6 +28,7 @@ class Settings {
 	const db_table_slides = 'slides';
 	const db_table_teams = 'teams';
 	const db_table_articles = 'articles';
+	const db_table_roles = 'roles';
 	/*
 	const host = 'localhost';
 	const databaseList = array('infecrjn_infected', 'infecrjn_crew');
