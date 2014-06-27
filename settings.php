@@ -27,6 +27,7 @@ class Settings {
 	const db_table_agendas = 'agendas';
 	const db_table_slides = 'slides';
 	const db_table_teams = 'teams';
+	const db_table_articles = 'articles';
 	/*
 	const host = 'localhost';
 	const databaseList = array('infecrjn_infected', 'infecrjn_crew');
@@ -41,6 +42,21 @@ class Settings {
 						'agendas', 
 						'slides', 
 						'teams');
+	*/
+
+	//Here is the table array for v7
+	// - Liam
+	
+	/*
+		public $tables = array('events', 
+					'users', 
+					'roles', 
+					'pages', 
+					'articles', 
+					'games', 
+					'gameapplications', 
+					'agendas', 
+					'slides');
 	*/
 	
 	// Create tables
