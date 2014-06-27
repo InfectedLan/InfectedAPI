@@ -39,54 +39,6 @@ class Database {
 		
 		return false;
 	}
-	
-	/*
-	 * Main site page system
-	 */
-
-	// Get page.
-	public function getSitePage($id) {
-		$con = $this->mysql->open();
-		
-		$result = mysqli_query($con, 'SELECT * FROM ' . $this->settings->tables[3] . ' WHERE id=\'' . $id . '\'');
-		$row = mysqli_fetch_array($result);
-		
-		if ($row) {
-			return new Page($row['id'], $row['name'], $row['title'], $row['content']);
-		}
-		
-		$this->mysql->close($con);
-	}
-	
-	// Get page.
-	public function getSitePageByName($name) {
-		$con = $this->mysql->open();
-		
-		$result = mysqli_query($con, 'SELECT id FROM ' . $this->settings->tables[3] . ' WHERE name=\'' . $name . '\'');
-		$row = mysqli_fetch_array($result);
-		
-		if ($row) {
-			return $this->getPage($row['id']);
-		}
-		
-		$this->mysql->close($con);
-	}
-	
-	// Get a list of all pages
-	public function getSitePages() {
-		$con = $this->mysql->open();
-		
-		$result = mysqli_query($con, 'SELECT id FROM ' . $this->settings->tables[3]);
-		$pageList = array();
-		
-		while ($row = mysqli_fetch_array($result)) {
-			array_push($pageList, $this->getPage($row['id']));
-		}
-		
-		return $pageList;
-		
-		$this->mysql->close($con);
-	}
 
     /*
      * Role
