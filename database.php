@@ -23,38 +23,6 @@ class Database {
 		$this->mysql = new MySQL();
 		$this->utils = new Utils();
     }
-
-    // Compatibility with petterroea's work.
-	public function getPermission($username, $value) {
-		$con = $this->mysql->open();
-		
-		$result = mysqli_query($con, 'SELECT value FROM permissions WHERE username=\'' . $username . '\' AND value=\'' . $value . '\'');
-		$row = mysqli_fetch_array($result);
-		
-		if ($row) {
-			return true;
-		}
-		
-		$this->mysql->close($con);
-		
-		return false;
-	}
-	
-	/*
-	 *	Permission
-	 */
-	
-	/* Returns true if user has the givern permission, otherwise false */
-	public function hasPermission($userId, $permission) {
-		$con = $this->mysql->open($this->settings->db_name_infected);
-		
-		$result = mysqli_query($con, 'SELECT value FROM ' . $this->settings->tableList[0][5] . ' WHERE userId=\'' . $userId . '\' AND value=\'' . $permission . '\'');
-		$row = mysqli_fetch_array($result);
-		
-		$this->mysql->close($con);
-		
-		return $row ? true : false;
-	}
 	
 	/*
 	 *	Page
