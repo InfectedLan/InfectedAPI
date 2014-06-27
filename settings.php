@@ -30,6 +30,9 @@
 		const db_table_articles = 'articles';
 		const db_table_roles = 'roles';
 		const db_table_memberof = 'memberof'; //The well known tableList[1][3] from issue #1
+		
+		const emailName = 'kontakt@infected.no';
+		const email = 'kontakt@infected.no';
 		/*
 		const host = 'localhost';
 		const databaseList = array('infecrjn_infected', 'infecrjn_crew');

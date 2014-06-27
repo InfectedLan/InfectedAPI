@@ -2,31 +2,23 @@
 require_once 'settings.php';
 require_once 'user.php';
 require_once 'database.php';
+require_once 'EventHandler.php';
 
 class Utils {
-	private $settings;
-	private $database;
 	
-	public function Utils() {
-		$this->settings = new Settings();
-		$this->database = new Database();
-	}
-	
-	public function getCurrentEvent() {
-		$event = end($this->database->getEvents());
-	
-		return $event;
+	public static function getCurrentEvent() {
+		return end(EventHandler::getEvents());
 	}
 
-	public function getUser() {
-		return $this->isAuthenticated() ? $_SESSION['user'] : null;
+	public static function getUser() {
+		return self::isAuthenticated() ? $_SESSION['user'] : null;
 	}
 	
-	public function isAuthenticated() {
+	public static function isAuthenticated() {
 		return isset($_SESSION['user']);
 	}
 	
-	public function getDayFromInt($day) {
+	public static function getDayFromInt($day) {
 		$dayList = array('Mandag', 
 					'Tirsdag', 
 					'Onsdag', 
@@ -38,7 +30,7 @@ class Utils {
 		return $dayList[$day - 1];
 	}
 	
-	public function getMonthFromInt($month) {
+	public static function getMonthFromInt($month) {
 		$monthList = array('Januar', 
 					'Februar', 
 					'Mars', 
@@ -55,14 +47,14 @@ class Utils {
 		return $monthList[$month - 1];
 	}
 	
-	public function spamCheck($email) {
+	public static function spamCheck($email) {
 		
 		
 		// Validate e-mail address
 		return filter_var($email, FILTER_VALIDATE_EMAIL);
 	}
 	
-	public function sendEmail($user, $subject, $message) {
+	public static function sendEmail($user, $subject, $message) {
 		// Sanitize e-mail address
 		$to = filter_var($user->getEmail(), FILTER_SANITIZE_EMAIL);
 		
@@ -78,7 +70,7 @@ class Utils {
 			
 			// Additional headers.
 			$headers[] = 'To: ' . $user->getFullname() . ' <' . $to . '>';
-			$headers[] = 'From: ' . $this->settings->emailName . ' <' . $this->settings->email . '>';
+			$headers[] = 'From: ' . Settings::emailName . ' <' . Settings::email . '>';
 			
 			// Send the e-mail.
 			return mail($to, $subject, $message, implode('\r\n', $headers));
@@ -87,8 +79,8 @@ class Utils {
 		return false;
 	}
 
-	public function hasPermission($permission) {
-		return $this->database->getPermission($this->getUser()->getUsername(), $permission);
+	public static function hasPermission($permission) {
+		return PermissionsHandler::getPermission(self::getUser()->getUsername(), $permission);
 	}
 }
 ?>
