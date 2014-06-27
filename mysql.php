@@ -3,13 +3,6 @@ require_once 'settings.php';
 require_once 'secret.php';
 
 class MySQL {
-	private $settings;
-	private $secret;
-	
-	public function __construct() {
-        $this->settings = new Settings();
-        $this->secret = new Secret();
-    }
 	
 	/* Opens a connection, to given database if specified */
 	public static function open($database) {
