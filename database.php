@@ -39,41 +39,6 @@ class Database {
 		
 		return false;
 	}
-
-    /*
-	 * Event
-	 */
-
-    // Get event.
-	public function getEvent($id) {
-		$con = $this->mysql->open();
-		
-		$result = mysqli_query($con, 'SELECT * FROM ' . $this->settings->tables[0] . ' WHERE id=\'' . $id . '\'');
-		$row = mysqli_fetch_array($result);
-		
-		if ($row) {
-			return new Event($row['id'], $row['theme'], $row['participants'], $row['price'], $row['start'], $row['end']);
-		}
-		
-		$this->mysql->close($con);
-	}
-	
-	// Get a list of all events.
-	public function getEvents() {
-		$con = $this->mysql->open();
-		
-		$result = mysqli_query($con, 'SELECT id FROM ' . $this->settings->tables[0]);
-		
-		$eventList = array();
-		
-		while ($row = mysqli_fetch_array($result)) {
-			array_push($eventList, $this->getEvent($row['id']));
-		}
-		
-		return $eventList;
-		
-		$this->mysql->close($con);
-	}
 	
 	/*
 	 *	User
