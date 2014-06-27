@@ -19,6 +19,7 @@
 
 		const db_table_events = 'events';
 		const db_table_site_pages = 'pages';
+		const db_table_crew_pages = 'pages';
 		const db_table_games = 'games';
 		const db_table_gameapplications = 'gameapplications';
 		const db_table_crews = 'crews';
@@ -30,7 +31,8 @@
 		const db_table_articles = 'articles';
 		const db_table_roles = 'roles';
 		const db_table_memberof = 'memberof'; //The well known tableList[1][3] from issue #1
-		
+		const db_table_groups = 'groups';
+
 		const emailName = 'kontakt@infected.no';
 		const email = 'kontakt@infected.no';
 		/*
