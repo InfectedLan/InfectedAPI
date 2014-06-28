@@ -32,6 +32,9 @@
 		const db_table_roles = 'roles';
 		const db_table_memberof = 'memberof'; //The well known tableList[1][3] from issue #1
 		const db_table_groups = 'groups';
+		const db_table_avatars = 'avatars';
+		const db_table_applications = 'applications';
+		const db_table_passresets = 'passresets';
 
 		const emailName = 'kontakt@infected.no';
 		const email = 'kontakt@infected.no';
