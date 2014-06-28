@@ -1,9 +1,8 @@
 <?php
-require_once 'settings.php';
-require_once 'secret.php';
+require_once 'Settings.php';
+require_once 'Secret.php';
 
 class MySQL {
-	
 	/* Opens a connection, to given database if specified */
 	public static function open($database) {
 		

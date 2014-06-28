@@ -1,7 +1,7 @@
 <?php
-require_once 'settings.php';
-require_once 'mysql.php';
-require_once 'group.php';
+require_once '/../Settings.php';
+require_once '/../MySQL.php';
+require_once '/../objects/Group.php';
 
 	class GroupHandler {
 		/* Get a group by id */

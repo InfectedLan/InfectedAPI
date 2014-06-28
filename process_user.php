@@ -1,9 +1,7 @@
 <?php
-require_once 'database.php';
+require_once 'handlers/UserHandler.php';
 
 session_start();
-
-$database = new Database();
 
 $action = isset($_GET['action']) ? $_GET['action'] : 0;
 $id = isset($_GET['id']) ? $_GET['id'] : 0;
@@ -19,8 +17,8 @@ if (isset($_GET['action'])) {
 			$username = $_POST['username'];
 			$password = hash('sha256', $_POST['password']);
 			
-			if ($database->userExists($username)) {
-				$user = $database->getUserByName($username);
+			if (UserHandler::userExists($username)) {
+				$user = UserHandler::getUserByName($username);
 				$storedPassword = $user->getPassword();
 				
 				if ($password == $storedPassword) {
@@ -69,7 +67,7 @@ if (isset($_GET['action'])) {
 			$postalCode = $_POST['postalCode'];
 			$nickname = isset($_POST['nickname']) ? $_POST['nickname'] : $username;
 			
-			if (!$database->userExists($username)) {
+			if (!UserHandler::userExists($username)) {
 				if (empty($firstname)) {
 					$message = '<p>Du har ikke skrevet inn noe fornavn.</p>';
 					
@@ -156,7 +154,7 @@ if (isset($_GET['action'])) {
 				
 				// Check if passwords match.
 				if ($password == $confirmPassword) {
-					$database->createUser($firstname, $lastname, $username, $password, $email, $gender, $birthDate, $phone, $address, $postalCode, $nickname);
+					UserHandler::createUser($firstname, $lastname, $username, $password, $email, $gender, $birthDate, $phone, $address, $postalCode, $nickname);
 				} else {
 					$message = '<p>Passordene er ikke like!</p>';
 				}
@@ -169,7 +167,7 @@ if (isset($_GET['action'])) {
 	/* Remove user */
 	} else if ($action == 4) {
 		if (isset($_GET['id'])) {
-			$database->removeUser($id);
+			UserHandler::removeUser($id);
 			$message = '<p>Brukeren ble fjernet!</p>';
 			
 			return;
@@ -181,7 +179,7 @@ if (isset($_GET['action'])) {
 		}
 	} else if ($action == 6) {
 		if (isset($_POST['email'])) {
-			$user = $database->getUserByName($_POST['email']);
+			$user = UserHandler::getUserByName($_POST['email']);
 			
 			if ($user->sendForgottenEmail()) {
 				$message = '<p>Vi har nå sendt deg en e-post med link for å tilbakestille passordet.</p>';

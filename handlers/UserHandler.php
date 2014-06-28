@@ -1,7 +1,7 @@
 <?php
-require_once 'settings.php';
-require_once 'mysql.php';
-require_once 'user.php';
+require_once '/../Settings.php';
+require_once '/../MySQL.php';
+require_once '/../objects/User.php';
 
 	class UserHandler {
 		/* Get user by id */
@@ -20,7 +20,7 @@ require_once 'user.php';
 								$row['username'], 
 								$row['password'], 
 								$row['email'], 
-								$row['birthDate'], 
+								$row['birthdate'], 
 								$row['gender'], 
 								$row['phone'], 
 								$row['address'], 

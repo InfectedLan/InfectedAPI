@@ -1,17 +1,11 @@
 <?php
-require_once 'settings.php';
-require_once 'database.php';
-require_once 'mysql.php';
-require_once 'utils.php';
-
+require_once '/../Settings.php';
+require_once '/../MySQL.php';
+require_once '/../handlers/PermissionsHandler.php';
+//require_once '/../Utils.php';
 require_once 'avatar.php';
 
-class User {
-	private $settings;
-	private $database;
-	private $mysql;
-	private $utils;
-	
+class User {	
 	private $id;
 	private $firstname;
 	private $lastname;
@@ -26,11 +20,6 @@ class User {
 	private $nickname;
 	
 	public function User($id, $firstname, $lastname, $username, $password, $email, $birthDate, $gender, $phone, $address, $postalCode, $nickname) {
-		$this->settings = new Settings();
-		$this->database = new Database();
-		$this->mysql = new MySQL();
-		$this->utils = new Utils();
-		
 		$this->id = $id;
 		$this->firstname = $firstname;
 		$this->lastname = $lastname;
@@ -145,9 +134,9 @@ class User {
 	}
 	
 	public function getAvatarType($type) {
-		$con = $this->mysql->open(1);
+		$con = MySQL::open(Settings::db_name_crew);
 		
-		$result = mysqli_query($con, 'SELECT relativeUrl FROM ' . $this->settings->tableList[1][1] . ' WHERE userId = \'' . $this->getId() . '\' AND state = \'2\'');
+		$result = mysqli_query($con, 'SELECT relativeUrl FROM ' . db_table_avatars . ' WHERE userId = \'' . $this->getId() . '\' AND state = \'2\'');
 		$row = mysqli_fetch_array($result);
 		
 		if ($row) {
@@ -170,9 +159,9 @@ class User {
 	}
 	
 	public function getPendingAvatar() {
-		$con = $this->mysql->open(1);
+		$con = MySQL::open(Settings::db_name_crew);
 		
-		$result = mysqli_query($con, 'SELECT relativeUrl FROM ' . $this->settings->tableList[1][1] . ' WHERE userId = \'' . $this->getId() . '\' AND state = \'1\'');
+		$result = mysqli_query($con, 'SELECT relativeUrl FROM ' . Settings::db_table_avatars . ' WHERE userId = \'' . $this->getId() . '\' AND state = \'1\'');
 		$row = mysqli_fetch_array($result);
 		
 		if ($row) {
@@ -195,9 +184,9 @@ class User {
 	}
 	
 	public function hasPendingAvatar() {
-		$con = $this->mysql->open(1);
+		$con = MySQL::open(Settings::db_name_crew);
 		
-		$result = mysqli_query($con, 'SELECT state FROM ' . $this->settings->tableList[1][1] . ' WHERE userId = \'' . $this->getId() . '\' AND state = \'1\'');
+		$result = mysqli_query($con, 'SELECT state FROM ' . Settings::db_table_avatars . ' WHERE userId = \'' . $this->getId() . '\' AND state = \'1\'');
 		$row = mysqli_fetch_array($result);
 		
 		$this->mysql->close($con);
@@ -206,9 +195,9 @@ class User {
 	}
 	
 	public function hasAvatar() {
-		$con = $this->mysql->open(1);
+		$con = MySQL::open(Settings::db_name_crew);
 		
-		$result = mysqli_query($con, 'SELECT state FROM ' . $this->settings->tableList[1][1] . ' WHERE userId = \'' . $this->getId() . '\' AND state = \'2\'');
+		$result = mysqli_query($con, 'SELECT state FROM ' . Settings::db_table_avatars . ' WHERE userId = \'' . $this->getId() . '\' AND state = \'2\'');
 		$row = mysqli_fetch_array($result);
 		
 		$this->mysql->close($con);
@@ -218,9 +207,9 @@ class User {
 	
 	/* Returns the users group */
 	public function getGroup() {
-		$con = $this->mysql->open(1);
+		$con = MySQL::open(Settings::db_name_crew);
 		
-		$result = mysqli_query($con, 'SELECT groupId FROM ' . $this->settings->tableList[1][3] . ' WHERE userId = \'' . $this->getId() . '\'');
+		$result = mysqli_query($con, 'SELECT groupId FROM ' . Settings::db_table_memberof . ' WHERE userId = \'' . $this->getId() . '\'');
 		$row = mysqli_fetch_array($result);
 		
 		if ($row) {
@@ -232,12 +221,12 @@ class User {
 	
 	/* Sets the users group */
 	public function setGroup($groupId) {
-		$con = $this->mysql->open(1);
+		$con = MySQL::open(Settings::db_name_crew);
 		
 		if ($this->isGroupMember) {	
-			mysqli_query($con, 'UPDATE ' . $this->settings->tableList[1][3] . ' SET groupId = \'' . $groupId . '\', teamId = \'0\' WHERE userId = \'' . $this->getId() . '\'');
+			mysqli_query($con, 'UPDATE ' . Settings::db_table_memberof . ' SET groupId = \'' . $groupId . '\', teamId = \'0\' WHERE userId = \'' . $this->getId() . '\'');
 		} else {
-			mysqli_query($con, 'INSERT INTO ' . $this->settings->tableList[1][3] . ' (userId, groupId, teamId) VALUES (\'' . $this->getId() . '\', \'' . $groupId . '\', \'0\')');
+			mysqli_query($con, 'INSERT INTO ' . Settings::db_table_memberof . ' (userId, groupId, teamId) VALUES (\'' . $this->getId() . '\', \'' . $groupId . '\', \'0\')');
 		}
 		
 		$this->mysql->close($con);
@@ -245,80 +234,80 @@ class User {
 	
 	/* Is member of a group which means it's not a plain user */
 	public function isGroupMember() {
-		$con = $this->mysql->open(1);
+		$con = MySQL::open(Settings::db_name_crew);
 		
-		$result = mysqli_query($con, 'SELECT groupId FROM ' . $this->settings->tableList[1][3] . ' WHERE userId = \'' . $this->getId() . '\' AND groupId != \'0\'');
+		$result = mysqli_query($con, 'SELECT groupId FROM ' . Settings::db_table_memberof . ' WHERE userId = \'' . $this->getId() . '\' AND groupId != \'0\'');
 		$row = mysqli_fetch_array($result);
 		
-		$this->mysql->close($con);
+		MySQL::close($con);
 		
 		return $row ? true : false;
 	}
 	
 	/* Return true if user is chief for a group */
 	public function isGroupChief() {
-		$con = $this->mysql->open(1);
+		$con = MySQL::open(Settings::db_name_crew);
 		
-		$result = mysqli_query($con, 'SELECT chief FROM ' . $this->settings->tableList[1][2] . ' WHERE chief = \'' . $this->getId() . '\'');
+		$result = mysqli_query($con, 'SELECT chief FROM ' . Settings::db_table_groups . ' WHERE chief = \'' . $this->getId() . '\'');
 		$row = mysqli_fetch_array($result);
 		
-		$this->mysql->close($con);
+		MySQL::close($con);
 		
 		return $row ? true : false;
 	}
 	
 	/* Returns the users team */
 	public function getTeam() {
-		$con = $this->mysql->open(1);
+		$con = MySQL::open(Settings::db_name_crew);
 		
-		$result = mysqli_query($con, 'SELECT teamId FROM ' . $this->settings->tableList[1][3] . ' WHERE userId = \'' . $this->getId() . '\'');
+		$result = mysqli_query($con, 'SELECT teamId FROM ' . Settings::db_table_memberof . ' WHERE userId = \'' . $this->getId() . '\'');
 		$row = mysqli_fetch_array($result);
+		
+		MySQL::close($con);
 		
 		if ($row) {
 			return $this->database->getTeam($row['teamId']);
 		}
-		
-		$this->mysql->close($con);
 	}
 	
 	/* Sets the users team */
 	public function setTeam($teamId) {
-		$con = $this->mysql->open(1);
+		$con = MySQL::open(Settings::db_name_crew);
 		
 		if ($this->isGroupMember) {	
-			mysqli_query($con, 'UPDATE ' . $this->settings->tableList[1][3] . ' SET teamId = \'' . $teamId . '\' WHERE userId = \'' . $this->getId() . '\' AND groupId = \'' . $this->getGroup()->getId() . '\'');	
+			mysqli_query($con, 'UPDATE ' . Settings::db_table_memberof . ' SET teamId = \'' . $teamId . '\' WHERE userId = \'' . $this->getId() . '\' AND groupId = \'' . $this->getGroup()->getId() . '\'');	
 		}
 		
-		$this->mysql->close($con);
+		MySQL::close($con);
 	}
 	
 	/* Is member of a team which means it's not a plain user */
 	public function isTeamMember() {
-		$con = $this->mysql->open(1);
+		$con = MySQL::open(Settings::db_name_crew);
 		
-		$result = mysqli_query($con, 'SELECT teamId FROM ' . $this->settings->tableList[1][3] . ' WHERE userId = \'' . $this->getId() . '\' AND teamId != \'0\'');
+		$result = mysqli_query($con, 'SELECT teamId FROM ' . Settings::db_table_memberof. ' WHERE userId = \'' . $this->getId() . '\' AND teamId != \'0\'');
 		$row = mysqli_fetch_array($result);
 		
-		$this->mysql->close($con);
+		MySQL::close($con);
 		
 		return $row ? true : false;
 	}
 	
 	/* Return true if user is chief for a team */
 	public function isTeamChief() {
-		$con = $this->mysql->open(1);
+		$con = MySQL::open(Settings::db_name_crew);
 		
-		$result = mysqli_query($con, 'SELECT chief FROM ' . $this->settings->tableList[1][6] . ' WHERE chief = \'' . $this->getId() . '\'');
+		$result = mysqli_query($con, 'SELECT chief FROM ' . Settings::db_table_teams . ' WHERE chief = \'' . $this->getId() . '\'');
 		$row = mysqli_fetch_array($result);
 		
-		$this->mysql->close($con);
+		MySQL::close($con);
 		
 		return $row ? true : false;
 	}
 	
 	/* Returns true if user have specified permission, otherwise false */
 	public function hasPermission($permission) {
-		return $this->database->hasPermission($this->getId(), $permission);
+		return PermissionsHandler::hasPermission($this->getId(), $permission);
 	}
 	
 	/* Returns users fullname as string */
@@ -372,7 +361,7 @@ class User {
 						</body>
 					</html>';
 			
-		return $this->utils->sendEmail($this, 'Infected.no - Tilbakestill passord', $message);
+		return Utils::sendEmail($this, 'Infected.no - Tilbakestill passord', $message);
 	}
 }
 ?>

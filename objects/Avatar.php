@@ -1,17 +1,13 @@
 <?php
-require_once 'database.php';
+require_once '/../handlers/UserHandler.php';
 
 class Avatar {
-	private $database;
-	
 	private $id;
 	private $userId;
 	private $relativeUrl;
 	private $state;
 
 	public function Avatar($id, $userId, $relativeUrl, $state) {
-		$this->database = new Database();
-		
 		$this->id = $id;
 		$this->userId = $userId;
 		$this->relativeUrl = $relativeUrl;
@@ -23,7 +19,7 @@ class Avatar {
 	}
 	
 	public function getUser() {
-		return $this->database->getUser($this->userId);
+		return UserHandler::getUser($this->userId);
 	}
 
 	public function getRelativeUrl() {
@@ -34,11 +30,14 @@ class Avatar {
 		return $this->state;
 	}
 	
-	// TODO: this.
 	public function setState($newstatus) {
 		if (is_bool($newstatus)) {
-			mysql_query("UPDATE `avatars` SET `state` = '" . $newstatus . "' WHERE `id` = '" . $this->id . "';");
+			$con = MySQL::open(Settings::db_name_crew);
+			
+			mysqli_query($con, 'UPDATE' . Settings::db_table_teams . ' SET `state` = ' . $newstatus . ' WHERE id = \'' . $this->getId() . '\'');
 			$state = $newstatus;
+			
+			$this->mysql->close($con);
 		}
 	}
 }

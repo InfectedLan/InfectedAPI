@@ -1,11 +1,9 @@
 <?php
-require_once 'settings.php';
-require_once 'user.php';
-require_once 'database.php';
-require_once 'EventHandler.php';
+require_once 'Settings.php';
+require_once 'handlers/EventHandler.php';
+require_once 'objects/User.php';
 
 class Utils {
-	
 	public static function getCurrentEvent() {
 		return end(EventHandler::getEvents());
 	}
