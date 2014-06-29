@@ -39,6 +39,7 @@ class Settings {
 	const db_table_tickets = 'tickets';
 	const db_table_seats = 'seats';
 	const db_table_sections = 'sections';
+	const db_table_ticketTypes = 'ticketTypes';
 
 	const emailName = 'kontakt@infected.no';
 	const email = 'kontakt@infected.no';

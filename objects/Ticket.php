@@ -15,8 +15,8 @@ class Ticket
 	 * Id: Unique id of ticket
 	 * Event_Id: Id of event ticket is connected to
 	 * Owner: User that owns the ticket
-	 * Type: Ticket type. ID.
-	 * Seat: ID of seat ticket is seated on
+	 * Type: Ticket type. Object.
+	 * Seat: Object of seat ticket is seated on
 	 * User: User account that will be using the ticket
 	 * Seater: User account that can seat this ticket
 	 */
