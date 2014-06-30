@@ -26,7 +26,28 @@ class TicketHandler {
 	}
 	public static function getAvailableTickets()
 	{
-		$currentEvent = //Todo: get current event, return amount of tickets left
+		$currentEvent = EventHandler::getCurrentEvent();//Todo: get current event, return amount of tickets left
+
+		$tickets = self::getTicketsForEvent($currentEvent->getId());
+		$numTickets = count($tickets);
+
+		return $currentEvent->getParticipants()-$numTickets;
+	}
+	public static function getTicketsForEvent($eventid)
+	{
+		$con = MySQL::open(Settings::db_name_tickets);
+
+		$result = mysqli_query($con, 'SELECT id FROM ' . Settings::db_table_tickets . ' WHERE event=\'' . $eventid . '\'');
+
+		$ticketList = array();
+
+		while($row = mysqli_fetch_array($result)) {
+			array_push($ticketList, self::getTicket($row['id']));
+		}
+
+		MySQL::close($con);
+
+		return $ticketList;
 	}
 }
 ?>
