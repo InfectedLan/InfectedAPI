@@ -1,5 +1,5 @@
 <?php
-class Section {
+class Row {
 	private $id;
 	private $seats;
 	private $x;
@@ -8,7 +8,7 @@ class Section {
 	private $event;
 
 	/*
-	 * Section - implementation of a section of seats
+	 * Row - implementation of a section of seats
 	 *
 	 * Id: Unique id of section
 	 * Seats: Array of seats in the section
@@ -17,7 +17,7 @@ class Section {
 	 * Row: Row of section
 	 * Event: Event this section belongs to
 	 */ 
-	public function Section($id, $seats, $x, $y, $row, $event) {
+	public function Row($id, $seats, $x, $y, $row, $event) {
 		$this->id = $id;
 		$this->seats = $seats;
 		$this->x = $x;

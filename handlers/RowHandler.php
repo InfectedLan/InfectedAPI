@@ -3,8 +3,9 @@ require_once '/../Settings.php';
 require_once '/../MySQL.php';
 require_once '/../objects/Section.php';
 require_once 'SeatHandler.php';
+require_once '/../objects/Row.php';
 	
-	class SectionHandler {
+	class RowHandler {
 		public static function getSection($id)
 		{
 			$con = MySQL::open(Settings::db_name_tickets);
@@ -16,7 +17,7 @@ require_once 'SeatHandler.php';
 
 			if($row)
 			{
-				return new Section($row['id'], SeatHandler::getSeats($id), );
+				return new Row($row['id'], SeatHandler::getSeats($id), $row['x'], $row['y']);
 			}
 		}
 	}
