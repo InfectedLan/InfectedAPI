@@ -1,7 +1,6 @@
 <?php
 class Row {
 	private $id;
-	private $seats;
 	private $x;
 	private $y;
 	private $row;
@@ -11,15 +10,13 @@ class Row {
 	 * Row - implementation of a section of seats
 	 *
 	 * Id: Unique id of section
-	 * Seats: Array of seats in the section
 	 * X: X coordinate of section
 	 * Y: Y coordinate of section
-	 * Row: Row of section
+	 * Row: Row number
 	 * Event: Event this section belongs to
 	 */ 
-	public function Row($id, $seats, $x, $y, $row, $event) {
+	public function Row($id, $x, $y, $row, $event) {
 		$this->id = $id;
-		$this->seats = $seats;
 		$this->x = $x;
 		$this->y = $y;
 		$this->row = $row;
@@ -32,14 +29,6 @@ class Row {
 	public function getId()
 	{
 		return $this->id;
-	}
-
-	/*
-	 * Returns the seat array 
-	 */
-	public function getSeats()
-	{
-		return $this->seats;
 	}
 
 	/*

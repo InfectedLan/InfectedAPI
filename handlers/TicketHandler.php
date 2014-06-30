@@ -3,6 +3,8 @@ require_once '/../Settings.php';
 require_once '/../MySQL.php';
 require_once '/../objects/Ticket.php';
 require_once 'EventHandler.php';
+require_once 'TicketTypeHandler.php';
+require_once 'SeatHandler.php';
 
 class TicketHandler {
 	public static function getTicket($id)
@@ -16,10 +18,15 @@ class TicketHandler {
 
 		if($row)
 		{
-			return new Ticket($row['id'], EventHandler::getEvent($row['event']), UserHandler::getUser($row['owner'], 
-				TicketTypeHandler::getTicketType($row['type']), /* TODO complete this */
-				)
+			return new Ticket($row['id'], EventHandler::getEvent($row['event']), UserHandler::getUser($row['owner']), 
+				TicketTypeHandler::getTicketType($row['type']), SeatHandler::getSeat($row['seat']), 
+				UserHandler::getUser($row['user']), UserHandler::getUser($row['seater'])
+				);
 		}
+	}
+	public static function getAvailableTickets()
+	{
+		$currentEvent = //Todo: get current event, return amount of tickets left
 	}
 }
 ?>
