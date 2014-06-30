@@ -18,6 +18,11 @@ require_once '/../objects/Event.php';
 			}
 		}
 		
+		// Get the current event, this works so that it takes the last event registred in the database, maybe refactor here and check what date that is shortest from current date.
+		public static function getCurrentEvent() {
+			return end(EventHandler::getEvents());
+		}
+		
 		// Get a list of all events.
 		public static function getEvents() {
 			$con = MySQL::open(Settings::db_name_infected);

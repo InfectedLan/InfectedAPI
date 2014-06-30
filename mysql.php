@@ -21,6 +21,6 @@ class MySQL {
 	/* Closes connection */
 	public static function close($con) {
 		mysqli_close($con);
-	}
+	}	
 }
 ?>

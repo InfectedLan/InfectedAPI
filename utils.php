@@ -4,10 +4,6 @@ require_once 'handlers/EventHandler.php';
 require_once 'objects/User.php';
 
 class Utils {
-	public static function getCurrentEvent() {
-		return end(EventHandler::getEvents());
-	}
-
 	public static function getUser() {
 		return self::isAuthenticated() ? $_SESSION['user'] : null;
 	}
