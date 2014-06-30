@@ -14,6 +14,7 @@ class Settings {
 
 	const db_name_infected = 'infecrjn_infected';
 	const db_name_crew = 'infecrjn_crew';
+	const db_name_tickets = 'infecrjn_tickets';
 
 	// Fix this, does not support constant arrays... const db_prefixList = array('');
 
@@ -35,6 +36,10 @@ class Settings {
 	const db_table_avatars = 'avatars';
 	const db_table_applications = 'applications';
 	const db_table_passresets = 'passresets';
+	const db_table_tickets = 'tickets';
+	const db_table_seats = 'seats';
+	const db_table_sections = 'sections';
+	const db_table_ticketTypes = 'ticketTypes';
 
 	const emailName = 'kontakt@infected.no';
 	const email = 'kontakt@infected.no';
