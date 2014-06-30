@@ -1,7 +1,7 @@
 <?php
 class Seat {
 	private $id;
-	private $section;
+	private $row;
 	private $number;
 
 	/*
@@ -9,12 +9,12 @@ class Seat {
 	 * 
 	 * Id: Unique id of seat
 	 * Section: Section object this seat belongs to
-	 * Number: Number relative to section, this seat is at, relative to the section the seat is a part of
+	 * Number: Number relative to row, this seat is at, relative to the row the seat is a part of
 	 */
-	public function Seat($id, $section, $number)
+	public function Seat($id, $row, $number)
 	{
 		$this->id = $id;
-		$this->section = $section;
+		$this->row = $row;
 	}
 
 	/*
@@ -26,15 +26,15 @@ class Seat {
 	}
 
 	/*
-	 * Returns section this seat belongs to
+	 * Returns row this seat belongs to
 	 */
-	public function getSection()
+	public function getRow()
 	{
-		return $this->section;
+		return $this->row;
 	}
 
 	/*
-	 * Returns seat number relative to section
+	 * Returns seat number relative to row
 	 */
 	public function getNumber()
 	{
