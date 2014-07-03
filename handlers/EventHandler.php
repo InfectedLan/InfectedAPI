@@ -20,7 +20,8 @@ require_once '/../objects/Event.php';
 		
 		// Get the current event, this works so that it takes the last event registred in the database, maybe refactor here and check what date that is shortest from current date.
 		public static function getCurrentEvent() {
-			return end(EventHandler::getEvents());
+			$events = self::getEvents();
+			return end($events);
 		}
 		
 		// Get a list of all events.
