@@ -1,4 +1,5 @@
 <?php
+session_start();
 require_once 'Settings.php';
 require_once 'handlers/EventHandler.php';
 require_once 'objects/User.php';
