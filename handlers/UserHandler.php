@@ -61,12 +61,12 @@ require_once '/../objects/User.php';
 		public static function userExists($username) {
 			$con = MySQL::open(Settings::db_name_infected);
 
-			$result = mysqli_query($con, 'SELECT EXISTS (SELECT * FROM ' . Settings::db_table_users . ' WHERE username=\'' . $username . '\' OR email=\'' . $username . '\')');
-			$row = mysqli_fetch_array($result);
+			$result = mysqli_query($con, 'SELECT * FROM ' . Settings::db_table_users . ' WHERE username=\'' . $username . '\' OR email=\'' . $username . '\'');
 			
 			MySQL::close($con);
+
 			
-			return $row ? true : false;
+			return $result->num_rows > 0 ? true : false;
 		}
 		
 		/* Get user by name */

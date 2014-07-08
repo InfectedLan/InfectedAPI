@@ -45,22 +45,22 @@ if (isset($_POST['firstname']) &&
 		else if (empty($password)) {
 			$message = 'Du har ikke oppgitt noe passord!';
 		}
-		else if (strlen($password) < 8) {
+		else if (strlen($_POST['password']) < 5) {
 			$message = 'Passordet er for kort!';
 		}
-		else if (strlen($password) > 32) {
+		else if (strlen($_POST['password']) > 32) {
 			$message = 'Passordet ditt er for langt!';
 		}
-		else if (!preg_match('#[0-9]+#', $password)) {
+		/*else if (!preg_match('#[0-9]+#', $password)) {
 			$message = 'Passordet må inneholde et tall.';
-		}
-		else if (!preg_match('#[a-z]+#', $password)) {
+		}*/
+		/*else if (!preg_match('#[a-z]+#', $password)) {
 			$message = 'Passordet må inneholde en bokstav.';
-		}
-		else if (!preg_match('#[A-Z]+#', $password)) {
+		}*/
+		/*else if (!preg_match('#[A-Z]+#', $password)) {
 			$message = 'Passordet må inneholde em stor bokstav.';
-		}
-		else if (strlen($email) <= 32 && filter_var($email, FILTER_VALIDATE_EMAIL)) {
+		}*/
+		else if (strlen($email) > 32 || !filter_var($email, FILTER_VALIDATE_EMAIL)) {
 			$message = 'E-posten du skrev inn er ikke en gyldig e-post addresse!';
 		}
 		else if ($gender < 0 || $gender > 1) {
