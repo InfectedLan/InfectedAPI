@@ -19,14 +19,14 @@ class Settings {
 	// Fix this, does not support constant arrays... const db_prefixList = array('');
 
 	const db_table_events = 'events';
-	const db_table_site_pages = 'pages';
+	const db_table_main_pages = 'pages';
 	const db_table_crew_pages = 'pages';
 	const db_table_games = 'games';
 	const db_table_gameapplications = 'gameapplications';
 	const db_table_crews = 'crews';
 	const db_table_users = 'users';
 	const db_table_permissions = 'permissions';
-	const db_table_agendas = 'agendas';
+	const db_table_agenda = 'agenda';
 	const db_table_slides = 'slides';
 	const db_table_teams = 'teams';
 	const db_table_articles = 'articles';

@@ -1,5 +1,5 @@
 <?php
-require_once 'utils.php';
+require_once '/../Utils.php';
 
 /*
  * SitePage.php
@@ -8,17 +8,13 @@ require_once 'utils.php';
  * While merging, i found that there are two different pages for the crewpage and the main page.
  * This is the main page. The crew page is refactored to CrewPage
 */
-class SitePage {
-	private $utils;
-
+class MainPage {
 	private $id;
 	private $name;
 	private $title;
 	private $content;
 	
-	public function SitePage($id, $name, $title, $content) {
-		$this->utils = new Utils();
-		
+	public function MainPage($id, $name, $title, $content) {
 		$this->id = $id;
 		$this->name = $name;
 		$this->title = $title;
@@ -30,7 +26,7 @@ class SitePage {
 		echo '<div class="contentTitleBox">';
 			echo '<h1>';
 				/*
-					if ($this->utils->isAuthenticated()) {
+					if (Utils::isAuthenticated()) {
 						if ($this->utils->hasPermission('admin') || $this->utils->hasPermission('site-admin')) {
 							echo '<form name="input" action="index.php?viewPage=edit-page&pageId=' . $this->getId() . '" method="post">';
 								echo $this->getTitle();
