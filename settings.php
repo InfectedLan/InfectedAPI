@@ -31,7 +31,7 @@ class Settings {
 	const db_table_teams = 'teams';
 	const db_table_articles = 'articles';
 	const db_table_roles = 'roles';
-	const db_table_memberof = 'memberof'; //The well known tableList[1][3] from issue #1
+	const db_table_memberof = 'memberof'; // The well known tableList[1][3] from issue #1
 	const db_table_groups = 'groups';
 	const db_table_avatars = 'avatars';
 	const db_table_applications = 'applications';
@@ -40,6 +40,7 @@ class Settings {
 	const db_table_seats = 'seats';
 	const db_table_sections = 'sections';
 	const db_table_ticketTypes = 'ticketTypes';
+	const db_table_postalcodes = 'postalcodes';
 
 	const emailName = 'kontakt@infected.no';
 	const email = 'kontakt@infected.no';

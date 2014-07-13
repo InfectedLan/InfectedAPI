@@ -2,8 +2,7 @@
 require_once '/../Settings.php';
 require_once '/../MySQL.php';
 require_once '/../handlers/PermissionsHandler.php';
-//require_once '/../Utils.php';
-require_once 'avatar.php';
+require_once '/../objects/Avatar.php';
 
 class User {	
 	private $id;
@@ -96,16 +95,16 @@ class User {
 	
 	/* Returns the users city as string, based on the postalCode */
 	public function getCity() {
-		$con = $this->mysql->open(0);
+		$con = MySQL::open(Settings::db_name_infected);
 		
-		$result = mysqli_query($con, 'SELECT city FROM ' . $this->settings->tableList[0][6] . ' WHERE code = \'' . $this->getPostalCode() . '\'');
+		$result = mysqli_query($con, 'SELECT city FROM ' . Settings::db_table_postalcodes . ' WHERE code = \'' . $this->getPostalCode() . '\'');
 		$row = mysqli_fetch_array($result);
+		
+		MySQL::close($con);
 		
 		if ($row) {
 			return ucfirst(strtolower($row['city']));
 		}
-		
-		$this->mysql->close($con);
 	}
 	
 	/* Returns the users nickname as string */
@@ -136,7 +135,7 @@ class User {
 	public function getAvatarType($type) {
 		$con = MySQL::open(Settings::db_name_crew);
 		
-		$result = mysqli_query($con, 'SELECT relativeUrl FROM ' . db_table_avatars . ' WHERE userId = \'' . $this->getId() . '\' AND state = \'2\'');
+		$result = mysqli_query($con, 'SELECT relativeUrl FROM ' . Settings::db_table_avatars . ' WHERE userId = \'' . $this->getId() . '\' AND state = \'2\'');
 		$row = mysqli_fetch_array($result);
 		
 		if ($row) {
@@ -153,7 +152,7 @@ class User {
 			}
 		}
 		
-		$this->mysql->close($con);
+		MySQL::close($con);
 		
 		return new Avatar(null, $this->getId(), 'images/avatars/' . $relativeUrl, null);
 	}
@@ -178,7 +177,7 @@ class User {
 			}
 		}
 		
-		$this->mysql->close($con);
+		MySQL::close($con);
 		
 		return new Avatar(null, $this->getId(), 'images/avatars/' . $relativeUrl, null);
 	}
@@ -189,7 +188,7 @@ class User {
 		$result = mysqli_query($con, 'SELECT state FROM ' . Settings::db_table_avatars . ' WHERE userId = \'' . $this->getId() . '\' AND state = \'1\'');
 		$row = mysqli_fetch_array($result);
 		
-		$this->mysql->close($con);
+		MySQL::close($con);
 		
 		return $row ? true : false;
 	}
@@ -200,7 +199,7 @@ class User {
 		$result = mysqli_query($con, 'SELECT state FROM ' . Settings::db_table_avatars . ' WHERE userId = \'' . $this->getId() . '\' AND state = \'2\'');
 		$row = mysqli_fetch_array($result);
 		
-		$this->mysql->close($con);
+		MySQL::close($con);
 		
 		return $row ? true : false;
 	}
@@ -216,7 +215,7 @@ class User {
 			return $this->database->getGroup($row['groupId']);
 		}
 		
-		$this->mysql->close($con);
+		MySQL::close($con);
 	}
 	
 	/* Sets the users group */
@@ -229,7 +228,7 @@ class User {
 			mysqli_query($con, 'INSERT INTO ' . Settings::db_table_memberof . ' (userId, groupId, teamId) VALUES (\'' . $this->getId() . '\', \'' . $groupId . '\', \'0\')');
 		}
 		
-		$this->mysql->close($con);
+		MySQL::close($con);
 	}
 	
 	/* Is member of a group which means it's not a plain user */

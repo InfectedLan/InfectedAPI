@@ -1,7 +1,8 @@
 <?php
+require_once '/../handlers/UserHandler.php';
+require_once '/../handlers/GroupHandler.php';
+
 class Application {
-	private $database;
-	
 	private $id;
 	private $userId;
 	private $groupId;
@@ -11,8 +12,6 @@ class Application {
 	private $reason;
 	
 	public function Application($id, $userId, $groupId, $content, $state, $datetime, $reason) {
-		$this->database = new Database();
-		
 		$this->id = $id;
 		$this->userId = $userId;
 		$this->groupId = $groupId;
@@ -27,11 +26,11 @@ class Application {
 	}
 	
 	public function getUser() {
-		return $this->database->getUser($this->userId);
+		return UserHandler::getUser($this->userId);
 	}
 	
 	public function getGroup() {
-		return $this->database->getGroup($this->groupId);
+		return GroupHandler::getGroup($this->groupId);
 	}
 	
 	public function getContent() {

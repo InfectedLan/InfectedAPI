@@ -2,6 +2,7 @@
 require_once '/../Settings.php';
 require_once '/../MySQL.php';
 require_once '/../objects/Ticket.php';
+
 require_once 'EventHandler.php';
 require_once 'TicketTypeHandler.php';
 require_once 'SeatHandler.php';
