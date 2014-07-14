@@ -50,5 +50,21 @@ class TicketHandler {
 
 		return $ticketList;
 	}
+	public static function getTicketsForOwner($user)
+	{
+		$con = MySQL::open(Settings::db_name_tickets);
+
+		$result = mysqli_query($con, 'SELECT id FROM ' . Settings::db_table_tickets . ' WHERE owner=\'' . $user->getId() . '\'');
+
+		$ticketList = array();
+
+		while($row = mysqli_fetch_array($result)) {
+			array_push($ticketList, self::getTicket($row['id']));
+		}
+
+		MySQL::close($con);
+
+		return $ticketList;
+	}
 }
 ?>
