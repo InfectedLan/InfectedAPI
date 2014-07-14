@@ -12,7 +12,7 @@ class TicketHandler {
 	{
 		$con = MySQL::open(Settings::db_name_tickets);
 
-		$result = mysqli_query($con, 'SELECT * FROM ' . Settings::db_table_seats . ' WHERE ID=\'' . $id . '\'');
+		$result = mysqli_query($con, 'SELECT * FROM ' . Settings::db_table_tickets . ' WHERE ID=\'' . $id . '\'');
 		$row = mysqli_fetch_array($result);
 
 		MySQL::close($con);
