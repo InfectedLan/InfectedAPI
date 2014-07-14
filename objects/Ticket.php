@@ -92,5 +92,13 @@ class Ticket
 	{
 		return $this->seater;
 	}
+
+	/*
+	 * Returns a human readable representation of the ticket
+	 */
+	public function getHumanName()
+	{
+		return 'INFECTED_' . strtoupper( $this->event->getTheme() ) . $this->id;
+	}
 }
 ?>
