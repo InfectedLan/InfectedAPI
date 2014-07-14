@@ -4,7 +4,7 @@ require_once '/../MySQL.php';
 require_once '/../objects/TicketType.php';
 
 class TicketTypeHandler {
-	public function getTicketType($id)
+	public static function getTicketType($id)
 	{
 		$con = MySQL::open(Settings::db_name_tickets);
 
