@@ -6,7 +6,6 @@ class Ticket
 	private $owner;
 	private $type;
 	private $seat;
-	private $user;
 	private $seater;
 
 	/*
@@ -20,14 +19,13 @@ class Ticket
 	 * User: User account that will be using the ticket
 	 * Seater: User account that can seat this ticket
 	 */
-	public function Ticket($id, $event, $owner, $type, $seat, $user, $seater)
+	public function Ticket($id, $event, $owner, $type, $seat, $seater)
 	{
 		$this->id = $id;
 		$this->event = $event;
 		$this->owner = $owner;
 		$this->type = $type;
 		$this->seat = $seat;
-		$this->user = $user;
 		$this->seater = $seater;
 	}
 
@@ -71,16 +69,6 @@ class Ticket
 	public function getSeat()
 	{
 		return $this->seat;
-	}
-
-	/*
-	 * Returns the user of this ticket.
-	 *
-	 * The user is the person who will be using the ticket during the party
-	 */
-	public function getUser()
-	{
-		return $this->user;
 	}
 
 	/*

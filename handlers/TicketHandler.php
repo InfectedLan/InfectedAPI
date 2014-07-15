@@ -21,7 +21,7 @@ class TicketHandler {
 		{
 			return new Ticket($row['id'], EventHandler::getEvent($row['event']), UserHandler::getUser($row['owner']), 
 				TicketTypeHandler::getTicketType($row['type']), SeatHandler::getSeat($row['seat']), 
-				UserHandler::getUser($row['user']), UserHandler::getUser($row['seater'])
+				UserHandler::getUser($row['seater'])
 				);
 		}
 	}
