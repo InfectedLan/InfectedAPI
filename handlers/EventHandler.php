@@ -14,7 +14,7 @@ require_once '/../objects/Event.php';
 			MySQL::close($con);
 
 			if ($row) {
-				return new Event($row['id'], $row['theme'], $row['participants'], $row['price'], $row['start'], $row['end']);
+				return new Event($row['id'], $row['theme'], $row['participants'], $row['price'], $row['start'], $row['end'], $row['location']);
 			}
 		}
 		

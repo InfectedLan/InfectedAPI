@@ -6,14 +6,16 @@ class Event {
 	private $price;
 	private $start;
 	private $end;
+	private $location;
 	
-	public function Event($id, $theme, $participants, $price, $start, $end) {
+	public function Event($id, $theme, $participants, $price, $start, $end, $location) {
 		$this->id = $id;
 		$this->theme = $theme;
 		$this->participants = $participants;
 		$this->price = $price;
 		$this->start = $start;
 		$this->end = $end;
+		$this->location = $location;
 	}
 	
 	public function getId() {
@@ -38,6 +40,10 @@ class Event {
 	
 	public function getEndTime() {
 		return strtotime($this->end);
+	}
+
+	public function getLocation() {
+		return $this->location;
 	}
 }
 ?>
