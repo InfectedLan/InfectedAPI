@@ -9,7 +9,7 @@
 	}
 	else
 	{
-		echo '{"result":true, "users":[';
+		echo '{"result":true, "key":"' . htmlspecialchars($_GET["key"]) . '", "users":[';
 		$first = true;
 		foreach ($list as $user) {
 			if($first==false)
