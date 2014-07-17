@@ -1,6 +1,13 @@
 <?php
 	require_once '/../utils.php';
 	require_once '/../handlers/UserHandler.php';
+
+	if( !isset( $_GET["query"] ) || strlen( $_GET["query"] ) < 2)
+	{
+		echo '{"result":false}';
+		return;
+	}
+
 	$list = UserHandler::searchUsers($_GET["query"]);
 
 	if(!isset($list))
