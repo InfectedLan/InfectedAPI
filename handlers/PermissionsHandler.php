@@ -1,6 +1,6 @@
 <?php
-require_once '/../Settings.php';
-require_once '/../MySQL.php';
+require_once $_SERVER['DOCUMENT_ROOT'] . '/api/Settings.php';
+require_once $_SERVER['DOCUMENT_ROOT'] . '/api/MySQL.php';
 
 class PermissionsHandler {
 	// Returns true if user has the given permission, otherwise false

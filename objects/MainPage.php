@@ -1,5 +1,5 @@
 <?php
-require_once '/../Utils.php';
+require_once $_SERVER['DOCUMENT_ROOT'] . '/api/Utils.php';
 
 /*
  * SitePage.php

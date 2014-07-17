@@ -1,5 +1,5 @@
 <?php
-require_once '/../handlers/UserHandler.php';
+require_once $_SERVER['DOCUMENT_ROOT'] . '/api/handlers/UserHandler.php';
 
 class Avatar {
 	private $id;
