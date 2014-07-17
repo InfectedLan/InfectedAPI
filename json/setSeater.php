@@ -29,7 +29,7 @@
 		{
 			$target = UserHandler::getUser($target);
 			TicketHandler::setSeater($ticket, $target);
-			
+
 			echo '{"result":true, "message":"Biletten har en ny seater"}';
 			return;
 		}
@@ -39,4 +39,6 @@
 		echo '{"result":false, "message":"Du eier ikke biletten!"}';
 		return;
 	}
+	echo '{"result":false, "message":"Wat"}';
+	return;
 ?>
