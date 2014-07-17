@@ -1,12 +1,11 @@
 <?php
-require_once '/../Settings.php';
-require_once '/../MySQL.php';
-require_once '/../objects/Ticket.php';
-require_once 'RowHandler.php';
+require_once $_SERVER['DOCUMENT_ROOT'] . '/api/Settings.php';
+require_once $_SERVER['DOCUMENT_ROOT'] . '/api/MySQL.php';
+require_once $_SERVER['DOCUMENT_ROOT'] . '/api/handlers/RowHandler.php';
+require_once $_SERVER['DOCUMENT_ROOT'] . '/api/objects/Ticket.php';
 
 class SeatHandler {
-	public static function getSeat($id)
-	{
+	public static function getSeat($id) {
 		$con = MySQL::open(Settings::db_name_tickets);
 
 		$result = mysqli_query($con, 'SELECT * FROM ' . Settings::db_table_seats . ' WHERE id=\'' . $id . '\'');
