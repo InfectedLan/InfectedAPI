@@ -1,8 +1,8 @@
 <?php
-require_once '/../Settings.php';
-require_once '/../MySQL.php';
-require_once '/../handlers/PermissionsHandler.php';
-require_once '/../objects/Avatar.php';
+require_once $_SERVER['DOCUMENT_ROOT'] . '/api/Settings.php';
+require_once $_SERVER['DOCUMENT_ROOT'] . '/api/MySQL.php';
+require_once $_SERVER['DOCUMENT_ROOT'] . '/api/handlers/PermissionsHandler.php';
+require_once $_SERVER['DOCUMENT_ROOT'] . '/api/objects/Avatar.php';
 
 class User {	
 	private $id;

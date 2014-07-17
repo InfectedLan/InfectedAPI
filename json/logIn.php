@@ -1,12 +1,11 @@
 <?php
-
-require_once '/../utils.php';
-require_once '/../handlers/UserHandler.php';
+require_once $_SERVER['DOCUMENT_ROOT'] . '/api/Utils.php';
+require_once $_SERVER['DOCUMENT_ROOT'] . '/api/handlers/UserHandler.php';
 
 $result = true;
 $message = "";
-if(!Utils::isAuthenticated())
-{
+
+if (!Utils::isAuthenticated()) {
 	if (isset($_POST['username']) &&
 			isset($_POST['password']) &&
 			!empty($_POST['username']) &&

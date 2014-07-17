@@ -1,20 +1,16 @@
 <?php
 class Settings {
-	// General
-	const name = 'Infected Crew';
+	const name = 'Infected';
 	const description = 'Infected er et av Akershus største datatreff (LAN-party), og holder til i kulturhuset i Asker kommune.';
 	const keywords = 'infected, lan, party, asker, kulturhus, ungdom, gaming';
 	public static $authors = array('halvors', 'petterroea');
-	
-	// Default page.
-	const defaultPage = 'home';
 
 	// Database.
 	const db_host = 'localhost';
 
-	const db_name_infected = 'infecrjn_infected';
-	const db_name_crew = 'infecrjn_crew';
-	const db_name_tickets = 'infecrjn_tickets';
+	const db_name_infected = 'infectedlan_tk';
+	const db_name_crew = 'infectedlan_tk_crew';
+	const db_name_tickets = 'infectedlan_tk_tickets';
 
 	// Fix this, does not support constant arrays... const db_prefixList = array('');
 

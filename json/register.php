@@ -1,8 +1,8 @@
 <?php
-require_once '/../utils.php';
-require_once '/../handlers/UserHandler.php';
+require_once $_SERVER['DOCUMENT_ROOT'] . '/api/Utils.php';
+require_once $_SERVER['DOCUMENT_ROOT'] . '/api/handlers/UserHandler.php';
 
-$message = "Sucess!";
+$message = "Success!";
 $result = false;
 
 if (isset($_POST['firstname']) && 

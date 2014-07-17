@@ -1,11 +1,10 @@
 <?php
-require_once '/../Settings.php';
-require_once '/../MySQL.php';
-require_once '/../objects/Ticket.php';
-
-require_once 'EventHandler.php';
-require_once 'TicketTypeHandler.php';
-require_once 'SeatHandler.php';
+require_once $_SERVER['DOCUMENT_ROOT'] . '/api/Settings.php';
+require_once $_SERVER['DOCUMENT_ROOT'] . '/api/MySQL.php';
+require_once $_SERVER['DOCUMENT_ROOT'] . '/api/handlers/EventHandler.php';
+require_once $_SERVER['DOCUMENT_ROOT'] . '/api/handlers/TicketTypeHandler.php';
+require_once $_SERVER['DOCUMENT_ROOT'] . '/api/handlers/SeatHandler.php';
+require_once $_SERVER['DOCUMENT_ROOT'] . '/api/objects/Ticket.php';
 
 class TicketHandler {
 	public static function getTicket($id)
