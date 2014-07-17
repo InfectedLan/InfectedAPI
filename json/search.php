@@ -2,6 +2,12 @@
 	require_once '/../utils.php';
 	require_once '/../handlers/UserHandler.php';
 
+	if(Utils::isAuthenticated() == false)
+	{
+		echo '{"result":false, "message":"You arent authenticated!"}';
+		return;
+	}
+
 	if( !isset( $_GET["query"] ) || strlen( $_GET["query"] ) < 2)
 	{
 		echo '{"result":false}';
@@ -23,7 +29,7 @@
 			{
 				echo ',';
 			}
-			echo '{"firstname":"' . $user->getFirstname() . '", "lastname":"' . $user->getLastname() . '", "nick":"' . $user->getNickname() . '"}';
+			echo '{"firstname":"' . $user->getFirstname() . '", "lastname":"' . $user->getLastname() . '", "nick":"' . $user->getNickname() . '", "userId":"' . $user->getId() . '"}';
 			$first = false;
 		}
 		echo ']}';

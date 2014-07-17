@@ -66,5 +66,13 @@ class TicketHandler {
 
 		return $ticketList;
 	}
+	public static function transferTicket($ticket, $newOwner)
+	{
+		$con = MySQL::open(Settings::db_name_tickets);
+
+		$result = mysqli_query($con, 'UPDATE ' . Settings::db_table_tickets . ' SET owner=\'' . $newOwner->getId() . '\' WHERE id=\'' . $ticket->getId() . '\'');
+
+		MySQL::close($con);
+	}
 }
 ?>
