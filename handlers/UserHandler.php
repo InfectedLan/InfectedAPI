@@ -194,5 +194,35 @@ require_once '/../objects/User.php';
 			
 			return $userList;
 		}
+
+		public static function searchUsers($query)
+		{
+			$con = MySQL::open(Settings::db_name_infected);
+
+			$result = mysqli_query($con, 'SELECT * FROM ' . Settings::db_table_users . ' WHERE firstname LIKE "%' . $query . '%"' .
+				' OR lastname LIKE "%' . $query . '%" OR nickname LIKE "%' . $query . '%" OR email LIKE "%' . $query . '%" LIMIT 0, 10');
+
+			$userList = array();
+
+			while($row = mysqli_fetch_array($result))
+			{
+				array_push($userList, new User($row['id'], 
+											   $row['firstname'], 
+											   $row['lastname'], 
+											   $row['username'], 
+										       $row['password'], 
+										       $row['email'], 
+											   $row['birthDate'], 
+											   $row['gender'], 
+											   $row['phone'], 
+											   $row['address'], 
+											   $row['postalCode'], 
+											   $row['nickname']));
+			}
+			
+			MySQL::close($con);
+			
+			return $userList;
+		}
 	}
 ?>
