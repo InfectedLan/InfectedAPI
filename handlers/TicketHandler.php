@@ -71,5 +71,20 @@ class TicketHandler {
 
 		MySQL::close($con);
 	}
+
+	public static function setSeater($ticket, $newSeater)
+	{
+		$con = MySQL::open(Settings::db_name_tickets);
+
+		if(!isset($newSeater) || empty($newSeater))
+		{
+			$result = mysqli_query($con, 'UPDATE ' . Settings::db_table_tickets . ' SET seater=\'0\' WHERE id=\'' . $ticket->getId() . '\'');
+		}
+		else
+		{
+			$result = mysqli_query($con, 'UPDATE ' . Settings::db_table_tickets . ' SET seater=\'' . $newSeater->getId() . '\' WHERE id=\'' . $ticket->getId() . '\'');
+		}
+		MySQL::close($con);
+	}
 }
 ?>

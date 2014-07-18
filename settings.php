@@ -8,9 +8,9 @@ class Settings {
 	// Database.
 	const db_host = 'localhost';
 
-	const db_name_infected = 'infectedlan_tk';
-	const db_name_crew = 'infectedlan_tk_crew';
-	const db_name_tickets = 'infectedlan_tk_tickets';
+	const db_name_infected = 'infecrjn_infected';
+	const db_name_crew = 'infecrjn_crew';
+	const db_name_tickets = 'infecrjn_tickets';
 
 	// Fix this, does not support constant arrays... const db_prefixList = array('');
 
