@@ -1,5 +1,5 @@
 <?php
-require_once $_SERVER['DOCUMENT_ROOT'] . '/api/phpqrcode/qrlib.php';
+require_once $_SERVER['DOCUMENT_ROOT'] . '/api/qr.php';
 
 class Ticket {
 	private $id;
@@ -83,14 +83,7 @@ class Ticket {
 	}
 	
 	public function getQRCode($content) {
-		$fileName = md5($this->getHumanName()) . '.png';
-		$filePath = 'qrcache/' . $fileName;
-    
-		if (!file_exists($filePath)) {
-			QRcode::png($content, $filePath);
-		}
-    
-		return $filePath;
+		return QR::getCode($content);
 	}
 }
 ?>
