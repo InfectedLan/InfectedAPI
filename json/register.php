@@ -1,6 +1,8 @@
 <?php
-require_once $_SERVER['DOCUMENT_ROOT'] . '/api/utils.php';
-require_once $_SERVER['DOCUMENT_ROOT'] . '/api/handlers/userhandler.php';
+require_once 'includes.php';
+
+require_once 'utils.php';
+require_once 'handlers/userhandler.php';
 
 $message = "Success!";
 $result = false;
