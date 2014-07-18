@@ -1,10 +1,10 @@
 <?php
-require_once $_SERVER['DOCUMENT_ROOT'] . '/api/Settings.php';
-require_once $_SERVER['DOCUMENT_ROOT'] . '/api/MySQL.php';
-require_once $_SERVER['DOCUMENT_ROOT'] . '/api/handlers/EventHandler.php';
-require_once $_SERVER['DOCUMENT_ROOT'] . '/api/handlers/TicketTypeHandler.php';
-require_once $_SERVER['DOCUMENT_ROOT'] . '/api/handlers/SeatHandler.php';
-require_once $_SERVER['DOCUMENT_ROOT'] . '/api/objects/Ticket.php';
+require_once $_SERVER['DOCUMENT_ROOT'] . '/api/settings.php';
+require_once $_SERVER['DOCUMENT_ROOT'] . '/api/mysql.php';
+require_once $_SERVER['DOCUMENT_ROOT'] . '/api/handlers/eventhandler.php';
+require_once $_SERVER['DOCUMENT_ROOT'] . '/api/handlers/tickettypehandler.php';
+require_once $_SERVER['DOCUMENT_ROOT'] . '/api/handlers/seathandler.php';
+require_once $_SERVER['DOCUMENT_ROOT'] . '/api/objects/ticket.php';
 
 class TicketHandler {
 	public static function getTicket($id) {
@@ -32,10 +32,10 @@ class TicketHandler {
 		return $currentEvent->getParticipants()-$numTickets;
 	}
 	
-	public static function getTicketsForEvent($eventid) {
+	public static function getTicketsForEvent($eventId) {
 		$con = MySQL::open(Settings::db_name_tickets);
 
-		$result = mysqli_query($con, 'SELECT id FROM ' . Settings::db_table_tickets . ' WHERE event=\'' . $eventid . '\'');
+		$result = mysqli_query($con, 'SELECT id FROM ' . Settings::db_table_tickets . ' WHERE event=\'' . $eventId . '\'');
 
 		$ticketList = array();
 

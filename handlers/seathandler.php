@@ -1,8 +1,8 @@
 <?php
-require_once $_SERVER['DOCUMENT_ROOT'] . '/api/Settings.php';
-require_once $_SERVER['DOCUMENT_ROOT'] . '/api/MySQL.php';
-require_once $_SERVER['DOCUMENT_ROOT'] . '/api/handlers/RowHandler.php';
-require_once $_SERVER['DOCUMENT_ROOT'] . '/api/objects/Ticket.php';
+require_once $_SERVER['DOCUMENT_ROOT'] . '/api/settings.php';
+require_once $_SERVER['DOCUMENT_ROOT'] . '/api/mysql.php';
+require_once $_SERVER['DOCUMENT_ROOT'] . '/api/handlers/rowhandler.php';
+require_once $_SERVER['DOCUMENT_ROOT'] . '/api/objects/ticket.php';
 
 class SeatHandler {
 	public static function getSeat($id) {

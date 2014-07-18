@@ -1,7 +1,7 @@
 <?php
-require_once $_SERVER['DOCUMENT_ROOT'] . '/api/Settings.php';
-require_once $_SERVER['DOCUMENT_ROOT'] . '/api/MySQL.php';
-require_once $_SERVER['DOCUMENT_ROOT'] . '/api/objects/Event.php';
+require_once $_SERVER['DOCUMENT_ROOT'] . '/api/settings.php';
+require_once $_SERVER['DOCUMENT_ROOT'] . '/api/mysql.php';
+require_once $_SERVER['DOCUMENT_ROOT'] . '/api/objects/event.php';
 
 class EventHandler {
 	// Get event.

@@ -1,7 +1,7 @@
 <?php
-require_once $_SERVER['DOCUMENT_ROOT'] . '/api/Settings.php';
-require_once $_SERVER['DOCUMENT_ROOT'] . '/api/MySQL.php';
-require_once $_SERVER['DOCUMENT_ROOT'] . '/api/objects/Agenda.php';
+require_once $_SERVER['DOCUMENT_ROOT'] . '/api/settings.php';
+require_once $_SERVER['DOCUMENT_ROOT'] . '/api/mysql.php';
+require_once $_SERVER['DOCUMENT_ROOT'] . '/api/objects/agenda.php';
 
 class AgendaHandler {
 	public static function getAgenda($id) {

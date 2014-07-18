@@ -1,5 +1,5 @@
 <?php
-require_once $_SERVER['DOCUMENT_ROOT'] . '/api/handlers/UserHanlder.php';
+require_once $_SERVER['DOCUMENT_ROOT'] . '/api/handlers/userhandler.php';
 
 class Article {	
 	private $id;

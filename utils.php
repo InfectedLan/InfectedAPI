@@ -1,7 +1,7 @@
 <?php
-require_once 'Settings.php';
-require_once 'handlers/EventHandler.php';
-require_once 'objects/User.php';
+require_once 'settings.php';
+require_once 'handlers/eventhandler.php';
+require_once 'objects/user.php';
 
 session_start();
 

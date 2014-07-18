@@ -1,9 +1,8 @@
 <?php
-require_once $_SERVER['DOCUMENT_ROOT'] . '/api/Settings.php';
-require_once $_SERVER['DOCUMENT_ROOT'] . '/api/MySQL.php';
-require_once $_SERVER['DOCUMENT_ROOT'] . '/api/Utils.php';
-require_once $_SERVER['DOCUMENT_ROOT'] . '/api/handlers/UserHandler.php';
-require_once $_SERVER['DOCUMENT_ROOT'] . '/api/handlers/GroupHandler.php';
+require_once $_SERVER['DOCUMENT_ROOT'] . '/api/settings.php';
+require_once $_SERVER['DOCUMENT_ROOT'] . '/api/mysql.php';
+require_once $_SERVER['DOCUMENT_ROOT'] . '/api/handlers/userhandler.php';
+require_once $_SERVER['DOCUMENT_ROOT'] . '/api/handlers/grouphandler.php';
 
 class Team {
 	private $id;

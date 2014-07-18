@@ -1,6 +1,6 @@
 <?php
 	require_once '/../utils.php';
-	require_once '/../handlers/TicketHandler.php';
+	require_once '/../handlers/tickethandler.php';
 
 	if(Utils::isAuthenticated() == false)
 	{
