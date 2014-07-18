@@ -1,7 +1,7 @@
 <?php
-require_once $_SERVER['DOCUMENT_ROOT'] . '/api/settings.php';
-require_once $_SERVER['DOCUMENT_ROOT'] . '/api/mysql.php';
-require_once $_SERVER['DOCUMENT_ROOT'] . '/api/objects/article.php';
+require_once 'settings.php';
+require_once 'mysql.php';
+require_once 'objects/article.php';
 
 class ArticleHandler {
 	// Get article.

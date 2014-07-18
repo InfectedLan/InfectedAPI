@@ -1,8 +1,8 @@
 <?php
-require_once $_SERVER['DOCUMENT_ROOT'] . '/api/settings.php';
-require_once $_SERVER['DOCUMENT_ROOT'] . '/api/mysql.php';
-require_once $_SERVER['DOCUMENT_ROOT'] . '/api/handlers/userhandler.php';
-require_once $_SERVER['DOCUMENT_ROOT'] . '/api/handlers/teamhandler.php';
+require_once 'settings.php';
+require_once 'mysql.php';
+require_once 'handlers/userhandler.php';
+require_once 'handlers/teamhandler.php';
 
 class Group {
 	private $id;

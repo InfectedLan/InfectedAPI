@@ -1,5 +1,5 @@
 <?php
-require_once $_SERVER['DOCUMENT_ROOT'] . '/api/phpqrcode/qrlib.php';
+require_once 'phpqrcode/qrlib.php';
 
 class QR {
 	public function getCode($content) {
