@@ -1,6 +1,6 @@
 <?php
-require_once '/../handlers/UserHandler.php';
-require_once '/../handlers/GroupHandler.php';
+require_once $_SERVER['DOCUMENT_ROOT'] . '/api/handlers/UserHandler.php';
+require_once $_SERVER['DOCUMENT_ROOT'] . '/api/handlers/GroupHandler.php';
 
 class Application {
 	private $id;

@@ -5,7 +5,7 @@ require_once $_SERVER['DOCUMENT_ROOT'] . '/api/objects/MainPage.php';
 
 class MainPageHandler {
 	// Get page.
-	public static function getMainPage($id) {
+	public static function getPage($id) {
 		$con = MySQL::open(Settings::db_name_infected);
 		
 		$result = mysqli_query($con, 'SELECT * FROM ' . Settings::db_table_main_pages . ' WHERE id=\'' . $id . '\'');
@@ -19,7 +19,7 @@ class MainPageHandler {
 	}
 	
 	// Get page.
-	public static function getMainPageByName($name) {
+	public static function getPageByName($name) {
 		$con = MySQL::open(Settings::db_name_infected);
 		
 		$result = mysqli_query($con, 'SELECT id FROM ' . Settings::db_table_main_pages . ' WHERE name=\'' . $name . '\'');
@@ -28,19 +28,19 @@ class MainPageHandler {
 		MySQL::close($con);
 
 		if ($row) {
-			return self::getMainPage($row['id']);
+			return self::getPage($row['id']);
 		}
 	}
 	
 	// Get a list of all pages
-	public static function getMainPages() {
+	public static function getPages() {
 		$con = MySQL::open(Settings::db_name_infected);
 		
 		$result = mysqli_query($con, 'SELECT id FROM ' . Settings::db_table_main_pages);
 		$pageList = array();
 		
 		while ($row = mysqli_fetch_array($result)) {
-			array_push($pageList, self::getMainPage($row['id']));
+			array_push($pageList, self::getPage($row['id']));
 		}
 		
 		MySQL::close($con);

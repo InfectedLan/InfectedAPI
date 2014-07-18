@@ -1,6 +1,5 @@
 <?php
-class Ticket
-{
+class Ticket {
 	private $id;
 	private $event;
 	private $owner;

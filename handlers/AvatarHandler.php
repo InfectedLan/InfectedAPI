@@ -1,7 +1,7 @@
 <?php
-require_once 'settings.php';
-require_once 'mysql.php';
-require_once 'avatar.php';
+require_once $_SERVER['DOCUMENT_ROOT'] . '/api/Settings.php';
+require_once $_SERVER['DOCUMENT_ROOT'] . '/api/MySQL.php';
+require_once $_SERVER['DOCUMENT_ROOT'] . '/api/objects/Avatar.php';
 
 class AvatarHandler {
 	/* Get a avatar by id */
@@ -66,5 +66,4 @@ class AvatarHandler {
 		}
 	}
 }
-
 ?>

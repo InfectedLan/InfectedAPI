@@ -1,6 +1,6 @@
 <?php
-require_once 'settings.php';
-require_once 'mysql.php';
+require_once $_SERVER['DOCUMENT_ROOT'] . '/api/Settings.php';
+require_once $_SERVER['DOCUMENT_ROOT'] . '/api/MySQL.php';
 
 class PasswordResetHandler {
 	/* Get a password reset code by userId */

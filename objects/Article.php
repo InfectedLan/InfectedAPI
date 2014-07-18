@@ -1,9 +1,7 @@
 <?php
-require_once 'database.php';
+require_once $_SERVER['DOCUMENT_ROOT'] . '/api/handlers/UserHanlder.php';
 
 class Article {	
-	private $database;
-	
 	private $id;
 	private $name;
 	private $title;
@@ -20,12 +18,10 @@ class Article {
 		$this->image = $image;
 		$this->author = $author;
 		$this->datetime = $datetime;
-		
-		$this->database = new Database();
 	}
 	
 	public function display() {
-		$author = $this->database->getUser($this->getAuthor());
+		$author = UserHanlder::getUser($this->getAuthor());
 		
 		if ($author != null) {
 			// Format the page with HTML.		

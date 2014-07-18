@@ -1,7 +1,7 @@
 <?php
-require_once '/../Settings.php';
-require_once '/../MySQL.php';
-require_once '/../objects/Team.php';
+require_once $_SERVER['DOCUMENT_ROOT'] . '/api/Settings.php';
+require_once $_SERVER['DOCUMENT_ROOT'] . '/api/MySQL.php';
+require_once $_SERVER['DOCUMENT_ROOT'] . '/api/objects/Team.php';
 
 class TeamHandler {
 	/* Get a team by id */
@@ -72,5 +72,4 @@ class TeamHandler {
 		MySQL::close($con);
 	}
 }
-
 ?>

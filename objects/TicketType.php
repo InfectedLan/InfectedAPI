@@ -26,7 +26,5 @@ class TicketType {
 	{
 		return $this->humanName;
 	}
-
 }
-
 ?>

@@ -1,8 +1,9 @@
 <?php
-require_once '/../Settings.php';
-require_once '/../MySQL.php';
-require_once '/../Utils.php';
-require_once '/../handlers/GroupHandler.php';
+require_once $_SERVER['DOCUMENT_ROOT'] . '/api/Settings.php';
+require_once $_SERVER['DOCUMENT_ROOT'] . '/api/MySQL.php';
+require_once $_SERVER['DOCUMENT_ROOT'] . '/api/Utils.php';
+require_once $_SERVER['DOCUMENT_ROOT'] . '/api/handlers/UserHandler.php';
+require_once $_SERVER['DOCUMENT_ROOT'] . '/api/handlers/GroupHandler.php';
 
 class Team {
 	private $id;
@@ -42,15 +43,15 @@ class Team {
 	}
 	
 	public function getChief() {
-		return $this->database->getUser($this->chief);
+		return UserHandler::getUser($this->chief);
 	}
 	
 	/* Returns an array of users that are members of this group */
 	public function getMembers() {
-		$con = MySQL::open(0);
+		$con = MySQL::open(Settings::db_name_infected);
 		
-		$result = mysqli_query($con, 'SELECT * FROM ' . Settings::db_table_teams_users . ' 
-									  LEFT JOIN infecrjn_crew.' . Settings::db_table_memberof . ' ON ' . Settings::db_table_teams_users . '.id = userId 
+		$result = mysqli_query($con, 'SELECT * FROM ' . Settings::db_table_users . ' 
+									  LEFT JOIN ' . Settings::db_name_crew . '.' . Settings::db_table_memberof . ' ON ' . Settings::db_table_users . '.id = userId 
 									  WHERE groupId = \'' . $this->getGroup()->getId() . '\' AND teamId = \'' . $this->getId() . '\' 
 									  ORDER BY firstname ASC');
 		
@@ -67,7 +68,7 @@ class Team {
 										   $row['gender'], 
 										   $row['phone'], 
 										   $row['address'], 
-										   $row['postalCode'], 
+										   $row['postalcode'], 
 										   $row['nickname']));
 		}
 		
@@ -82,13 +83,13 @@ class Team {
 			echo $this->getDescription();
 		echo '</div>';
 		
-		if ($this->utils->isAuthenticated()) {
+		if (Utils::isAuthenticated()) {
 			$this->display();
 		}
 	}
 	
 	public function display() {
-		$user = $this->utils->getUser();
+		$user = Utils::getUser();
 		
 		if ($user->isGroupMember()) {
 			$memberList = $this->getMembers();

@@ -1,7 +1,7 @@
 <?php
-require_once '/../Settings.php';
-require_once '/../MySQL.php';
-require_once '/../objects/Role.php';
+require_once $_SERVER['DOCUMENT_ROOT'] . '/api/Settings.php';
+require_once $_SERVER['DOCUMENT_ROOT'] . '/api/MySQL.php';
+require_once $_SERVER['DOCUMENT_ROOT'] . '/api/objects/Role.php';
 
 class RoleHandler {
 	// Get a role by id.

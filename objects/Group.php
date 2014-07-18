@@ -1,8 +1,9 @@
 <?php
-require_once '/../settings.php';
-require_once '/../MySQL.php';
-require_once '/../Utils.php';
-require_once '/../handlers/UserHandler.php';
+require_once $_SERVER['DOCUMENT_ROOT'] . '/api/Settings.php';
+require_once $_SERVER['DOCUMENT_ROOT'] . '/api/MySQL.php';
+require_once $_SERVER['DOCUMENT_ROOT'] . '/api/Utils.php';
+require_once $_SERVER['DOCUMENT_ROOT'] . '/api/handlers/UserHandler.php';
+require_once $_SERVER['DOCUMENT_ROOT'] . '/api/handlers/TeamHandler.php';
 
 class Group {
 	private $id;
@@ -49,7 +50,7 @@ class Group {
 		$con = MySQL::open(Settings::db_name_infected);
 		
 		$result = mysqli_query($con, 'SELECT * FROM ' . Settings::db_table_users . ' 
-									  LEFT JOIN infecrjn_crew.' . Settings::db_table_memberof . ' ON ' . Settings::db_table_users . '.id = userId 
+									  LEFT JOIN ' . Settings::db_name_crew . '.' . Settings::db_table_memberof . ' ON ' . Settings::db_table_users . '.id = userId 
 									  WHERE groupId = \'' . $this->getId() . '\'
 									  ORDER BY firstname ASC');
 		
@@ -62,11 +63,11 @@ class Group {
 										   $row['username'], 
 										   $row['password'], 
 										   $row['email'], 
-										   $row['birthDate'], 
+										   $row['birthdate'], 
 										   $row['gender'], 
 										   $row['phone'], 
 										   $row['address'], 
-										   $row['postalCode'], 
+										   $row['postalcode'], 
 										   $row['nickname']));
 		}
 		
@@ -77,33 +78,33 @@ class Group {
 	
 	/* Retuns an array of all teams in this group */
 	public function getTeams() {
-		$con = $this->mysql->open(1);
+		$con = MySQL::open(Settings::db_name_crew);
 		
-		$result = mysqli_query($con, 'SELECT id FROM ' . $this->settings->tableList[1][6] . ' WHERE groupId=\'' . $this->getId() . '\'');
+		$result = mysqli_query($con, 'SELECT id FROM ' . Settings::db_table_teams . ' WHERE groupId=\'' . $this->getId() . '\'');
 		
 		$teamList = array();
 		
 		while ($row = mysqli_fetch_array($result)) {
-			array_push($teamList, $this->database->getTeam($row['id']));
+			array_push($teamList, TeamHandler::getTeam($row['id']));
 		}
 		
-		$this->mysql->close($con);
+		MySQL::close($con);
 		
 		return $teamList;
 	}
 	
 	public function getPendingApplications() {
-		$con = $this->mysql->open(1);
+		$con = MySQL::open(Settings::db_name_crew);
 		
 		$applicationList = array();
 		
-		$result = mysqli_query($con, 'SELECT id FROM ' . $this->settings->tableList[1][0] . ' WHERE groupId=\'' . $this->getId() . '\' AND state=\'1\'');
+		$result = mysqli_query($con, 'SELECT id FROM ' . Settings::db_table_applications . ' WHERE groupId=\'' . $this->getId() . '\' AND state=\'1\'');
 		
 		while ($row = mysqli_fetch_array($result)) {
-			array_push($applicationList, $this->database->getApplication($row['id']));
+			array_push($applicationList, ApplicationHandler::getApplication($row['id']));
 		}
 		
-		$this->mysql->close($con);
+		MySQL::close($con);
 		
 		return $applicationList;
 	}
@@ -114,13 +115,13 @@ class Group {
 			echo $this->getDescription();
 		echo '</div>';
 			
-		if ($this->utils->isAuthenticated()) {
+		if (Utils::isAuthenticated()) {
 			$this->display();
 		}
 	}
 	
 	public function display() {
-		$user = $this->utils->getUser();
+		$user = Utils::getUser();
 		
 		if ($user->isGroupMember()) {
 			$memberList = $this->getMembers();

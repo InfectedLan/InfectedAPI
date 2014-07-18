@@ -24,7 +24,7 @@ class UserHandler {
 							$row['gender'], 
 							$row['phone'], 
 							$row['address'], 
-							$row['postalCode'], 
+							$row['postalcode'], 
 							$row['nickname']);
 		}
 	}
@@ -138,7 +138,7 @@ class UserHandler {
 		$con = MySQL::open(Settings::db_name_infected);
 		
 		$result = mysqli_query($con, 'SELECT * FROM ' . Settings::db_table_users . '
-									  LEFT JOIN infecrjn_crew.' . Settings::db_table_memberof . ' ON ' . Settings::db_table_users . '.id = userId
+									  LEFT JOIN ' . Settings::db_name_crew . '.' . Settings::db_table_memberof . ' ON ' . Settings::db_table_users . '.id = userId
 									  WHERE groupId IS NOT NULL 
 									  ORDER BY firstname ASC');
 		
@@ -151,11 +151,11 @@ class UserHandler {
 										   $row['username'], 
 										   $row['password'], 
 										   $row['email'], 
-										   $row['birthDate'], 
+										   $row['birthdate'], 
 										   $row['gender'], 
 										   $row['phone'], 
 										   $row['address'], 
-										   $row['postalCode'], 
+										   $row['postalcode'], 
 										   $row['nickname']));
 		}
 		
@@ -169,7 +169,7 @@ class UserHandler {
 		$con = MySQL::open(Settings::db_name_infected);
 		
 		$result = mysqli_query($con, 'SELECT * FROM ' . Settings::db_table_users . ' 
-									  LEFT JOIN infecrjn_crew.' . Settings::db_table_memberof . ' ON ' . Settings::db_table_users . '.id = userId 
+									  LEFT JOIN ' . Settings::db_name_crew . '.' . Settings::db_table_memberof . ' ON ' . Settings::db_table_users . '.id = userId 
 									  WHERE groupId IS NULL 
 									  ORDER BY firstname ASC');
 		
@@ -182,11 +182,11 @@ class UserHandler {
 										   $row['username'], 
 										   $row['password'], 
 										   $row['email'], 
-										   $row['birthDate'], 
+										   $row['birthdate'], 
 										   $row['gender'], 
 										   $row['phone'], 
 										   $row['address'], 
-										   $row['postalCode'], 
+										   $row['postalcode'], 
 										   $row['nickname']));
 		}
 		

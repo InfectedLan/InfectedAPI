@@ -19,7 +19,6 @@ class Settings {
 	const db_table_crew_pages = 'pages';
 	const db_table_games = 'games';
 	const db_table_gameapplications = 'gameapplications';
-	const db_table_crews = 'crews';
 	const db_table_users = 'users';
 	const db_table_permissions = 'permissions';
 	const db_table_agenda = 'agenda';

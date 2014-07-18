@@ -211,11 +211,11 @@ class User {
 		$result = mysqli_query($con, 'SELECT groupId FROM ' . Settings::db_table_memberof . ' WHERE userId = \'' . $this->getId() . '\'');
 		$row = mysqli_fetch_array($result);
 		
-		if ($row) {
-			return $this->database->getGroup($row['groupId']);
-		}
-		
 		MySQL::close($con);
+		
+		if ($row) {
+			return GroupHandler::getGroup($row['groupId']);
+		}
 	}
 	
 	/* Sets the users group */
@@ -265,7 +265,7 @@ class User {
 		MySQL::close($con);
 		
 		if ($row) {
-			return $this->database->getTeam($row['teamId']);
+			return TeamHandler::getTeam($row['teamId']);
 		}
 	}
 	

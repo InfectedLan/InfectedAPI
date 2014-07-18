@@ -1,9 +1,9 @@
 <?php
-require_once '/../Settings.php';
-require_once '/../MySQL.php';
-require_once '/../Utils.php';
-require_once '/../objects/CrewPage.php';
-require_once '/../objects/User.php';
+require_once $_SERVER['DOCUMENT_ROOT'] . '/api/Settings.php';
+require_once $_SERVER['DOCUMENT_ROOT'] . '/api/MySQL.php';
+require_once $_SERVER['DOCUMENT_ROOT'] . '/api/Utils.php';
+require_once $_SERVER['DOCUMENT_ROOT'] . '/api/objects/CrewPage.php';
+require_once $_SERVER['DOCUMENT_ROOT'] . '/api/objects/User.php';
 
 class CrewPageHandler {
 	/* Get page by id */
@@ -122,6 +122,5 @@ class CrewPageHandler {
 		
 		MySQL::close($con);
 	}
-	
 }
 ?>

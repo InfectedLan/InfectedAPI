@@ -7,8 +7,7 @@ require_once $_SERVER['DOCUMENT_ROOT'] . '/api/handlers/SeatHandler.php';
 require_once $_SERVER['DOCUMENT_ROOT'] . '/api/objects/Ticket.php';
 
 class TicketHandler {
-	public static function getTicket($id)
-	{
+	public static function getTicket($id) {
 		$con = MySQL::open(Settings::db_name_tickets);
 
 		$result = mysqli_query($con, 'SELECT * FROM ' . Settings::db_table_tickets . ' WHERE ID=\'' . $id . '\'');
@@ -16,16 +15,15 @@ class TicketHandler {
 
 		MySQL::close($con);
 
-		if($row)
-		{
+		if($row) {
 			return new Ticket($row['id'], EventHandler::getEvent($row['event']), UserHandler::getUser($row['owner']), 
 				TicketTypeHandler::getTicketType($row['type']), SeatHandler::getSeat($row['seat']), 
 				UserHandler::getUser($row['seater'])
 				);
 		}
 	}
-	public static function getAvailableTickets()
-	{
+	
+	public static function getAvailableTickets() {
 		$currentEvent = EventHandler::getCurrentEvent();//Todo: get current event, return amount of tickets left
 
 		$tickets = self::getTicketsForEvent($currentEvent->getId());
@@ -33,8 +31,8 @@ class TicketHandler {
 
 		return $currentEvent->getParticipants()-$numTickets;
 	}
-	public static function getTicketsForEvent($eventid)
-	{
+	
+	public static function getTicketsForEvent($eventid) {
 		$con = MySQL::open(Settings::db_name_tickets);
 
 		$result = mysqli_query($con, 'SELECT id FROM ' . Settings::db_table_tickets . ' WHERE event=\'' . $eventid . '\'');
@@ -49,8 +47,8 @@ class TicketHandler {
 
 		return $ticketList;
 	}
-	public static function getTicketsForOwner($user)
-	{
+	
+	public static function getTicketsForOwner($user) {
 		$con = MySQL::open(Settings::db_name_tickets);
 
 		$result = mysqli_query($con, 'SELECT id FROM ' . Settings::db_table_tickets . ' WHERE owner=\'' . $user->getId() . '\'');
@@ -65,8 +63,8 @@ class TicketHandler {
 
 		return $ticketList;
 	}
-	public static function transferTicket($ticket, $newOwner)
-	{
+	
+	public static function transferTicket($ticket, $newOwner) {
 		$con = MySQL::open(Settings::db_name_tickets);
 
 		$result = mysqli_query($con, 'UPDATE ' . Settings::db_table_tickets . ' SET owner=\'' . $newOwner->getId() . '\' WHERE id=\'' . $ticket->getId() . '\'');
