@@ -1,4 +1,6 @@
 <?php
+require_once $_SERVER['DOCUMENT_ROOT'] . '/api/phpqrcode/qrlib.php';
+
 class Ticket {
 	private $id;
 	private $event;
@@ -18,8 +20,7 @@ class Ticket {
 	 * User: User account that will be using the ticket
 	 * Seater: User account that can seat this ticket
 	 */
-	public function Ticket($id, $event, $owner, $type, $seat, $seater)
-	{
+	public function Ticket($id, $event, $owner, $type, $seat, $seater) {
 		$this->id = $id;
 		$this->event = $event;
 		$this->owner = $owner;
@@ -31,16 +32,14 @@ class Ticket {
 	/*
 	 * Returns the unique id for the ticket
 	 */
-	public function getId()
-	{
+	public function getId() {
 		return $this->id;
 	}
 
 	/*
 	 * Returns the event this ticket is for
 	 */
-	public function getEvent()
-	{
+	public function getEvent() {
 		return $this->event;
 	}
 
@@ -49,24 +48,21 @@ class Ticket {
 	 *
 	 * The owner is the user account that purchased the ticket.
 	 */
-	public function getOwner()
-	{
+	public function getOwner() {
 		return $this->owner;
 	}
 
 	/*
 	 * Returns the ticket type
 	 */
-	public function getType()
-	{
+	public function getType() {
 		return $this->type;
 	}
 
 	/*
 	 * Returns the seat that this ticket is seated at
 	 */
-	public function getSeat()
-	{
+	public function getSeat() {
 		return $this->seat;
 	}
 
@@ -75,17 +71,26 @@ class Ticket {
 	 *
 	 * The seater is the user account that is allowed to decide what seat this ticket is seated on.
 	 */
-	public function getSeater()
-	{
+	public function getSeater() {
 		return $this->seater;
 	}
 
 	/*
 	 * Returns a human readable representation of the ticket
 	 */
-	public function getHumanName()
-	{
-		return 'INFECTED_' . strtoupper( $this->event->getTheme() ) . $this->id;
+	public function getHumanName() {
+		return 'INFECTED_' . strtoupper($this->getEvent()->getTheme() ) . $this->id;
+	}
+	
+	public function getQRCode($content) {
+		$fileName = md5($this->getHumanName()) . '.png';
+		$filePath = 'qrcache/' . $fileName;
+    
+		if (!file_exists($filePath)) {
+			QRcode::png($content, $filePath);
+		}
+    
+		return $filePath;
 	}
 }
 ?>

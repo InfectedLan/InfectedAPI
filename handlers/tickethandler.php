@@ -1,6 +1,7 @@
 <?php
 require_once $_SERVER['DOCUMENT_ROOT'] . '/api/settings.php';
 require_once $_SERVER['DOCUMENT_ROOT'] . '/api/mysql.php';
+require_once $_SERVER['DOCUMENT_ROOT'] . '/api/handlers/userhandler.php';
 require_once $_SERVER['DOCUMENT_ROOT'] . '/api/handlers/eventhandler.php';
 require_once $_SERVER['DOCUMENT_ROOT'] . '/api/handlers/tickettypehandler.php';
 require_once $_SERVER['DOCUMENT_ROOT'] . '/api/handlers/seathandler.php';

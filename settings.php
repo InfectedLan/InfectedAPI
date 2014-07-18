@@ -1,18 +1,17 @@
 <?php
 class Settings {
+	// Information
 	const name = 'Infected';
 	const description = 'Infected er et av Akershus største datatreff (LAN-party), og holder til i kulturhuset i Asker kommune.';
 	const keywords = 'infected, lan, party, asker, kulturhus, ungdom, gaming';
 	public static $authors = array('halvors', 'petterroea');
 
-	// Database.
+	// Database
 	const db_host = 'localhost';
 
 	const db_name_infected = 'infectedlan_tk';
 	const db_name_crew = 'infectedlan_tk_crew';
 	const db_name_tickets = 'infectedlan_tk_tickets';
-
-	// Fix this, does not support constant arrays... const db_prefixList = array('');
 
 	const db_table_events = 'events';
 	const db_table_main_pages = 'pages';
@@ -39,39 +38,5 @@ class Settings {
 
 	const emailName = 'kontakt@infected.no';
 	const email = 'kontakt@infected.no';
-	/*
-	const host = 'localhost';
-	const databaseList = array('infecrjn_infected', 'infecrjn_crew');
-	const prefixList = array('');
-	const tableList = array('events', 
-						'pages', 
-						'games', 
-						'gameapplications', 
-						'crews', 
-						'users', 
-						'permissions', 
-						'agendas', 
-						'slides', 
-						'teams');
-	*/
-
-	//Here is the table array for v7
-	// - Liam
-	
-	/*
-		public $tables = array('events', 
-					'users', 
-					'roles', 
-					'pages', 
-					'articles', 
-					'games', 
-					'gameapplications', 
-					'agendas', 
-					'slides');
-	*/
-	
-	// Create tables
-	public $tablesSql = array();
-	public $tablesDataSql = array();
 }
 ?>
