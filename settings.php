@@ -6,37 +6,43 @@ class Settings {
 	const keywords = 'infected, lan, party, asker, kulturhus, ungdom, gaming';
 	public static $authors = array('halvors', 'petterroea');
 
-	// Database
-	const db_host = 'localhost';
-
-	const db_name_infected = 'infectedlan_tk';
-	const db_name_crew = 'infectedlan_tk_crew';
-	const db_name_tickets = 'infectedlan_tk_tickets';
-
-	const db_table_events = 'events';
-	const db_table_main_pages = 'pages';
-	const db_table_crew_pages = 'pages';
-	const db_table_games = 'games';
-	const db_table_gameapplications = 'gameapplications';
-	const db_table_users = 'users';
-	const db_table_permissions = 'permissions';
-	const db_table_agenda = 'agenda';
-	const db_table_slides = 'slides';
-	const db_table_teams = 'teams';
-	const db_table_articles = 'articles';
-	const db_table_roles = 'roles';
-	const db_table_memberof = 'memberof'; // The well known tableList[1][3] from issue #1
-	const db_table_groups = 'groups';
-	const db_table_avatars = 'avatars';
-	const db_table_applications = 'applications';
-	const db_table_passresets = 'passresets';
-	const db_table_tickets = 'tickets';
-	const db_table_seats = 'seats';
-	const db_table_sections = 'sections';
-	const db_table_ticketTypes = 'ticketTypes';
-	const db_table_postalcodes = 'postalcodes';
-
 	const emailName = 'kontakt@infected.no';
 	const email = 'kontakt@infected.no';
+	
+	const path = 'http://api.infectedlan.tk/';
+	
+	// Database information
+	const db_host = 'localhost';
+	const db_name_infected = 'infectedlan_tk';
+	const db_name_infected_main = 'infectedlan_tk_main';
+	const db_name_infected_crew = 'infectedlan_tk_crew';
+	const db_name_infected_tickets = 'infectedlan_tk_tickets';
+
+	// Infected
+	const db_table_infected_events = 'events';
+	const db_table_infected_locations = 'locations';
+	const db_table_infected_permissions = 'permissions';
+	const db_table_infected_postalcodes = 'postalcodes';
+	const db_table_infected_resetcodes = 'resetcodes';
+	
+	// InfectedMain
+	const db_table_infected_main_agenda = 'agenda';
+	const db_table_infected_main_gameapplications = 'gameapplications';
+	const db_table_infected_main_games = 'games';
+	const db_table_infected_main_pages = 'pages';
+	
+	// InfectedCrew
+	const db_table_infected_crew_applications = 'applications';
+	const db_table_infected_crew_avatars = 'avatars';
+	const db_table_infected_crew_groups = 'groups';
+	const db_table_infected_crew_memberof = 'memberof';
+	const db_table_infected_crew_pages = 'pages';
+	const db_table_infected_crew_teams = 'teams';
+	
+	// InfectedTickets
+	const db_table_infected_tickets_rows = 'rows';
+	const db_table_infected_tickets_seats = 'seats';
+	const db_table_infected_tickets_tickets = 'tickets';
+	const db_table_infected_tickets_ticketTypes = 'ticketTypes';
 }
 ?>

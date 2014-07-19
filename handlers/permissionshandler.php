@@ -7,7 +7,7 @@ class PermissionsHandler {
 	public static function hasPermission($userId, $permission) {
 		$con = MySQL::open(Settings::db_name_infected);
 		
-		$result = mysqli_query($con, 'SELECT value FROM ' . Settings::db_table_permissions . ' WHERE userId=\'' . $userId . '\' AND value=\'' . $permission . '\'');
+		$result = mysqli_query($con, 'SELECT value FROM ' . Settings::db_table_infected_permissions . ' WHERE userId=\'' . $userId . '\' AND value=\'' . $permission . '\'');
 		$row = mysqli_fetch_array($result);
 		
 		MySQL::close($con);

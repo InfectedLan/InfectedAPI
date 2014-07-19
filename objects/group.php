@@ -48,8 +48,8 @@ class Group {
 	public function getMembers() {
 		$con = MySQL::open(Settings::db_name_infected);
 		
-		$result = mysqli_query($con, 'SELECT * FROM ' . Settings::db_table_users . ' 
-									  LEFT JOIN ' . Settings::db_name_crew . '.' . Settings::db_table_memberof . ' ON ' . Settings::db_table_users . '.id = userId 
+		$result = mysqli_query($con, 'SELECT * FROM ' . Settings::db_table_infected_users . ' 
+									  LEFT JOIN ' . Settings::db_name_infected_crew . '.' . Settings::db_table_infected_crew_memberof . ' ON ' . Settings::db_table_infected_users . '.id = userId 
 									  WHERE groupId = \'' . $this->getId() . '\'
 									  ORDER BY firstname ASC');
 		
@@ -77,9 +77,9 @@ class Group {
 	
 	/* Retuns an array of all teams in this group */
 	public function getTeams() {
-		$con = MySQL::open(Settings::db_name_crew);
+		$con = MySQL::open(Settings::db_name_infected_crew);
 		
-		$result = mysqli_query($con, 'SELECT id FROM ' . Settings::db_table_teams . ' WHERE groupId=\'' . $this->getId() . '\'');
+		$result = mysqli_query($con, 'SELECT id FROM ' . Settings::db_table_infected_crew_teams . ' WHERE groupId=\'' . $this->getId() . '\'');
 		
 		$teamList = array();
 		
@@ -93,11 +93,11 @@ class Group {
 	}
 	
 	public function getPendingApplications() {
-		$con = MySQL::open(Settings::db_name_crew);
+		$con = MySQL::open(Settings::db_name_infected_crew);
 		
 		$applicationList = array();
 		
-		$result = mysqli_query($con, 'SELECT id FROM ' . Settings::db_table_applications . ' WHERE groupId=\'' . $this->getId() . '\' AND state=\'1\'');
+		$result = mysqli_query($con, 'SELECT id FROM ' . Settings::db_table_infected_crew_applications . ' WHERE groupId=\'' . $this->getId() . '\' AND state=\'1\'');
 		
 		while ($row = mysqli_fetch_array($result)) {
 			array_push($applicationList, ApplicationHandler::getApplication($row['id']));

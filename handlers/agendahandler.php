@@ -5,9 +5,9 @@ require_once 'objects/agenda.php';
 
 class AgendaHandler {
 	public static function getAgenda($id) {
-		$con = MySQL::open(Settings::db_name_infected);
+		$con = MySQL::open(Settings::db_name_infected_main);
 		
-		$result = mysqli_query($con, 'SELECT * FROM ' . Settings::db_table_agenda . ' WHERE id=\'' . $id . '\'');
+		$result = mysqli_query($con, 'SELECT * FROM ' . Settings::db_table_infected_main_agenda . ' WHERE id=\'' . $id . '\'');
 		$row = mysqli_fetch_array($result);
 		
 		MySQL::close($con);
@@ -18,9 +18,9 @@ class AgendaHandler {
 	}
 	
 	public static function getAgendas() {
-		$con = MySQL::open(Settings::db_name_infected);
+		$con = MySQL::open(Settings::db_name_infected_main);
 		
-		$result = mysqli_query($con, 'SELECT id FROM ' . Settings::db_table_agenda . ' ORDER BY datetime');
+		$result = mysqli_query($con, 'SELECT id FROM ' . Settings::db_table_infected_main_agenda . ' ORDER BY datetime');
 		$agendaList = array();
 		
 		while ($row = mysqli_fetch_array($result)) {
@@ -33,9 +33,9 @@ class AgendaHandler {
 	}
 	
 	public static function getAgendasBetween($first, $last) {
-		$con = MySQL::open(Settings::db_name_infected);
+		$con = MySQL::open(Settings::db_name_infected_main);
 		
-		$result = mysqli_query($con, 'SELECT id FROM ' . Settings::db_table_agenda . ' ORDER BY datetime');
+		$result = mysqli_query($con, 'SELECT id FROM ' . Settings::db_table_infected_main_agenda . ' ORDER BY datetime');
 		$agendaList = array();
 		
 		while ($row = mysqli_fetch_array($result)) {

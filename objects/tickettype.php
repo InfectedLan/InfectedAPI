@@ -11,19 +11,16 @@ class TicketType {
 	 * Id: Unique id of ticket type
 	 * HumanName: Human readable name for tickets
 	 */
-	public function TicketType($id, $humanName)
-	{
+	public function TicketType($id, $humanName) {
 		$this->id = $id;
 		$this->humanName = $humanName;
 	}
 
-	public function getId()
-	{
+	public function getId() {
 		return $this->id;
 	}
 
-	public function getHumanName()
-	{
+	public function getHumanName() {
 		return $this->humanName;
 	}
 }

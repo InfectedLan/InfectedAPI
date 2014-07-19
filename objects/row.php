@@ -26,40 +26,35 @@ class Row {
 	/*
 	 * Returns the unique id of the section
 	 */
-	public function getId()
-	{
+	public function getId() {
 		return $this->id;
 	}
 
 	/*
 	 * Returns the x coordinate of the section
 	 */
-	public function getX()
-	{
+	public function getX() {
 		return $this->x;
 	}
 
 	/*
 	 * Returns the y coordinate of the section
 	 */
-	public function getY()
-	{
+	public function getY() {
 		return $this->y;
 	}
 
 	/*
 	 * Returns the row of the section
 	 */
-	public function getRow()
-	{
+	public function getRow() {
 		return $this->row;
 	}
 
 	/*
 	 * Returns the event the section belongs to
 	 */
-	public function getEvent()
-	{
+	public function getEvent() {
 		return $this->event;
 	}
 }

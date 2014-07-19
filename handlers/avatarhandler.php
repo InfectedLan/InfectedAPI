@@ -6,9 +6,9 @@ require_once 'objects/avatar.php';
 class AvatarHandler {
 	/* Get a avatar by id */
 	public static function getAvatar($id) {
-		$con = MySQL::open(Settings::db_name_crew);
+		$con = MySQL::open(Settings::db_name_infected_crew);
 		
-		$result = mysqli_query($con, 'SELECT * FROM ' . Settings::db_table_avatars . ' WHERE id=\'' . $id . '\'');
+		$result = mysqli_query($con, 'SELECT * FROM ' . Settings::db_table_infected_crew_avatars . ' WHERE id=\'' . $id . '\'');
 		$row = mysqli_fetch_array($result);
 		
 		MySQL::close($con);
@@ -22,9 +22,9 @@ class AvatarHandler {
 	}
 	
 	public static function getAvatars() {
-		$con = MySQL::open(Settings::db_name_crew);
+		$con = MySQL::open(Settings::db_name_infected_crew);
 		
-		$result = mysqli_query($con, 'SELECT id FROM ' . Settings::db_table_avatars);
+		$result = mysqli_query($con, 'SELECT id FROM ' . Settings::db_table_infected_crew_avatars);
 		
 		$avatarList = array();
 		
@@ -38,9 +38,9 @@ class AvatarHandler {
 	}
 	
 	public static function getPendingAvatars() {
-		$con = MySQL::open(Settings::db_name_crew);
+		$con = MySQL::open(Settings::db_name_infected_crew);
 		
-		$result = mysqli_query($con, 'SELECT id FROM ' . Settings::db_table_avatars . ' WHERE state=\'1\'');
+		$result = mysqli_query($con, 'SELECT id FROM ' . Settings::db_table_infected_crew_avatars . ' WHERE state=\'1\'');
 		
 		$avatarList = array();
 		
@@ -54,9 +54,9 @@ class AvatarHandler {
 	}
 	
 	public static function getAvatarForUser($userId) {
-		$con = MySQL::open(Settings::db_name_crew);
+		$con = MySQL::open(Settings::db_name_infected_crew);
 		
-		$result = mysqli_query($con, 'SELECT id FROM ' . Settings::db_table_avatars . ' WHERE userId=\'' . $userId . '\'');
+		$result = mysqli_query($con, 'SELECT id FROM ' . Settings::db_table_infected_crew_avatars . ' WHERE userId=\'' . $userId . '\'');
 		$row = mysqli_fetch_array($result);
 		
 		MySQL::close($con);

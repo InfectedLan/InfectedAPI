@@ -97,7 +97,7 @@ class User {
 	public function getCity() {
 		$con = MySQL::open(Settings::db_name_infected);
 		
-		$result = mysqli_query($con, 'SELECT city FROM ' . Settings::db_table_postalcodes . ' WHERE code = \'' . $this->getPostalCode() . '\'');
+		$result = mysqli_query($con, 'SELECT city FROM ' . Settings::db_table_infected_postalcodes . ' WHERE code = \'' . $this->getPostalCode() . '\'');
 		$row = mysqli_fetch_array($result);
 		
 		MySQL::close($con);
@@ -133,9 +133,9 @@ class User {
 	}
 	
 	public function getAvatarType($type) {
-		$con = MySQL::open(Settings::db_name_crew);
+		$con = MySQL::open(Settings::db_name_infected_crew);
 		
-		$result = mysqli_query($con, 'SELECT relativeUrl FROM ' . Settings::db_table_avatars . ' WHERE userId = \'' . $this->getId() . '\' AND state = \'2\'');
+		$result = mysqli_query($con, 'SELECT relativeUrl FROM ' . Settings::db_table_infected_crew_avatars . ' WHERE userId = \'' . $this->getId() . '\' AND state = \'2\'');
 		$row = mysqli_fetch_array($result);
 		
 		if ($row) {
@@ -158,9 +158,9 @@ class User {
 	}
 	
 	public function getPendingAvatar() {
-		$con = MySQL::open(Settings::db_name_crew);
+		$con = MySQL::open(Settings::db_name_infected_crew);
 		
-		$result = mysqli_query($con, 'SELECT relativeUrl FROM ' . Settings::db_table_avatars . ' WHERE userId = \'' . $this->getId() . '\' AND state = \'1\'');
+		$result = mysqli_query($con, 'SELECT relativeUrl FROM ' . Settings::db_table_infected_crew_avatars . ' WHERE userId = \'' . $this->getId() . '\' AND state = \'1\'');
 		$row = mysqli_fetch_array($result);
 		
 		if ($row) {
@@ -183,9 +183,9 @@ class User {
 	}
 	
 	public function hasPendingAvatar() {
-		$con = MySQL::open(Settings::db_name_crew);
+		$con = MySQL::open(Settings::db_name_infected_crew);
 		
-		$result = mysqli_query($con, 'SELECT state FROM ' . Settings::db_table_avatars . ' WHERE userId = \'' . $this->getId() . '\' AND state = \'1\'');
+		$result = mysqli_query($con, 'SELECT state FROM ' . Settings::db_table_infected_crew_avatars . ' WHERE userId = \'' . $this->getId() . '\' AND state = \'1\'');
 		$row = mysqli_fetch_array($result);
 		
 		MySQL::close($con);
@@ -194,9 +194,9 @@ class User {
 	}
 	
 	public function hasAvatar() {
-		$con = MySQL::open(Settings::db_name_crew);
+		$con = MySQL::open(Settings::db_name_infected_crew);
 		
-		$result = mysqli_query($con, 'SELECT state FROM ' . Settings::db_table_avatars . ' WHERE userId = \'' . $this->getId() . '\' AND state = \'2\'');
+		$result = mysqli_query($con, 'SELECT state FROM ' . Settings::db_table_infected_crew_avatars . ' WHERE userId = \'' . $this->getId() . '\' AND state = \'2\'');
 		$row = mysqli_fetch_array($result);
 		
 		MySQL::close($con);
@@ -206,9 +206,9 @@ class User {
 	
 	/* Returns the users group */
 	public function getGroup() {
-		$con = MySQL::open(Settings::db_name_crew);
+		$con = MySQL::open(Settings::db_name_infected_crew);
 		
-		$result = mysqli_query($con, 'SELECT groupId FROM ' . Settings::db_table_memberof . ' WHERE userId = \'' . $this->getId() . '\'');
+		$result = mysqli_query($con, 'SELECT groupId FROM ' . Settings::db_table_infected_crew_memberof . ' WHERE userId = \'' . $this->getId() . '\'');
 		$row = mysqli_fetch_array($result);
 		
 		MySQL::close($con);
@@ -220,12 +220,12 @@ class User {
 	
 	/* Sets the users group */
 	public function setGroup($groupId) {
-		$con = MySQL::open(Settings::db_name_crew);
+		$con = MySQL::open(Settings::db_name_infected_crew);
 		
 		if ($this->isGroupMember) {	
-			mysqli_query($con, 'UPDATE ' . Settings::db_table_memberof . ' SET groupId = \'' . $groupId . '\', teamId = \'0\' WHERE userId = \'' . $this->getId() . '\'');
+			mysqli_query($con, 'UPDATE ' . Settings::db_table_infected_crew_memberof . ' SET groupId = \'' . $groupId . '\', teamId = \'0\' WHERE userId = \'' . $this->getId() . '\'');
 		} else {
-			mysqli_query($con, 'INSERT INTO ' . Settings::db_table_memberof . ' (userId, groupId, teamId) VALUES (\'' . $this->getId() . '\', \'' . $groupId . '\', \'0\')');
+			mysqli_query($con, 'INSERT INTO ' . Settings::db_table_infected_crew_memberof . ' (userId, groupId, teamId) VALUES (\'' . $this->getId() . '\', \'' . $groupId . '\', \'0\')');
 		}
 		
 		MySQL::close($con);
@@ -233,9 +233,9 @@ class User {
 	
 	/* Is member of a group which means it's not a plain user */
 	public function isGroupMember() {
-		$con = MySQL::open(Settings::db_name_crew);
+		$con = MySQL::open(Settings::db_name_infected_crew);
 		
-		$result = mysqli_query($con, 'SELECT groupId FROM ' . Settings::db_table_memberof . ' WHERE userId = \'' . $this->getId() . '\' AND groupId != \'0\'');
+		$result = mysqli_query($con, 'SELECT groupId FROM ' . Settings::db_table_infected_crew_memberof . ' WHERE userId = \'' . $this->getId() . '\' AND groupId != \'0\'');
 		$row = mysqli_fetch_array($result);
 		
 		MySQL::close($con);
@@ -245,9 +245,9 @@ class User {
 	
 	/* Return true if user is chief for a group */
 	public function isGroupChief() {
-		$con = MySQL::open(Settings::db_name_crew);
+		$con = MySQL::open(Settings::db_name_infected_crew);
 		
-		$result = mysqli_query($con, 'SELECT chief FROM ' . Settings::db_table_groups . ' WHERE chief = \'' . $this->getId() . '\'');
+		$result = mysqli_query($con, 'SELECT chief FROM ' . Settings::db_table_infected_crew_groups . ' WHERE chief = \'' . $this->getId() . '\'');
 		$row = mysqli_fetch_array($result);
 		
 		MySQL::close($con);
@@ -257,9 +257,9 @@ class User {
 	
 	/* Returns the users team */
 	public function getTeam() {
-		$con = MySQL::open(Settings::db_name_crew);
+		$con = MySQL::open(Settings::db_name_infected_crew);
 		
-		$result = mysqli_query($con, 'SELECT teamId FROM ' . Settings::db_table_memberof . ' WHERE userId = \'' . $this->getId() . '\'');
+		$result = mysqli_query($con, 'SELECT teamId FROM ' . Settings::db_table_infected_crew_memberof . ' WHERE userId = \'' . $this->getId() . '\'');
 		$row = mysqli_fetch_array($result);
 		
 		MySQL::close($con);
@@ -271,10 +271,10 @@ class User {
 	
 	/* Sets the users team */
 	public function setTeam($teamId) {
-		$con = MySQL::open(Settings::db_name_crew);
+		$con = MySQL::open(Settings::db_name_infected_crew);
 		
 		if ($this->isGroupMember) {	
-			mysqli_query($con, 'UPDATE ' . Settings::db_table_memberof . ' SET teamId = \'' . $teamId . '\' WHERE userId = \'' . $this->getId() . '\' AND groupId = \'' . $this->getGroup()->getId() . '\'');	
+			mysqli_query($con, 'UPDATE ' . Settings::db_table_infected_crew_memberof . ' SET teamId = \'' . $teamId . '\' WHERE userId = \'' . $this->getId() . '\' AND groupId = \'' . $this->getGroup()->getId() . '\'');	
 		}
 		
 		MySQL::close($con);
@@ -282,9 +282,9 @@ class User {
 	
 	/* Is member of a team which means it's not a plain user */
 	public function isTeamMember() {
-		$con = MySQL::open(Settings::db_name_crew);
+		$con = MySQL::open(Settings::db_name_infected_crew);
 		
-		$result = mysqli_query($con, 'SELECT teamId FROM ' . Settings::db_table_memberof. ' WHERE userId = \'' . $this->getId() . '\' AND teamId != \'0\'');
+		$result = mysqli_query($con, 'SELECT teamId FROM ' . Settings::db_table_infected_crew_memberof. ' WHERE userId = \'' . $this->getId() . '\' AND teamId != \'0\'');
 		$row = mysqli_fetch_array($result);
 		
 		MySQL::close($con);
@@ -294,9 +294,9 @@ class User {
 	
 	/* Return true if user is chief for a team */
 	public function isTeamChief() {
-		$con = MySQL::open(Settings::db_name_crew);
+		$con = MySQL::open(Settings::db_name_infected_crew);
 		
-		$result = mysqli_query($con, 'SELECT chief FROM ' . Settings::db_table_teams . ' WHERE chief = \'' . $this->getId() . '\'');
+		$result = mysqli_query($con, 'SELECT chief FROM ' . Settings::db_table_infected_crew_teams . ' WHERE chief = \'' . $this->getId() . '\'');
 		$row = mysqli_fetch_array($result);
 		
 		MySQL::close($con);

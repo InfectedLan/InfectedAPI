@@ -12,12 +12,12 @@ class CrewPageHandler {
 			$user = Utils::getUser();
 			
 			if ($user->isGroupMember()) {
-				$con = MySQL::open(Settings::db_name_crew);
+				$con = MySQL::open(Settings::db_name_infected_crew);
 				
 				if ($user->isTeamMember()) {
-					$result = mysqli_query($con, 'SELECT * FROM ' . Settings::db_table_crew_pages . ' WHERE id=\'' . $id . '\' AND (groupId=\'0\' OR groupId=\'' . $user->getGroup()->getId() . '\') AND (teamId=\'0\' OR teamId=\'' . $user->getTeam()->getId() . '\')');
+					$result = mysqli_query($con, 'SELECT * FROM ' . Settings::db_table_infected_crew_pages . ' WHERE id=\'' . $id . '\' AND (groupId=\'0\' OR groupId=\'' . $user->getGroup()->getId() . '\') AND (teamId=\'0\' OR teamId=\'' . $user->getTeam()->getId() . '\')');
 				} else {
-					$result = mysqli_query($con, 'SELECT * FROM ' . Settings::db_table_crew_pages . ' WHERE id=\'' . $id . '\' AND (groupId=\'0\' OR groupId=\'' . $user->getGroup()->getId() . '\') AND teamId=\'0\'');
+					$result = mysqli_query($con, 'SELECT * FROM ' . Settings::db_table_infected_crew_pages . ' WHERE id=\'' . $id . '\' AND (groupId=\'0\' OR groupId=\'' . $user->getGroup()->getId() . '\') AND teamId=\'0\'');
 				}
 				
 				$row = mysqli_fetch_array($result);
@@ -40,9 +40,9 @@ class CrewPageHandler {
 	public static function getPageByName($name) {
 		if (Utils::isAuthenticated()) {
 			$user = Utils::getUser();
-			$con = MySQL::open(Settings::db_name_crew);
+			$con = MySQL::open(Settings::db_name_infected_crew);
 			
-			$result = mysqli_query($con, 'SELECT id FROM ' . Settings::db_table_crew_pages . ' WHERE name=\'' . $name . '\'');
+			$result = mysqli_query($con, 'SELECT id FROM ' . Settings::db_table_infected_crew_pages . ' WHERE name=\'' . $name . '\'');
 			
 			$row = mysqli_fetch_array($result);
 			
@@ -56,9 +56,9 @@ class CrewPageHandler {
 	
 	/* Get a list of all pages */
 	public static function getPages() {
-		$con = MySQL::open(Settings::db_name_crew);
+		$con = MySQL::open(Settings::db_name_infected_crew);
 		
-		$result = mysqli_query($con, 'SELECT id FROM ' . Settings::db_table_crew_pages);
+		$result = mysqli_query($con, 'SELECT id FROM ' . Settings::db_table_infected_crew_pages);
 		$pageList = array();
 		
 		while ($row = mysqli_fetch_array($result)) {
@@ -77,9 +77,9 @@ class CrewPageHandler {
 	
 	/* Get a list of pages for specified team */
 	public static function getPagesForTeam($groupId, $teamId) {
-		$con = MySQL::open(Settings::db_name_crew);
+		$con = MySQL::open(Settings::db_name_infected_crew);
 		
-		$result = mysqli_query($con, 'SELECT id FROM ' . Settings::db_table_crew_pages . ' WHERE groupId=\'' . $groupId . '\' AND teamId=\'' . $teamId . '\'');
+		$result = mysqli_query($con, 'SELECT id FROM ' . Settings::db_table_infected_crew_pages . ' WHERE groupId=\'' . $groupId . '\' AND teamId=\'' . $teamId . '\'');
 		$pageList = array();
 		
 		while ($row = mysqli_fetch_array($result)) {
@@ -93,9 +93,9 @@ class CrewPageHandler {
 	
 	/* Create a new page */
 	public static function createPage($name, $title, $content, $groupId, $teamId) {
-		$con = MySQL::open(Settings::db_name_crew);
+		$con = MySQL::open(Settings::db_name_infected_crew);
 		
-		mysqli_query($con, 'INSERT INTO ' . Settings::db_table_crew_pages . ' (name, title, content, groupId, teamId) 
+		mysqli_query($con, 'INSERT INTO ' . Settings::db_table_infected_crew_pages . ' (name, title, content, groupId, teamId) 
 							VALUES (\'' . $name . '\', 
 									\'' . $title . '\', 
 									\'' . $content . '\', 
@@ -107,18 +107,18 @@ class CrewPageHandler {
 	
 	/* Remove a page */
 	public static function removePage($id) {
-		$con = MySQL::open(Settings::db_name_crew);
+		$con = MySQL::open(Settings::db_name_infected_crew);
 		
-		mysqli_query($con, 'DELETE FROM ' . Settings::db_table_crew_pages . ' WHERE id=\'' . $id . '\'');
+		mysqli_query($con, 'DELETE FROM ' . Settings::db_table_infected_crew_pages . ' WHERE id=\'' . $id . '\'');
 		
 		MySQL::close($con);
 	}
 	
 	/* Update a page */
 	public static function updatePage($id, $title, $content) {
-		$con = MySQL::open(Settings::db_name_crew);
+		$con = MySQL::open(Settings::db_name_infected_crew);
 		
-		mysqli_query($con, 'UPDATE ' . Settings::db_table_crew_pages . ' SET title=\'' . $title . '\', content=\'' . $content . '\' WHERE id=\'' . $id . '\'');
+		mysqli_query($con, 'UPDATE ' . Settings::db_table_infected_crew_pages . ' SET title=\'' . $title . '\', content=\'' . $content . '\' WHERE id=\'' . $id . '\'');
 		
 		MySQL::close($con);
 	}

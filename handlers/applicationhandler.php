@@ -6,9 +6,9 @@ require_once 'objects/application.php';
 class ApplicationHandler {
 	/* Get a application by id */
 	public static function getApplication($id) {
-		$con = MySQL::open(Settings::db_name_crew);
+		$con = MySQL::open(Settings::db_name_infected_crew);
 		
-		$result = mysqli_query($con, 'SELECT * FROM ' . Settings::db_table_applications . ' WHERE id=\'' . $id . '\'');
+		$result = mysqli_query($con, 'SELECT * FROM ' . Settings::db_table_infected_crew_applications . ' WHERE id=\'' . $id . '\'');
 		$row = mysqli_fetch_array($result);
 		
 		MySQL::close($con);
@@ -26,9 +26,9 @@ class ApplicationHandler {
 	
 	/* Get a list of all applications */
 	public static function getApplications() {
-		$con = MySQL::open(Settings::db_name_crew);
+		$con = MySQL::open(Settings::db_name_infected_crew);
 		
-		$result = mysqli_query($con, 'SELECT id FROM ' . Settings::db_table_applications);
+		$result = mysqli_query($con, 'SELECT id FROM ' . Settings::db_table_infected_crew_applications);
 		
 		$applicationList = array();
 		

@@ -9,14 +9,13 @@ $message = "";
 
 if (!Utils::isAuthenticated()) {
 	if (isset($_POST['username']) &&
-			isset($_POST['password']) &&
-			!empty($_POST['username']) &&
-			!empty($_POST['password'])) {
+		isset($_POST['password']) &&
+		!empty($_POST['username']) &&
+		!empty($_POST['password'])) {
 		$username = $_POST['username'];
 		$password = hash('sha256', $_POST['password']);
 
-		if (UserHandler::userExists($username)) 
-		{
+		if (UserHandler::userExists($username)) {
 			$user = UserHandler::getUserByName($username);
 			$storedPassword = $user->getPassword();
 			
@@ -29,23 +28,18 @@ if (!Utils::isAuthenticated()) {
 				$result = false;
 				$message = 'Feil brukernavn eller passord.';
 			}
-		} 
-		else 
-		{
+		} else {
 			$result = false;
 			$message = 'Feil brukernavn eller passord.';
 		}
-	}
-	else
-	{
+	} else {
 		$result = false;
 		$message = "Du har ikke skrevet inn et brukernavn og passord.";
 	}
-}
-else
-{
+} else {
 	$result = false;
 	$message = "Du er allerede logget inn!";
 }
+
 echo '{"result":' . ($result ? 'true' : 'false') . ', "message":"' . $message . '"}';
 ?>

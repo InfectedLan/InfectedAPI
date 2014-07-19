@@ -8,7 +8,7 @@ class EventHandler {
 	public static function getEvent($id) {
 		$con = MySQL::open(Settings::db_name_infected);
 		
-		$result = mysqli_query($con, 'SELECT * FROM ' . Settings::db_table_events . ' WHERE id=\'' . $id . '\'');
+		$result = mysqli_query($con, 'SELECT * FROM ' . Settings::db_table_infected_events . ' WHERE id=\'' . $id . '\'');
 		$row = mysqli_fetch_array($result);
 		
 		MySQL::close($con);
@@ -20,16 +20,14 @@ class EventHandler {
 	
 	// Get the current event, this works so that it takes the last event registred in the database, maybe refactor here and check what date that is shortest from current date.
 	public static function getCurrentEvent() {
-		$events = self::getEvents();
-		
-		return end($events);
+		return end(self::getEvents());
 	}
 	
 	// Get a list of all events.
 	public static function getEvents() {
 		$con = MySQL::open(Settings::db_name_infected);
 		
-		$result = mysqli_query($con, 'SELECT id FROM ' . Settings::db_table_events);
+		$result = mysqli_query($con, 'SELECT id FROM ' . Settings::db_table_infected_events);
 		
 		$eventList = array();
 		

@@ -32,9 +32,9 @@ class Avatar {
 	
 	public function setState($newstatus) {
 		if (is_bool($newstatus)) {
-			$con = MySQL::open(Settings::db_name_crew);
+			$con = MySQL::open(Settings::db_name_infected_crew);
 			
-			mysqli_query($con, 'UPDATE' . Settings::db_table_teams . ' SET `state` = ' . $newstatus . ' WHERE id = \'' . $this->getId() . '\'');
+			mysqli_query($con, 'UPDATE' . Settings::db_table_infected_crew_teams . ' SET `state` = ' . $newstatus . ' WHERE id = \'' . $this->getId() . '\'');
 			$state = $newstatus;
 			
 			$this->mysql->close($con);
