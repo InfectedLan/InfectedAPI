@@ -1,7 +1,7 @@
 <?php
-require_once $_SERVER['DOCUMENT_ROOT'] . '/api/settings.php';
-require_once $_SERVER['DOCUMENT_ROOT'] . '/api/mysql.php';
-require_once $_SERVER['DOCUMENT_ROOT'] . '/api/objects/team.php';
+require_once 'settings.php';
+require_once 'mysql.php';
+require_once 'objects/team.php';
 
 class TeamHandler {
 	/* Get a team by id */

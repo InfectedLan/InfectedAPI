@@ -1,5 +1,5 @@
 <?php
-require_once $_SERVER['DOCUMENT_ROOT'] . '/api/qr.php';
+require_once 'qr.php';
 
 class Ticket {
 	private $id;

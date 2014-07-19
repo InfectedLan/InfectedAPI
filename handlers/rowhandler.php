@@ -1,9 +1,9 @@
 <?php
-require_once $_SERVER['DOCUMENT_ROOT'] . '/api/settings.php';
-require_once $_SERVER['DOCUMENT_ROOT'] . '/api/mysql.php';
-require_once $_SERVER['DOCUMENT_ROOT'] . '/api/handlers/seathandler.php';
-require_once $_SERVER['DOCUMENT_ROOT'] . '/api/handlers/eventhandler.php';
-require_once $_SERVER['DOCUMENT_ROOT'] . '/api/objects/row.php';
+require_once 'settings.php';
+require_once 'mysql.php';
+require_once 'handlers/seathandler.php';
+require_once 'handlers/eventhandler.php';
+require_once 'objects/row.php';
 	
 class RowHandler {
 	public static function getRow($id) {

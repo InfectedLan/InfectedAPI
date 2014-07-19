@@ -1,6 +1,8 @@
 <?php
-require_once $_SERVER['DOCUMENT_ROOT'] . '/api/utils.php';
-require_once $_SERVER['DOCUMENT_ROOT'] . '/api/handlers/userhandler.php';
+require_once 'includes.php';
+
+require_once 'utils.php';
+require_once 'handlers/userhandler.php';
 
 $result = true;
 $message = "";
@@ -9,8 +11,7 @@ if (!Utils::isAuthenticated()) {
 	if (isset($_POST['username']) &&
 			isset($_POST['password']) &&
 			!empty($_POST['username']) &&
-			!empty($_POST['password'])) 
-	{
+			!empty($_POST['password'])) {
 		$username = $_POST['username'];
 		$password = hash('sha256', $_POST['password']);
 

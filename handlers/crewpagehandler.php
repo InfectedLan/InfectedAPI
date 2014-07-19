@@ -1,9 +1,9 @@
 <?php
-require_once $_SERVER['DOCUMENT_ROOT'] . '/api/settings.php';
-require_once $_SERVER['DOCUMENT_ROOT'] . '/api/mysql.php';
-require_once $_SERVER['DOCUMENT_ROOT'] . '/api/utils.php';
-require_once $_SERVER['DOCUMENT_ROOT'] . '/api/objects/crewpage.php';
-require_once $_SERVER['DOCUMENT_ROOT'] . '/api/objects/user.php';
+require_once 'settings.php';
+require_once 'mysql.php';
+require_once 'utils.php';
+require_once 'objects/crewpage.php';
+require_once 'objects/user.php';
 
 class CrewPageHandler {
 	/* Get page by id */
