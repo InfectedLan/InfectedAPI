@@ -37,5 +37,12 @@ class Seat {
 		return $this->number;
 	}
 
+	/*
+	 * Returns a string representation of the seat
+	 */
+	public function getHumanString() {
+		return 'R' . $this->row->getNumber() . 'S' . $this->number;
+	}
+
 }
 ?>
