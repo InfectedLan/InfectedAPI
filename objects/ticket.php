@@ -82,7 +82,7 @@ class Ticket {
 		return 'INFECTED_' . strtoupper($this->getEvent()->getTheme() ) . $this->id;
 	}
 	
-	public function getQRCode() {
+	public function getQrImagePath() {
 		return QR::getCode('https://tickets.infected.no/field/verifyTicket.php?id=' . $this->id);
 	}
 }
