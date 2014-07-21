@@ -24,6 +24,7 @@ class Settings {
 	const db_table_infected_permissions = 'permissions';
 	const db_table_infected_postalcodes = 'postalcodes';
 	const db_table_infected_resetcodes = 'resetcodes';
+	const db_table_infected_users = 'users';
 	
 	// InfectedMain
 	const db_table_infected_main_agenda = 'agenda';

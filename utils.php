@@ -3,6 +3,7 @@ require_once 'settings.php';
 require_once 'handlers/eventhandler.php';
 require_once 'objects/user.php';
 
+session_name('user');
 session_start();
 
 class Utils {
