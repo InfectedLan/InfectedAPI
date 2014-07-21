@@ -47,7 +47,7 @@ class Row {
 	/*
 	 * Returns the row of the section
 	 */
-	public function getRow() {
+	public function getNumber() {
 		return $this->row;
 	}
 
