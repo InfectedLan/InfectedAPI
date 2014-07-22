@@ -11,7 +11,7 @@ class QR {
 			QRcode::png($content, $filePath);
 		}
 		
-		return $directory;
+		return $filePath;
 	}
 }
 ?>
