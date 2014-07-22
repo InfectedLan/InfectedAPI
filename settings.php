@@ -11,7 +11,7 @@ class Settings {
 	
 	const path = 'http://api.infectedlan.tk/';
 
-	const qr_path = '/home/infectedlan.tk/public_html/api/images/qrcache'
+	const qr_path = '/home/infectedlan.tk/public_html/api/images/qrcache/';
 	
 	// Database information
 	const db_host = 'localhost';
