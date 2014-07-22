@@ -1,11 +1,11 @@
 <?php
 require_once 'phpqrcode/qrlib.php';
+require_once 'settings.php';
 
 class QR {
 	public function getCode($content) {
 		$fileName = md5($content) . '.png';
-		$directory = '/api/images/qrcache/' . $fileName;
-		$filePath = $_SERVER['DOCUMENT_ROOT'] . $directory;
+		$filePath = Settings::qr_path . $fileName;
     
 		if (!file_exists($filePath)) {
 			QRcode::png($content, $filePath);
