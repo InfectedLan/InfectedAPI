@@ -1,7 +1,8 @@
 <?php
+require_once 'utils.php';
+
 require_once '../includes.php';
 
-require_once 'utils.php';
 require_once 'handlers/userhandler.php';
 
 $result = true;
