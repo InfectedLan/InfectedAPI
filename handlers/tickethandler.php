@@ -17,10 +17,11 @@ class TicketHandler {
 		MySQL::close($con);
 
 		if ($row) {
-			return new Ticket($row['id'], EventHandler::getEvent($row['event']), UserHandler::getUser($row['owner']), 
-				TicketTypeHandler::getTicketType($row['type']), SeatHandler::getSeat($row['seat']), 
-				UserHandler::getUser($row['seater'])
-				);
+			return new Ticket($row['id'],
+					  EventHandler::getEvent($row['event']), 
+					  UserHandler::getUser($row['owner']), 
+					  TicketTypeHandler::getTicketType($row['type']), SeatHandler::getSeat($row['seat']),
+					  UserHandler::getUser($row['seater']));
 		}
 	}
 	
@@ -76,7 +77,7 @@ class TicketHandler {
 	public static function setSeater($ticket, $newSeater) {
 		$con = MySQL::open(Settings::db_name_infected_tickets);
 
-		if(!isset($newSeater) || empty($newSeater)) {
+		if (!isset($newSeater) || empty($newSeater)) {
 			$result = mysqli_query($con, 'UPDATE ' . Settings::db_table_infected_tickets_tickets . ' SET seater=\'0\' WHERE id=\'' . $ticket->getId() . '\'');
 		} else {
 			$result = mysqli_query($con, 'UPDATE ' . Settings::db_table_infected_tickets_tickets . ' SET seater=\'' . $newSeater->getId() . '\' WHERE id=\'' . $ticket->getId() . '\'');

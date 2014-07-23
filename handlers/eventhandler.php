@@ -1,33 +1,56 @@
 <?php
 require_once 'settings.php';
 require_once 'mysql.php';
+require_once 'handlers/locationhandler.php';
 require_once 'objects/event.php';
 
 class EventHandler {
-	// Get event.
+	// Returns the event with the given id.
 	public static function getEvent($id) {
 		$con = MySQL::open(Settings::db_name_infected);
 		
-		$result = mysqli_query($con, 'SELECT * FROM ' . Settings::db_table_infected_events . ' WHERE id=\'' . $id . '\'');
+		$result = mysqli_query($con, 'SELECT * 
+					      FROM `'. Settings::db_table_infected_events . '`
+					      WHERE `id` = \'' . $id . '\';');
+
 		$row = mysqli_fetch_array($result);
 		
 		MySQL::close($con);
 
 		if ($row) {
-			return new Event($row['id'], $row['theme'], $row['participants'], $row['price'], $row['start'], $row['end'], $row['location']);
+			return new Event($row['id'],
+					 $row['theme'], 
+					 $row['start'], 
+					 $row['end'], 
+					 LocationHandler::getLocation($row['location']), 
+					 $row['participants'], 
+					 $row['price']);
 		}
 	}
 	
-	// Get the current event, this works so that it takes the last event registred in the database, maybe refactor here and check what date that is shortest from current date.
+	// Returns the event that is closest in time, which means the next or goiong event.
 	public static function getCurrentEvent() {
-		return end(self::getEvents());
+		$con = MySQL::open(Settings::db_name_infected);
+		
+		$result = mysqli_query($con, 'SELECT `id`
+					      FROM `' . Settings::db_table_infected_events . '`
+					      WHERE `end` > NOW()
+					      ORDER BY `start` ASC
+					      LIMIT 1;');
+
+		$row = mysqli_fetch_array($result);
+		
+		MySQL::close($con);
+		
+		return self::getEvent($row['id']);
 	}
 	
-	// Get a list of all events.
+	// Returns a list of all registred events.
 	public static function getEvents() {
 		$con = MySQL::open(Settings::db_name_infected);
 		
-		$result = mysqli_query($con, 'SELECT id FROM ' . Settings::db_table_infected_events);
+		$result = mysqli_query($con, 'SELECT `id` 
+					      FROM `' . Settings::db_table_infected_events . '`;');
 		
 		$eventList = array();
 		

@@ -1,21 +1,23 @@
 <?php
+require_once 'location.php';
+
 class Event {
 	private $id;
 	private $theme;
-	private $participants;
-	private $price;
 	private $start;
 	private $end;
 	private $location;
+	private $participants;
+	private $price;
 	
-	public function Event($id, $theme, $participants, $price, $start, $end, $location) {
+	public function Event($id, $theme, $start, $end, $location, $participants, $price) {
 		$this->id = $id;
 		$this->theme = $theme;
-		$this->participants = $participants;
-		$this->price = $price;
 		$this->start = $start;
 		$this->end = $end;
 		$this->location = $location;
+		$this->participants = $participants;
+		$this->price = $price;
 	}
 	
 	public function getId() {
@@ -24,14 +26,6 @@ class Event {
 	
 	public function getTheme() {
 		return $this->theme;
-	}
-	
-	public function getParticipants() {
-		return $this->participants;
-	}
-	
-	public function getPrice() {
-		return $this->price;
 	}
 	
 	public function getStartTime() {
@@ -44,6 +38,14 @@ class Event {
 
 	public function getLocation() {
 		return $this->location;
+	}
+
+	public function getParticipants() {
+		return $this->participants;
+	}
+	
+	public function getPrice() {
+		return $this->price;
 	}
 }
 ?>
