@@ -1,20 +1,20 @@
 <?php
-require_once '../includes.php';
-
 require_once 'utils.php';
 require_once 'handlers/userhandler.php';
 
 $result = true;
-$message = "";
+$message = '';
 
 if (!Utils::isAuthenticated()) {
+	$message = "lol";
+
 	if (isset($_POST['username']) &&
 		isset($_POST['password']) &&
 		!empty($_POST['username']) &&
 		!empty($_POST['password'])) {
 		$username = $_POST['username'];
 		$password = hash('sha256', $_POST['password']);
-
+		
 		if (UserHandler::userExists($username)) {
 			$user = UserHandler::getUserByName($username);
 			$storedPassword = $user->getPassword();
@@ -22,9 +22,7 @@ if (!Utils::isAuthenticated()) {
 			if ($password == $storedPassword) {
 				$_SESSION['user'] = $user;
 				$message = 'Du er nå logget inn!';
-			}
-			else
-			{
+			} else {
 				$result = false;
 				$message = 'Feil brukernavn eller passord.';
 			}
@@ -39,7 +37,7 @@ if (!Utils::isAuthenticated()) {
 } else {
 	$result = false;
 	$message = "Du er allerede logget inn!";
-}
+} 
 
-echo '{"result":' . ($result ? 'true' : 'false') . ', "message":"' . $message . '"}';
+echo '{"result":"' . ($result ? 'true' : 'false') . '", "message":"' . $message . '"}';
 ?>

@@ -14,13 +14,13 @@ class MySQL {
 		if (mysqli_connect_errno($con)) {
 			echo "Failed to connect to MySQL: " . mysqli_connect_error();
 		}
-		
+
 		return $con;
 	}
 	
 	/* Closes connection */
 	public static function close($con) {
 		mysqli_close($con);
-	}	
+	}
 }
 ?>

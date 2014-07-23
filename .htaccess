@@ -1,2 +1,3 @@
 php_value session.cookie_domain .infectedlan.tk
 Header set Access-Control-Allow-Origin "*"
+php_value include_path .:/home/infectedlan.tk/public_html/api
