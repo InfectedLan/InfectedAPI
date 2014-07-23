@@ -114,7 +114,7 @@ class User {
 	
 	/* Returns the users age as int */
 	public function getAge() {
-		return date('Y') - date('Y', $this->getBirthdate());
+		return date_diff(date_create(date('Y-m-d', $this->getBirthdate())), date_create('now'))->y;
 	}
 	
 	/* Linked tables database functions */
