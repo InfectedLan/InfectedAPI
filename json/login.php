@@ -6,8 +6,6 @@ $result = true;
 $message = '';
 
 if (!Utils::isAuthenticated()) {
-	$message = "lol";
-
 	if (isset($_POST['username']) &&
 		isset($_POST['password']) &&
 		!empty($_POST['username']) &&

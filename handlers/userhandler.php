@@ -122,11 +122,11 @@ class UserHandler {
 								username=\'' . $username . '\', 
 								password=\'' . $password . '\', 
 								email=\'' . $email . '\', 
-								birthDate=\'' . $birthDate . '\', 
+								birthdate=\'' . $birthDate . '\', 
 								gender=\'' . $gender . '\', 
 								phone=\'' . $phone . '\', 
 								address=\'' . $address . '\', 
-								postalCode=\'' . $postalCode . '\', 
+								postalcode=\'' . $postalCode . '\', 
 								nickname=\'' . $nickname . '\' 
 							WHERE id=\'' . $id . '\'');
 		
@@ -195,12 +195,12 @@ class UserHandler {
 		return $userList;
 	}
 
-	public static function searchUsers($query) {
+	public static function search($query) {
 		$con = MySQL::open(Settings::db_name_infected);
 
 		$result = mysqli_query($con, 'SELECT * FROM ' . Settings::db_table_infected_users . ' WHERE firstname LIKE "%' . $query . '%"' .
 									' OR lastname LIKE "%' . $query . '%" OR nickname LIKE "%' . $query . '%" OR email LIKE "%' . $query . '%" LIMIT 0, 10');
-									
+		
 		$userList = array();
 
 		while($row = mysqli_fetch_array($result)) {
@@ -214,7 +214,7 @@ class UserHandler {
 										   $row['gender'], 
 										   $row['phone'], 
 										   $row['address'], 
-										   $row['postalCode'], 
+										   $row['postalcode'], 
 										   $row['nickname']));
 		}
 		
