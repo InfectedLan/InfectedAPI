@@ -15,7 +15,7 @@ class RowHandler {
 		MySQL::close($con);
 
 		if($row) {
-			return new Row($row['id'], $row['x'], $row['y'], $row['row'], EventHandler::getEvent($row['event']));
+			return new Row($row['id'], $row['x'], $row['y'], $row['row'], $row['seatmap']);
 		}
 	}
 }

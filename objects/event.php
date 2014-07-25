@@ -9,8 +9,9 @@ class Event {
 	private $location;
 	private $participants;
 	private $price;
+	private $seatmap;
 	
-	public function Event($id, $theme, $start, $end, $location, $participants, $price) {
+	public function Event($id, $theme, $start, $end, $location, $participants, $price, $seatmap) {
 		$this->id = $id;
 		$this->theme = $theme;
 		$this->start = $start;
@@ -18,6 +19,7 @@ class Event {
 		$this->location = $location;
 		$this->participants = $participants;
 		$this->price = $price;
+		$this->seatmap = $seatmap;
 	}
 	
 	public function getId() {
@@ -46,6 +48,10 @@ class Event {
 	
 	public function getPrice() {
 		return $this->price;
+	}
+
+	public function getSeatmap() {
+		return $this->seatmap;
 	}
 }
 ?>

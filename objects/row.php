@@ -4,7 +4,7 @@ class Row {
 	private $x;
 	private $y;
 	private $row;
-	private $event;
+	private $seatmap;
 
 	/*
 	 * Row - implementation of a section of seats
@@ -15,12 +15,12 @@ class Row {
 	 * Row: Row number
 	 * Event: Event this section belongs to
 	 */ 
-	public function Row($id, $x, $y, $row, $event) {
+	public function Row($id, $x, $y, $row, $seatmap) {
 		$this->id = $id;
 		$this->x = $x;
 		$this->y = $y;
 		$this->row = $row;
-		$this->event = $event;
+		$this->seatmap = $seatmap;
 	}
 
 	/*
@@ -52,10 +52,10 @@ class Row {
 	}
 
 	/*
-	 * Returns the event the section belongs to
+	 * Returns the seatmap the section belongs to
 	 */
-	public function getEvent() {
-		return $this->event;
+	public function getSeatmap() {
+		return $this->seatmap;
 	}
 }
 ?>

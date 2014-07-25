@@ -47,5 +47,6 @@ class Settings {
 	const db_table_infected_tickets_seats = 'seats';
 	const db_table_infected_tickets_tickets = 'tickets';
 	const db_table_infected_tickets_ticketTypes = 'ticketTypes';
+	const db_table_infected_tickets_seatmaps = 'seatmaps';
 }
 ?>
