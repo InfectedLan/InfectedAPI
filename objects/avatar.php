@@ -10,7 +10,25 @@ class Avatar {
 	public function __construct($id, $userId, $relativeUrl, $state) {
 		$this->id = $id;
 		$this->userId = $userId;
-		$this->relativeUrl = $relativeUrl;
+		
+		$relativeUrlPath = 'images/avatars/';
+		
+		if (!file_exists($relativeUrlPath . $relativeUrl) ||
+			$relativeUrl == null) {
+			$user = UserHandler::getUser($userId);
+		
+			if ($user->getAge() >= 18) {
+				if ($user->getGender() == 0) {
+					$relativeUrl = 'default_gutt.png';
+				} else {
+					$relativeUrl = 'default_jente.png';
+				}
+			} else {
+				$relativeUrl = 'default_child.png';
+			}
+		}
+		
+		$this->relativeUrl = $relativeUrlPath . $relativeUrl;
 		$this->state = $state;
 	}
 
@@ -37,7 +55,7 @@ class Avatar {
 			mysqli_query($con, 'UPDATE' . Settings::db_table_infected_crew_teams . ' SET `state` = ' . $newstatus . ' WHERE id = \'' . $this->getId() . '\'');
 			$state = $newstatus;
 			
-			$this->mysql->close($con);
+			MYSQL::close($con);
 		}
 	}
 }

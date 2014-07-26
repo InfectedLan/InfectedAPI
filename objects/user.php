@@ -12,25 +12,25 @@ class User {
 	private $username;
 	private $password;
 	private $email;
-	private $birthDate;
+	private $birthdate;
 	private $gender;
 	private $phone;
 	private $address;
-	private $postalCode;
+	private $postalcode;
 	private $nickname;
 	
-	public function __construct($id, $firstname, $lastname, $username, $password, $email, $birthDate, $gender, $phone, $address, $postalCode, $nickname) {
+	public function __construct($id, $firstname, $lastname, $username, $password, $email, $birthdate, $gender, $phone, $address, $postalcode, $nickname) {
 		$this->id = $id;
 		$this->firstname = $firstname;
 		$this->lastname = $lastname;
 		$this->username = $username;
 		$this->password = $password;
 		$this->email = $email;
-		$this->birthDate = $birthDate;
+		$this->birthdate = $birthdate;
 		$this->gender = $gender;
 		$this->phone = $phone;
 		$this->address = $address;
-		$this->postalCode = $postalCode;
+		$this->postalcode = $postalcode;
 		$this->nickname = $nickname;
 	}
 	
@@ -66,7 +66,7 @@ class User {
 	
 	/* Returns the users birthDate as timestamp */
 	public function getBirthdate() {
-		return strtotime($this->birthDate);
+		return strtotime($this->birthdate);
 	}
 	
 	/* Returns the users gender as boolean */
@@ -91,7 +91,7 @@ class User {
 	
 	/* Returns the users postalCode as int */
 	public function getPostalCode() {
-		return sprintf('%04u', $this->postalCode);
+		return sprintf('%04u', $this->postalcode);
 	}
 	
 	/* Returns the users city as string, based on the postalCode */
@@ -127,26 +127,16 @@ class User {
 	public function getAvatarType($type) {
 		$con = MySQL::open(Settings::db_name_infected_crew);
 		
-		$result = mysqli_query($con, 'SELECT relativeUrl FROM ' . Settings::db_table_infected_crew_avatars . ' WHERE userId = \'' . $this->getId() . '\' AND state = \'2\'');
+		$result = mysqli_query($con, 'SELECT * FROM ' . Settings::db_table_infected_crew_avatars . ' WHERE userId = \'' . $this->getId() . '\' AND state = \'2\'');
 		$row = mysqli_fetch_array($result);
 		
 		if ($row) {
-			$relativeUrl = $type . '/' . $row['relativeUrl'];
+			return new Avatar($row['id'], $this->getId(), $type . '/' . $row['relativeUrl'], 2);
 		} else {
-			if ((date('Y') - date('Y', $this->getBirthdate())) > 18) {
-				if ($this->getGender() == 0) {
-					$relativeUrl = 'default.png';
-				} else {
-					$relativeUrl = 'default_jente.png';
-				}
-			} else {
-				$relativeUrl = 'default18.png';
-			}
+			return new Avatar(null, $this->getId(), null, null);
 		}
 		
 		MySQL::close($con);
-		
-		return new Avatar(null, $this->getId(), 'images/avatars/' . $relativeUrl, null);
 	}
 	
 	public function getPendingAvatar() {
