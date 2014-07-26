@@ -1,9 +1,9 @@
 <?php
 require_once 'settings.php';
 require_once 'mysql.php';
-require_once 'objects/mainpage.php';
+require_once 'objects/page.php';
 
-class MainPageHandler {
+class PageHandler {
 	// Get page.
 	public static function getPage($id) {
 		$con = MySQL::open(Settings::db_name_infected_main);
@@ -14,7 +14,7 @@ class MainPageHandler {
 		MySQL::close($con);
 
 		if ($row) {
-			return new MainPage($row['id'], $row['name'], $row['title'], $row['content']);
+			return new Page($row['id'], $row['name'], $row['title'], $row['content']);
 		}
 	}
 	

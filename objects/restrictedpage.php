@@ -1,4 +1,6 @@
 <?php
+require_once 'page.php';
+
 class RestrictedPage extends Page {
 	private $groupId;
 	private $teamId;
