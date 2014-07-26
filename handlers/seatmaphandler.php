@@ -19,6 +19,19 @@ class SeatmapHandler
 			return new Seatmap($row['id'], $row['humanName']);
 		}
 	}
+	public static function getSeatmaps() //Internal use
+	{
+		$con = MySQL::open(Settings::db_name_infected_tickets);
+
+		$result = mysqli_query($con, 'SELECT id FROM ' . Settings::db_table_infected_tickets_seatmaps . '');
+
+		$seatmapArray = array();
+
+		while($row = mysqli_fetch_array($result))
+		{
+			array_push($seatmapArray, self::getSeatmap($row['id']));
+		}
+	}
 	public static function getRows($seatmap)
 	{
 		$con = MySQL::open(Settings::db_name_infected_tickets);
