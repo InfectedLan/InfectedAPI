@@ -16,16 +16,31 @@ class AvatarHandler {
 		if ($row) {
 			return new Avatar($row['id'], 
 							  $row['userId'], 
-							  $row['relativeUrl'], 
+							  $row['file'], 
 							  $row['state']);
+		}
+	}
+	
+	public static function getAvatarForUser($userId) {
+		$con = MySQL::open(Settings::db_name_infected_crew);
+		
+		$result = mysqli_query($con, 'SELECT `id` 
+									  FROM `' . Settings::db_table_infected_crew_avatars . '` 
+									  WHERE `userId` = \'' . $userId . '\';');
+		
+		$row = mysqli_fetch_array($result);
+		
+		MySQL::close($con);
+		
+		if ($row) {
+			return self::getAvatar($row['id']);
 		}
 	}
 	
 	public static function getAvatars() {
 		$con = MySQL::open(Settings::db_name_infected_crew);
 		
-		$result = mysqli_query($con, 'SELECT `id` 
-									  FROM `' . Settings::db_table_infected_crew_avatars . '`;');
+		$result = mysqli_query($con, 'SELECT `id` FROM `' . Settings::db_table_infected_crew_avatars . '`;');
 		
 		$avatarList = array();
 		
@@ -36,6 +51,38 @@ class AvatarHandler {
 		MySQL::close($con);
 		
 		return $avatarList;
+	}
+	
+	public function getPendingAvatar($id) {
+		$con = MySQL::open(Settings::db_name_infected_crew);
+		
+		$result = mysqli_query($con, 'SELECT id FROM `' . Settings::db_table_infected_crew_avatars . '` WHERE `id` = \'' . $id . '\' AND `state` = \'1\';');
+		
+		
+		$row = mysqli_fetch_array($result);
+		
+		MySQL::close($con);
+		
+		if ($row) {
+			return self::getAvatar($row['id']);
+		}
+	}
+	
+	public static function getPendingAvatarForUser($userId) {
+		$con = MySQL::open(Settings::db_name_infected_crew);
+		
+		$result = mysqli_query($con, 'SELECT `id` 
+									  FROM `' . Settings::db_table_infected_crew_avatars . '` 
+									  WHERE `userId` = \'' . $userId . '\'
+									  AND `state` = \'1\';');
+		
+		$row = mysqli_fetch_array($result);
+		
+		MySQL::close($con);
+		
+		if ($row) {
+			return self::getAvatar($row['id']);
+		}
 	}
 	
 	public static function getPendingAvatars() {
@@ -54,22 +101,6 @@ class AvatarHandler {
 		MySQL::close($con);
 		
 		return $avatarList;
-	}
-	
-	public static function getAvatarForUser($userId) {
-		$con = MySQL::open(Settings::db_name_infected_crew);
-		
-		$result = mysqli_query($con, 'SELECT `id` 
-									  FROM `' . Settings::db_table_infected_crew_avatars . '` 
-									  WHERE `userId` = \'' . $userId . '\';');
-		
-		$row = mysqli_fetch_array($result);
-		
-		MySQL::close($con);
-		
-		if ($row) {
-			return self::getAvatar($row['id']);
-		}
 	}
 }
 ?>

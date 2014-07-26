@@ -4,7 +4,9 @@ require_once 'mysql.php';
 require_once 'objects/application.php';
 
 class ApplicationHandler {
-	/* Get a application by id */
+	/* 
+	 * Get a application by id
+	 */
 	public static function getApplication($id) {
 		$con = MySQL::open(Settings::db_name_infected_crew);
 		

@@ -4,31 +4,29 @@ require_once 'handlers/userhandler.php';
 class Avatar {
 	private $id;
 	private $userId;
-	private $relativeUrl;
+	private $file;
 	private $state;
 
-	public function __construct($id, $userId, $relativeUrl, $state) {
+	public function __construct($id, $userId, $file, $state) {
 		$this->id = $id;
 		$this->userId = $userId;
+		$this->path = 'images/avatars/';
 		
-		$relativeUrlPath = 'images/avatars/';
-		
-		if (!file_exists($relativeUrlPath . $relativeUrl) ||
-			$relativeUrl == null) {
+		if (!file_exists($path . $file) || $file == null) {
 			$user = UserHandler::getUser($userId);
 		
 			if ($user->getAge() >= 18) {
 				if ($user->getGender() == 0) {
-					$relativeUrl = 'default_gutt.png';
+					$file = 'default_gutt.png';
 				} else {
-					$relativeUrl = 'default_jente.png';
+					$file = 'default_jente.png';
 				}
 			} else {
-				$relativeUrl = 'default_child.png';
+				$file = 'default_child.png';
 			}
 		}
 		
-		$this->relativeUrl = $relativeUrlPath . $relativeUrl;
+		$this->file = $file;
 		$this->state = $state;
 	}
 
@@ -40,8 +38,8 @@ class Avatar {
 		return UserHandler::getUser($this->userId);
 	}
 
-	public function getRelativeUrl() {
-		return $this->relativeUrl;
+	public function getFile() {
+		return path . $this->file;
 	}
 
 	public function getState() {

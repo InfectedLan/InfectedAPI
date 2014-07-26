@@ -21,7 +21,24 @@ class GroupHandler {
 							 $row['name'], 
 							 $row['title'], 
 							 $row['description'], 
-							 $row['chief']);
+							 $row['leader']);
+		}
+	}
+	
+	/* Get a group by userId */
+	public static function getGroupForUser($userId) {
+		$con = MySQL::open(Settings::db_name_infected_crew);
+		
+		$result = mysqli_query($con, 'SELECT `id`
+									  FROM `' . Settings::db_table_infected_crew_groups . '` 
+									  WHERE `userId` = \'' . $userId . '\';');
+									
+		$row = mysqli_fetch_array($result);
+		
+		MySQL::close($con);
+		
+		if ($row) {
+			return self::getGroup($row['id']);
 		}
 	}
 	
@@ -45,14 +62,14 @@ class GroupHandler {
 	}
 	
 	/* Create a new group */
-	public static function createGroup($name, $title, $description, $chief) {
+	public static function createGroup($name, $title, $description, $leader) {
 		$con = MySQL::open(Settings::db_name_infected_crew);
 		
-		mysqli_query($con, 'INSERT INTO `' . Settings::db_table_infected_crew_groups . '` (`name`, `title`, `description`, `chief`) 
+		mysqli_query($con, 'INSERT INTO `' . Settings::db_table_infected_crew_groups . '` (`name`, `title`, `description`, `leader`) 
 							VALUES (\'' . $name . '\', 
 									\'' . $title . '\', 
 									\'' . $description . '\', 
-									\'' . $chief . '\');');
+									\'' . $leader . '\');');
 		
 		MySQL::close($con);
 	}
@@ -68,15 +85,71 @@ class GroupHandler {
 	}
 	
 	/* Update a page */
-	public static function updateGroup($id, $name, $title, $description, $chief) {
+	public static function updateGroup($id, $name, $title, $description, $leader) {
 		$con = MySQL::open(Settings::db_name_infected_crew);
 		
 		mysqli_query($con, 'UPDATE `' . Settings::db_table_infected_crew_groups . '` 
 							SET `name` = \'' . $name . '\', 
 								`title` = \'' . $title . '\', 
 								`description` = \'' . $description . '\', 
-								`chief` = \'' . $chief . '\'
+								`leader` = \'' . $leader . '\'
 							WHERE `id` = \'' . $id . '\';');
+		
+		MySQL::close($con);
+	}
+	
+	/* 
+	 * Is member of a group which means it's not a member user.
+	 */
+	public static function isGroupMember($userId) {
+		$con = MySQL::open(Settings::db_name_infected_crew);
+		
+		$result = mysqli_query($con, 'SELECT `groupId` 
+									  FROM `' . Settings::db_table_infected_crew_memberof . '`
+									  WHERE `userId` = \'' . $userId . '\'
+									  AND `groupId` != \'0\';');
+									  
+		$row = mysqli_fetch_array($result);
+		
+		MySQL::close($con);
+		
+		return $row ? true : false;
+	}
+	
+	/* 
+	 * Return true if user is leader for a group.
+	 */
+	public static function isGroupLeader($userId) {
+		$con = MySQL::open(Settings::db_name_infected_crew);
+		
+		$result = mysqli_query($con, 'SELECT `leader` 
+									  FROM `' . Settings::db_table_infected_crew_groups . '` 
+									  WHERE `leader` = \'' . $userId . '\';');
+									  
+		$row = mysqli_fetch_array($result);
+		
+		MySQL::close($con);
+		
+		return $row ? true : false;
+	}
+
+	/*
+	 * Sets the users group.
+	 */
+	public static function changeGroup($userId, $groupId) {
+		$con = MySQL::open(Settings::db_name_infected_crew);
+		
+		if (self::isGroupMember) {	
+			mysqli_query($con, 'UPDATE `' . Settings::db_table_infected_crew_memberof . '` 
+								SET `groupId` = \'' . $groupId . '\', 
+									`teamId` = \'0\' 
+								WHERE `userId` = \'' . $userId . '\';');
+		} else {
+			mysqli_query($con, 'INSERT INTO `' . Settings::db_table_infected_crew_memberof . '` (`userId`, `groupId`, `teamId`) 
+								VALUES (\'' . $userId . '\', 
+										\'' . $groupId . '\', 
+										\'0\');');
+		}
 		
 		MySQL::close($con);
 	}

@@ -10,15 +10,15 @@ class Team {
 	private $name;
 	private $title;
 	private $description;
-	private $chief;
+	private $leader;
 	
-	public function __construct($id, $groupId, $name, $title, $description, $chief) {
+	public function __construct($id, $groupId, $name, $title, $description, $leader) {
 		$this->id = $id;
 		$this->groupId = $groupId;
 		$this->name = $name;
 		$this->title = $title;
 		$this->description = $description;
-		$this->chief = $chief;
+		$this->leader = $leader;
 	}
 	
 	public function getId() {
@@ -41,8 +41,8 @@ class Team {
 		return $this->description;
 	}
 	
-	public function getChief() {
-		return UserHandler::getUser($this->chief);
+	public function getleader() {
+		return UserHandler::getUser($this->leader);
 	}
 	
 	/* Returns an array of users that are members of this group */

@@ -22,7 +22,7 @@ class TeamHandler {
 							$row['name'], 
 							$row['title'], 
 							$row['description'], 
-							$row['chief']);
+							$row['leader']);
 		}
 	}
 	
@@ -45,15 +45,15 @@ class TeamHandler {
 	}
 	
 	/* Create a new team */
-	public static function createTeam($groupId, $name, $title, $description, $chief) {
+	public static function createTeam($groupId, $name, $title, $description, $leader) {
 		$con = MySQL::open(Settings::db_name_infected_crew);
 		
-		mysqli_query($con, 'INSERT INTO `' . Settings::db_table_infected_crew_teams . '` (`groupId`, `name`, `title`, `description`, `chief`) 
+		mysqli_query($con, 'INSERT INTO `' . Settings::db_table_infected_crew_teams . '` (`groupId`, `name`, `title`, `description`, `leader`) 
 							VALUES (\'' . $groupId . '\', 
 									\'' . $name . '\', 
 									\'' . $title . '\', 
 									\'' . $description . '\', 
-									\'' . $chief . '\')');
+									\'' . $leader . '\')');
 		
 		MySQL::close($con);
 	}
@@ -69,7 +69,7 @@ class TeamHandler {
 	}
 	
 	/* Update a team */
-	public static function updateTeam($id, $groupId, $name, $title, $description, $chief) {
+	public static function updateTeam($id, $groupId, $name, $title, $description, $leader) {
 		$con = MySQL::open(Settings::db_name_infected_crew);
 		
 		mysqli_query($con, 'UPDATE `' . Settings::db_table_infected_crew_teams . '` 
@@ -77,8 +77,53 @@ class TeamHandler {
 								`name` = \'' . $name . '\', 
 								`title` = \'' . $title . '\', 
 								`description` = \'' . $description . '\', 
-								`chief` = \'' . $chief . '\' 
+								`leader` = \'' . $leader . '\' 
 							WHERE `id` = \'' . $id . '\';');
+		
+		MySQL::close($con);
+	}
+	
+		/* Is member of a team which means it's not a plain user */
+	public function isTeamMember($userId) {
+		$con = MySQL::open(Settings::db_name_infected_crew);
+		
+		$result = mysqli_query($con, 'SELECT `teamId` 
+									  FROM `' . Settings::db_table_infected_crew_memberof. '` 
+									  WHERE `userId` = \'' . $userId . '\' 
+									  AND `teamId` != \'0\'');
+									  
+		$row = mysqli_fetch_array($result);
+		
+		MySQL::close($con);
+		
+		return $row ? true : false;
+	}
+	
+	/* Return true if user is leader for a team */
+	public function isTeamLeader($userId) {
+		$con = MySQL::open(Settings::db_name_infected_crew);
+		
+		$result = mysqli_query($con, 'SELECT `leader` 
+									  FROM `' . Settings::db_table_infected_crew_teams . '` 
+									  WHERE `leader` = \'' . $userId . '\';');
+									  
+		$row = mysqli_fetch_array($result);
+		
+		MySQL::close($con);
+		
+		return $row ? true : false;
+	}
+	
+	/* Sets the users team */
+	public function changeTeam($userId, $teamId) {
+		$con = MySQL::open(Settings::db_name_infected_crew);
+		
+		if ($this->isGroupMember) {	
+			mysqli_query($con, 'UPDATE `' . Settings::db_table_infected_crew_memberof . '` 
+								SET `teamId` = \'' . $teamId . '\' 
+								WHERE `userId` = \'' . $userId . '\' 
+								AND `groupId` = \'' . GroupHandler::getGroupForUser($userId)->getId() . '\';');	
+		}
 		
 		MySQL::close($con);
 	}

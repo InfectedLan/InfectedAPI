@@ -9,14 +9,14 @@ class Group {
 	private $name;
 	private $title;
 	private $description;
-	private $chief;
+	private $leader;
 	
-	public function __construct($id, $name, $title, $description, $chief) {
+	public function __construct($id, $name, $title, $description, $leader) {
 		$this->id = $id;
 		$this->name = $name;
 		$this->title = $title;
 		$this->description = $description;
-		$this->chief = $chief;
+		$this->leader = $leader;
 	}
 	
 	/* Returns the internal id for this group */
@@ -39,9 +39,9 @@ class Group {
 		return $this->description;
 	}
 	
-	/* Returns the user which is chief for this group */
-	public function getChief() {
-		return UserHandler::getUser($this->chief);
+	/* Returns the user which is leader for this group */
+	public function getleader() {
+		return UserHandler::getUser($this->leader);
 	}
 	
 	/* Returns an array of users that are members of this group */

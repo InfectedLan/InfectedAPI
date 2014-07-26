@@ -1,9 +1,6 @@
 <?php
-require_once 'settings.php';
-require_once 'mysql.php';
-require_once 'handlers/permissionshandler.php';
 require_once 'handlers/citydictionary.php';
-require_once 'objects/avatar.php';
+require_once 'handlers/permissionshandler.php';
 
 class User {	
 	private $id;
@@ -104,193 +101,6 @@ class User {
 		return $this->nickname;
 	}
 	
-	/* Returns the users age as int */
-	public function getAge() {
-		return date_diff(date_create(date('Y-m-d', $this->getBirthdate())), date_create('now'))->y;
-	}
-	
-	/* Linked tables database functions */
-	
-	/* Returns the users avatar image link as string */
-	public function getAvatar() {
-		return $this->getAvatarType('sd');
-	}
-
-	public function getThumbnailAvatar() {
-		return $this->getAvatarType('thumbnail');
-	}
-	
-	public function getHqAvatar() {
-		return $this->getAvatarType('hg');
-	}
-	
-	public function getAvatarType($type) {
-		$con = MySQL::open(Settings::db_name_infected_crew);
-		
-		$result = mysqli_query($con, 'SELECT * FROM ' . Settings::db_table_infected_crew_avatars . ' WHERE userId = \'' . $this->getId() . '\' AND state = \'2\'');
-		$row = mysqli_fetch_array($result);
-		
-		if ($row) {
-			return new Avatar($row['id'], $this->getId(), $type . '/' . $row['relativeUrl'], 2);
-		} else {
-			return new Avatar(null, $this->getId(), null, null);
-		}
-		
-		MySQL::close($con);
-	}
-	
-	public function getPendingAvatar() {
-		$con = MySQL::open(Settings::db_name_infected_crew);
-		
-		$result = mysqli_query($con, 'SELECT relativeUrl FROM ' . Settings::db_table_infected_crew_avatars . ' WHERE userId = \'' . $this->getId() . '\' AND state = \'1\'');
-		$row = mysqli_fetch_array($result);
-		
-		if ($row) {
-			$relativeUrl = 'sd/' . $row['relativeUrl'];
-		} else {
-			if ((date('Y') - date('Y', $this->getBirthdate())) > 18) {
-				if ($this->getGender() == 0) {
-					$relativeUrl = 'default.png';
-				} else {
-					$relativeUrl = 'default_jente.png';
-				}
-			} else {
-				$relativeUrl = 'default18.png';
-			}
-		}
-		
-		MySQL::close($con);
-		
-		return new Avatar(null, $this->getId(), 'images/avatars/' . $relativeUrl, null);
-	}
-	
-	public function hasPendingAvatar() {
-		$con = MySQL::open(Settings::db_name_infected_crew);
-		
-		$result = mysqli_query($con, 'SELECT state FROM ' . Settings::db_table_infected_crew_avatars . ' WHERE userId = \'' . $this->getId() . '\' AND state = \'1\'');
-		$row = mysqli_fetch_array($result);
-		
-		MySQL::close($con);
-		
-		return $row ? true : false;
-	}
-	
-	public function hasAvatar() {
-		$con = MySQL::open(Settings::db_name_infected_crew);
-		
-		$result = mysqli_query($con, 'SELECT state FROM ' . Settings::db_table_infected_crew_avatars . ' WHERE userId = \'' . $this->getId() . '\' AND state = \'2\'');
-		$row = mysqli_fetch_array($result);
-		
-		MySQL::close($con);
-		
-		return $row ? true : false;
-	}
-	
-	/* Returns the users group */
-	public function getGroup() {
-		$con = MySQL::open(Settings::db_name_infected_crew);
-		
-		$result = mysqli_query($con, 'SELECT groupId FROM ' . Settings::db_table_infected_crew_memberof . ' WHERE userId = \'' . $this->getId() . '\'');
-		$row = mysqli_fetch_array($result);
-		
-		MySQL::close($con);
-		
-		if ($row) {
-			return GroupHandler::getGroup($row['groupId']);
-		}
-	}
-	
-	/* Sets the users group */
-	public function setGroup($groupId) {
-		$con = MySQL::open(Settings::db_name_infected_crew);
-		
-		if ($this->isGroupMember) {	
-			mysqli_query($con, 'UPDATE ' . Settings::db_table_infected_crew_memberof . ' SET groupId = \'' . $groupId . '\', teamId = \'0\' WHERE userId = \'' . $this->getId() . '\'');
-		} else {
-			mysqli_query($con, 'INSERT INTO ' . Settings::db_table_infected_crew_memberof . ' (userId, groupId, teamId) VALUES (\'' . $this->getId() . '\', \'' . $groupId . '\', \'0\')');
-		}
-		
-		MySQL::close($con);
-	}
-	
-	/* Is member of a group which means it's not a plain user */
-	public function isGroupMember() {
-		$con = MySQL::open(Settings::db_name_infected_crew);
-		
-		$result = mysqli_query($con, 'SELECT groupId FROM ' . Settings::db_table_infected_crew_memberof . ' WHERE userId = \'' . $this->getId() . '\' AND groupId != \'0\'');
-		$row = mysqli_fetch_array($result);
-		
-		MySQL::close($con);
-		
-		return $row ? true : false;
-	}
-	
-	/* Return true if user is chief for a group */
-	public function isGroupChief() {
-		$con = MySQL::open(Settings::db_name_infected_crew);
-		
-		$result = mysqli_query($con, 'SELECT chief FROM ' . Settings::db_table_infected_crew_groups . ' WHERE chief = \'' . $this->getId() . '\'');
-		$row = mysqli_fetch_array($result);
-		
-		MySQL::close($con);
-		
-		return $row ? true : false;
-	}
-	
-	/* Returns the users team */
-	public function getTeam() {
-		$con = MySQL::open(Settings::db_name_infected_crew);
-		
-		$result = mysqli_query($con, 'SELECT teamId FROM ' . Settings::db_table_infected_crew_memberof . ' WHERE userId = \'' . $this->getId() . '\'');
-		$row = mysqli_fetch_array($result);
-		
-		MySQL::close($con);
-		
-		if ($row) {
-			return TeamHandler::getTeam($row['teamId']);
-		}
-	}
-	
-	/* Sets the users team */
-	public function setTeam($teamId) {
-		$con = MySQL::open(Settings::db_name_infected_crew);
-		
-		if ($this->isGroupMember) {	
-			mysqli_query($con, 'UPDATE ' . Settings::db_table_infected_crew_memberof . ' SET teamId = \'' . $teamId . '\' WHERE userId = \'' . $this->getId() . '\' AND groupId = \'' . $this->getGroup()->getId() . '\'');	
-		}
-		
-		MySQL::close($con);
-	}
-	
-	/* Is member of a team which means it's not a plain user */
-	public function isTeamMember() {
-		$con = MySQL::open(Settings::db_name_infected_crew);
-		
-		$result = mysqli_query($con, 'SELECT teamId FROM ' . Settings::db_table_infected_crew_memberof. ' WHERE userId = \'' . $this->getId() . '\' AND teamId != \'0\'');
-		$row = mysqli_fetch_array($result);
-		
-		MySQL::close($con);
-		
-		return $row ? true : false;
-	}
-	
-	/* Return true if user is chief for a team */
-	public function isTeamChief() {
-		$con = MySQL::open(Settings::db_name_infected_crew);
-		
-		$result = mysqli_query($con, 'SELECT chief FROM ' . Settings::db_table_infected_crew_teams . ' WHERE chief = \'' . $this->getId() . '\'');
-		$row = mysqli_fetch_array($result);
-		
-		MySQL::close($con);
-		
-		return $row ? true : false;
-	}
-	
-	/* Returns true if user have specified permission, otherwise false */
-	public function hasPermission($permission) {
-		return PermissionsHandler::hasPermission($this->getId(), $permission);
-	}
-	
 	/* Returns users fullname as string */
 	public function getFullName() {
 		return $this->getFirstname() . ' ' . $this->getLastname();
@@ -309,6 +119,16 @@ class User {
 		return $displayName;
 	}
 	
+	/* Returns the users age as int */
+	public function getAge() {
+		return date_diff(date_create(date('Y-m-d', $this->getBirthdate())), date_create('now'))->y;
+	}
+	
+	/* Returns true if user have specified permission, otherwise false */
+	public function hasPermission($permission) {
+		return PermissionsHandler::hasPermission($this->getId(), $permission);
+	}
+	
 	/* Return a string with the name of the position */
 	public function getPosition() {
 		if ($this->isGroupMember()) {
@@ -324,25 +144,88 @@ class User {
 		}
 	}
 	
-	public function sendForgottenEmail() {
+		/*
+	 * Sends a mail to the user with a link where they can reset the password.
+	 */
+	public function sendForgottenMail() {
 		$code = md5($this->getId() + time() * rand());
 		
 		// Put the code in the database.
-		$this->database->setResetCode($this->getId(), $code);
+		ResetCodeHandler::setResetCode($this->getId(), $code);
 		
 		// Send an email to the user with a link for resetting the password.
-		$url = 'https://' . $_SERVER['HTTP_HOST'] . 'index.php?page=reset&code=' . $code;
-		$message = '<html>
-						<head>
-							<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-						</head>
-						<body>
-							<h3>Hei!</h3>
-							<p>For å tilbakestille passordet ditt må du klikke <a href="' . $url . '">her</a>.</p>
-						</body>
-					</html>';
+		$url = 'https://' . $_SERVER['HTTP_HOST'] . 'index.php?page=reset-code=' . $code;
+		$message = '<html>' .
+						'<head>' .
+							'<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />' .
+						'</head>' .
+						'<body>' .
+							'<h3>Hei!</h3>' .
+							'<p>For å tilbakestille passordet ditt må du klikke <a href="' . $url . '">her</a>.</p>' .
+						'</body>' .
+					'</html>';
 			
-		return Utils::sendEmail($this, 'Infected.no - Tilbakestill passord', $message);
+		return MailManager::sendMail($this, 'Infected.no - Tilbakestill passord', $message);
+	}
+	
+	public function getAvatar()) {
+		return self::hasAvatar() ? AvatarHandler::getAvatarForUser($this) : null;
+	}
+	
+	public function getPendingAvatar()) {
+		return self::hasPendingAvatar() ? AvatarHandler::getPendingAvatarForUser($this) : null;
+	}
+	
+	public function hasAvatar() {
+		$avatar = AvatarHandler::getAvatarForUser($this);
+	
+		return $avatar->getState() == 2;
+	}
+	
+	public function hasPendingAvatar() {
+		return AvatarHandler::getPendingAvatarForUser($this) != null;
+	}
+
+	/* 
+	 * Returns the users group.
+	 */
+	public function getGroup() {
+		return GroupHandler::getGroupForUser($this->getId());
+	}
+	
+	/* 
+	 * Is member of a group which means it's not a plain user.
+	 */
+	public function isGroupMember() {
+		return GroupHandler::isGroupMember($this->getId());
+	}
+	
+	/* 
+	 * Return true if user is leader of a group.
+	 */
+	public function isGroupLeader() {
+		return GroupHandler::isGroupLeader($this->getId());
+	}
+	
+	/* 
+	 * Returns the team.
+	 */
+	public function getTeam() {
+		return TeamHandler::getTeamForUser($this->getId());
+	}
+	
+	/* 
+	 * Is member of a team which means it's not a plain user.
+	 */
+	public function isTeamMember() {
+		return TeamHandler::isTeamMember($this->getId());
+	}
+	
+	/*
+	 * Return true if user is leader of a team.
+	 */
+	public function isTeamLeader() {
+		return TeamHandler::isTeamLeader($this->getId());
 	}
 }
 ?>
