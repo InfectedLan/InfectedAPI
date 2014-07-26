@@ -8,13 +8,19 @@ class PageHandler {
 	public static function getPage($id) {
 		$con = MySQL::open(Settings::db_name_infected_main);
 		
-		$result = mysqli_query($con, 'SELECT * FROM ' . Settings::db_table_infected_main_pages . ' WHERE id=\'' . $id . '\'');
+		$result = mysqli_query($con, 'SELECT * 
+									  FROM `' . Settings::db_table_infected_main_pages . '` 
+									  WHERE id=\'' . $id . '\';');
+									  
 		$row = mysqli_fetch_array($result);
 		
 		MySQL::close($con);
 
 		if ($row) {
-			return new Page($row['id'], $row['name'], $row['title'], $row['content']);
+			return new Page($row['id'], 
+							$row['name'], 
+							$row['title'], 
+							$row['content']);
 		}
 	}
 	
@@ -22,7 +28,10 @@ class PageHandler {
 	public static function getPageByName($name) {
 		$con = MySQL::open(Settings::db_name_infected_main);
 		
-		$result = mysqli_query($con, 'SELECT id FROM ' . Settings::db_table_infected_main_pages . ' WHERE name=\'' . $name . '\'');
+		$result = mysqli_query($con, 'SELECT `id` 
+									  FROM `' . Settings::db_table_infected_main_pages . '`
+									  WHERE `name` = \'' . $name . '\';');
+									  
 		$row = mysqli_fetch_array($result);
 		
 		MySQL::close($con);
@@ -36,7 +45,9 @@ class PageHandler {
 	public static function getPages() {
 		$con = MySQL::open(Settings::db_name_infected_main);
 		
-		$result = mysqli_query($con, 'SELECT id FROM ' . Settings::db_table_infected_main_pages);
+		$result = mysqli_query($con, 'SELECT `id` 
+									  FROM `' . Settings::db_table_infected_main_pages . '`;');
+									  
 		$pageList = array();
 		
 		while ($row = mysqli_fetch_array($result)) {

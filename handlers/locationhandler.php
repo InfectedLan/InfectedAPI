@@ -9,8 +9,8 @@ class LocationHandler {
 		$con = MySQL::open(Settings::db_name_infected);
 		
 		$result = mysqli_query($con, 'SELECT * 
-					      FROM `'. Settings::db_table_infected_locations . '`
-					      WHERE `id` = \'' . $id . '\';');
+									  FROM `'. Settings::db_table_infected_locations . '`
+									  WHERE `id` = \'' . $id . '\';');
 
 		$row = mysqli_fetch_array($result);
 		
@@ -18,8 +18,8 @@ class LocationHandler {
 
 		if ($row) {
 			return new Location($row['id'],
-					    $row['name'],
-					    $row['title']);
+								$row['name'],
+								$row['title']);
 		}
 	}
 	
@@ -28,7 +28,7 @@ class LocationHandler {
 		$con = MySQL::open(Settings::db_name_infected);
 		
 		$result = mysqli_query($con, 'SELECT `id` 
-					      FROM `' . Settings::db_table_infected_locations . '`;');
+									  FROM `' . Settings::db_table_infected_locations . '`;');
 		
 		$locationList = array();
 		

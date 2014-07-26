@@ -19,13 +19,13 @@ class EventHandler {
 
 		if ($row) {
 			return new Event($row['id'],
-					 $row['theme'], 
-					 $row['start'], 
-					 $row['end'], 
-					 LocationHandler::getLocation($row['location']), 
-					 $row['participants'], 
-					 $row['price'],
-					 $row['seatmap']);
+							 $row['theme'], 
+							 $row['start'], 
+							 $row['end'], 
+							 LocationHandler::getLocation($row['location']), 
+							 $row['participants'], 
+							 $row['price'],
+							 $row['seatmap']);
 		}
 	}
 	
@@ -51,7 +51,7 @@ class EventHandler {
 		$con = MySQL::open(Settings::db_name_infected);
 		
 		$result = mysqli_query($con, 'SELECT `id` 
-					      FROM `' . Settings::db_table_infected_events . '`;');
+									  FROM `' . Settings::db_table_infected_events . '`;');
 		
 		$eventList = array();
 		

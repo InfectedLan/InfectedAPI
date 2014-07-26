@@ -8,7 +8,10 @@ class TeamHandler {
 	public static function getTeam($id) {
 		$con = MySQL::open(Settings::db_name_infected_crew);
 		
-		$result = mysqli_query($con, 'SELECT * FROM ' . Settings::db_table_infected_crew_teams . ' WHERE id=\'' . $id . '\'');
+		$result = mysqli_query($con, 'SELECT * 
+									  FROM `' . Settings::db_table_infected_crew_teams . '` 
+									  WHERE `id` = \'' . $id . '\';');
+									  
 		$row = mysqli_fetch_array($result);
 		
 		MySQL::close($con);
@@ -27,7 +30,8 @@ class TeamHandler {
 	public static function getTeams() {
 		$con = MySQL::open(Settings::db_name_infected_crew);
 		
-		$result = mysqli_query($con, 'SELECT id FROM ' . Settings::db_table_infected_crew_teams);
+		$result = mysqli_query($con, 'SELECT `id` 
+									  FROM `' . Settings::db_table_infected_crew_teams . '`;');
 		
 		$teamList = array();
 		
@@ -44,7 +48,7 @@ class TeamHandler {
 	public static function createTeam($groupId, $name, $title, $description, $chief) {
 		$con = MySQL::open(Settings::db_name_infected_crew);
 		
-		mysqli_query($con, 'INSERT INTO ' . Settings::db_table_infected_crew_teams . ' (groupId, name, title, description, chief) 
+		mysqli_query($con, 'INSERT INTO `' . Settings::db_table_infected_crew_teams . '` (`groupId`, `name`, `title`, `description`, `chief`) 
 							VALUES (\'' . $groupId . '\', 
 									\'' . $name . '\', 
 									\'' . $title . '\', 
@@ -58,7 +62,8 @@ class TeamHandler {
 	public static function removeTeam($id) {
 		$con = MySQL::open(Settings::db_name_infected_crew);
 		
-		mysqli_query($con, 'DELETE FROM ' . Settings::db_table_infected_crew_teams . ' WHERE id=\'' . $id . '\'');
+		mysqli_query($con, 'DELETE FROM `' . Settings::db_table_infected_crew_teams . '` 
+							WHERE `id` = \'' . $id . '\';');
 		
 		MySQL::close($con);
 	}
@@ -67,7 +72,13 @@ class TeamHandler {
 	public static function updateTeam($id, $groupId, $name, $title, $description, $chief) {
 		$con = MySQL::open(Settings::db_name_infected_crew);
 		
-		mysqli_query($con, 'UPDATE ' . Settings::db_table_infected_crew_teams . ' SET groupId=\'' . $groupId . '\', name=\'' . $name . '\', title=\'' . $title . '\', description=\'' . $description . '\', chief=\'' . $chief . '\' WHERE id=\'' . $id . '\'');
+		mysqli_query($con, 'UPDATE `' . Settings::db_table_infected_crew_teams . '` 
+							SET `groupId` = \'' . $groupId . '\', 
+								`name` = \'' . $name . '\', 
+								`title` = \'' . $title . '\', 
+								`description` = \'' . $description . '\', 
+								`chief` = \'' . $chief . '\' 
+							WHERE `id` = \'' . $id . '\';');
 		
 		MySQL::close($con);
 	}

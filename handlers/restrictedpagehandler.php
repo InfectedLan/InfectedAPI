@@ -151,7 +151,10 @@ class RestrictedPageHandler {
 	public static function updatePage($id, $title, $content) {
 		$con = MySQL::open(Settings::db_name_infected_crew);
 		
-		mysqli_query($con, 'UPDATE `' . Settings::db_table_infected_crew_pages . '` SET `title` = \'' . $title . '\', `content` = \'' . $content . '\' WHERE `id` = \'' . $id . '\'');
+		mysqli_query($con, 'UPDATE `' . Settings::db_table_infected_crew_pages . '` 
+							SET `title` = \'' . $title . '\', 
+								`content` = \'' . $content . '\' 
+							WHERE `id` = \'' . $id . '\';');
 		
 		MySQL::close($con);
 	}

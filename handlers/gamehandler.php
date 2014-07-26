@@ -7,20 +7,32 @@ class GameHandler {
 	public static function getGame($id) {
 		$con = MySQL::open(Settings::db_name_infected_main);
 		
-		$result = mysqli_query($con, 'SELECT * FROM ' . Settings::db_table_infected_main_games . ' WHERE id=\'' . $id . '\'');
+		$result = mysqli_query($con, 'SELECT * 
+									  FROM `' . Settings::db_table_infected_main_games . '` 
+									  WHERE `id` = \'' . $id . '\';');
+									  
 		$row = mysqli_fetch_array($result);
 		
 		MySQL::close($con);
 
 		if ($row) {
-			return new Game($row['id'], $row['name'], $row['title'], $row['price'], $row['mode'], $row['description'], $row['deadline'], $row['published']);
+			return new Game($row['id'], 
+							$row['name'], 
+							$row['title'], 
+							$row['price'], 
+							$row['mode'], 
+							$row['description'], 
+							$row['deadline'], 
+							$row['published']);
 		}
 	}
 	
 	public static function getGames() {
 		$con = MySQL::open(Settings::db_name_infected_main);
 		
-		$result = mysqli_query($con, 'SELECT id FROM ' . Settings::db_table_infected_main_games);
+		$result = mysqli_query($con, 'SELECT `id` 
+									  FROM `' . Settings::db_table_infected_main_games . '`;');
+									  
 		$gameList = array();
 		
 		while ($row = mysqli_fetch_array($result)) {
@@ -35,7 +47,10 @@ class GameHandler {
 	public static function getPublishedGames() {
 		$con = MySQL::open(Settings::db_name_infected_main);
 		
-		$result = mysqli_query($con, 'SELECT id FROM ' . Settings::db_table_infected_main_games . ' WHERE published=\'1\'');
+		$result = mysqli_query($con, 'SELECT `id` 
+									  FROM `' . Settings::db_table_infected_main_games . '` 
+									  WHERE `published` = \'1\'');
+		
 		$gameList = array();
 		
 		while ($row = mysqli_fetch_array($result)) {

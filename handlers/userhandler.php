@@ -8,7 +8,10 @@ class UserHandler {
 	public static function getUser($id) {
 		$con = MySQL::open(Settings::db_name_infected);
 		
-		$result = mysqli_query($con, 'SELECT * FROM ' . Settings::db_table_infected_users . ' WHERE id=\'' . $id . '\'');
+		$result = mysqli_query($con, 'SELECT * 
+									  FROM `' . Settings::db_table_infected_users . '` 
+									  WHERE `id` = \'' . $id . '\';');
+							
 		$row = mysqli_fetch_array($result);
 		
 		MySQL::close($con);
@@ -33,7 +36,8 @@ class UserHandler {
 	public static function getUsers() {
 		$con = MySQL::open(Settings::db_name_infected);
 		
-		$result = mysqli_query($con, 'SELECT * FROM ' . Settings::db_table_infected_users);
+		$result = mysqli_query($con, 'SELECT * 
+									  FROM `' . Settings::db_table_infected_users . '`;');
 		
 		$userList = array();
 		
@@ -61,19 +65,27 @@ class UserHandler {
 	public static function userExists($username) {
 		$con = MySQL::open(Settings::db_name_infected);
 
-		$result = mysqli_query($con, 'SELECT * FROM ' . Settings::db_table_infected_users . ' WHERE username=\'' . $username . '\' OR email=\'' . $username . '\'');
+		$result = mysqli_query($con, 'SELECT * 
+									  FROM `' . Settings::db_table_infected_users . '` 
+									  WHERE `username` = \'' . $username . '\' 
+									  OR `email` = \'' . $username . '\';');
+									  
+		$row = mysqli_fetch_array($result);
 		
 		MySQL::close($con);
 
-		
-		return $result->num_rows > 0 ? true : false;
+		return $row ? true : false;
 	}
 	
 	/* Get user by name */
 	public static function getUserByName($username) {
 		$con = MySQL::open(Settings::db_name_infected);
 		
-		$result = mysqli_query($con, 'SELECT id FROM ' . Settings::db_table_infected_users . ' WHERE username=\'' . $username . '\' OR email=\'' . $username . '\'');
+		$result = mysqli_query($con, 'SELECT `id` 
+									  FROM `' . Settings::db_table_infected_users . '` 
+									  WHERE `username` = \'' . $username . '\' 
+									  OR `email` = \'' . $username . '\';');
+									  
 		$row = mysqli_fetch_array($result);
 		
 		MySQL::close($con);
@@ -87,7 +99,7 @@ class UserHandler {
 	public static function createUser($firstname, $lastname, $username, $password, $email, $birthDate, $gender, $phone, $address, $postalCode, $nickname) {
 		$con = MySQL::open(Settings::db_name_infected);
 		
-		mysqli_query($con, 'INSERT INTO ' . Settings::db_table_infected_users . ' (firstname, lastname, username, password, email, birthDate, gender, phone, address, postalCode, nickname) 
+		mysqli_query($con, 'INSERT INTO `' . Settings::db_table_infected_users . '` (`firstname`, `lastname`, `username`, `password`, `email`, `birthdate`, `gender`, `phone`, `address`, `postalcode`, `nickname`) 
 							VALUES (\'' . $firstname . '\', 
 									\'' . $lastname . '\', 
 									\'' . $username . '\', 
@@ -98,7 +110,7 @@ class UserHandler {
 									\'' . $phone . '\', 
 									\'' . $address. '\', 
 									\'' . $postalCode . '\', 
-									\'' . $nickname . '\')');
+									\'' . $nickname . '\');');
 									
 		MySQL::close($con);
 	}
@@ -107,7 +119,8 @@ class UserHandler {
 	public static function removeUser($id) {
 		$con = MySQL::open(Settings::db_name_infected);
 		
-		mysqli_query($con, 'DELETE FROM ' . Settings::db_table_infected_users . ' WHERE id=\'' . $id . '\'');
+		mysqli_query($con, 'DELETE FROM `' . Settings::db_table_infected_users . '` 
+							WHERE `id` = \'' . $id . '\';');
 		
 		MySQL::close($con);
 	}
@@ -116,19 +129,19 @@ class UserHandler {
 	public static function updateUser($firstname, $lastname, $username, $password, $email, $birthDate, $gender, $phone, $address, $postalCode, $nickname) {
 		$con = MySQL::open(Settings::db_name_infected);
 		
-		mysqli_query($con, 'UPDATE ' . Settings::db_table_infected_users . ' 
-							SET firstname=\'' . $firstname . '\', 
-								lastname=\'' . $lastname . '\', 
-								username=\'' . $username . '\', 
-								password=\'' . $password . '\', 
-								email=\'' . $email . '\', 
-								birthdate=\'' . $birthDate . '\', 
-								gender=\'' . $gender . '\', 
-								phone=\'' . $phone . '\', 
-								address=\'' . $address . '\', 
-								postalcode=\'' . $postalCode . '\', 
-								nickname=\'' . $nickname . '\' 
-							WHERE id=\'' . $id . '\'');
+		mysqli_query($con, 'UPDATE `' . Settings::db_table_infected_users . '` 
+							SET `firstname` = \'' . $firstname . '\', 
+								`lastname` = \'' . $lastname . '\', 
+								`username` = \'' . $username . '\', 
+								`password` = \'' . $password . '\', 
+								`email` = \'' . $email . '\', 
+								`birthdate` = \'' . $birthDate . '\', 
+								`gender` = \'' . $gender . '\', 
+								`phone` = \'' . $phone . '\', 
+								`address` = \'' . $address . '\', 
+								`postalcode` = \'' . $postalCode . '\', 
+								`nickname` = \'' . $nickname . '\' 
+							WHERE `id` = \'' . $id . '\';');
 		
 		MySQL::close($con);
 	}
@@ -137,7 +150,7 @@ class UserHandler {
 	public static function getMemberUsers() {
 		$con = MySQL::open(Settings::db_name_infected);
 		
-		$result = mysqli_query($con, 'SELECT * FROM ' . Settings::db_table_infected_users . '
+		$result = mysqli_query($con, 'SELECT * FROM `' . Settings::db_table_infected_users . '`
 									  LEFT JOIN ' . Settings::db_name_infected_crew . '.' . Settings::db_table_infected_crew_memberof . ' ON ' . Settings::db_table_infected_users . '.id = userId
 									  WHERE groupId IS NOT NULL 
 									  ORDER BY firstname ASC');
@@ -198,8 +211,12 @@ class UserHandler {
 	public static function search($query) {
 		$con = MySQL::open(Settings::db_name_infected);
 
-		$result = mysqli_query($con, 'SELECT * FROM ' . Settings::db_table_infected_users . ' WHERE firstname LIKE "%' . $query . '%"' .
-									' OR lastname LIKE "%' . $query . '%" OR nickname LIKE "%' . $query . '%" OR email LIKE "%' . $query . '%" LIMIT 0, 10');
+		$result = mysqli_query($con, 'SELECT * FROM `' . Settings::db_table_infected_users . '` 
+									  WHERE `firstname` LIKE "%' . $query . '%"' . ' 
+									  OR `lastname` LIKE "%' . $query . '%" 
+									  OR `nickname` LIKE "%' . $query . '%" 
+									  OR `email` LIKE "%' . $query . '%" 
+									  LIMIT 10;');
 		
 		$userList = array();
 

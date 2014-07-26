@@ -8,19 +8,22 @@ class ApplicationHandler {
 	public static function getApplication($id) {
 		$con = MySQL::open(Settings::db_name_infected_crew);
 		
-		$result = mysqli_query($con, 'SELECT * FROM ' . Settings::db_table_infected_crew_applications . ' WHERE id=\'' . $id . '\'');
+		$result = mysqli_query($con, 'SELECT * 
+									  FROM `' . Settings::db_table_infected_crew_applications . '` 
+									  WHERE `id` = \'' . $id . '\';');
+									  
 		$row = mysqli_fetch_array($result);
 		
 		MySQL::close($con);
 
 		if ($row) {
 			return new Application($row['id'], 
-								$row['userId'], 
-								$row['groupId'], 
-								$row['content'], 
-								$row['state'], 
-								$row['datetime'], 
-								$row['reason']);
+								   $row['userId'], 
+								   $row['groupId'], 
+								   $row['content'], 
+								   $row['state'], 
+								   $row['datetime'], 
+								   $row['reason']);
 		}
 	}
 	
