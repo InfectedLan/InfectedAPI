@@ -4,7 +4,7 @@ class Location {
 	private $name;
 	private $title;
 	
-	public function Location($id, $name, $title) {
+	public function __construct($id, $name, $title) {
 		$this->id = $id;
 		$this->name = $name;
 		$this->title = $title;

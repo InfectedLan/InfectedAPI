@@ -9,7 +9,7 @@ class Game {
 	private $deadline;
 	private $published;
 	
-	public function Game($id, $name, $title, $price, $mode, $description, $deadline, $published) {
+	public function __construct($id, $name, $title, $price, $mode, $description, $deadline, $published) {
 		$this->id = $id;
 		$this->name = $name;
 		$this->title = $title;

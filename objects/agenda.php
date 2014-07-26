@@ -5,7 +5,7 @@ class Agenda {
 	private $name;
 	private $description;
 	
-	public function Agenda($id, $datetime, $name, $description) {
+	public function __construct($id, $datetime, $name, $description) {
 		$this->id = $id;
 		$this->datetime = $datetime;
 		$this->name = $name;

@@ -15,7 +15,7 @@ class Row {
 	 * Row: Row number
 	 * Event: Event this section belongs to
 	 */ 
-	public function Row($id, $x, $y, $row, $seatmap) {
+	public function __construct($id, $x, $y, $row, $seatmap) {
 		$this->id = $id;
 		$this->x = $x;
 		$this->y = $y;

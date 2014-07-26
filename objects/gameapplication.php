@@ -9,7 +9,7 @@ class GameApplication {
 	private $email;
 	private $phone;
 	
-	public function GameApplication($id, $game, $name, $tag, $contactname, $contactnick, $phone, $email) {
+	public function __construct($id, $game, $name, $tag, $contactname, $contactnick, $phone, $email) {
 		$this->id = $id;
 		$this->game = $game;
 		$this->name = $name;

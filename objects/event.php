@@ -11,7 +11,7 @@ class Event {
 	private $price;
 	private $seatmap;
 	
-	public function Event($id, $theme, $start, $end, $location, $participants, $price, $seatmap) {
+	public function __construct($id, $theme, $start, $end, $location, $participants, $price, $seatmap) {
 		$this->id = $id;
 		$this->theme = $theme;
 		$this->start = $start;

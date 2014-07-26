@@ -11,7 +11,7 @@ class Seat {
 	 * Section: Section object this seat belongs to
 	 * Number: Number relative to row, this seat is at, relative to the row the seat is a part of
 	 */
-	public function Seat($id, $row, $number) {
+	public function __construct($id, $row, $number) {
 		$this->id = $id;
 		$this->row = $row;
 	}
@@ -43,6 +43,5 @@ class Seat {
 	public function getHumanString() {
 		return 'R' . $this->row->getNumber() . 'S' . $this->number;
 	}
-
 }
 ?>

@@ -20,7 +20,7 @@ class Ticket {
 	 * User: User account that will be using the ticket
 	 * Seater: User account that can seat this ticket
 	 */
-	public function Ticket($id, $event, $owner, $type, $seat, $seater) {
+	public function __construct($id, $event, $owner, $type, $seat, $seater) {
 		$this->id = $id;
 		$this->event = $event;
 		$this->owner = $owner;

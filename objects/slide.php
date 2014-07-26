@@ -7,7 +7,7 @@ class Slide {
 	private $content;
 	private $published;
 	
-	public function Slide($id, $start, $end, $title, $content, $published) {
+	public function __construct($id, $start, $end, $title, $content, $published) {
 		$this->id = $id;
 		$this->start = $start;
 		$this->end = $end;

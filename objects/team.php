@@ -12,7 +12,7 @@ class Team {
 	private $description;
 	private $chief;
 	
-	public function Team($id, $groupId, $name, $title, $description, $chief) {
+	public function __construct($id, $groupId, $name, $title, $description, $chief) {
 		$this->id = $id;
 		$this->groupId = $groupId;
 		$this->name = $name;

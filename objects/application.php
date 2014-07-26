@@ -11,7 +11,7 @@ class Application {
 	private $datetime;
 	private $reason;
 	
-	public function Application($id, $userId, $groupId, $content, $state, $datetime, $reason) {
+	public function __construct($id, $userId, $groupId, $content, $state, $datetime, $reason) {
 		$this->id = $id;
 		$this->userId = $userId;
 		$this->groupId = $groupId;

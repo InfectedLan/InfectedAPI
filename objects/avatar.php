@@ -7,7 +7,7 @@ class Avatar {
 	private $relativeUrl;
 	private $state;
 
-	public function Avatar($id, $userId, $relativeUrl, $state) {
+	public function __construct($id, $userId, $relativeUrl, $state) {
 		$this->id = $id;
 		$this->userId = $userId;
 		$this->relativeUrl = $relativeUrl;

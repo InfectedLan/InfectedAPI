@@ -1,23 +1,26 @@
 <?php
-class CrewPage {
+/*
+ * Page.php
+ * Page used by main page on infected.no
+ * 
+ * While merging, i found that there are two different pages for the crewpage and the main page.
+ * This is the main page. The crew page is refactored to CrewPage
+*/
+class Page {
 	private $id;
 	private $name;
 	private $title;
 	private $content;
-	private $groupId;
-	private $teamId;
 	
-	public function CrewPage($id, $name, $title, $content, $groupId, $teamId) {
+	public function __construct($id, $name, $title, $content) {
 		$this->id = $id;
 		$this->name = $name;
 		$this->title = $title;
 		$this->content = $content;
-		$this->groupId = $groupId;
-		$this->teamId = $teamId;
 	}
 	
 	public function display() {
-		// Format the page with HTML.
+		// Format the page as HTML.
 		echo '<h1>' . $this->getTitle() . '</h1>';
 		echo $this->getContent();
 	}
@@ -36,14 +39,6 @@ class CrewPage {
 	
 	public function getContent() {
 		return $this->content;
-	}
-	
-	public function getGroup() {
-		return $this->groupId;
-	}
-	
-	public function getTeam() {
-		return $this->teamId;
 	}
 }
 ?>

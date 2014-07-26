@@ -11,7 +11,7 @@ class TicketType {
 	 * Id: Unique id of ticket type
 	 * HumanName: Human readable name for tickets
 	 */
-	public function TicketType($id, $humanName) {
+	public function __construct($id, $humanName) {
 		$this->id = $id;
 		$this->humanName = $humanName;
 	}

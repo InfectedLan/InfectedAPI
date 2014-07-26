@@ -11,7 +11,7 @@ class Group {
 	private $description;
 	private $chief;
 	
-	public function Group($id, $name, $title, $description, $chief) {
+	public function __construct($id, $name, $title, $description, $chief) {
 		$this->id = $id;
 		$this->name = $name;
 		$this->title = $title;

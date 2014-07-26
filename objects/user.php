@@ -2,6 +2,7 @@
 require_once 'settings.php';
 require_once 'mysql.php';
 require_once 'handlers/permissionshandler.php';
+require_once 'handlers/citydictionary.php';
 require_once 'objects/avatar.php';
 
 class User {	
@@ -18,7 +19,7 @@ class User {
 	private $postalCode;
 	private $nickname;
 	
-	public function User($id, $firstname, $lastname, $username, $password, $email, $birthDate, $gender, $phone, $address, $postalCode, $nickname) {
+	public function __construct($id, $firstname, $lastname, $username, $password, $email, $birthDate, $gender, $phone, $address, $postalCode, $nickname) {
 		$this->id = $id;
 		$this->firstname = $firstname;
 		$this->lastname = $lastname;
@@ -95,16 +96,7 @@ class User {
 	
 	/* Returns the users city as string, based on the postalCode */
 	public function getCity() {
-		$con = MySQL::open(Settings::db_name_infected);
-		
-		$result = mysqli_query($con, 'SELECT city FROM ' . Settings::db_table_infected_postalcodes . ' WHERE code = \'' . $this->getPostalCode() . '\'');
-		$row = mysqli_fetch_array($result);
-		
-		MySQL::close($con);
-		
-		if ($row) {
-			return ucfirst(strtolower($row['city']));
-		}
+		return CityDictionary::getCity($this->getPostalCode());
 	}
 	
 	/* Returns the users nickname as string */

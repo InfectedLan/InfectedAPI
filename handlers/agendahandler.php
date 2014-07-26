@@ -7,20 +7,29 @@ class AgendaHandler {
 	public static function getAgenda($id) {
 		$con = MySQL::open(Settings::db_name_infected_main);
 		
-		$result = mysqli_query($con, 'SELECT * FROM ' . Settings::db_table_infected_main_agenda . ' WHERE id=\'' . $id . '\'');
+		$result = mysqli_query($con, 'SELECT * 
+								      FROM `' . Settings::db_table_infected_main_agenda . '` 
+									  WHERE `id` = \'' . $id . '\';');
+									  
 		$row = mysqli_fetch_array($result);
 		
 		MySQL::close($con);
 		
 		if ($row) {
-			return new Agenda($row['id'], $row['datetime'], $row['name'], $row['description']);
+			return new Agenda($row['id'], 
+							  $row['datetime'], 
+							  $row['name'], 
+							  $row['description']);
 		}
 	}
 	
 	public static function getAgendas() {
 		$con = MySQL::open(Settings::db_name_infected_main);
 		
-		$result = mysqli_query($con, 'SELECT id FROM ' . Settings::db_table_infected_main_agenda . ' ORDER BY datetime');
+		$result = mysqli_query($con, 'SELECT `id`
+									  FROM `' . Settings::db_table_infected_main_agenda . '`
+									  ORDER BY `datetime`;');
+									  
 		$agendaList = array();
 		
 		while ($row = mysqli_fetch_array($result)) {
@@ -32,20 +41,23 @@ class AgendaHandler {
 		return $agendaList;
 	}
 	
-	public static function getAgendasBetween($first, $last) {
+	public static function getAgendaSelection($first, $last) {
+		$first = '2014-01-13 08:00:00';
+		$last = '2014-02-18 23:00:00';
+	
 		$con = MySQL::open(Settings::db_name_infected_main);
 		
-		$result = mysqli_query($con, 'SELECT id FROM ' . Settings::db_table_infected_main_agenda . ' ORDER BY datetime');
+		$result = mysqli_query($con, 'SELECT `id`
+									  FROM `' . Settings::db_table_infected_main_agenda . '`
+									  WHERE `datetime` 
+									  BETWEEN ' . $first . ' 
+									  AND ' . $last . '
+									  ORDER BY `datetime`;'); 
+									  
 		$agendaList = array();
 		
 		while ($row = mysqli_fetch_array($result)) {
-			$agenda = self::getAgenda($row['id']);
-			$now = date('U');
-			
-			if ($agenda->getDatetime() >= $now - $first * 60 * 60 ||
-				$agenda->getDatetime() + (60*90) >= $now + $last * 60 * 60) {
-				array_push($agendaList, $agenda);
-			}
+			array_push($agendaList, self::getAgenda($row['id']));
 		}
 		
 		MySQL::close($con);
