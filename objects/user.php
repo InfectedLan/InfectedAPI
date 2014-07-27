@@ -168,11 +168,11 @@ class User {
 		return MailManager::sendMail($this, 'Infected.no - Tilbakestill passord', $message);
 	}
 	
-	public function getAvatar()) {
+	public function getAvatar() {
 		return self::hasAvatar() ? AvatarHandler::getAvatarForUser($this) : null;
 	}
 	
-	public function getPendingAvatar()) {
+	public function getPendingAvatar() {
 		return self::hasPendingAvatar() ? AvatarHandler::getPendingAvatarForUser($this) : null;
 	}
 	
