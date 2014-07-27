@@ -2,43 +2,38 @@
 require_once 'session.php';
 require_once 'handlers/tickethandler.php';
 
-if(!Session::isAuthenticated())
-{
-	echo '{"result":false, "message":"You arent authenticated!"}';
-	return;
-}
+$result = false;
+$message = null;
 
-$ticketid = $_GET["id"];
-$ticket = TicketHandler::getTicket($ticketid);
+if (Session::isAuthenticated()) {
+	$user = Session::getCurrentUser();
 
-if(!isset($ticket))
-{
-	echo '{"result":false, "message":"Ugyldig bilett"}';
-	return;
-}
-$me = Session::getCurrentUser();
-if($me->getId() == $ticket->getOwner()->getId())
-{
-	$target = $_GET["target"];
-	if(!isset($target))
-	{
-		echo '{"result":false, "message":"Felt mangler! Trengeer mål!"}';
-		return;
+	if (isset($_GET['id'])) {
+		$ticket = TicketHandler::getTicket($_GET['id']);
+		
+		if ($ticket != null) {
+			if ($user->getId() == $ticket->getOwner()->getId()) {
+				if (isset($_GET['target'])) {
+					$target = UserHandler::getUser($target);
+					TicketHandler::setSeater($ticket, $target);
+
+					$result = true;
+					$message = 'Biletten har en ny seater.';
+				} else {
+					$message = 'Felt mangler! Trenger mål!';
+				}
+			} else {
+				$message = 'Du eier ikke denne billetten!';
+			}
+		} else {
+			
+		}
+	} else {
+		$merssage = 'Ugyldig bilett.';
 	}
-	else
-	{
-		$target = UserHandler::getUser($target);
-		TicketHandler::setSeater($ticket, $target);
+} else {
+	$message = 'Du er ikke logget inn!';
+}
 
-		echo '{"result":true, "message":"Biletten har en ny seater"}';
-		return;
-	}
-}
-else
-{
-	echo '{"result":false, "message":"Du eier ikke biletten!"}';
-	return;
-}
-echo '{"result":false, "message":"Wat"}';
-return;
+echo json_encode(array('result' => $result, 'message' => $message));
 ?>
