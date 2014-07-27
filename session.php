@@ -1,4 +1,6 @@
 <?php
+require_once 'objects/user.php';
+
 session_start();
 
 class Session {
