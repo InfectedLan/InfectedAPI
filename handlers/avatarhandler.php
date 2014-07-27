@@ -95,7 +95,7 @@ class AvatarHandler {
 		$avatarList = array();
 		
 		while ($row = mysqli_fetch_array($result)) {
-			array_push($groupList, self::getAvatar($row['id']));
+			array_push($avatarList, self::getAvatar($row['id']));
 		}
 		
 		MySQL::close($con);
