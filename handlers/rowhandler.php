@@ -1,8 +1,6 @@
 <?php
 require_once 'settings.php';
 require_once 'mysql.php';
-require_once 'handlers/seathandler.php';
-require_once 'handlers/eventhandler.php';
 require_once 'objects/row.php';
 	
 class RowHandler {
@@ -10,7 +8,7 @@ class RowHandler {
 		$con = MySQL::open(Settings::db_name_infected_tickets);
 
 		$result = mysqli_query($con, 'SELECT * 
-									  FROM `' . Settings::db_table_infected_tickets_sections . `' 
+									  FROM `' . Settings::db_table_infected_tickets_rows . '`
 									  WHERE `id` = \'' . $id . '\';');
 									  
 		$row = mysqli_fetch_array($result);
