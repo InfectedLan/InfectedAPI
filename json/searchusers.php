@@ -9,8 +9,8 @@ $users = array();
 
 if (Session::isAuthenticated()) {
 	if (isset($_GET['query']) &&
-		isset($_GET['key']) &&
-		&& strlen($_GET['query']) > 2) {
+		isset($_GET['key']) && 
+		strlen($_GET['query']) > 2) {
 		$userList = UserHandler::search($_GET['query']);
 
 		if (!empty($userList)) {
