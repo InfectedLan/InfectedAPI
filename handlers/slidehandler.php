@@ -33,13 +33,7 @@ class SlideHandler {
 		$slideList = array();
 		
 		while ($row = mysqli_fetch_array($result)) {
-			$slide = self::getSlide($row['id']);
-			$now = date('U');
-			
-			if ($slide->getStart() >= $now - $first * 60 * 60 ||
-				$slide->getEnd() >= $now + $last * 60 * 60) {
-				array_push($slideList, $slide);
-			}
+			array_push($slideList, self::getSlide($row['id']));
 		}
 		
 		MySQL::close($con);

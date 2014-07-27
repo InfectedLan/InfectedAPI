@@ -4,6 +4,7 @@ require_once 'handlers/userhandler.php';
 class Avatar {
 	private $id;
 	private $userId;
+	private $path;
 	private $file;
 	private $state;
 
@@ -12,7 +13,7 @@ class Avatar {
 		$this->userId = $userId;
 		$this->path = 'images/avatars/';
 		
-		if (!file_exists($path . $file) || $file == null) {
+		if (!file_exists($this->path . $file) || $file == null) {
 			$user = UserHandler::getUser($userId);
 		
 			if ($user->getAge() >= 18) {
@@ -39,7 +40,7 @@ class Avatar {
 	}
 
 	public function getFile() {
-		return path . $this->file;
+		return $this->path . $this->file;
 	}
 
 	public function getState() {

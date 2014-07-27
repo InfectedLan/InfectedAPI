@@ -1,5 +1,5 @@
 <?php
-require_once 'utils.php';
+require_once 'session.php';
 require_once 'settings.php';
 require_once 'mysql.php';
 require_once 'objects/restrictedpage.php';
@@ -10,8 +10,8 @@ class RestrictedPageHandler {
 	 * Get page by id.
 	 */
 	public static function getPage($id) {
-		if (Utils::isAuthenticated()) {
-			$user = Utils::getUser();
+		if (Session::isAuthenticated()) {
+			$user = Session::getCurrentUser();
 			
 			if ($user->isGroupMember()) {
 				$con = MySQL::open(Settings::db_name_infected_crew);
@@ -50,8 +50,8 @@ class RestrictedPageHandler {
 	 * Get page by name.
 	 */
 	public static function getPageByName($name) {
-		if (Utils::isAuthenticated()) {
-			$user = Utils::getUser();
+		if (Session::isAuthenticated()) {
+			$user = Session::getCurrentUser();
 			$con = MySQL::open(Settings::db_name_infected_crew);
 			
 			$result = mysqli_query($con, 'SELECT `id`

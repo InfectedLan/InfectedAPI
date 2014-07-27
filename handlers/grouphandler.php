@@ -29,8 +29,8 @@ class GroupHandler {
 	public static function getGroupForUser($userId) {
 		$con = MySQL::open(Settings::db_name_infected_crew);
 		
-		$result = mysqli_query($con, 'SELECT `id`
-									  FROM `' . Settings::db_table_infected_crew_groups . '` 
+		$result = mysqli_query($con, 'SELECT `groupId`
+									  FROM `' . Settings::db_table_infected_crew_memberof . '` 
 									  WHERE `userId` = \'' . $userId . '\';');
 									
 		$row = mysqli_fetch_array($result);
@@ -38,7 +38,7 @@ class GroupHandler {
 		MySQL::close($con);
 		
 		if ($row) {
-			return self::getGroup($row['id']);
+			return self::getGroup($row['groupId']);
 		}
 	}
 	

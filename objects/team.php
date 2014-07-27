@@ -1,4 +1,5 @@
 <?php
+require_once 'session.php';
 require_once 'settings.php';
 require_once 'mysql.php';
 require_once 'handlers/userhandler.php';
@@ -82,13 +83,13 @@ class Team {
 			echo $this->getDescription();
 		echo '</div>';
 		
-		if (Utils::isAuthenticated()) {
+		if (Session::isAuthenticated()) {
 			$this->display();
 		}
 	}
 	
 	public function display() {
-		$user = Utils::getUser();
+		$user = Session::getCurrentUser();
 		
 		if ($user->isGroupMember()) {
 			$memberList = $this->getMembers();
@@ -105,7 +106,7 @@ class Team {
 					}
 					
 				echo '">';
-					echo '<a href="index.php?page=profile&id=' . $member->getId() . '"><img src="' . $member->getThumbnailAvatar()->getRelativeUrl() . '" width="146" height="110" style="float: right;"></a>';
+					echo '<a href="index.php?page=profile&id=' . $member->getId() . '"><img src="' . $member->getAvatar()->getFile() . '" width="146" height="110" style="float: right;"></a>';
 					echo '<p>Navn: ' . $member->getFirstname() . ' "' . $member->getNickname() . '" ' . $member->getLastname() . '<br>';
 					echo 'Stilling: ' . $member->getPosition() . '<br>';
 					echo 'Telefon: ' . $member->getPhone() . '<br>';

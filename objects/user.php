@@ -1,6 +1,9 @@
 <?php
 require_once 'handlers/citydictionary.php';
 require_once 'handlers/permissionshandler.php';
+require_once 'handlers/avatarhandler.php';
+require_once 'handlers/grouphandler.php';
+require_once 'handlers/teamhandler.php';
 
 class User {	
 	private $id;
@@ -132,9 +135,9 @@ class User {
 	/* Return a string with the name of the position */
 	public function getPosition() {
 		if ($this->isGroupMember()) {
-			if ($this->isGroupChief()) {
+			if ($this->isGroupLeader()) {
 				return 'Chief';
-			} else if ($this->isTeamChief()) {
+			} else if ($this->isTeamLeader()) {
 				return 'Shift-leder';
 			} else {
 				return 'Medlem';
@@ -169,21 +172,21 @@ class User {
 	}
 	
 	public function getAvatar() {
-		return self::hasAvatar() ? AvatarHandler::getAvatarForUser($this) : null;
+		return self::hasAvatar() ? AvatarHandler::getAvatarForUser($this->getId()) : null;
 	}
 	
 	public function getPendingAvatar() {
-		return self::hasPendingAvatar() ? AvatarHandler::getPendingAvatarForUser($this) : null;
+		return self::hasPendingAvatar() ? AvatarHandler::getPendingAvatarForUser($this->getId()) : null;
 	}
 	
 	public function hasAvatar() {
-		$avatar = AvatarHandler::getAvatarForUser($this);
+		$avatar = AvatarHandler::getAvatarForUser($this->getId());
 	
 		return $avatar->getState() == 2;
 	}
 	
 	public function hasPendingAvatar() {
-		return AvatarHandler::getPendingAvatarForUser($this) != null;
+		return AvatarHandler::getPendingAvatarForUser($this->getId()) != null;
 	}
 
 	/* 

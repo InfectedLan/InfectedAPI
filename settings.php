@@ -33,6 +33,7 @@ class Settings {
 	const db_table_infected_main_gameapplications = 'gameapplications';
 	const db_table_infected_main_games = 'games';
 	const db_table_infected_main_pages = 'pages';
+	const db_table_infected_main_slides = 'slides';
 	
 	// InfectedCrew
 	const db_table_infected_crew_applications = 'applications';

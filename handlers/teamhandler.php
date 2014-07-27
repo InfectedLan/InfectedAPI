@@ -26,6 +26,23 @@ class TeamHandler {
 		}
 	}
 	
+	/* Get a group by userId */
+	public static function getTeamForUser($userId) {
+		$con = MySQL::open(Settings::db_name_infected_crew);
+		
+		$result = mysqli_query($con, 'SELECT `teamId`
+									  FROM `' . Settings::db_table_infected_crew_memberof . '` 
+									  WHERE `userId` = \'' . $userId . '\';');
+									
+		$row = mysqli_fetch_array($result);
+		
+		MySQL::close($con);
+		
+		if ($row) {
+			return self::getTeam($row['teamId']);
+		}
+	}
+	
 	/* Get an array of all teams */
 	public static function getTeams() {
 		$con = MySQL::open(Settings::db_name_infected_crew);
