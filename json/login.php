@@ -1,11 +1,11 @@
 <?php
-require_once 'utils.php';
+require_once 'session.php';
 require_once 'handlers/userhandler.php';
 
 $result = true;
 $message = '';
 
-if (!Utils::isAuthenticated()) {
+if (!Session::isAuthenticated()) {
 	if (isset($_POST['username']) &&
 		isset($_POST['password']) &&
 		!empty($_POST['username']) &&

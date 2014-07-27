@@ -1,8 +1,8 @@
 <?php
-require_once 'utils.php';
+require_once 'session.php';
 require_once 'handlers/userhandler.php';
 
-if (!Utils::isAuthenticated()) {
+if (!Session::isAuthenticated()) {
 	echo '{"result":false, "message":"You aren\'t authenticated!"}';
 	return;
 }

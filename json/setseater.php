@@ -1,8 +1,8 @@
 <?php
-require_once 'utils.php';
+require_once 'session.php';
 require_once 'handlers/tickethandler.php';
 
-if(Utils::isAuthenticated() == false)
+if(!Session::isAuthenticated())
 {
 	echo '{"result":false, "message":"You arent authenticated!"}';
 	return;
@@ -16,7 +16,7 @@ if(!isset($ticket))
 	echo '{"result":false, "message":"Ugyldig bilett"}';
 	return;
 }
-$me = Utils::getUser();
+$me = Session::getCurrentUser();
 if($me->getId() == $ticket->getOwner()->getId())
 {
 	$target = $_GET["target"];
