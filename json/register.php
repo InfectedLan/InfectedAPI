@@ -22,32 +22,26 @@ if (isset($_POST['firstname']) &&
 	$confirmPassword = hash('sha256', $_POST['confirmpassword']);
 	$email = $_POST['email'];
 	$gender = $_POST['gender'];
-	$birthDate = $_POST['birthyear'] . '-' . $_POST['birthmonth'] . '-' . $_POST['birthday'];
+	$birthdate = $_POST['birthyear'] . '-' . $_POST['birthmonth'] . '-' . $_POST['birthday'];
 	$phone = $_POST['phone'];
 	$address = $_POST['address'];
-	$postalCode = $_POST['postalCode'];
+	$postalcode = $_POST['postalCode'];
 	$nickname = isset($_POST['nickname']) ? $_POST['nickname'] : $username;
 	
 	if (!UserHandler::userExists($username)) {
 		if (empty($firstname)) {
 			$message = 'Du har ikke skrevet inn noe fornavn.';
-		}
-		else if (empty($lastname)) {
+		} else if (empty($lastname)) {
 			$message = 'Du har ikke skrevet inn noe etternavn.';	
-		}
-		else if (empty($username) || strlen($username) < 4) {
+		} else if (empty($username) || strlen($username) < 4) {
 			$message = 'Du har ikke oppgitt noe brukernavn, eller det er for kort.';
-		}
-		else if (strlen($username) > 32) {
+		} else if (strlen($username) > 32) {
 			$message = 'Brukernavnet ditt er for langt!';
-		}
-		else if (empty($password)) {
+		} else if (empty($password)) {
 			$message = 'Du har ikke oppgitt noe passord!';
-		}
-		else if (strlen($_POST['password']) < 5) {
+		} else if (strlen($_POST['password']) < 5) {
 			$message = 'Passordet er for kort!';
-		}
-		else if (strlen($_POST['password']) > 32) {
+		} else if (strlen($_POST['password']) > 32) {
 			$message = 'Passordet ditt er for langt!';
 		}
 		/*else if (!preg_match('#[0-9]+#', $password)) {
@@ -61,28 +55,21 @@ if (isset($_POST['firstname']) &&
 		}*/
 		else if (strlen($email) > 32 || !filter_var($email, FILTER_VALIDATE_EMAIL)) {
 			$message = 'E-posten du skrev inn er ikke en gyldig e-post addresse!';
-		}
-		else if ($gender < 0 || $gender > 1) {
+		} else if ($gender < 0 || $gender > 1) {
 			$message = 'Du har oppgitt et ugyldig kjønn.';
-		}
-		else if (empty($phone) || strlen($phone) != 8) {
+		} else if (empty($phone) || strlen($phone) != 8) {
 			$message = 'Du har ikke skrevet inn et gyldig telefonnummer.';
-		}
-		else if (empty($address)) {
+		} else if (empty($address)) {
 			$message = 'Du må skrive inn en adresse.';
-		}
-		else if (empty($postalCode) || strlen($postalCode) != 4) {
+		} else if (empty($postalcode) || strlen($postalcode) != 4) {
 			$message = 'Du må skrive inn et gyldig postnummer.';
-		}
-		else if (strlen($nickname) > 32) {
+		} else if (strlen($nickname) > 32) {
 			$message = 'Kallenavnet ditt er for langt!';
-		}
-		else
-		{
+		} else {
 			//If all fields are ok
 			// Check if passwords match.
 			if ($password == $confirmPassword) {
-				UserHandler::createUser($firstname, $lastname, $username, $password, $email, $gender, $birthDate, $phone, $address, $postalCode, $nickname);
+				UserHandler::createUser($firstname, $lastname, $username, $password, $email, $gender, $birthdate, $phone, $address, $postalcode, $nickname);
 				$result = true;
 			} else {
 				$message = 'Passordene er ikke like!';
@@ -91,11 +78,9 @@ if (isset($_POST['firstname']) &&
 	} else {
 		$message = 'Brukeren finnes allerede!';
 	}
-}
-else
-{
+} else {
 	$message = "Du har ikke fylt inn alle feltene!";
 }
 
-echo '{"result":' . ($result ? 'true' : 'false') . ', "message":"' . $message . '"}';
+echo json_encode(array('result' => $result, 'message' => $message));
 ?>

@@ -2,34 +2,33 @@
 require_once 'session.php';
 require_once 'handlers/userhandler.php';
 
-if (!Session::isAuthenticated()) {
-	echo '{"result":false, "message":"You aren\'t authenticated!"}';
-	return;
-}
+$result = false;
+$message = null;
+$key = null;
+$users = array();
 
-if (!isset( $_GET['query'] ) || strlen($_GET['query']) < 2) {
-	echo '{"result":false}';
-	return;
-}
+if (Session::isAuthenticated()) {
+	if (isset($_GET['query']) &&
+		isset($_GET['key']) &&
+		&& strlen($_GET['query']) > 2) {
+		$userList = UserHandler::search($_GET['query']);
 
-$list = UserHandler::search($_GET['query']);
-
-if(!isset($list)) {
-	echo '{"result":false}';
-} else {
-	echo '{"result":true, "key":"' . htmlspecialchars($_GET['key']) . '", "users":[';
-	
-	$first = true;
-	
-	foreach ($list as $user) {
-		if ($first==false) {
-			echo ',';
-		}
+		if (!empty($userList)) {
+			$result = true;
+			$key = htmlspecialchars($_GET['key']);
 		
-		echo '{"firstname":"' . $user->getFirstname() . '", "lastname":"' . $user->getLastname() . '", "nick":"' . $user->getNickname() . '", "userId":"' . $user->getId() . '"}';
-		$first = false;
+			foreach ($userList as $user) {
+				array_push($users, array('firstname' => $user->getFirstname(), 'lastname' => $user->getLastname(), 'nick' => $user->getNickname(), 'userId' => $user->getId()));
+			}
+		} else {
+			$message = 'Ingen brukere ble funnet.';
+		}	
+	} else {
+		$message = 'Spørring må være mer en 2 bokstaver lang.';
 	}
-	
-	echo ']}';
+} else {
+	$message = 'Du er ikke logget inn!"}';
 }
+
+echo json_encode(array('result' => $result, 'message' => $message, 'key' => $key, 'users' => $users));
 ?>

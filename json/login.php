@@ -3,7 +3,7 @@ require_once 'session.php';
 require_once 'handlers/userhandler.php';
 
 $result = true;
-$message = '';
+$message = null;
 
 if (!Session::isAuthenticated()) {
 	if (isset($_POST['username']) &&
@@ -37,5 +37,5 @@ if (!Session::isAuthenticated()) {
 	$message = "Du er allerede logget inn!";
 } 
 
-echo '{"result":"' . ($result ? 'true' : 'false') . '", "message":"' . $message . '"}';
+echo json_encode(array('result' => $result, 'message' => $message));
 ?>
