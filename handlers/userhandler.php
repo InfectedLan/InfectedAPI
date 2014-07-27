@@ -182,7 +182,7 @@ class UserHandler {
 		$con = MySQL::open(Settings::db_name_infected);
 		
 		$result = mysqli_query($con, 'SELECT * FROM ' . Settings::db_table_infected_users . ' 
-									  LEFT JOIN ' . Settings::db_name_infected_crew . '.' . Settings::db_table_infected_crew_memberof . ' ON ' . Settings::db_table_users . '.id = userId 
+									  LEFT JOIN ' . Settings::db_name_infected_crew . '.' . Settings::db_table_infected_crew_memberof . ' ON ' . Settings::db_table_infected_users . '.id = userId 
 									  WHERE groupId IS NULL 
 									  ORDER BY firstname ASC');
 		
