@@ -1,8 +1,10 @@
 <?php
+require_once 'session.php';
+
 $result = false;
 $message = null;
 
-if (isset($_SESSION['user'])) {
+if (Session::isAuthenticated()) {
 	unset($_SESSION['user']);
 	
 	$result = true;
