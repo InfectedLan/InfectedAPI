@@ -47,8 +47,7 @@ class TeamHandler {
 	public static function getTeams() {
 		$con = MySQL::open(Settings::db_name_infected_crew);
 		
-		$result = mysqli_query($con, 'SELECT `id` 
-									  FROM `' . Settings::db_table_infected_crew_teams . '`;');
+		$result = mysqli_query($con, 'SELECT `id` FROM `' . Settings::db_table_infected_crew_teams . '`;');
 		
 		$teamList = array();
 		
@@ -65,8 +64,7 @@ class TeamHandler {
 	public static function getTeamsForGroup($groupId) {
 		$con = MySQL::open(Settings::db_name_infected_crew);
 
-		$result = mysqli_query($con, 'SELECT `id` 
-									  FROM `' . Settings::db_table_infected_crew_teams . '`
+		$result = mysqli_query($con, 'SELECT `id` FROM `' . Settings::db_table_infected_crew_teams . '`
 									  WHERE `groupId` = \'' . $groupId . '\';');
 		
 		$teamList = array();
@@ -125,7 +123,7 @@ class TeamHandler {
 		
 		$result = mysqli_query($con, 'SELECT `' . Settings::db_table_infected_users . '`.`id` FROM `' . Settings::db_table_infected_users . '`
 									  LEFT JOIN `' . Settings::db_name_infected_crew . '`.`' . Settings::db_table_infected_crew_memberof . '`
-									  ON `' . Settings::db_table_infected_users . '`.`id` = `userId` 
+									  ON `' . Settings::db_table_infected_users . '`.`id` = `userId`
 									  WHERE `groupId` = \'' . $groupId . '\'
 									  AND `teamId` = \'' . $teamId . '\' 
 									  ORDER BY `firstname` ASC;');
@@ -176,7 +174,7 @@ class TeamHandler {
 	public static function changeTeam($userId, $teamId) {
 		$con = MySQL::open(Settings::db_name_infected_crew);
 		
-		if ($this->isGroupMember) {	
+		if ($this->isGroupMember($userId)) {	
 			mysqli_query($con, 'UPDATE `' . Settings::db_table_infected_crew_memberof . '` 
 								SET `teamId` = \'' . $teamId . '\' 
 								WHERE `userId` = \'' . $userId . '\' 

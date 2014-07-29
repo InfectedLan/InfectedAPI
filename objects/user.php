@@ -1,4 +1,5 @@
 <?php
+require_once 'mailmanager.php';
 require_once 'handlers/citydictionary.php';
 require_once 'handlers/permissionshandler.php';
 require_once 'handlers/avatarhandler.php';
@@ -37,82 +38,121 @@ class User {
 		$this->nickname = $nickname;
 	}
 	
-	/* Returns the users internal id as int */
+	/* 
+	 * Returns the users internal id.
+	 */
 	public function getId() {
 		return $this->id;
 	}
 	
-	/* Returns the users firstname as string */
+	/* 
+	 * Returns the users firstname.
+	 */
 	public function getFirstname() {
 		return $this->firstname;
 	}
 	
-	/* Returns the users lastname as string */
+	/* 
+	 * Returns the users lastname.
+	 */
 	public function getLastname() {
 		return $this->lastname;
 	}
 	
-	/* Returns the users username as string */
+	/* 
+	 * Returns the users username
+	 */
 	public function getUsername() {
 		return $this->username;
 	}
 	
-	/* Returns the users password as a sha256 hash. */
+	/* 
+	 * Returns the users password as a sha256 hash. 
+	 */
 	public function getPassword() {
 		return $this->password;
 	}
 	
-	/* Returns the users email address as string */
+	/* 
+	 * Returns the users email address.
+	 */
 	public function getEmail() {
 		return $this->email;
 	}
 	
-	/* Returns the users birthDate as timestamp */
+	/* 
+	 * Returns the users birthdate.
+	 */
 	public function getBirthdate() {
 		return strtotime($this->birthdate);
 	}
 	
-	/* Returns the users gender as boolean */
+	/* 
+	 * Returns the users gender.
+	 */
 	public function getGender() {
 		return $this->gender;
 	}
 	
-	/* Returns the users gender as string */
+	/* 
+	 * Returns the users gendername.
+	 */
 	public function getGenderName() {
 		return $this->getGender() ? "Kvinne" : "Mann";
 	}
 	
-	/* Returns the users phone number spaces every second number as string */
+	/* 
+	 * Returns the users phone number.
+	 */
 	public function getPhone() {
 		return chunk_split($this->phone, 2, ' ');
 	}
 	
-	/* Returns the users address as a string */
+	/*
+	 * Returns the users address.
+	 */
 	public function getAddress() {
 		return $this->address;
 	}
 	
-	/* Returns the users postalCode as int */
+	/* 
+	 * Returns the users postalcode.
+	 */
 	public function getPostalCode() {
 		return sprintf('%04u', $this->postalcode);
 	}
 	
-	/* Returns the users city as string, based on the postalCode */
+	/* 
+	 * Returns the users city, based on the postalcode.
+	 */
 	public function getCity() {
 		return CityDictionary::getCity($this->getPostalCode());
 	}
 	
-	/* Returns the users nickname as string */
+	/* 
+	 * Returns the users nickname.
+	 */
 	public function getNickname() {
 		return $this->nickname;
 	}
 	
-	/* Returns users fullname as string */
+	/*
+	 * Returns users fullname.
+	 */
 	public function getFullName() {
 		return $this->getFirstname() . ' ' . $this->getLastname();
 	}
 	
-	/* Returns users displayName as string */
+	/* 
+	 * Returns the users age.
+	 */
+	public function getAge() {
+		return date_diff(date_create(date('Y-m-d', $this->getBirthdate())), date_create('now'))->y;
+	}
+	
+	/* 
+	 * Returns users displayname.
+	 */
 	public function getDisplayName() {
 		$nickname = $this->getNickname();
 	
@@ -125,32 +165,34 @@ class User {
 		return $displayName;
 	}
 	
-	/* Returns the users age as int */
-	public function getAge() {
-		return date_diff(date_create(date('Y-m-d', $this->getBirthdate())), date_create('now'))->y;
-	}
 	
-	/* Returns true if user have specified permission, otherwise false */
+	/* 
+	 * Returns true if user have specified permission, otherwise false.
+	 */
 	public function hasPermission($permission) {
 		return PermissionsHandler::hasPermission($this->getId(), $permission);
 	}
 	
-	/* Return a string with the name of the position */
-	public function getPosition() {
-		if ($this->isGroupMember()) {
-			if ($this->isGroupLeader()) {
-				return 'Chief';
-			} else if ($this->isTeamLeader()) {
-				return 'Shift-leder';
-			} else {
-				return 'Medlem';
-			}
-		} else {
-			return 'Deltaker';
-		}
+	/*
+	 * Sends an mail to the users address with an activation link.
+	 */
+	public function sendRegistrationMail() {
+		// Put the code in the database.
+		$code = UserHandler::createRegistrationCode($this->getId());
+		
+		// Send an email to the user with a link for resetting the password.
+		$url = 'https://' . $_SERVER['HTTP_HOST'] . 'index.php?page=activation&code=' . $code;
+		$message = '<html>' .
+						'<body>' .
+							'<h3>Hei!</h3>' .
+							'<p>For å aktivere din bruker hos Infected, trenger du bare å klikke på <a href="' . $url . '">denne</a> linken.</p>' .
+						'</body>' .
+					'</html>';
+			
+		return MailManager::sendMail($this, 'Infected brukerregistrering', $message);
 	}
 	
-		/*
+	/*
 	 * Sends a mail to the user with a link where they can reset the password.
 	 */
 	public function sendForgottenMail() {
@@ -172,6 +214,23 @@ class User {
 					'</html>';
 			
 		return MailManager::sendMail($this, 'Infected.no - Tilbakestill passord', $message);
+	}
+	
+	/* 
+	 * Returns the name of the users position.
+	 */
+	public function getPosition() {
+		if ($this->isGroupMember()) {
+			if ($this->isGroupLeader()) {
+				return 'Chief';
+			} else if ($this->isTeamLeader()) {
+				return 'Shift-leder';
+			} else {
+				return 'Medlem';
+			}
+		} else {
+			return 'Deltaker';
+		}
 	}
 	
 	public function getAvatar() {

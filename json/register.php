@@ -28,7 +28,7 @@ if (isset($_POST['firstname']) &&
 	$postalcode = $_POST['postalcode'];
 	$nickname = isset($_POST['nickname']) ? $_POST['nickname'] : $username;
 	
-	if (!UserHandler::userExists($username) && !UserHandler::userExists($email)) {
+	if (!UserHandler::userExists($username)) {
 		if (empty($firstname)) {
 			$message = 'Du har ikke skrevet inn noe fornavn.';
 		} else if (empty($lastname)) {
@@ -39,21 +39,17 @@ if (isset($_POST['firstname']) &&
 			$message = 'Brukernavnet ditt er for langt!';
 		} else if (empty($password)) {
 			$message = 'Du har ikke oppgitt noe passord!';
-		} else if (strlen($_POST['password']) < 5) {
-			$message = 'Passordet er for kort!';
+		} else if (strlen($_POST['password']) < 8) {
+			$message = 'Passordet er for kort! Det må minst bestå av 8 tegn.';
 		} else if (strlen($_POST['password']) > 32) {
 			$message = 'Passordet ditt er for langt!';
-		}
-		/*else if (!preg_match('#[0-9]+#', $password)) {
-			$message = 'Passordet må inneholde et tall.';
-		}*/
-		/*else if (!preg_match('#[a-z]+#', $password)) {
-			$message = 'Passordet må inneholde en bokstav.';
-		}*/
-		/*else if (!preg_match('#[A-Z]+#', $password)) {
-			$message = 'Passordet må inneholde em stor bokstav.';
-		}*/
-		else if (strlen($email) > 32 || !filter_var($email, FILTER_VALIDATE_EMAIL)) {
+		/* } else if (!preg_match('#[0-9]+#', $password)) {
+			$message = 'Passordet må inneholde minst et tall.';
+		} else if (!preg_match('#[a-z]+#', $password)) {
+			$message = 'Passordet må inneholde minst en bokstav.';
+		} else if (!preg_match('#[A-Z]+#', $password)) {
+			$message = 'Passordet må inneholde minst en stor bokstav.'; */
+		} else if (strlen($email) > 32 || !filter_var($email, FILTER_VALIDATE_EMAIL)) {
 			$message = 'E-posten du skrev inn er ikke en gyldig e-post addresse!';
 		} else if ($gender < 0 || $gender > 1) {
 			$message = 'Du har oppgitt et ugyldig kjønn.';
@@ -66,10 +62,14 @@ if (isset($_POST['firstname']) &&
 		} else if (strlen($nickname) > 32) {
 			$message = 'Kallenavnet ditt er for langt!';
 		} else {
-			//If all fields are ok
-			// Check if passwords match.
 			if ($password == $confirmPassword) {
+				// Creates the user in database.
 				UserHandler::createUser($firstname, $lastname, $username, $password, $email, $gender, $birthdate, $phone, $address, $postalcode, $nickname);
+				
+				// Retrives the user object and sends the activation mail.
+				$user = UserHandler::getUserByName($username);
+				$user->sendRegistrationMail();
+				
 				$result = true;
 				$message = 'Din bruker har blitt laget! Sjekk e-posten din for å aktivere, før du logger inn.';
 			} else {
