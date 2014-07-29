@@ -8,7 +8,10 @@ class AvatarHandler {
 	public static function getAvatar($id) {
 		$con = MySQL::open(Settings::db_name_infected_crew);
 		
-		$result = mysqli_query($con, 'SELECT * FROM `' . Settings::db_table_infected_crew_avatars . '` WHERE `id` = \'' . $id . '\';');
+		$result = mysqli_query($con, 'SELECT * FROM `' . Settings::db_table_infected_crew_avatars . '` 
+									  WHERE `id` = \'' . $id . '\'
+									  AND `state` = \'2\';');
+									  
 		$row = mysqli_fetch_array($result);
 		
 		MySQL::close($con);
@@ -26,7 +29,8 @@ class AvatarHandler {
 		
 		$result = mysqli_query($con, 'SELECT `id` 
 									  FROM `' . Settings::db_table_infected_crew_avatars . '` 
-									  WHERE `userId` = \'' . $userId . '\';');
+									  WHERE `userId` = \'' . $userId . '\'
+									  AND `state` = \'2\';');
 		
 		$row = mysqli_fetch_array($result);
 		
