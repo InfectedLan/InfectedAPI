@@ -1,9 +1,9 @@
 <?php
 require_once 'session.php';
-require_once 'settings.php';
-require_once 'mysql.php';
-require_once 'handlers/userhandler.php';
 require_once 'handlers/grouphandler.php';
+require_once 'handlers/teamhandler.php';
+require_once 'handlers/userhandler.php';
+
 
 class Team {
 	private $id;
@@ -42,18 +42,18 @@ class Team {
 		return $this->description;
 	}
 	
-	public function getleader() {
-		return UserHandler::getUser($this->getLeader());
+	public function getLeader() {
+		return UserHandler::getUser($this->leader);
 	}
 	
 	/* Returns an array of users that are members of this group */
 	public function getMembers() {
-		return TeamHandler::getMembers($this->groupId, $this->getId());
+		return TeamHandler::getMembers($this->groupId, $this->id);
 	}
 	
 	public function displayWithInfo() {
 		echo '<div class="crewParagraph">';
-			echo '<h1>' . $this->getTitle() . '</h1>';
+			echo '<h1>' . $this->title . '</h1>';
 			echo $this->getDescription();
 		echo '</div>';
 		
