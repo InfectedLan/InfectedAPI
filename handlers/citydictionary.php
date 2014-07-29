@@ -37,7 +37,7 @@ class CityDictionary {
 		MySQL::close($con);
 		
 		if ($row) {
-			return ucfirst(strtolower($row['city']));
+			return $row['city'];
 		}
 	}
 }
