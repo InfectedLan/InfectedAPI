@@ -48,7 +48,7 @@ class Team {
 	
 	/* Returns an array of users that are members of this group */
 	public function getMembers() {
-		return TeamHandler::getMembers($this->getId());
+		return TeamHandler::getMembers($this->groupId, $this->getId());
 	}
 	
 	public function displayWithInfo() {

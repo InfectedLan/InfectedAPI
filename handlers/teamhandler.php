@@ -123,11 +123,10 @@ class TeamHandler {
 	public function getMembers($groupId, $teamId) {
 		$con = MySQL::open(Settings::db_name_infected);
 		
-		$result = mysqli_query($con, 'SELECT `id`
-									  FROM `' . Settings::db_table_infected_users . '`
-									  LEFT JOIN `' . Settings::db_name_infected_crew . '`.`' . Settings::db_table_infected_crew_memberof . '` 
+		$result = mysqli_query($con, 'SELECT `' . Settings::db_table_infected_users . '`.`id` FROM `' . Settings::db_table_infected_users . '`
+									  LEFT JOIN `' . Settings::db_name_infected_crew . '`.`' . Settings::db_table_infected_crew_memberof . '`
 									  ON `' . Settings::db_table_infected_users . '`.`id` = `userId` 
-									  WHERE `groupId` = \'' . $groupId . '\' 
+									  WHERE `groupId` = \'' . $groupId . '\'
 									  AND `teamId` = \'' . $teamId . '\' 
 									  ORDER BY `firstname` ASC;');
 		

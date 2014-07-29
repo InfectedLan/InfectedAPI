@@ -103,7 +103,7 @@ class GroupHandler {
 	public function getMembers($groupId) {
 		$con = MySQL::open(Settings::db_name_infected);
 		
-		$result = mysqli_query($con, 'SELECT * FROM `' . Settings::db_table_infected_users . '`
+		$result = mysqli_query($con, 'SELECT `' . Settings::db_table_infected_users . '`.`id` FROM `' . Settings::db_table_infected_users . '`
 									  LEFT JOIN `' . Settings::db_name_infected_crew . '`.`' . Settings::db_table_infected_crew_memberof . '`
 									  ON `' . Settings::db_table_infected_users . '`.`id` = `userId` 
 									  WHERE `groupId` = \'' . $groupId . '\'
