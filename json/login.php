@@ -2,7 +2,7 @@
 require_once 'session.php';
 require_once 'handlers/userhandler.php';
 
-$result = true;
+$result = false;
 $message = null;
 
 if (!Session::isAuthenticated()) {
@@ -19,21 +19,18 @@ if (!Session::isAuthenticated()) {
 			
 			if ($password == $storedPassword) {
 				$_SESSION['user'] = $user;
+				$result = true;
 				$message = 'Du er nå logget inn!';
 			} else {
-				$result = false;
 				$message = 'Feil brukernavn eller passord.';
 			}
 		} else {
-			$result = false;
 			$message = 'Feil brukernavn eller passord.';
 		}
 	} else {
-		$result = false;
 		$message = "Du har ikke skrevet inn et brukernavn og passord.";
 	}
 } else {
-	$result = false;
 	$message = "Du er allerede logget inn!";
 } 
 

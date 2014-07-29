@@ -122,6 +122,17 @@ class UserHandler {
 		MySQL::close($con);
 	}
 	
+	/* Update users password */
+	public static function updateUserPassword($userId, $password) {
+		$con = MySQL::open(Settings::db_name_infected);
+		
+		mysqli_query($con, 'UPDATE `' . Settings::db_table_infected_users . '` 
+							SET `password` = \'' . $password . '\'
+							WHERE `id` = \'' . $userId . '\';');
+		
+		MySQL::close($con);
+	}
+	
 	/* Get a list of all users which is member in a group */
 	public static function getMemberUsers() {
 		$con = MySQL::open(Settings::db_name_infected);
