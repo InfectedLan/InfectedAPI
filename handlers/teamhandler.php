@@ -61,6 +61,25 @@ class TeamHandler {
 		return $teamList;
 	}
 	
+	/* Get an array of all teams */
+	public static function getTeamsForGroup($groupId) {
+		$con = MySQL::open(Settings::db_name_infected_crew);
+
+		$result = mysqli_query($con, 'SELECT `id` 
+									  FROM `' . Settings::db_table_infected_crew_teams . '`
+									  WHERE `groupId` = \'' . $groupId . '\';');
+		
+		$teamList = array();
+		
+		while ($row = mysqli_fetch_array($result)) {
+			array_push($teamList, self::getTeam($row['id']));
+		}
+		
+		MySQL::close($con);
+		
+		return $teamList;
+	}
+	
 	/* Create a new team */
 	public static function createTeam($groupId, $name, $title, $description, $leader) {
 		$con = MySQL::open(Settings::db_name_infected_crew);
@@ -100,7 +119,30 @@ class TeamHandler {
 		MySQL::close($con);
 	}
 	
-		/* Is member of a team which means it's not a plain user */
+	/* Returns an array of users that are members of this team */
+	public function getMembers($groupId, $teamId) {
+		$con = MySQL::open(Settings::db_name_infected);
+		
+		$result = mysqli_query($con, 'SELECT `id`
+									  FROM `' . Settings::db_table_infected_users . '`
+									  LEFT JOIN `' . Settings::db_name_infected_crew . '`.`' . Settings::db_table_infected_crew_memberof . '` 
+									  ON `' . Settings::db_table_infected_users . '`.`id` = `userId` 
+									  WHERE `groupId` = \'' . $groupId . '\' 
+									  AND `teamId` = \'' . $teamId . '\' 
+									  ORDER BY `firstname` ASC;');
+		
+		$memberList = array();
+		
+		while ($row = mysqli_fetch_array($result)) {
+			array_push($memberList, UserHandler::getUser($row['id']));
+		}
+		
+		MySQL::close($con);
+		
+		return $memberList;
+	}
+	
+	/* Is member of a team which means it's not a plain user */
 	public function isTeamMember($userId) {
 		$con = MySQL::open(Settings::db_name_infected_crew);
 		

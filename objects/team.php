@@ -43,38 +43,12 @@ class Team {
 	}
 	
 	public function getleader() {
-		return UserHandler::getUser($this->leader);
+		return UserHandler::getUser($this->getLeader());
 	}
 	
 	/* Returns an array of users that are members of this group */
 	public function getMembers() {
-		$con = MySQL::open(Settings::db_name_infected);
-		
-		$result = mysqli_query($con, 'SELECT * FROM ' . Settings::db_table_infected_users . ' 
-									  LEFT JOIN ' . Settings::db_name_infected_crew . '.' . Settings::db_table_infected_crew_memberof . ' ON ' . Settings::db_table_infected_users . '.id = userId 
-									  WHERE groupId = \'' . $this->getGroup()->getId() . '\' AND teamId = \'' . $this->getId() . '\' 
-									  ORDER BY firstname ASC');
-		
-		$memberList = array();
-		
-		while ($row = mysqli_fetch_array($result)) {
-			array_push($memberList, new User($row['id'], 
-										   $row['firstname'], 
-										   $row['lastname'], 
-										   $row['username'], 
-										   $row['password'], 
-										   $row['email'], 
-										   $row['birthdate'], 
-										   $row['gender'], 
-										   $row['phone'], 
-										   $row['address'], 
-										   $row['postalcode'], 
-										   $row['nickname']));
-		}
-		
-		MySQL::close($con);	
-		
-		return $memberList;
+		return TeamHandler::getMembers($this->getId());
 	}
 	
 	public function displayWithInfo() {

@@ -5,6 +5,9 @@ require_once 'handlers/avatarhandler.php';
 require_once 'handlers/grouphandler.php';
 require_once 'handlers/teamhandler.php';
 
+/*
+ * Used to store information about a user.
+ */
 class User {	
 	private $id;
 	private $firstname;
@@ -172,17 +175,15 @@ class User {
 	}
 	
 	public function getAvatar() {
-		return self::hasAvatar() ? AvatarHandler::getAvatarForUser($this->getId()) : null;
+		return AvatarHandler::getAvatarForUser($this->getId());
 	}
 	
 	public function getPendingAvatar() {
-		return self::hasPendingAvatar() ? AvatarHandler::getPendingAvatarForUser($this->getId()) : null;
+		return AvatarHandler::getPendingAvatarForUser($this->getId());
 	}
 	
 	public function hasAvatar() {
-		$avatar = AvatarHandler::getAvatarForUser($this->getId());
-	
-		return $avatar->getState() == 2;
+		return AvatarHandler::getAvatarForUser($this->getId()) != null;
 	}
 	
 	public function hasPendingAvatar() {

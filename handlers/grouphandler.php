@@ -2,6 +2,7 @@
 require_once 'settings.php';
 require_once 'mysql.php';
 require_once 'objects/group.php';
+require_once 'objects/user.php';
 
 class GroupHandler {
 	/* Get a group by id */
@@ -98,6 +99,27 @@ class GroupHandler {
 		MySQL::close($con);
 	}
 	
+	/* Returns an array of users that are members of this group */
+	public function getMembers($groupId) {
+		$con = MySQL::open(Settings::db_name_infected);
+		
+		$result = mysqli_query($con, 'SELECT * FROM `' . Settings::db_table_infected_users . '`
+									  LEFT JOIN `' . Settings::db_name_infected_crew . '`.`' . Settings::db_table_infected_crew_memberof . '`
+									  ON `' . Settings::db_table_infected_users . '`.`id` = `userId` 
+									  WHERE `groupId` = \'' . $groupId . '\'
+									  ORDER BY `firstname` ASC;');
+		
+		$memberList = array();
+		
+		while ($row = mysqli_fetch_array($result)) {
+			array_push($memberList, UserHandler::getUser($row['id']));
+		}
+		
+		MySQL::close($con);
+		
+		return $memberList;
+	}
+
 	/* 
 	 * Is member of a group which means it's not a member user.
 	 */
