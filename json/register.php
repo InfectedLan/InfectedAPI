@@ -1,8 +1,8 @@
 <?php
 require_once 'handlers/userhandler.php';
 
-$message = "Success!";
 $result = false;
+$message = null;
 
 if (isset($_POST['firstname']) && 
 	isset($_POST['lastname']) && 
@@ -22,10 +22,10 @@ if (isset($_POST['firstname']) &&
 	$confirmPassword = hash('sha256', $_POST['confirmpassword']);
 	$email = $_POST['email'];
 	$gender = $_POST['gender'];
-	$birthdate = $_POST['birthyear'] . '-' . $_POST['birthmonth'] . '-' . $_POST['birthday'];
+	$birthdate = strtotime($_POST['birthyear'] . '-' . $_POST['birthmonth'] . '-' . $_POST['birthday']); 
 	$phone = $_POST['phone'];
 	$address = $_POST['address'];
-	$postalcode = $_POST['postalCode'];
+	$postalcode = $_POST['postalcode'];
 	$nickname = isset($_POST['nickname']) ? $_POST['nickname'] : $username;
 	
 	if (!UserHandler::userExists($username)) {
@@ -71,6 +71,7 @@ if (isset($_POST['firstname']) &&
 			if ($password == $confirmPassword) {
 				UserHandler::createUser($firstname, $lastname, $username, $password, $email, $gender, $birthdate, $phone, $address, $postalcode, $nickname);
 				$result = true;
+				$message = 'Din bruker har blitt laget! Sjekk e-posten din for å aktivere, før du logger inn.';
 			} else {
 				$message = 'Passordene er ikke like!';
 			}
