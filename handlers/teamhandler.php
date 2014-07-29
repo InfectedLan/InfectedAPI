@@ -120,7 +120,7 @@ class TeamHandler {
 	}
 	
 	/* Returns an array of users that are members of this team */
-	public function getMembers($groupId, $teamId) {
+	public static function getMembers($groupId, $teamId) {
 		$con = MySQL::open(Settings::db_name_infected);
 		
 		$result = mysqli_query($con, 'SELECT `' . Settings::db_table_infected_users . '`.`id` FROM `' . Settings::db_table_infected_users . '`
@@ -142,7 +142,7 @@ class TeamHandler {
 	}
 	
 	/* Is member of a team which means it's not a plain user */
-	public function isTeamMember($userId) {
+	public static function isTeamMember($userId) {
 		$con = MySQL::open(Settings::db_name_infected_crew);
 		
 		$result = mysqli_query($con, 'SELECT `teamId` 
@@ -158,7 +158,7 @@ class TeamHandler {
 	}
 	
 	/* Return true if user is leader for a team */
-	public function isTeamLeader($userId) {
+	public static function isTeamLeader($userId) {
 		$con = MySQL::open(Settings::db_name_infected_crew);
 		
 		$result = mysqli_query($con, 'SELECT `leader` 
@@ -173,7 +173,7 @@ class TeamHandler {
 	}
 	
 	/* Sets the users team */
-	public function changeTeam($userId, $teamId) {
+	public static function changeTeam($userId, $teamId) {
 		$con = MySQL::open(Settings::db_name_infected_crew);
 		
 		if ($this->isGroupMember) {	
