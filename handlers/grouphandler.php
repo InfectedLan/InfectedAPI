@@ -9,8 +9,7 @@ class GroupHandler {
 	public static function getGroup($id) {
 		$con = MySQL::open(Settings::db_name_infected_crew);
 		
-		$result = mysqli_query($con, 'SELECT * 
-									  FROM `' . Settings::db_table_infected_crew_groups . '` 
+		$result = mysqli_query($con, 'SELECT * FROM `' . Settings::db_table_infected_crew_groups . '` 
 									  WHERE `id` = \'' . $id . '\';');
 									
 		$row = mysqli_fetch_array($result);
@@ -100,7 +99,7 @@ class GroupHandler {
 	}
 	
 	/* Returns an array of users that are members of this group */
-	public function getMembers($groupId) {
+	public static function getMembers($groupId) {
 		$con = MySQL::open(Settings::db_name_infected);
 		
 		$result = mysqli_query($con, 'SELECT `' . Settings::db_table_infected_users . '`.`id` FROM `' . Settings::db_table_infected_users . '`
