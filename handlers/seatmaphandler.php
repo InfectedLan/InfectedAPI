@@ -51,6 +51,8 @@ class SeatmapHandler {
 		while ($row = mysqli_fetch_array($result)) {
 			array_push($seatmapArray, self::getSeatmap($row['id']));
 		}
+
+		return $seatmapArray;
 	}
 	
 	public static function getRows($seatmap) {
@@ -65,6 +67,8 @@ class SeatmapHandler {
 		while ($row = mysqli_fetch_array($result)) {
 			array_push($rowArray, RowHandler::getRow($row['id']));
 		}
+
+		return $rowArray;
 	}
 }
 ?>
