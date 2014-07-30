@@ -22,7 +22,7 @@ if (Session::isAuthenticated()) {
 		!empty($_POST['firstname']) &&
 		!empty($_POST['lastname']) &&
 		!empty($_POST['email']) &&
-		/* !empty($_POST['gender']) && */
+		// !empty() check for gender is removed since 0 actually is a legit value.
 		!empty($_POST['birthday']) &&
 		!empty($_POST['birthmonth']) &&
 		!empty($_POST['birthyear']) &&
