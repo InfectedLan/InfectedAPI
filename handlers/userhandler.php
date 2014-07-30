@@ -102,7 +102,7 @@ class UserHandler {
 	}
 	
 	/* Update user */
-	public static function updateUser($firstname, $lastname, $username, $password, $email, $birthDate, $gender, $phone, $address, $postalCode, $nickname) {
+	public static function updateUser($id, $firstname, $lastname, $username, $password, $email, $birthDate, $gender, $phone, $address, $postalCode, $nickname) {
 		$con = MySQL::open(Settings::db_name_infected);
 		
 		mysqli_query($con, 'UPDATE `' . Settings::db_table_infected_users . '` 
