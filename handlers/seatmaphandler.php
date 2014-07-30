@@ -21,6 +21,24 @@ class SeatmapHandler {
 							   $row['humanName']);
 		}
 	}
+
+	public static function createNewSeatmap($name) {
+		$con = MySQL::open(Settings::db_name_infected_tickets);
+
+		mysqli_query($con, 'INSERT INTO ' . Settings::db_table_infected_tickets_seatmaps . '(`humanName`) VALUES (\'' . $name . '\')');
+
+		$result = mysqli_query($con, 'SELECT id FROM ' .  Settings::db_table_infected_tickets_seatmaps . ' ORDER BY id DESC LIMIT 1;');
+
+		$row = mysqli_fetch_array($result);
+
+		MySQL::close($con);
+
+		if($row)
+		{
+			return self::getSeatmap($row['id']);
+		}
+
+	}
 	
 	public static function getSeatmaps() {
 		$con = MySQL::open(Settings::db_name_infected_tickets);
