@@ -234,7 +234,7 @@ class UserHandler {
 	}
 	
 	public static function createRegistrationCode($userId) {
-		$code = hash('md5', $userId * rand()); 
+		$code = openssl_random_pseudo_bytes(16);
 		
 		$con = MySQL::open(Settings::db_name_infected);
 		
