@@ -3,6 +3,7 @@ require_once 'settings.php';
 require_once 'mysql.php';
 require_once 'handlers/rowhandler.php';
 require_once 'objects/ticket.php';
+require_once 'objects/seat.php';
 
 class SeatHandler {
 	public static function getSeat($id) {
@@ -17,9 +18,17 @@ class SeatHandler {
 
 		if ($row) {
 			return new Seat($row['id'], 
-							RowHandler::getRow($row['row']), 
+							$row['section'], 
 							$row['number']);
 		}
+	}
+
+	/*
+	 * Returns a string representation of the seat
+	 */
+	public static function getHumanString($seat) {
+		$row = RowHandler::getRow($seat->getRow());
+		return 'R' . $row->getNumber() . 'S' . $seat->getNumber();
 	}
 }
 ?>

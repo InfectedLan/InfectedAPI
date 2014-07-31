@@ -14,6 +14,7 @@ class Seat {
 	public function __construct($id, $row, $number) {
 		$this->id = $id;
 		$this->row = $row;
+		$this->number = $number;
 	}
 
 	/*
@@ -35,13 +36,6 @@ class Seat {
 	 */
 	public function getNumber() {
 		return $this->number;
-	}
-
-	/*
-	 * Returns a string representation of the seat
-	 */
-	public function getHumanString() {
-		return 'R' . $this->row->getNumber() . 'S' . $this->number;
 	}
 }
 ?>
