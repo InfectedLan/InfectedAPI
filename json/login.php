@@ -13,16 +13,20 @@ if (!Session::isAuthenticated()) {
 		$username = $_POST['username'];
 		$password = hash('sha256', $_POST['password']);
 		
-		if (UserHandler::userExists($username)) {
+		if (UserHandler::userExists($username) &&
 			$user = UserHandler::getUserByName($username);
 			$storedPassword = $user->getPassword();
 			
-			if ($password == $storedPassword) {
-				$_SESSION['user'] = $user;
-				$result = true;
-				$message = 'Du er nå logget inn!';
+			if ($user->isActivated()) {
+				if ($password == $storedPassword) {
+					$_SESSION['user'] = $user;
+					$result = true;
+					$message = 'Du er nå logget inn!';
+				} else {
+					$message = 'Feil brukernavn eller passord.';
+				}
 			} else {
-				$message = 'Feil brukernavn eller passord.';
+				$message = 'Du må aktivere brukeren din før du logger inn.';
 			}
 		} else {
 			$message = 'Feil brukernavn eller passord.';

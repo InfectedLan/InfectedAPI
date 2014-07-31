@@ -173,6 +173,13 @@ class User {
 		return PermissionsHandler::hasPermission($this->getId(), $permission);
 	}
 	
+	/* 
+	 * Returns true if the given users account is activated.
+	 */
+	public function isActivated() {
+		return UserHandler::getRegistrationCode($this->getId()) == null;
+	}
+	
 	/*
 	 * Sends an mail to the users address with an activation link.
 	 */
