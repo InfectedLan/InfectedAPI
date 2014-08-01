@@ -188,7 +188,7 @@ class User {
 		$code = UserHandler::createRegistrationCode($this->getId());
 		
 		// Send an email to the user with a link for resetting the password.
-		$url = 'https://' . $_SERVER['HTTP_HOST'] . 'index.php?page=activation&code=' . $code;
+		$url = 'https://' . $_SERVER['HTTP_HOST'] . $_SERVER['REQUEST_URI'] . 'index.php?page=activation&code=' . $code;
 		$message = '<html>' .
 						'<body>' .
 							'<h3>Hei!</h3>' .
@@ -202,14 +202,12 @@ class User {
 	/*
 	 * Sends a mail to the user with a link where they can reset the password.
 	 */
-	public function sendForgottenMail() {
-		$code = md5($this->getId() + time() * rand());
-		
+	public function sendPasswordResetMail() {
 		// Put the code in the database.
-		ResetCodeHandler::setResetCode($this->getId(), $code);
+		$code = UserHandler::createPasswordResetCode($this->getId());
 		
 		// Send an email to the user with a link for resetting the password.
-		$url = 'https://' . $_SERVER['HTTP_HOST'] . 'index.php?page=reset-code=' . $code;
+		$url = 'https://' . $_SERVER['HTTP_HOST'] . $_SERVER['REQUEST_URI'] . 'index.php?page&=reset-password=' . $code;
 		$message = '<html>' .
 						'<head>' .
 							'<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />' .
@@ -220,7 +218,7 @@ class User {
 						'</body>' .
 					'</html>';
 			
-		return MailManager::sendMail($this, 'Infected.no - Tilbakestill passord', $message);
+		return MailManager::sendMail($this, 'Infected tilbakestilling av passord', $message);
 	}
 	
 	/* 
