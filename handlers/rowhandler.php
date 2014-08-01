@@ -40,5 +40,23 @@ class RowHandler {
 
 		return $seatArray;
 	}
+
+	public static function createNewRow($seatmapId, $x, $y) {
+		$con = MySQL::open(Settings::db_name_infected_tickets);
+
+		mysqli_query($con, 'INSERT INTO ' . Settings::db_table_infected_tickets_rows . '(`seatmap`, `x`, `y`) VALUES (\'' . $seatmapId . '\', ' . $x . ', ' . $y . ')');
+
+		$result = mysqli_query($con, 'SELECT id FROM ' .  Settings::db_table_infected_tickets_rows . ' ORDER BY id DESC LIMIT 1;');
+
+		$row = mysqli_fetch_array($result);
+
+		MySQL::close($con);
+
+		if($row)
+		{
+			return self::getRow($row['id']);
+		}
+
+	}
 }
 ?>
