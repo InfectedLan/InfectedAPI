@@ -28,7 +28,7 @@ class SeatHandler {
 	 */
 	public static function getHumanString($seat) {
 		$row = RowHandler::getRow($seat->getRow());
-		return 'R' . $row->getNumber() . 'S' . $seat->getNumber();
+		return 'R' . $row->getNumber() . ' S' . $seat->getNumber();
 	}
 }
 ?>
