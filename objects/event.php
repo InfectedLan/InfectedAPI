@@ -1,4 +1,5 @@
 <?php
+require_once 'handlers/tickethandler.php';
 require_once 'location.php';
 
 class Event {
@@ -52,6 +53,10 @@ class Event {
 
 	public function getSeatmap() {
 		return $this->seatmap;
+	}
+	
+	public function getTicketCount() {
+		return TicketHandler::getAvailableTicketsForEvent($this);
 	}
 }
 ?>

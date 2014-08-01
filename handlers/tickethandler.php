@@ -34,9 +34,9 @@ class TicketHandler {
 	}
 	
 	public static function getAvailableTicketsForEvent($event) {
-		$tickets = self::getTicketsForEvent($event->getId());
+		$ticketList = self::getTicketsForEvent($event->getId());
 
-		return $event->getParticipants() - count($tickets);
+		return $event->getParticipants() - count($ticketList);
 	}
 	
 	public static function getTicketsForEvent($eventId) {
