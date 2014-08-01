@@ -30,12 +30,13 @@ class TicketHandler {
 	}
 	
 	public static function getAvailableTickets() {
-		$currentEvent = EventHandler::getCurrentEvent(); //Todo: get current event, return amount of tickets left
+		return self::getAvailableTicketsForEvent(EventHandler::getCurrentEvent());
+	}
+	
+	public static function getAvailableTicketsForEvent($event) {
+		$tickets = self::getTicketsForEvent($event->getId());
 
-		$tickets = self::getTicketsForEvent($currentEvent->getId());
-		$numTickets = count($tickets);
-
-		return $currentEvent->getParticipants() - $numTickets;
+		return $event->getParticipants() - count($tickets);
 	}
 	
 	public static function getTicketsForEvent($eventId) {
