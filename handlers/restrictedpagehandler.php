@@ -13,21 +13,25 @@ class RestrictedPageHandler {
 		if (Session::isAuthenticated()) {
 			$user = Session::getCurrentUser();
 			
-			if ($user->isGroupMember()) {
+			if ($user->hasPermission('admin') ||
+				$user->isGroupMember()) {
 				$con = MySQL::open(Settings::db_name_infected_crew);
 				
-				if ($user->isTeamMember()) {
-					$result = mysqli_query($con, 'SELECT * 
-												  FROM `' . Settings::db_table_infected_crew_pages . '`
-												  WHERE `id` = \'' . $id . '\' 
-												  AND (`groupId` = \'0\' OR `groupId` = \'' . $user->getGroup()->getId() . '\') 
-												  AND (`teamId` = \'0\' OR `teamId` = \'' . $user->getTeam()->getId() . '\');');
+				if ($user->isGroupMember()) {
+					if ($user->isTeamMember()) {
+						$result = mysqli_query($con, 'SELECT * FROM `' . Settings::db_table_infected_crew_pages . '`
+													  WHERE `id` = \'' . $id . '\' 
+													  AND (`groupId` = \'0\' OR `groupId` = \'' . $user->getGroup()->getId() . '\') 
+													  AND (`teamId` = \'0\' OR `teamId` = \'' . $user->getTeam()->getId() . '\');');
+					} else {
+						$result = mysqli_query($con, 'SELECT * FROM `' . Settings::db_table_infected_crew_pages . '`
+													  WHERE `id` = \'' . $id . '\' 
+													  AND (`groupId` = \'0\' OR `groupId` = \'' . $user->getGroup()->getId() . '\') 
+													  AND `teamId` = \'0\';');
+					}
 				} else {
-					$result = mysqli_query($con, 'SELECT * 
-												  FROM `' . Settings::db_table_infected_crew_pages . '`
-												  WHERE `id` = \'' . $id . '\' 
-												  AND (`groupId` = \'0\' OR `groupId` = \'' . $user->getGroup()->getId() . '\') 
-												  AND `teamId` = \'0\';');
+					$result = mysqli_query($con, 'SELECT * FROM `' . Settings::db_table_infected_crew_pages . '`
+												  WHERE `id` = \'' . $id . '\' AND `private` = 0;');
 				}
 				
 				$row = mysqli_fetch_array($result);
@@ -40,7 +44,8 @@ class RestrictedPageHandler {
 											  $row['title'], 
 											  $row['content'], 
 											  $row['groupId'], 
-											  $row['teamId']);
+											  $row['teamId'],
+											  $row['private']);
 				}
 			}
 		}
@@ -51,11 +56,9 @@ class RestrictedPageHandler {
 	 */
 	public static function getPageByName($name) {
 		if (Session::isAuthenticated()) {
-			$user = Session::getCurrentUser();
 			$con = MySQL::open(Settings::db_name_infected_crew);
 			
-			$result = mysqli_query($con, 'SELECT `id`
-										  FROM `' . Settings::db_table_infected_crew_pages . '`
+			$result = mysqli_query($con, 'SELECT `id` FROM `' . Settings::db_table_infected_crew_pages . '`
 										  WHERE `name` = \'' . $name . '\';');
 			
 			$row = mysqli_fetch_array($result);
@@ -74,8 +77,7 @@ class RestrictedPageHandler {
 	public static function getPages() {
 		$con = MySQL::open(Settings::db_name_infected_crew);
 		
-		$result = mysqli_query($con, 'SELECT `id` 
-									  FROM `' . Settings::db_table_infected_crew_pages . '`;');
+		$result = mysqli_query($con, 'SELECT `id` FROM `' . Settings::db_table_infected_crew_pages . '`;');
 		
 		$pageList = array();
 		
@@ -92,7 +94,21 @@ class RestrictedPageHandler {
 	 * Get a list of pages for specified group.
 	 */
 	public static function getPagesForGroup($groupId) {
-		return self::getPagesForTeam($groupId, 0);
+		$con = MySQL::open(Settings::db_name_infected_crew);
+		
+		$result = mysqli_query($con, 'SELECT `id` FROM `' . Settings::db_table_infected_crew_pages . '`
+									  WHERE `groupId` = \'' . $groupId . '\'
+									  AND `teamId` = \'0\';');
+		
+		$pageList = array();
+		
+		while ($row = mysqli_fetch_array($result)) {
+			array_push($pageList, self::getPage($row['id']));
+		}
+
+		MySQL::close($con);
+		
+		return $pageList;
 	}
 	
 	/*
@@ -101,8 +117,7 @@ class RestrictedPageHandler {
 	public static function getPagesForTeam($groupId, $teamId) {
 		$con = MySQL::open(Settings::db_name_infected_crew);
 		
-		$result = mysqli_query($con, 'SELECT `id` 
-									  FROM `' . Settings::db_table_infected_crew_pages . '`
+		$result = mysqli_query($con, 'SELECT `id` FROM `' . Settings::db_table_infected_crew_pages . '`
 									  WHERE `groupId` = \'' . $groupId . '\'
 									  AND `teamId` = \'' . $teamId . '\';');
 		
