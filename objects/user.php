@@ -5,6 +5,9 @@ require_once 'handlers/permissionshandler.php';
 require_once 'handlers/avatarhandler.php';
 require_once 'handlers/grouphandler.php';
 require_once 'handlers/teamhandler.php';
+require_once 'handlers/registrationcodehandler.php';
+require_once 'handlers/passwordresetcodehandler.php';
+
 
 /*
  * Used to store information about a user.
@@ -177,7 +180,7 @@ class User {
 	 * Returns true if the given users account is activated.
 	 */
 	public function isActivated() {
-		return UserHandler::getRegistrationCode($this->getId()) == null;
+		return RegistrationCodeHandler::getRegistrationCode($this->getId()) == null;
 	}
 	
 	/*
@@ -185,7 +188,7 @@ class User {
 	 */
 	public function sendRegistrationMail() {
 		// Put the code in the database.
-		$code = UserHandler::createRegistrationCode($this->getId());
+		$code = RegistrationCodeHandler::createRegistrationCode($this->getId());
 		
 		// Send an email to the user with a link for resetting the password.
 		$url = 'https://' . $_SERVER['HTTP_HOST'] . $_SERVER['REQUEST_URI'] . 'index.php?page=activation&code=' . $code;
@@ -204,7 +207,7 @@ class User {
 	 */
 	public function sendPasswordResetMail() {
 		// Put the code in the database.
-		$code = UserHandler::createPasswordResetCode($this->getId());
+		$code = PasswordResetCodeHandler::createPasswordResetCode($this->getId());
 		
 		// Send an email to the user with a link for resetting the password.
 		$url = 'https://' . $_SERVER['HTTP_HOST'] . $_SERVER['REQUEST_URI'] . 'index.php?page&=reset-password=' . $code;

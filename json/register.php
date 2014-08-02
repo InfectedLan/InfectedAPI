@@ -28,7 +28,8 @@ if (isset($_POST['firstname']) &&
 	$postalcode = $_POST['postalcode'];
 	$nickname = isset($_POST['nickname']) ? $_POST['nickname'] : $username;
 	
-	if (!UserHandler::userExists($username) || !UserHandler::userExists($email)) {
+	if (!UserHandler::userExists($username) || 
+		!UserHandler::userExists($email)) {
 		if (empty($firstname)) {
 			$message = 'Du har ikke skrevet inn noe fornavn.';
 		} else if (empty($lastname)) {

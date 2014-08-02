@@ -1,5 +1,6 @@
 <?php
 require_once 'handlers/userhandler.php';
+require_once 'handlers/passwordresetcodehandler.php';
 
 $result = false;
 $message = null;
@@ -33,11 +34,11 @@ if (!isset($_GET['key'])) {
 		
 		echo $code;
 		
-		if (UserHandler::hasPasswordResetCode($code)) {
-			$user = UserHandler::getUserFromPasswordResetCode($code);
+		if (PasswordResetCodeHandler::hasPasswordResetCode($code)) {
+			$user = PasswordResetCodeHandler::getUserFromPasswordResetCode($code);
 			
 			if ($password == $confirmPassword) {
-				UserHandler::removePasswordResetCode($code);
+				PasswordResetCodeHandler::removePasswordResetCode($code);
 				UserHandler::updateUserPassword($user->getId(), hash('sha256', $password));
 				$result = true;
 				$message = 'Passordet ditt er nå endret.';

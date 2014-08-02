@@ -19,12 +19,6 @@ class Page {
 		$this->content = $content;
 	}
 	
-	public function display() {
-		// Format the page as HTML.
-		echo '<h1>' . $this->getTitle() . '</h1>';
-		echo $this->getContent();
-	}
-	
 	public function getId() {
 		return $this->id;
 	}

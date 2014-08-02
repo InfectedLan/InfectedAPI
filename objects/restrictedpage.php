@@ -22,7 +22,7 @@ class RestrictedPage extends Page {
 		return $this->teamId;
 	}
 	
-	public function getPrivate() {
+	public function isPrivate() {
 		return $this->isPrivate;
 	}
 }
