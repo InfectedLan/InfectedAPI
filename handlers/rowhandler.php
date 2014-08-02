@@ -38,6 +38,8 @@ class RowHandler {
 			array_push($seatArray, SeatHandler::getSeat($seat['id']));
 		}
 
+		MySQL::close($con);
+
 		return $seatArray;
 	}
 
@@ -64,6 +66,32 @@ class RowHandler {
 			return self::getRow($row['id']);
 		}
 
+	}
+	public static function safeToDelete($row)
+	{
+		$seats = self::getSeats($row);
+		foreach($seats as $seat)
+		{
+			if(SeatHandler::hasOwner($seat))
+			{
+				return false;
+			}
+		}
+		return true;
+	}
+	public static function deleteRow($row)
+	{
+		$con = MySQL::open(Settings::db_name_infected_tickets);
+
+		$result = mysqli_query($con, 'DELETE FROM `' . Settings::db_table_infected_tickets_rows . '` WHERE `id`=' . $row->getId() . ';');
+
+		$seats = self::getSeats($row);
+		foreach($seats as $seat)
+		{
+			SeatHandler::deleteSeat($seat);
+		}
+
+		MySQL::close($con);
 	}
 }
 ?>

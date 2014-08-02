@@ -30,5 +30,27 @@ class SeatHandler {
 		$row = RowHandler::getRow($seat->getRow());
 		return 'R' . $row->getNumber() . ' S' . $seat->getNumber();
 	}
+
+	public static function deleteSeat($seat)
+	{
+		$con = MySQL::open(Settings::db_name_infected_tickets);
+
+		$result = mysqli_query($con, 'DELETE FROM `' . Settings::db_table_infected_tickets_seats . '` WHERE `id`=' . $seat->getId() . ';');
+
+		MySQL::close($con);
+	}
+
+	public static function hasOwner($seat)
+	{
+		$con = MySQL::open(Settings::db_name_infected_tickets);
+
+		$result = mysqli_query($con, 'SELECT * FROM `' . Settings::db_table_infected_tickets_tickets . '` WHERE `seat`=' . $seat->getId() . ';');
+
+		$row = mysqli_fetch_array($result);
+
+		MySQL::close($con);
+
+		return $row ? true : false;
+	}
 }
 ?>
