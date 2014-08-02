@@ -44,7 +44,14 @@ class RowHandler {
 	public static function createNewRow($seatmapId, $x, $y) {
 		$con = MySQL::open(Settings::db_name_infected_tickets);
 
-		mysqli_query($con, 'INSERT INTO ' . Settings::db_table_infected_tickets_rows . '(`seatmap`, `x`, `y`) VALUES (\'' . $seatmapId . '\', ' . $x . ', ' . $y . ')');
+		//Find out what row is max row
+		$highestRowNum = mysqli_query($con, 'SELECT `row` FROM `rows` WHERE `seatmap`=' . $seatmapId . ' ORDER BY `row` DESC LIMIT 1;');
+
+		$row = mysqli_fetch_array($highestRowNum);
+
+		$newRowNumber = $row['row']+1;
+
+		mysqli_query($con, 'INSERT INTO ' . Settings::db_table_infected_tickets_rows . '(`seatmap`, `x`, `y`, `row`) VALUES (\'' . $seatmapId . '\', ' . $x . ', ' . $y . ', ' . $newRowNumber . ')');
 
 		$result = mysqli_query($con, 'SELECT id FROM ' .  Settings::db_table_infected_tickets_rows . ' ORDER BY id DESC LIMIT 1;');
 
