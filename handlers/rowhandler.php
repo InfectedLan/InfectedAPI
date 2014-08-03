@@ -47,7 +47,7 @@ class RowHandler {
 		$con = MySQL::open(Settings::db_name_infected_tickets);
 
 		//Find out what row is max row
-		$highestRowNum = mysqli_query($con, 'SELECT `row` FROM `rows` WHERE `seatmap`=' . $seatmapId . ' ORDER BY `row` DESC LIMIT 1;');
+		$highestRowNum = mysqli_query($con, 'SELECT `row` FROM `' . Settings::db_table_infected_tickets_rows . '` WHERE `seatmap`=' . $seatmapId . ' ORDER BY `row` DESC LIMIT 1;');
 
 		$row = mysqli_fetch_array($highestRowNum);
 
@@ -92,6 +92,19 @@ class RowHandler {
 		}
 
 		MySQL::close($con);
+	}
+	public static function addSeat($row)
+	{
+		$con = MySQL::open(Settings::db_name_infected_tickets);
+
+		//Find out what seat number we are at
+		$highestSeatNum = mysqli_query($con, 'SELECT `number` FROM `' . Settings::db_table_infected_tickets_seats . '` WHERE `section`=' . $row->getId() . ' ORDER BY `number` DESC LIMIT 1;');
+
+		$seatRow = mysqli_fetch_array($highestSeatNum);
+
+		$newSeatNumber = $seatRow['number']+1;
+
+		mysqli_query($con, 'INSERT INTO `seats` (`section`, `number`) VALUES (' . $row->getId() . ', ' . $newSeatNumber . ')');
 	}
 }
 ?>
