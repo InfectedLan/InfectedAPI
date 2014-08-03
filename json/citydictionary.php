@@ -10,6 +10,9 @@ if (isset($_GET['postalcode'])) {
 	if ($city != null) {
 		$result = true;
 		$message = $city;
+	} else {
+		$result = true;
+		$message = 'Ikke funnet.';
 	}
 } else {
 	$message = 'Postnummer ikke spesifisert.';
