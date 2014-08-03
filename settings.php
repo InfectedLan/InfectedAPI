@@ -15,10 +15,10 @@ class Settings {
 	
 	// Database information
 	const db_host = 'localhost';
-	const db_name_infected = 'infectedlan_tk';
-	const db_name_infected_main = 'infectedlan_tk_main';
-	const db_name_infected_crew = 'infectedlan_tk_crew';
-	const db_name_infected_tickets = 'infectedlan_tk_tickets';
+	const db_name_infected = 'test_infected_no';
+	const db_name_infected_main = 'test_infected_no_main';
+	const db_name_infected_crew = 'test_infected_no_crew';
+	const db_name_infected_tickets = 'test_infected_no_tickets';
 
 	// Infected
 	const db_table_infected_events = 'events';
