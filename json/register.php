@@ -22,7 +22,7 @@ if (isset($_POST['firstname']) &&
 	$confirmPassword = hash('sha256', $_POST['confirmpassword']);
 	$email = $_POST['email'];
 	$gender = $_POST['gender'];
-	$birthdate = strtotime($_POST['birthyear'] . '-' . $_POST['birthmonth'] . '-' . $_POST['birthday']); 
+	$birthdate = $_POST['birthyear'] . '-' . $_POST['birthmonth'] . '-' . $_POST['birthday']; 
 	$phone = $_POST['phone'];
 	$address = $_POST['address'];
 	$postalcode = $_POST['postalcode'];
@@ -65,7 +65,7 @@ if (isset($_POST['firstname']) &&
 		} else {
 			if ($password == $confirmPassword) {
 				// Creates the user in database.
-				UserHandler::createUser($firstname, $lastname, $username, $password, $email, $gender, $birthdate, $phone, $address, $postalcode, $nickname);
+				UserHandler::createUser($firstname, $lastname, $username, $password, $email, $birthdate, $gender, $phone, $address, $postalcode, $nickname);
 				
 				// Retrives the user object and sends the activation mail.
 				$user = UserHandler::getUserByName($username);

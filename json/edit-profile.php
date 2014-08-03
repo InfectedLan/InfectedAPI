@@ -22,7 +22,7 @@ if (Session::isAuthenticated()) {
 		!empty($_POST['firstname']) &&
 		!empty($_POST['lastname']) &&
 		!empty($_POST['email']) &&
-		// !empty() check for gender is removed since 0 actually is a legit value.
+		($_POST['gender'] == 0 || $_POST['gender'] == 1) &&
 		!empty($_POST['birthday']) &&
 		!empty($_POST['birthmonth']) &&
 		!empty($_POST['birthyear']) &&
@@ -34,7 +34,7 @@ if (Session::isAuthenticated()) {
 		$lastname = $_POST['lastname'];
 		$email = $_POST['email'];
 		$gender = $_POST['gender'];
-		$birthdate = strtotime($_POST['birthyear'] . '-' . $_POST['birthmonth'] . '-' . $_POST['birthday']);
+		$birthdate = date('Y-m-d', strtotime($_POST['birthyear'] . '-' . $_POST['birthmonth'] . '-' . $_POST['birthday'])); 
 		$phone = $_POST['phone'];
 		$address = $_POST['address'];
 		$postalcode = $_POST['postalcode'];
