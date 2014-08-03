@@ -5,13 +5,12 @@ class Settings {
 	const description = 'Infected er et av Akershus største datatreff (LAN-party), og holder til i kulturhuset i Asker kommune.';
 	const keywords = 'infected, lan, party, asker, kulturhus, ungdom, gaming';
 	public static $authors = array('halvors', 'petterroea');
-
-	const emailName = 'kontakt@infected.no';
-	const email = 'kontakt@infected.no';
 	
 	const path = 'http://api.infectedlan.tk/';
-
 	const qr_path = '/home/infectedlan.tk/public_html/api/images/qrcache/';
+	
+	const emailName = 'Infected';
+	const email = 'no-reply@infected.no';
 	
 	// Database information
 	const db_host = 'localhost';
