@@ -105,6 +105,16 @@ class RowHandler {
 		$newSeatNumber = $seatRow['number']+1;
 
 		mysqli_query($con, 'INSERT INTO `seats` (`section`, `number`) VALUES (' . $row->getId() . ', ' . $newSeatNumber . ')');
+
+		MySQL::close($con);
+	}
+	public static function moveRow($row, $x, $y)
+	{
+		$con = MySQL::open(Settings::db_name_infected_tickets);
+
+		mysqli_query($con, 'UPDATE `rows` SET `x`=' . $x . ',`y`=' . $y . ' WHERE `id`=' . $row->getId() . ';');
+
+		MySQL::close($con);
 	}
 }
 ?>
