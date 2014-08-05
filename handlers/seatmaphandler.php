@@ -18,14 +18,15 @@ class SeatmapHandler {
 
 		if ($row) {
 			return new Seatmap($row['id'], 
-							   $row['humanName']);
+							   $row['humanName'],
+							   $row['backgroundImage']);
 		}
 	}
 
-	public static function createNewSeatmap($name) {
+	public static function createNewSeatmap($name, $backgroundImage) {
 		$con = MySQL::open(Settings::db_name_infected_tickets);
 
-		mysqli_query($con, 'INSERT INTO ' . Settings::db_table_infected_tickets_seatmaps . '(`humanName`) VALUES (\'' . $name . '\')');
+		mysqli_query($con, 'INSERT INTO ' . Settings::db_table_infected_tickets_seatmaps . '(`humanName`, `backgroundImage`) VALUES (\'' . $name . '\', \'' . $backgroundImage . '\')');
 
 		$result = mysqli_query($con, 'SELECT id FROM ' .  Settings::db_table_infected_tickets_seatmaps . ' ORDER BY id DESC LIMIT 1;');
 
