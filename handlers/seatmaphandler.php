@@ -53,6 +53,8 @@ class SeatmapHandler {
 			array_push($seatmapArray, self::getSeatmap($row['id']));
 		}
 
+		MySQL::close($con);
+
 		return $seatmapArray;
 	}
 	
@@ -69,7 +71,17 @@ class SeatmapHandler {
 			array_push($rowArray, RowHandler::getRow($row['id']));
 		}
 
+		MySQL::close($con);
+
 		return $rowArray;
+	}
+	public static function setBackground($seatmap, $filename)
+	{
+		$con = MySQL::open(Settings::db_name_infected_tickets);
+
+		mysqli_query($con, 'UPDATE `' . Settings::db_table_infected_tickets_seatmaps . '` SET `backgroundImage`=\'' . $filename . '\' WHERE `id`=' . $seatmap->getId() . ';');
+	
+		MySQL::close($con);
 	}
 }
 ?>
