@@ -5,6 +5,7 @@
 	$result = false;
 	$message = null;
 	$seatmapData = null; //Array of rows
+	$backgroundImage = null; //File name of background image. Didnt know how else to do this.
 
 	if(!isset($_GET["id"]))
 	{
@@ -28,6 +29,7 @@
 				$result = true;
 				$rows = SeatmapHandler::getRows($seatmap);
 				$seatmapData = array();
+				$backgroundImage = $seatmap->getBackgroundImage();
 				foreach ($rows as $row) 
 				{
 					$seats = RowHandler::getSeats($row);
@@ -48,7 +50,7 @@
 	}
 	if($result)
 	{
-		echo json_encode(array('result' => $result, 'rows' => $seatmapData));
+		echo json_encode(array('result' => $result, 'rows' => $seatmapData, 'backgroundImage' => $backgroundImage));
 	}
 	else
 	{

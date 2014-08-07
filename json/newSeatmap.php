@@ -12,7 +12,7 @@
 			$user->hasPermission('admin')) {
 			if(isset($_GET["name"]))
 			{
-				$seatmap = SeatmapHandler::createNewSeatmap($_GET["name"]);
+				$seatmap = SeatmapHandler::createNewSeatmap($_GET["name"], "default.png");
 				$result = true;
 				$id = $seatmap->getId();
 			}

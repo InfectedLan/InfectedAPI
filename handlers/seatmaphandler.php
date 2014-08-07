@@ -18,14 +18,15 @@ class SeatmapHandler {
 
 		if ($row) {
 			return new Seatmap($row['id'], 
-							   $row['humanName']);
+							   $row['humanName'],
+							   $row['backgroundImage']);
 		}
 	}
 
-	public static function createNewSeatmap($name) {
+	public static function createNewSeatmap($name, $backgroundImage) {
 		$con = MySQL::open(Settings::db_name_infected_tickets);
 
-		mysqli_query($con, 'INSERT INTO ' . Settings::db_table_infected_tickets_seatmaps . '(`humanName`) VALUES (\'' . $name . '\')');
+		mysqli_query($con, 'INSERT INTO ' . Settings::db_table_infected_tickets_seatmaps . '(`humanName`, `backgroundImage`) VALUES (\'' . $name . '\', \'' . $backgroundImage . '\')');
 
 		$result = mysqli_query($con, 'SELECT id FROM ' .  Settings::db_table_infected_tickets_seatmaps . ' ORDER BY id DESC LIMIT 1;');
 
@@ -52,6 +53,8 @@ class SeatmapHandler {
 			array_push($seatmapArray, self::getSeatmap($row['id']));
 		}
 
+		MySQL::close($con);
+
 		return $seatmapArray;
 	}
 	
@@ -68,7 +71,17 @@ class SeatmapHandler {
 			array_push($rowArray, RowHandler::getRow($row['id']));
 		}
 
+		MySQL::close($con);
+
 		return $rowArray;
+	}
+	public static function setBackground($seatmap, $filename)
+	{
+		$con = MySQL::open(Settings::db_name_infected_tickets);
+
+		mysqli_query($con, 'UPDATE `' . Settings::db_table_infected_tickets_seatmaps . '` SET `backgroundImage`=\'' . $filename . '\' WHERE `id`=' . $seatmap->getId() . ';');
+	
+		MySQL::close($con);
 	}
 }
 ?>
