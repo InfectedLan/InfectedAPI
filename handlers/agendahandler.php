@@ -7,8 +7,7 @@ class AgendaHandler {
 	public static function getAgenda($id) {
 		$con = MySQL::open(Settings::db_name_infected_main);
 		
-		$result = mysqli_query($con, 'SELECT * 
-								      FROM `' . Settings::db_table_infected_main_agenda . '` 
+		$result = mysqli_query($con, 'SELECT * FROM `' . Settings::db_table_infected_main_agenda . '` 
 									  WHERE `id` = \'' . $id . '\';');
 									  
 		$row = mysqli_fetch_array($result);
@@ -17,9 +16,11 @@ class AgendaHandler {
 		
 		if ($row) {
 			return new Agenda($row['id'], 
-							  $row['datetime'], 
+							  $row['event'], 
 							  $row['name'], 
-							  $row['description']);
+							  $row['title'], 
+							  $row['description'],
+							  $row['start']);
 		}
 	}
 	
@@ -28,7 +29,7 @@ class AgendaHandler {
 		
 		$result = mysqli_query($con, 'SELECT `id`
 									  FROM `' . Settings::db_table_infected_main_agenda . '`
-									  ORDER BY `datetime`;');
+									  ORDER BY `start`;');
 									  
 		$agendaList = array();
 		
@@ -41,18 +42,15 @@ class AgendaHandler {
 		return $agendaList;
 	}
 	
-	public static function getAgendaSelection($first, $last) {
-		$first = '2014-01-13 08:00:00';
-		$last = '2014-02-18 23:00:00';
-	
+	public static function getAgendaSelection($first, $last) {	
 		$con = MySQL::open(Settings::db_name_infected_main);
 		
 		$result = mysqli_query($con, 'SELECT `id`
 									  FROM `' . Settings::db_table_infected_main_agenda . '`
-									  WHERE `datetime` 
+									  WHERE `start` 
 									  BETWEEN ' . $first . ' 
 									  AND ' . $last . '
-									  ORDER BY `datetime`;'); 
+									  ORDER BY `start`;'); 
 									  
 		$agendaList = array();
 		
