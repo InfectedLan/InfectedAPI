@@ -27,8 +27,8 @@ class AgendaHandler {
 	public static function getAgendas() {
 		$con = MySQL::open(Settings::db_name_infected_main);
 		
-		$result = mysqli_query($con, 'SELECT `id`
-									  FROM `' . Settings::db_table_infected_main_agenda . '`
+		$result = mysqli_query($con, 'SELECT `id` FROM `' . Settings::db_table_infected_main_agenda . '`
+									  WHERE `event` = ' . EventHandler::getCurrentEvent()->getId() . '
 									  ORDER BY `start`;');
 									  
 		$agendaList = array();
