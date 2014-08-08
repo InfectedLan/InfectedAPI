@@ -5,6 +5,7 @@ require_once 'handlers/permissionshandler.php';
 require_once 'handlers/registrationcodehandler.php';
 require_once 'handlers/passwordresetcodehandler.php';
 require_once 'handlers/tickethandler.php';
+require_once 'handlers/emergencycontacthandler.php';
 require_once 'handlers/avatarhandler.php';
 require_once 'handlers/grouphandler.php';
 require_once 'handlers/teamhandler.php';
@@ -222,6 +223,14 @@ class User {
 					'</html>';
 			
 		return MailManager::sendMail($this, 'Infected tilbakestilling av passord', $message);
+	}
+	
+	public function hasEmergencyContact() {
+		EmergencyContactHandler::getEmergenctContactForUser($this) != null;
+	}
+	
+	public function getEmergenctContact() {
+		return EmergencyContactHandler::getEmergenctContactForUser($this);
 	}
 	
 	public function hasTicket() {

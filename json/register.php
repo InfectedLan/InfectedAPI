@@ -27,6 +27,7 @@ if (isset($_POST['firstname']) &&
 	$address = $_POST['address'];
 	$postalcode = $_POST['postalcode'];
 	$nickname = isset($_POST['nickname']) ? $_POST['nickname'] : $username;
+	$emergencyContactPhone = $_POST['emergencycontactphone'];
 	
 	if (!UserHandler::userExists($username) || 
 		!UserHandler::userExists($email)) {
@@ -69,6 +70,12 @@ if (isset($_POST['firstname']) &&
 				
 				// Retrives the user object and sends the activation mail.
 				$user = UserHandler::getUserByName($username);
+				
+				if (isset($_POST['emergencycontactphone']) &&
+					!empty($_POST['emergencycontactphone'])) {
+					EmergencyContactHandler::createEmergencyContact($user->getId(), $emergencyContactPhone);
+				}
+				
 				$user->sendRegistrationMail();
 				
 				$result = true;
