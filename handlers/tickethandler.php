@@ -11,8 +11,7 @@ class TicketHandler {
 	public static function getTicket($id) {
 		$con = MySQL::open(Settings::db_name_infected_tickets);
 
-		$result = mysqli_query($con, 'SELECT * 
-									  FROM `' . Settings::db_table_infected_tickets_tickets . '` 
+		$result = mysqli_query($con, 'SELECT * FROM `' . Settings::db_table_infected_tickets_tickets . '` 
 									  WHERE `id` = \'' . $id . '\';');
 									
 		$row = mysqli_fetch_array($result);
@@ -21,14 +20,15 @@ class TicketHandler {
 
 		if ($row) {
 			return new Ticket($row['id'],
-					  EventHandler::getEvent($row['event']), 
-					  UserHandler::getUser($row['owner']), 
-					  TicketTypeHandler::getTicketType($row['type']), 
-					  SeatHandler::getSeat($row['seat']),
-					  UserHandler::getUser($row['seater']));
+							  $row['eventId'], 
+							  $row['ownerId'], 
+							  $row['typeId'], 
+							  $row['seatId'],
+							  $row['seaterId']);
 		}
 	}
 	
+	// TODO: Move this to Event.
 	public static function getAvailableTickets() {
 		return self::getAvailableTicketsForEvent(EventHandler::getCurrentEvent());
 	}
@@ -42,7 +42,8 @@ class TicketHandler {
 	public static function getTicketsForEvent($eventId) {
 		$con = MySQL::open(Settings::db_name_infected_tickets);
 
-		$result = mysqli_query($con, 'SELECT `id` FROM `' . Settings::db_table_infected_tickets_tickets . '` WHERE `event` = \'' . $eventId . '\';');
+		$result = mysqli_query($con, 'SELECT `id` FROM `' . Settings::db_table_infected_tickets_tickets . '` 
+									  WHERE `eventId` = \'' . $eventId . '\';');
 
 		$ticketList = array();
 
@@ -59,7 +60,8 @@ class TicketHandler {
 		$con = MySQL::open(Settings::db_name_infected_tickets);
 
 		$result = mysqli_query($con, 'SELECT `id` FROM `' . Settings::db_table_infected_tickets_tickets . '` 
-									  WHERE `owner` = \'' . $user->getId() . '\'
+									  WHERE `ownerId` = \'' . $user->getId() . '\'
+									  AND `eventId` = \'' .  EventHandler::getCurrentEvent()->getId() . '\' 
 									  LIMIT 1;');
 
 		$row = mysqli_fetch_array($result);
@@ -69,15 +71,14 @@ class TicketHandler {
 		if ($row) {
 			return self::getTicket($row['id']);
 		}
-		
-		return $row ? true : false;
 	}
 	
 	public static function hasTicket($user) {
 		$con = MySQL::open(Settings::db_name_infected_tickets);
 
 		$result = mysqli_query($con, 'SELECT `id` FROM `' . Settings::db_table_infected_tickets_tickets . '` 
-									  WHERE `owner` = \'' . $user->getId() . '\';');
+									  WHERE `ownerId` = \'' . $user->getId() . '\'
+									  AND `eventId` = \'' .  EventHandler::getCurrentEvent()->getId() . '\';');
 
 		$row = mysqli_fetch_array($result);
 
@@ -90,7 +91,7 @@ class TicketHandler {
 		$con = MySQL::open(Settings::db_name_infected_tickets);
 
 		$result = mysqli_query($con, 'SELECT `id` FROM `' . Settings::db_table_infected_tickets_tickets . '` 
-									  WHERE `owner` = \'' . $user->getId() . '\';');
+									  WHERE `ownerId` = \'' . $user->getId() . '\';');
 
 		$ticketList = array();
 
@@ -107,7 +108,7 @@ class TicketHandler {
 		$con = MySQL::open(Settings::db_name_infected_tickets);
 
 		$result = mysqli_query($con, 'UPDATE `' . Settings::db_table_infected_tickets_tickets . '` 
-									  SET `owner` = \'' . $newOwner->getId() . '\' 
+									  SET `ownerId` = \'' . $newOwner->getId() . '\' 
 									  WHERE `id` = \'' . $ticket->getId() . '\';');
  
 		MySQL::close($con);
@@ -118,11 +119,11 @@ class TicketHandler {
 
 		if (!isset($newSeater) || empty($newSeater)) {
 			$result = mysqli_query($con, 'UPDATE `' . Settings::db_table_infected_tickets_tickets . '` 
-										  SET `seater` = \'0\' 
+										  SET `seaterId` = \'0\' 
 										  WHERE `id` = \'' . $ticket->getId() . '\';');
 		} else {
 			$result = mysqli_query($con, 'UPDATE `' . Settings::db_table_infected_tickets_tickets . '` 
-										  SET `seater` = \'' . $newSeater->getId() . '\' 
+										  SET `seaterId` = \'' . $newSeater->getId() . '\' 
 										  WHERE `id` = \'' . $ticket->getId() . '\';');
 		}
 		

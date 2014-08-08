@@ -1,7 +1,9 @@
 <?php
+require_once 'handlers/rowhandler.php';
+
 class Seat {
 	private $id;
-	private $row;
+	private $rowId;
 	private $number;
 
 	/*
@@ -11,9 +13,9 @@ class Seat {
 	 * Section: Section object this seat belongs to
 	 * Number: Number relative to row, this seat is at, relative to the row the seat is a part of
 	 */
-	public function __construct($id, $row, $number) {
+	public function __construct($id, $rowId, $number) {
 		$this->id = $id;
-		$this->row = $row;
+		$this->rowId = $rowId;
 		$this->number = $number;
 	}
 
@@ -28,7 +30,7 @@ class Seat {
 	 * Returns row this seat belongs to
 	 */
 	public function getRow() {
-		return $this->row;
+		return RowHandler::getRow($this->rowId);
 	}
 
 	/*

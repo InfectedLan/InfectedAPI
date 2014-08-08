@@ -1,13 +1,17 @@
 <?php
 require_once 'qr.php';
+require_once 'handlers/eventhandler.php';
+require_once 'handlers/userhandler.php';
+require_once 'handlers/tickettypehandler.php';
+require_once 'handlers/seathandler.php';
 
 class Ticket {
 	private $id;
-	private $event;
-	private $owner;
-	private $type;
-	private $seat;
-	private $seater;
+	private $eventId;
+	private $ownerId;
+	private $typeId;
+	private $seatId;
+	private $seaterId;
 
 	/*
 	 * Ticket - implementation of backend ticket db.
@@ -20,13 +24,13 @@ class Ticket {
 	 * User: User account that will be using the ticket
 	 * Seater: User account that can seat this ticket
 	 */
-	public function __construct($id, $event, $owner, $type, $seat, $seater) {
+	public function __construct($id, $eventId, $ownerId, $typeId, $seatId, $seaterId) {
 		$this->id = $id;
-		$this->event = $event;
-		$this->owner = $owner;
-		$this->type = $type;
-		$this->seat = $seat;
-		$this->seater = $seater;
+		$this->eventId = $eventId;
+		$this->ownerId = $ownerId;
+		$this->typeId = $typeId;
+		$this->seatId = $seatId;
+		$this->seaterId = $seaterId;
 	}
 
 	/*
@@ -40,7 +44,7 @@ class Ticket {
 	 * Returns the event this ticket is for
 	 */
 	public function getEvent() {
-		return $this->event;
+		return EventHandler::getEvent($this->eventId);
 	}
 
 	/*
@@ -49,21 +53,21 @@ class Ticket {
 	 * The owner is the user account that purchased the ticket.
 	 */
 	public function getOwner() {
-		return $this->owner;
+		return UserHandler::getUser($this->ownerId);
 	}
 
 	/*
 	 * Returns the ticket type
 	 */
 	public function getType() {
-		return $this->type;
+		return TicketTypeHandler::getTicketType($this->typeId);
 	}
 
 	/*
 	 * Returns the seat that this ticket is seated at
 	 */
 	public function getSeat() {
-		return $this->seat;
+		return SeatHandler::getSeat($this->seatId);
 	}
 
 	/*
@@ -72,14 +76,14 @@ class Ticket {
 	 * The seater is the user account that is allowed to decide what seat this ticket is seated on.
 	 */
 	public function getSeater() {
-		return $this->seater;
+		return UserHandler::getUser($this->seaterId);
 	}
 
 	/*
 	 * Returns a human readable representation of the ticket
 	 */
 	public function getHumanName() {
-		return 'INFECTED_' . strtoupper($this->getEvent()->getTheme() ) . $this->id;
+		return 'INFECTED_' . strtoupper($this->getEvent()->getTheme()) . $this->id;
 	}
 	
 	public function getQrImagePath() {
