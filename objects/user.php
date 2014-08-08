@@ -155,22 +155,6 @@ class User {
 	}
 	
 	/* 
-	 * Returns users displayname.
-	 */
-	public function getDisplayName() {
-		$nickname = $this->getNickname();
-	
-		if (!empty($nickname)) {
-			$displayName = $this->getFirstname() . ' "' . $nickname  . '" ' . $this->getLastname();
-		} else {
-			$displayName = $this->getFirstname() . ' ' . $this->getLastname();
-		}
-		
-		return $displayName;
-	}
-	
-	
-	/* 
 	 * Returns true if user have specified permission, otherwise false.
 	 */
 	public function hasPermission($permission) {
@@ -226,11 +210,11 @@ class User {
 	}
 	
 	public function hasEmergencyContact() {
-		EmergencyContactHandler::getEmergenctContactForUser($this) != null;
+		return EmergencyContactHandler::getEmergencyContactForUser($this) != null;
 	}
 	
-	public function getEmergenctContact() {
-		return EmergencyContactHandler::getEmergenctContactForUser($this);
+	public function getEmergencyContact() {
+		return EmergencyContactHandler::getEmergencyContactForUser($this);
 	}
 	
 	public function hasTicket() {
@@ -239,6 +223,21 @@ class User {
 	
 	public function getTicket() {
 		return TicketHandler::getTicketForUser($this);
+	}
+	
+	/* 
+	 * Returns users displayname.
+	 */
+	public function getDisplayName() {
+		$nickname = $this->getNickname();
+	
+		if (!empty($nickname)) {
+			$displayName = $this->getFirstname() . ' "' . $nickname  . '" ' . $this->getLastname();
+		} else {
+			$displayName = $this->getFirstname() . ' ' . $this->getLastname();
+		}
+		
+		return $displayName;
 	}
 	
 	/* 

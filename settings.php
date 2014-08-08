@@ -20,11 +20,12 @@ class Settings {
 	const db_name_infected_tickets = 'test_infected_no_tickets';
 
 	// Infected
+	const db_table_infected_emergencycontacts = 'emergencycontacts';
 	const db_table_infected_events = 'events';
 	const db_table_infected_locations = 'locations';
+	const db_table_infected_passwordresetcodes = 'passwordresetcodes';
 	const db_table_infected_permissions = 'permissions';
 	const db_table_infected_postalcodes = 'postalcodes';
-	const db_table_infected_passwordresetcodes = 'passwordresetcodes';
 	const db_table_infected_registrationcodes = 'registrationcodes';
 	const db_table_infected_users = 'users';
 	

@@ -1,7 +1,7 @@
 <?php
 require_once 'settings.php';
 require_once 'mysql.php';
-require_once 'handlers/emergencycontactshandler.php';
+require_once 'handlers/emergencycontacthandler.php';
 require_once 'objects/user.php';
 
 class UserHandler {
@@ -97,10 +97,10 @@ class UserHandler {
 		$con = MySQL::open(Settings::db_name_infected);
 		
 		mysqli_query($con, 'DELETE FROM `' . Settings::db_table_infected_users . '` 
-							WHERE `id` = \'' . $user->getId() . '\';');
+							WHERE `userId` = \'' . $user->getId() . '\';');
 		
 		if ($user->hasEmergencyContact()) {
-			EmergencyContactHandler::removeEmergenctContact($user):
+			EmergencyContactHandler::removeEmergenctContact($user);
 		}
 		
 		MySQL::close($con);
