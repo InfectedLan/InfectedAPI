@@ -55,6 +55,37 @@ class TicketHandler {
 		return $ticketList;
 	}
 	
+	public static function getTicketForUser($user) {
+		$con = MySQL::open(Settings::db_name_infected_tickets);
+
+		$result = mysqli_query($con, 'SELECT `id` FROM `' . Settings::db_table_infected_tickets_tickets . '` 
+									  WHERE `owner` = \'' . $user->getId() . '\'
+									  LIMIT 1;');
+
+		$row = mysqli_fetch_array($result);
+
+		MySQL::close($con);
+		
+		if ($row) {
+			return self::getTicket($row['id']);
+		}
+		
+		return $row ? true : false;
+	}
+	
+	public static function hasTicket($user) {
+		$con = MySQL::open(Settings::db_name_infected_tickets);
+
+		$result = mysqli_query($con, 'SELECT `id` FROM `' . Settings::db_table_infected_tickets_tickets . '` 
+									  WHERE `owner` = \'' . $user->getId() . '\';');
+
+		$row = mysqli_fetch_array($result);
+
+		MySQL::close($con);
+		
+		return $row ? true : false;
+	}
+	
 	public static function getTicketsForOwner($user) {
 		$con = MySQL::open(Settings::db_name_infected_tickets);
 

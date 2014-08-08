@@ -2,12 +2,12 @@
 require_once 'mailmanager.php';
 require_once 'handlers/citydictionary.php';
 require_once 'handlers/permissionshandler.php';
+require_once 'handlers/registrationcodehandler.php';
+require_once 'handlers/passwordresetcodehandler.php';
+require_once 'handlers/tickethandler.php';
 require_once 'handlers/avatarhandler.php';
 require_once 'handlers/grouphandler.php';
 require_once 'handlers/teamhandler.php';
-require_once 'handlers/registrationcodehandler.php';
-require_once 'handlers/passwordresetcodehandler.php';
-
 
 /*
  * Used to store information about a user.
@@ -222,6 +222,14 @@ class User {
 					'</html>';
 			
 		return MailManager::sendMail($this, 'Infected tilbakestilling av passord', $message);
+	}
+	
+	public function hasTicket() {
+		return TicketHandler::hasTicket($this);
+	}
+	
+	public function getTicket() {
+		return TicketHandler::getTicketForUser($this);
 	}
 	
 	/* 
