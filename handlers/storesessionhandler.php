@@ -35,5 +35,9 @@ class StoreSessionHandler
 			return self::getStoreSession($row['id']);
 		}
 	}
+	public static function hasStoreSession($userId)
+	{
+		return getStoreSessionForUser($userId) != null;
+	}
 }
 ?>
