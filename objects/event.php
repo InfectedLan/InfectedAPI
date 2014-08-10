@@ -9,18 +9,18 @@ class Event {
 	private $end;
 	private $location;
 	private $participants;
-	private $price;
 	private $seatmap;
+	private $ticketType;
 	
-	public function __construct($id, $theme, $start, $end, $location, $participants, $price, $seatmap) {
+	public function __construct($id, $theme, $start, $end, $location, $participants, $seatmap, $ticketType) {
 		$this->id = $id;
 		$this->theme = $theme;
 		$this->start = $start;
 		$this->end = $end;
 		$this->location = $location;
 		$this->participants = $participants;
-		$this->price = $price;
 		$this->seatmap = $seatmap;
+		$this->ticketType = $ticketType;
 	}
 	
 	public function getId() {
@@ -46,10 +46,6 @@ class Event {
 	public function getParticipants() {
 		return $this->participants;
 	}
-	
-	public function getPrice() {
-		return $this->price;
-	}
 
 	public function getSeatmap() {
 		return $this->seatmap;
@@ -57,6 +53,10 @@ class Event {
 	
 	public function getTicketCount() {
 		return TicketHandler::getAvailableTicketsForEvent($this);
+	}
+
+	public function getTicketType() {
+		return $this->ticketType;
 	}
 }
 ?>

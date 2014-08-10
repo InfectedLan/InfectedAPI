@@ -16,7 +16,9 @@ class TicketTypeHandler {
 
 		if ($row) {
 			return new TicketType($row['id'], 
-								  $row['humanName']);
+								  $row['humanName'],
+								  $row['price'],
+								  $row['internalName']);
 		}
 	}
 }

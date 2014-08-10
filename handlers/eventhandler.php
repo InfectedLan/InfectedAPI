@@ -24,8 +24,8 @@ class EventHandler {
 							 $row['end'], 
 							 LocationHandler::getLocation($row['location']), 
 							 $row['participants'], 
-							 $row['price'],
-							 $row['seatmap']);
+							 $row['seatmap'],
+							 $row['ticketType']);
 		}
 	}
 	

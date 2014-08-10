@@ -17,8 +17,10 @@ class StoreSessionHandler
 
 		if($row) {
 			return new StoreSession($row('id'), 
-				$row('userId'), 
-				$row('timeCreated'));
+				$row['userId'], 
+				$row['timeCreated'],
+				$row['ticketType'],
+				$row['amount']);
 		}
 	}
 	public static function getStoreSessionForUser($userId)
