@@ -1,5 +1,7 @@
 <?php
+require_once 'handlers/locationhandler.php';
 require_once 'handlers/tickethandler.php';
+require_once 'handlers/tickettypehandler.php';
 require_once 'location.php';
 
 class Event {
@@ -40,7 +42,7 @@ class Event {
 	}
 
 	public function getLocation() {
-		return $this->location;
+		return LocationHandler::getLocation($this->location);
 	}
 
 	public function getParticipants() {
@@ -50,13 +52,13 @@ class Event {
 	public function getSeatmap() {
 		return $this->seatmap;
 	}
+
+	public function getTicketType() {
+		return TicketTypeHandler::getTicketType($this->ticketType);
+	}
 	
 	public function getTicketCount() {
 		return TicketHandler::getAvailableTicketsForEvent($this);
-	}
-
-	public function getTicketType() {
-		return $this->ticketType;
 	}
 }
 ?>

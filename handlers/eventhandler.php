@@ -9,9 +9,8 @@ class EventHandler {
 	public static function getEvent($id) {
 		$con = MySQL::open(Settings::db_name_infected);
 		
-		$result = mysqli_query($con, 'SELECT * 
-					      FROM `'. Settings::db_table_infected_events . '`
-					      WHERE `id` = \'' . $id . '\';');
+		$result = mysqli_query($con, 'SELECT * FROM `'. Settings::db_table_infected_events . '`
+									  WHERE `id` = \'' . $id . '\';');
 
 		$row = mysqli_fetch_array($result);
 		
@@ -22,7 +21,7 @@ class EventHandler {
 							 $row['theme'], 
 							 $row['start'], 
 							 $row['end'], 
-							 LocationHandler::getLocation($row['location']), 
+							 $row['location'], 
 							 $row['participants'], 
 							 $row['seatmap'],
 							 $row['ticketType']);
@@ -33,11 +32,10 @@ class EventHandler {
 	public static function getCurrentEvent() {
 		$con = MySQL::open(Settings::db_name_infected);
 		
-		$result = mysqli_query($con, 'SELECT `id`
-					      FROM `' . Settings::db_table_infected_events . '`
-					      WHERE `end` > NOW()
-					      ORDER BY `start` ASC
-					      LIMIT 1;');
+		$result = mysqli_query($con, 'SELECT `id` FROM `' . Settings::db_table_infected_events . '`
+									  WHERE `end` > NOW()
+									  ORDER BY `start` ASC
+									  LIMIT 1;');
 
 		$row = mysqli_fetch_array($result);
 		
@@ -50,8 +48,7 @@ class EventHandler {
 	public static function getEvents() {
 		$con = MySQL::open(Settings::db_name_infected);
 		
-		$result = mysqli_query($con, 'SELECT `id` 
-									  FROM `' . Settings::db_table_infected_events . '`;');
+		$result = mysqli_query($con, 'SELECT `id` FROM `' . Settings::db_table_infected_events . '`;');
 		
 		$eventList = array();
 		
