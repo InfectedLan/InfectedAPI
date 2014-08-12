@@ -12,16 +12,16 @@ if (Session::isAuthenticated()) {
 		$user->hasPermission('admin') ||
 		$user->isGroupMember() && $user->isGroupLeader()) {
 		if (isset($_GET['id']) &&
-			isset($_POST['title']) &&
-			isset($_POST['description']) &&
-			isset($_POST['leader']) &&
-			!empty($_POST['title']) &&
-			!empty($_POST['description'])) {
+			isset($_GET['title']) &&
+			isset($_GET['description']) &&
+			isset($_GET['leader']) &&
+			!empty($_GET['title']) &&
+			!empty($_GET['description'])) {
 			$id = $_GET['id'];
-			$name = strtolower(str_replace(' ', '-', $_POST['title']));
-			$title = $_POST['title'];
-			$description = $_POST['description'];
-			$leader = $_POST['leader'];
+			$name = strtolower(str_replace(' ', '-', $_GET['title']));
+			$title = $_GET['title'];
+			$description = $_GET['description'];
+			$leader = $_GET['leader'];
 
 			GroupHandler::updateGroup($id, $name, $title, $description, $leader);
 			$result = true;
