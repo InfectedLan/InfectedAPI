@@ -45,6 +45,25 @@ class ApplicationHandler {
 		return $applicationList;
 	}
 	
+	/* Returns a list of pending applications */
+	public static function getPendingApplications($group) {
+		$con = MySQL::open(Settings::db_name_infected_crew);
+		
+		$result = mysqli_query($con, 'SELECT `id` FROM `' . Settings::db_table_infected_crew_applications . '`
+									  WHERE `groupId` = \'' . $group->getId() .  '\'
+									  AND `state` = 1;');
+		
+		$applicationList = array();
+		
+		while ($row = mysqli_fetch_array($result)) {
+			array_push($applicationList, self::getApplication($row['id']));
+		}
+		
+		MySQL::close($con);
+		
+		return $applicationList;
+	}
+	
 	/* Creates an application in database */
 	public static function createApplication($user, $group, $content) {
 		$con = MySQL::open(Settings::db_name_infected_crew);
@@ -53,7 +72,7 @@ class ApplicationHandler {
 							VALUES (\'' . $user->getId() . '\', 
 									\'' . $group->getId() . '\', 
 									\'' . $content . '\', 
-									\'0\', 
+									\'1\', 
 									\'' . date('Y-m-d H:i:s') . '\');');
 									
 		MySQL::close($con);
