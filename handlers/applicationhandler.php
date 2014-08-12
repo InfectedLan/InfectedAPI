@@ -10,8 +10,7 @@ class ApplicationHandler {
 	public static function getApplication($id) {
 		$con = MySQL::open(Settings::db_name_infected_crew);
 		
-		$result = mysqli_query($con, 'SELECT * 
-									  FROM `' . Settings::db_table_infected_crew_applications . '` 
+		$result = mysqli_query($con, 'SELECT * FROM `' . Settings::db_table_infected_crew_applications . '` 
 									  WHERE `id` = \'' . $id . '\';');
 									  
 		$row = mysqli_fetch_array($result);
@@ -33,7 +32,7 @@ class ApplicationHandler {
 	public static function getApplications() {
 		$con = MySQL::open(Settings::db_name_infected_crew);
 		
-		$result = mysqli_query($con, 'SELECT id FROM ' . Settings::db_table_infected_crew_applications);
+		$result = mysqli_query($con, 'SELECT `id` FROM `' . Settings::db_table_infected_crew_applications . '`;');
 		
 		$applicationList = array();
 		
@@ -44,6 +43,20 @@ class ApplicationHandler {
 		MySQL::close($con);
 		
 		return $applicationList;
+	}
+	
+	/* Creates an application in database */
+	public static function createApplication($user, $group, $content) {
+		$con = MySQL::open(Settings::db_name_infected_crew);
+		
+		mysqli_query($con, 'INSERT INTO `' . Settings::db_table_infected_crew_applications . '` (`userId`, `groupId`, `content`, `state`, `datetime`) 
+							VALUES (\'' . $user->getId() . '\', 
+									\'' . $group->getId() . '\', 
+									\'' . $content . '\', 
+									\'0\', 
+									\'' . date('Y-m-d H:i:s') . '\');');
+									
+		MySQL::close($con);
 	}
 }
 ?>
