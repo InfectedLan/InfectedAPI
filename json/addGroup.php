@@ -11,15 +11,15 @@ if (Session::isAuthenticated()) {
 	if ($user->hasPermission('leader.group') ||
 		$user->hasPermission('admin') ||
 		$user->isGroupMember() && $user->isGroupLeader()) {
-		if (isset($_POST['title']) &&
-						isset($_POST['description']) &&
-						isset($_POST['leader']) &&
-						!empty($_POST['title']) &&
-						!empty($_POST['description'])) {
-			$name = strtolower(str_replace(' ', '-', $_POST['title']));
-			$title = $_POST['title'];
-			$description = $_POST['description'];
-			$leader = $_POST['leader'];
+		if (isset($_GET['title']) &&
+						isset($_GET['description']) &&
+						isset($_GET['leader']) &&
+						!empty($_GET['title']) &&
+						!empty($_GET['description'])) {
+			$name = strtolower(str_replace(' ', '-', $_GET['title']));
+			$title = $_GET['title'];
+			$description = $_GET['description'];
+			$leader = $_GET['leader'];
 			
 			GroupHandler::createGroup($name, $title, $description, $leader);
 			$result = true;
