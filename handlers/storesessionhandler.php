@@ -9,14 +9,14 @@ class StoreSessionHandler
 	{
 		$con = MySQL::open(Settings::db_name_infected_tickets);
 
-		$result = mysqli_query($con, 'SELECT * FROM `' . Settings::db_table_infected_tickets_storesessions . '` WHERE `id`=' . $id . ';')
+		$result = mysqli_query($con, 'SELECT * FROM `' . Settings::db_table_infected_tickets_storesessions . '` WHERE `id`=' . $id . ';');
 		
 		$row = mysqli_fetch_array($result);
 
 		MySQL::close($con);
 
 		if($row) {
-			return new StoreSession($row('id'), 
+			return new StoreSession($row['id'], 
 				$row['userId'], 
 				$row['timeCreated'],
 				$row['ticketType'],
@@ -39,7 +39,7 @@ class StoreSessionHandler
 	}
 	public static function hasStoreSession($userId)
 	{
-		return getStoreSessionForUser($userId) != null;
+		return self::getStoreSessionForUser($userId) != null;
 	}
 }
 ?>
