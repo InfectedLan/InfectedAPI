@@ -11,12 +11,12 @@ if (Session::isAuthenticated()) {
 	
 	if ($user->hasPermission('admin') ||
 		$user->isGroupMember() && $user->isGroupLeader()) {
-		if (isset($_GET['id']) &&
-			isset($_GET['userId']) &&
-			is_numeric($_GET['id']) &&
-			is_numeric($_GET['userId'])) {
-			$group = GroupHandler::getGroup($_GET['id']);
+		if (isset($_GET['userId']) &&
+			isset($_GET['groupId']) &&
+			is_numeric($_GET['userId']) &&
+			is_numeric($_GET['groupId'])) {
 			$groupUser = UserHandler::getUser($_GET['userId']);
+			$group = GroupHandler::getGroup($_GET['groupId']);
 			
 			GroupHandler::changeGroup($groupUser, $group);
 			$result = true;
@@ -31,5 +31,4 @@ if (Session::isAuthenticated()) {
 }
 
 echo json_encode(array('result' => $result, 'message' => $message));
-
 ?>
