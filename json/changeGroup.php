@@ -29,10 +29,10 @@ if (Session::isAuthenticated()) {
 			$message = 'Du har ikke fylt ut alle feltene.';
 		}
 	} else {
-		$message = "Du har ikke tillatelser til dette.";
+		$message = 'Du har ikke tillatelse til dette.';
 	}
 } else {
-	$message = "Du er ikke logget inn.";
+	$message = 'Du er ikke logget inn.';
 }
 
 echo json_encode(array('result' => $result, 'message' => $message));

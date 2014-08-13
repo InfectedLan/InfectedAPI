@@ -157,20 +157,32 @@ class GroupHandler {
 	/*
 	 * Sets the users group.
 	 */
-	public static function changeGroup($userId, $groupId) {
+	public static function changeGroup($user, $group) {
 		$con = MySQL::open(Settings::db_name_infected_crew);
 		
-		if (self::isGroupMember) {	
+		if ($user->isGroupMember()) {	
 			mysqli_query($con, 'UPDATE `' . Settings::db_table_infected_crew_memberof . '` 
-								SET `groupId` = \'' . $groupId . '\', 
+								SET `groupId` = \'' . $group->getId() . '\', 
 									`teamId` = \'0\' 
-								WHERE `userId` = \'' . $userId . '\';');
+								WHERE `userId` = \'' . $user->getId() . '\';');
 		} else {
 			mysqli_query($con, 'INSERT INTO `' . Settings::db_table_infected_crew_memberof . '` (`userId`, `groupId`, `teamId`) 
-								VALUES (\'' . $userId . '\', 
-										\'' . $groupId . '\', 
+								VALUES (\'' . $user->getId() . '\', 
+										\'' . $group->getId() . '\', 
 										\'0\');');
 		}
+		
+		MySQL::close($con);
+	}
+	
+	/*
+	 * Removes a user from a group.
+	 */
+	public static function removeUserFromGroup($user) {
+		$con = MySQL::open(Settings::db_name_infected_crew);
+		
+		mysqli_query($con, 'DELETE FROM `' . Settings::db_table_infected_crew_memberof . '` 
+							WHERE `userId` = \'' . $user->getId() . '\';');
 		
 		MySQL::close($con);
 	}

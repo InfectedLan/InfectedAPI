@@ -1,5 +1,6 @@
 <?php
 require_once 'session.php';
+require_once 'handlers/userhandler.php';
 require_once 'handlers/grouphandler.php';
 
 $result = false;
@@ -10,20 +11,14 @@ if (Session::isAuthenticated()) {
 	
 	if ($user->hasPermission('admin') ||
 		$user->isGroupMember() && $user->isGroupLeader()) {
-		if (isset($_GET['title']) &&
-			isset($_GET['description']) &&
-			isset($_GET['leader']) &&
-			!empty($_GET['title']) &&
-			!empty($_GET['description'])) {
-			$name = strtolower(str_replace(' ', '-', $_GET['title']));
-			$title = $_GET['title'];
-			$description = $_GET['description'];
-			$leader = $_GET['leader'];
+		if (isset($_GET['id']) &&
+			is_numeric($_GET['id'])) {
+			$groupUser = UserHandler::getUser($_GET['id']);
 			
-			GroupHandler::createGroup($name, $title, $description, $leader);
+			GroupHandler::removeUserFromGroup($groupUser);
 			$result = true;
 		} else {
-			$message = 'Du har ikke fyllt ut alle feltene!';
+			$message = 'Ingen bruker spesifisert.';
 		}
 	} else {
 		$message = 'Du har ikke tillatelse til dette.';
