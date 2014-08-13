@@ -11,6 +11,8 @@ class Settings {
 	
 	const emailName = 'Infected';
 	const email = 'no-reply@infected.no';
+
+	const storeSessionTime = 3600; //You have an hour to pay on paypal
 	
 	// Database information
 	const db_host = 'localhost';

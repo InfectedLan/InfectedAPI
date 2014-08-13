@@ -39,11 +39,11 @@ class TicketHandler {
 		return $event->getParticipants() - count($ticketList);
 	}
 	
-	public static function getTicketsForEvent($eventId) {
+	public static function getTicketList($event) {
 		$con = MySQL::open(Settings::db_name_infected_tickets);
 
 		$result = mysqli_query($con, 'SELECT `id` FROM `' . Settings::db_table_infected_tickets_tickets . '` 
-									  WHERE `eventId` = \'' . $eventId . '\';');
+									  WHERE `eventId` = \'' . $event->getId() . '\';');
 
 		$ticketList = array();
 
@@ -54,6 +54,16 @@ class TicketHandler {
 		MySQL::close($con);
 
 		return $ticketList;
+	}
+
+	public static function getTicketCount($event) {
+		$con = MySQL::open(Settings::db_name_infected_tickets);
+
+		$result = mysqli_query($con, 'SELECT `id` FROM `' . Settings::db_table_infected_tickets_tickets . '` 
+									  WHERE `eventId` = \'' . $event->getId() . '\';');
+		MySQL::close($con);
+
+		return mysqli_num_rows($result);
 	}
 	
 	public static function getTicketForUser($user) {

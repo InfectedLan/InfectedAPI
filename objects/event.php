@@ -2,6 +2,7 @@
 require_once 'handlers/locationhandler.php';
 require_once 'handlers/tickethandler.php';
 require_once 'handlers/tickettypehandler.php';
+require_once 'handlers/storesessionhandler.php';
 require_once 'location.php';
 
 class Event {
@@ -58,7 +59,14 @@ class Event {
 	}
 	
 	public function getTicketCount() {
-		return TicketHandler::getAvailableTicketsForEvent($this);
+		return TicketHandler::getTicketCount($this);
+	}
+
+	public function getAvailableTickets() {
+		$ticketCount = $this->getTicketCount();
+		$numLeft = $this->getParticipants() - $ticketCount;
+		$numLeft -= StoreSessionHandler::getReservedTicketCount( TicketTypeHandler::getTicketType($this->ticketType) );
+		return $numLeft;
 	}
 }
 ?>
