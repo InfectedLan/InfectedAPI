@@ -5,8 +5,7 @@ require_once 'objects/storesession.php';
 
 class StoreSessionHandler
 {
-	public static function getStoreSession($id)
-	{
+	public static function getStoreSession($id) {
 		$con = MySQL::open(Settings::db_name_infected_tickets);
 
 		$result = mysqli_query($con, 'SELECT * FROM `' . Settings::db_table_infected_tickets_storesessions . '` WHERE `id`=' . $id . ';');
@@ -23,16 +22,16 @@ class StoreSessionHandler
 				$row['amount']);
 		}
 	}
-	public static function registerStoreSession($user, $type, $amount)
-	{
+	
+	public static function registerStoreSession($user, $type, $amount) {
 		$con = MySQL::open(Settings::db_name_infected_tickets);
 
 		$result = mysqli_query($con, 'INSERT INTO `' . Settings::db_table_infected_tickets_storesessions . '` (`userId`, `timeCreated`, `ticketType`, `amount`) VALUES (' . $user->getId() . ', ' . time() . ', ' . $type->getId() . ', ' . $amount . ')');
 
 		MySQL::close($con);
 	}
-	public static function getStoreSessionForUser($user)
-	{
+	
+	public static function getStoreSessionForUser($user) {
 		$con = MySQL::open(Settings::db_name_infected_tickets);
 
 		$result = mysqli_query($con, 'SELECT `id` FROM `' . Settings::db_table_infected_tickets_storesessions . '` WHERE `userId`=' . $user->getId() . ' AND `timeCreated` > ' . self::oldestValidTimestamp() . ';');
@@ -45,13 +44,12 @@ class StoreSessionHandler
 			return self::getStoreSession($row['id']);
 		}
 	}
-	public static function hasStoreSession($user)
-	{
+	
+	public static function hasStoreSession($user) {
 		return self::getStoreSessionForUser($user) != null;
 	}
 
-	public static function getReservedTicketCount($ticketType)
-	{
+	public static function getReservedTicketCount($ticketType) {
 		$con = MySQL::open(Settings::db_name_infected_tickets);
 
 		$result = mysqli_query($con, 'SELECT `amount` FROM `' . Settings::db_table_infected_tickets_storesessions . '` WHERE `ticketType` = ' . $ticketType->getId() . ' AND `timeCreated` > ' . self::oldestValidTimestamp() . ';');
