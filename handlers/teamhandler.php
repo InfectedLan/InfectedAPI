@@ -81,11 +81,11 @@ class TeamHandler {
 	}
 	
 	/* Create a new team */
-	public static function createTeam($groupId, $name, $title, $description, $leader) {
+	public static function createTeam($group, $name, $title, $description, $leader) {
 		$con = MySQL::open(Settings::db_name_infected_crew);
 		
 		mysqli_query($con, 'INSERT INTO `' . Settings::db_table_infected_crew_teams . '` (`groupId`, `name`, `title`, `description`, `leader`) 
-							VALUES (\'' . $groupId . '\', 
+							VALUES (\'' . $group->getId() . '\', 
 									\'' . $name . '\', 
 									\'' . $title . '\', 
 									\'' . $description . '\', 
@@ -95,26 +95,27 @@ class TeamHandler {
 	}
 	
 	/* Remove a team */
-	public static function removeTeam($id) {
+	public static function removeTeam($group, $team) {
 		$con = MySQL::open(Settings::db_name_infected_crew);
 		
 		mysqli_query($con, 'DELETE FROM `' . Settings::db_table_infected_crew_teams . '` 
-							WHERE `id` = \'' . $id . '\';');
+							WHERE `id` = \'' . $team->getId() . '\'
+							AND `groupId` = \'' . $group->getId() . '\';');
 		
 		MySQL::close($con);
 	}
 	
 	/* Update a team */
-	public static function updateTeam($id, $groupId, $name, $title, $description, $leader) {
+	public static function updateTeam($team, $group, $name, $title, $description, $leader) {
 		$con = MySQL::open(Settings::db_name_infected_crew);
 		
 		mysqli_query($con, 'UPDATE `' . Settings::db_table_infected_crew_teams . '` 
-							SET `groupId` = \'' . $groupId . '\', 
+							SET `groupId` = \'' . $group->getId() . '\', 
 								`name` = \'' . $name . '\', 
 								`title` = \'' . $title . '\', 
 								`description` = \'' . $description . '\', 
 								`leader` = \'' . $leader . '\' 
-							WHERE `id` = \'' . $id . '\';');
+							WHERE `id` = \'' . $team->getId() . '\';');
 		
 		MySQL::close($con);
 	}
@@ -173,15 +174,28 @@ class TeamHandler {
 	}
 	
 	/* Sets the users team */
-	public static function changeTeam($userId, $teamId) {
+	public static function changeTeamForUser($user, $group, $team) {
 		$con = MySQL::open(Settings::db_name_infected_crew);
 		
-		if ($this->isGroupMember($userId)) {	
+		if ($user->isGroupMember()) {	
 			mysqli_query($con, 'UPDATE `' . Settings::db_table_infected_crew_memberof . '` 
-								SET `teamId` = \'' . $teamId . '\' 
-								WHERE `userId` = \'' . $userId . '\' 
-								AND `groupId` = \'' . GroupHandler::getGroupForUser($userId)->getId() . '\';');	
+								SET `teamId` = \'' . $team->getId() . '\' 
+								WHERE `userId` = \'' . $user->getId() . '\' 
+								AND `groupId` = \'' . $group->getId() . '\';');	
 		}
+		
+		MySQL::close($con);
+	}
+	
+	/*
+	 * Removes a user from a team.
+	 */
+	public static function removeUserFromTeam($user) {
+		$con = MySQL::open(Settings::db_name_infected_crew);
+		
+		mysqli_query($con, 'UPDATE `' . Settings::db_table_infected_crew_memberof . '` 
+							SET `teamId` = \'0\'
+							WHERE `userId` = \'' . $user->getId() . '\';');	
 		
 		MySQL::close($con);
 	}
