@@ -77,5 +77,26 @@ class ApplicationHandler {
 									
 		MySQL::close($con);
 	}
+	
+	public static function acceptApplication($id) {
+		$con = MySQL::open(Settings::db_name_infected_crew);
+		
+		mysqli_query($con, 'UPDATE `' . Settings::db_table_infected_crew_applications . '` 
+							SET `state` =  \'2\'
+							WHERE `id` = \'' . $id . '\';');
+									
+		MySQL::close($con);
+	}
+	
+	public static function rejectApplication($id, $reason) {
+		$con = MySQL::open(Settings::db_name_infected_crew);
+		
+		mysqli_query($con, 'UPDATE `' . Settings::db_table_infected_crew_applications . '` 
+							SET `state` =  \'3\', 
+								`reason` = \'' . $reason . '\'
+							WHERE `id` = \'' . $id . '\';');
+									
+		MySQL::close($con);
+	}
 }
 ?>

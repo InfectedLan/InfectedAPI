@@ -10,12 +10,12 @@ if (Session::isAuthenticated()) {
 	$user = Session::getCurrentUser();
 	
 	if (!$user->isGroupMember()) {
-		if (isset($_POST['groupId']) &&
-			isset($_POST['content']) &&
-			/* is_int($_POST['groupId']) && */
-			!empty($_POST['content'])) {
-			$group = GroupHandler::getGroup($_POST['groupId']);
-			$content = $_POST['content'];
+		if (isset($_GET['groupId']) &&
+			isset($_GET['content']) &&
+			is_numeric($_GET['groupId']) &&
+			!empty($_GET['content'])) {
+			$group = GroupHandler::getGroup($_GET['groupId']);
+			$content = $_GET['content'];
 		
 			ApplicationHandler::createApplication($user, $group, $content);
 		
