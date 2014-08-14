@@ -60,5 +60,50 @@ class EventHandler {
 
 		return $eventList;
 	}
+	
+	/* 
+	 * Create new event
+	 */
+	public static function createEvent($theme, $start, $end, $location, $participants) {
+		$con = MySQL::open(Settings::db_name_infected);
+		
+		mysqli_query($con, 'INSERT INTO `' . Settings::db_table_infected_events . '` (`theme`, `start`, `end`, `location`, `participants`) 
+							VALUES (\'' . $theme . '\', 
+									\'' . $start . '\', 
+									\'' . $end . '\',
+									\'' . $location . '\',
+									\'' . $participants . '\');');
+									
+		MySQL::close($con);
+	}
+	
+	/* 
+	 * Update an event 
+	 */
+	public static function updateEvent($id, $theme, $start, $end, $location, $participants) {
+		$con = MySQL::open(Settings::db_name_infected);
+		
+		mysqli_query($con, 'UPDATE `' . Settings::db_table_infected_events . '` 
+							SET `theme` = \'' . $theme . '\', 
+								`start` = \'' . $start . '\', 
+								`end` = \'' . $end . '\', 
+								`location` = \'' . $location . '\', 
+								`participants` = \'' . $participants . '\'
+							WHERE `id` = \'' . $id . '\';');
+		
+		MySQL::close($con);
+	}
+	
+	/* 
+	 * Remove an event
+	 */
+	public static function removeEvent($id) {
+		$con = MySQL::open(Settings::db_name_infected);
+		
+		mysqli_query($con, 'DELETE FROM `' . Settings::db_table_infected_events . '` 
+							WHERE `id` = \'' . $id . '\';');
+		
+		MySQL::close($con);
+	}
 }
 ?>
