@@ -4,30 +4,29 @@ require_once 'handlers/userhandler.php';
 $result = false;
 $message = null;
 
-if (isset($_POST['firstname']) && 
-	isset($_POST['lastname']) && 
-	isset($_POST['username']) &&  
-	isset($_POST['password']) && 
-	isset($_POST['confirmpassword']) && 
-	isset($_POST['email']) && 
-	isset($_POST['gender']) && 
-	isset($_POST['birthday']) && 
-	isset($_POST['birthmonth']) && 
-	isset($_POST['birthyear']) && 
-	isset($_POST['phone'])) {
-	$firstname = $_POST['firstname'];
-	$lastname = $_POST['lastname'];
-	$username = $_POST['username'];
-	$password = hash('sha256', $_POST['password']);
-	$confirmPassword = hash('sha256', $_POST['confirmpassword']);
-	$email = $_POST['email'];
-	$gender = $_POST['gender'];
-	$birthdate = $_POST['birthyear'] . '-' . $_POST['birthmonth'] . '-' . $_POST['birthday']; 
-	$phone = $_POST['phone'];
-	$address = $_POST['address'];
-	$postalcode = $_POST['postalcode'];
-	$nickname = isset($_POST['nickname']) ? $_POST['nickname'] : $username;
-	$emergencyContactPhone = $_POST['emergencycontactphone'];
+if (isset($_GET['firstname']) && 
+	isset($_GET['lastname']) && 
+	isset($_GET['username']) &&  
+	isset($_GET['password']) && 
+	isset($_GET['confirmpassword']) && 
+	isset($_GET['email']) && 
+	isset($_GET['gender']) && 
+	isset($_GET['birthday']) && 
+	isset($_GET['birthmonth']) && 
+	isset($_GET['birthyear']) && 
+	isset($_GET['phone'])) {
+	$firstname = $_GET['firstname'];
+	$lastname = $_GET['lastname'];
+	$username = $_GET['username'];
+	$password = hash('sha256', $_GET['password']);
+	$confirmPassword = hash('sha256', $_GET['confirmpassword']);
+	$email = $_GET['email'];
+	$gender = $_GET['gender'];
+	$birthdate = $_GET['birthyear'] . '-' . $_GET['birthmonth'] . '-' . $_GET['birthday']; 
+	$phone = $_GET['phone'];
+	$address = $_GET['address'];
+	$postalcode = $_GET['postalcode'];
+	$nickname = isset($_GET['nickname']) ? $_GET['nickname'] : $username;
 	
 	if (!UserHandler::userExists($username) || 
 		!UserHandler::userExists($email)) {
@@ -41,9 +40,9 @@ if (isset($_POST['firstname']) &&
 			$message = 'Brukernavnet ditt er for langt!';
 		} else if (empty($password)) {
 			$message = 'Du har ikke oppgitt noe passord!';
-		} else if (strlen($_POST['password']) < 8) {
+		} else if (strlen($_GET['password']) < 8) {
 			$message = 'Passordet er for kort! Det må minst bestå av 8 tegn.';
-		} else if (strlen($_POST['password']) > 32) {
+		} else if (strlen($_GET['password']) > 32) {
 			$message = 'Passordet ditt er for langt!';
 		/* } else if (!preg_match('#[0-9]+#', $password)) {
 			$message = 'Passordet må inneholde minst et tall.';
@@ -66,14 +65,24 @@ if (isset($_POST['firstname']) &&
 		} else {
 			if ($password == $confirmPassword) {
 				// Creates the user in database.
-				UserHandler::createUser($firstname, $lastname, $username, $password, $email, $birthdate, $gender, $phone, $address, $postalcode, $nickname);
+				UserHandler::createUser($firstname, 
+										$lastname, 
+										$username, 
+										$password, 
+										$email, 
+										$birthdate, 
+										$gender, 
+										$phone, 
+										$address, 
+										$postalcode, 
+										$nickname);
 				
 				// Retrives the user object and sends the activation mail.
 				$user = UserHandler::getUserByName($username);
 				
-				if (isset($_POST['emergencycontactphone']) &&
-					is_numeric($_POST['emergencycontactphone'])) {
-					EmergencyContactHandler::createEmergencyContact($user, $emergencyContactPhone);
+				if (isset($_GET['emergencycontactphone']) &&
+					is_numeric($_GET['emergencycontactphone'])) {
+					EmergencyContactHandler::createEmergencyContact($user, $_GET['emergencycontactphone']);
 				}
 				
 				$user->sendRegistrationMail();

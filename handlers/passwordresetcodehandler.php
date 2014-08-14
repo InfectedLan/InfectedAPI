@@ -3,13 +3,13 @@ require_once 'settings.php';
 require_once 'mysql.php';
 
 class ResetCodeHandler {
-	public static function createPasswordResetCode($userId) {
+	public static function createPasswordResetCode($user) {
 		$code = bin2hex(openssl_random_pseudo_bytes(16));
 		
 		$con = MySQL::open(Settings::db_name_infected);
 		
 		mysqli_query($con, 'INSERT INTO `' . Settings::db_table_infected_passwordresetcodes . '` (`userId`, `code`) 
-							VALUES (\'' . $userId . '\', 
+							VALUES (\'' . $user->getId() . '\', 
 									\'' . $code . '\');');
 									
 		MySQL::close($con);

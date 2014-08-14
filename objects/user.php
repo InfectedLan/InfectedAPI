@@ -172,7 +172,7 @@ class User {
 	 * Returns true if the given users account is activated.
 	 */
 	public function isActivated() {
-		return RegistrationCodeHandler::getRegistrationCode($this->getId()) == null;
+		return RegistrationCodeHandler::getRegistrationCode($this) == null;
 	}
 	
 	/*
@@ -180,10 +180,10 @@ class User {
 	 */
 	public function sendRegistrationMail() {
 		// Put the code in the database.
-		$code = RegistrationCodeHandler::createRegistrationCode($this->getId());
+		$code = RegistrationCodeHandler::createRegistrationCode($this);
 		
 		// Send an email to the user with a link for resetting the password.
-		$url = 'https://' . $_SERVER['HTTP_HOST'] . $_SERVER['REQUEST_URI'] . 'index.php?page=activation&code=' . $code;
+		$url = 'https://' . $_SERVER['HTTP_HOST'] . '/v2/index.php?page=activation&code=' . $code;
 		$message = '<html>' .
 						'<body>' .
 							'<h3>Hei!</h3>' .
@@ -199,7 +199,7 @@ class User {
 	 */
 	public function sendPasswordResetMail() {
 		// Put the code in the database.
-		$code = PasswordResetCodeHandler::createPasswordResetCode($this->getId());
+		$code = PasswordResetCodeHandler::createPasswordResetCode($this);
 		
 		// Send an email to the user with a link for resetting the password.
 		$url = 'https://' . $_SERVER['HTTP_HOST'] . $_SERVER['REQUEST_URI'] . 'index.php?page&=reset-password=' . $code;
