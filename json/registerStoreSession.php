@@ -4,6 +4,7 @@
 
 	$result = false;
 	$message = null;
+	$key = null;
 
 	if (Session::isAuthenticated()) {
 		$user = Session::getCurrentUser();
@@ -13,7 +14,7 @@
 			$amount = $_GET['amount'];
 
 			if(!StoreSessionHandler::hasStoreSession($user)) {
-				StoreSessionHandler::registerStoreSession($user, TicketTypeHandler::getTicketType($type), $amount);
+				$key = StoreSessionHandler::registerStoreSession($user, TicketTypeHandler::getTicketType($type), $amount);
 
 				$result = true;
 				$message = 'Hi mom!';
@@ -27,5 +28,12 @@
 		$message = "Du er ikke logget inn!";
 	} 
 
-	echo json_encode(array('result' => $result, 'message' => $message));
+	if($result)
+	{
+		echo json_encode(array('result' => $result, 'key' => $key));
+	}
+	else
+	{
+		echo json_encode(array('result' => $result, 'message' => $message));
+	}
 ?>

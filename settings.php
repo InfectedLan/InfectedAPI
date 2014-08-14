@@ -53,5 +53,6 @@ class Settings {
 	const db_table_infected_tickets_tickettypes = 'tickettypes';
 	const db_table_infected_tickets_seatmaps = 'seatmaps';
 	const db_table_infected_tickets_storesessions = 'storesessions';
+	const db_table_infected_tickets_paymentlog = 'paymentlog';
 }
 ?>

@@ -5,6 +5,7 @@ require_once 'handlers/userhandler.php';
 require_once 'handlers/eventhandler.php';
 require_once 'handlers/tickettypehandler.php';
 require_once 'handlers/seathandler.php';
+require_once 'handlers/storesessionhandler.php';
 require_once 'objects/ticket.php';
 
 class TicketHandler {
@@ -139,5 +140,17 @@ class TicketHandler {
 		
 		MySQL::close($con);
 	}
+
+	public static function createTicket($user, $ticketType)
+	{
+		$currentEvent = EventHandler::getCurrentEvent();
+
+		$con = MySQL::open(Settings::db_name_infected_tickets);
+
+		$result = mysqli_query($con, 'INSERT INTO `' . Settings::db_table_infected_tickets_tickets . '` (`ownerId`, `eventId`, `typeId`) VALUES (' . $user->getId() . ', ' . $currentEvent->getId() . ', ' . $ticketType->getId() . ');');
+
+		MySQL::close($con);
+	}
+
 }
 ?>
