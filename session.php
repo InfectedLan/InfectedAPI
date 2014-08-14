@@ -29,5 +29,18 @@ class Session {
 			return $_SESSION['user'];
 		}
 	}
+	
+	/*
+	 * Reloads the current user from database.
+	 */
+	public static function reload() {
+		if (self::isAuthenticated()) {
+			$user = self::getCurrentUser();
+			$newUser = UserHandler::getUser($user->getId());
+		
+			unset($_SESSION['user']);
+			$_SESSION['user'] = $newUser;
+		}
+	}
 }
 ?>
