@@ -157,8 +157,15 @@ class User {
 	/* 
 	 * Returns true if user have specified permission, otherwise false.
 	 */
-	public function hasPermission($permission) {
-		return PermissionsHandler::hasPermission($this->getId(), $permission);
+	public function hasPermission($value) {
+		return PermissionsHandler::hasPermission($this, $value);
+	}
+	
+	/* 
+	 * Returns the permissions assigned to this user.
+	 */
+	public function getPermissions() {
+		return PermissionsHandler::getPermissions($this);
 	}
 	
 	/* 

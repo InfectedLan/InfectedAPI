@@ -1,0 +1,1 @@
+php_value include_path .:/home/test.infected.no/public_html/api

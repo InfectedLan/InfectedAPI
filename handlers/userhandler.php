@@ -72,7 +72,72 @@ class UserHandler {
 		return $userList;
 	}
 
-	/* Create new user */
+	/*
+	 * Returns all users that have one or more permission values in the permissions table.
+	 */
+	public static function getPermissionUsers() {
+		$con = MySQL::open(Settings::db_name_infected);
+		
+		$result = mysqli_query($con, 'SELECT `userId` FROM `' . Settings::db_table_infected_permissions . '`;');
+		
+		$userList = array();
+		
+		while ($row = mysqli_fetch_array($result)) {
+			array_push($userList, self::getUser($row['userId']));
+		}
+		
+		MySQL::close($con);
+
+		return $userList;
+	}
+	
+	/* 
+	 * Get a list of all users which is member in a group
+	 */
+	public static function getMemberUsers() {
+		$con = MySQL::open(Settings::db_name_infected);
+		
+		$result = mysqli_query($con, 'SELECT `' . Settings::db_table_infected_users . '`.`id` FROM `' . Settings::db_table_infected_users . '`
+									  LEFT JOIN `' . Settings::db_name_infected_crew . '`.`' . Settings::db_table_infected_crew_memberof . '` ON `' . Settings::db_table_infected_users . '`.`id` = `userId`
+									  WHERE `groupId` IS NOT NULL 
+									  ORDER BY `firstname` ASC;');
+		
+		$userList = array();
+		
+		while ($row = mysqli_fetch_array($result)) {
+			array_push($userList, self::getUser($row['id']));
+		}
+		
+		MySQL::close($con);
+		
+		return $userList;
+	}
+	
+	/* 
+	 * Get a list of all users which is not member in a group
+	 */
+	public static function getNonMemberUsers() {
+		$con = MySQL::open(Settings::db_name_infected);
+		
+		$result = mysqli_query($con, 'SELECT `' . Settings::db_table_infected_users . '`.`id` FROM ' . Settings::db_table_infected_users . ' 
+									  LEFT JOIN `' . Settings::db_name_infected_crew . '`.`' . Settings::db_table_infected_crew_memberof . '` ON `' . Settings::db_table_infected_users . '`.`id` = `userId`
+									  WHERE `groupId` IS NULL 
+									  ORDER BY `firstname` ASC;');
+		
+		$userList = array();
+		
+		while ($row = mysqli_fetch_array($result)) {
+			array_push($userList, self::getUser($row['id']));
+		}
+		
+		MySQL::close($con);
+		
+		return $userList;
+	}
+	
+	/*
+	 * Create a new user
+	 */
 	public static function createUser($firstname, $lastname, $username, $password, $email, $birthDate, $gender, $phone, $address, $postalCode, $nickname) {
 		$con = MySQL::open(Settings::db_name_infected);
 		
@@ -92,21 +157,9 @@ class UserHandler {
 		MySQL::close($con);
 	}
 	
-	/* Remove user */
-	public static function removeUser($user) {
-		$con = MySQL::open(Settings::db_name_infected);
-		
-		mysqli_query($con, 'DELETE FROM `' . Settings::db_table_infected_users . '` 
-							WHERE `userId` = \'' . $user->getId() . '\';');
-		
-		if ($user->hasEmergencyContact()) {
-			EmergencyContactHandler::removeEmergenctContact($user);
-		}
-		
-		MySQL::close($con);
-	}
-	
-	/* Update user */
+	/* 
+	 * Update a user
+	 */
 	public static function updateUser($id, $firstname, $lastname, $username, $password, $email, $birthDate, $gender, $phone, $address, $postalCode, $nickname) {
 		$con = MySQL::open(Settings::db_name_infected);
 		
@@ -127,7 +180,25 @@ class UserHandler {
 		MySQL::close($con);
 	}
 	
-	/* Update users password */
+	/* 
+	 * Remove a user
+	 */
+	public static function removeUser($user) {
+		$con = MySQL::open(Settings::db_name_infected);
+		
+		mysqli_query($con, 'DELETE FROM `' . Settings::db_table_infected_users . '` 
+							WHERE `userId` = \'' . $user->getId() . '\';');
+		
+		if ($user->hasEmergencyContact()) {
+			EmergencyContactHandler::removeEmergenctContact($user);
+		}
+		
+		MySQL::close($con);
+	}
+	
+	/* 
+	 * Update a users password
+	 */
 	public static function updateUserPassword($userId, $password) {
 		$con = MySQL::open(Settings::db_name_infected);
 		
@@ -136,46 +207,6 @@ class UserHandler {
 							WHERE `id` = \'' . $userId . '\';');
 		
 		MySQL::close($con);
-	}
-	
-	/* Get a list of all users which is member in a group */
-	public static function getMemberUsers() {
-		$con = MySQL::open(Settings::db_name_infected);
-		
-		$result = mysqli_query($con, 'SELECT `' . Settings::db_table_infected_users . '`.`id` FROM `' . Settings::db_table_infected_users . '`
-									  LEFT JOIN `' . Settings::db_name_infected_crew . '`.`' . Settings::db_table_infected_crew_memberof . '` ON `' . Settings::db_table_infected_users . '`.`id` = `userId`
-									  WHERE `groupId` IS NOT NULL 
-									  ORDER BY `firstname` ASC;');
-		
-		$userList = array();
-		
-		while ($row = mysqli_fetch_array($result)) {
-			array_push($userList, self::getUser($row['id']));
-		}
-		
-		MySQL::close($con);
-		
-		return $userList;
-	}
-	
-	/* Get a list of all users which is not member in a group */
-	public static function getNonMemberUsers() {
-		$con = MySQL::open(Settings::db_name_infected);
-		
-		$result = mysqli_query($con, 'SELECT `' . Settings::db_table_infected_users . '`.`id` FROM ' . Settings::db_table_infected_users . ' 
-									  LEFT JOIN `' . Settings::db_name_infected_crew . '`.`' . Settings::db_table_infected_crew_memberof . '` ON `' . Settings::db_table_infected_users . '`.`id` = `userId`
-									  WHERE `groupId` IS NULL 
-									  ORDER BY `firstname` ASC;');
-		
-		$userList = array();
-		
-		while ($row = mysqli_fetch_array($result)) {
-			array_push($userList, self::getUser($row['id']));
-		}
-		
-		MySQL::close($con);
-		
-		return $userList;
 	}
 	
 	/* 
