@@ -72,8 +72,8 @@ if (isset($_POST['firstname']) &&
 				$user = UserHandler::getUserByName($username);
 				
 				if (isset($_POST['emergencycontactphone']) &&
-					!empty($_POST['emergencycontactphone'])) {
-					EmergencyContactHandler::createEmergencyContact($user->getId(), $emergencyContactPhone);
+					is_numeric($_POST['emergencycontactphone'])) {
+					EmergencyContactHandler::createEmergencyContact($user, $emergencyContactPhone);
 				}
 				
 				$user->sendRegistrationMail();
