@@ -2,7 +2,7 @@
 require_once 'session.php';
 require_once 'handlers/userhandler.php';
 
-$result = true;
+$result = false;
 $message = null;
 
 if (Session::isAuthenticated()) {
@@ -29,7 +29,7 @@ if (Session::isAuthenticated()) {
 				$message = 'Passordene du skrev inn var ikke like!';
 			}
 		} else {
-			$message = 'Det gamle passordet du skrev innvar ikke riktig.';
+			$message = 'Det gamle passordet du skrev inn var ikke riktig.';
 		}
 	} else {
 		$message = 'Du har ikke fyllt ut alle feltene.';
