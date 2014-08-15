@@ -65,7 +65,7 @@ class GameApplicationHandler {
 		$con = MySQL::open(Settings::db_name_infected_main);
 		
 		mysqli_query($con, 'INSERT INTO `' . Settings::db_table_infected_main_gameapplications . '` (`game`, `name`, `tag`, `contactname`, `contactnick`, `phone`, `email`) 
-							VALUES (\'' . $game . '\', 
+							VALUES (\'' . $game->getId() . '\', 
 									\'' . $name . '\', 
 									\'' . $tag . '\', 
 									\'' . $contactname . '\', 
