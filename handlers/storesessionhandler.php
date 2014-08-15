@@ -17,20 +17,20 @@ class StoreSessionHandler
 
 		if($row) {
 			return new StoreSession($row['id'], 
-				$row['userId'], 
-				$row['timeCreated'],
-				$row['ticketType'],
-				$row['amount'],
-				$row['key']);
+									$row['userId'], 
+									$row['timeCreated'],
+									$row['ticketType'],
+									$row['amount'],
+									$row['code']);
 		}
 	}
 	
 	public static function registerStoreSession($user, $type, $amount) {
 		$con = MySQL::open(Settings::db_name_infected_tickets);
 
-		$key = md5(time() . $user->getId() . "123");
+		$code = md5(time() . $user->getId() . "123");
 
-		$result = mysqli_query($con, 'INSERT INTO `' . Settings::db_table_infected_tickets_storesessions . '` (`userId`, `timeCreated`, `ticketType`, `amount`, `key`) VALUES (' . $user->getId() . ', ' . time() . ', ' . $type->getId() . ', ' . $amount . ', \'' . $key . '\')');
+		$result = mysqli_query($con, 'INSERT INTO `' . Settings::db_table_infected_tickets_storesessions . '` (`userId`, `timeCreated`, `ticketType`, `amount`, `code`) VALUES (' . $user->getId() . ', ' . time() . ', ' . $type->getId() . ', ' . $amount . ', \'' . $code . '\')');
 
 		MySQL::close($con);
 
@@ -89,7 +89,7 @@ class StoreSessionHandler
 	{
 		$con = MySQL::open(Settings::db_name_infected_tickets);
 
-		$result = mysqli_query($con, 'SELECT `id` FROM `' . Settings::db_table_infected_tickets_storesessions . '` WHERE `key`=' . $key . ' AND `timeCreated` > ' . self::oldestValidTimestamp() . ';');
+		$result = mysqli_query($con, 'SELECT `id` FROM `' . Settings::db_table_infected_tickets_storesessions . '` WHERE `code`=' . $code . ' AND `timeCreated` > ' . self::oldestValidTimestamp() . ';');
 
 		$row = mysqli_fetch_array($result);
 
@@ -104,7 +104,7 @@ class StoreSessionHandler
 	{
 		$con = MySQL::open(Settings::db_name_infected_tickets);
 
-		$result = mysqli_query($con, 'SELECT `userId` FROM `' . Settings::db_table_infected_tickets_storesessions . '` WHERE `key`=' . $key . ' AND `timeCreated` > ' . self::oldestValidTimestamp() . ';');
+		$result = mysqli_query($con, 'SELECT `userId` FROM `' . Settings::db_table_infected_tickets_storesessions . '` WHERE `code`=' . $code . ' AND `timeCreated` > ' . self::oldestValidTimestamp() . ';');
 
 		$row = mysqli_fetch_array($result);
 
@@ -115,9 +115,9 @@ class StoreSessionHandler
 		}
 	}
 
-	public static function purchaseComplete($key, $price, $amount)
+	public static function purchaseComplete($code, $price, $amount)
 	{
-		$storeSession = self::getStoreSessionFromKey($key);
+		$storeSession = self::getStoreSessionFromcode($code);
 		if( !isset($storeSession) )
 		{
 			return false;

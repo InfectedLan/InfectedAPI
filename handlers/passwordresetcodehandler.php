@@ -1,6 +1,7 @@
 <?php
 require_once 'settings.php';
 require_once 'mysql.php';
+require_once 'handlers/userhandler.php';
 
 class PasswordResetCodeHandler {
 	public static function createPasswordResetCode($user) {
@@ -60,7 +61,7 @@ class PasswordResetCodeHandler {
 		MySQL::close($con);
 
 		if ($row) {
-			return self::getUser($row['userId']);
+			return UserHandler::getUser($row['userId']);
 		}
 	}
 	
