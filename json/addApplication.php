@@ -28,7 +28,7 @@ if (Session::isAuthenticated()) {
 		$message = 'Du er allerede med i et crew.';
 	}
 } else {
-	$message = "Du er allerede logget inn!";
+	$message = 'Du er allerede logget inn!';
 } 
 
 echo json_encode(array('result' => $result, 'message' => $message));

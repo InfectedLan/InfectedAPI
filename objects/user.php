@@ -187,7 +187,7 @@ class User {
 		$message = '<html>' .
 						'<body>' .
 							'<h3>Hei!</h3>' .
-							'<p>For å aktivere din bruker hos Infected, trenger du bare å klikke på <a href="' . $url . '">denne</a> linken.</p>' .
+							'<p>For å aktivere din bruker på ' . $_SERVER['HTTP_HOST'] . ', trenger du bare å klikke på <a href="' . $url . '">denne</a> linken.</p>' .
 						'</body>' .
 					'</html>';
 			
@@ -202,14 +202,11 @@ class User {
 		$code = PasswordResetCodeHandler::createPasswordResetCode($this);
 		
 		// Send an email to the user with a link for resetting the password.
-		$url = 'https://' . $_SERVER['HTTP_HOST'] . $_SERVER['REQUEST_URI'] . 'index.php?page&=reset-password=' . $code;
+		$url = 'https://' . $_SERVER['HTTP_HOST'] . '/v2/index.php?page=reset-password&code=' . $code;
 		$message = '<html>' .
-						'<head>' .
-							'<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />' .
-						'</head>' .
 						'<body>' .
 							'<h3>Hei!</h3>' .
-							'<p>For å tilbakestille passordet ditt må du klikke <a href="' . $url . '">her</a>.</p>' .
+							'<p>For å tilbakestille passordet ditt på ' . $_SERVER['HTTP_HOST'] . ', trenger du bare å klikke på <a href="' . $url . '">denne</a> linken.</p>' .
 						'</body>' .
 					'</html>';
 			
