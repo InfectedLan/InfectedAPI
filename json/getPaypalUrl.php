@@ -1,10 +1,12 @@
 <?php
 	require_once 'session.php';
 	require_once 'handlers/storesessionhandler.php';
+	require_once 'handlers/userhandler.php';
+	require_once 'paypal/paypal.php';
 
 	$result = false;
 	$message = null;
-	$key = null;
+	$url = null;
 
 	if (Session::isAuthenticated()) {
 		$user = Session::getCurrentUser();
@@ -14,10 +16,18 @@
 			$amount = $_GET['amount'];
 
 			if(!StoreSessionHandler::hasStoreSession($user)) {
-				$key = StoreSessionHandler::registerStoreSession($user, TicketTypeHandler::getTicketType($type), $amount);
+				$ticketType = TicketTypeHandler::getTicketType($type);
+				//Register store session
+				$key = StoreSessionHandler::registerStoreSession($user, $ticketType, $amount);
 
-				$result = true;
-				$message = 'Hi mom!';
+				$url = PayPal::getPaymentUrl($ticketType, $amount, $key, $user);
+
+				if( isset($url) ) {
+					$result = true;
+				} else {
+					$message = "Noe gikk galt da vi snakket med paypal";
+				}
+
 			} else {
 				$message = "Du har allerede en session!";
 			}
@@ -30,7 +40,7 @@
 
 	if($result)
 	{
-		echo json_encode(array('result' => $result, 'key' => $key));
+		echo json_encode(array('result' => $result, 'url' => $url));
 	}
 	else
 	{
