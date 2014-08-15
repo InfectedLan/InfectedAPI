@@ -7,8 +7,7 @@ class GameApplicationHandler {
 	public static function getGameApplication($id) {
 		$con = MySQL::open(Settings::db_name_infected_main);
 		
-		$result = mysqli_query($con, 'SELECT * 
-									  FROM `' . Settings::db_table_infected_main_gameapplications . '` 
+		$result = mysqli_query($con, 'SELECT * FROM `' . Settings::db_table_infected_main_gameapplications . '` 
 									  WHERE `id` = \'' . $id . '\';');
 										
 		$row = mysqli_fetch_array($result);
@@ -30,9 +29,26 @@ class GameApplicationHandler {
 	public static function getGameApplications($game) {
 		$con = MySQL::open(Settings::db_name_infected_main);
 		
-		$result = mysqli_query($con, 'SELECT `id` 
-									  FROM `' . Settings::db_table_infected_main_gameapplications . '` 
-									  WHERE `game` = \'' . $game . '\';');
+		$result = mysqli_query($con, 'SELECT `id` FROM `' . Settings::db_table_infected_main_gameapplications . '` 
+									  WHERE `game` = \'' . $game->getId() . '\';');
+									
+		$gameApplicationList = array();
+		
+		while ($row = mysqli_fetch_array($result)) {
+			array_push($gameApplicationList, self::getGameApplication($row['id']));
+		}
+		
+		return $gameApplicationList;
+		
+		MySQL::close($con);
+	}
+	
+	public static function getGameApplicationsForEvent($game, $event) {
+		$con = MySQL::open(Settings::db_name_infected_main);
+		
+		$result = mysqli_query($con, 'SELECT `id` FROM `' . Settings::db_table_infected_main_gameapplications . '` 
+									  WHERE `event` = \'' . $event->getId() . '\'
+									  AND `game` = \'' . $game->getId() . '\';');
 									
 		$gameApplicationList = array();
 		
