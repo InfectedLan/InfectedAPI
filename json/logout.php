@@ -8,9 +8,8 @@ if (Session::isAuthenticated()) {
 	unset($_SESSION['user']);
 	
 	$result = true;
-	$message = 'Du er nå logget ut.';
 } else {
-	$message = 'En feil oppstod!';
+	$message = 'Du er ikke logget inn.';
 }
 
 echo json_encode(array('result' => $result, 'message' => $message));
