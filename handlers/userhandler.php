@@ -59,8 +59,9 @@ class UserHandler {
 	public static function getUsers() {
 		$con = MySQL::open(Settings::db_name_infected);
 		
-		$result = mysqli_query($con, 'SELECT `id` FROM `' . Settings::db_table_infected_users . '`;');
-		
+		$result = mysqli_query($con, 'SELECT `id` FROM `' . Settings::db_table_infected_users . '`
+									  ORDER BY `firstname` ASC;');
+									  
 		$userList = array();
 		
 		while ($row = mysqli_fetch_array($result)) {
@@ -78,7 +79,8 @@ class UserHandler {
 	public static function getPermissionUsers() {
 		$con = MySQL::open(Settings::db_name_infected);
 		
-		$result = mysqli_query($con, 'SELECT `userId` FROM `' . Settings::db_table_infected_permissions . '`;');
+		$result = mysqli_query($con, 'SELECT `userId` FROM `' . Settings::db_table_infected_permissions . '`
+									  ORDER BY `firstname` ASC;');
 		
 		$userList = array();
 		
