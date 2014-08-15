@@ -5,9 +5,9 @@ require_once 'handlers/passwordresetcodehandler.php';
 $result = false;
 $message = null;
 
-if (!isset($_GET['key'])) {
-	if (isset($_POST['username'])) {
-		$username = $_POST['username'];
+if (!isset($_GET['code'])) {
+	if (isset($_GET['username'])) {
+		$username = $_GET['username'];
 		
 		if (UserHandler::userExists($username)) {
 			$user = UserHandler::getUserByName($username);
@@ -24,17 +24,15 @@ if (!isset($_GET['key'])) {
 		$message = 'Du må skrive inn en e-postadresse eller ett brukernavn!';
 	}
 } else {
-	if (isset($_POST['password']) &&
-		isset($_POST['confirmpassword']) &&
-		!empty($_POST['password']) &&
-		!empty($_POST['confirmpassword'])) {
-		$code = $_GET['key'];
-		$password = $_POST['password'];
-		$confirmPassword = $_POST['confirmpassword'];
+	if (isset($_GET['password']) &&
+		isset($_GET['confirmpassword']) &&
+		!empty($_GET['password']) &&
+		!empty($_GET['confirmpassword'])) {
+		$code = $_GET['code'];
+		$password = $_GET['password'];
+		$confirmPassword = $_GET['confirmpassword'];
 		
-		echo $code;
-		
-		if (PasswordResetCodeHandler::hasPasswordResetCode($code)) {
+		if (PasswordResetCodeHandler::existsPasswordResetCode($code)) {
 			$user = PasswordResetCodeHandler::getUserFromPasswordResetCode($code);
 			
 			if ($password == $confirmPassword) {
