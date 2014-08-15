@@ -6,7 +6,6 @@ class Settings {
 	const keywords = 'infected, lan, party, asker, kulturhus, ungdom, gaming';
 	public static $authors = array('halvors', 'petterroea');
 	
-	const path = 'http://api.infectedlan.tk/';
 	const qr_path = '/home/infectedlan.tk/public_html/api/images/qrcache/';
 	
 	const emailName = 'Infected';
