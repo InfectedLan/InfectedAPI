@@ -27,8 +27,7 @@ class AvatarHandler {
 	public static function getAvatarForUser($userId) {
 		$con = MySQL::open(Settings::db_name_infected_crew);
 		
-		$result = mysqli_query($con, 'SELECT `id` 
-									  FROM `' . Settings::db_table_infected_crew_avatars . '` 
+		$result = mysqli_query($con, 'SELECT `id` FROM `' . Settings::db_table_infected_crew_avatars . '` 
 									  WHERE `userId` = \'' . $userId . '\'
 									  AND `state` = \'2\';');
 		
@@ -38,6 +37,8 @@ class AvatarHandler {
 		
 		if ($row) {
 			return self::getAvatar($row['id']);
+		} else {
+			return new Avatar(0, $userId, null, 0);
 		}
 	}
 	
