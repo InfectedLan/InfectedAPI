@@ -9,8 +9,8 @@ if (Session::isAuthenticated()) {
 	$user = Session::getCurrentUser();
 	
 	if ($user->hasPermission('*') ||
-		$user->hasPermission('admin-events') ||
-		$user->isGroupMember() && $user->isGroupLeader()) {
+		$user->hasPermission('admin.events') ||
+		$user->isGroupLeader()) {
 		if (isset($_GET['theme']) &&
 			isset($_GET['startDate']) &&
 			isset($_GET['startTime']) &&

@@ -9,7 +9,7 @@ if (Session::isAuthenticated()) {
 	$user = Session::getCurrentUser();
 	
 	if ($user->hasPermission('*') ||
-		$user->hasPermission('functions.group') ||
+		$user->hasPermission('functions.groups') ||
 		$user->isGroupLeader()) {
 		if (isset($_GET['title']) &&
 			isset($_GET['description']) &&
