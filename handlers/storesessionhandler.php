@@ -144,6 +144,8 @@ class StoreSessionHandler
 		}
 
 		self::deleteStoreSession($storeSession);
+
+		return true;
 	}
 }
 ?>

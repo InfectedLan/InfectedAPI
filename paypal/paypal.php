@@ -85,7 +85,7 @@
 			$_SESSION["amt"] = $resArray["AMT"];
 			$_SESSION["desc"] = $resArray["L_PAYMENTREQUEST_0_DESC0"];
 			$_SESSION["qty"] = $resArray["L_PAYMENTREQUEST_0_QTY0"];
-			$_SESSION["eventcode"] = $resArray["L_PAYMENTREQUEST_0_NAME0"];
+			$_SESSION["key"] = $resArray["L_PAYMENTREQUEST_0_NAME0"];
 		}
 	}
 ?>
