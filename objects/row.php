@@ -1,25 +1,30 @@
 <?php
+require_once 'handlers/entrancehandler.php';
+
 class Row {
 	private $id;
+	private $number;
 	private $x;
 	private $y;
-	private $row;
+	private $entrance;
 	private $seatmap;
 
 	/*
 	 * Row - implementation of a section of seats
 	 *
 	 * Id: Unique id of section
+	 * Number: Row number
 	 * X: X coordinate of section
 	 * Y: Y coordinate of section
-	 * Row: Row number
+	 * Entrance: Entrance number
 	 * Event: Event this section belongs to
 	 */ 
-	public function __construct($id, $x, $y, $row, $seatmap) {
+	public function __construct($id, $number, $x, $y, $entrance, $seatmap) {
 		$this->id = $id;
+		$this->number = $number;
 		$this->x = $x;
 		$this->y = $y;
-		$this->row = $row;
+		$this->entrance = $entrance;
 		$this->seatmap = $seatmap;
 	}
 
@@ -30,6 +35,13 @@ class Row {
 		return $this->id;
 	}
 
+	/*
+	 * Returns the row of the section
+	 */
+	public function getNumber() {
+		return $this->number;
+	}
+	
 	/*
 	 * Returns the x coordinate of the section
 	 */
@@ -47,8 +59,8 @@ class Row {
 	/*
 	 * Returns the row of the section
 	 */
-	public function getNumber() {
-		return $this->row;
+	public function getEntrance() {
+		return EntranceHandler::getEntrance($this->entrance);
 	}
 
 	/*

@@ -18,9 +18,10 @@ class RowHandler {
 
 		if ($row) {
 			return new Row($row['id'], 
+						   $row['number'],
 						   $row['x'], 
 						   $row['y'], 
-						   $row['row'], 
+						   $row['entrance'], 
 						   $row['seatmap']);
 		}
 	}
@@ -52,7 +53,7 @@ class RowHandler {
 
 		$newRowNumber = $row['row']+1;
 
-		mysqli_query($con, 'INSERT INTO ' . Settings::db_table_infected_tickets_rows . '(`seatmap`, `x`, `y`, `row`) VALUES (\'' . $seatmapId . '\', ' . $x . ', ' . $y . ', ' . $newRowNumber . ')');
+		mysqli_query($con, 'INSERT INTO ' . Settings::db_table_infected_tickets_rows . '(`number`, `x`, `y`, `seatmap`) VALUES (\'' . $newRowNumber . '\', ' . $x . ', ' . $y . ', ' . $seatmapId . ')');
 
 		$result = mysqli_query($con, 'SELECT id FROM ' .  Settings::db_table_infected_tickets_rows . ' ORDER BY id DESC LIMIT 1;');
 

@@ -47,12 +47,13 @@ class Settings {
 	const db_table_infected_crew_teams = 'teams';
 	
 	// InfectedTickets
+	const db_table_infected_tickets_entrances = 'entrances';
+	const db_table_infected_tickets_paymentlog = 'paymentlog';
 	const db_table_infected_tickets_rows = 'rows';
+	const db_table_infected_tickets_seatmaps = 'seatmaps';
 	const db_table_infected_tickets_seats = 'seats';
+	const db_table_infected_tickets_storesessions = 'storesessions';
 	const db_table_infected_tickets_tickets = 'tickets';
 	const db_table_infected_tickets_tickettypes = 'tickettypes';
-	const db_table_infected_tickets_seatmaps = 'seatmaps';
-	const db_table_infected_tickets_storesessions = 'storesessions';
-	const db_table_infected_tickets_paymentlog = 'paymentlog';
 }
 ?>
