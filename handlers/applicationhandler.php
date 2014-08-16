@@ -84,7 +84,11 @@ class ApplicationHandler {
 		mysqli_query($con, 'UPDATE `' . Settings::db_table_infected_crew_applications . '` 
 							SET `state` =  \'2\'
 							WHERE `id` = \'' . $id . '\';');
-									
+		
+		// Set the user in the new group
+		$application = self::getApplication($id);
+		GroupHandler::changeGroup($application->getUser(), $application->getGroup());
+		
 		MySQL::close($con);
 	}
 	

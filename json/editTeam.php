@@ -9,8 +9,9 @@ $message = null;
 if (Session::isAuthenticated()) {
 	$user = Session::getCurrentUser();
 	
-	if ($user->hasPermission('admin') ||
-		$user->isGroupMember() && $user->isGroupLeader()) {
+	if ($user->hasPermission('*') ||
+		$user->hasPermission('chief.teams') ||
+		$user->isGroupLeader()) {
 		if (isset($_GET['teamId']) &&
 			isset($_GET['groupId']) &&
 			isset($_GET['title']) &&

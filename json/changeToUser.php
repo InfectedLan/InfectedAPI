@@ -8,8 +8,8 @@ $message = null;
 if (Session::isAuthenticated()) {
 	$user = Session::getCurrentUser();
 	
-	if ($user->hasPermission('admin') ||
-		$user->hasPermission('admin.changeuser')) {
+	if ($user->hasPermission('*') ||
+		$user->hasPermission('admin.change-user')) {
 		if (isset($_GET['userId']) &&
 			is_numeric($_GET['userId'])) {
 			$changeUser = UserHandler::getUser($_GET['userId']);

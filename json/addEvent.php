@@ -8,7 +8,7 @@ $message = null;
 if (Session::isAuthenticated()) {
 	$user = Session::getCurrentUser();
 	
-	if ($user->hasPermission('admin') ||
+	if ($user->hasPermission('*') ||
 		$user->hasPermission('admin-events') ||
 		$user->isGroupMember() && $user->isGroupLeader()) {
 		if (isset($_GET['theme']) &&

@@ -9,8 +9,8 @@ $message = null;
 if (Session::isAuthenticated()) {
 	$user = Session::getCurrentUser();
 	
-	if ($user->hasPermission('admin') ||
-		$user->hasPermission('admin-permissions')) {
+	if ($user->hasPermission('*') ||
+		$user->hasPermission('admin.permissions')) {
 		if (isset($_GET['userId']) &&
 			isset($_GET['value']) &&
 			is_numeric($_GET['userId']) &&

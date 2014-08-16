@@ -9,10 +9,10 @@
 
 	if (Session::isAuthenticated()) {
 		$user = Session::getCurrentUser();
-		if ($user->hasPermission('admin.seatmap') ||
-			$user->hasPermission('admin')) {
-			if(isset($_GET["row"]))
-			{
+		
+		if ($user->hasPermission('*') ||
+			$user->hasPermission('admin.seatmap')) {
+			if(isset($_GET["row"])) {
 				$row = RowHandler::getRow($_GET["row"]);
 				if(isset($row))
 				{

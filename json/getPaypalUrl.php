@@ -10,6 +10,7 @@ $url = null;
 
 if (Session::isAuthenticated()) {
 	$user = Session::getCurrentUser();
+	
 	if (isset($_GET['ticketType']) &&
 		isset($_GET['amount'])) {		
 		$type = $_GET['ticketType'];

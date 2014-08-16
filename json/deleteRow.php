@@ -9,11 +9,12 @@
 
 	if (Session::isAuthenticated()) {
 		$user = Session::getCurrentUser();
-		if ($user->hasPermission('admin.seatmap') ||
-			$user->hasPermission('admin')) {
-			if(isset($_GET["row"]))
-			{
-				$row = RowHandler::getRow($_GET["row"]);
+		
+		if ($user->hasPermission('*') ||
+			$user->hasPermission('admin.seatmap')) {
+			
+			if(isset($_GET['row'])) {
+				$row = RowHandler::getRow($_GET['row']);
 				if(isset($row))
 				{
 					if(RowHandler::safeToDelete($row))
@@ -23,27 +24,27 @@
 					}
 					else
 					{
-						$message = "Noen sitter på raden du prøver å slette!";
+						$message = 'Noen sitter på raden du prøver å slette!';
 					}
 				}
 				else
 				{
-					$message = "Raden eksisterer ikke!";
+					$message = 'Raden eksisterer ikke!';
 				}
 			}
 			else
 			{
-				$message = "Raden er ikke satt!";
+				$message = 'Raden er ikke satt!';
 			}
 		}
 		else
 		{
-			$message = "Du har ikke tillatelse til å legge til en rad!";
+			$message = 'Du har ikke tillatelse til å legge til en rad!';
 		}
 	}
 	else
 	{
-		$message = "Du må logge inn først!";
+		$message = 'Du må logge inn først!';
 	}
 
 	if($result)

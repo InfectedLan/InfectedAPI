@@ -18,7 +18,7 @@ if (Session::isAuthenticated()) {
 			$content = $_GET['content'];
 		
 			ApplicationHandler::createApplication($user, $group, $content);
-		
+			
 			$result = true;
 			$message = 'Din søknad til ' . $group->getTitle() . ' crew er sendt.';
 		} else {

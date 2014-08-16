@@ -7,10 +7,11 @@
 
 	if (Session::isAuthenticated()) {
 		$user = Session::getCurrentUser();
-		if ($user->hasPermission('admin.seatmap') ||
-			$user->hasPermission('admin')) {
-			if(isset($_POST["seatmapId"]))
-			{
+		
+		if ($user->hasPermission('*') ||
+			$user->hasPermission('admin.seatmap')) {
+			
+			if(isset($_POST["seatmapId"])) {
 				$seatmap = SeatmapHandler::getSeatmap($_POST["seatmapId"]);
 				if(isset($seatmap))
 				{

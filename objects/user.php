@@ -1,7 +1,7 @@
 <?php
 require_once 'mailmanager.php';
 require_once 'handlers/citydictionary.php';
-require_once 'handlers/permissionshandler.php';
+require_once 'handlers/userpermissionshandler.php';
 require_once 'handlers/registrationcodehandler.php';
 require_once 'handlers/passwordresetcodehandler.php';
 require_once 'handlers/tickethandler.php';
@@ -158,14 +158,14 @@ class User {
 	 * Returns true if user have specified permission, otherwise false.
 	 */
 	public function hasPermission($value) {
-		return PermissionsHandler::hasPermission($this, $value);
+		return UserPermissionsHandler::hasUserPermission($this, $value);
 	}
 	
 	/* 
 	 * Returns the permissions assigned to this user.
 	 */
 	public function getPermissions() {
-		return PermissionsHandler::getPermissions($this);
+		return UserPermissionsHandler::getUserPermissions($this);
 	}
 	
 	/* 
