@@ -79,8 +79,8 @@ class UserHandler {
 	public static function getPermissionUsers() {
 		$con = MySQL::open(Settings::db_name_infected);
 		
-		$result = mysqli_query($con, 'SELECT `userId` FROM `' . Settings::db_table_infected_permissions . '`
-									  ORDER BY `firstname` ASC;');
+		$result = mysqli_query($con, 'SELECT `userId` FROM `' . Settings::db_table_infected_userpermissions . '`
+									  GROUP BY `userId`;');
 		
 		$userList = array();
 		

@@ -1,7 +1,7 @@
 <?php
 require_once 'session.php';
 require_once 'handlers/userhandler.php';
-require_once 'handlers/permissionshandler.php';
+require_once 'handlers/userpermissionshandler.php';
 
 $result = false;
 $message = null;
@@ -18,7 +18,7 @@ if (Session::isAuthenticated()) {
 			$user = UserHandler::getUser($_GET['userId']);
 			$value = $_GET['value'];
 			
-			PermissionsHandler::createPermission($user, $value);
+			UserPermissionsHandler::createUserPermission($user, $value);
 			$result = true;
 		} else {
 			$message = 'Du har ikke fyllt ut alle feltene!';

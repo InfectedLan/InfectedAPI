@@ -36,13 +36,15 @@ class UserPermissionsHandler {
 	}
 	
 	public static function createUserPermission($user, $value) {
-		$con = MySQL::open(Settings::db_name_infected);
+		if (!self::hasUserPermission($user, $value)) {
+			$con = MySQL::open(Settings::db_name_infected);
 		
-		mysqli_query($con, 'INSERT INTO `' . Settings::db_table_infected_userpermissions . '` (`userId`, `value`) 
-							VALUES (\'' . $user->getId() . '\', 
-									\'' . $value . '\')');
-		
-		MySQL::close($con);
+			mysqli_query($con, 'INSERT INTO `' . Settings::db_table_infected_userpermissions . '` (`userId`, `value`) 
+								VALUES (\'' . $user->getId() . '\', 
+										\'' . $value . '\')');
+			
+			MySQL::close($con);
+		}
 	}
 	
 	public static function removeUserPermission($user, $value) {
