@@ -52,5 +52,20 @@ class SeatHandler {
 
 		return $row ? true : false;
 	}
+
+	public static function getOwner($seat)
+	{
+		$con = MySQL::open(Settings::db_name_infected_tickets);
+
+		$result = mysqli_query($con, 'SELECT `ownerId` FROM `' . Settings::db_table_infected_tickets_tickets . '` WHERE `seatId`=' . $seat->getId() . ';');
+		
+		$row = mysqli_fetch_array($result);
+
+		MySQL::close($con);
+
+		if($row) {
+			return UserHandler::getUser($row['ownerId']);
+		}		
+	}
 }
 ?>

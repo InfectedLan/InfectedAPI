@@ -151,6 +151,21 @@ class TicketHandler {
 
 		MySQL::close($con);
 	}
+	public static function getTicketsSeatableByUser($user, $event)
+	{
+		$con = MySQL::open(Settings::db_name_infected_tickets),
 
+		$result = mysqli_query($con, 'SELECT `id` FROM `' . Settings::db_table_infected_tickets_tickets . '` WHERE ( `seaterId`=' . $user->getId() . ' OR (`ownerId`=' . $user->getId() . ' AND `seaterId` = 0) ) AND `eventId`=' . $event->getId() . ';');
+	
+		$ticketList = array();
+
+		while($row = mysqli_fetch_array($result)) {
+			array_push($ticketList, self::getTicket($row['id']));
+		}
+
+		MySQL::close($con);
+
+		return $ticketList;
+	}
 }
 ?>
