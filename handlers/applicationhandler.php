@@ -64,7 +64,7 @@ class ApplicationHandler {
 	}
 	
 	/* Returns a list of pending applications */
-	public static function getPendingApplications($group) {
+	public static function getPendingApplicationsForGroup($group) {
 		$con = MySQL::open(Settings::db_name_infected_crew);
 		
 		$result = mysqli_query($con, 'SELECT `id` FROM `' . Settings::db_table_infected_crew_applications . '`
