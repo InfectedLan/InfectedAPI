@@ -10,7 +10,6 @@ if (Session::isAuthenticated()) {
 	
 	if (isset($_GET['firstname']) &&
 		isset($_GET['lastname']) &&
-		isset($_GET['email']) &&
 		isset($_GET['gender']) &&
 		isset($_GET['birthday']) &&
 		isset($_GET['birthmonth']) &&
@@ -21,31 +20,28 @@ if (Session::isAuthenticated()) {
 		isset($_GET['nickname']) &&
 		!empty($_GET['firstname']) &&
 		!empty($_GET['lastname']) &&
-		!empty($_GET['email']) &&
 		is_numeric($_GET['gender']) &&
 		is_numeric($_GET['birthday']) &&
 		is_numeric($_GET['birthmonth']) &&
 		is_numeric($_GET['birthyear']) &&
 		is_numeric($_GET['phone']) &&
 		!empty($_GET['address']) &&
-		is_numeric($_GET['postalcode']) &&
-		!empty($_GET['nickname'])) {
+		is_numeric($_GET['postalcode'])) {
 		$firstname = $_GET['firstname'];
 		$lastname = $_GET['lastname'];
-		$email = $_GET['email'];
 		$gender = $_GET['gender'];
-		$birthdate = date('Y-m-d', strtotime($_GET['birthyear'] . '-' . $_GET['birthmonth'] . '-' . $_GET['birthday'])); 
+		$birthdate = $_GET['birthyear'] . '-' . $_GET['birthmonth'] . '-' . $_GET['birthday']; 
 		$phone = $_GET['phone'];
 		$address = $_GET['address'];
 		$postalcode = $_GET['postalcode'];
-		$nickname = $_GET['nickname'];
+		$nickname = empty($_GET['nickname']) ? $user->getUsername() : $_GET['nickname'];
 		
 		UserHandler::updateUser($user->getId(),
 								$firstname, 
 								$lastname, 
 								$user->getUsername(), 
 								$user->getPassword(), 
-								$email, 
+								$user->getEmail(), 
 								$birthdate, 
 								$gender, 
 								$phone, 
