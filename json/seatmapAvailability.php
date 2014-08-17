@@ -52,7 +52,9 @@
 						else
 						{
 							$data['occupied'] = true;
-							$data['occupiedBy'] = htmlspecialchars($owner->getDisplayName());
+							$ticket = SeatHandler::getTicket($seat);
+							$data['occupiedTicket'] = array('id' => $ticket->getId(), 
+															'owner' => htmlspecialchars($owner->getDisplayName()) );
 						}
 
 						array_push($seatData, $data);

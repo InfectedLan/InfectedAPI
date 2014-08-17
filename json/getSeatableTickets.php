@@ -1,25 +1,28 @@
 <?php
 	require_once 'session.php';
 	require_once 'handlers/tickethandler.php';
+	require_once 'handlers/seatmaphandler.php';
 
 	$result = false;
 	$message = null;
-	$ticketData = null;
+	$ticketData = array();
 	if(Session::isAuthenticated())
 	{
 		if(isset($_GET['seatmap']))
 		{
-			//TODO
-			$event = EventHandler::getEvent($_GET['event']);
-			if(isset($event))
+			$seatmap = SeatmapHandler::getSeatmap($_GET['seatmap']);
+			if(isset($seatmap))
 			{
+				$event = SeatmapHandler::getEvent($seatmap);
 				$user = Session::getCurrentUser();
 				$tickets = TicketHandler::getTicketsSeatableByUser($user, $event);
 				foreach($tickets as $ticket)
 				{
 					$ticketOwner = $ticket->getOwner();
-					array_push($ticketData, array('id' => $ticket->getId(), 
-													'owner' => $ticketOwner->getDisplayName() ));
+					$data = array();
+					$data['id'] = $ticket->getId();
+					$data['owner'] = $ticketOwner->getDisplayName();
+					array_push($ticketData, $data);
 				}
 				$result = true;
 			}

@@ -89,5 +89,9 @@ class Ticket {
 	public function getQrImagePath() {
 		return QR::getCode('https://tickets.infected.no/field/verifyTicket.php?id=' . $this->id);
 	}
+
+	public function canSeat($user) {
+		return ($this->ownerId == $user->getId() && $this->seaterId == 0) || $this->seaterId == $user->getId();
+	}
 }
 ?>

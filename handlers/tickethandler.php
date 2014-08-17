@@ -153,7 +153,7 @@ class TicketHandler {
 	}
 	public static function getTicketsSeatableByUser($user, $event)
 	{
-		$con = MySQL::open(Settings::db_name_infected_tickets),
+		$con = MySQL::open(Settings::db_name_infected_tickets);
 
 		$result = mysqli_query($con, 'SELECT `id` FROM `' . Settings::db_table_infected_tickets_tickets . '` WHERE ( `seaterId`=' . $user->getId() . ' OR (`ownerId`=' . $user->getId() . ' AND `seaterId` = 0) ) AND `eventId`=' . $event->getId() . ';');
 	
@@ -166,6 +166,14 @@ class TicketHandler {
 		MySQL::close($con);
 
 		return $ticketList;
+	}
+	public static function changeSeat($ticket, $seat)
+	{
+		$con = MySQL::open(Settings::db_name_infected_tickets);
+
+		$result = mysqli_query($con, 'UPDATE `' . Settings::db_table_infected_tickets_tickets . '` SET `seatId` = ' . $seat->getId() . ' WHERE `id` = ' . $ticket->getId() . ';');
+		
+		MySQL::close($con);
 	}
 }
 ?>

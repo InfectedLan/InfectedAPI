@@ -2,6 +2,7 @@
 require_once 'settings.php';
 require_once 'mysql.php';
 require_once 'handlers/rowhandler.php';
+require_once 'handlers/eventhandler.php';
 require_once 'objects/seatmap.php';
 
 class SeatmapHandler {
@@ -82,6 +83,21 @@ class SeatmapHandler {
 		mysqli_query($con, 'UPDATE `' . Settings::db_table_infected_tickets_seatmaps . '` SET `backgroundImage`=\'' . $filename . '\' WHERE `id`=' . $seatmap->getId() . ';');
 	
 		MySQL::close($con);
+	}
+
+	public static function getEvent($seatmap)
+	{
+		$con = MySQL::open(Settings::db_name_infected);
+
+		$result = mysqli_query($con, 'SELECT `id` FROM `' . Settings::db_table_infected_events . '` WHERE `seatmap`=' . $seatmap->getId() . ';');
+
+		$row = mysqli_fetch_array($result);
+
+		MySQL::close($con);
+
+		if($row) {
+			return EventHandler::getEvent($row['id']);
+		}
 	}
 }
 ?>

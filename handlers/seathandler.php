@@ -2,6 +2,8 @@
 require_once 'settings.php';
 require_once 'mysql.php';
 require_once 'objects/seat.php';
+require_once 'handlers/tickethandler.php';
+require_once 'handlers/rowhandler.php';
 
 class SeatHandler {
 	public static function getSeat($id) {
@@ -66,6 +68,26 @@ class SeatHandler {
 		if($row) {
 			return UserHandler::getUser($row['ownerId']);
 		}		
+	}
+
+	public static function getTicket($seat)
+	{
+		$con = MySQL::open(Settings::db_name_infected_tickets);
+
+		$result = mysqli_query($con, 'SELECT `id` FROM `' . Settings::db_table_infected_tickets_tickets . '` WHERE `seatId`=' . $seat->getId() . ';');
+		
+		$row = mysqli_fetch_array($result);
+
+		MySQL::close($con);
+
+		if($row) {
+			return TicketHandler::getTicket($row['id']);
+		}		
+	}
+
+	public static function getEvent($seat)
+	{
+		return RowHandler::getEvent($seat->getRow());
 	}
 }
 ?>

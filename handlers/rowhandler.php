@@ -2,6 +2,7 @@
 require_once 'settings.php';
 require_once 'mysql.php';
 require_once 'objects/row.php';
+require_once 'handlers/seatmaphandler.php';
 require_once 'handlers/seathandler.php';
 	
 class RowHandler {
@@ -115,6 +116,11 @@ class RowHandler {
 		mysqli_query($con, 'UPDATE `rows` SET `x`=' . $x . ',`y`=' . $y . ' WHERE `id`=' . $row->getId() . ';');
 
 		MySQL::close($con);
+	}
+
+	public static function getEvent($row)
+	{
+		return SeatmapHandler::getEvent(SeatmapHandler::getSeatmap($row->getSeatmap()));
 	}
 }
 ?>
