@@ -12,7 +12,7 @@ class UserHandler {
 		$con = MySQL::open(Settings::db_name_infected);
 		
 		$result = mysqli_query($con, 'SELECT * FROM `' . Settings::db_table_infected_users . '` 
-									  WHERE `id` = \'' . $id . '\';');
+									  WHERE `id` = \'' . $con->real_escape_string($id) . '\';');
 							
 		$row = mysqli_fetch_array($result);
 		
@@ -41,8 +41,8 @@ class UserHandler {
 		$con = MySQL::open(Settings::db_name_infected);
 		
 		$result = mysqli_query($con, 'SELECT `id` FROM `' . Settings::db_table_infected_users . '` 
-									  WHERE `username` = \'' . $username . '\' 
-									  OR `email` = \'' . $username . '\';');
+									  WHERE `username` = \'' . $con->real_escape_string($username) . '\' 
+									  OR `email` = \'' . $con->real_escape_string($username) . '\';');
 									  
 		$row = mysqli_fetch_array($result);
 		
@@ -144,17 +144,17 @@ class UserHandler {
 		$con = MySQL::open(Settings::db_name_infected);
 		
 		mysqli_query($con, 'INSERT INTO `' . Settings::db_table_infected_users . '` (`firstname`, `lastname`, `username`, `password`, `email`, `birthdate`, `gender`, `phone`, `address`, `postalcode`, `nickname`) 
-							VALUES (\'' . $firstname . '\', 
-									\'' . $lastname . '\', 
-									\'' . $username . '\', 
-									\'' . $password . '\', 
-									\'' . $email . '\', 
-									\'' . $birthDate . '\', 
-									\'' . $gender . '\', 
-									\'' . $phone . '\', 
-									\'' . $address. '\', 
-									\'' . $postalCode . '\', 
-									\'' . $nickname . '\');');
+							VALUES (\'' . $con->real_escape_string($firstname) . '\', 
+									\'' . $con->real_escape_string($lastname) . '\', 
+									\'' . $con->real_escape_string($username) . '\', 
+									\'' . $con->real_escape_string($password) . '\', 
+									\'' . $con->real_escape_string($email) . '\', 
+									\'' . $con->real_escape_string($birthDate) . '\', 
+									\'' . $con->real_escape_string($gender) . '\', 
+									\'' . $con->real_escape_string($phone) . '\', 
+									\'' . $con->real_escape_string($address) . '\', 
+									\'' . $con->real_escape_string($postalCode) . '\', 
+									\'' . $con->real_escape_string($nickname) . '\');');
 									
 		MySQL::close($con);
 	}
@@ -166,18 +166,18 @@ class UserHandler {
 		$con = MySQL::open(Settings::db_name_infected);
 		
 		mysqli_query($con, 'UPDATE `' . Settings::db_table_infected_users . '` 
-							SET `firstname` = \'' . $firstname . '\', 
-								`lastname` = \'' . $lastname . '\', 
-								`username` = \'' . $username . '\', 
-								`password` = \'' . $password . '\', 
-								`email` = \'' . $email . '\', 
-								`birthdate` = \'' . $birthDate . '\', 
-								`gender` = \'' . $gender . '\', 
-								`phone` = \'' . $phone . '\', 
-								`address` = \'' . $address . '\', 
-								`postalcode` = \'' . $postalCode . '\', 
-								`nickname` = \'' . $nickname . '\' 
-							WHERE `id` = \'' . $id . '\';');
+							SET `firstname` = \'' . $con->real_escape_string($firstname) . '\', 
+								`lastname` = \'' . $con->real_escape_string($lastname) . '\', 
+								`username` = \'' . $con->real_escape_string($username) . '\', 
+								`password` = \'' . $con->real_escape_string($password) . '\', 
+								`email` = \'' . $con->real_escape_string($email) . '\', 
+								`birthdate` = \'' . $con->real_escape_string($birthDate) . '\', 
+								`gender` = \'' . $con->real_escape_string($gender) . '\', 
+								`phone` = \'' . $con->real_escape_string($phone) . '\', 
+								`address` = \'' . $con->real_escape_string($address) . '\', 
+								`postalcode` = \'' . $con->real_escape_string($postalCode) . '\', 
+								`nickname` = \'' . $con->real_escape_string($nickname) . '\' 
+							WHERE `id` = \'' . $con->real_escape_string($id) . '\';');
 		
 		MySQL::close($con);
 	}
@@ -189,7 +189,7 @@ class UserHandler {
 		$con = MySQL::open(Settings::db_name_infected);
 		
 		mysqli_query($con, 'DELETE FROM `' . Settings::db_table_infected_users . '` 
-							WHERE `userId` = \'' . $user->getId() . '\';');
+							WHERE `userId` = \'' . $con->real_escape_string($user->getId()) . '\';');
 		
 		if ($user->hasEmergencyContact()) {
 			EmergencyContactHandler::removeEmergenctContact($user);
@@ -205,8 +205,8 @@ class UserHandler {
 		$con = MySQL::open(Settings::db_name_infected);
 		
 		mysqli_query($con, 'UPDATE `' . Settings::db_table_infected_users . '` 
-							SET `password` = \'' . $password . '\'
-							WHERE `id` = \'' . $userId . '\';');
+							SET `password` = \'' . $con->real_escape_string($password) . '\'
+							WHERE `id` = \'' . $con->real_escape_string($userId) . '\';');
 		
 		MySQL::close($con);
 	}
@@ -218,8 +218,8 @@ class UserHandler {
 		$con = MySQL::open(Settings::db_name_infected);
 
 		$result = mysqli_query($con, 'SELECT `id` FROM `' . Settings::db_table_infected_users . '` 
-									  WHERE `username` = \'' . $username . '\' 
-									  OR `email` = \'' . $username . '\';');
+									  WHERE `username` = \'' . $con->real_escape_string($username) . '\' 
+									  OR `email` = \'' . $con->real_escape_string($username) . '\';');
 									  
 		$row = mysqli_fetch_array($result);
 		
@@ -235,12 +235,12 @@ class UserHandler {
 		$con = MySQL::open(Settings::db_name_infected);
 
 		$result = mysqli_query($con, 'SELECT `id` FROM `' . Settings::db_table_infected_users . '` 
-									  WHERE `firstname` LIKE \'%' . $query . '%\'
-									  OR `lastname` LIKE \'%' . $query . '%\' 
-									  OR `username` LIKE \'%' . $query . '%\' 
-									  OR `email` LIKE \'%' . $query . '%\' 
-									  OR `phone` LIKE \'%' . $query . '%\' 
-									  OR `nickname` LIKE \'%' . $query . '%\' 
+									  WHERE `firstname` LIKE \'%' . $con->real_escape_string($query) . '%\'
+									  OR `lastname` LIKE \'%' . $con->real_escape_string($query) . '%\' 
+									  OR `username` LIKE \'%' . $con->real_escape_string($query) . '%\' 
+									  OR `email` LIKE \'%' . $con->real_escape_string($query) . '%\' 
+									  OR `phone` LIKE \'%' . $con->real_escape_string($query) . '%\' 
+									  OR `nickname` LIKE \'%' . $con->real_escape_string($query) . '%\' 
 									  LIMIT 10;');
 		
 		$userList = array();
