@@ -93,5 +93,26 @@ class Ticket {
 	public function canSeat($user) {
 		return ($this->ownerId == $user->getId() && $this->seaterId == 0) || $this->seaterId == $user->getId();
 	}
+	
+	/*
+	 * Returns the price of this ticket, taking discount into consideration
+	 */
+	public function getPrice() {
+		$user = $this->getOwner();
+		$price = $this->getType()->getPrice();
+		$discount = 20;
+		
+		// Check if the user have an registred ticket in the database
+		if (TicketHandler::hasTicket($user)) {
+			$ticket = TicketHandler::getTicketForUser($user);
+			
+			// We'll check if this user has a ticket for earlier events, if it has, then give the discount.
+			if ($ticket->getEvent()->getId() != EventHandler::getCurrentEvent()->getId()) {
+				$price += $discount;
+			}
+		}
+		
+		return $price;
+	}
 }
 ?>
