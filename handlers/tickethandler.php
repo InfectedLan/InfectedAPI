@@ -13,7 +13,7 @@ class TicketHandler {
 		$con = MySQL::open(Settings::db_name_infected_tickets);
 
 		$result = mysqli_query($con, 'SELECT * FROM `' . Settings::db_table_infected_tickets_tickets . '` 
-									  WHERE `id` = \'' . $id . '\';');
+									  WHERE `id` = \'' . $con->real_escape_string($id) . '\';');
 									
 		$row = mysqli_fetch_array($result);
 
@@ -44,7 +44,7 @@ class TicketHandler {
 		$con = MySQL::open(Settings::db_name_infected_tickets);
 
 		$result = mysqli_query($con, 'SELECT `id` FROM `' . Settings::db_table_infected_tickets_tickets . '` 
-									  WHERE `eventId` = \'' . $event->getId() . '\';');
+									  WHERE `eventId` = \'' . $con->real_escape_string($event->getId()) . '\';');
 
 		$ticketList = array();
 
@@ -61,7 +61,7 @@ class TicketHandler {
 		$con = MySQL::open(Settings::db_name_infected_tickets);
 
 		$result = mysqli_query($con, 'SELECT `id` FROM `' . Settings::db_table_infected_tickets_tickets . '` 
-									  WHERE `eventId` = \'' . $event->getId() . '\';');
+									  WHERE `eventId` = \'' . $con->real_escape_string($event->getId()) . '\';');
 		MySQL::close($con);
 
 		return mysqli_num_rows($result);
@@ -71,7 +71,7 @@ class TicketHandler {
 		$con = MySQL::open(Settings::db_name_infected_tickets);
 
 		$result = mysqli_query($con, 'SELECT `id` FROM `' . Settings::db_table_infected_tickets_tickets . '` 
-									  WHERE `ownerId` = \'' . $user->getId() . '\'
+									  WHERE `ownerId` = \'' . $con->real_escape_string($user->getId()) . '\'
 									  AND `eventId` = \'' .  EventHandler::getCurrentEvent()->getId() . '\' 
 									  LIMIT 1;');
 
@@ -88,7 +88,7 @@ class TicketHandler {
 		$con = MySQL::open(Settings::db_name_infected_tickets);
 
 		$result = mysqli_query($con, 'SELECT `id` FROM `' . Settings::db_table_infected_tickets_tickets . '` 
-									  WHERE `ownerId` = \'' . $user->getId() . '\'
+									  WHERE `ownerId` = \'' . $con->real_escape_string($user->getId()) . '\'
 									  AND `eventId` = \'' .  EventHandler::getCurrentEvent()->getId() . '\';');
 
 		$row = mysqli_fetch_array($result);
@@ -102,7 +102,7 @@ class TicketHandler {
 		$con = MySQL::open(Settings::db_name_infected_tickets);
 
 		$result = mysqli_query($con, 'SELECT `id` FROM `' . Settings::db_table_infected_tickets_tickets . '` 
-									  WHERE `ownerId` = \'' . $user->getId() . '\';');
+									  WHERE `ownerId` = \'' . $con->real_escape_string($user->getId()) . '\';');
 
 		$ticketList = array();
 
@@ -119,8 +119,8 @@ class TicketHandler {
 		$con = MySQL::open(Settings::db_name_infected_tickets);
 
 		$result = mysqli_query($con, 'UPDATE `' . Settings::db_table_infected_tickets_tickets . '` 
-									  SET `ownerId` = \'' . $newOwner->getId() . '\' 
-									  WHERE `id` = \'' . $ticket->getId() . '\';');
+									  SET `ownerId` = \'' . $con->real_escape_string($newOwner->getId()) . '\' 
+									  WHERE `id` = \'' . $con->real_escape_string($ticket->getId()) . '\';');
  
 		MySQL::close($con);
 	}
@@ -131,11 +131,11 @@ class TicketHandler {
 		if (!isset($newSeater) || empty($newSeater)) {
 			$result = mysqli_query($con, 'UPDATE `' . Settings::db_table_infected_tickets_tickets . '` 
 										  SET `seaterId` = \'0\' 
-										  WHERE `id` = \'' . $ticket->getId() . '\';');
+										  WHERE `id` = \'' . $con->real_escape_string($ticket->getId()) . '\';');
 		} else {
 			$result = mysqli_query($con, 'UPDATE `' . Settings::db_table_infected_tickets_tickets . '` 
-										  SET `seaterId` = \'' . $newSeater->getId() . '\' 
-										  WHERE `id` = \'' . $ticket->getId() . '\';');
+										  SET `seaterId` = \'' . $con->real_escape_string($newSeater->getId()) . '\' 
+										  WHERE `id` = \'' . $con->real_escape_string($ticket->getId()) . '\';');
 		}
 		
 		MySQL::close($con);
@@ -146,14 +146,18 @@ class TicketHandler {
 
 		$con = MySQL::open(Settings::db_name_infected_tickets);
 
-		$result = mysqli_query($con, 'INSERT INTO `' . Settings::db_table_infected_tickets_tickets . '` (`ownerId`, `eventId`, `typeId`) VALUES (' . $user->getId() . ', ' . $currentEvent->getId() . ', ' . $ticketType->getId() . ');');
+		$result = mysqli_query($con, 'INSERT INTO `' . Settings::db_table_infected_tickets_tickets . '` (`ownerId`, `eventId`, `typeId`) 
+									  VALUES (' . $con->real_escape_string($user->getId()) . ', 
+											  ' . $con->real_escape_string($currentEvent->getId()) . ', 
+											  ' . $con->real_escape_string($ticketType->getId()) . ');');
 
 		MySQL::close($con);
 	}	
+	
 	public static function getTicketsSeatableByUser($user, $event) {
 		$con = MySQL::open(Settings::db_name_infected_tickets);
 
-		$result = mysqli_query($con, 'SELECT `id` FROM `' . Settings::db_table_infected_tickets_tickets . '` WHERE ( `seaterId`=' . $user->getId() . ' OR (`ownerId`=' . $user->getId() . ' AND `seaterId` = 0) ) AND `eventId`=' . $event->getId() . ';');
+		$result = mysqli_query($con, 'SELECT `id` FROM `' . Settings::db_table_infected_tickets_tickets . '` WHERE (`seaterId`=' . $con->real_escape_string($user->getId()) . ' OR (`ownerId`=' . $con->real_escape_string($user->getId()) . ' AND `seaterId` = 0) ) AND `eventId`=' . $con->real_escape_string($event->getId()) . ';');
 	
 		$ticketList = array();
 
@@ -165,11 +169,12 @@ class TicketHandler {
 
 		return $ticketList;
 	}
+	
 	public static function changeSeat($ticket, $seat)
 	{
 		$con = MySQL::open(Settings::db_name_infected_tickets);
 
-		$result = mysqli_query($con, 'UPDATE `' . Settings::db_table_infected_tickets_tickets . '` SET `seatId` = ' . $seat->getId() . ' WHERE `id` = ' . $ticket->getId() . ';');
+		$result = mysqli_query($con, 'UPDATE `' . Settings::db_table_infected_tickets_tickets . '` SET `seatId` = ' . $con->real_escape_string($seat->getId()) . ' WHERE `id` = ' . $con->real_escape_string($ticket->getId()) . ';');
 		
 		MySQL::close($con);
 	}

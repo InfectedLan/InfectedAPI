@@ -8,9 +8,8 @@ class TeamHandler {
 	public static function getTeam($id) {
 		$con = MySQL::open(Settings::db_name_infected_crew);
 		
-		$result = mysqli_query($con, 'SELECT * 
-									  FROM `' . Settings::db_table_infected_crew_teams . '` 
-									  WHERE `id` = \'' . $id . '\';');
+		$result = mysqli_query($con, 'SELECT * FROM `' . Settings::db_table_infected_crew_teams . '` 
+									  WHERE `id` = \'' . $con->real_escape_string($id) . '\';');
 									  
 		$row = mysqli_fetch_array($result);
 		
@@ -32,7 +31,7 @@ class TeamHandler {
 		
 		$result = mysqli_query($con, 'SELECT `teamId`
 									  FROM `' . Settings::db_table_infected_crew_memberof . '` 
-									  WHERE `userId` = \'' . $userId . '\';');
+									  WHERE `userId` = \'' . $con->real_escape_string($userId) . '\';');
 									
 		$row = mysqli_fetch_array($result);
 		
@@ -47,8 +46,7 @@ class TeamHandler {
 	public static function getTeams() {
 		$con = MySQL::open(Settings::db_name_infected_crew);
 		
-		$result = mysqli_query($con, 'SELECT `id` 
-									  FROM `' . Settings::db_table_infected_crew_teams . '`;');
+		$result = mysqli_query($con, 'SELECT `id` FROM `' . Settings::db_table_infected_crew_teams . '`;');
 		
 		$teamList = array();
 		
@@ -65,9 +63,8 @@ class TeamHandler {
 	public static function getTeamsForGroup($groupId) {
 		$con = MySQL::open(Settings::db_name_infected_crew);
 
-		$result = mysqli_query($con, 'SELECT `id` 
-									  FROM `' . Settings::db_table_infected_crew_teams . '`
-									  WHERE `groupId` = \'' . $groupId . '\';');
+		$result = mysqli_query($con, 'SELECT `id` FROM `' . Settings::db_table_infected_crew_teams . '`
+									  WHERE `groupId` = \'' . $con->real_escape_string($groupId) . '\';');
 		
 		$teamList = array();
 		
@@ -85,11 +82,11 @@ class TeamHandler {
 		$con = MySQL::open(Settings::db_name_infected_crew);
 		
 		mysqli_query($con, 'INSERT INTO `' . Settings::db_table_infected_crew_teams . '` (`groupId`, `name`, `title`, `description`, `leader`) 
-							VALUES (\'' . $group->getId() . '\', 
-									\'' . $name . '\', 
-									\'' . $title . '\', 
-									\'' . $description . '\', 
-									\'' . $leader . '\')');
+							VALUES (\'' . $con->real_escape_string($group->getId()) . '\', 
+									\'' . $con->real_escape_string($name) . '\', 
+									\'' . $con->real_escape_string($title) . '\', 
+									\'' . $con->real_escape_string($description) . '\', 
+									\'' . $con->real_escape_string($leader) . '\')');
 		
 		MySQL::close($con);
 	}
@@ -99,8 +96,8 @@ class TeamHandler {
 		$con = MySQL::open(Settings::db_name_infected_crew);
 		
 		mysqli_query($con, 'DELETE FROM `' . Settings::db_table_infected_crew_teams . '` 
-							WHERE `id` = \'' . $team->getId() . '\'
-							AND `groupId` = \'' . $group->getId() . '\';');
+							WHERE `id` = \'' . $con->real_escape_string($team->getId()) . '\'
+							AND `groupId` = \'' . $con->real_escape_string($group->getId()) . '\';');
 		
 		MySQL::close($con);
 	}
@@ -110,12 +107,12 @@ class TeamHandler {
 		$con = MySQL::open(Settings::db_name_infected_crew);
 		
 		mysqli_query($con, 'UPDATE `' . Settings::db_table_infected_crew_teams . '` 
-							SET `groupId` = \'' . $group->getId() . '\', 
-								`name` = \'' . $name . '\', 
-								`title` = \'' . $title . '\', 
-								`description` = \'' . $description . '\', 
-								`leader` = \'' . $leader . '\' 
-							WHERE `id` = \'' . $team->getId() . '\';');
+							SET `groupId` = \'' . $con->real_escape_string($group->getId()) . '\', 
+								`name` = \'' . $con->real_escape_string($name) . '\', 
+								`title` = \'' . $con->real_escape_string($title) . '\', 
+								`description` = \'' . $con->real_escape_string($description) . '\', 
+								`leader` = \'' . $con->real_escape_string($leader) . '\' 
+							WHERE `id` = \'' . $con->real_escape_string($team->getId()) . '\';');
 		
 		MySQL::close($con);
 	}
@@ -127,8 +124,8 @@ class TeamHandler {
 		$result = mysqli_query($con, 'SELECT `' . Settings::db_table_infected_users . '`.`id` FROM `' . Settings::db_table_infected_users . '`
 									  LEFT JOIN `' . Settings::db_name_infected_crew . '`.`' . Settings::db_table_infected_crew_memberof . '`
 									  ON `' . Settings::db_table_infected_users . '`.`id` = `userId` 
-									  WHERE `groupId` = \'' . $groupId . '\'
-									  AND `teamId` = \'' . $teamId . '\' 
+									  WHERE `groupId` = \'' . $con->real_escape_string($groupId) . '\'
+									  AND `teamId` = \'' . $con->real_escape_string($teamId) . '\' 
 									  ORDER BY `firstname` ASC;');
 		
 		$memberList = array();
@@ -148,7 +145,7 @@ class TeamHandler {
 		
 		$result = mysqli_query($con, 'SELECT `teamId` 
 									  FROM `' . Settings::db_table_infected_crew_memberof. '` 
-									  WHERE `userId` = \'' . $userId . '\' 
+									  WHERE `userId` = \'' . $con->real_escape_string($userId) . '\' 
 									  AND `teamId` != \'0\'');
 									  
 		$row = mysqli_fetch_array($result);
@@ -164,7 +161,7 @@ class TeamHandler {
 		
 		$result = mysqli_query($con, 'SELECT `leader` 
 									  FROM `' . Settings::db_table_infected_crew_teams . '` 
-									  WHERE `leader` = \'' . $userId . '\';');
+									  WHERE `leader` = \'' . $con->real_escape_string($userId) . '\';');
 									  
 		$row = mysqli_fetch_array($result);
 		
@@ -179,9 +176,9 @@ class TeamHandler {
 		
 		if ($user->isGroupMember()) {	
 			mysqli_query($con, 'UPDATE `' . Settings::db_table_infected_crew_memberof . '` 
-								SET `teamId` = \'' . $team->getId() . '\' 
-								WHERE `userId` = \'' . $user->getId() . '\' 
-								AND `groupId` = \'' . $group->getId() . '\';');	
+								SET `teamId` = \'' . $con->real_escape_string($team->getId()) . '\' 
+								WHERE `userId` = \'' . $con->real_escape_string($user->getId()) . '\' 
+								AND `groupId` = \'' . $con->real_escape_string($group->getId()) . '\';');	
 		}
 		
 		MySQL::close($con);
@@ -195,7 +192,7 @@ class TeamHandler {
 		
 		mysqli_query($con, 'UPDATE `' . Settings::db_table_infected_crew_memberof . '` 
 							SET `teamId` = \'0\'
-							WHERE `userId` = \'' . $user->getId() . '\';');	
+							WHERE `userId` = \'' . $con->real_escape_string($user->getId()) . '\';');	
 		
 		MySQL::close($con);
 	}

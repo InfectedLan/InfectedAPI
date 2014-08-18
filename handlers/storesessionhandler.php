@@ -9,7 +9,7 @@ class StoreSessionHandler
 	public static function getStoreSession($id) {
 		$con = MySQL::open(Settings::db_name_infected_tickets);
 
-		$result = mysqli_query($con, 'SELECT * FROM `' . Settings::db_table_infected_tickets_storesessions . '` WHERE `id`=' . $id . ';');
+		$result = mysqli_query($con, 'SELECT * FROM `' . Settings::db_table_infected_tickets_storesessions . '` WHERE `id`=' . $con->real_escape_string($id) . ';');
 		
 		$row = mysqli_fetch_array($result);
 
@@ -28,9 +28,14 @@ class StoreSessionHandler
 	public static function registerStoreSession($user, $type, $amount) {
 		$con = MySQL::open(Settings::db_name_infected_tickets);
 
-		$code = md5(time() . $user->getId() . "123");
+		$code = md5(time() . $user->getId() . "123"); // TODO: Replace with fancy openssl function.
 
-		$result = mysqli_query($con, 'INSERT INTO `' . Settings::db_table_infected_tickets_storesessions . '` (`userId`, `timeCreated`, `ticketType`, `amount`, `code`) VALUES (' . $user->getId() . ', ' . time() . ', ' . $type->getId() . ', ' . $amount . ', \'' . $code . '\')');
+		$result = mysqli_query($con, 'INSERT INTO `' . Settings::db_table_infected_tickets_storesessions . '` (`userId`, `timeCreated`, `ticketType`, `amount`, `code`) 
+									  VALUES (' . $con->real_escape_string($user->getId()) . ', 
+											  ' . $con->real_escape_string(time()) . ', 
+											  ' . $con->real_escape_string($type->getId()) . ', 
+											  ' . $con->real_escape_string($amount) . ', 
+											  ' . $con->real_escape_string($code) . '\')');
 
 		MySQL::close($con);
 
@@ -40,7 +45,9 @@ class StoreSessionHandler
 	public static function getStoreSessionForUser($user) {
 		$con = MySQL::open(Settings::db_name_infected_tickets);
 
-		$result = mysqli_query($con, 'SELECT `id` FROM `' . Settings::db_table_infected_tickets_storesessions . '` WHERE `userId`=' . $user->getId() . ' AND `timeCreated` > ' . self::oldestValidTimestamp() . ';');
+		$result = mysqli_query($con, 'SELECT `id` FROM `' . Settings::db_table_infected_tickets_storesessions . '` 
+									  WHERE `userId` = ' . $con->real_escape_string($user->getId()) . ' 
+									  AND `timeCreated` > ' . self::oldestValidTimestamp() . ';');
 
 		$row = mysqli_fetch_array($result);
 
@@ -58,7 +65,9 @@ class StoreSessionHandler
 	public static function getReservedTicketCount($ticketType) {
 		$con = MySQL::open(Settings::db_name_infected_tickets);
 
-		$result = mysqli_query($con, 'SELECT `amount` FROM `' . Settings::db_table_infected_tickets_storesessions . '` WHERE `ticketType` = ' . $ticketType->getId() . ' AND `timeCreated` > ' . self::oldestValidTimestamp() . ';');
+		$result = mysqli_query($con, 'SELECT `amount` FROM `' . Settings::db_table_infected_tickets_storesessions . '` 
+									  WHERE `ticketType` = ' . $con->real_escape_string($ticketType->getId()) . ' 
+									  AND `timeCreated` > ' . self::oldestValidTimestamp() . ';');
 
 		$reservedCount = 0;
 
@@ -71,40 +80,41 @@ class StoreSessionHandler
 		return $reservedCount;
 	}
 
-	private static function oldestValidTimestamp()
-	{
+	private static function oldestValidTimestamp() {
 		return time() - Settings::storeSessionTime;
 	}
 
-	public static function deleteStoreSession($storeSession)
-	{
+	public static function deleteStoreSession($storeSession) {
 		$con = MySQL::open(Settings::db_name_infected_tickets);
 
-		$result = mysqli_query($con, 'DELETE FROM `' . Settings::db_table_infected_tickets_storesessions . '` WHERE `id`=' . $storeSession->getId() . ';');
+		$result = mysqli_query($con, 'DELETE FROM `' . Settings::db_table_infected_tickets_storesessions . '` 
+									  WHERE `id` = ' . $con->real_escape_string($storeSession->getId()) . ';');
 
 		MySQL::close($con);
 	}
 
-	private static function getStoreSessionFromKey($key)
-	{
+	private static function getStoreSessionFromKey($key) {
 		$con = MySQL::open(Settings::db_name_infected_tickets);
 
-		$result = mysqli_query($con, 'SELECT `id` FROM `' . Settings::db_table_infected_tickets_storesessions . '` WHERE `code`=' . $code . ' AND `timeCreated` > ' . self::oldestValidTimestamp() . ';');
+		$result = mysqli_query($con, 'SELECT `id` FROM `' . Settings::db_table_infected_tickets_storesessions . '` 
+									  WHERE `code` = ' . $con->real_escape_string($code) . ' 
+									  AND `timeCreated` > ' . self::oldestValidTimestamp() . ';');
 
 		$row = mysqli_fetch_array($result);
 
 		MySQL::close($con);
 
-		if($row) {
+		if ($row) {
 			return self::getStoreSession($row['id']);
 		}
 	}
 
-	public static function getUserIdFromKey($key)
-	{
+	public static function getUserIdFromKey($key) {
 		$con = MySQL::open(Settings::db_name_infected_tickets);
 
-		$result = mysqli_query($con, 'SELECT `userId` FROM `' . Settings::db_table_infected_tickets_storesessions . '` WHERE `code`=' . $code . ' AND `timeCreated` > ' . self::oldestValidTimestamp() . ';');
+		$result = mysqli_query($con, 'SELECT `userId` FROM `' . Settings::db_table_infected_tickets_storesessions . '` 
+									  WHERE `code`=' . $con->real_escape_string($code) . ' 
+									  AND `timeCreated` > ' . self::oldestValidTimestamp() . ';');
 
 		$row = mysqli_fetch_array($result);
 
@@ -115,11 +125,10 @@ class StoreSessionHandler
 		}
 	}
 
-	public static function purchaseComplete($code, $price, $amount)
-	{
+	public static function purchaseComplete($code, $price, $amount) {
 		$storeSession = self::getStoreSessionFromcode($code);
-		if( !isset($storeSession) )
-		{
+		
+		if (!isset($storeSession)) {
 			return false;
 		}
 
@@ -127,19 +136,18 @@ class StoreSessionHandler
 		$expectedAmount = $storeSession->getAmount();
 		$ticketType = $storeSession->getTicketType();
 
-		if($amount != $storeSession->getAmount())
-		{
+		if ($amount != $storeSession->getAmount()) {
 			return false;
 		}
+		
 		$expectedPrice = $ticketType->getPrice() * $amount;
-		if($expectedPrice != $price)
-		{
+		
+		if ($expectedPrice != $price) {
 			return false;
 		}
 
-		//Checks are ok, lets buy!
-		for($i = 0; $i < $amount; $i++)
-		{
+		// Checks are ok, lets buy!
+		for ($i = 0; $i < $amount; $i++) {
 			TicketHandler::createTicket($user, $ticketType);
 		}
 

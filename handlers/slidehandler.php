@@ -8,7 +8,7 @@ class SlideHandler {
 		$con = MySQL::open(Settings::db_name_infected_main);
 		
 		$result = mysqli_query($con, 'SELECT * FROM `' . Settings::db_table_infected_main_slides . '` 
-									  WHERE `id` = \'' . $id . '\';');
+									  WHERE `id` = \'' . $con->real_escape_string($id) . '\';');
 										
 		$row = mysqli_fetch_array($result);
 		

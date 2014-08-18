@@ -9,9 +9,8 @@ class SeatmapHandler {
 	public static function getSeatmap($id) {
 		$con = MySQL::open(Settings::db_name_infected_tickets);
 
-		$result = mysqli_query($con, 'SELECT * 
-									  FROM `' . Settings::db_table_infected_tickets_seatmaps . '` 
-									  WHERE `id` = \'' . $id . '\';');
+		$result = mysqli_query($con, 'SELECT * FROM `' . Settings::db_table_infected_tickets_seatmaps . '` 
+									  WHERE `id` = \'' . $con->real_escape_string($id) . '\';');
 									  
 		$row = mysqli_fetch_array($result);
 
@@ -27,16 +26,18 @@ class SeatmapHandler {
 	public static function createNewSeatmap($name, $backgroundImage) {
 		$con = MySQL::open(Settings::db_name_infected_tickets);
 
-		mysqli_query($con, 'INSERT INTO ' . Settings::db_table_infected_tickets_seatmaps . '(`humanName`, `backgroundImage`) VALUES (\'' . $name . '\', \'' . $backgroundImage . '\')');
+		mysqli_query($con, 'INSERT INTO ' . Settings::db_table_infected_tickets_seatmaps . '(`humanName`, `backgroundImage`) 
+							VALUES (\'' . $con->real_escape_string($name) . '\', 
+									\'' . $con->real_escape_string($backgroundImage) . '\')');
 
-		$result = mysqli_query($con, 'SELECT id FROM ' .  Settings::db_table_infected_tickets_seatmaps . ' ORDER BY id DESC LIMIT 1;');
+		$result = mysqli_query($con, 'SELECT id FROM ' .  Settings::db_table_infected_tickets_seatmaps . ' 
+									  ORDER BY id DESC LIMIT 1;');
 
 		$row = mysqli_fetch_array($result);
 
 		MySQL::close($con);
 
-		if($row)
-		{
+		if ($row) {
 			return self::getSeatmap($row['id']);
 		}
 
@@ -45,8 +46,7 @@ class SeatmapHandler {
 	public static function getSeatmaps() {
 		$con = MySQL::open(Settings::db_name_infected_tickets);
 
-		$result = mysqli_query($con, 'SELECT `id` 
-									  FROM `' . Settings::db_table_infected_tickets_seatmaps . '`;');
+		$result = mysqli_query($con, 'SELECT `id` FROM `' . Settings::db_table_infected_tickets_seatmaps . '`;');
 
 		$seatmapArray = array();
 
@@ -62,9 +62,8 @@ class SeatmapHandler {
 	public static function getRows($seatmap) {
 		$con = MySQL::open(Settings::db_name_infected_tickets);
 
-		$result = mysqli_query($con, 'SELECT `id` 
-									  FROM `' . Settings::db_table_infected_tickets_rows . '` 
-									  WHERE `seatmap` = \'' . $seatmap->getId() . '\';');
+		$result = mysqli_query($con, 'SELECT `id` FROM `' . Settings::db_table_infected_tickets_rows . '` 
+									  WHERE `seatmap` = \'' . $con->real_escape_string($seatmap->getId()) . '\';');
 
 		$rowArray = array();
 
@@ -76,20 +75,22 @@ class SeatmapHandler {
 
 		return $rowArray;
 	}
-	public static function setBackground($seatmap, $filename)
-	{
+	
+	public static function setBackground($seatmap, $filename) {
 		$con = MySQL::open(Settings::db_name_infected_tickets);
 
-		mysqli_query($con, 'UPDATE `' . Settings::db_table_infected_tickets_seatmaps . '` SET `backgroundImage`=\'' . $filename . '\' WHERE `id`=' . $seatmap->getId() . ';');
+		mysqli_query($con, 'UPDATE `' . Settings::db_table_infected_tickets_seatmaps . '` 
+							SET `backgroundImage`=\'' . $con->real_escape_string($filename) . '\' 
+							WHERE `id`=' . $con->real_escape_string($seatmap->getId()) . ';');
 	
 		MySQL::close($con);
 	}
 
-	public static function getEvent($seatmap)
-	{
+	public static function getEvent($seatmap) {
 		$con = MySQL::open(Settings::db_name_infected);
 
-		$result = mysqli_query($con, 'SELECT `id` FROM `' . Settings::db_table_infected_events . '` WHERE `seatmap`=' . $seatmap->getId() . ';');
+		$result = mysqli_query($con, 'SELECT `id` FROM `' . Settings::db_table_infected_events . '` 
+									  WHERE `seatmap`=' . $con->real_escape_string($seatmap->getId()) . ';');
 
 		$row = mysqli_fetch_array($result);
 
