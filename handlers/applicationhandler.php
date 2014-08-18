@@ -50,7 +50,7 @@ class ApplicationHandler {
 		$con = MySQL::open(Settings::db_name_infected_crew);
 		
 		$result = mysqli_query($con, 'SELECT `id` FROM `' . Settings::db_table_infected_crew_applications . '`
-									  AND `state` = 1;');
+									  WHERE `state` = 1;');
 		
 		$applicationList = array();
 		
