@@ -33,7 +33,7 @@
 								if ($_FILES["bgImageFile"]["error"] == 0)
 								{
 									$name = md5(time() . "yoloswag");
-									move_uploaded_file($_FILES["bgImageFile"]["tmp_name"], "../content/" . $name . "." . $extension);
+									move_uploaded_file($_FILES["bgImageFile"]["tmp_name"], "../content/seatmapBackground/" . $name . "." . $extension);
 
 									SeatmapHandler::setBackground($seatmap, $name . "." . $extension);
 
