@@ -235,11 +235,12 @@ class UserHandler {
 		$con = MySQL::open(Settings::db_name_infected);
 
 		$result = mysqli_query($con, 'SELECT `id` FROM `' . Settings::db_table_infected_users . '` 
-									  WHERE `firstname` LIKE "%' . $query . '%"' . ' 
-									  OR `lastname` LIKE "%' . $query . '%" 
-									  OR `username` LIKE "%' . $query . '%" 
-									  OR `email` LIKE "%' . $query . '%" 
-									  OR `nickname` LIKE "%' . $query . '%" 
+									  WHERE `firstname` LIKE \'%' . $query . '%\'
+									  OR `lastname` LIKE \'%' . $query . '%\' 
+									  OR `username` LIKE \'%' . $query . '%\' 
+									  OR `email` LIKE \'%' . $query . '%\' 
+									  OR `phone` LIKE \'%' . $query . '%\' 
+									  OR `nickname` LIKE \'%' . $query . '%\' 
 									  LIMIT 10;');
 		
 		$userList = array();

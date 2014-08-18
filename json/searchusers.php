@@ -18,7 +18,10 @@ if (Session::isAuthenticated()) {
 			$key = htmlspecialchars($_GET['key']);
 		
 			foreach ($userList as $user) {
-				array_push($users, array('firstname' => $user->getFirstname(), 'lastname' => $user->getLastname(), 'nickname' => $user->getNickname(), 'userId' => $user->getId()));
+				array_push($users, array('firstname' => $user->getFirstname(), 
+										 'lastname' => $user->getLastname(), 
+										 'nickname' => $user->getNickname(), 
+										 'userId' => $user->getId()));
 			}
 		} else {
 			$message = 'Ingen brukere ble funnet.';
