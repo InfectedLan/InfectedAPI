@@ -11,12 +11,12 @@ class PasswordResetCodeHandler {
 		
 		if (!self::hasPasswordResetCode($user)) {
 			mysqli_query($con, 'INSERT INTO `' . Settings::db_table_infected_passwordresetcodes . '` (`userId`, `code`) 
-								VALUES (\'' . $user->getId() . '\', 
-										\'' . $code . '\');');
+								VALUES (\'' . $con->real_escape_string($user->getId()) . '\', 
+										\'' . $con->real_escape_string($code) . '\');');
 		} else {
 			mysqli_query($con, 'UPDATE `' . Settings::db_table_infected_passwordresetcodes . '` 
-								SET `code` = \'' . $code . '\'
-								WHERE `userId` = \'' . $user->getId() . '\';');
+								SET `code` = \'' . $con->real_escape_string($code) . '\'
+								WHERE `userId` = \'' . $con->real_escape_string($user->getId()) . '\';');
 		}
 		
 		MySQL::close($con);
@@ -28,7 +28,7 @@ class PasswordResetCodeHandler {
 		$con = MySQL::open(Settings::db_name_infected);
 		
 		$result = mysqli_query($con, 'SELECT `id` FROM `' . Settings::db_table_infected_passwordresetcodes . '` 
-									  WHERE `userId` = \'' . $user->getId() . '\';');
+									  WHERE `userId` = \'' . $con->real_escape_string($user->getId()) . '\';');
 							
 		$row = mysqli_fetch_array($result);
 		
@@ -41,7 +41,7 @@ class PasswordResetCodeHandler {
 		$con = MySQL::open(Settings::db_name_infected);
 		
 		$result = mysqli_query($con, 'SELECT `id` FROM `' . Settings::db_table_infected_passwordresetcodes . '` 
-									  WHERE `code` = \'' . $code . '\';');
+									  WHERE `code` = \'' . $con->real_escape_string($code) . '\';');
 							
 		$row = mysqli_fetch_array($result);
 		
@@ -54,7 +54,7 @@ class PasswordResetCodeHandler {
 		$con = MySQL::open(Settings::db_name_infected);
 		
 		$result = mysqli_query($con, 'SELECT `userId` FROM `' . Settings::db_table_infected_passwordresetcodes . '` 
-									  WHERE `code` = \'' . $code . '\';');
+									  WHERE `code` = \'' . $con->real_escape_string($code) . '\';');
 							
 		$row = mysqli_fetch_array($result);
 		
@@ -69,7 +69,7 @@ class PasswordResetCodeHandler {
 		$con = MySQL::open(Settings::db_name_infected);
 		
 		mysqli_query($con, 'DELETE FROM `' . Settings::db_table_infected_passwordresetcodes . '` 
-							WHERE `code` = \'' . $code . '\';');
+							WHERE `code` = \'' . $con->real_escape_string($code) . '\';');
 		
 		MySQL::close($con);
 	}

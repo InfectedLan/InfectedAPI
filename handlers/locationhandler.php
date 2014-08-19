@@ -8,9 +8,8 @@ class LocationHandler {
 	public static function getLocation($id) {
 		$con = MySQL::open(Settings::db_name_infected);
 		
-		$result = mysqli_query($con, 'SELECT * 
-									  FROM `'. Settings::db_table_infected_locations . '`
-									  WHERE `id` = \'' . $id . '\';');
+		$result = mysqli_query($con, 'SELECT * FROM `'. Settings::db_table_infected_locations . '`
+									  WHERE `id` = \'' . $con->real_escape_string($id) . '\';');
 
 		$row = mysqli_fetch_array($result);
 		
@@ -27,8 +26,7 @@ class LocationHandler {
 	public static function getLocations() {
 		$con = MySQL::open(Settings::db_name_infected);
 		
-		$result = mysqli_query($con, 'SELECT `id` 
-									  FROM `' . Settings::db_table_infected_locations . '`;');
+		$result = mysqli_query($con, 'SELECT `id` FROM `' . Settings::db_table_infected_locations . '`;');
 		
 		$locationList = array();
 		
