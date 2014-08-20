@@ -9,7 +9,7 @@ class AvatarHandler {
 		$con = MySQL::open(Settings::db_name_infected_crew);
 		
 		$result = mysqli_query($con, 'SELECT * FROM `' . Settings::db_table_infected_crew_avatars . '` 
-									  WHERE `id` = \'' . $id . '\'
+									  WHERE `id` = \'' . $con->real_escape_string($id) . '\'
 									  AND `state` = \'2\';');
 									  
 		$row = mysqli_fetch_array($result);
@@ -28,7 +28,7 @@ class AvatarHandler {
 		$con = MySQL::open(Settings::db_name_infected_crew);
 		
 		$result = mysqli_query($con, 'SELECT `id` FROM `' . Settings::db_table_infected_crew_avatars . '` 
-									  WHERE `userId` = \'' . $userId . '\'
+									  WHERE `userId` = \'' . $con->real_escape_string($userId) . '\'
 									  AND `state` = \'2\';');
 		
 		$row = mysqli_fetch_array($result);
@@ -61,7 +61,9 @@ class AvatarHandler {
 	public function getPendingAvatar($id) {
 		$con = MySQL::open(Settings::db_name_infected_crew);
 		
-		$result = mysqli_query($con, 'SELECT id FROM `' . Settings::db_table_infected_crew_avatars . '` WHERE `id` = \'' . $id . '\' AND `state` = \'1\';');
+		$result = mysqli_query($con, 'SELECT `id` FROM `' . Settings::db_table_infected_crew_avatars . '` 
+									  WHERE `id` = \'' . $con->real_escape_string($id) . '\' 
+									  AND `state` = \'1\';');
 		
 		
 		$row = mysqli_fetch_array($result);
@@ -76,9 +78,8 @@ class AvatarHandler {
 	public static function getPendingAvatarForUser($userId) {
 		$con = MySQL::open(Settings::db_name_infected_crew);
 		
-		$result = mysqli_query($con, 'SELECT `id` 
-									  FROM `' . Settings::db_table_infected_crew_avatars . '` 
-									  WHERE `userId` = \'' . $userId . '\'
+		$result = mysqli_query($con, 'SELECT `id` FROM `' . Settings::db_table_infected_crew_avatars . '` 
+									  WHERE `userId` = \'' . $con->real_escape_string($userId) . '\'
 									  AND `state` = \'1\';');
 		
 		$row = mysqli_fetch_array($result);
@@ -93,8 +94,7 @@ class AvatarHandler {
 	public static function getPendingAvatars() {
 		$con = MySQL::open(Settings::db_name_infected_crew);
 		
-		$result = mysqli_query($con, 'SELECT `id` 
-									  FROM `' . Settings::db_table_infected_crew_avatars . '` 
+		$result = mysqli_query($con, 'SELECT `id` FROM `' . Settings::db_table_infected_crew_avatars . '` 
 									  WHERE `state` = \'1\';');
 		
 		$avatarList = array();

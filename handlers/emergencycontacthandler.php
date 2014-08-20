@@ -9,7 +9,7 @@ class EmergencyContactHandler {
 		$con = MySQL::open(Settings::db_name_infected);
 		
 		$result = mysqli_query($con, 'SELECT * FROM `'. Settings::db_table_infected_emergencycontacts . '`
-									  WHERE `id` = \'' . $id . '\';');
+									  WHERE `id` = \'' . $con->real_escape_string($id) . '\';');
 		
 		$row = mysqli_fetch_array($result);
 		
@@ -26,7 +26,7 @@ class EmergencyContactHandler {
 		$con = MySQL::open(Settings::db_name_infected);
 		
 		$result = mysqli_query($con, 'SELECT `id` FROM `'. Settings::db_table_infected_emergencycontacts . '`
-									  WHERE `userId` = \'' . $user->getId() . '\';');
+									  WHERE `userId` = \'' . $con->real_escape_string($user->getId()) . '\';');
 		
 		$row = mysqli_fetch_array($result);
 		
@@ -59,8 +59,8 @@ class EmergencyContactHandler {
 		$con = MySQL::open(Settings::db_name_infected);
 		
 		mysqli_query($con, 'INSERT INTO `' . Settings::db_table_infected_emergencycontacts . '` (`userId`, `phone`) 
-							VALUES (\'' . $user->getId() . '\', 
-									\'' . $phone . '\');');
+							VALUES (\'' . $con->real_escape_string($user->getId()) . '\', 
+									\'' . $con->real_escape_string($phone) . '\');');
 									
 		MySQL::close($con);
 	}
@@ -70,7 +70,7 @@ class EmergencyContactHandler {
 		$con = MySQL::open(Settings::db_name_infected);
 		
 		mysqli_query($con, 'DELETE FROM `' . Settings::db_table_infected_emergencycontacts . '` 
-							WHERE `userId` = \'' . $user->getId . '\';');
+							WHERE `userId` = \'' . $con->real_escape_string($user->getId()) . '\';');
 		
 		MySQL::close($con);
 	}

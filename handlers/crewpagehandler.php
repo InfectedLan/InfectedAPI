@@ -15,9 +15,15 @@ class CrewPageHandler {
 				$con = MySQL::open(Settings::db_name_infected_crew);
 				
 				if ($user->isTeamMember()) {
-					$result = mysqli_query($con, 'SELECT * FROM ' . Settings::db_table_infected_crew_pages . ' WHERE id=\'' . $id . '\' AND (groupId=\'0\' OR groupId=\'' . $user->getGroup()->getId() . '\') AND (teamId=\'0\' OR teamId=\'' . $user->getTeam()->getId() . '\')');
+					$result = mysqli_query($con, 'SELECT * FROM `' . Settings::db_table_infected_crew_pages . '`
+												  WHERE `id` = \'' . $con->real_escape_string($id) . '\' 
+												  AND (`groupId` = \'0\' OR `groupId` = \'' . $con->real_escape_string($user->getGroup()->getId()) . '\') 
+												  AND (`teamId` = \'0\' OR `teamId` = \'' . $con->real_escape_string($user->getTeam()->getId()) . '\');');
 				} else {
-					$result = mysqli_query($con, 'SELECT * FROM ' . Settings::db_table_infected_crew_pages . ' WHERE id=\'' . $id . '\' AND (groupId=\'0\' OR groupId=\'' . $user->getGroup()->getId() . '\') AND teamId=\'0\'');
+					$result = mysqli_query($con, 'SELECT * FROM `' . Settings::db_table_infected_crew_pages . '` 
+												  WHERE `id` = \'' . $con->real_escape_string($id) . '\' 
+												  AND (`groupId` = \'0\' OR `groupId` = \'' . $con->real_escape_string($user->getGroup()->getId()) . '\') 
+												  AND `teamId` = \'0\';');
 				}
 				
 				$row = mysqli_fetch_array($result);
@@ -42,7 +48,8 @@ class CrewPageHandler {
 			$user = Utils::getUser();
 			$con = MySQL::open(Settings::db_name_infected_crew);
 			
-			$result = mysqli_query($con, 'SELECT id FROM ' . Settings::db_table_infected_crew_pages . ' WHERE name=\'' . $name . '\'');
+			$result = mysqli_query($con, 'SELECT `id` FROM `' . Settings::db_table_infected_crew_pages . '` 
+										  WHERE `name` = \'' . $con->real_escape_string($name) . '\';');
 			
 			$row = mysqli_fetch_array($result);
 			
@@ -58,7 +65,7 @@ class CrewPageHandler {
 	public static function getPages() {
 		$con = MySQL::open(Settings::db_name_infected_crew);
 		
-		$result = mysqli_query($con, 'SELECT id FROM ' . Settings::db_table_infected_crew_pages);
+		$result = mysqli_query($con, 'SELECT `id` FROM `' . Settings::db_table_infected_crew_pages . '`;');
 		$pageList = array();
 		
 		while ($row = mysqli_fetch_array($result)) {
@@ -79,7 +86,9 @@ class CrewPageHandler {
 	public static function getPagesForTeam($groupId, $teamId) {
 		$con = MySQL::open(Settings::db_name_infected_crew);
 		
-		$result = mysqli_query($con, 'SELECT id FROM ' . Settings::db_table_infected_crew_pages . ' WHERE groupId=\'' . $groupId . '\' AND teamId=\'' . $teamId . '\'');
+		$result = mysqli_query($con, 'SELECT `id` FROM `' . Settings::db_table_infected_crew_pages . '` 
+									  WHERE `groupId` = \'' . $con->real_escape_string($groupId) . '\' 
+									  AND `teamId` = \'' . $con->real_escape_string($teamId) . '\';');
 		$pageList = array();
 		
 		while ($row = mysqli_fetch_array($result)) {
@@ -95,12 +104,12 @@ class CrewPageHandler {
 	public static function createPage($name, $title, $content, $groupId, $teamId) {
 		$con = MySQL::open(Settings::db_name_infected_crew);
 		
-		mysqli_query($con, 'INSERT INTO ' . Settings::db_table_infected_crew_pages . ' (name, title, content, groupId, teamId) 
-							VALUES (\'' . $name . '\', 
-									\'' . $title . '\', 
-									\'' . $content . '\', 
-									\'' . $groupId . '\', 
-									\'' . $teamId . '\')');
+		mysqli_query($con, 'INSERT INTO `' . Settings::db_table_infected_crew_pages . '` (`name`, `title`, `content`, `groupId`, `teamId`) 
+							VALUES (\'' . $con->real_escape_string($name) . '\', 
+									\'' . $con->real_escape_string($title) . '\', 
+									\'' . $con->real_escape_string($content) . '\', 
+									\'' . $con->real_escape_string($groupId) . '\', 
+									\'' . $con->real_escape_string($teamId) . '\')');
 		
 		MySQL::close($con);
 	}
@@ -109,7 +118,8 @@ class CrewPageHandler {
 	public static function removePage($id) {
 		$con = MySQL::open(Settings::db_name_infected_crew);
 		
-		mysqli_query($con, 'DELETE FROM ' . Settings::db_table_infected_crew_pages . ' WHERE id=\'' . $id . '\'');
+		mysqli_query($con, 'DELETE FROM ' . Settings::db_table_infected_crew_pages . ' 
+							WHERE `id` = \'' . $con->real_escape_string($id) . '\'');
 		
 		MySQL::close($con);
 	}
@@ -118,7 +128,10 @@ class CrewPageHandler {
 	public static function updatePage($id, $title, $content) {
 		$con = MySQL::open(Settings::db_name_infected_crew);
 		
-		mysqli_query($con, 'UPDATE ' . Settings::db_table_infected_crew_pages . ' SET title=\'' . $title . '\', content=\'' . $content . '\' WHERE id=\'' . $id . '\'');
+		mysqli_query($con, 'UPDATE `' . Settings::db_table_infected_crew_pages . '` 
+							SET `title` = \'' . $con->real_escape_string($title) . '\', 
+								`content` = \'' . $con->real_escape_string($content) . '\' 
+							WHERE `id` = \'' . $con->real_escape_string($id) . '\';');
 		
 		MySQL::close($con);
 	}

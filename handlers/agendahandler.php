@@ -8,7 +8,7 @@ class AgendaHandler {
 		$con = MySQL::open(Settings::db_name_infected_main);
 		
 		$result = mysqli_query($con, 'SELECT * FROM `' . Settings::db_table_infected_main_agenda . '` 
-									  WHERE `id` = \'' . $id . '\';');
+									  WHERE `id` = \'' . $con->real_escape_string($id) . '\';');
 									  
 		$row = mysqli_fetch_array($result);
 		
@@ -45,11 +45,10 @@ class AgendaHandler {
 	public static function getAgendaSelection($first, $last) {	
 		$con = MySQL::open(Settings::db_name_infected_main);
 		
-		$result = mysqli_query($con, 'SELECT `id`
-									  FROM `' . Settings::db_table_infected_main_agenda . '`
+		$result = mysqli_query($con, 'SELECT `id` FROM `' . Settings::db_table_infected_main_agenda . '`
 									  WHERE `start` 
-									  BETWEEN ' . $first . ' 
-									  AND ' . $last . '
+									  BETWEEN ' . $con->real_escape_string($first) . ' 
+									  AND ' . $con->real_escape_string($last) . '
 									  ORDER BY `start`;'); 
 									  
 		$agendaList = array();

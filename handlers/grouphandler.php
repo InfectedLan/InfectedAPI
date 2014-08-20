@@ -10,7 +10,7 @@ class GroupHandler {
 		$con = MySQL::open(Settings::db_name_infected_crew);
 		
 		$result = mysqli_query($con, 'SELECT * FROM `' . Settings::db_table_infected_crew_groups . '` 
-									  WHERE `id` = \'' . $id . '\';');
+									  WHERE `id` = \'' . $con->real_escape_string($id) . '\';');
 									
 		$row = mysqli_fetch_array($result);
 		
@@ -29,9 +29,8 @@ class GroupHandler {
 	public static function getGroupForUser($userId) {
 		$con = MySQL::open(Settings::db_name_infected_crew);
 		
-		$result = mysqli_query($con, 'SELECT `groupId`
-									  FROM `' . Settings::db_table_infected_crew_memberof . '` 
-									  WHERE `userId` = \'' . $userId . '\';');
+		$result = mysqli_query($con, 'SELECT `groupId` FROM `' . Settings::db_table_infected_crew_memberof . '` 
+									  WHERE `userId` = \'' . $con->real_escape_string($userId) . '\';');
 									
 		$row = mysqli_fetch_array($result);
 		
@@ -46,8 +45,7 @@ class GroupHandler {
 	public static function getGroups() {
 		$con = MySQL::open(Settings::db_name_infected_crew);
 		
-		$result = mysqli_query($con, 'SELECT `id` 
-									  FROM `' . Settings::db_table_infected_crew_groups . '` 
+		$result = mysqli_query($con, 'SELECT `id` FROM `' . Settings::db_table_infected_crew_groups . '` 
 									  ORDER BY `name`;');
 		
 		$groupList = array();
@@ -66,10 +64,10 @@ class GroupHandler {
 		$con = MySQL::open(Settings::db_name_infected_crew);
 		
 		mysqli_query($con, 'INSERT INTO `' . Settings::db_table_infected_crew_groups . '` (`name`, `title`, `description`, `leader`) 
-							VALUES (\'' . $name . '\', 
-									\'' . $title . '\', 
-									\'' . $description . '\', 
-									\'' . $leader . '\');');
+							VALUES (\'' . $con->real_escape_string($name) . '\', 
+									\'' . $con->real_escape_string($title) . '\', 
+									\'' . $con->real_escape_string($description) . '\', 
+									\'' . $con->real_escape_string($leader) . '\');');
 		
 		MySQL::close($con);
 	}
@@ -79,7 +77,7 @@ class GroupHandler {
 		$con = MySQL::open(Settings::db_name_infected_crew);
 		
 		mysqli_query($con, 'DELETE FROM `' . Settings::db_table_infected_crew_groups . '` 
-							WHERE `id` = \'' . $id . '\';');
+							WHERE `id` = \'' . $con->real_escape_string($id) . '\';');
 		
 		MySQL::close($con);
 	}
@@ -89,11 +87,11 @@ class GroupHandler {
 		$con = MySQL::open(Settings::db_name_infected_crew);
 		
 		mysqli_query($con, 'UPDATE `' . Settings::db_table_infected_crew_groups . '` 
-							SET `name` = \'' . $name . '\', 
-								`title` = \'' . $title . '\', 
-								`description` = \'' . $description . '\', 
-								`leader` = \'' . $leader . '\'
-							WHERE `id` = \'' . $id . '\';');
+							SET `name` = \'' . $con->real_escape_string($name) . '\', 
+								`title` = \'' . $con->real_escape_string($title) . '\', 
+								`description` = \'' . $con->real_escape_string($description) . '\', 
+								`leader` = \'' . $con->real_escape_string($leader) . '\'
+							WHERE `id` = \'' . $con->real_escape_string($id) . '\';');
 		
 		MySQL::close($con);
 	}
@@ -105,7 +103,7 @@ class GroupHandler {
 		$result = mysqli_query($con, 'SELECT `' . Settings::db_table_infected_users . '`.`id` FROM `' . Settings::db_table_infected_users . '`
 									  LEFT JOIN `' . Settings::db_name_infected_crew . '`.`' . Settings::db_table_infected_crew_memberof . '`
 									  ON `' . Settings::db_table_infected_users . '`.`id` = `userId` 
-									  WHERE `groupId` = \'' . $groupId . '\'
+									  WHERE `groupId` = \'' . $con->real_escape_string($groupId) . '\'
 									  ORDER BY `firstname` ASC;');
 		
 		$memberList = array();
@@ -127,7 +125,7 @@ class GroupHandler {
 		
 		$result = mysqli_query($con, 'SELECT `groupId` 
 									  FROM `' . Settings::db_table_infected_crew_memberof . '`
-									  WHERE `userId` = \'' . $userId . '\'
+									  WHERE `userId` = \'' . $con->real_escape_string($userId) . '\'
 									  AND `groupId` != \'0\';');
 									  
 		$row = mysqli_fetch_array($result);
@@ -145,7 +143,7 @@ class GroupHandler {
 		
 		$result = mysqli_query($con, 'SELECT `leader` 
 									  FROM `' . Settings::db_table_infected_crew_groups . '` 
-									  WHERE `leader` = \'' . $userId . '\';');
+									  WHERE `leader` = \'' . $con->real_escape_string($userId) . '\';');
 									  
 		$row = mysqli_fetch_array($result);
 		
@@ -162,13 +160,13 @@ class GroupHandler {
 		
 		if ($user->isGroupMember()) {	
 			mysqli_query($con, 'UPDATE `' . Settings::db_table_infected_crew_memberof . '` 
-								SET `groupId` = \'' . $group->getId() . '\', 
+								SET `groupId` = \'' . $con->real_escape_string($group->getId()) . '\', 
 									`teamId` = \'0\' 
-								WHERE `userId` = \'' . $user->getId() . '\';');
+								WHERE `userId` = \'' . $$con->real_escape_string(user->getId()) . '\';');
 		} else {
 			mysqli_query($con, 'INSERT INTO `' . Settings::db_table_infected_crew_memberof . '` (`userId`, `groupId`, `teamId`) 
-								VALUES (\'' . $user->getId() . '\', 
-										\'' . $group->getId() . '\', 
+								VALUES (\'' . $con->real_escape_string($user->getId()) . '\', 
+										\'' . $con->real_escape_string($group->getId()) . '\', 
 										\'0\');');
 		}
 		
@@ -182,7 +180,7 @@ class GroupHandler {
 		$con = MySQL::open(Settings::db_name_infected_crew);
 		
 		mysqli_query($con, 'DELETE FROM `' . Settings::db_table_infected_crew_memberof . '` 
-							WHERE `userId` = \'' . $user->getId() . '\';');
+							WHERE `userId` = \'' . $con->real_escape_string($user->getId()) . '\';');
 		
 		MySQL::close($con);
 	}

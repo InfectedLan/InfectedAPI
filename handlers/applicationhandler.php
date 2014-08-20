@@ -11,7 +11,7 @@ class ApplicationHandler {
 		$con = MySQL::open(Settings::db_name_infected_crew);
 		
 		$result = mysqli_query($con, 'SELECT * FROM `' . Settings::db_table_infected_crew_applications . '` 
-									  WHERE `id` = \'' . $id . '\';');
+									  WHERE `id` = \'' . $con->real_escape_string($id) . '\';');
 									  
 		$row = mysqli_fetch_array($result);
 		
@@ -68,7 +68,7 @@ class ApplicationHandler {
 		$con = MySQL::open(Settings::db_name_infected_crew);
 		
 		$result = mysqli_query($con, 'SELECT `id` FROM `' . Settings::db_table_infected_crew_applications . '`
-									  WHERE `groupId` = \'' . $group->getId() .  '\'
+									  WHERE `groupId` = \'' . $con->real_escape_string($group->getId()) .  '\'
 									  AND `state` = 1;');
 		
 		$applicationList = array();
@@ -87,9 +87,9 @@ class ApplicationHandler {
 		$con = MySQL::open(Settings::db_name_infected_crew);
 		
 		mysqli_query($con, 'INSERT INTO `' . Settings::db_table_infected_crew_applications . '` (`userId`, `groupId`, `content`, `state`, `datetime`) 
-							VALUES (\'' . $user->getId() . '\', 
-									\'' . $group->getId() . '\', 
-									\'' . $content . '\', 
+							VALUES (\'' . $con->real_escape_string($user->getId()) . '\', 
+									\'' . $con->real_escape_string($group->getId()) . '\', 
+									\'' . $con->real_escape_string($content) . '\', 
 									\'1\', 
 									\'' . date('Y-m-d H:i:s') . '\');');
 									
@@ -100,8 +100,8 @@ class ApplicationHandler {
 		$con = MySQL::open(Settings::db_name_infected_crew);
 		
 		mysqli_query($con, 'UPDATE `' . Settings::db_table_infected_crew_applications . '` 
-							SET `state` =  \'2\'
-							WHERE `id` = \'' . $id . '\';');
+							SET `state` = \'2\'
+							WHERE `id` = \'' . $con->real_escape_string($id) . '\';');
 		
 		// Set the user in the new group
 		$application = self::getApplication($id);
@@ -115,8 +115,8 @@ class ApplicationHandler {
 		
 		mysqli_query($con, 'UPDATE `' . Settings::db_table_infected_crew_applications . '` 
 							SET `state` =  \'3\', 
-								`reason` = \'' . $reason . '\'
-							WHERE `id` = \'' . $id . '\';');
+								`reason` = \'' . $con->real_escape_string($reason) . '\'
+							WHERE `id` = \'' . $con->real_escape_string($id) . '\';');
 									
 		MySQL::close($con);
 	}

@@ -9,9 +9,8 @@ class CityDictionary {
 	public static function getCity($postalcode) {
 		$con = MySQL::open(Settings::db_name_infected);
 		
-		$result = mysqli_query($con, 'SELECT `city`
-									  FROM `' . Settings::db_table_infected_postalcodes . '`
-									  WHERE `code` = \'' . $postalcode . '\';');
+		$result = mysqli_query($con, 'SELECT `city` FROM `' . Settings::db_table_infected_postalcodes . '`
+									  WHERE `code` = \'' . $con->real_escape_string($postalcode . '\';');
 									  
 		$row = mysqli_fetch_array($result);
 		
@@ -28,9 +27,8 @@ class CityDictionary {
 	public static function getPostalCode($city) {
 		$con = MySQL::open(Settings::db_name_infected);
 		
-		$result = mysqli_query($con, 'SELECT `code` 
-								      FROM `' . Settings::db_table_infected_postalcodes . '` 
-									  WHERE `city` = \'' . $city . '\';');
+		$result = mysqli_query($con, 'SELECT `code` FROM `' . Settings::db_table_infected_postalcodes . '` 
+									  WHERE `city` = \'' . $con->real_escape_string($city) . '\';');
 		
 		$row = mysqli_fetch_array($result);
 		

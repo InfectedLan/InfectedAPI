@@ -10,7 +10,7 @@ class EventHandler {
 		$con = MySQL::open(Settings::db_name_infected);
 		
 		$result = mysqli_query($con, 'SELECT * FROM `'. Settings::db_table_infected_events . '`
-									  WHERE `id` = \'' . $id . '\';');
+									  WHERE `id` = \'' . $con->real_escape_string($id) . '\';');
 
 		$row = mysqli_fetch_array($result);
 		
@@ -68,11 +68,11 @@ class EventHandler {
 		$con = MySQL::open(Settings::db_name_infected);
 		
 		mysqli_query($con, 'INSERT INTO `' . Settings::db_table_infected_events . '` (`theme`, `start`, `end`, `location`, `participants`) 
-							VALUES (\'' . $theme . '\', 
-									\'' . $start . '\', 
-									\'' . $end . '\',
-									\'' . $location . '\',
-									\'' . $participants . '\');');
+							VALUES (\'' . $con->real_escape_string($theme) . '\', 
+									\'' . $con->real_escape_string($start) . '\', 
+									\'' . $con->real_escape_string($end) . '\',
+									\'' . $con->real_escape_string($location) . '\',
+									\'' . $con->real_escape_string($participants) . '\');');
 									
 		MySQL::close($con);
 	}
@@ -84,12 +84,12 @@ class EventHandler {
 		$con = MySQL::open(Settings::db_name_infected);
 		
 		mysqli_query($con, 'UPDATE `' . Settings::db_table_infected_events . '` 
-							SET `theme` = \'' . $theme . '\', 
-								`start` = \'' . $start . '\', 
-								`end` = \'' . $end . '\', 
-								`location` = \'' . $location . '\', 
-								`participants` = \'' . $participants . '\'
-							WHERE `id` = \'' . $id . '\';');
+							SET `theme` = \'' . $con->real_escape_string($theme) . '\', 
+								`start` = \'' . $con->real_escape_string($start) . '\', 
+								`end` = \'' . $con->real_escape_string($end) . '\', 
+								`location` = \'' . $con->real_escape_string($location) . '\', 
+								`participants` = \'' . $con->real_escape_string($participants) . '\'
+							WHERE `id` = \'' . $con->real_escape_string($id) . '\';');
 		
 		MySQL::close($con);
 	}
@@ -101,7 +101,7 @@ class EventHandler {
 		$con = MySQL::open(Settings::db_name_infected);
 		
 		mysqli_query($con, 'DELETE FROM `' . Settings::db_table_infected_events . '` 
-							WHERE `id` = \'' . $id . '\';');
+							WHERE `id` = \'' . $con->real_escape_string($id) . '\';');
 		
 		MySQL::close($con);
 	}

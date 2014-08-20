@@ -8,7 +8,7 @@ class GameApplicationHandler {
 		$con = MySQL::open(Settings::db_name_infected_main);
 		
 		$result = mysqli_query($con, 'SELECT * FROM `' . Settings::db_table_infected_main_gameapplications . '` 
-									  WHERE `id` = \'' . $id . '\';');
+									  WHERE `id` = \'' . $con->real_escape_string($id) . '\';');
 										
 		$row = mysqli_fetch_array($result);
 		
@@ -30,7 +30,7 @@ class GameApplicationHandler {
 		$con = MySQL::open(Settings::db_name_infected_main);
 		
 		$result = mysqli_query($con, 'SELECT `id` FROM `' . Settings::db_table_infected_main_gameapplications . '` 
-									  WHERE `game` = \'' . $game->getId() . '\';');
+									  WHERE `game` = \'' . $con->real_escape_string($game->getId()) . '\';');
 									
 		$gameApplicationList = array();
 		
@@ -47,8 +47,8 @@ class GameApplicationHandler {
 		$con = MySQL::open(Settings::db_name_infected_main);
 		
 		$result = mysqli_query($con, 'SELECT `id` FROM `' . Settings::db_table_infected_main_gameapplications . '` 
-									  WHERE `event` = \'' . $event->getId() . '\'
-									  AND `game` = \'' . $game->getId() . '\';');
+									  WHERE `event` = \'' . $con->real_escape_string($event->getId()) . '\'
+									  AND `game` = \'' . $con->real_escape_string($game->getId()) . '\';');
 									
 		$gameApplicationList = array();
 		
@@ -65,13 +65,13 @@ class GameApplicationHandler {
 		$con = MySQL::open(Settings::db_name_infected_main);
 		
 		mysqli_query($con, 'INSERT INTO `' . Settings::db_table_infected_main_gameapplications . '` (`game`, `name`, `tag`, `contactname`, `contactnick`, `phone`, `email`) 
-							VALUES (\'' . $game->getId() . '\', 
-									\'' . $name . '\', 
-									\'' . $tag . '\', 
-									\'' . $contactname . '\', 
-									\'' . $contactnick . '\', 
-									\'' . $phone . '\', 
-									\'' . $email . '\');');
+							VALUES (\'' . $con->real_escape_string($game->getId()) . '\', 
+									\'' . $con->real_escape_string($name) . '\', 
+									\'' . $con->real_escape_string($tag) . '\', 
+									\'' . $con->real_escape_string($contactname) . '\', 
+									\'' . $con->real_escape_string($contactnick) . '\', 
+									\'' . $con->real_escape_string($phone) . '\', 
+									\'' . $con->real_escape_string($email) . '\');');
 		
 		MySQL::close($con);
 	}
