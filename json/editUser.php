@@ -36,6 +36,21 @@ if (Session::isAuthenticated()) {
 		$postalcode = $_GET['postalcode'];
 		$nickname = empty($_GET['nickname']) ? $user->getUsername() : $_GET['nickname'];
 		
+		if (empty($firstname) || strlen($firstname) > 32) {
+			$message = 'Du har ikke skrevet inn noe fornavn.';
+		} else if (empty($lastname) || strlen($lastname) > 32) {
+			$message = 'Du har ikke skrevet inn noe etternavn.';	
+		} else if (!is_numeric($gender)) {
+			$message = 'Du har oppgitt et ugyldig kjønn.';
+		} else if (!is_numeric($phone) || strlen($phone) > 8) {
+			$message = 'Du har ikke skrevet inn et gyldig telefonnummer.';
+		} else if (empty($address) && strlen($address) > 32) {
+			$message = 'Du må skrive inn en adresse.';
+		} else if (!is_numeric($postalcode) || strlen($postalcode) > 4 || !CityDictionary::hasPostalCode($postalcode)) {
+			$message = 'Du må skrive inn et gyldig postnummer.';
+		} else if (!preg_match('/^[a-zæøåA-ZÆØÅ0-9_-]{2,16}$/', $nickname)) {
+			$message = 'Kallenavnet du skrev inn er ikke gyldig, det må bestå av minst 2 tegn og max 16 tegn.';
+		
 		UserHandler::updateUser($user->getId(),
 								$firstname, 
 								$lastname, 
