@@ -10,7 +10,7 @@ class CityDictionary {
 		$con = MySQL::open(Settings::db_name_infected);
 		
 		$result = mysqli_query($con, 'SELECT `city` FROM `' . Settings::db_table_infected_postalcodes . '`
-									  WHERE `code` = \'' . $con->real_escape_string($postalcode . '\';');
+									  WHERE `code` = \'' . $con->real_escape_string($postalcode) . '\';');
 									  
 		$row = mysqli_fetch_array($result);
 		

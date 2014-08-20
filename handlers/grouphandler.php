@@ -162,7 +162,7 @@ class GroupHandler {
 			mysqli_query($con, 'UPDATE `' . Settings::db_table_infected_crew_memberof . '` 
 								SET `groupId` = \'' . $con->real_escape_string($group->getId()) . '\', 
 									`teamId` = \'0\' 
-								WHERE `userId` = \'' . $$con->real_escape_string(user->getId()) . '\';');
+								WHERE `userId` = \'' . $con->real_escape_string($user->getId()) . '\';');
 		} else {
 			mysqli_query($con, 'INSERT INTO `' . Settings::db_table_infected_crew_memberof . '` (`userId`, `groupId`, `teamId`) 
 								VALUES (\'' . $con->real_escape_string($user->getId()) . '\', 
