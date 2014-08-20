@@ -1,6 +1,7 @@
 <?php
 require_once 'session.php';
 require_once 'handlers/userhandler.php';
+require_once 'handlers/permissionshandler.php';
 require_once 'handlers/userpermissionshandler.php';
 
 $result = false;
@@ -11,23 +12,27 @@ if (Session::isAuthenticated()) {
 	
 	if ($user->hasPermission('*') ||
 		$user->hasPermission('admin.permissions')) {
-		if (isset($_GET['userId']) &&
-			isset($_GET['value']) &&
-			is_numeric($_GET['userId']) &&
-			!empty($_GET['value'])) {
-			$user = UserHandler::getUser($_GET['userId']);
-			$value = $_GET['value'];
+		if (isset($_GET['id']) &&
+			is_numeric($_GET['id'])) {
+			$permissionUser = UserHandler::getUser($_GET['id']);
 			
-			UserPermissionsHandler::createUserPermission($user, $value);
+			foreach (PermissionsHandler::getPermissions() as $permission) {
+				if (isset($_GET['checkbox_' . $permission->getId()])) {
+					UserPermissionsHandler::createUserPermission($permissionUser, $permission->getValue());
+				} else {
+					UserPermissionsHandler::removeUserPermission($permissionUser, $permission->getValue());
+				}
+			}
+		
 			$result = true;
 		} else {
-			$message = 'Du har ikke fyllt ut alle feltene!';
+			$message = '<p>Bruker ikke spesifisert.</p>';
 		}
 	} else {
-		$message = 'Du har ikke tillatelse til dette.';
+		$message = '<p>Du har ikke tillatelse til dette.</p>';
 	}
 } else {
-	$message = 'Du er ikke logget inn.';
+	$message = '<p>Du er ikke logget inn.</p>';
 }
 
 echo json_encode(array('result' => $result, 'message' => $message));
