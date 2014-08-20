@@ -41,7 +41,7 @@ class TicketType {
 	/*
 	 * Returns the price of this ticket, taking discount into consideration
 	 */
-	public function getPrice($user) {
+	public function getPriceForUser($user) {
 		$price = $this->price;
 		$discount = 20;
 		

@@ -19,7 +19,7 @@ if (Session::isAuthenticated()) {
 		if(!StoreSessionHandler::hasStoreSession($user)) {
 			$ticketType = TicketTypeHandler::getTicketType($type);
 			//Register store session
-			$price = $ticketType->getPrice($user) * $amount;
+			$price = $ticketType->getPriceForUser($user) * $amount;
 			
 			$code = StoreSessionHandler::registerStoreSession($user, $ticketType, $amount, $price);
 

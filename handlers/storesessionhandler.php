@@ -40,7 +40,7 @@ class StoreSessionHandler
 
 		MySQL::close($con);
 
-		return $key;
+		return $code;
 	}
 	
 	public static function getStoreSessionForUser($user) {
