@@ -25,17 +25,18 @@ class StoreSessionHandler
 		}
 	}
 	
-	public static function registerStoreSession($user, $type, $amount) {
+	public static function registerStoreSession($user, $type, $amount, $price) {
 		$con = MySQL::open(Settings::db_name_infected_tickets);
 
 		$code = md5(time() . $user->getId() . "123"); // TODO: Replace with fancy openssl function.
 
-		$result = mysqli_query($con, 'INSERT INTO `' . Settings::db_table_infected_tickets_storesessions . '` (`userId`, `timeCreated`, `ticketType`, `amount`, `code`) 
+		$result = mysqli_query($con, 'INSERT INTO `' . Settings::db_table_infected_tickets_storesessions . '` (`userId`, `timeCreated`, `ticketType`, `amount`, `code`, `price`) 
 									  VALUES (' . $con->real_escape_string($user->getId()) . ', 
 											  ' . $con->real_escape_string(time()) . ', 
 											  ' . $con->real_escape_string($type->getId()) . ', 
 											  ' . $con->real_escape_string($amount) . ', 
-											  ' . $con->real_escape_string($code) . '\')');
+											  \'' . $con->real_escape_string($code) . '\',
+											  ' . $con->real_escape_string($price) .  ')');
 
 		MySQL::close($con);
 

@@ -19,7 +19,9 @@ if (Session::isAuthenticated()) {
 		if(!StoreSessionHandler::hasStoreSession($user)) {
 			$ticketType = TicketTypeHandler::getTicketType($type);
 			//Register store session
-			$code = StoreSessionHandler::registerStoreSession($user, $ticketType, $amount);
+			$price = $ticketType->getPrice($user) * $amount;
+			
+			$code = StoreSessionHandler::registerStoreSession($user, $ticketType, $amount, $price);
 
 			$url = PayPal::getPaymentUrl($ticketType, $amount, $code, $user);
 
