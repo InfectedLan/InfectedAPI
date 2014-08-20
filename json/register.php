@@ -30,14 +30,7 @@ if (isset($_GET['firstname']) &&
 	$nickname = isset($_GET['nickname']) ? $_GET['nickname'] : $username;
 	
 	if (!UserHandler::userExists($username) || 
-		!UserHandler::userExists($email)) {
-		
-		SELECT `username`
-FROM `users` 
-WHERE (`username` 
-       NOT REGEXP '^[a-zæøåA-ZÆØÅ0-9_-]{2,16}$'
-      )
-		
+		!UserHandler::userExists($email)) {		
 		if (empty($firstname) || strlen($firstname) > 32) {
 			$message = 'Du har ikke skrevet inn noe fornavn.';
 		} else if (empty($lastname) || strlen($lastname) > 32) {
