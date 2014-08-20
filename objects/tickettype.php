@@ -41,8 +41,8 @@ class TicketType {
 	/*
 	 * Returns the price of this ticket, taking discount into consideration
 	 */
-	public function getPrice($type, $user) {
-		$price = $type->getPrice();
+	public function getPrice($user) {
+		$price = $this->price;
 		$discount = 20;
 		
 		// Check if the user have an registred ticket in the database
