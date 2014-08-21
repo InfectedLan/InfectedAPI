@@ -149,8 +149,9 @@ function hash_call($methodName,$nvpStr)
 		// moving to display page to display curl errors
 		  $_SESSION['curl_error_no']=curl_errno($ch) ;
 		  $_SESSION['curl_error_msg']=curl_error($ch);
-		  $location = "APIError.php";
-		  header("Location: $location");
+		  echo 'Curl error ' . curl_errno($ch) . ': ' . curl_error($ch);
+		  //$location = "APIError.php";
+		  //header("Location: $location");
 	 } else {
 		 //closing the curl
 			curl_close($ch);

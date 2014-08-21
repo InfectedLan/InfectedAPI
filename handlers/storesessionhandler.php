@@ -58,6 +58,19 @@ class StoreSessionHandler
 			return self::getStoreSession($row['id']);
 		}
 	}
+
+	//Used to validate a payment
+	public static function isPaymentValid($totalPrice, $amt, $user)
+	{
+		$session = self::getStoreSessionForUser($user);
+		if(!isset($session))
+		{
+			return false;
+		}
+		$type = TicketTypeHandler::getTicketType( $session->getTicketType() );
+
+		return $totalPrice == ($type->getPriceForUser($user) * $amt);
+	}
 	
 	public static function hasStoreSession($user) {
 		return self::getStoreSessionForUser($user) != null;

@@ -7,21 +7,24 @@
    			$paymentType="Sale";
 
    			//Set the return and cancel url
-		   	$returnURL =urlencode('https://tickets.infected.no/v2/index.php?page=reviewOrder');
-		   	$cancelURL =urlencode('https://tickets.infected.no/v2/index.php');
+		   	/*$returnURL =urlencode('https://tickets.infected.no/v2/index.php?page=reviewOrder');
+		   	$cancelURL =urlencode('https://tickets.infected.no/v2/index.php');*/
+
+		   	$returnURL =urlencode('https://tickets.test.infected.no/v2/index.php?page=reviewOrder');
+		   	$cancelURL =urlencode('https://tickets.test.infected.no/v2/index.php');
 
 			//Calculate total price		   	
 		   	$itemamt = $amount*$ticketType->getPrice();
 		   	$amt = $itemamt;
 		   	$maxamt= $amt;
 		   
-		   	$nvpstr = "&_LITEMCATEGORY0=Digital&NOSHIPPING=1&L_NAME0=" . $key . "&L_AMT0=" . $ticketType->getPrice() . 
+		   	$nvpstr = "&_LITEMCATEGORY0=Digital&NOSHIPPING=1&L_NAME0=" . $ticketType->getHumanName() . "&L_AMT0=" . $ticketType->getPrice() . 
 		   	"&L_QTY0=" . $amount . "&MAXAMT=" . (string)$maxamt . "&AMT=" . (string)$amt . "&ITEMAMT=" . 
 		   	(string)$itemamt . "&CALLBACKTIMEOUT=4&L_NUMBER0=10001&L_DESC0=" . $ticketType->getHumanName() . 
 		   	"&ReturnUrl=" . $returnURL . "&CANCELURL=" . $cancelURL ."&CURRENCYCODE=" . $currencyCodeType . 
 		   	"&PAYMENTACTION=" . $paymentType;
 		   
-		   	$nvpstr = /*$nvpHeader .*/ $nvpstr;
+		   	$nvpstr = /*$nvpHeader .*/$nvpstr;
 		   
 		 	//Make the call to PayPal to get the Express Checkout token
 		   	$resArray=hash_call("SetExpressCheckout",$nvpstr);
@@ -38,7 +41,7 @@
 			}
 		}
 
-		public static function completePurchase($token, $paymentAmount, $paymentType, $currCodeType, $payerID, $serverName) {
+		public static function completePurchase($token, $paymentAmount, $currCodeType, $payerID, $serverName) {
 			ini_set('session.bug_compat_42',0);
 			ini_set('session.bug_compat_warn',0);
 
@@ -66,7 +69,22 @@
 			}
 			return null;
 		}
+		public static function getExpressCheckoutDetails($token) {
 
+			$nvpstr="&TOKEN=".urlencode($token);
+
+			echo $nvpstr;
+
+			$resArray = hash_call("GetExpressCheckoutDetails",$nvpstr);
+
+			$ack = strtoupper($resArray["ACK"]);
+
+			if($ack == 'SUCCESS' || $ack == 'SUCCESSWITHWARNING'){
+				return $resArray;
+			} else {
+				return null;
+			}
+		}
 		public static function handlePaypalRedirectData() {
 			//This is stuff done in the php called by paypal.
 			$_SESSION['token']=$_REQUEST['token'];
