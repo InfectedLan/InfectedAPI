@@ -21,7 +21,7 @@
 		   	"&ReturnUrl=" . $returnURL . "&CANCELURL=" . $cancelURL ."&CURRENCYCODE=" . $currencyCodeType . 
 		   	"&PAYMENTACTION=" . $paymentType;
 		   
-		   	$nvpstr = $nvpHeader . $nvpstr;
+		   	$nvpstr = /*$nvpHeader .*/ $nvpstr;
 		   
 		 	//Make the call to PayPal to get the Express Checkout token
 		   	$resArray=hash_call("SetExpressCheckout",$nvpstr);
