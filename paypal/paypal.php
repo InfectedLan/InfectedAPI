@@ -1,6 +1,7 @@
 <?php
 	require_once 'session.php';
 	require_once 'paypal/CallerService.php';
+	require_once 'paypalSecret.php';
 	class PayPal {
 		public static function getPaymentUrl($ticketType, $amount, $key, $user) {
 			$currencyCodeType="NOK";
@@ -34,7 +35,7 @@
 
 		 	if($ack=="SUCCESS"){
 				$token = urldecode($resArray["TOKEN"]);
-				$url = PAYPAL_URL.$token;
+				$url = PaypalSecret::PaypalUrl . $token;
 				return $url;
 		  	} else  {
 				return null;

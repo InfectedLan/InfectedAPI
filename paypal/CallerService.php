@@ -11,38 +11,16 @@ DoDirectPaymentReceipt.php and DoExpressCheckoutPayment.php.
 
 ****************************************************/
 require_once 'paypalSecret.php';
-if(defined('API_USERNAME'))
-$API_UserName=API_USERNAME;
-
-if(defined('API_PASSWORD'))
-$API_Password=API_PASSWORD;
-
-if(defined('API_SIGNATURE'))
-$API_Signature=API_SIGNATURE;
-
-if(defined('API_ENDPOINT'))
-$API_Endpoint =API_ENDPOINT;
-
-$version=VERSION;
 
 if(defined('SUBJECT'))
 $subject = SUBJECT;
-// below three are needed if used permissioning
-if(defined('AUTH_TOKEN'))
-$AUTH_token= AUTH_TOKEN;
-
-if(defined('AUTH_SIGNATURE'))
-$AUTH_signature=AUTH_SIGNATURE;
-
-if(defined('AUTH_TIMESTAMP'))
-$AUTH_timestamp=AUTH_TIMESTAMP;
 
 
 function nvpHeader()
 {
 global $API_Endpoint,$version,$API_UserName,$API_Password,$API_Signature,$nvp_Header, $subject, $AUTH_token,$AUTH_signature,$AUTH_timestamp;
 $nvpHeaderStr = "";
-
+/*
 if(defined('AUTH_MODE')) {
 	//$AuthMode = "3TOKEN"; //Merchant's API 3-TOKEN Credential is required to make API Call.
 	//$AuthMode = "FIRSTPARTY"; //Only merchant Email is required to make EC Calls.
@@ -56,7 +34,7 @@ else {
 	}
 	
 	else if((!empty($API_UserName)) && (!empty($API_Password)) && (!empty($API_Signature))) {
-		$AuthMode = "TOKEN";
+		$AuthMode = "TOKEN"; //This
 	}
 	
 	elseif (!empty($AUTH_token) && !empty($AUTH_signature) && !empty($AUTH_timestamp)) {
@@ -65,12 +43,22 @@ else {
     elseif(!empty($subject)) {
 		$AuthMode = "FIRSTPARTY";
 	}
-}
+	else
+	{
+		echo empty($API_UserName);
+		echo empty($API_Password);
+		echo empty($API_Signature);
+		echo empty($subject);
+		echo empty($AUTH_token);
+		echo empty($AUTH_signature);
+		echo empty($AUTH_timestamp);
+	}
+}*//*
 switch($AuthMode) {
 	
-	case "TOKEN" : 
-			$nvpHeaderStr = "&PWD=".urlencode($API_Password)."&USER=".urlencode($API_UserName)."&SIGNATURE=".urlencode($API_Signature);
-			break;
+	case "TOKEN" : */
+			$nvpHeaderStr = "&PWD=".urlencode(PaypalSecret::ApiPassword)."&USER=".urlencode(PaypalSecret::ApiUsername)."&SIGNATURE=".urlencode(PaypalSecret::ApiSignature);
+			/*break;
 	case "FIRSTPARTY" :
 			$nvpHeaderStr = "&SUBJECT=".urlencode($subject);
 			break;
@@ -80,7 +68,7 @@ switch($AuthMode) {
 	case "PERMISSION" :
 		    $nvpHeaderStr = formAutorization($AUTH_token,$AUTH_signature,$AUTH_timestamp);
 		    break;
-}
+}*/
 	return $nvpHeaderStr;
 }
 
@@ -95,12 +83,12 @@ switch($AuthMode) {
 function hash_call($methodName,$nvpStr)
 {
 	//declaring of global variables
-	global $API_Endpoint,$version,$API_UserName,$API_Password,$API_Signature,$nvp_Header, $subject, $AUTH_token,$AUTH_signature,$AUTH_timestamp;
+	//global $API_Endpoint,$version,$API_UserName,$API_Password,$API_Signature,$nvp_Header, $subject, $AUTH_token,$AUTH_signature,$AUTH_timestamp;
 	// form header string
 	$nvpheader=nvpHeader();
 	//setting the curl parameters.
 	$ch = curl_init();
-	curl_setopt($ch, CURLOPT_URL,$API_Endpoint);
+	curl_setopt($ch, CURLOPT_URL,PaypalSecret::ApiEndpoint);
 	curl_setopt($ch, CURLOPT_VERBOSE, 1);
 
 	//turning off the server and peer verification(TrustManager Concept).
@@ -124,12 +112,12 @@ function hash_call($methodName,$nvpStr)
 	}
     //if USE_PROXY constant set to TRUE in Constants.php, then only proxy will be enabled.
    //Set proxy name to PROXY_HOST and port number to PROXY_PORT in constants.php 
-	if(USE_PROXY)
-	curl_setopt ($ch, CURLOPT_PROXY, PROXY_HOST.":".PROXY_PORT); 
+	/*if(USE_PROXY)
+	curl_setopt ($ch, CURLOPT_PROXY, PROXY_HOST.":".PROXY_PORT); */
 
 	//check if version is included in $nvpStr else include the version.
 	if(strlen(str_replace('VERSION=', '', strtoupper($nvpStr))) == strlen($nvpStr)) {
-		$nvpStr = "&VERSION=" . urlencode($version) . $nvpStr;	
+		$nvpStr = "&VERSION=" . urlencode(PaypalSecret::Version) . $nvpStr;	
 	}
 	
 	$nvpreq="METHOD=".urlencode($methodName).$nvpStr;
