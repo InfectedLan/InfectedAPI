@@ -15,11 +15,11 @@
 		   	$cancelURL =urlencode('https://tickets.test.infected.no/v2/index.php');
 
 			//Calculate total price		   	
-		   	$itemamt = $amount*$ticketType->getPrice();
+		   	$itemamt = $amount*$ticketType->getPriceForUser($user);
 		   	$amt = $itemamt;
 		   	$maxamt= $amt;
 		   
-		   	$nvpstr = "&_LITEMCATEGORY0=Digital&NOSHIPPING=1&L_NAME0=" . $ticketType->getHumanName() . "&L_AMT0=" . $ticketType->getPrice() . 
+		   	$nvpstr = "&_LITEMCATEGORY0=Digital&NOSHIPPING=1&L_NAME0=" . $ticketType->getHumanName() . "&L_AMT0=" . $ticketType->getPriceForUser($user) . 
 		   	"&L_QTY0=" . $amount . "&MAXAMT=" . (string)$maxamt . "&AMT=" . (string)$amt . "&ITEMAMT=" . 
 		   	(string)$itemamt . "&CALLBACKTIMEOUT=4&L_NUMBER0=10001&L_DESC0=" . $ticketType->getHumanName() . 
 		   	"&ReturnUrl=" . $returnURL . "&CANCELURL=" . $cancelURL ."&CURRENCYCODE=" . $currencyCodeType . 

@@ -21,7 +21,8 @@ class StoreSessionHandler
 									$row['timeCreated'],
 									$row['ticketType'],
 									$row['amount'],
-									$row['code']);
+									$row['code'],
+									$row['price']);
 		}
 	}
 	
@@ -60,16 +61,9 @@ class StoreSessionHandler
 	}
 
 	//Used to validate a payment
-	public static function isPaymentValid($totalPrice, $amt, $user)
+	public static function isPaymentValid($totalPrice, $amt, $session)
 	{
-		$session = self::getStoreSessionForUser($user);
-		if(!isset($session))
-		{
-			return false;
-		}
-		$type = TicketTypeHandler::getTicketType( $session->getTicketType() );
-
-		return $totalPrice == ($type->getPriceForUser($user) * $amt);
+		return $totalPrice == $session->getPrice() && $amt == $session->getAmount();
 	}
 	
 	public static function hasStoreSession($user) {
@@ -139,26 +133,20 @@ class StoreSessionHandler
 		}
 	}
 
-	public static function purchaseComplete($code, $price, $amount) {
-		$storeSession = self::getStoreSessionFromcode($code);
-		
+	public static function purchaseComplete($storeSession, $price, $amount) {
 		if (!isset($storeSession)) {
 			return false;
 		}
 
 		$user = UserHandler::getUser( $storeSession->getUserId() );
-		$expectedAmount = $storeSession->getAmount();
-		$ticketType = $storeSession->getTicketType();
 
-		if ($amount != $storeSession->getAmount()) {
+		//Validate
+		if(!self::isPaymentValid($price, $amount, $storeSession))
+		{
 			return false;
 		}
-		
-		$expectedPrice = $ticketType->getPrice() * $amount;
-		
-		if ($expectedPrice != $price) {
-			return false;
-		}
+
+		$ticketType = $storeSession->getTicketType();
 
 		// Checks are ok, lets buy!
 		for ($i = 0; $i < $amount; $i++) {

@@ -6,6 +6,7 @@ class StoreSession {
 	private $ticketType;
 	private $amount;
 	private $key;
+	private $price;
 
 	/*
 	 * StoreSession - represents a session in the ticket shop.
@@ -17,13 +18,14 @@ class StoreSession {
 	 * UserId: ID of user connected to the session
 	 * TimeCreated: time this session was created, used for calculating if session has timed out
 	 */
-	public function __construct($id, $userId, $timeCreated, $ticketType, $amount, $key) {
+	public function __construct($id, $userId, $timeCreated, $ticketType, $amount, $key, $price) {
 		$this->id = $id;
 		$this->userId = $userId;
 		$this->timeCreated = $timeCreated;
 		$this->ticketType = $ticketType;
 		$this->amount = $amount;
 		$this->key = $key;
+		$this->price = $price;
 	}
 
 	/*
@@ -66,6 +68,13 @@ class StoreSession {
 	 */
 	public function getKey() {
 		return $this->key;
+	}
+
+	/*
+	 * Returns the price the user was supposed to pay
+	 */
+	public function getPrice() {
+		return $this->price;
 	}
 }
 ?>
