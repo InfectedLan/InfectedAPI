@@ -133,23 +133,17 @@ class StoreSessionHandler
 		}
 	}
 
-	public static function purchaseComplete($storeSession, $price, $amount) {
+	public static function purchaseComplete($storeSession) {
 		if (!isset($storeSession)) {
 			return false;
 		}
 
 		$user = UserHandler::getUser( $storeSession->getUserId() );
 
-		//Validate
-		if(!self::isPaymentValid($price, $amount, $storeSession))
-		{
-			return false;
-		}
-
 		$ticketType = $storeSession->getTicketType();
 
 		// Checks are ok, lets buy!
-		for ($i = 0; $i < $amount; $i++) {
+		for ($i = 0; $i < $storeSession->getAmount(); $i++) {
 			TicketHandler::createTicket($user, $ticketType);
 		}
 

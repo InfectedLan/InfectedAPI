@@ -61,7 +61,6 @@
 			$ack = strtoupper($resArray["ACK"]);
 			$transid = strtoupper($resArray["TRANSACTIONID"]);
 			$paymentstatus = strtoupper($resArray["PAYMENTSTATUS"]);
-			$session = $_SESSION["navn"];
 			if($ack != 'SUCCESS' && $ack != 'SUCCESSWITHWARNING' && $paymentstatus != 'COMPLETED'){
 				return null; 
 			}
