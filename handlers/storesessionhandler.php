@@ -3,6 +3,7 @@ require_once 'settings.php';
 require_once 'mysql.php';
 require_once 'objects/storesession.php';
 require_once 'handlers/tickethandler.php';
+require_once 'handlers/tickettypehandler.php';
 
 class StoreSessionHandler
 {
@@ -140,7 +141,7 @@ class StoreSessionHandler
 
 		$user = UserHandler::getUser( $storeSession->getUserId() );
 
-		$ticketType = $storeSession->getTicketType();
+		$ticketType = TicketTypeHandler::getTicketType($storeSession->getTicketType());
 
 		// Checks are ok, lets buy!
 		for ($i = 0; $i < $storeSession->getAmount(); $i++) {

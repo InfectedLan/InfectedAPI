@@ -73,7 +73,7 @@
 
 			$nvpstr="&TOKEN=".urlencode($token);
 
-			echo $nvpstr;
+			//echo $nvpstr;
 
 			$resArray = hash_call("GetExpressCheckoutDetails",$nvpstr);
 
