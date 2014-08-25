@@ -14,7 +14,8 @@ if (Session::isAuthenticated()) {
 		if ($ticket != null) {
 			if ($user->getId() == $ticket->getOwner()->getId()) {
 				if (isset($_GET['target'])) {
-					$target = UserHandler::getUser($target);
+					
+					$target = UserHandler::getUser($_GET['target']);
 					TicketHandler::setSeater($ticket, $target);
 
 					$result = true;

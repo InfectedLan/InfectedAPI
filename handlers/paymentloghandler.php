@@ -12,12 +12,12 @@ class PaymentLogHandler
 		$con = MySQL::open(Settings::db_name_infected_tickets);
 
 		mysqli_query($con, 'INSERT INTO `' . Settings::db_table_infected_tickets_paymentlog . '` (`timeLogged`, `userId`, `ticketType`, `amount`, `totalPrice`, `transactionId`) 
-							VALUES (' . $con->real_escape_string($time) . ', 
-									\'' . $con->real_escape_string($user->getId()) . '\', 
-									\'' . $con->real_escape_string($ticketType->getId()) . '\',
-									\'' . $con->real_escape_string($amount) . '\', 
-									\'' . $con->real_escape_string($total) . '\', 
-									\'' . $con->real_escape_string($transactionId) . ');');
+							VALUES (' . $con->real_escape_string($time) . ', '
+									 . $con->real_escape_string($user->getId()) . ', '
+									 . $con->real_escape_string($ticketType->getId()) . ','
+									 . $con->real_escape_string($amount) . ', '
+									 . $con->real_escape_string($total) . ', 
+									\'' . $con->real_escape_string($transactionId) . '\');');
 
 		MySQL::close($con);
 	}

@@ -85,6 +85,7 @@
 				return null;
 			}
 		}
+		//Not working
 		public static function handlePaypalRedirectData() {
 			//This is stuff done in the php called by paypal.
 			$_SESSION['token']=$_REQUEST['token'];
