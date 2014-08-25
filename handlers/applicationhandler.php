@@ -96,6 +96,18 @@ class ApplicationHandler {
 		MySQL::close($con);
 	}
 	
+	/* 
+	 * Remove a application.
+	 */
+	public static function removeApplication($id) {
+		$con = MySQL::open(Settings::db_name_infected_crew);
+		
+		mysqli_query($con, 'DELETE FROM `' . Settings::db_table_infected_crew_applications . '` 
+							WHERE `id` = \'' . $con->real_escape_string($id) . '\';');
+		
+		MySQL::close($con);
+	}
+	
 	public static function acceptApplication($id) {
 		$con = MySQL::open(Settings::db_name_infected_crew);
 		

@@ -1,6 +1,6 @@
 <?php
 require_once 'session.php';
-require_once 'handlers/userhandler.php';
+require_once 'handlers/grouphandler.php';
 require_once 'handlers/teamhandler.php';
 
 $result = false;
