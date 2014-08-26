@@ -9,32 +9,35 @@ if (Session::isAuthenticated()) {
 	$user = Session::getCurrentUser();
 	
 	if ($user->hasPermission('*') ||
-		$user->hasPermission('admin-events') ||
-		$user->isGroupLeader()) {
+		$user->hasPermission('admin-events')) {
 		if (isset($_GET['id']) &&
 			isset($_GET['theme']) &&
+			isset($_GET['location']) &&
+			isset($_GET['participants']) &&
+			isset($_GET['bookingDate']) &&
+			isset($_GET['bookingTime']) &&
 			isset($_GET['startDate']) &&
 			isset($_GET['startTime']) &&
 			isset($_GET['endDate']) &&
 			isset($_GET['endTime']) &&
-			isset($_GET['location']) &&
-			isset($_GET['participants']) &&
 			is_numeric($_GET['id']) &&
-			!empty($_GET['theme']) &&
+			is_numeric($_GET['location']) &&
+			is_numeric($_GET['participants'])) {
+			!empty($_GET['bookingDate']) &&
+			!empty($_GET['bookingTime']) &&
 			!empty($_GET['startDate']) &&
 			!empty($_GET['startTime']) &&
 			!empty($_GET['endDate']) &&
 			!empty($_GET['endTime']) &&
-			is_numeric($_GET['location']) &&
-			is_numeric($_GET['participants'])) {
 			$id = $_GET['id'];
 			$theme = $_GET['theme'];
-			$start = $_GET['startDate'] . ' ' . $_GET['startTime'];
-			$end = $_GET['endDate'] . ' ' . $_GET['endTime'];
 			$location = $_GET['location'];
 			$participants = $_GET['participants'];
+			$bookingTime = $_GET['bookingDate'] . ' ' . $_GET['bookingTime'];
+			$startTime = $_GET['startDate'] . ' ' . $_GET['startTime'];
+			$endTime = $_GET['endDate'] . ' ' . $_GET['endTime'];
 			
-			EventHandler::updateEvent($id, $theme, $start, $end, $location, $participants);
+			EventHandler::updateEvent($id, $theme, $location, $participants, $bookingTime, $startTime, $endTime);
 			$result = true;
 		} else {
 			$message = 'Du har ikke fyllt ut alle feltene!';
