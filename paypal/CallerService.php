@@ -10,7 +10,7 @@ Called by TransactionDetails.php, ReviewOrder.php,
 DoDirectPaymentReceipt.php and DoExpressCheckoutPayment.php.
 
 ****************************************************/
-require_once 'paypalSecret.php';
+require_once 'paypalsecret.php';
 
 if(defined('SUBJECT'))
 $subject = SUBJECT;
