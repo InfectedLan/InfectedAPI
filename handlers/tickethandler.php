@@ -57,7 +57,7 @@ class TicketHandler {
 
 		$result = mysqli_query($con, 'SELECT `id` FROM `' . Settings::db_table_infected_tickets_tickets . '` 
 									  WHERE `ownerId` = \'' . $con->real_escape_string($user->getId()) . '\'
-									  ORDER BY DESC
+									  ORDER BY `eventId` DESC
 									  LIMIT 1;');
 
 		$row = mysqli_fetch_array($result);
