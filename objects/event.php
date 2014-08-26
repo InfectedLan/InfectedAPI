@@ -8,20 +8,22 @@ require_once 'location.php';
 class Event {
 	private $id;
 	private $theme;
-	private $start;
-	private $end;
 	private $location;
 	private $participants;
+	private $bookingTime;
+	private $startTime;
+	private $endTime;
 	private $seatmap;
 	private $ticketType;
 	
-	public function __construct($id, $theme, $start, $end, $location, $participants, $seatmap, $ticketType) {
+	public function __construct($id, $theme, $location, $participants, $bookingTime, $startTime, $endTime, $seatmap, $ticketType) {
 		$this->id = $id;
 		$this->theme = $theme;
-		$this->start = $start;
-		$this->end = $end;
 		$this->location = $location;
 		$this->participants = $participants;
+		$this->bookingTime = $bookingTime;
+		$this->startTime = $startTime;
+		$this->endTime = $endTime;
 		$this->seatmap = $seatmap;
 		$this->ticketType = $ticketType;
 	}
@@ -34,20 +36,24 @@ class Event {
 		return $this->theme;
 	}
 	
-	public function getStartTime() {
-		return strtotime($this->start);
-	}
-	
-	public function getEndTime() {
-		return strtotime($this->end);
-	}
-
 	public function getLocation() {
 		return LocationHandler::getLocation($this->location);
 	}
 
 	public function getParticipants() {
 		return $this->participants;
+	}
+	
+	public function getBookingTime() {
+		return strtotime($this->bookingTime);
+	}
+	
+	public function getStartTime() {
+		return strtotime($this->startTime);
+	}
+	
+	public function getEndTime() {
+		return strtotime($this->endTime);
 	}
 
 	public function getSeatmap() {
@@ -56,6 +62,14 @@ class Event {
 
 	public function getTicketType() {
 		return TicketTypeHandler::getTicketType($this->ticketType);
+	}
+	
+	public function isBookingTime() {
+		$bookingTime = $this->getBookingTime();
+		$bookingEndTime = $this->getStartTime() + 86400;
+		$now = strtotime(date('Y-m-d H:i:s'));
+
+		return $now >= $bookingTime && $now <= $bookingEndTime;
 	}
 	
 	public function getTicketCount() {

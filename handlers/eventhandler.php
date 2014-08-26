@@ -19,10 +19,11 @@ class EventHandler {
 		if ($row) {
 			return new Event($row['id'],
 							 $row['theme'], 
-							 $row['start'], 
-							 $row['end'], 
 							 $row['location'], 
 							 $row['participants'], 
+							 $row['bookingTime'], 
+							 $row['startTime'], 
+							 $row['endTime'], 
 							 $row['seatmap'],
 							 $row['ticketType']);
 		}
@@ -33,8 +34,8 @@ class EventHandler {
 		$con = MySQL::open(Settings::db_name_infected);
 		
 		$result = mysqli_query($con, 'SELECT `id` FROM `' . Settings::db_table_infected_events . '`
-									  WHERE `end` > NOW()
-									  ORDER BY `start` ASC
+									  WHERE `endTime` > NOW()
+									  ORDER BY `startTime` ASC
 									  LIMIT 1;');
 
 		$row = mysqli_fetch_array($result);
@@ -64,15 +65,17 @@ class EventHandler {
 	/* 
 	 * Create new event
 	 */
-	public static function createEvent($theme, $start, $end, $location, $participants) {
+	public static function createEvent($theme, $location, $participants, $bookingTime, $startTime, $endTime) {
 		$con = MySQL::open(Settings::db_name_infected);
 		
-		mysqli_query($con, 'INSERT INTO `' . Settings::db_table_infected_events . '` (`theme`, `start`, `end`, `location`, `participants`) 
+		mysqli_query($con, 'INSERT INTO `' . Settings::db_table_infected_events . '` (`theme`, `location`, `participants`, `bookingTime`, `startTime`, `endTime`) 
 							VALUES (\'' . $con->real_escape_string($theme) . '\', 
-									\'' . $con->real_escape_string($start) . '\', 
-									\'' . $con->real_escape_string($end) . '\',
 									\'' . $con->real_escape_string($location) . '\',
-									\'' . $con->real_escape_string($participants) . '\');');
+									\'' . $con->real_escape_string($participants) . '\',
+									\'' . $con->real_escape_string($bookingTime) . '\', 
+									\'' . $con->real_escape_string($startTime) . '\', 
+									\'' . $con->real_escape_string($endTime) . '\',
+);');
 									
 		MySQL::close($con);
 	}
@@ -80,15 +83,16 @@ class EventHandler {
 	/* 
 	 * Update an event 
 	 */
-	public static function updateEvent($id, $theme, $start, $end, $location, $participants) {
+	public static function updateEvent($id, $theme, $location, $participants, $bookingTime, $startTime, $endTime) {
 		$con = MySQL::open(Settings::db_name_infected);
 		
 		mysqli_query($con, 'UPDATE `' . Settings::db_table_infected_events . '` 
 							SET `theme` = \'' . $con->real_escape_string($theme) . '\', 
-								`start` = \'' . $con->real_escape_string($start) . '\', 
-								`end` = \'' . $con->real_escape_string($end) . '\', 
 								`location` = \'' . $con->real_escape_string($location) . '\', 
-								`participants` = \'' . $con->real_escape_string($participants) . '\'
+								`participants` = \'' . $con->real_escape_string($participants) . '\',
+								`bookingTime` = \'' . $con->real_escape_string($bookingTime) . '\', 
+								`startTime` = \'' . $con->real_escape_string($startTime) . '\', 
+								`endTime` = \'' . $con->real_escape_string($endTime) . '\'
 							WHERE `id` = \'' . $con->real_escape_string($id) . '\';');
 		
 		MySQL::close($con);
