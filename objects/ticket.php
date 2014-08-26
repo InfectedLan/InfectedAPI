@@ -85,7 +85,7 @@ class Ticket {
 	public function getHumanName() {
 		$event = $this->getEvent();
 		$season = date('m', $event->getStartTime()) == 2 ? 'Vinter' : 'Høst';
-		$eventName = !empty($event->getTitle()) ? $event->getTitle() : $season;
+		$eventName = !empty($event->getTheme()) ? $event->getTheme() : $season;
 	
 		return 'INFECTED_' . strtoupper($eventName) . $this->getId();
 	}
