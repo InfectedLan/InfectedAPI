@@ -74,8 +74,7 @@ class EventHandler {
 									\'' . $con->real_escape_string($participants) . '\',
 									\'' . $con->real_escape_string($bookingTime) . '\', 
 									\'' . $con->real_escape_string($startTime) . '\', 
-									\'' . $con->real_escape_string($endTime) . '\',
-);');
+									\'' . $con->real_escape_string($endTime) . '\');');
 									
 		MySQL::close($con);
 	}
