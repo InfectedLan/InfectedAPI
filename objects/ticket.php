@@ -83,7 +83,11 @@ class Ticket {
 	 * Returns a human readable representation of the ticket
 	 */
 	public function getHumanName() {
-		return 'INFECTED_' . strtoupper($this->getEvent()->getTheme()) . $this->id;
+		$event = $this->getEvent();
+		$season = date('m', $event->getStartTime()) == 2 ? 'Vinter' : 'Høst';
+		$eventName = !empty($event->getTitle()) ? $event->getTitle() : $season;
+	
+		return 'INFECTED_' . strtoupper($eventName) . $this->getId();
 	}
 	
 	public function getQrImagePath() {
