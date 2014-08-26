@@ -28,30 +28,51 @@ class Event {
 		$this->ticketType = $ticketType;
 	}
 	
+	/*
+	 * Returns the id.
+	 */
 	public function getId() {
 		return $this->id;
 	}
 	
+	/*
+	 * Returns theme of this event.
+	 */
 	public function getTheme() {
 		return $this->theme;
 	}
 	
+	/*
+	 * Returns the event location.
+	 */
 	public function getLocation() {
 		return LocationHandler::getLocation($this->location);
 	}
 
+	/*
+	 * Returns the number of paricipants for this event.
+	 */
 	public function getParticipants() {
 		return $this->participants;
 	}
 	
+	/*
+	 * Returns the time when the booking starts.
+	 */
 	public function getBookingTime() {
 		return strtotime($this->bookingTime);
 	}
 	
+	/*
+	 * Returns when the event starts.
+	 */
 	public function getStartTime() {
 		return strtotime($this->startTime);
 	}
 	
+	/*
+	 * Returns when the event ends.
+	 */
 	public function getEndTime() {
 		return strtotime($this->endTime);
 	}
@@ -64,6 +85,9 @@ class Event {
 		return TicketTypeHandler::getTicketType($this->ticketType);
 	}
 	
+	/*
+	 * Returns true if booking for this event is open.
+	 */
 	public function isBookingTime() {
 		$bookingTime = $this->getBookingTime();
 		$bookingEndTime = $this->getStartTime() + 86400;
@@ -79,7 +103,8 @@ class Event {
 	public function getAvailableTickets() {
 		$ticketCount = $this->getTicketCount();
 		$numLeft = $this->getParticipants() - $ticketCount;
-		$numLeft -= StoreSessionHandler::getReservedTicketCount( TicketTypeHandler::getTicketType($this->ticketType) );
+		$numLeft -= StoreSessionHandler::getReservedTicketCount(TicketTypeHandler::getTicketType($this->ticketType));
+		
 		return $numLeft;
 	}
 }

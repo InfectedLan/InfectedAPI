@@ -29,15 +29,78 @@ class TicketHandler {
 		}
 	}
 	
-	// TODO: Move this to Event.
-	public static function getAvailableTickets() {
-		return self::getAvailableTicketsForEvent(EventHandler::getCurrentEvent());
-	}
-	
 	public static function getAvailableTicketsForEvent($event) {
 		$ticketList = self::getTicketsForEvent($event->getId());
 
 		return $event->getParticipants() - count($ticketList);
+	}
+	
+	public static function getTicketForUser($user) {
+		$con = MySQL::open(Settings::db_name_infected_tickets);
+
+		$result = mysqli_query($con, 'SELECT `id` FROM `' . Settings::db_table_infected_tickets_tickets . '` 
+									  WHERE `ownerId` = \'' . $con->real_escape_string($user->getId()) . '\'
+									  AND `eventId` = \'' .  EventHandler::getCurrentEvent()->getId() . '\' 
+									  LIMIT 1;');
+
+		$row = mysqli_fetch_array($result);
+
+		MySQL::close($con);
+		
+		if ($row) {
+			return self::getTicket($row['id']);
+		}
+	}
+	
+	public static function hasTicket($user) {
+		$con = MySQL::open(Settings::db_name_infected_tickets);
+
+		$result = mysqli_query($con, 'SELECT `id` FROM `' . Settings::db_table_infected_tickets_tickets . '` 
+									  WHERE `ownerId` = \'' . $con->real_escape_string($user->getId()) . '\'
+									  ORDER BY DESC
+									  LIMIT 1;');
+
+		$row = mysqli_fetch_array($result);
+
+		MySQL::close($con);
+		
+		return $row ? true : false;
+	}
+	
+	public static function getTicketsForOwner($user) {
+		$con = MySQL::open(Settings::db_name_infected_tickets);
+
+		$result = mysqli_query($con, 'SELECT `id` FROM `' . Settings::db_table_infected_tickets_tickets . '` 
+									  WHERE `ownerId` = \'' . $con->real_escape_string($user->getId()) . '\';');
+
+		$ticketList = array();
+
+		while($row = mysqli_fetch_array($result)) {
+			array_push($ticketList, self::getTicket($row['id']));
+		}
+
+		MySQL::close($con);
+
+		return $ticketList;
+	}
+	
+	public static function getTicketsForOwnerAndEvent($user, $event) {
+		$con = MySQL::open(Settings::db_name_infected_tickets);
+
+		$result = mysqli_query($con, 'SELECT `id` FROM `' . Settings::db_table_infected_tickets_tickets . '` 
+									  WHERE `ownerId` = \'' . $con->real_escape_string($user->getId()) . '\' 
+									  AND `eventId`= ' . $con->real_escape_string($event->getId()) . '
+									  LIMIT 1;');
+
+		$ticketList = array();
+
+		while($row = mysqli_fetch_array($result)) {
+			array_push($ticketList, self::getTicket($row['id']));
+		}
+
+		MySQL::close($con);
+
+		return $ticketList;
 	}
 	
 	public static function getTicketList($event) {
@@ -65,87 +128,6 @@ class TicketHandler {
 		MySQL::close($con);
 
 		return mysqli_num_rows($result);
-	}
-	
-	public static function getUserTicketForEvent($user, $event) {
-		$con = MySQL::open(Settings::db_name_infected_tickets);
-
-		$result = mysqli_query($con, 'SELECT `id` FROM `' . Settings::db_table_infected_tickets_tickets . '` 
-									  WHERE `ownerId` = \'' . $con->real_escape_string($user->getId()) . '\'
-									  AND `eventId` = \'' .  $con->real_escape_string($event->getId()) . '\' 
-									  LIMIT 1;');
-
-		$row = mysqli_fetch_array($result);
-
-		MySQL::close($con);
-		
-		if ($row) {
-			return self::getTicket($row['id']);
-		}
-	}
-	
-	public static function getTicketForUser($user) {
-		$con = MySQL::open(Settings::db_name_infected_tickets);
-
-		$result = mysqli_query($con, 'SELECT `id` FROM `' . Settings::db_table_infected_tickets_tickets . '` 
-									  WHERE `ownerId` = \'' . $con->real_escape_string($user->getId()) . '\'
-									  AND `eventId` = \'' .  EventHandler::getCurrentEvent()->getId() . '\' 
-									  LIMIT 1;');
-
-		$row = mysqli_fetch_array($result);
-
-		MySQL::close($con);
-		
-		if ($row) {
-			return self::getTicket($row['id']);
-		}
-	}
-	
-	public static function hasTicket($user) {
-		$con = MySQL::open(Settings::db_name_infected_tickets);
-
-		$result = mysqli_query($con, 'SELECT `id` FROM `' . Settings::db_table_infected_tickets_tickets . '` 
-									  WHERE `ownerId` = \'' . $con->real_escape_string($user->getId()) . '\';');
-
-		$row = mysqli_fetch_array($result);
-
-		MySQL::close($con);
-		
-		return $row ? true : false;
-	}
-	
-	public static function getTicketsForOwner($user) {
-		$con = MySQL::open(Settings::db_name_infected_tickets);
-
-		$result = mysqli_query($con, 'SELECT `id` FROM `' . Settings::db_table_infected_tickets_tickets . '` 
-									  WHERE `ownerId` = \'' . $con->real_escape_string($user->getId()) . '\';');
-
-		$ticketList = array();
-
-		while($row = mysqli_fetch_array($result)) {
-			array_push($ticketList, self::getTicket($row['id']));
-		}
-
-		MySQL::close($con);
-
-		return $ticketList;
-	}
-
-	public static function getTicketsForOwnerAndEvent($user, $event) {
-		$con = MySQL::open(Settings::db_name_infected_tickets);
-
-		$result = mysqli_query($con, 'SELECT `id` FROM `' . Settings::db_table_infected_tickets_tickets . '` 
-									  WHERE `ownerId` = \'' . $con->real_escape_string($user->getId()) . '\' AND `eventId`= ' . $con->real_escape_string($event->getId()) . ';');
-
-		$ticketList = array();
-
-		while($row = mysqli_fetch_array($result)) {
-			array_push($ticketList, self::getTicket($row['id']));
-		}
-
-		MySQL::close($con);
-
-		return $ticketList;
 	}
 	
 	public static function transferTicket($ticket, $newOwner) {

@@ -43,17 +43,20 @@ class TicketType {
 	 * Returns the price of this ticket, taking discount into consideration
 	 */
 	public function getPriceForUser($user) {
-		$event = EventHandler::getCurrentEvent();
-		$price = $this->price;
+		$price = $this->getPrice();
 		$discount = 20;
 		
-		// Check if the user have an registred ticket in the database
-		if (TicketHandler::hasTicket($user)) {
-			$ticket = TicketHandler::getUserTicketForEvent($user, EventHandler::getEvent($event->getId() - 1));
-			
-			// We'll check if this user has a ticket for earlier events, if it has, then give the discount.
-			if ($ticket != null) {
-				$price += $discount;
+		$ticketList = TicketHandler::getTicketsForOwner($user);
+		
+		foreach ($ticketList as $ticket) {
+			$year = date('Y', EventHandler::getCurrentEvent()->getStartTime());
+			$ticketYear = date('Y', $ticket->getEvent()->getStartTime());
+		
+			// We'll check if this user has a ticket in the same calender year, if it has, then give the discount.
+			if ($year == $ticketYear) {
+				$price -= $discount;
+				
+				break;
 			}
 		}
 		
