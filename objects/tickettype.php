@@ -1,6 +1,7 @@
 <?php
 require_once 'handlers/tickethandler.php';
 require_once 'handlers/eventhandler.php';
+
 class TicketType {
 	private $id;
 	private $humanName;
@@ -42,15 +43,16 @@ class TicketType {
 	 * Returns the price of this ticket, taking discount into consideration
 	 */
 	public function getPriceForUser($user) {
+		$event = EventHandler::getCurrentEvent();
 		$price = $this->price;
 		$discount = 20;
 		
 		// Check if the user have an registred ticket in the database
 		if (TicketHandler::hasTicket($user)) {
-			$ticket = TicketHandler::getTicketForUser($user);
+			$ticket = TicketHandler::getUserTicketForEvent($user, EventHandler::getEvent($event->getId() - 1));
 			
 			// We'll check if this user has a ticket for earlier events, if it has, then give the discount.
-			if ($ticket->getEvent()->getId() != EventHandler::getCurrentEvent()->getId()) {
+			if ($ticket != null) {
 				$price += $discount;
 			}
 		}
