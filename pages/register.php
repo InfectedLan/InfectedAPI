@@ -5,7 +5,7 @@ require_once 'utils.php';
 if (!Session::isAuthenticated()) {
 	echo '<script src="../api/scripts/register.js"></script>';
 	echo '<script src="../api/scripts/lookupCity.js"></script>';
-	echo '<form class="register" name="input" method="post">';
+	echo '<form class="register" method="post">';
 		echo '<h2>Registrer</h2>';
 		echo '<table>';
 			echo '<tr>';
