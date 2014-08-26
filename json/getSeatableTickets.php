@@ -21,6 +21,7 @@
 					$ticketOwner = $ticket->getOwner();
 					$data = array();
 					$data['id'] = $ticket->getId();
+					$data['humanName'] = $ticket->getHumanName();
 					$data['owner'] = $ticketOwner->getDisplayName();
 					array_push($ticketData, $data);
 				}
