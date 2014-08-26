@@ -53,16 +53,19 @@ class RowHandler {
 
 		$row = mysqli_fetch_array($highestRowNum);
 
-		$newRowNumber = $row['row']+1;
+		$newRowNumber = $row['row'] + 1;
+		$entrance = 1; // TODO: Set this somewere else?
 
-		mysqli_query($con, 'INSERT INTO ' . Settings::db_table_infected_tickets_rows . '(`number`, `x`, `y`, `seatmap`) 
+		mysqli_query($con, 'INSERT INTO ' . Settings::db_table_infected_tickets_rows . '(`number`, `x`, `y`, `entrance`, `seatmap`) 
 							VALUES (\'' . $con->real_escape_string($newRowNumber) . '\', 
 									  ' . $con->real_escape_string($x) . ', 
 									  ' . $con->real_escape_string($y) . ', 
-									  ' . $con->real_escape_string($seatmapId) . ')');
+									  ' . $con->real_escape_string($entrance) . ', 
+									  ' . $con->real_escape_string($seatmapId) . ');');
 
-		$result = mysqli_query($con, 'SELECT id FROM ' .  Settings::db_table_infected_tickets_rows . ' 
-									  ORDER BY `id` DESC LIMIT 1;');
+		$result = mysqli_query($con, 'SELECT `id` FROM `' .  Settings::db_table_infected_tickets_rows . '`
+									  ORDER BY `id` DESC 
+									  LIMIT 1;');
 
 		$row = mysqli_fetch_array($result);
 
