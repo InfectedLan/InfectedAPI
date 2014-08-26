@@ -51,9 +51,9 @@ if (isset($_GET['firstname']) &&
 			$message = 'Du har ikke skrevet inn et gyldig telefonnummer.';
 		} else if (empty($address) && strlen($address) > 32) {
 			$message = 'Du må skrive inn en adresse.';
-		} else if (!is_numeric($postalcode) || strlen($postalcode) > 4 || !CityDictionary::hasPostalCode($postalcode)) {
-			$message = 'Du må skrive inn et gyldig postnummer.';
-		} else if (!preg_match('/^[a-zæøåA-ZÆØÅ0-9_-]{2,16}$/', $nickname)) {
+		} else if (!is_numeric($postalcode) || strlen($postalcode) != 4 || !CityDictionary::hasPostalCode($postalcode)) {
+			$message = 'Du må skrive inn et gyldig postnummer, postnummeret må være 4 tegn langt.';
+		} else if (!preg_match('/^[a-zæøåA-ZÆØÅ0-9_-]{2,16}$/', $nickname) && !empty($nickname)) {
 			$message = 'Kallenavnet du skrev inn er ikke gyldig, det må bestå av minst 2 tegn og max 16 tegn.';
 		} else {
 			if ($password == $confirmPassword) {

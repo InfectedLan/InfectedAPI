@@ -39,11 +39,11 @@ class CityDictionary {
 		}
 	}
 	
-	public static function hasPostalCode($city) {
+	public static function hasPostalCode($code) {
 		$con = MySQL::open(Settings::db_name_infected);
 		
-		$result = mysqli_query($con, 'SELECT `code` FROM `' . Settings::db_table_infected_postalcodes . '` 
-									  WHERE `city` = \'' . $con->real_escape_string($city) . '\';');
+		$result = mysqli_query($con, 'SELECT `id` FROM `' . Settings::db_table_infected_postalcodes . '` 
+									  WHERE `code` = \'' . $con->real_escape_string($code) . '\';');
 		
 		$row = mysqli_fetch_array($result);
 		
