@@ -6,7 +6,8 @@ class Settings {
 	const keywords = 'infected, lan, party, asker, kulturhus, ungdom, gaming';
 	public static $authors = array('halvors', 'petterroea');
 	
-	const qr_path = '/home/test.infected.no/public_html/api/content/qrcache/';
+	const api_path = '/home/test.infected.no/public_html/api/';
+	const qr_path = 'content/qrcache/';
 	
 	const emailName = 'Infected';
 	const email = 'no-reply@infected.no';

@@ -1,4 +1,5 @@
 <?php
+require_once 'settings.php';
 require_once 'qr.php';
 require_once 'handlers/eventhandler.php';
 require_once 'handlers/userhandler.php';
@@ -84,10 +85,10 @@ class Ticket {
 	 */
 	public function getHumanName() {
 		$event = $this->getEvent();
-		$season = date('m', $event->getStartTime()) == 2 ? 'Vinter' : 'Høst';
+		$season = date('m', $event->getStartTime()) == 2 ? 'VINTER' : 'HØST' . '_' . date('Y', $event->getStartTime());
 		$eventName = !empty($event->getTheme()) ? $event->getTheme() : $season;
 	
-		return 'INFECTED_' . strtoupper($eventName) . $this->getId();
+		return strtoupper(Settings::name . '_' . $eventName . '_' . $this->getId());
 	}
 	
 	public function getQrImagePath() {
