@@ -1,6 +1,6 @@
 <?php
 require_once 'session.php';
-require_once 'paypal/CallerService.php';
+require_once 'paypal/callerservice.php';
 require_once 'paypalsecret.php';
 
 class PayPal {
@@ -12,8 +12,8 @@ class PayPal {
 		/*$returnURL =urlencode('https://tickets.infected.no/v2/index.php?page=reviewOrder');
 		$cancelURL =urlencode('https://tickets.infected.no/v2/index.php');*/
 
-		$returnURL =urlencode('https://tickets.test.infected.no/v2/index.php?page=reviewOrder');
-		$cancelURL =urlencode('https://tickets.test.infected.no/v2/index.php');
+		$returnURL = urlencode('https://tickets.' . $_SERVER['HTTP_HOST'] . '/v2/index.php?page=reviewOrder');
+		$cancelURL = urlencode('https://tickets.' . $_SERVER['HTTP_HOST'] . '/v2/index.php');
 
 		//Calculate total price		   	
 		$itemamt = $amount*$ticketType->getPriceForUser($user);
