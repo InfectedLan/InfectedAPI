@@ -50,23 +50,24 @@ if (Session::isAuthenticated()) {
 			$message = 'Du må skrive inn et gyldig postnummer.';
 		} else if (!preg_match('/^[a-zæøåA-ZÆØÅ0-9_-]{2,16}$/', $nickname)) {
 			$message = 'Kallenavnet du skrev inn er ikke gyldig, det må bestå av minst 2 tegn og max 16 tegn.';
-		
-		UserHandler::updateUser($user->getId(),
-								$firstname, 
-								$lastname, 
-								$user->getUsername(), 
-								$user->getPassword(), 
-								$user->getEmail(), 
-								$birthdate, 
-								$gender, 
-								$phone, 
-								$address, 
-								$postalcode, 
-								$nickname);
-		
-		// Update the user instance form database.
-		Session::reload();
-		$result = true;
+		} else {
+			UserHandler::updateUser($user->getId(),
+									$firstname, 
+									$lastname, 
+									$user->getUsername(), 
+									$user->getPassword(), 
+									$user->getEmail(), 
+									$birthdate, 
+									$gender, 
+									$phone, 
+									$address, 
+									$postalcode, 
+									$nickname);
+			
+			// Update the user instance form database.
+			Session::reload();
+			$result = true;
+		}
 	} else {
 		$message = 'Du har ikke fyllt ut alle feltene.';
 	}
