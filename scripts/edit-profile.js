@@ -3,7 +3,7 @@ $(document).ready(function() {
 		e.preventDefault();
 		$.getJSON('../api/json/editUser.php' + '?' + $(this).serialize(), function(data){
 			if (data.result) {
-				$(location).attr('href', 'index.php?page=profile');
+				$(location).attr('href', 'index.php?page=my-profile');
 			} else {
 				error(data.message); 
 			}
