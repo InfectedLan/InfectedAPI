@@ -38,6 +38,19 @@ class RegistrationCodeHandler {
 		return $code;
 	}
 	
+	public static function hasRegistrationCode($code) {
+		$con = MySQL::open(Settings::db_name_infected);
+		
+		$result = mysqli_query($con, 'SELECT `id` FROM `' . Settings::db_table_infected_registrationcodes . '` 
+									  WHERE `code` = \'' . $con->real_escape_string($code) . '\';');
+							
+		$row = mysqli_fetch_array($result);
+		
+		MySQL::close($con);
+
+		return $row ? true : false;
+	}
+	
 	/*
 	 * Remove registration code for current user, if one exists.
 	 */
@@ -48,6 +61,19 @@ class RegistrationCodeHandler {
 							WHERE `code` = \'' . $con->real_escape_string($code) . '\';');
 		
 		MySQL::close($con);
+	}
+	
+	public static function hasUserRegistrationCode($user) {
+		$con = MySQL::open(Settings::db_name_infected);
+		
+		$result = mysqli_query($con, 'SELECT `id` FROM `' . Settings::db_table_infected_registrationcodes . '` 
+									  WHERE `userId` = \'' . $con->real_escape_string($user->getId()) . '\';');
+							
+		$row = mysqli_fetch_array($result);
+		
+		MySQL::close($con);
+
+		return $row ? true : false;
 	}
 }
 ?>
