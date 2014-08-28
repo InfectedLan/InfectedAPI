@@ -25,7 +25,7 @@ if (!Session::isAuthenticated()) {
 					$message = 'Feil brukernavn eller passord.';
 				}
 			} else {
-				$message = 'Du må aktivere brukeren din før du kan logger inn.';
+				$message = 'Du må aktivere brukeren din før du kan logge inn.';
 			}
 		} else {
 			$message = 'Feil brukernavn eller passord.';

@@ -172,7 +172,7 @@ class User {
 	 * Returns true if the given users account is activated.
 	 */
 	public function isActivated() {
-		return RegistrationCodeHandler::getRegistrationCode($this) == null;
+		return !RegistrationCodeHandler::hasUserRegistrationCode($this);
 	}
 	
 	/*

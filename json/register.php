@@ -28,6 +28,7 @@ if (isset($_GET['firstname']) &&
 	$address = $_GET['address'];
 	$postalcode = $_GET['postalcode'];
 	$nickname = isset($_GET['nickname']) ? $_GET['nickname'] : $username;
+	$emergencycontactphone = isset($_GET['emergencycontactphone']) ? $_GET['emergencycontactphone'] : null;
 	
 	if (!UserHandler::userExists($username) &&
 		!UserHandler::userExists($email)) {		
@@ -47,7 +48,7 @@ if (isset($_GET['firstname']) &&
 			$message = 'E-post adressen du skrev inn er ikke gyldig.';
 		} else if (!is_numeric($gender)) {
 			$message = 'Du har oppgitt et ugyldig kjønn.';
-		} else if (!is_numeric($phone) || strlen($phone) > 8) {
+		} else if (!is_numeric($phone) || strlen($phone) != 8) {
 			$message = 'Du har ikke skrevet inn et gyldig telefonnummer.';
 		} else if (empty($address) && strlen($address) > 32) {
 			$message = 'Du må skrive inn en adresse.';
@@ -85,7 +86,7 @@ if (isset($_GET['firstname']) &&
 				
 				if (isset($_GET['emergencycontactphone']) &&
 					is_numeric($_GET['emergencycontactphone'])) {
-					EmergencyContactHandler::createEmergencyContact($user, $_GET['emergencycontactphone']);
+					EmergencyContactHandler::createEmergencyContact($user, $emergencycontactphone);
 				}
 				
 				$user->sendRegistrationMail();
