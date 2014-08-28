@@ -10,6 +10,7 @@ if (Session::isAuthenticated()) {
 	
 	if (isset($_GET['firstname']) &&
 		isset($_GET['lastname']) &&
+		isset($_GET['email']) &&
 		isset($_GET['gender']) &&
 		isset($_GET['birthday']) &&
 		isset($_GET['birthmonth']) &&
@@ -20,6 +21,7 @@ if (Session::isAuthenticated()) {
 		isset($_GET['nickname']) &&
 		!empty($_GET['firstname']) &&
 		!empty($_GET['lastname']) &&
+		!empty($_GET['email']) &&
 		is_numeric($_GET['gender']) &&
 		is_numeric($_GET['birthday']) &&
 		is_numeric($_GET['birthmonth']) &&
@@ -29,6 +31,7 @@ if (Session::isAuthenticated()) {
 		is_numeric($_GET['postalcode'])) {
 		$firstname = $_GET['firstname'];
 		$lastname = $_GET['lastname'];
+		$email = $_GET['email'];
 		$gender = $_GET['gender'];
 		$birthdate = $_GET['birthyear'] . '-' . $_GET['birthmonth'] . '-' . $_GET['birthday']; 
 		$phone = $_GET['phone'];
@@ -40,6 +43,8 @@ if (Session::isAuthenticated()) {
 			$message = 'Du har ikke skrevet inn noe fornavn.';
 		} else if (empty($lastname) || strlen($lastname) > 32) {
 			$message = 'Du har ikke skrevet inn noe etternavn.';	
+		} else if (!preg_match('/^([a-z0-9_\.-]+)@([\da-z\.-]+)\.([a-z\.]{2,6})$/', $email) || !filter_var($email, FILTER_VALIDATE_EMAIL)) {
+			$message = 'E-post adressen du skrev inn er ikke gyldig.';
 		} else if (!is_numeric($gender)) {
 			$message = 'Du har oppgitt et ugyldig kjønn.';
 		} else if (!is_numeric($phone) || strlen($phone) > 8) {
@@ -56,7 +61,7 @@ if (Session::isAuthenticated()) {
 									$lastname, 
 									$user->getUsername(), 
 									$user->getPassword(), 
-									$user->getEmail(), 
+									$email, 
 									$birthdate, 
 									$gender, 
 									$phone, 
