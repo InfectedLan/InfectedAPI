@@ -12,8 +12,8 @@ class PayPal {
 		/*$returnURL =urlencode('https://tickets.infected.no/v2/index.php?page=reviewOrder');
 		$cancelURL =urlencode('https://tickets.infected.no/v2/index.php');*/
 
-		$returnURL = urlencode('https://' . $_SERVER['HTTP_HOST'] . '/v2/index.php?page=reviewOrder');
-		$cancelURL = urlencode('https://' . $_SERVER['HTTP_HOST'] . '/v2/index.php');
+		$returnURL = urlencode('https://tickets.infected.no/v2/index.php?page=reviewOrder');
+		$cancelURL = urlencode('https://tickets.infected.no/v2/index.php');
 
 		//Calculate total price		   	
 		$itemamt = $amount*$ticketType->getPriceForUser($user);
