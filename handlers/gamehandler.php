@@ -21,7 +21,7 @@ class GameHandler {
 							$row['price'], 
 							$row['mode'], 
 							$row['description'], 
-							$row['deadline'], 
+							$row['deadlineTime'], 
 							$row['published']);
 		}
 	}
@@ -57,6 +57,34 @@ class GameHandler {
 		MySQL::close($con);
 
 		return $gameList;
+	}
+	
+	/* 
+	 * Update information about a game.
+	 */
+	public static function updateGame($id, $name, $title, $price, $mode, $description, $deadlineTime, $published) {
+		$con = MySQL::open(Settings::db_name_infected_main);
+		
+		mysqli_query($con, 'UPDATE `' . Settings::db_table_infected_main_games . '` 
+							SET `name` = \'' . $con->real_escape_string($name) . '\', 
+								`title` = \'' . $con->real_escape_string($title) . '\', 
+								`price` = \'' . $con->real_escape_string($price) . '\', 
+								`mode` = \'' . $con->real_escape_string($mode) . '\', 
+								`description` = \'' . $con->real_escape_string($description) . '\', 
+								`deadlineTime` = \'' . $con->real_escape_string($deadlineTime) . '\', 
+								`published` = \'' . $con->real_escape_string($published) . '\'
+							WHERE `id` = \'' . $con->real_escape_string($id) . '\';');
+		
+		MySQL::close($con);
+	}
+	
+	public static function removeGame($id) {
+		$con = MySQL::open(Settings::db_name_infected_main);
+		
+		mysqli_query($con, 'DELETE FROM `' . Settings::db_table_infected_main_games . '` 
+							WHERE `id` = \'' . $con->real_escape_string($id) . '\';');
+		
+		MySQL::close($con);
 	}
 }
 ?>

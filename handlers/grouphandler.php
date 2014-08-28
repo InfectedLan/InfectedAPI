@@ -72,16 +72,6 @@ class GroupHandler {
 		MySQL::close($con);
 	}
 	
-	/* Remove a page */
-	public static function removeGroup($id) {
-		$con = MySQL::open(Settings::db_name_infected_crew);
-		
-		mysqli_query($con, 'DELETE FROM `' . Settings::db_table_infected_crew_groups . '` 
-							WHERE `id` = \'' . $con->real_escape_string($id) . '\';');
-		
-		MySQL::close($con);
-	}
-	
 	/* Update a page */
 	public static function updateGroup($id, $name, $title, $description, $leader) {
 		$con = MySQL::open(Settings::db_name_infected_crew);
@@ -91,6 +81,16 @@ class GroupHandler {
 								`title` = \'' . $con->real_escape_string($title) . '\', 
 								`description` = \'' . $con->real_escape_string($description) . '\', 
 								`leader` = \'' . $con->real_escape_string($leader) . '\'
+							WHERE `id` = \'' . $con->real_escape_string($id) . '\';');
+		
+		MySQL::close($con);
+	}
+	
+	/* Remove a page */
+	public static function removeGroup($id) {
+		$con = MySQL::open(Settings::db_name_infected_crew);
+		
+		mysqli_query($con, 'DELETE FROM `' . Settings::db_table_infected_crew_groups . '` 
 							WHERE `id` = \'' . $con->real_escape_string($id) . '\';');
 		
 		MySQL::close($con);
