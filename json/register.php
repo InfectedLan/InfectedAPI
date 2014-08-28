@@ -29,7 +29,7 @@ if (isset($_GET['firstname']) &&
 	$postalcode = $_GET['postalcode'];
 	$nickname = isset($_GET['nickname']) ? $_GET['nickname'] : $username;
 	
-	if (!UserHandler::userExists($username) || 
+	if (!UserHandler::userExists($username) &&
 		!UserHandler::userExists($email)) {		
 		if (empty($firstname) || strlen($firstname) > 32) {
 			$message = 'Du har ikke skrevet inn noe fornavn.';
