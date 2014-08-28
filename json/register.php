@@ -55,6 +55,8 @@ if (isset($_GET['firstname']) &&
 			$message = 'Du må skrive inn et gyldig postnummer, postnummeret må være 4 tegn langt.';
 		} else if (!preg_match('/^[a-zæøåA-ZÆØÅ0-9_-]{2,16}$/', $nickname) && !empty($nickname)) {
 			$message = 'Kallenavnet du skrev inn er ikke gyldig, det må bestå av minst 2 tegn og max 16 tegn.';
+		} else if (date_diff(date_create($birthdate), date_create('now'))->y < 18) {
+			$message = 'Du er under 18 år, og må derfor oppgi et telefonnummer til en forelder.';
 		} else {
 			if ($password == $confirmPassword) {
 				// Creates the user in database.
