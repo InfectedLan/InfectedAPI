@@ -15,6 +15,7 @@ class MailManager {
 			$headers   = array();
 			$headers[] = 'MIME-Version: 1.0';
 			$headers[] = 'Content-type: text/html; charset=utf-8';
+			$headers[] = 'X-Mailer: PHP/' . phpversion();
 			
 			/* Additional headers */
 			$headers[] = 'From: ' . Settings::name . ' <' . Settings::email . '>';
