@@ -184,14 +184,16 @@ class User {
 		
 		// Send an email to the user with a link for resetting the password.
 		$url = 'https://' . $_SERVER['HTTP_HOST'] . '/v2/index.php?page=activation&code=' . $code;
-		$message = '<html>' .
-						'<body>' .
-							'<h3>Hei!</h3>' .
-							'<p>For å aktivere din bruker på ' . $_SERVER['HTTP_HOST'] . ', trenger du bare å klikke på <a href="' . $url . '">denne</a> linken.</p>' .
-						'</body>' .
-					'</html>';
+		$message = array();
+		$message[] = '<!DOCTYPE html>';
+		$message[] = '<html>';
+			$message[] = '<body>';
+				$message[] = '<h3>Hei!</h3>';
+				$message[] = '<p>For å aktivere din bruker på ' . $_SERVER['HTTP_HOST'] . ', trenger du bare å klikke på <a href="' . $url . '">denne</a> linken.</p>';
+			$message[] = '</body>';
+		$message[] = '</html>';
 			
-		return MailManager::sendMail($this, 'Infected brukerregistrering', $message);
+		return MailManager::sendMail($this, 'Infected brukerregistrering', implode("\r\n", $message));
 	}
 	
 	/*
@@ -203,14 +205,16 @@ class User {
 		
 		// Send an email to the user with a link for resetting the password.
 		$url = 'https://' . $_SERVER['HTTP_HOST'] . '/v2/index.php?page=reset-password&code=' . $code;
-		$message = '<html>' .
-						'<body>' .
-							'<h3>Hei!</h3>' .
-							'<p>For å tilbakestille passordet ditt på ' . $_SERVER['HTTP_HOST'] . ', trenger du bare å klikke på <a href="' . $url . '">denne</a> linken.</p>' .
-						'</body>' .
-					'</html>';
+		$message = array();
+		$message[] = '<!DOCTYPE html>';
+		$message[] = '<html>';
+			$message[] = '<body>';
+				$message[] = '<h3>Hei!</h3>';
+				$message[] = '<p>For å tilbakestille passordet ditt på ' . $_SERVER['HTTP_HOST'] . ', trenger du bare å klikke på <a href="' . $url . '">denne</a> linken.</p>';
+			$message[] = '</body>';
+		$message[] = '</html>';
 			
-		return MailManager::sendMail($this, 'Infected tilbakestilling av passord', $message);
+		return MailManager::sendMail($this, 'Infected tilbakestilling av passord', implode("\r\n", $message));
 	}
 	
 	public function hasEmergencyContact() {

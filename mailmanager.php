@@ -18,7 +18,7 @@ class MailManager {
 			$headers[] = 'X-Mailer: PHP/' . phpversion();
 			
 			/* Additional headers */
-			$headers[] = 'From: ' . Settings::name . ' <' . Settings::email . '>';
+			$headers[] = 'From: ' . Settings::name . '<' . Settings::email . '>';
 
 			mail($to, $subject, $message, implode("\r\n", $headers));
 		}
