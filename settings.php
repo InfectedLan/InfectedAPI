@@ -76,6 +76,7 @@ class Settings {
 	
 	// Tells where QR images should be stored under API folder.
 	const qr_path = 'content/qrcache/';
+	const avatar_path = 'content/avatars/';
 
 	// Defines how long a ticket should be stored on your account before payment is successful.
 	const storeSessionTime = 3600; // You have an hour to pay on paypal
