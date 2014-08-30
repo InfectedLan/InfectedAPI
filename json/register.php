@@ -56,15 +56,13 @@ if (isset($_GET['firstname']) &&
 			$message = 'Du må skrive inn et gyldig postnummer, postnummeret må være 4 tegn langt.';
 		} else if (!preg_match('/^[a-zæøåA-ZÆØÅ0-9_-]{2,16}$/', $nickname) && !empty($nickname)) {
 			$message = 'Kallenavnet du skrev inn er ikke gyldig, det må bestå av minst 2 tegn og max 16 tegn.';
-		} else if (date_diff(date_create($birthdate), date_create('now'))->y < 18 && ( !isset($_GET['emergencycontactphone']) || !is_numeric($_GET['emergencycontactphone']) || strlen($_GET['emergencycontactphone']) > 8)) {
-			if(!is_numeric($_GET['emergencycontactphone']))
-			{
-				$message = "Foresattes telefonnummer må være et tall!";
+		} else if (date_diff(date_create($birthdate), date_create('now'))->y < 18 && (!isset($_GET['emergencycontactphone']) || !is_numeric($emergencycontactphone) || strlen($emergencycontactphone) != 8)) {
+			if (!is_numeric($emergencycontactphone)) {
+				$message = 'Foresattes telefonnummer må være et tall!';
+			} else if (strlen($emergencycontactphone) != 8) {
+				$message = 'Foresattes telefonnummer er ikke 8 siffer langt!';
 			}
-			else if(strlen($_GET['emergencycontactphone']) > 8)
-			{
-				$message = "Foresattes telefonnummer er ikke 8 siffer langt!";
-			}
+			
 			$message = 'Du er under 18 år, og må derfor oppgi et telefonnummer til en forelder.';
 		} else {
 			if ($password == $confirmPassword) {
@@ -92,7 +90,7 @@ if (isset($_GET['firstname']) &&
 				$user->sendRegistrationMail();
 				
 				$result = true;
-				$message = 'Din bruker har blitt laget! Sjekk e-posten din for å aktivere, før du logger inn. Husk å sjekke søppelpost!';
+				$message = 'Din bruker har blitt laget! Sjekk e-posten din for å aktivere, før du logger inn. Husk å sjekke søppelpost ved eventuelle problemer.';
 			} else {
 				$message = 'Passordene er ikke like!';
 			}
