@@ -1,29 +1,28 @@
 <?php
 require_once 'settings.php';
+require_once 'phpmailer/PHPMailerAutoload.php';
 
 class MailManager {
 	public static function sendMail($user, $subject, $message) {
-		// Sanitize e-mail address
-		$to = filter_var($user->getEmail(), FILTER_SANITIZE_EMAIL);
+		// Create PHPMailer object.
+		$mail = new PHPMailer;
 		
-		// In case any of our lines are larger than 70 characters, we should use wordwrap().
-		$message = wordwrap($message, 70, "\r\n");
-		
-		// Validate e-mail address.
-		if (filter_var($to, FILTER_VALIDATE_EMAIL)) {
-			/* To send HTML mail, the Content-type header must be set */
-			$headers   = array();
-			$headers[] = 'MIME-Version: 1.0';
-			$headers[] = 'Content-type: text/html; charset=utf-8';
-			$headers[] = 'X-Mailer: PHP/' . phpversion();
-			
-			/* Additional headers */
-			$headers[] = 'From: ' . Settings::name . '<' . Settings::email . '>';
+		// Set sender and recipient.
+		$mail->SetFrom(Settings::email, Settings::name);
+		$mail->addAddress($user->getEmail(), $user->getFullName());
 
-			mail($to, $subject, $message, implode("\r\n", $headers));
-		}
+		// Set to use HTML and UTF-8 as charset.
+		$mail->isHTML(true);  // Set email format to HTML
+		$mail->CharSet = 'UTF-8'; // Set charset to UTF-8
+		$mail->WordWrap = 70; // Set word wrap to 70 characters
 		
-		return false;
+		// Create subject and body.
+		$mail->Subject = $subject;
+		$mail->Body = $message;
+		$mail->AltBody = 'Denne e-posten krever en e-post klient som støtter visning av HTML innhold.';
+		
+		// Sending the e-mail.
+		$mail->send();
 	}
 }
 ?>
