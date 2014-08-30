@@ -64,6 +64,11 @@ class Avatar {
 		}
 	}
 
+	//Only use if state = 0
+	public function getTemp() {
+		return Settings::avatar_path . "temp/" . $this->file;
+	}
+
 	public function getThumbnail() {
 		if($defaultState == 0) {
 			return Settings::avatar_path . "thumb/" . $this->file;

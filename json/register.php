@@ -91,7 +91,7 @@ if (isset($_GET['firstname']) &&
 				$user->sendRegistrationMail();
 				
 				$result = true;
-				$message = 'Din bruker har blitt laget! Sjekk e-posten din for å aktivere, før du logger inn. Husk å sjekke søppelpost ved eventuelle problemer.';
+				$message = 'Din bruker har blitt laget! Sjekk e-posten din for å aktivere, før du logger inn. Husk å sjekke søppelposten din dersom mener at du ikke har fått e-posten.';
 			} else {
 				$message = 'Passordene er ikke like!';
 			}
