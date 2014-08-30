@@ -1,5 +1,6 @@
 <?php
 require_once 'handlers/userhandler.php';
+require_once 'handlers/emergencycontacthandler.php';
 require_once 'handlers/citydictionary.php';
 
 $result = false;
@@ -31,7 +32,7 @@ if (isset($_GET['firstname']) &&
 	$emergencycontactphone = isset($_GET['emergencycontactphone']) ? $_GET['emergencycontactphone'] : null;
 	
 	if (!UserHandler::userExists($username) &&
-		!UserHandler::userExists($email)) {		
+		!UserHandler::userExists($email)) {
 		if (empty($firstname) || strlen($firstname) > 32) {
 			$message = 'Du har ikke skrevet inn noe fornavn.';
 		} else if (empty($lastname) || strlen($lastname) > 32) {
@@ -83,7 +84,7 @@ if (isset($_GET['firstname']) &&
 				$user = UserHandler::getUserByName($username);
 				
 				if (isset($_GET['emergencycontactphone']) &&
-					is_numeric($_GET['emergencycontactphone'])) {
+					is_numeric($emergencycontactphone)) {
 					EmergencyContactHandler::createEmergencyContact($user, $emergencycontactphone);
 				}
 				

@@ -21,7 +21,7 @@ class EmergencyContact {
 	}
 	
 	public function getPhone() {
-		return chunk_split($this->phone, 2, ' ');
+		return $this->phone;
 	}
 }
 ?>

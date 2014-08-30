@@ -1,6 +1,7 @@
 <?php
 require_once 'session.php';
 require_once 'handlers/userhandler.php';
+require_once 'handlers/emergencycontacthandler.php';
 
 $result = false;
 $message = null;
@@ -38,6 +39,7 @@ if (Session::isAuthenticated()) {
 		$address = $_GET['address'];
 		$postalcode = $_GET['postalcode'];
 		$nickname = empty($_GET['nickname']) ? $user->getUsername() : $_GET['nickname'];
+		$emergencycontactphone = isset($_GET['emergencycontactphone']) ? $_GET['emergencycontactphone'] : 0;
 		
 		if (empty($firstname) || strlen($firstname) > 32) {
 			$message = 'Du har ikke skrevet inn noe fornavn.';
@@ -55,6 +57,14 @@ if (Session::isAuthenticated()) {
 			$message = 'Du må skrive inn et gyldig postnummer.';
 		} else if (!preg_match('/^[a-zæøåA-ZÆØÅ0-9_-]{2,16}$/', $nickname)) {
 			$message = 'Kallenavnet du skrev inn er ikke gyldig, det må bestå av minst 2 tegn og max 16 tegn.';
+		} else if (date_diff(date_create($birthdate), date_create('now'))->y < 18 && (!isset($_GET['emergencycontactphone']) || !is_numeric($emergencycontactphone) || strlen($emergencycontactphone) != 8)) {
+			if (!is_numeric($emergencycontactphone)) {
+				$message = 'Foresattes telefonnummer må være et tall!';
+			} else if (strlen($emergencycontactphone) != 8) {
+				$message = 'Foresattes telefonnummer er ikke 8 siffer langt!';
+			}
+			
+			$message = 'Du er under 18 år, og må derfor oppgi et telefonnummer til en forelder.';
 		} else {
 			UserHandler::updateUser($user->getId(),
 									$firstname, 
@@ -68,6 +78,11 @@ if (Session::isAuthenticated()) {
 									$address, 
 									$postalcode, 
 									$nickname);
+			
+			if (EmergencyContactHandler::hasEmergencyContact($user) || 
+				isset($_GET['emergencycontactphone']) && is_numeric($emergencycontactphone)) {
+				EmergencyContactHandler::createEmergencyContact($user, $emergencycontactphone);
+			}
 			
 			// Update the user instance form database.
 			Session::reload();

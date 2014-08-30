@@ -60,6 +60,24 @@ class GameHandler {
 	}
 	
 	/* 
+	 * Create a new game.
+	 */
+	public static function createGame($name, $title, $price, $mode, $description, $deadlineTime, $published) {
+		$con = MySQL::open(Settings::db_name_infected_main);
+		
+		mysqli_query($con, 'INSERT INTO `' . Settings::db_table_infected_main_games . '` (`name`, `title`, `price`, `description`, `deadlineTime`, `published`) 
+							VALUES (\'' . $con->real_escape_string($name) . '\', 
+									\'' . $con->real_escape_string($title) . '\', 
+									\'' . $con->real_escape_string($price) . '\', 
+									\'' . $con->real_escape_string($mode) . '\', 
+									\'' . $con->real_escape_string($description) . '\', 
+									\'' . $con->real_escape_string($deadlineTime) . '\', 
+									\'' . $con->real_escape_string($published) . '\');');
+		
+		MySQL::close($con);
+	}
+	
+	/* 
 	 * Update information about a game.
 	 */
 	public static function updateGame($id, $name, $title, $price, $mode, $description, $deadlineTime, $published) {
@@ -78,6 +96,9 @@ class GameHandler {
 		MySQL::close($con);
 	}
 	
+	/*
+	 * Remove a game from the database.
+	 */
 	public static function removeGame($id) {
 		$con = MySQL::open(Settings::db_name_infected_main);
 		

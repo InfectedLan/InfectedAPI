@@ -54,14 +54,50 @@ class EmergencyContactHandler {
 		return $emergencyContactsList;
 	}
 	
+	public static function hasEmergencyContact($user) {
+		$con = MySQL::open(Settings::db_name_infected);
+		
+		$result = mysqli_query($con, 'SELECT `id` FROM `'. Settings::db_table_infected_emergencycontacts . '`
+									  WHERE `userId` = \'' . $con->real_escape_string($user->getId()) . '\';');
+		
+		$row = mysqli_fetch_array($result);
+		
+		MySQL::close($con);
+
+		return $row ? true : false;
+	}
+	
 	/* Create new emergency contact */
 	public static function createEmergencyContact($user, $phone) {
 		$con = MySQL::open(Settings::db_name_infected);
 		
-		mysqli_query($con, 'INSERT INTO `' . Settings::db_table_infected_emergencycontacts . '` (`userId`, `phone`) 
-							VALUES (\'' . $con->real_escape_string($user->getId()) . '\', 
-									\'' . $con->real_escape_string($phone) . '\');');
-									
+		if (!self::hasEmergencyContact($user)) {
+				echo 'Hello darfin.';
+		
+				mysqli_query($con, 'INSERT INTO `' . Settings::db_table_infected_emergencycontacts . '` (`userId`, `phone`) 
+									VALUES (\'' . $con->real_escape_string($user->getId()) . '\', 
+											\'' . $con->real_escape_string($phone) . '\');');
+		} else {
+			if (!empty($phone) && $phone != 0) {
+				self::updateEmergencyContact($user, $phone);
+			} else {
+				self::removeEmergencyContact($user);
+			}
+		}
+	
+		MySQL::close($con);
+	}
+	
+	/* 
+	 * Update information about a game.
+	 */
+	public static function updateEmergencyContact($user, $phone) {
+		$con = MySQL::open(Settings::db_name_infected);
+		
+		mysqli_query($con, 'UPDATE `' . Settings::db_table_infected_emergencycontacts . '` 
+							SET `phone` = \'' . $con->real_escape_string($phone) . '\'
+							WHERE `userId` = \'' . $con->real_escape_string($user->getId()) . '\';');
+		
 		MySQL::close($con);
 	}
 	

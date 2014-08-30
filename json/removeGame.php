@@ -15,7 +15,7 @@ if (Session::isAuthenticated()) {
 			GameHandler::removeGame($_GET['id']);
 			$result = true;
 		} else {
-			$message = 'Ikke no spill spesifisert.';
+			$message = 'Ikke noe spill spesifisert.';
 		}
 	} else {
 		$message = 'Du har ikke tillatelse til dette.';

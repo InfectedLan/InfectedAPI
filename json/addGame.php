@@ -10,22 +10,18 @@ if (Session::isAuthenticated()) {
 	
 	if ($user->hasPermission('*') || 
 		$user->hasPermission('functions.site-list-games')) {
-		if (isset($_GET['id']) &&
-			isset($_GET['title']) &&
+		if (isset($_GET['title']) &&
 			isset($_GET['price']) &&
 			isset($_GET['mode']) &&
 			isset($_GET['description']) &&
 			isset($_GET['deadlineDate']) &&
 			isset($_GET['deadlineTime']) &&
-			isset($_GET['published']) &&
-			is_numeric($_GET['id']) &&
 			!empty($_GET['title']) &&
 			is_numeric($_GET['price']) &&
 			!empty($_GET['mode']) &&
 			!empty($_GET['description']) &&
 			!empty($_GET['deadlineDate']) &&
-			!empty($_GET['deadlineTime']) &&
-			is_numeric($_GET['published'])) {
+			!empty($_GET['deadlineTime'])) {
 			$id = $_GET['id'];
 			$name = strtolower(str_replace(' ', '-', $_GET['title']));
 			$title = $_GET['title'];
@@ -33,12 +29,11 @@ if (Session::isAuthenticated()) {
 			$mode = $_GET['mode'];
 			$description = $_GET['description'];
 			$deadlineTime = $_GET['deadlineDate'] . ' ' . $_GET['deadlineTime'];
-			$published = $_GET['published'];
 
-			GameHandler::updateGame($id, $name, $title, $price, $mode, $description, $deadlineTime, $published);
+			GameHandler::createGame($$name, $title, $price, $mode, $description, $deadlineTime, 1);
 			$result = true;
 		} else {
-			$message = 'Du har ikke fylt ut alle feltene.';
+			$message = 'Du har ikke fyllt ut alle feltene!';
 		}
 	} else {
 		$message = 'Du har ikke tillatelse til dette.';
