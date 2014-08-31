@@ -88,9 +88,7 @@ class Settings {
 	const avatar_hd_w = 1200;
 	const avatar_hd_h = 900;
 
-	const avatar_allowed_extensions = array("jpeg", "jpg", "png");
-
 	// Defines how long a ticket should be stored on your account before payment is successful.
-	const storeSessionTime = 60*60; // You have an hour to pay on paypal,
+	const storeSessionTime = 3600; // You have an hour to pay on paypal,
 }
 ?>

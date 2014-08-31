@@ -9,8 +9,7 @@ class AvatarHandler {
 		$con = MySQL::open(Settings::db_name_infected_crew);
 		
 		$result = mysqli_query($con, 'SELECT * FROM `' . Settings::db_table_infected_crew_avatars . '` 
-									  WHERE `id` = \'' . $con->real_escape_string($id) . '\'
-									  AND `state` = \'2\';');
+									  WHERE `id` = \'' . $con->real_escape_string($id) . '\';');
 									  
 		$row = mysqli_fetch_array($result);
 		
@@ -28,8 +27,7 @@ class AvatarHandler {
 		$con = MySQL::open(Settings::db_name_infected_crew);
 		
 		$result = mysqli_query($con, 'SELECT `id` FROM `' . Settings::db_table_infected_crew_avatars . '` 
-									  WHERE `userId` = \'' . $con->real_escape_string($userId) . '\'
-									  AND `state` = \'2\';');
+									  WHERE `userId` = \'' . $con->real_escape_string($userId) . '\';');
 		
 		$row = mysqli_fetch_array($result);
 		
@@ -37,8 +35,6 @@ class AvatarHandler {
 		
 		if ($row) {
 			return self::getAvatar($row['id']);
-		} else {
-			return new Avatar(0, $userId, null, 0);
 		}
 	}
 	
@@ -57,7 +53,7 @@ class AvatarHandler {
 		
 		return $avatarList;
 	}
-	
+	/*
 	public function getPendingAvatar($id) {
 		$con = MySQL::open(Settings::db_name_infected_crew);
 		
@@ -107,6 +103,9 @@ class AvatarHandler {
 		
 		return $avatarList;
 	}
+
+
+	*/
 	public static function deleteAvatar($avatar) {
 		$con = MySQL::open(Settings::db_name_infected_crew);
 

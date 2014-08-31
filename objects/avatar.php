@@ -45,11 +45,11 @@ class Avatar {
 	}
 
 	public function getFile() {
-		return $self->getSd();
+		return $this->getSd();
 	}
 
 	public function getHd() {
-		if($defaultState == 0) {
+		if($this->defaultState == 0) {
 			return Settings::avatar_path . "hd/" . $this->file;
 		} else {
 			return Settings::avatar_path . "default/" . $this->file;
@@ -57,7 +57,7 @@ class Avatar {
 	}
 
 	public function getSd() {
-		if($defaultState == 0) {
+		if($this->defaultState == 0) {
 			return Settings::avatar_path . "sd/" . $this->file;
 		} else {
 			return Settings::avatar_path . "default/" . $this->file;
@@ -70,7 +70,7 @@ class Avatar {
 	}
 
 	public function getThumbnail() {
-		if($defaultState == 0) {
+		if($this->defaultState == 0) {
 			return Settings::avatar_path . "thumb/" . $this->file;
 		} else {
 			return Settings::avatar_path . "default/" . $this->file;
