@@ -46,13 +46,31 @@ class AvatarHandler {
 		$avatarList = array();
 		
 		while ($row = mysqli_fetch_array($result)) {
-			array_push($groupList, self::getAvatar($row['id']));
+			array_push($avatarList, self::getAvatar($row['id']));
 		}
 		
 		MySQL::close($con);
 		
 		return $avatarList;
 	}
+	
+	public static function getPendingAvatars() {
+		$con = MySQL::open(Settings::db_name_infected_crew);
+		
+		$result = mysqli_query($con, 'SELECT `id` FROM `' . Settings::db_table_infected_crew_avatars . '` 
+									  WHERE `state` = \'1\';');
+		
+		$pendingAvatarList = array();
+		
+		while ($row = mysqli_fetch_array($result)) {
+			array_push($pendingAvatarList, self::getAvatar($row['id']));
+		}
+		
+		MySQL::close($con);
+		
+		return $pendingAvatarList;
+	}
+	
 	/*
 	public function getPendingAvatar($id) {
 		$con = MySQL::open(Settings::db_name_infected_crew);
@@ -86,26 +104,8 @@ class AvatarHandler {
 			return self::getAvatar($row['id']);
 		}
 	}
-	
-	public static function getPendingAvatars() {
-		$con = MySQL::open(Settings::db_name_infected_crew);
-		
-		$result = mysqli_query($con, 'SELECT `id` FROM `' . Settings::db_table_infected_crew_avatars . '` 
-									  WHERE `state` = \'1\';');
-		
-		$avatarList = array();
-		
-		while ($row = mysqli_fetch_array($result)) {
-			array_push($avatarList, self::getAvatar($row['id']));
-		}
-		
-		MySQL::close($con);
-		
-		return $avatarList;
-	}
-
-
 	*/
+	
 	public static function deleteAvatar($avatar) {
 		$con = MySQL::open(Settings::db_name_infected_crew);
 
