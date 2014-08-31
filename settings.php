@@ -78,7 +78,17 @@ class Settings {
 	const qr_path = 'content/qrcache/';
 	const avatar_path = 'content/avatars/';
 
+	//Avatar sizes
+	const avatar_thumb_w = 150;
+	const avatar_thumb_h = 133;
+
+	const avatar_sd_w = 800;
+	const avatar_sd_h = 600;
+
+	const avatar_hd_w = 1200;
+	const avatar_hd_h = 900;
+
 	// Defines how long a ticket should be stored on your account before payment is successful.
-	const storeSessionTime = 3600; // You have an hour to pay on paypal
+	const storeSessionTime = 60*60; // You have an hour to pay on paypal,
 }
 ?>
