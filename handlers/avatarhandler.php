@@ -119,7 +119,7 @@ class AvatarHandler {
 	public static function createAvatar($fileName, $user) {
 		$con = MySQL::open(Settings::db_name_infected_crew);
 
-		$result = mysqli_query($con, 'INSERT INTO `` (`userId`, `file`, `state`) VALUES (' . $user->getId() . ', \'' . $fileName . '\', 0);');
+		$result = mysqli_query($con, 'INSERT INTO `' . Settings::db_table_infected_crew_avatars . '` (`userId`, `file`, `state`) VALUES (' . $user->getId() . ', \'' . $fileName . '\', 0);');
 	
 		return Settings::api_path . Settings::avatar_path . 'temp/' . $fileName;
 	}
