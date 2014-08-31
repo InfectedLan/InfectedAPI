@@ -24,6 +24,7 @@ if (Session::isAuthenticated()) {
 					$name = md5(time() . "This is a random seed. Nothing to see here. 31.08.2014") . $user->getUsername();
 					$path = AvatarHandler::createAvatar($name . '.' . $extension, $user);
 					move_uploaded_file($_FILES["file"]["tmp_name"], $path);
+					$result = true;
 				} else {
 					$message = urlencode($_FILES["file"]["error"]);
 				}
