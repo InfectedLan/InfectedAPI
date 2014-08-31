@@ -155,6 +155,20 @@ class User {
 	}
 	
 	/* 
+	 * Returns users displayname.
+	 */
+	public function getDisplayName() {
+		return $this->getFirstname() . ' "' . $this->getNickname() . '" ' . $this->getLastname();
+	}
+	
+	/* 
+	 * Returns true if the given users account is activated.
+	 */
+	public function isActivated() {
+		return !RegistrationCodeHandler::hasUserRegistrationCode($this);
+	}
+	
+	/* 
 	 * Returns true if user have specified permission, otherwise false.
 	 */
 	public function hasPermission($value) {
@@ -168,11 +182,32 @@ class User {
 		return UserPermissionsHandler::getUserPermissions($this);
 	}
 	
-	/* 
-	 * Returns true if the given users account is activated.
+	/*
+	 * Returns true if user has an emergency contact linked to this account.
 	 */
-	public function isActivated() {
-		return !RegistrationCodeHandler::hasUserRegistrationCode($this);
+	public function hasEmergencyContact() {
+		return EmergencyContactHandler::getEmergencyContactForUser($this) != null;
+	}
+	
+	/*
+	 * Returns emergency contact linked to this account.
+	 */
+	public function getEmergencyContact() {
+		return EmergencyContactHandler::getEmergencyContactForUser($this);
+	}
+	
+	/*
+	 * Returns true if user has an ticket for the current/upcoming event.
+	 */
+	public function hasTicket() {
+		return TicketHandler::hasTicket($this);
+	}
+	
+	/*
+	 * Returns the ticket for the current/upcoming event linked to this account.
+	 */
+	public function getTicket() {
+		return TicketHandler::getTicketForUser($this);
 	}
 	
 	/*
@@ -218,73 +253,6 @@ class User {
 			
 		return MailManager::sendMail($this, 'Infected tilbakestilling av passord', implode("\r\n", $message));
 	}
-	
-	public function hasEmergencyContact() {
-		return EmergencyContactHandler::getEmergencyContactForUser($this) != null;
-	}
-	
-	public function getEmergencyContact() {
-		return EmergencyContactHandler::getEmergencyContactForUser($this);
-	}
-	
-	public function hasTicket() {
-		return TicketHandler::hasTicket($this);
-	}
-	
-	public function getTicket() {
-		return TicketHandler::getTicketForUser($this);
-	}
-	
-	/* 
-	 * Returns users displayname.
-	 */
-	public function getDisplayName() {
-		$nickname = $this->getNickname();
-	
-		if (!empty($nickname)) {
-			$displayName = $this->getFirstname() . ' "' . $nickname  . '" ' . $this->getLastname();
-		} else {
-			$displayName = $this->getFirstname() . ' ' . $this->getLastname();
-		}
-		
-		return $displayName;
-	}
-	
-	/* 
-	 * Returns the name of the users position.
-	 */
-	public function getPosition() {
-		if ($this->isGroupMember()) {
-			if ($this->isGroupLeader()) {
-				return 'Chief';
-			} else if ($this->isTeamLeader()) {
-				return 'Shift-leder';
-			} else {
-				return 'Medlem';
-			}
-		} else {
-			return 'Deltaker';
-		}
-	}
-	
-	public function getAvatar() {
-		return AvatarHandler::getAvatarForUser($this->getId());
-	}
-	
-	//Discontinued
-	public function getPendingAvatar() {
-		$avatar = self::getAvatar();
-		return $avatar->getState() == 1 ? $avatar : null;
-	}
-	
-	public function hasAvatar() {
-		return AvatarHandler::getAvatarForUser($this->getId()) != null;
-	}
-	
-	public function hasPendingAvatar() {
-		$avatar = self::getAvatar();
-		return $avatar->getState() == 1;
-	}
 
 	/* 
 	 * Returns the users group.
@@ -326,6 +294,42 @@ class User {
 	 */
 	public function isTeamLeader() {
 		return TeamHandler::isTeamLeader($this->getId());
+	}
+	
+		public function getAvatar() {
+		return AvatarHandler::getAvatarForUser($this->getId());
+	}
+	
+	/* 
+	 * Returns the name of the users position.
+	 */
+	public function getPosition() {
+		if ($this->isGroupMember()) {
+			if ($this->isGroupLeader()) {
+				return 'Chief';
+			} else if ($this->isTeamLeader()) {
+				return 'Shift-leder';
+			} else {
+				return 'Medlem';
+			}
+		} else {
+			return 'Deltaker';
+		}
+	}
+	
+	//Discontinued
+	public function getPendingAvatar() {
+		$avatar = self::getAvatar();
+		return $avatar->getState() == 1 ? $avatar : null;
+	}
+	
+	public function hasAvatar() {
+		return AvatarHandler::getAvatarForUser($this->getId()) != null;
+	}
+	
+	public function hasPendingAvatar() {
+		$avatar = self::getAvatar();
+		return $avatar->getState() == 1;
 	}
 }
 ?>
