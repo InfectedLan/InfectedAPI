@@ -20,7 +20,7 @@ if (Session::isAuthenticated()) {
 			ApplicationHandler::createApplication($user, $group, $content);
 			
 			$result = true;
-			$message = 'Din søknad til ' . $group->getTitle() . ' crew er sendt.';
+			$message = 'Din søknad til crewet "' . $group->getTitle() . '" er nå sendt.';
 		} else {
 			$message = 'Du har ikke fyllt ut alle feltene.';
 		}
