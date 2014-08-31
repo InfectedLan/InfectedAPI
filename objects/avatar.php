@@ -18,14 +18,14 @@ class Avatar {
 		
 			if ($user->getAge() >= 18) {
 				if ($user->getGender() == 0) {
-					$file = 'default_gutt.png';
+					//$file = 'default_gutt.png';
 					$defaultState = 1;
 				} else {
-					$file = 'default_jente.png';
+					//$file = 'default_jente.png';
 					$defaultState = 2;
 				}
 			} else {
-				$file = 'default_child.png';
+				//$file = 'default_child.png';
 				$defaultState = 3;
 			}
 		} else {
@@ -48,11 +48,21 @@ class Avatar {
 		return $this->getSd();
 	}
 
+	private function getDefault() {
+		if($this->defaultState == 1) {
+			return "default_gutt.png";
+		} else if($this->defaultState == 2) {
+			return "default_jente.png";
+		} else if($this->defaultState == 3) {
+			return "default_child.png";
+		}
+	}
+
 	public function getHd() {
 		if($this->defaultState == 0) {
 			return Settings::avatar_path . "hd/" . $this->file;
 		} else {
-			return Settings::avatar_path . "default/" . $this->file;
+			return Settings::avatar_path . "default/" . $this->getDefault();
 		}
 	}
 
@@ -60,7 +70,7 @@ class Avatar {
 		if($this->defaultState == 0) {
 			return Settings::avatar_path . "sd/" . $this->file;
 		} else {
-			return Settings::avatar_path . "default/" . $this->file;
+			return Settings::avatar_path . "default/" . $this->getDefault();
 		}
 	}
 
@@ -73,7 +83,7 @@ class Avatar {
 		if($this->defaultState == 0) {
 			return Settings::avatar_path . "thumb/" . $this->file;
 		} else {
-			return Settings::avatar_path . "default/" . $this->file;
+			return Settings::avatar_path . "default/" . $this->getDefault();
 		}
 	}
 
