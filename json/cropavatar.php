@@ -69,6 +69,7 @@ if (Session::isAuthenticated()) {
 						unlink(Settings::api_path . $avatar->getTemp());
 
 						$avatar->setFileName(str_replace_last($extension, "jpg", $avatar->getFileName()));
+						$avatar->setState(1);
 						$result = true;
 						$message = "Avataren har blitt skalert!";
 

@@ -92,14 +92,12 @@ class Avatar {
 	}
 	
 	public function setState($newstatus) {
-		if (is_bool($newstatus)) {
-			$con = MySQL::open(Settings::db_name_infected_crew);
-			
-			mysqli_query($con, 'UPDATE' . Settings::db_table_infected_crew_avatars . ' SET `state` = ' . $newstatus . ' WHERE id = \'' . $this->getId() . '\'');
-			$this->state = $newstatus;
-			
-			MySQL::close($con);
-		}
+		$con = MySQL::open(Settings::db_name_infected_crew);
+		
+		mysqli_query($con, 'UPDATE `' . Settings::db_table_infected_crew_avatars . '` SET `state` = ' . $con->real_escape_string($newstatus) . ' WHERE id = \'' . $this->getId() . '\'');
+		$this->state = $newstatus;
+		
+		MySQL::close($con);
 	}
 
 	public function getFileName() {
