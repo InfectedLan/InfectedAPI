@@ -271,8 +271,10 @@ class User {
 		return AvatarHandler::getAvatarForUser($this->getId());
 	}
 	
+	//Discontinued
 	public function getPendingAvatar() {
-		return AvatarHandler::getPendingAvatarForUser($this->getId());
+		$avatar = self::getAvatar();
+		return $avatar->getState() == 1 ? $avatar : null;
 	}
 	
 	public function hasAvatar() {
@@ -280,7 +282,8 @@ class User {
 	}
 	
 	public function hasPendingAvatar() {
-		return AvatarHandler::getPendingAvatarForUser($this->getId()) != null;
+		$avatar = self::getAvatar();
+		return $avatar->getState() == 1;
 	}
 
 	/* 
