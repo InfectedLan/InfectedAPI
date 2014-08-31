@@ -107,5 +107,22 @@ class AvatarHandler {
 		
 		return $avatarList;
 	}
+	public static function deleteAvatar($avatar) {
+		$con = MySQL::open(Settings::db_name_infected_crew);
+
+		$result = mysqli_query($con, 'DELETE FROM `' . Settings::db_table_infected_crew_avatars . '` WHERE `id` = ' . $con->real_escape_string($avatar->getId()) . ';');
+		
+		$avatar->deleteFiles();
+
+		MySQL::close($con);
+	}
+
+	public static function createAvatar($fileName, $user) {
+		$con = MySQL::open(Settings::db_name_infected_crew);
+
+		$result = mysqli_query($con, 'INSERT INTO `` (`userId`, `file`, `state`) VALUES (' . $user->getId() . ', \'' . $fileName . '\', 0);');
+	
+		return Settings::api_path . Settings::avatar_path . 'temp/' . $fileName;
+	}
 }
 ?>

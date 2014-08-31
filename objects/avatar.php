@@ -103,5 +103,18 @@ class Avatar {
 
 		MySQL::close($con);
 	}
+
+	//Do not use
+	public function deleteFiles() {
+		if($this->state == 0) {
+			//This picture is not cropped
+			unlink(Settings::api_path . $this->getTemp());
+		} else {
+			unlink(Settings::api_path . $this->getSd());
+			unlink(Settings::api_path . $this->getHd());
+			unlink(Settings::api_path . $this->getThumbnail());
+		}
+
+	}
 }
 ?>
