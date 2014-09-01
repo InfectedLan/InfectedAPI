@@ -103,7 +103,7 @@ class Group {
 				echo '">';
 					$avatarFile = null;
 			
-					if ($member->hasAvatar()) {
+					if ($member->hasValidAvatar()) {
 						$avatarFile = $user->getAvatar()->getThumbnail();
 					} else {
 						$avatarFile = AvatarHandler::getDefaultAvatar($member);

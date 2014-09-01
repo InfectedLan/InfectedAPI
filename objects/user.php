@@ -285,6 +285,13 @@ class User {
 	}
 	
 	/*
+	 * Returns true if the user has an accpeted avatar.
+	 */
+	public function hasValidAvatar() {
+		return AvatarHandler::hasValidAvatar($this);
+	}
+	
+	/*
 	 * Returns the avatar linked to this user.
 	 */
 	public function getAvatar() {
