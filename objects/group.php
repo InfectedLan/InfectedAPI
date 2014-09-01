@@ -101,7 +101,15 @@ class Group {
 						echo 'crewEntryRight';
 					}
 				echo '">';
-					echo '<a href="index.php?page=profile&id=' . $member->getId() . '"><img src="../api/' . $member->getAvatar()->getThumbnail() . '" width="146" height="110" style="float: right;"></a>';
+					$avatarFile = null;
+			
+					if ($member->hasAvatar()) {
+						$avatarFile = $user->getAvatar()->getThumbnail();
+					} else {
+						$avatarFile = AvatarHandler::getDefaultAvatar($member);
+					}
+				
+					echo '<a href="index.php?page=profile&id=' . $member->getId() . '"><img src="../api/' . $avatarFile . '" width="146" height="110" style="float: right;"></a>';
 					echo '<p>Navn: ' . $member->getFirstname() . ' "' . $member->getNickname() . '" ' . $member->getLastname() . '<br>';
 					echo 'Stilling: ' . $member->getPosition() . '<br>';
 					echo 'Telefon: ' . $member->getPhone() . '<br>';
