@@ -104,7 +104,7 @@ class Group {
 					$avatarFile = null;
 			
 					if ($member->hasValidAvatar()) {
-						$avatarFile = $user->getAvatar()->getThumbnail();
+						$avatarFile = $member->getAvatar()->getThumbnail();
 					} else {
 						$avatarFile = AvatarHandler::getDefaultAvatar($member);
 					}
