@@ -7,31 +7,10 @@ class Avatar {
 	private $userId;
 	private $file;
 	private $state;
-	private $defaultState;
 
 	public function __construct($id, $userId, $file, $state) {
 		$this->id = $id;
 		$this->userId = $userId;
-		
-		if (!file_exists(Settings::api_path . Settings::avatar_path . 'hd/' . $file) || $file == null) {
-			$user = UserHandler::getUser($userId);
-		
-			if ($user->getAge() >= 18) {
-				if ($user->getGender() == 0) {
-					//$file = 'default_gutt.png';
-					$defaultState = 1;
-				} else {
-					//$file = 'default_jente.png';
-					$defaultState = 2;
-				}
-			} else {
-				//$file = 'default_child.png';
-				$defaultState = 3;
-			}
-		} else {
-			$defaultState = 0;
-		}
-		
 		$this->file = $file;
 		$this->state = $state;
 	}
@@ -44,36 +23,12 @@ class Avatar {
 		return UserHandler::getUser($this->userId);
 	}
 
-	private function getDefault() {
-		switch ($this->defaultState) {
-			case 1:
-				return 'default_gutt.png';
-				break;
-			
-			case 2:
-				return 'default_jente.png';
-				break;
-			
-			case 3:
-				return 'default_child.png';
-				break;
-		}
-	}
-
 	public function getHd() {
-		if ($this->defaultState == 0) {
-			return Settings::avatar_path . 'hd/' . $this->file;
-		} else {
-			return Settings::avatar_path . 'default/' . $this->getDefault();
-		}
+		return Settings::avatar_path . 'hd/' . $this->file;
 	}
 	
 	public function getSd() {
-		if ($this->defaultState == 0) {
-			return Settings::avatar_path . 'sd/' . $this->file;
-		} else {
-			return Settings::avatar_path . 'default/' . $this->getDefault();
-		}
+		return Settings::avatar_path . 'sd/' . $this->file;
 	}
 
 	// Only use if state = 0
@@ -82,11 +37,7 @@ class Avatar {
 	}
 
 	public function getThumbnail() {
-		if ($this->defaultState == 0) {
-			return Settings::avatar_path . 'thumb/' . $this->file;
-		} else {
-			return Settings::avatar_path . 'default/' . $this->getDefault();
-		}
+		return Settings::avatar_path . 'thumb/' . $this->file;
 	}
 
 	public function getState() {

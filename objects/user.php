@@ -255,10 +255,17 @@ class User {
 	}
 	
 	/*
+	 * Returns true if the user has an avatar.
+	 */
+	public function hasAvatar() {
+		return AvatarHandler::hasAvatar($this);
+	}
+	
+	/*
 	 * Returns the avatar linked to this user.
 	 */
 	public function getAvatar() {
-		return AvatarHandler::getAvatarForUser($this->getId());
+		return AvatarHandler::getAvatarForUser($this);
 	}
 	
 	/* 
