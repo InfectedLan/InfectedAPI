@@ -35,7 +35,7 @@ if (Session::isAuthenticated()) {
 			$message = "Filen er for stor!";
 		}
 	} else {
-		$message = "Filen har ikke riktig MIME-format";
+		$message = "Filen har ikke riktig MIME-format(" . $_FILES["file"]["type"] . ")";
 	} 
 } else {
 	$message = "Du er allerede logget inn!";
