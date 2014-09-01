@@ -9,7 +9,7 @@ if (Session::isAuthenticated()) {
 	$user = Session::getCurrentUser();
 	
 	if ($user->hasPermission('*') ||
-		$user->hasPermission('functions.mycrew') || 
+		$user->hasPermission('functions.my-crew') || 
 		$user->hasPermission('functions.edit-page') || 
 		$user->isGroupLeader()) {
 		if (isset($_GET['id']) &&
@@ -21,7 +21,7 @@ if (Session::isAuthenticated()) {
 			$id = $_GET['id'];
 			$name = strtolower(str_replace(' ', '-', $_GET['title']));
 			$title = $_GET['title'];
-			$price = $_GET['content'];
+			$content = $_GET['content'];
 
 			RestrictedPageHandler::updatePage($id, $name, $title, $content);
 			$result = true;
