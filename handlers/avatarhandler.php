@@ -23,11 +23,11 @@ class AvatarHandler {
 		}
 	}
 	
-	public static function getAvatarForUser($userId) {
+	public static function getAvatarForUser($user) {
 		$con = MySQL::open(Settings::db_name_infected_crew);
 		
 		$result = mysqli_query($con, 'SELECT `id` FROM `' . Settings::db_table_infected_crew_avatars . '` 
-									  WHERE `userId` = \'' . $con->real_escape_string($userId) . '\';');
+									  WHERE `userId` = \'' . $con->real_escape_string($user->getId()) . '\';');
 		
 		$row = mysqli_fetch_array($result);
 		
@@ -71,40 +71,26 @@ class AvatarHandler {
 		return $pendingAvatarList;
 	}
 	
-	/*
-	public function getPendingAvatar($id) {
+	public static function hasAvatar($user) {
 		$con = MySQL::open(Settings::db_name_infected_crew);
 		
 		$result = mysqli_query($con, 'SELECT `id` FROM `' . Settings::db_table_infected_crew_avatars . '` 
-									  WHERE `id` = \'' . $con->real_escape_string($id) . '\' 
-									  AND `state` = \'1\';');
-		
+									  WHERE `userId` = \'' . $con->real_escape_string($user->getId()) . '\';');
 		
 		$row = mysqli_fetch_array($result);
 		
 		MySQL::close($con);
 		
-		if ($row) {
-			return self::getAvatar($row['id']);
-		}
+		$row ? true : false;
 	}
 	
-	public static function getPendingAvatarForUser($userId) {
+	public static function createAvatar($fileName, $user) {
 		$con = MySQL::open(Settings::db_name_infected_crew);
-		
-		$result = mysqli_query($con, 'SELECT `id` FROM `' . Settings::db_table_infected_crew_avatars . '` 
-									  WHERE `userId` = \'' . $con->real_escape_string($userId) . '\'
-									  AND `state` = \'1\';');
-		
-		$row = mysqli_fetch_array($result);
-		
-		MySQL::close($con);
-		
-		if ($row) {
-			return self::getAvatar($row['id']);
-		}
+
+		$result = mysqli_query($con, 'INSERT INTO `' . Settings::db_table_infected_crew_avatars . '` (`userId`, `file`, `state`) VALUES (' . $user->getId() . ', \'' . $fileName . '\', 0);');
+	
+		return Settings::api_path . Settings::avatar_path . 'temp/' . $fileName;
 	}
-	*/
 	
 	public static function deleteAvatar($avatar) {
 		$con = MySQL::open(Settings::db_name_infected_crew);
@@ -115,13 +101,21 @@ class AvatarHandler {
 
 		MySQL::close($con);
 	}
-
-	public static function createAvatar($fileName, $user) {
-		$con = MySQL::open(Settings::db_name_infected_crew);
-
-		$result = mysqli_query($con, 'INSERT INTO `' . Settings::db_table_infected_crew_avatars . '` (`userId`, `file`, `state`) VALUES (' . $user->getId() . ', \'' . $fileName . '\', 0);');
 	
-		return Settings::api_path . Settings::avatar_path . 'temp/' . $fileName;
+	public static function getDefaultAvatar($user) {
+		$file = null;
+		
+		if ($user->getAge() >= 18) {
+			if ($user->getGender() == 0) {
+				$file = 'default_gutt.png';
+			} else {
+				$file = 'default_jente.png';
+			}
+		} else {
+			$file = 'default_child.png';
+		}
+		
+		return Settings::avatar_path . 'default/' . $file;
 	}
 }
 ?>
