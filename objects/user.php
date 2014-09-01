@@ -255,6 +255,29 @@ class User {
 	}
 	
 	/*
+	 * Sends a mail to the user that the avatar was accepted or rejected, depening on the accepted boolean.
+	 */
+	public function sendAvatarMail($accepted) {
+		if ($accepted) {
+			$text = 'Din avatar på <a href="' . $_SERVER['HTTP_HOST'] . '">' . $_SERVER['HTTP_HOST'] . '</a> har blitt godjent!';
+		} else {
+			$text = 'Din avatar på <a href="' . $_SERVER['HTTP_HOST'] . '">' . $_SERVER['HTTP_HOST'] . '</a> ble ikke godkjent, vennligst last opp en ny en.';
+		}
+	
+		$message = array();
+		$message[] = '<!DOCTYPE html>';
+		$message[] = '<html>';
+			$message[] = '<body>';
+				$message[] = '<h3>Hei!</h3>';
+				$message[] = '<p>' . $text . '</p>';
+				$message[] = '<p>Med vennlig hilsen <a href="http://infected.no/">Infected</a>.</p>';
+			$message[] = '</body>';
+		$message[] = '</html>';
+			
+		return MailManager::sendMail($this, 'Infected avatar', implode("\r\n", $message));
+	}
+	
+	/*
 	 * Returns true if the user has an avatar.
 	 */
 	public function hasAvatar() {

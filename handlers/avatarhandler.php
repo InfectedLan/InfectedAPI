@@ -101,6 +101,7 @@ class AvatarHandler {
 		$result = mysqli_query($con, 'DELETE FROM `' . Settings::db_table_infected_crew_avatars . '` 
 									  WHERE `id` = \'' . $con->real_escape_string($avatar->getId()) . '\';');
 		
+		// Delete all avatars.
 		$avatar->deleteFiles();
 
 		MySQL::close($con);
