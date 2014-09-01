@@ -88,6 +88,13 @@ class Settings {
 	const avatar_hd_w = 1200;
 	const avatar_hd_h = 900;
 
+	const thumbnail_compression_rate = 100;
+	const sd_compression_rate = 100;
+	const hd_compression_rate = 100;
+
+	const avatar_minimum_width = 1200;
+	const avatar_minimum_height = 900;
+
 	// Defines how long a ticket should be stored on your account before payment is successful.
 	const storeSessionTime = 3600; // You have an hour to pay on paypal,
 }

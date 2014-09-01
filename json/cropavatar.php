@@ -48,31 +48,37 @@ if (Session::isAuthenticated()) {
 						//Get scale factor. Image scaler is 800 px wide.
 						$scalefactor = imagesx($image)/800;
 
-						//Render to tumbnail
-						$target = imagecreatetruecolor(Settings::avatar_thumb_w, Settings::avatar_thumb_h);
-						imagecopyresized($target, $image, 0, 0, $x*$scalefactor, $y*$scalefactor, 150, 113, $w*$scalefactor, $h*$scalefactor);
-						$imagePath = Settings::api_path . $avatar->getThumbnail();
-						imagejpeg($target, str_replace_last($extension, "jpg", $imagePath), 75);
+						$cropWidth = $w*$scalefactor;
+						$cropHeight = $h*$scalefactor;
 
-						//Render to sd
-						$target = imagecreatetruecolor(Settings::avatar_sd_w, Settings::avatar_sd_h);
-						imagecopyresized($target, $image, 0, 0, $x*$scalefactor, $y*$scalefactor, 800, 600, $w*$scalefactor, $h*$scalefactor);
-						$imagePath = Settings::api_path . $avatar->getSd();
-						imagejpeg($target, str_replace_last($extension, "jpg", $imagePath), 100);
+						if($cropWidth > Settings::avatar_minimum_width && $cropWidth > Settings::avatar_minimum_height) {
+							//Render to tumbnail
+							$target = imagecreatetruecolor(Settings::avatar_thumb_w, Settings::avatar_thumb_h);
+							imagecopyresized($target, $image, 0, 0, $x*$scalefactor, $y*$scalefactor, 150, 113, $w*$scalefactor, $h*$scalefactor);
+							$imagePath = Settings::api_path . $avatar->getThumbnail();
+							imagejpeg($target, str_replace_last($extension, "jpg", $imagePath), Settings::thumbnail_compression_rate);
 
-						//Render to hq
-						$target = imagecreatetruecolor(Settings::avatar_hd_w, Settings::avatar_hd_h);
-						imagecopyresized($target, $image, 0, 0, $x*$scalefactor, $y*$scalefactor, 1200, 900, $w*$scalefactor, $h*$scalefactor);
-						$imagePath = Settings::api_path . $avatar->getHd();
-						imagejpeg($target, str_replace_last($extension, "jpg", $imagePath), 100);
+							//Render to sd
+							$target = imagecreatetruecolor(Settings::avatar_sd_w, Settings::avatar_sd_h);
+							imagecopyresized($target, $image, 0, 0, $x*$scalefactor, $y*$scalefactor, 800, 600, $w*$scalefactor, $h*$scalefactor);
+							$imagePath = Settings::api_path . $avatar->getSd();
+							imagejpeg($target, str_replace_last($extension, "jpg", $imagePath), Settings::sd_compression_rate);
 
-						unlink(Settings::api_path . $avatar->getTemp());
+							//Render to hq
+							$target = imagecreatetruecolor(Settings::avatar_hd_w, Settings::avatar_hd_h);
+							imagecopyresized($target, $image, 0, 0, $x*$scalefactor, $y*$scalefactor, 1200, 900, $w*$scalefactor, $h*$scalefactor);
+							$imagePath = Settings::api_path . $avatar->getHd();
+							imagejpeg($target, str_replace_last($extension, "jpg", $imagePath), Settings::hd_compression_rate);
 
-						$avatar->setFileName(str_replace_last($extension, "jpg", $avatar->getFileName()));
-						$avatar->setState(1);
-						$result = true;
-						$message = "Avataren har blitt skalert!";
+							unlink(Settings::api_path . $avatar->getTemp());
 
+							$avatar->setFileName(str_replace_last($extension, "jpg", $avatar->getFileName()));
+							$avatar->setState(1);
+							$result = true;
+							$message = "Avataren har blitt skalert!";
+						} else {
+							$message = "Du har valgt et for lite omeråde! Dette er ikke lov, ettersom det kan medføre et pikselert bilde.";
+						}
 					} else {
 						$message = "Bildet ble ikke funnet!";
 					}

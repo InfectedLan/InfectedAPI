@@ -21,10 +21,25 @@ if (Session::isAuthenticated()) {
 		if (($_FILES["file"]["size"] < 7000000)) {
 			if(in_array($extension, $allowedExts)) {
 				if ($_FILES["file"]["error"] == 0) {
-					$name = bin2hex(openssl_random_pseudo_bytes(16)) . $user->getUsername();
-					$path = AvatarHandler::createAvatar($name . '.' . $extension, $user);
-					move_uploaded_file($_FILES["file"]["tmp_name"], $path);
-					$result = true;
+					//Validate size
+					$image = 0;
+					if($extension=="png")
+					{
+						$image = imagecreatefrompng($_FILES["file"]["tmp_name"]);
+					}
+					elseif($extension=="jpeg"||$extension=="jpg")
+					{
+						$image = imagecreatefromjpeg($_FILES["file"]["tmp_name"]);
+					}
+
+					if(imagesx($image) > Settings::avatar_minimum_width && imagesy($image) > Settings::avatar_minimum_height) {
+						$name = bin2hex(openssl_random_pseudo_bytes(16)) . $user->getUsername();
+						$path = AvatarHandler::createAvatar($name . '.' . $extension, $user);
+						move_uploaded_file($_FILES["file"]["tmp_name"], $path);
+						$result = true;
+					} else {
+						$message = "Bildet er for smått! Det må være minimum " . Settings::avatar_minimum_width . ' x ' . Settings::avatar_minimum_height . ' piksler stort.';
+					}
 				} else {
 					$message = urlencode($_FILES["file"]["error"]);
 				}
