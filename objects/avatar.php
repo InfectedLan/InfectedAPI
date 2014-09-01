@@ -13,7 +13,7 @@ class Avatar {
 		$this->id = $id;
 		$this->userId = $userId;
 		
-		if (!file_exists(Settings::api_path . Settings::avatar_path . "hd/" . $file) || $file == null) {
+		if (!file_exists(Settings::api_path . Settings::avatar_path . 'hd/' . $file) || $file == null) {
 			$user = UserHandler::getUser($userId);
 		
 			if ($user->getAge() >= 18) {
@@ -44,46 +44,48 @@ class Avatar {
 		return UserHandler::getUser($this->userId);
 	}
 
-	public function getFile() {
-		return $this->getSd();
-	}
-
 	private function getDefault() {
-		if($this->defaultState == 1) {
-			return "default_gutt.png";
-		} else if($this->defaultState == 2) {
-			return "default_jente.png";
-		} else if($this->defaultState == 3) {
-			return "default_child.png";
+		switch ($this->defaultState) {
+			case 1:
+				return 'default_gutt.png';
+				break;
+			
+			case 2:
+				return 'default_jente.png';
+				break;
+			
+			case 3:
+				return 'default_child.png';
+				break;
 		}
 	}
 
 	public function getHd() {
-		if($this->defaultState == 0) {
-			return Settings::avatar_path . "hd/" . $this->file;
+		if ($this->defaultState == 0) {
+			return Settings::avatar_path . 'hd/' . $this->file;
 		} else {
-			return Settings::avatar_path . "default/" . $this->getDefault();
+			return Settings::avatar_path . 'default/' . $this->getDefault();
 		}
 	}
-
+	
 	public function getSd() {
-		if($this->defaultState == 0) {
-			return Settings::avatar_path . "sd/" . $this->file;
+		if ($this->defaultState == 0) {
+			return Settings::avatar_path . 'sd/' . $this->file;
 		} else {
-			return Settings::avatar_path . "default/" . $this->getDefault();
+			return Settings::avatar_path . 'default/' . $this->getDefault();
 		}
 	}
 
-	//Only use if state = 0
+	// Only use if state = 0
 	public function getTemp() {
-		return Settings::avatar_path . "temp/" . $this->file;
+		return Settings::avatar_path . 'temp/' . $this->file;
 	}
 
 	public function getThumbnail() {
-		if($this->defaultState == 0) {
-			return Settings::avatar_path . "thumb/" . $this->file;
+		if ($this->defaultState == 0) {
+			return Settings::avatar_path . 'thumb/' . $this->file;
 		} else {
-			return Settings::avatar_path . "default/" . $this->getDefault();
+			return Settings::avatar_path . 'default/' . $this->getDefault();
 		}
 	}
 
@@ -91,6 +93,7 @@ class Avatar {
 		return $this->state;
 	}
 	
+	// TODO: We don't make SQL queries in object files.
 	public function setState($newstatus) {
 		$con = MySQL::open(Settings::db_name_infected_crew);
 		
@@ -103,6 +106,8 @@ class Avatar {
 	public function getFileName() {
 		return $this->file;
 	}
+	
+	// TODO: We don't make SQL queries in object files.
  	public function setFileName($newName) {
  		$con = MySQL::open(Settings::db_name_infected_crew);
 
@@ -114,7 +119,7 @@ class Avatar {
 
 	//Do not use
 	public function deleteFiles() {
-		if($this->state == 0) {
+		if ($this->state == 0) {
 			//This picture is not cropped
 			unlink(Settings::api_path . $this->getTemp());
 		} else {
@@ -122,7 +127,6 @@ class Avatar {
 			unlink(Settings::api_path . $this->getHd());
 			unlink(Settings::api_path . $this->getThumbnail());
 		}
-
 	}
 }
 ?>

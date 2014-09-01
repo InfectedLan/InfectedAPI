@@ -53,7 +53,7 @@ class Team {
 	
 	public function displayWithInfo() {
 		echo '<div class="crewParagraph">';
-			echo '<h1>' . $this->title . '</h1>';
+			echo '<h3>' . $this->title . '</h3>';
 			echo $this->getDescription();
 		echo '</div>';
 		
@@ -78,9 +78,8 @@ class Team {
 					} else {
 						echo 'crewEntryRight';
 					}
-					
 				echo '">';
-					echo '<a href="index.php?page=profile&id=' . $member->getId() . '"><img src="' . $member->getAvatar()->getFile() . '" width="146" height="110" style="float: right;"></a>';
+					echo '<a href="index.php?page=profile&id=' . $member->getId() . '"><img src="../api/' . $member->getAvatar()->getThumbnail() . '" width="146" height="110" style="float: right;"></a>';
 					echo '<p>Navn: ' . $member->getFirstname() . ' "' . $member->getNickname() . '" ' . $member->getLastname() . '<br>';
 					echo 'Stilling: ' . $member->getPosition() . '<br>';
 					echo 'Telefon: ' . $member->getPhone() . '<br>';

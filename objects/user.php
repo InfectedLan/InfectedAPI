@@ -253,7 +253,14 @@ class User {
 			
 		return MailManager::sendMail($this, 'Infected tilbakestilling av passord', implode("\r\n", $message));
 	}
-
+	
+	/*
+	 * Returns the avatar linked to this user.
+	 */
+	public function getAvatar() {
+		return AvatarHandler::getAvatarForUser($this->getId());
+	}
+	
 	/* 
 	 * Returns the users group.
 	 */
@@ -296,10 +303,6 @@ class User {
 		return TeamHandler::isTeamLeader($this->getId());
 	}
 	
-		public function getAvatar() {
-		return AvatarHandler::getAvatarForUser($this->getId());
-	}
-	
 	/* 
 	 * Returns the name of the users position.
 	 */
@@ -315,21 +318,6 @@ class User {
 		} else {
 			return 'Deltaker';
 		}
-	}
-	
-	//Discontinued
-	public function getPendingAvatar() {
-		$avatar = self::getAvatar();
-		return $avatar->getState() == 1 ? $avatar : null;
-	}
-	
-	public function hasAvatar() {
-		return AvatarHandler::getAvatarForUser($this->getId()) != null;
-	}
-	
-	public function hasPendingAvatar() {
-		$avatar = self::getAvatar();
-		return $avatar->getState() == 1;
 	}
 }
 ?>
