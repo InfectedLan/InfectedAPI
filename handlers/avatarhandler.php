@@ -81,13 +81,16 @@ class AvatarHandler {
 		
 		MySQL::close($con);
 		
-		$row ? true : false;
+		return $row ? true : false;
 	}
 	
 	public static function createAvatar($fileName, $user) {
 		$con = MySQL::open(Settings::db_name_infected_crew);
 
-		$result = mysqli_query($con, 'INSERT INTO `' . Settings::db_table_infected_crew_avatars . '` (`userId`, `file`, `state`) VALUES (' . $user->getId() . ', \'' . $fileName . '\', 0);');
+		$result = mysqli_query($con, 'INSERT INTO `' . Settings::db_table_infected_crew_avatars . '` (`userId`, `file`, `state`) 
+									  VALUES (\'' . $user->getId() . '\',
+											  \'' . $fileName . '\',
+											  \'0\');');
 	
 		return Settings::api_path . Settings::avatar_path . 'temp/' . $fileName;
 	}
@@ -95,10 +98,31 @@ class AvatarHandler {
 	public static function deleteAvatar($avatar) {
 		$con = MySQL::open(Settings::db_name_infected_crew);
 
-		$result = mysqli_query($con, 'DELETE FROM `' . Settings::db_table_infected_crew_avatars . '` WHERE `id` = ' . $con->real_escape_string($avatar->getId()) . ';');
+		$result = mysqli_query($con, 'DELETE FROM `' . Settings::db_table_infected_crew_avatars . '` 
+									  WHERE `id` = \'' . $con->real_escape_string($avatar->getId()) . '\';');
 		
 		$avatar->deleteFiles();
 
+		MySQL::close($con);
+	}
+	
+	public static function acceptAvatar($id) {
+		$con = MySQL::open(Settings::db_name_infected_crew);
+		
+		mysqli_query($con, 'UPDATE `' . Settings::db_table_infected_crew_avatars . '` 
+							SET `state` = \'2\'
+							WHERE `id` = \'' . $con->real_escape_string($id) . '\';');
+		
+		MySQL::close($con);
+	}
+	
+	public static function rejectAvatar($id) {
+		$con = MySQL::open(Settings::db_name_infected_crew);
+		
+		mysqli_query($con, 'UPDATE `' . Settings::db_table_infected_crew_avatars . '` 
+							SET `state` =  \'3\'
+							WHERE `id` = \'' . $con->real_escape_string($id) . '\';');
+		
 		MySQL::close($con);
 	}
 	
