@@ -30,14 +30,14 @@ class Avatar {
 	public function getSd() {
 		return Settings::avatar_path . 'sd/' . $this->file;
 	}
+	
+	public function getThumbnail() {
+		return Settings::avatar_path . 'thumbnail/' . $this->file;
+	}
 
 	// Only use if state = 0
 	public function getTemp() {
 		return Settings::avatar_path . 'temp/' . $this->file;
-	}
-
-	public function getThumbnail() {
-		return Settings::avatar_path . 'thumb/' . $this->file;
 	}
 
 	public function getState() {

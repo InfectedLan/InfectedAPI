@@ -21,7 +21,7 @@ if (Session::isAuthenticated()) {
 		if (($_FILES["file"]["size"] < 7000000)) {
 			if(in_array($extension, $allowedExts)) {
 				if ($_FILES["file"]["error"] == 0) {
-					$name = md5(time() . "This is a random seed. Nothing to see here. 31.08.2014") . $user->getUsername();
+					$name = bin2hex(openssl_random_pseudo_bytes(16)) . $user->getUsername();
 					$path = AvatarHandler::createAvatar($name . '.' . $extension, $user);
 					move_uploaded_file($_FILES["file"]["tmp_name"], $path);
 					$result = true;

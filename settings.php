@@ -78,7 +78,7 @@ class Settings {
 	const qr_path = 'content/qrcache/';
 	const avatar_path = 'content/avatars/';
 
-	//Avatar sizes
+	// Avatar sizes
 	const avatar_thumb_w = 150;
 	const avatar_thumb_h = 133;
 
