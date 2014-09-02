@@ -17,10 +17,14 @@ if (Session::isAuthenticated()) {
 			$permissionUser = UserHandler::getUser($_GET['id']);
 			
 			foreach (PermissionsHandler::getPermissions() as $permission) {
-				if (isset($_GET['checkbox_' . $permission->getId()])) {
-					UserPermissionsHandler::createUserPermission($permissionUser, $permission->getValue());
-				} else {
-					UserPermissionsHandler::removeUserPermission($permissionUser, $permission->getValue());
+				if ($user->hasPermission('*') ||
+					$user->hasPermission('admin.permissions') && 
+					$user->hasPermission($permission->getValue())) {
+					if (isset($_GET['checkbox_' . $permission->getId()])) {
+						UserPermissionsHandler::createUserPermission($permissionUser, $permission->getValue());
+					} else {
+						UserPermissionsHandler::removeUserPermission($permissionUser, $permission->getValue());
+					}
 				}
 			}
 		
