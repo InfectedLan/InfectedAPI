@@ -17,6 +17,7 @@ if (Session::isAuthenticated()) {
 			$permissionUser = UserHandler::getUser($_GET['id']);
 			
 			foreach (PermissionsHandler::getPermissions() as $permission) {
+				// Only allow changes by admin or user with the "admin.permissions" to give permissions that he is assigned to other users.
 				if ($user->hasPermission('*') ||
 					$user->hasPermission('admin.permissions') && 
 					$user->hasPermission($permission->getValue())) {
