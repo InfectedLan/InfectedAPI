@@ -7,17 +7,11 @@ if (isset($_GET['code'])) {
 	if (RegistrationCodeHandler::hasRegistrationCode($code)) {
 		RegistrationCodeHandler::removeRegistrationCode($_GET['code']);
 		
-		echo '<li>';
-			echo '<p>Brukeren din er nå aktivert og klar for bruk.</p>';
-		echo '</li>';
+		echo '<p>Brukeren din er nå aktivert og klar for bruk.</p>';
 	} else {
-		echo '<li>';
-			echo '<p>Brukeren din er allerede aktivert.</p>';
-		echo '</li>';
+		echo '<p>Brukeren din er allerede aktivert.</p>';
 	}
 } else {
-	echo '<li>';
-		echo '<p>En feil oppstod.</p>';
-	echo '</li>';
+	echo '<p>En feil oppstod.</p>';
 }
 ?>

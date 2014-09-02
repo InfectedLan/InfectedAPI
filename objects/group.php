@@ -90,33 +90,37 @@ class Group {
 		if ($user->isGroupMember()) {
 			$memberList = $this->getMembers();
 			
-			$i = 0;
-			
-			foreach ($memberList as $member) {
-				echo '<div class="';
-					
-					if ($i % 2 == 0) {
-						echo 'crewEntryLeft';
-					} else {
-						echo 'crewEntryRight';
-					}
-				echo '">';
-					$avatarFile = null;
-			
-					if ($member->hasValidAvatar()) {
-						$avatarFile = $member->getAvatar()->getThumbnail();
-					} else {
-						$avatarFile = AvatarHandler::getDefaultAvatar($member);
-					}
+			if (!empty($memberList)) {
+				$index = 0;
 				
-					echo '<a href="index.php?page=profile&id=' . $member->getId() . '"><img src="../api/' . $avatarFile . '" width="146" height="110" style="float: right;"></a>';
-					echo '<p>Navn: ' . $member->getFirstname() . ' "' . $member->getNickname() . '" ' . $member->getLastname() . '<br>';
-					echo 'Stilling: ' . $member->getPosition() . '<br>';
-					echo 'Telefon: ' . $member->getPhone() . '<br>';
-					echo 'E-post: ' . $member->getEmail() . '</p>';
-				echo '</div>';
+				foreach ($memberList as $member) {
+					echo '<div class="';
+						
+						if ($index % 2 == 0) {
+							echo 'crewEntryLeft';
+						} else {
+							echo 'crewEntryRight';
+						}
+					echo '">';
+						$avatarFile = null;
+				
+						if ($member->hasValidAvatar()) {
+							$avatarFile = $member->getAvatar()->getThumbnail();
+						} else {
+							$avatarFile = AvatarHandler::getDefaultAvatar($member);
+						}
 					
-				$i++;
+						echo '<a href="index.php?page=my-profile&id=' . $member->getId() . '"><img src="../api/' . $avatarFile . '" width="146" height="110" style="float: right;"></a>';
+						echo '<p>Navn: ' . $member->getFirstname() . ' "' . $member->getNickname() . '" ' . $member->getLastname() . '<br>';
+						echo 'Stilling: ' . $member->getPosition() . '<br>';
+						echo 'Telefon: ' . $member->getPhone() . '<br>';
+						echo 'E-post: ' . $member->getEmail() . '</p>';
+					echo '</div>';
+						
+					$index++;
+				}
+			} else {
+				echo '<p>Det er ingen medlemmer av dette crewet.</p>';
 			}
 		}
 	}

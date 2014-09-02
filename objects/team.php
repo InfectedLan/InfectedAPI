@@ -53,7 +53,7 @@ class Team {
 	
 	public function displayWithInfo() {
 		echo '<div class="crewParagraph">';
-			echo '<h3>' . $this->title . '</h3>';
+			echo '<h3>' . $this->getTitle() . '</h3>';
 			echo $this->getDescription();
 		echo '</div>';
 		
@@ -68,33 +68,37 @@ class Team {
 		if ($user->isGroupMember()) {
 			$memberList = $this->getMembers();
 			
-			$index = 0;
-			
-			foreach ($memberList as $member) {
-				echo '<div class="';
-					
-					if ($index % 2 == 0) {
-						echo 'crewEntryLeft';
-					} else {
-						echo 'crewEntryRight';
-					}
-				echo '">';
-					$avatarFile = null;
-			
-					if ($member->hasValidAvatar()) {
-						$avatarFile = $member->getAvatar()->getThumbnail();
-					} else {
-						$avatarFile = AvatarHandler::getDefaultAvatar($member);
-					}
+			if (!empty($memberList)) {
+				$index = 0;
 				
-					echo '<a href="index.php?page=profile&id=' . $member->getId() . '"><img src="../api/' . $avatarFile . '" width="146" height="110" style="float: right;"></a>';
-					echo '<p>Navn: ' . $member->getFirstname() . ' "' . $member->getNickname() . '" ' . $member->getLastname() . '<br>';
-					echo 'Stilling: ' . $member->getPosition() . '<br>';
-					echo 'Telefon: ' . $member->getPhone() . '<br>';
-					echo 'E-post: ' . $member->getEmail() . '</p>';
-				echo '</div>';
+				foreach ($memberList as $member) {
+					echo '<div class="';
+						
+						if ($index % 2 == 0) {
+							echo 'crewEntryLeft';
+						} else {
+							echo 'crewEntryRight';
+						}
+					echo '">';
+						$avatarFile = null;
+				
+						if ($member->hasValidAvatar()) {
+							$avatarFile = $member->getAvatar()->getThumbnail();
+						} else {
+							$avatarFile = AvatarHandler::getDefaultAvatar($member);
+						}
 					
-				$index++;
+						echo '<a href="index.php?page=my-profile&id=' . $member->getId() . '"><img src="../api/' . $avatarFile . '" width="146" height="110" style="float: right;"></a>';
+						echo '<p>Navn: ' . $member->getFirstname() . ' "' . $member->getNickname() . '" ' . $member->getLastname() . '<br>';
+						echo 'Stilling: ' . $member->getPosition() . '<br>';
+						echo 'Telefon: ' . $member->getPhone() . '<br>';
+						echo 'E-post: ' . $member->getEmail() . '</p>';
+					echo '</div>';
+						
+					$index++;
+				}
+			} else {
+					echo '<p>Det er ingen medlemmer av dette laget.</p>';
 			}
 		}
 	}
