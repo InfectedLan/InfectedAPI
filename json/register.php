@@ -17,8 +17,8 @@ if (isset($_GET['firstname']) &&
 	isset($_GET['birthmonth']) && 
 	isset($_GET['birthyear']) && 
 	isset($_GET['phone'])) {
-	$firstname = $_GET['firstname'];
-	$lastname = $_GET['lastname'];
+	$firstname = ucfirst($_GET['firstname']);
+	$lastname = ucfirst($_GET['lastname']);
 	$username = $_GET['username'];
 	$password = hash('sha256', $_GET['password']);
 	$confirmPassword = hash('sha256', $_GET['confirmpassword']);
@@ -26,9 +26,9 @@ if (isset($_GET['firstname']) &&
 	$gender = $_GET['gender'];
 	$birthdate = $_GET['birthyear'] . '-' . $_GET['birthmonth'] . '-' . $_GET['birthday']; 
 	$phone = $_GET['phone'];
-	$address = $_GET['address'];
+	$address = ucfirst($_GET['address']);
 	$postalcode = $_GET['postalcode'];
-	$nickname = isset($_GET['nickname']) ? $_GET['nickname'] : $username;
+	$nickname = !empty($_GET['nickname']) ? $_GET['nickname'] : $username;
 	$emergencycontactphone = isset($_GET['emergencycontactphone']) ? $_GET['emergencycontactphone'] : null;
 	
 	if (!UserHandler::userExists($username) &&

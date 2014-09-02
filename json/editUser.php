@@ -19,7 +19,6 @@ if (Session::isAuthenticated()) {
 		isset($_GET['phone']) &&
 		isset($_GET['address']) &&
 		isset($_GET['postalcode']) &&
-		isset($_GET['nickname']) &&
 		!empty($_GET['firstname']) &&
 		!empty($_GET['lastname']) &&
 		!empty($_GET['email']) &&
@@ -30,15 +29,15 @@ if (Session::isAuthenticated()) {
 		is_numeric($_GET['phone']) &&
 		!empty($_GET['address']) &&
 		is_numeric($_GET['postalcode'])) {
-		$firstname = $_GET['firstname'];
-		$lastname = $_GET['lastname'];
+		$firstname = ucfirst($_GET['firstname']);
+		$lastname = ucfirst($_GET['lastname']);
 		$email = $_GET['email'];
 		$gender = $_GET['gender'];
 		$birthdate = $_GET['birthyear'] . '-' . $_GET['birthmonth'] . '-' . $_GET['birthday']; 
 		$phone = $_GET['phone'];
-		$address = $_GET['address'];
+		$address = ucfirst($_GET['address']);
 		$postalcode = $_GET['postalcode'];
-		$nickname = empty($_GET['nickname']) ? $user->getUsername() : $_GET['nickname'];
+		$nickname = !empty($_GET['nickname']) ? $_GET['nickname'] : $user->getUsername();
 		$emergencycontactphone = isset($_GET['emergencycontactphone']) ? $_GET['emergencycontactphone'] : 0;
 		
 		if (empty($firstname) || strlen($firstname) > 32) {
