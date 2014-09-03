@@ -13,7 +13,7 @@ class RestrictedPageHandler {
 		if (Session::isAuthenticated()) {
 			$user = Session::getCurrentUser();
 			
-			if ($user->hasPermission('*') ||
+			if ($user->hasPermission('admin') ||
 				$user->isGroupMember()) {
 				$con = MySQL::open(Settings::db_name_infected_crew);
 				
