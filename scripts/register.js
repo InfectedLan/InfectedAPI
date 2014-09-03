@@ -4,7 +4,7 @@
 		$.getJSON('../api/json/register.php' + '?' + $(this).serialize(), function(data){
 			if (data.result) {
 				//$(location).attr('href', 'index.php');
-				info(data.message);
+				info(data.message, function() {location.reload();});
 			} else {
 				error(data.message); 
 			}
