@@ -17,7 +17,7 @@ if (Session::isAuthenticated()) {
 		if ($application == null ||
 			$application->getState() == 3) {
 
-			$vatar = $user->getAvatar();
+			$avatar = $user->getAvatar();
 			if (isset($avatar) && ( $avatar->getState() == 1 || $avatar->getState() == 2 ) ) {
 				if (isset($_GET['groupId']) &&
 					isset($_GET['content']) &&
