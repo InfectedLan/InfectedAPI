@@ -21,7 +21,8 @@ class GameHandler {
 							$row['price'], 
 							$row['mode'], 
 							$row['description'], 
-							$row['deadlineTime'], 
+							$row['startTime'], 
+							$row['endTime'], 
 							$row['published']);
 		}
 	}
@@ -62,16 +63,17 @@ class GameHandler {
 	/* 
 	 * Create a new game.
 	 */
-	public static function createGame($name, $title, $price, $mode, $description, $deadlineTime, $published) {
+	public static function createGame($name, $title, $price, $mode, $description, $startTime, $endTime, $published) {
 		$con = MySQL::open(Settings::db_name_infected_main);
 		
-		mysqli_query($con, 'INSERT INTO `' . Settings::db_table_infected_main_games . '` (`name`, `title`, `price`, `description`, `deadlineTime`, `published`) 
+		mysqli_query($con, 'INSERT INTO `' . Settings::db_table_infected_main_games . '` (`name`, `title`, `price`, `description`, `startTime`, `endTime`, `published`) 
 							VALUES (\'' . $con->real_escape_string($name) . '\', 
 									\'' . $con->real_escape_string($title) . '\', 
 									\'' . $con->real_escape_string($price) . '\', 
 									\'' . $con->real_escape_string($mode) . '\', 
 									\'' . $con->real_escape_string($description) . '\', 
-									\'' . $con->real_escape_string($deadlineTime) . '\', 
+									\'' . $con->real_escape_string($startTime) . '\', 
+									\'' . $con->real_escape_string($endTime) . '\', 
 									\'' . $con->real_escape_string($published) . '\');');
 		
 		MySQL::close($con);
@@ -80,7 +82,7 @@ class GameHandler {
 	/* 
 	 * Update information about a game.
 	 */
-	public static function updateGame($id, $name, $title, $price, $mode, $description, $deadlineTime, $published) {
+	public static function updateGame($id, $name, $title, $price, $mode, $description, $startTime, $endTime, $published) {
 		$con = MySQL::open(Settings::db_name_infected_main);
 		
 		mysqli_query($con, 'UPDATE `' . Settings::db_table_infected_main_games . '` 
@@ -89,7 +91,8 @@ class GameHandler {
 								`price` = \'' . $con->real_escape_string($price) . '\', 
 								`mode` = \'' . $con->real_escape_string($mode) . '\', 
 								`description` = \'' . $con->real_escape_string($description) . '\', 
-								`deadlineTime` = \'' . $con->real_escape_string($deadlineTime) . '\', 
+								`startTime` = \'' . $con->real_escape_string($startTime) . '\', 
+								`endTime` = \'' . $con->real_escape_string($endTime) . '\', 
 								`published` = \'' . $con->real_escape_string($published) . '\'
 							WHERE `id` = \'' . $con->real_escape_string($id) . '\';');
 		

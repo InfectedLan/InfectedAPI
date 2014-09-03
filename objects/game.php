@@ -6,17 +6,19 @@ class Game {
 	private $price;
 	private $mode;
 	private $description;
-	private $deadline;
+	private $startTime;
+	private $endTime;
 	private $published;
 	
-	public function __construct($id, $name, $title, $price, $mode, $description, $deadline, $published) {
+	public function __construct($id, $name, $title, $price, $mode, $description, $startTime, $endTime, $published) {
 		$this->id = $id;
 		$this->name = $name;
 		$this->title = $title;
 		$this->price = $price;
 		$this->mode = $mode;
 		$this->description = $description;
-		$this->deadline = $deadline;
+		$this->startTime = $startTime;
+		$this->endTime = $endTime;
 		$this->published = $published;
 	}
 	
@@ -44,8 +46,18 @@ class Game {
 		return $this->description;
 	}
 	
-	public function getDeadline() {
-		return strtotime($this->deadline);
+	public function getStartTime() {
+		return strtotime($this->startTime);
+	}
+	
+	public function getEndTime() {
+		return strtotime($this->endTime);
+	}
+	
+	public function isBookingTime() {
+		$now = strtotime(date('Y-m-d H:i:s'));
+				
+		return $now >= $this->getStartTime() && $now <= $this->getEndTime();
 	}
 	
 	public function isPublished() {
