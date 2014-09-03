@@ -51,7 +51,7 @@ if (Session::isAuthenticated()) {
 						$cropWidth = $w*$scalefactor;
 						$cropHeight = $h*$scalefactor;
 
-						if($cropWidth > Settings::avatar_minimum_width && $cropWidth > Settings::avatar_minimum_height) {
+						if($cropWidth >= Settings::avatar_minimum_width && $cropWidth >= Settings::avatar_minimum_height) {
 							//Render to tumbnail
 							$target = imagecreatetruecolor(Settings::avatar_thumb_w, Settings::avatar_thumb_h);
 							imagecopyresized($target, $image, 0, 0, $x*$scalefactor, $y*$scalefactor, 150, 113, $w*$scalefactor, $h*$scalefactor);

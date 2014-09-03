@@ -32,7 +32,7 @@ if (Session::isAuthenticated()) {
 						$image = imagecreatefromjpeg($_FILES["file"]["tmp_name"]);
 					}
 
-					if(imagesx($image) > Settings::avatar_minimum_width && imagesy($image) > Settings::avatar_minimum_height) {
+					if(imagesx($image) >= Settings::avatar_minimum_width && imagesy($image) >= Settings::avatar_minimum_height) {
 						$name = bin2hex(openssl_random_pseudo_bytes(16)) . $user->getUsername();
 						$path = AvatarHandler::createAvatar($name . '.' . $extension, $user);
 						move_uploaded_file($_FILES["file"]["tmp_name"], $path);
