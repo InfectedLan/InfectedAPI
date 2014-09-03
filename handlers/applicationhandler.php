@@ -19,12 +19,52 @@ class ApplicationHandler {
 
 		if ($row) {
 			return new Application($row['id'], 
+								   $row['eventId'], 
 								   $row['userId'], 
 								   $row['groupId'], 
 								   $row['content'], 
-								   $row['state'], 
 								   $row['datetime'], 
+								   $row['state'], 
 								   $row['reason']);
+		}
+	}
+	
+	/* 
+	 * Get a application by user
+	 */
+	public static function getApplicationByUser($user) {
+		$con = MySQL::open(Settings::db_name_infected_crew);
+		
+		$result = mysqli_query($con, 'SELECT `id` FROM `' . Settings::db_table_infected_crew_applications . '` 
+									  WHERE `userId` = \'' . $con->real_escape_string($user->getId()) . '\'
+									  ORDER BY `datetime` DESC;');
+									  
+		$row = mysqli_fetch_array($result);
+		
+		MySQL::close($con);
+
+		if ($row) {
+			return self::getApplication($row['id']);
+		}
+	}
+	
+	/* 
+	 * Get a application by user
+	 */
+	public static function getApplicationByUserAndEvent($user, $event) {
+		$con = MySQL::open(Settings::db_name_infected_crew);
+		
+		$result = mysqli_query($con, 'SELECT `id` FROM `' . Settings::db_table_infected_crew_applications . '` 
+									  WHERE `userId` = \'' . $con->real_escape_string($user->getId()) . '\'
+									  AND `eventId` = \'' . $event->getId(). '\'
+									  ORDER BY `datetime` DESC;');
+									  
+		$row = mysqli_fetch_array($result);
+		
+		MySQL::close($con);
+
+		if ($row) {
+			return self::getApplication($row['id']);
 		}
 	}
 	
@@ -83,15 +123,16 @@ class ApplicationHandler {
 	}
 	
 	/* Creates an application in database */
-	public static function createApplication($user, $group, $content) {
+	public static function createApplication($event, $user, $group, $content) {
 		$con = MySQL::open(Settings::db_name_infected_crew);
 		
-		mysqli_query($con, 'INSERT INTO `' . Settings::db_table_infected_crew_applications . '` (`userId`, `groupId`, `content`, `state`, `datetime`) 
-							VALUES (\'' . $con->real_escape_string($user->getId()) . '\', 
+		mysqli_query($con, 'INSERT INTO `' . Settings::db_table_infected_crew_applications . '` (`eventId`, `userId`, `groupId`, `content`, `datetime`, `state`) 
+							VALUES (\'' . $con->real_escape_string($event->getId()) . '\', 
+									\'' . $con->real_escape_string($user->getId()) . '\', 
 									\'' . $con->real_escape_string($group->getId()) . '\', 
 									\'' . $con->real_escape_string($content) . '\', 
-									\'1\', 
-									\'' . date('Y-m-d H:i:s') . '\');');
+									\'' . date('Y-m-d H:i:s') . '\',
+									\'1\');');
 									
 		MySQL::close($con);
 	}

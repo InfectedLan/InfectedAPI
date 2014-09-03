@@ -1,28 +1,35 @@
 <?php
+require_once 'handlers/eventhandler.php';
 require_once 'handlers/userhandler.php';
 require_once 'handlers/grouphandler.php';
 
 class Application {
 	private $id;
+	private $eventId;
 	private $userId;
 	private $groupId;
 	private $content;
-	private $state;
 	private $datetime;
+	private $state;
 	private $reason;
 	
-	public function __construct($id, $userId, $groupId, $content, $state, $datetime, $reason) {
+	public function __construct($id, $eventId, $userId, $groupId, $content, $datetime, $state, $reason) {
 		$this->id = $id;
+		$this->eventId = $eventId;
 		$this->userId = $userId;
 		$this->groupId = $groupId;
 		$this->content = $content;
-		$this->state = $state;
 		$this->datetime = $datetime;
+		$this->state = $state;
 		$this->reason = $reason;
 	}
 	
 	public function getId() {
 		return $this->id;
+	}
+	
+	public function getEvent() {
+		return EventHandler::getEvent($this->eventId);
 	}
 	
 	public function getUser() {
@@ -37,12 +44,12 @@ class Application {
 		return $this->content;
 	}
 	
-	public function getState() {
-		return $this->state;
-	}
-	
 	public function getDatetime() {
 		return strtotime($this->datetime);
+	}
+	
+	public function getState() {
+		return $this->state;
 	}
 	
 	public function getReason() {
