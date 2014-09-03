@@ -53,7 +53,7 @@ if (Session::isAuthenticated()) {
 		$message = "Filen har ikke riktig MIME-format(" . $_FILES["file"]["type"] . ")";
 	} 
 } else {
-	$message = "Du er allerede logget inn!";
+	$message = "Du er ikke logget inn!";
 } 
 
 echo json_encode(array('result' => $result, 'message' => $message));
