@@ -16,9 +16,8 @@ if (Session::isAuthenticated()) {
 	
 		if ($application == null ||
 			$application->getState() == 3) {
-
-			$avatar = $user->getAvatar();
-			if (isset($avatar) && ( $avatar->getState() == 1 || $avatar->getState() == 2 ) ) {
+			
+			if ($user->hasCroppedAvatar()) {
 				if (isset($_GET['groupId']) &&
 					isset($_GET['content']) &&
 					is_numeric($_GET['groupId']) &&

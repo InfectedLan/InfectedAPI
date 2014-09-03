@@ -285,6 +285,13 @@ class User {
 	}
 	
 	/*
+	 * Returns true if the user has an successfully cropped avatar.
+	 */
+	public function hasCroppedAvatar() {
+		return AvatarHandler::hasCroppedAvatar($this);
+	}
+	
+	/*
 	 * Returns true if the user has an accpeted avatar.
 	 */
 	public function hasValidAvatar() {

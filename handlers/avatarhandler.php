@@ -84,6 +84,20 @@ class AvatarHandler {
 		return $row ? true : false;
 	}
 	
+	public static function hasCroppedAvatar($user) {
+		$con = MySQL::open(Settings::db_name_infected_crew);
+		
+		$result = mysqli_query($con, 'SELECT `id` FROM `' . Settings::db_table_infected_crew_avatars . '` 
+									  WHERE `userId` = \'' . $con->real_escape_string($user->getId()) . '\'
+									  AND (`state` = 1 OR `state` = 2);');
+		
+		$row = mysqli_fetch_array($result);
+		
+		MySQL::close($con);
+		
+		return $row ? true : false;
+	}
+	
 	public static function hasValidAvatar($user) {
 		$con = MySQL::open(Settings::db_name_infected_crew);
 		
