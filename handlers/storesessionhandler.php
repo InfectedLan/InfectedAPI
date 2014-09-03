@@ -62,9 +62,9 @@ class StoreSessionHandler
 	}
 
 	//Used to validate a payment
-	public static function isPaymentValid($totalPrice, $amt, $session)
+	public static function isPaymentValid($totalPrice, $session)
 	{
-		return $totalPrice == $session->getPrice() && $amt == $session->getAmount();
+		return $totalPrice == $session->getPrice();
 	}
 	
 	public static function hasStoreSession($user) {
