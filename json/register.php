@@ -91,7 +91,7 @@ if (isset($_GET['firstname']) &&
 				$user->sendRegistrationMail();
 				
 				$result = true;
-				$message = 'Din bruker har blitt registrer! Du har nå fått en aktiveringslink på e-post. Husk også og sjekk søppelpost/spam hvis du ikke finner den.';
+				$message = 'Din bruker har blitt registrert! Du har nå fått en aktiveringslink på e-post. Husk å sjekk søppelpost/spam hvis du ikke finner den.';
 			} else {
 				$message = 'Passordene er ikke like!';
 			}
