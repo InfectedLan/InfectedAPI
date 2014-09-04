@@ -158,7 +158,7 @@ class ApplicationHandler {
 		
 		// Set the user in the new group
 		$application = self::getApplication($id);
-		GroupHandler::changeGroup($application->getUser(), $application->getGroup());
+		GroupHandler::changeGroupForUser($application->getUser(), $application->getGroup());
 		
 		MySQL::close($con);
 	}
