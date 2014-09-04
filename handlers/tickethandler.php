@@ -35,12 +35,12 @@ class TicketHandler {
 		return $event->getParticipants() - count($ticketList);
 	}
 	
-	public static function getTicketForUser($user) {
+	public static function getTicketForUser($event, $user) {
 		$con = MySQL::open(Settings::db_name_infected_tickets);
 
 		$result = mysqli_query($con, 'SELECT `id` FROM `' . Settings::db_table_infected_tickets_tickets . '` 
 									  WHERE `ownerId` = \'' . $con->real_escape_string($user->getId()) . '\'
-									  AND `eventId` = \'' .  EventHandler::getCurrentEvent()->getId() . '\' 
+									  AND `eventId` = \'' . $con->real_escape_string($event->getId()) . '\' 
 									  LIMIT 1;');
 
 		$row = mysqli_fetch_array($result);
@@ -52,12 +52,12 @@ class TicketHandler {
 		}
 	}
 	
-	public static function hasTicket($user) {
+	public static function hasTicket($event, $user) {
 		$con = MySQL::open(Settings::db_name_infected_tickets);
 
 		$result = mysqli_query($con, 'SELECT `id` FROM `' . Settings::db_table_infected_tickets_tickets . '` 
 									  WHERE `ownerId` = \'' . $con->real_escape_string($user->getId()) . '\'
-									  ORDER BY `eventId` DESC
+									  AND `eventId` = \'' . $con->real_escape_string($event->getId()) . '\' 
 									  LIMIT 1;');
 
 		$row = mysqli_fetch_array($result);

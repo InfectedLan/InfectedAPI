@@ -9,6 +9,7 @@ require_once 'handlers/emergencycontacthandler.php';
 require_once 'handlers/avatarhandler.php';
 require_once 'handlers/grouphandler.php';
 require_once 'handlers/teamhandler.php';
+require_once 'handlers/eventhandler.php';
 
 /*
  * Used to store information about a user.
@@ -102,7 +103,7 @@ class User {
 	 * Returns the users gendername.
 	 */
 	public function getGenderName() {
-		return $this->getGender() ? "Kvinne" : "Mann";
+		return $this->getGender() ? 'Kvinne' : 'Mann';
 	}
 	
 	/* 
@@ -200,14 +201,21 @@ class User {
 	 * Returns true if user has an ticket for the current/upcoming event.
 	 */
 	public function hasTicket() {
-		return TicketHandler::hasTicket($this);
+		return TicketHandler::hasTicket(EventHandler::getCurrentEvent(), $this);
 	}
 	
 	/*
 	 * Returns the ticket for the current/upcoming event linked to this account.
 	 */
 	public function getTicket() {
-		return TicketHandler::getTicketForUser($this);
+		return TicketHandler::getTicketForUser(EventHandler::getCurrentEvent(), $this);
+	}
+	
+	/*
+	 * Returns true if users has a seat.
+	 */
+	public function hasSeat() {
+		return self::getTicket()->getSeat() != null;
 	}
 	
 	/*
