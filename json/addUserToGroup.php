@@ -19,7 +19,7 @@ if (Session::isAuthenticated()) {
 			$groupUser = UserHandler::getUser($_GET['userId']);
 			$group = GroupHandler::getGroup($_GET['groupId']);
 			
-			GroupHandler::changeGroup($groupUser, $group);
+			GroupHandler::changeGroupForUser($groupUser, $group);
 			$result = true;
 		} else {
 			$message = 'Ingen gruppe spesifisert.';

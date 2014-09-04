@@ -155,7 +155,7 @@ class GroupHandler {
 	/*
 	 * Sets the users group.
 	 */
-	public static function changeGroup($user, $group) {
+	public static function changeGroupForUser($user, $group) {
 		$con = MySQL::open(Settings::db_name_infected_crew);
 		
 		if ($user->isGroupMember()) {	
