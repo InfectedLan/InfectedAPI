@@ -17,7 +17,9 @@ if (Session::isAuthenticated()) {
 			$memberList = $group->getMembers();
 			
 			foreach ($memberList as $member) {
-				GroupHandler::removeUserFromGroup($member);
+				if ($user->getId() != $member->getId()) {
+					GroupHandler::removeUserFromGroup($member);
+				}
 			}
 			
 			$result = true;
