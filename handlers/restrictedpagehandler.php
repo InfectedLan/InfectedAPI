@@ -12,10 +12,11 @@ class RestrictedPageHandler {
 	public static function getPage($id) {
 		if (Session::isAuthenticated()) {
 			$user = Session::getCurrentUser();
-			
+		
+			$con = MySQL::open(Settings::db_name_infected_crew);
+		
 			if ($user->hasPermission('*') ||
 				$user->isGroupMember()) {
-				$con = MySQL::open(Settings::db_name_infected_crew);
 				
 				if ($user->isGroupMember()) {
 					if ($user->isTeamMember()) {
@@ -33,20 +34,26 @@ class RestrictedPageHandler {
 					$result = mysqli_query($con, 'SELECT * FROM `' . Settings::db_table_infected_crew_pages . '`
 												  WHERE `id` = \'' . $con->real_escape_string($id) . '\' AND `private` = 0;');
 				}
+			} else {
+				$result = mysqli_query($con, 'SELECT * FROM `' . Settings::db_table_infected_crew_pages . '`
+											  WHERE `id` = \'' . $con->real_escape_string($id) . '\' 
+											  AND `groupId` = 0
+											  AND `teamId` = 0
+											  AND `private` = 0;');
+			}
+			
+			$row = mysqli_fetch_array($result);
 				
-				$row = mysqli_fetch_array($result);
-				
-				MySQL::close($con);
-
-				if ($row) {
-					return new RestrictedPage($row['id'], 
-											  $row['name'], 
-											  $row['title'], 
-											  $row['content'], 
-											  $row['groupId'], 
-											  $row['teamId'],
-											  $row['private']);
-				}
+			MySQL::close($con);
+			
+			if ($row) {
+				return new RestrictedPage($row['id'], 
+										  $row['name'], 
+										  $row['title'], 
+										  $row['content'], 
+										  $row['groupId'], 
+										  $row['teamId'],
+										  $row['private']);
 			}
 		}
 	}
