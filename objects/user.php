@@ -110,6 +110,13 @@ class User {
 	 * Returns the users phone number.
 	 */
 	public function getPhone() {
+		return $this->phone;
+	}
+	
+	/* 
+	 * Returns the users phone number formatted as a string.
+	 */
+	public function getPhoneString() {
 		return chunk_split($this->phone, 2, ' ');
 	}
 	
@@ -149,17 +156,17 @@ class User {
 	}
 	
 	/* 
-	 * Returns the users age.
-	 */
-	public function getAge() {
-		return date_diff(date_create(date('Y-m-d', $this->getBirthdate())), date_create('now'))->y;
-	}
-	
-	/* 
 	 * Returns users displayname.
 	 */
 	public function getDisplayName() {
 		return $this->getFirstname() . ' "' . $this->getNickname() . '" ' . $this->getLastname();
+	}
+	
+	/* 
+	 * Returns the users age.
+	 */
+	public function getAge() {
+		return date_diff(date_create(date('Y-m-d', $this->getBirthdate())), date_create('now'))->y;
 	}
 	
 	/* 
