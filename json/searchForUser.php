@@ -9,7 +9,7 @@ if (Session::isAuthenticated()) {
 	$user = Session::getCurrentUser();
 
 	if ($user->hasPermission('*') ||
-		$user->hasPermission('functions.find-users')) {
+		$user->hasPermission('functions.search-users')) {
 		if (isset($_GET['query']) &&
 			strlen($_GET['query']) >= 2) {
 			$query = preg_replace('/[^A-Za-z0-9]/', ' ', $_GET['query']);

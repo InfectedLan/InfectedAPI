@@ -17,7 +17,9 @@ if (Session::isAuthenticated()) {
 			$memberList = $team->getMembers();
 			
 			foreach ($memberList as $member) {
-				TeamHandler::removeUserFromTeam($member);
+				if ($user->getId() != $member->getId()) {
+					TeamHandler::removeUserFromTeam($member);
+				}
 			}
 			
 			$result = true;

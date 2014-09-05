@@ -1,6 +1,6 @@
 <?php
 require_once 'session.php';
-require_once 'handlers/grouphandler.php';
+require_once 'handlers/restrictedpagehandler.php';
 
 $result = false;
 $message = null;
@@ -8,23 +8,15 @@ $message = null;
 if (Session::isAuthenticated()) {
 	$user = Session::getCurrentUser();
 	
-	if ($user->hasPermission('*') ||
-		$user->hasPermission('chief.groups') ||
+	if ($user->hasPermission('*') || 
+		$user->hasPermission('functions.my-crew') || 
 		$user->isGroupLeader()) {
 		if (isset($_GET['id']) &&
 			is_numeric($_GET['id'])) {
-			$group = GroupHandler::getGroup($_GET['id']);
-			$memberList = $group->getMembers();
-			
-			foreach ($memberList as $member) {
-				if ($user->getId() != $member->getId()) {
-					GroupHandler::removeUserFromGroup($member);
-				}
-			}
-			
+			RestrictedPageHandler::removePage($_GET['id']);
 			$result = true;
 		} else {
-			$message = 'Ingen gruppe spesifisert.';
+			$message = 'Ikke noen side spesifisert.';
 		}
 	} else {
 		$message = 'Du har ikke tillatelse til dette.';

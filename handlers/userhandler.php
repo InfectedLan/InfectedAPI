@@ -79,8 +79,7 @@ class UserHandler {
 	public static function getPermissionUsers() {
 		$con = MySQL::open(Settings::db_name_infected);
 		
-		$result = mysqli_query($con, 'SELECT `userId` FROM `' . Settings::db_table_infected_userpermissions . '`
-									  GROUP BY `userId`;');
+		$result = mysqli_query($con, 'SELECT DISTINCT `userId` FROM `' . Settings::db_table_infected_userpermissions . '`;');
 		
 		$userList = array();
 		
@@ -162,14 +161,13 @@ class UserHandler {
 	/* 
 	 * Update a user
 	 */
-	public static function updateUser($id, $firstname, $lastname, $username, $password, $email, $birthDate, $gender, $phone, $address, $postalCode, $nickname) {
+	public static function updateUser($id, $firstname, $lastname, $username, $email, $birthDate, $gender, $phone, $address, $postalCode, $nickname) {
 		$con = MySQL::open(Settings::db_name_infected);
 		
 		mysqli_query($con, 'UPDATE `' . Settings::db_table_infected_users . '` 
 							SET `firstname` = \'' . $con->real_escape_string($firstname) . '\', 
 								`lastname` = \'' . $con->real_escape_string($lastname) . '\', 
 								`username` = \'' . $con->real_escape_string($username) . '\', 
-								`password` = \'' . $con->real_escape_string($password) . '\', 
 								`email` = \'' . $con->real_escape_string($email) . '\', 
 								`birthdate` = \'' . $con->real_escape_string($birthDate) . '\', 
 								`gender` = \'' . $con->real_escape_string($gender) . '\', 
