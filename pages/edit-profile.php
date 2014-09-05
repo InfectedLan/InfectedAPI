@@ -2,6 +2,7 @@
 require_once 'session.php';
 require_once 'utils.php';
 require_once 'handlers/userhandler.php';
+require_once 'handlers/emergencycontacthandler.php';
 
 $id = isset($_GET['id']) ? $_GET['id'] : Session::getCurrentUser()->getId();
 
@@ -83,7 +84,7 @@ if (Session::isAuthenticated()) {
 					echo '</tr>';
 					echo '<tr>';
 						echo '<td>Telefon:</td>';
-						echo '<td><input type="tel" name="phone" value="' .  str_replace(' ', '', $editUser->getPhone()) . '" required></td>';
+						echo '<td><input type="tel" name="phone" value="' . $editUser->getPhone() . '" required></td>';
 					echo '</tr>';
 					echo '<tr>';
 						echo '<td>Gateadresse:</td>';
@@ -97,6 +98,17 @@ if (Session::isAuthenticated()) {
 					echo '<tr>';
 						echo '<td>Nickname:</td>';
 						echo '<td><input type="text" name="nickname" value="' . $editUser->getNickname() . '"></td>';
+					echo '</tr>';
+					echo '<tr>';
+						echo '<td>Foresatte\'s telefon:</td>';
+							if (EmergencyContactHandler::hasEmergencyContact($editUser)) {
+								$emergencycontactphone = EmergencyContactHandler::getEmergencyContactForUser($editUser)->getPhone();
+							
+								echo '<td><input name="emergencycontactphone" type="tel" value="' . $emergencycontactphone . '"></td>';
+							} else {
+								echo '<td><input name="emergencycontactphone" type="tel"></td>';
+							}
+						echo '<td><i>(Påkrevd hvis du er under 18)</i></td>';
 					echo '</tr>';
 					echo '<tr>';
 						echo '<td><input type="submit" value="Lagre"></td>';
