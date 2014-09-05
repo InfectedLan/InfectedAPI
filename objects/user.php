@@ -205,10 +205,17 @@ class User {
 	}
 	
 	/*
-	 * Returns the ticket for the current/upcoming event linked to this account.
+	 * Returns the first ticket for the current/upcoming event found for ths user.
 	 */
 	public function getTicket() {
 		return TicketHandler::getTicketForUser(EventHandler::getCurrentEvent(), $this);
+	}
+	
+	/*
+	 * Returns the tickets for the current/upcoming event linked to this account.
+	 */
+	public function getTickets() {
+		return TicketHandler::getTicketsForUser(EventHandler::getCurrentEvent(), $this);
 	}
 	
 	/*
