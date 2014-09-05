@@ -12,9 +12,12 @@ class GameApplicationHandler {
 										
 		$row = mysqli_fetch_array($result);
 		
+		MySQL::close($con);
+		
 		if ($row) {
 			return new GameApplication($row['id'], 
-									   $row['game'], 
+									   $row['eventId'], 
+									   $row['gameId'], 
 									   $row['name'], 
 									   $row['tag'], 
 									   $row['contactname'], 
@@ -22,15 +25,13 @@ class GameApplicationHandler {
 									   $row['phone'], 
 									   $row['email']);
 		}
-		
-		MySQL::close($con);
 	}
 	
 	public static function getGameApplications($game) {
 		$con = MySQL::open(Settings::db_name_infected_main);
 		
 		$result = mysqli_query($con, 'SELECT `id` FROM `' . Settings::db_table_infected_main_gameapplications . '` 
-									  WHERE `game` = \'' . $con->real_escape_string($game->getId()) . '\';');
+									  WHERE `gameId` = \'' . $con->real_escape_string($game->getId()) . '\';');
 									
 		$gameApplicationList = array();
 		
@@ -38,17 +39,17 @@ class GameApplicationHandler {
 			array_push($gameApplicationList, self::getGameApplication($row['id']));
 		}
 		
-		return $gameApplicationList;
-		
 		MySQL::close($con);
+		
+		return $gameApplicationList;
 	}
 	
 	public static function getGameApplicationsForEvent($game, $event) {
 		$con = MySQL::open(Settings::db_name_infected_main);
 		
 		$result = mysqli_query($con, 'SELECT `id` FROM `' . Settings::db_table_infected_main_gameapplications . '` 
-									  WHERE `event` = \'' . $con->real_escape_string($event->getId()) . '\'
-									  AND `game` = \'' . $con->real_escape_string($game->getId()) . '\';');
+									  WHERE `eventId` = \'' . $con->real_escape_string($event->getId()) . '\'
+									  AND `gameId` = \'' . $con->real_escape_string($game->getId()) . '\';');
 									
 		$gameApplicationList = array();
 		
@@ -56,16 +57,17 @@ class GameApplicationHandler {
 			array_push($gameApplicationList, self::getGameApplication($row['id']));
 		}
 		
-		return $gameApplicationList;
-		
 		MySQL::close($con);
+		
+		return $gameApplicationList;
 	}
 	
-	public static function createGameApplication($game, $name, $tag, $contactname, $contactnick, $phone, $email) {
+	public static function createGameApplication($event, $game, $name, $tag, $contactname, $contactnick, $phone, $email) {
 		$con = MySQL::open(Settings::db_name_infected_main);
 		
-		mysqli_query($con, 'INSERT INTO `' . Settings::db_table_infected_main_gameapplications . '` (`game`, `name`, `tag`, `contactname`, `contactnick`, `phone`, `email`) 
-							VALUES (\'' . $con->real_escape_string($game->getId()) . '\', 
+		mysqli_query($con, 'INSERT INTO `' . Settings::db_table_infected_main_gameapplications . '` (`eventId`, `gameId`, `name`, `tag`, `contactname`, `contactnick`, `phone`, `email`) 
+							VALUES (\'' . $con->real_escape_string($event->getId()) . '\', 
+									\'' . $con->real_escape_string($game->getId()) . '\', 
 									\'' . $con->real_escape_string($name) . '\', 
 									\'' . $con->real_escape_string($tag) . '\', 
 									\'' . $con->real_escape_string($contactname) . '\', 

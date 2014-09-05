@@ -66,7 +66,7 @@ class GameHandler {
 	public static function createGame($name, $title, $price, $mode, $description, $startTime, $endTime, $published) {
 		$con = MySQL::open(Settings::db_name_infected_main);
 		
-		mysqli_query($con, 'INSERT INTO `' . Settings::db_table_infected_main_games . '` (`name`, `title`, `price`, `description`, `startTime`, `endTime`, `published`) 
+		mysqli_query($con, 'INSERT INTO `' . Settings::db_table_infected_main_games . '` (`name`, `title`, `price`, `mode`, `description`, `startTime`, `endTime`, `published`) 
 							VALUES (\'' . $con->real_escape_string($name) . '\', 
 									\'' . $con->real_escape_string($title) . '\', 
 									\'' . $con->real_escape_string($price) . '\', 

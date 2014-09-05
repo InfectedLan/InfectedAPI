@@ -1,7 +1,11 @@
 <?php
+require_once 'handlers/eventhandler.php';
+require_once 'handlers/gamehandler.php';
+
 class GameApplication {
 	private $id;
-	private $game;
+	private $eventId;
+	private $gameId;
 	private $name;
 	private $tag;
 	private $contactname;
@@ -9,9 +13,10 @@ class GameApplication {
 	private $email;
 	private $phone;
 	
-	public function __construct($id, $game, $name, $tag, $contactname, $contactnick, $phone, $email) {
+	public function __construct($id, $eventId, $gameId, $name, $tag, $contactname, $contactnick, $phone, $email) {
 		$this->id = $id;
-		$this->game = $game;
+		$this->eventId = $eventId;
+		$this->gameId = $gameId;
 		$this->name = $name;
 		$this->tag = $tag;
 		$this->contactname = $contactname;
@@ -24,8 +29,12 @@ class GameApplication {
 		return $this->id;
 	}
 	
+	public function getEvent() {
+		return EventHandler::getEvent($this->eventId);
+	}
+	
 	public function getGame() {
-		return $this->game;
+		return GameHandler::getGame($this->gameId);
 	}
 	
 	public function getName() {

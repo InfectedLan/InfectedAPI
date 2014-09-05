@@ -15,16 +15,20 @@ if (Session::isAuthenticated()) {
 			isset($_GET['price']) &&
 			isset($_GET['mode']) &&
 			isset($_GET['description']) &&
-			isset($_GET['deadlineDate']) &&
-			isset($_GET['deadlineTime']) &&
+			isset($_GET['startDate']) &&
+			isset($_GET['startTime']) &&
+			isset($_GET['endDate']) &&
+			isset($_GET['endTime']) &&
 			isset($_GET['published']) &&
 			is_numeric($_GET['id']) &&
 			!empty($_GET['title']) &&
 			is_numeric($_GET['price']) &&
 			!empty($_GET['mode']) &&
 			!empty($_GET['description']) &&
-			!empty($_GET['deadlineDate']) &&
-			!empty($_GET['deadlineTime']) &&
+			!empty($_GET['startDate']) &&
+			!empty($_GET['startTime']) &&
+			!empty($_GET['endDate']) &&
+			!empty($_GET['endTime']) &&
 			is_numeric($_GET['published'])) {
 			$id = $_GET['id'];
 			$name = strtolower(str_replace(' ', '-', $_GET['title']));
@@ -32,10 +36,11 @@ if (Session::isAuthenticated()) {
 			$price = $_GET['price'];
 			$mode = $_GET['mode'];
 			$description = $_GET['description'];
-			$deadlineTime = $_GET['deadlineDate'] . ' ' . $_GET['deadlineTime'];
+			$startTime = $_GET['startDate'] . ' ' . $_GET['startTime'];
+			$endTime = $_GET['endDate'] . ' ' . $_GET['endTime'];
 			$published = $_GET['published'];
 
-			GameHandler::updateGame($id, $name, $title, $price, $mode, $description, $deadlineTime, $published);
+			GameHandler::updateGame($id, $name, $title, $price, $mode, $description, $startTime, $endTime, $published);
 			$result = true;
 		} else {
 			$message = 'Du har ikke fylt ut alle feltene.';
