@@ -12,14 +12,18 @@ if (Session::isAuthenticated()) {
 		$user->hasPermission('functions.applications') ||
 		$user->isGroupLeader()) {
 		if (isset($_GET['id']) &&
-			isset($_GET['reason']) &&
-			is_numeric($_GET['id']) &&
-			!empty($_GET['reason'])) {
+			is_numeric($_GET['id'])) {
 			$id = $_GET['id'];
-			$reason = $_GET['reason'];
 			
-			ApplicationHandler::rejectApplication($id, $reason);
-			$result = true;
+			if (isset($_GET['reason']) &&
+				!empty($_GET['reason'])) {
+				$reason = $_GET['reason'];
+			
+				ApplicationHandler::rejectApplication($id, $reason);
+				$result = true;
+			} else {
+				$message = 'Du har ikke oppgitt noen grunn på hvorfor søkneden skal bli avvist.';
+			}
 		} else {
 			$message = 'Ingen søknad spesifisert.';
 		}
