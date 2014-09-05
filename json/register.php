@@ -12,6 +12,7 @@ if (isset($_GET['firstname']) &&
 	isset($_GET['password']) && 
 	isset($_GET['confirmpassword']) && 
 	isset($_GET['email']) && 
+	isset($_GET['confirmemail']) && 
 	isset($_GET['gender']) && 
 	isset($_GET['birthday']) && 
 	isset($_GET['birthmonth']) && 
@@ -23,6 +24,7 @@ if (isset($_GET['firstname']) &&
 	$password = hash('sha256', $_GET['password']);
 	$confirmPassword = hash('sha256', $_GET['confirmpassword']);
 	$email = $_GET['email'];
+	$confirmEmail = $_GET['confirmemail'];
 	$gender = $_GET['gender'];
 	$birthdate = $_GET['birthyear'] . '-' . $_GET['birthmonth'] . '-' . $_GET['birthday']; 
 	$phone = $_GET['phone'];
@@ -40,13 +42,17 @@ if (isset($_GET['firstname']) &&
 		} else if (!preg_match('/^[a-zæøåA-ZÆØÅ0-9_-]{2,16}$/', $username)) {
 			$message = 'Brukernavnet du skrev inn er ikke gyldig, det må bestå av minst 2 tegn og max 16 tegn.';
 		} else if (empty($password)) {
-			$message = 'Du har ikke oppgitt noe passord!';
+			$message = 'Du har ikke oppgitt noe passord.';
 		} else if (strlen($_GET['password']) < 8) {
 			$message = 'Passordet du skrev inn er for kort! Det må minst bestå av 8 tegn.';
 		} else if (strlen($_GET['password']) > 32) {
 			$message = 'Passordet du skrev inn er for langt! Det kan maks bestå av 16 tegn.';
+		} else if ($password != $confirmPassword) {
+			$message = 'Passordene du skrev inn er ikke like.';
 		} else if (empty($email) || !preg_match('/^([a-zæøåA-ZÆØÅ0-9_\.-]+)@([\da-z\.-]+)\.([a-z\.]{2,6})$/', $email) || !filter_var($email, FILTER_VALIDATE_EMAIL)) {
 			$message = 'E-post adressen du skrev inn er ikke gyldig.';
+		} else if ($email != $confirmEmail) {
+			$message = 'E-post adressene er ikke like.';
 		} else if (!is_numeric($gender)) {
 			$message = 'Du har oppgitt et ugyldig kjønn.';
 		} else if (!is_numeric($phone) || strlen($phone) != 8) {
@@ -66,35 +72,31 @@ if (isset($_GET['firstname']) &&
 			
 			$message = 'Du er under 18 år, og må derfor oppgi et telefonnummer til en forelder.';
 		} else {
-			if ($password == $confirmPassword) {
-				// Creates the user in database.
-				UserHandler::createUser($firstname, 
-										$lastname, 
-										$username, 
-										$password, 
-										$email, 
-										$birthdate, 
-										$gender, 
-										$phone, 
-										$address, 
-										$postalcode, 
-										$nickname);
-				
-				// Retrives the user object and sends the activation mail.
-				$user = UserHandler::getUserByName($username);
-				
-				if (isset($_GET['emergencycontactphone']) &&
-					is_numeric($emergencycontactphone)) {
-					EmergencyContactHandler::createEmergencyContact($user, $emergencycontactphone);
-				}
-				
-				$user->sendRegistrationMail();
-				
-				$result = true;
-				$message = 'Din bruker har blitt registrert! Du har nå fått en aktiveringslink på e-post. Husk å sjekk søppelpost/spam hvis du ikke finner den.';
-			} else {
-				$message = 'Passordene er ikke like!';
+			// Creates the user in database.
+			UserHandler::createUser($firstname, 
+									$lastname, 
+									$username, 
+									$password, 
+									$email, 
+									$birthdate, 
+									$gender, 
+									$phone, 
+									$address, 
+									$postalcode, 
+									$nickname);
+			
+			// Retrives the user object and sends the activation mail.
+			$user = UserHandler::getUserByName($username);
+			
+			if (isset($_GET['emergencycontactphone']) &&
+				is_numeric($emergencycontactphone)) {
+				EmergencyContactHandler::createEmergencyContact($user, $emergencycontactphone);
 			}
+			
+			$user->sendRegistrationMail();
+			
+			$result = true;
+			$message = 'Din bruker har blitt registrert! Du har nå fått en aktiveringslink på e-post. Husk å sjekk søppelpost/spam hvis du ikke finner den.';
 		}
 	} else {
 		$message = 'Brukeren finnes allerede!';
