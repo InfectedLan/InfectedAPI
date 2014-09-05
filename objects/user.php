@@ -117,7 +117,7 @@ class User {
 	 * Returns the users phone number formatted as a string.
 	 */
 	public function getPhoneString() {
-		return chunk_split($this->phone, 2, ' ');
+		return !empty($this->phone) ? chunk_split($this->phone, 2, ' ') : 'Ikke oppgitt';
 	}
 	
 	/*

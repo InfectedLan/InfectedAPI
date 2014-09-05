@@ -17,9 +17,10 @@ if (Session::isAuthenticated()) {
 			echo '<script src="../api/scripts/lookupCity.js"></script>';
 			
 			echo '<h3>Endre bruker</h3>';
-			echo '<form class="edit-profile" method="post">';
-				echo '<input type="hidden" name="id" value="' . $editUser->getId() . '">';
-				echo '<table>';
+			
+			echo '<table>';
+				echo '<form class="edit-profile" method="post">';
+					echo '<input type="hidden" name="id" value="' . $editUser->getId() . '">';
 					echo '<tr>';
 						echo '<td>Fornavn:</td>';
 						echo '<td><input type="text" name="firstname" value="' . $editUser->getFirstname() . '" required autofocus></td>';
@@ -28,6 +29,14 @@ if (Session::isAuthenticated()) {
 						echo '<td>Etternavn:</td>';
 						echo '<td><input type="text" name="lastname" value="' . $editUser->getLastname() . '" required></td>';
 					echo '</tr>';
+					
+					if ($user->hasPermission('*')) {
+						echo '<tr>';
+							echo '<td>Brukernavn:</td>';
+							echo '<td><input type="text" name="username" value="' . $editUser->getUsername() . '" required></td>';
+						echo '</tr>';
+					}
+					
 					echo '<tr>';
 						echo '<td>E-post:</td>';
 						echo '<td><input type="email" name="email" value="' . $editUser->getEmail() . '" required></td>';
@@ -113,10 +122,16 @@ if (Session::isAuthenticated()) {
 					echo '<tr>';
 						echo '<td><input type="submit" value="Lagre"></td>';
 					echo '</tr>';
-				echo '</table>';
-			echo '</form>';
-			echo '<a href="index.php?page=edit-password">Endre passord</a>';
-			echo '<a href="index.php?page=edit-avatar">Endre/Last opp profilbilde</a>';
+				echo '</form>';
+				echo '<tr>';
+					echo '<td></td>';
+					echo '<td><a href="index.php?page=edit-avatar">Endre/Last opp profilbilde</a></td>';
+				echo '</tr>';
+				echo '<tr>';
+					echo '<td></td>';
+					echo '<td><a href="index.php?page=edit-password">Endre passord</a></td>';
+				echo '</tr>';
+			echo '</table>';
 		} else {
 			echo '<p>Du har ikke rettigehter til dette.</p>';
 		}

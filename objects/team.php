@@ -91,7 +91,7 @@ class Team {
 						echo '<a href="index.php?page=my-profile&id=' . $member->getId() . '"><img src="../api/' . $avatarFile . '" width="146" height="110" style="float: right;"></a>';
 						echo '<p>Navn: ' . $member->getFirstname() . ' "' . $member->getNickname() . '" ' . $member->getLastname() . '<br>';
 						echo 'Stilling: ' . $member->getPosition() . '<br>';
-						echo 'Telefon: ' . $member->getPhone() . '<br>';
+						echo 'Telefon: ' . $member->getPhoneString() . '<br>';
 						echo 'E-post: ' . $member->getEmail() . '</p>';
 					echo '</div>';
 						

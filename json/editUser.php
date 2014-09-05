@@ -39,6 +39,7 @@ if (Session::isAuthenticated()) {
 					$editUser = UserHandler::getUser($_GET['id']);
 					$firstname = ucfirst($_GET['firstname']);
 					$lastname = ucfirst($_GET['lastname']);
+					$username = $user->hasPermission('*') ? $_GET['username'] : $editUser->getUsername();
 					$email = $_GET['email'];
 					$gender = $_GET['gender'];
 					$birthdate = $_GET['birthyear'] . '-' . $_GET['birthmonth'] . '-' . $_GET['birthday']; 
@@ -51,8 +52,12 @@ if (Session::isAuthenticated()) {
 					if (empty($firstname) || strlen($firstname) > 32) {
 						$message = 'Du har ikke skrevet inn noe fornavn.';
 					} else if (empty($lastname) || strlen($lastname) > 32) {
-						$message = 'Du har ikke skrevet inn noe etternavn.';	
-					} else if (!preg_match('/^([a-z0-9_\.-]+)@([\da-z\.-]+)\.([a-z\.]{2,6})$/', $email) || !filter_var($email, FILTER_VALIDATE_EMAIL)) {
+						$message = 'Du har ikke skrevet inn noe etternavn.';
+					} else if ($username != $editUser->getUsername() && UserHandler::userExists($username)) {
+						$message = 'Brukernavnet er allerede i bruk.';
+					} else if ($email != $editUser->getEmail() && UserHandler::userExists($email)) {
+						$message = 'E-post adressen er allerede i bruk.';
+					} else if (empty($email) || !preg_match('/^([a-zæøåA-ZÆØÅ0-9_\.-]+)@([\da-z\.-]+)\.([a-z\.]{2,6})$/', $email) || !filter_var($email, FILTER_VALIDATE_EMAIL)) {
 						$message = 'E-post adressen du skrev inn er ikke gyldig.';
 					} else if (!is_numeric($gender)) {
 						$message = 'Du har oppgitt et ugyldig kjønn.';
@@ -76,8 +81,7 @@ if (Session::isAuthenticated()) {
 						UserHandler::updateUser($editUser->getId(),
 												$firstname, 
 												$lastname, 
-												$editUser->getUsername(), 
-												$editUser->getPassword(), 
+												$username, 
 												$email, 
 												$birthdate, 
 												$gender, 

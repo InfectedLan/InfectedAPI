@@ -45,7 +45,7 @@ if (isset($_GET['firstname']) &&
 			$message = 'Passordet du skrev inn er for kort! Det må minst bestå av 8 tegn.';
 		} else if (strlen($_GET['password']) > 32) {
 			$message = 'Passordet du skrev inn er for langt! Det kan maks bestå av 16 tegn.';
-		} else if (!preg_match('/^([a-zæøåA-ZÆØÅ0-9_\.-]+)@([\da-z\.-]+)\.([a-z\.]{2,6})$/', $email) || !filter_var($email, FILTER_VALIDATE_EMAIL)) {
+		} else if (empty($email) || !preg_match('/^([a-zæøåA-ZÆØÅ0-9_\.-]+)@([\da-z\.-]+)\.([a-z\.]{2,6})$/', $email) || !filter_var($email, FILTER_VALIDATE_EMAIL)) {
 			$message = 'E-post adressen du skrev inn er ikke gyldig.';
 		} else if (!is_numeric($gender)) {
 			$message = 'Du har oppgitt et ugyldig kjønn.';
