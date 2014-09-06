@@ -61,9 +61,11 @@ class Settings {
 									   'chief.teams' 			   => 'Administrer lagene for ditt crew, hvem som er medlem av hvilke lag og lederene i lagene.',
 									   'chief.avatars'			   => 'Administrer profilbilder, alle nye profilbilder vil dukke opp her og du kan godjkenne dem eller avise.',
 									   'chief.applications'		   => 'Godta eller avvis crew-søknader.',
+									   'chief.tickets'		   	   => 'Gjøre ting relatert til ticket-siden',
 									   'admin.events' 			   => 'Administrer arrangementer, informasjon er blir automatisk endret på hovedsiden og ticketsiden.',
 									   'admin.permissions' 		   => 'Velg hvilke bruker som skal ha tilgang til hva, dette er et tilgangsystem, men husk at brukere har standard tilganger utenom dette, ettersom de er medlem av crewet eller ikke.',
 									   'admin.change-user' 		   => 'Lar deg logge inn som hvilken som helst annen bruker, kun beregnet for bruk ved feilsøking.',
+									   'admin.console' 		       => 'Gir deg tilgang til vedlikeholdskonsollen brukt av utviklere med over gjennomsnittlig forståelse for siden.',
 									   'admin.seatmap' 			   => 'Endre seatmappet, her kan du flytte, legg til, og fjerne seter og rader.');
 	
 	/* Configuration */

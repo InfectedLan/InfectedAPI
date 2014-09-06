@@ -18,7 +18,7 @@
 			{
 				if(isset($seat))
 				{
-					if($ticket->canSeat($user))
+					if($ticket->canSeat($user) || $user->hasPermission('*') || $user->hasPermission('chief.tickets'))
 					{
 						if(!SeatHandler::hasOwner($seat))
 						{

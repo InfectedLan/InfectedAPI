@@ -23,3 +23,10 @@
 	font-size: 10px;
 	text-align: center;
 }
+#seatmapCanvas {
+	position: relative;
+	border-style: solid;
+	background-repeat: no-repeat;
+    border-width: 1px;
+    min-height: 1400px;
+}
