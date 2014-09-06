@@ -29,14 +29,10 @@ if (Session::isAuthenticated()) {
 						echo '<td>Etternavn:</td>';
 						echo '<td><input type="text" name="lastname" value="' . $editUser->getLastname() . '" required></td>';
 					echo '</tr>';
-					
-					if ($user->hasPermission('*')) {
-						echo '<tr>';
-							echo '<td>Brukernavn:</td>';
-							echo '<td><input type="text" name="username" value="' . $editUser->getUsername() . '" required></td>';
-						echo '</tr>';
-					}
-					
+					echo '<tr>';
+						echo '<td>Brukernavn:</td>';
+						echo '<td><input type="text" name="username" value="' . $editUser->getUsername() . '" required></td>';
+					echo '</tr>';
 					echo '<tr>';
 						echo '<td>E-post:</td>';
 						echo '<td><input type="email" name="email" value="' . $editUser->getEmail() . '" required></td>';

@@ -18,6 +18,7 @@ if (Session::isAuthenticated()) {
 				$user->getId() == $editUser->getId()) {
 				if (isset($_GET['firstname']) &&
 					isset($_GET['lastname']) &&
+					isset($_GET['username']) &&
 					isset($_GET['email']) &&
 					isset($_GET['gender']) &&
 					isset($_GET['birthday']) &&
@@ -28,6 +29,7 @@ if (Session::isAuthenticated()) {
 					isset($_GET['postalcode']) &&
 					!empty($_GET['firstname']) &&
 					!empty($_GET['lastname']) &&
+					!empty($_GET['username']) &&
 					!empty($_GET['email']) &&
 					is_numeric($_GET['gender']) &&
 					is_numeric($_GET['birthday']) &&
@@ -39,7 +41,7 @@ if (Session::isAuthenticated()) {
 					$editUser = UserHandler::getUser($_GET['id']);
 					$firstname = ucfirst($_GET['firstname']);
 					$lastname = ucfirst($_GET['lastname']);
-					$username = $user->hasPermission('*') ? $_GET['username'] : $editUser->getUsername();
+					$username = $_GET['username'];
 					$email = $_GET['email'];
 					$gender = $_GET['gender'];
 					$birthdate = $_GET['birthyear'] . '-' . $_GET['birthmonth'] . '-' . $_GET['birthday']; 
