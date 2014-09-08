@@ -90,7 +90,8 @@ class ApplicationHandler {
 		$con = MySQL::open(Settings::db_name_infected_crew);
 		
 		$result = mysqli_query($con, 'SELECT `id` FROM `' . Settings::db_table_infected_crew_applications . '`
-									  WHERE `state` = 1;');
+									  WHERE `state` = 1
+									  ORDER BY `datetime`;');
 		
 		$applicationList = array();
 		
@@ -109,7 +110,8 @@ class ApplicationHandler {
 		
 		$result = mysqli_query($con, 'SELECT `id` FROM `' . Settings::db_table_infected_crew_applications . '`
 									  WHERE `groupId` = \'' . $con->real_escape_string($group->getId()) .  '\'
-									  AND `state` = 1;');
+									  AND `state` = 1
+									  ORDER BY `datetime`;');
 		
 		$applicationList = array();
 		
