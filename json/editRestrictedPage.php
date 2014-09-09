@@ -10,7 +10,6 @@ if (Session::isAuthenticated()) {
 	
 	if ($user->hasPermission('*') ||
 		$user->hasPermission('functions.my-crew') || 
-		$user->hasPermission('functions.edit-page') || 
 		$user->isGroupLeader()) {
 		if (isset($_GET['id']) &&
 			isset($_GET['title']) &&
