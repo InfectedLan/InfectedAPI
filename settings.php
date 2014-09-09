@@ -12,6 +12,7 @@ class Settings {
 	const db_name_infected_main = 'test_infected_no_main';
 	const db_name_infected_crew = 'test_infected_no_crew';
 	const db_name_infected_tickets = 'test_infected_no_tickets';
+	const db_name_infected_compo = 'test_infected_no_compo';
 
 	// Infected
 	const db_table_infected_emergencycontacts = 'emergencycontacts';
@@ -48,6 +49,14 @@ class Settings {
 	const db_table_infected_tickets_storesessions = 'storesessions';
 	const db_table_infected_tickets_tickets = 'tickets';
 	const db_table_infected_tickets_tickettypes = 'tickettypes';
+
+	//InfectedCompo
+	const db_table_infected_compo_clans = 'clans';
+	const db_table_infected_compo_compos = 'compos';
+	const db_table_infected_compo_invites = 'invites';
+	const db_table_infected_compo_memberof = 'memberof';
+	const db_table_infected_compo_participantof = 'participantof';
+	const db_table_infected_compo_voteoptions = 'voteOptions'
 	
 	/* Permissions */
     public static $permissions = array('*' 				    	   => 'Gir tilgang til absolutt alt, du er nå en udødelig administrator.',
