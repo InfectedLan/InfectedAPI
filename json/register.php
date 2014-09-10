@@ -33,9 +33,9 @@ if (isset($_GET['firstname']) &&
 	$nickname = !empty($_GET['nickname']) ? $_GET['nickname'] : $username;
 	$emergencycontactphone = isset($_GET['emergencycontactphone']) ? $_GET['emergencycontactphone'] : null;
 	
-	if (!UserHandler::userExists($username)) {
+	if (UserHandler::userExists($username)) {
 		$message = 'Brukernavnet du skrev inn er allerede i bruk.';
-	} else if (!UserHandler::userExists($email)) {
+	} else if (UserHandler::userExists($email)) {
 		$message = 'E-post adressen du skrev inn er allerede i bruk.';
 	} else if (empty($firstname) || strlen($firstname) > 32) {
 		$message = 'Du har ikke skrevet inn noe fornavn.';
