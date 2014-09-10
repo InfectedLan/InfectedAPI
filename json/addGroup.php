@@ -1,6 +1,7 @@
 <?php
 require_once 'session.php';
 require_once 'handlers/grouphandler.php';
+require_once 'handlers/restrictedpagehandler.php';
 
 $result = false;
 $message = null;

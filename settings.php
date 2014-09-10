@@ -64,7 +64,7 @@ class Settings {
 									   'functions.my-crew' 		   => 'Endre sider under "My Crew".',
 									   'functions.info'			   => 'Post informasjon på infoskjermen som vil vises under arrangementet.',
 									   'functions.site-list-games' => 'Administrer spill, settes opp compo i nye spill og moderer påmeldinger.',
-									   'functions.site-list-pages' => 'Endre innholdet på nettsiden.',
+									   'functions.site-pages' 	   => 'Endre innholdet på nettsiden.',
 									   'functions.seatmap'		   => 'Se seatmappet',
 									   'chief.home' 			   => 'Endre "home" siden."',
 									   'chief.tickets' 			   => 'Gjøre ting relatert til tickets-siden, slik som flytting av brukere',

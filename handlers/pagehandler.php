@@ -55,5 +55,46 @@ class PageHandler {
 
 		return $pageList;
 	}
+	
+	/* 
+	 * Create a new page.
+	 */
+	public static function createPage($name, $title, $content) {
+		$con = MySQL::open(Settings::db_name_infected_main);
+		
+		mysqli_query($con, 'INSERT INTO `' . Settings::db_table_infected_main_pages . '` (`name`, `title`, `content`) 
+							VALUES (\'' . $con->real_escape_string($name) . '\', 
+									\'' . $con->real_escape_string($title) . '\', 
+									\'' . $con->real_escape_string($content) . '\')');
+		
+		MySQL::close($con);
+	}
+	
+	/*
+	 * Remove a page.
+	 */
+	public static function removePage($id) {
+		$con = MySQL::open(Settings::db_name_infected_main);
+		
+		mysqli_query($con, 'DELETE FROM `' . Settings::db_table_infected_main_pages . '` 
+							WHERE `id` = \'' . $con->real_escape_string($id) . '\';');
+		
+		MySQL::close($con);
+	}
+	
+	/*
+	 * Update a page.
+	 */
+	public static function updatePage($id, $name, $title, $content) {
+		$con = MySQL::open(Settings::db_name_infected_main);
+		
+		mysqli_query($con, 'UPDATE `' . Settings::db_table_infected_main_pages . '` 
+							SET `name` = \'' . $con->real_escape_string($name) . '\', 
+								`title` = \'' . $con->real_escape_string($title) . '\', 
+								`content` = \'' . $con->real_escape_string($content) . '\' 
+							WHERE `id` = \'' . $con->real_escape_string($id) . '\';');
+		
+		MySQL::close($con);
+	}
 }
 ?>
