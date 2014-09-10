@@ -56,9 +56,9 @@ if (Session::isAuthenticated()) {
 					} else if (empty($lastname) || strlen($lastname) > 32) {
 						$message = 'Du har ikke skrevet inn noe etternavn.';
 					} else if ($username != $editUser->getUsername() && UserHandler::userExists($username)) {
-						$message = 'Brukernavnet er allerede i bruk.';
+						$message = 'Brukernavnet du skrev inn er allerede i bruk.';
 					} else if ($email != $editUser->getEmail() && UserHandler::userExists($email)) {
-						$message = 'E-post adressen er allerede i bruk.';
+						$message = 'E-post adressen du skrev inn er allerede i bruk.';
 					} else if (empty($email) || !preg_match('/^([a-zæøåA-ZÆØÅ0-9_\.-]+)@([\da-z\.-]+)\.([a-z\.]{2,6})$/', $email) || !filter_var($email, FILTER_VALIDATE_EMAIL)) {
 						$message = 'E-post adressen du skrev inn er ikke gyldig.';
 					} else if (!is_numeric($gender)) {
