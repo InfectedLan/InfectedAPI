@@ -60,15 +60,25 @@ class PayPal {
 		   If the response was an error, display the errors received using APIError.php.
 		   */
 		$ack = strtoupper($resArray["ACK"]);
-		$transid = strtoupper($resArray["TRANSACTIONID"]);
-		$paymentstatus = strtoupper($resArray["PAYMENTSTATUS"]);
+		if($ack == "SUCCESS") {
+
+			$paymentstatus = strtoupper($resArray["PAYMENTSTATUS"]);
+
+			if($paymentstatus == "COMPLETED") {
+				$transid = strtoupper($resArray["TRANSACTIONID"]);
+				return $transid;
+			}
+		}
+		return null;
+		/*
 		if($ack != 'SUCCESS' && $ack != 'SUCCESSWITHWARNING' && $paymentstatus != 'COMPLETED'){
 			return null; 
 		}
 		if($ack == 'SUCCESS' && $paymentstatus == "COMPLETED"){
+			$transid = strtoupper($resArray["TRANSACTIONID"]);
 			return $transid;
 		}
-		return null;
+		return null;*/
 	}
 	public static function getExpressCheckoutDetails($token) {
 
