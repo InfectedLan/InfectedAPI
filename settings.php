@@ -8,11 +8,11 @@ class Settings {
 	
 	/* Database */
 	const db_host = 'localhost';
-	const db_name_infected = 'infected_no';
-	const db_name_infected_main = 'infected_no_main';
-	const db_name_infected_crew = 'infected_no_crew';
-	const db_name_infected_tickets = 'infected_no_tickets';
-	const db_name_infected_compo = 'infected_no_compo';
+	const db_name_infected = 'test_infected_no';
+	const db_name_infected_main = 'test_infected_no_main';
+	const db_name_infected_crew = 'test_infected_no_crew';
+	const db_name_infected_tickets = 'test_infected_no_tickets';
+	const db_name_infected_compo = 'test_infected_no_compo';
 
 	// Infected
 	const db_table_infected_emergencycontacts = 'emergencycontacts';
@@ -80,7 +80,7 @@ class Settings {
 	
 	/* Configuration */
 	// Full path to the API location.
-	const api_path = '/home/infected.no/public_html/api/';
+	const api_path = '/home/test.infected.no/public_html/api/';
 	
 	// Email information
 	const emailName = 'Infected';
