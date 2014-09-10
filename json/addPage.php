@@ -10,7 +10,7 @@ if (Session::isAuthenticated()) {
 	
 	if ($user->hasPermission('*') ||
 		$user->hasPermission('functions.edit-page') || 
-		$user->hasPermission('functions.site-list-pages')) {
+		$user->hasPermission('functions.site-pages')) {
 		if (isset($_GET['title']) &&
 			isset($_GET['content']) &&
 			!empty($_GET['title']) &&
