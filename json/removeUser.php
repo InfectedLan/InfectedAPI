@@ -11,11 +11,15 @@ if (Session::isAuthenticated()) {
 	if ($user->hasPermission('*')) {
 		if (isset($_GET['id']) &&
 			is_numeric($_GET['id'])) {
-			$removeUser = GroupHandler::getGroup($_GET['id']); 
+			$removeUser = UserHandler::getUser($_GET['id']); 
 			
 			if ($removeUser != null) {
-				UserHandler::removeUser($removeUser);
-				$result = true;
+				if (!TicketHandler::hasUserTicket($removeUser)) {
+					UserHandler::removeUser($removeUser);
+					$result = true;
+				} else {
+					$message = 'Brukeren har en billett, og kan derfor ikke slettes.';
+				}
 			} else {
 				$message = 'Brukeren finnes ikke.';
 			}

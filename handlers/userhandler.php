@@ -1,7 +1,14 @@
 <?php
 require_once 'settings.php';
 require_once 'mysql.php';
+require_once 'handlers/tickethandler.php';
 require_once 'handlers/emergencycontacthandler.php';
+require_once 'handlers/passwordresetcodehandler.php';
+require_once 'handlers/registrationcodehandler.php';
+require_once 'handlers/userpermissionshandler.php';
+require_once 'handlers/applicationhandler.php';
+require_once 'handlers/avatarhandler.php';
+require_once 'handlers/grouphandler.php';
 require_once 'objects/user.php';
 
 class UserHandler {
@@ -185,11 +192,11 @@ class UserHandler {
 	 */
 	public static function removeUser($user) {
 		// Only remove users without a ticket, for now...
-		if (TicketHandler::hasUserTicket($user)) {
+		if (!TicketHandler::hasUserTicket($user)) {
 			$con = MySQL::open(Settings::db_name_infected);
 			
 			mysqli_query($con, 'DELETE FROM `' . Settings::db_table_infected_users . '` 
-								WHERE `userId` = \'' . $con->real_escape_string($user->getId()) . '\';');
+								WHERE `id` = \'' . $con->real_escape_string($user->getId()) . '\';');
 			
 			MySQL::close($con);
 			
