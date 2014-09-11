@@ -369,6 +369,14 @@ class User {
 		return TeamHandler::isTeamLeader($this->getId());
 	}
 	
+	/*
+	 * Returns true if user is eligible to play in a infected compo
+	 */
+	public function isEligibleForCompos() {
+		//For now we 
+		return $this->hasTicket();
+	}
+
 	/* 
 	 * Returns the name of the users position.
 	 */
