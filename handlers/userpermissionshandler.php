@@ -35,6 +35,19 @@ class UserPermissionsHandler {
 		return $permissionList;
 	}
 	
+	public static function hasUserPermissions($user) {
+		$con = MySQL::open(Settings::db_name_infected);
+		
+		$result = mysqli_query($con, 'SELECT `id` FROM `' . Settings::db_table_infected_userpermissions . '` 
+									  WHERE `userId` = \'' . $con->real_escape_string($user->getId()) . '\';');
+								
+		$row = mysqli_fetch_array($result);
+		
+		MySQL::close($con);
+		
+		return $row ? true : false;
+	}
+	
 	public static function createUserPermission($user, $value) {
 		if (!self::hasUserPermission($user, $value)) {
 			$con = MySQL::open(Settings::db_name_infected);
@@ -53,6 +66,15 @@ class UserPermissionsHandler {
 		mysqli_query($con, 'DELETE FROM `' . Settings::db_table_infected_userpermissions . '` 
 							WHERE `userId` = \'' . $con->real_escape_string($user->getId()) . '\'
 							AND `value` = \'' . $con->real_escape_string($value) . '\';');
+		
+		MySQL::close($con);
+	}
+	
+	public static function removeUserPermissions($user) {
+		$con = MySQL::open(Settings::db_name_infected);
+		
+		mysqli_query($con, 'DELETE FROM `' . Settings::db_table_infected_userpermissions . '` 
+							WHERE `userId` = \'' . $con->real_escape_string($user->getId()) . '\';');
 		
 		MySQL::close($con);
 	}

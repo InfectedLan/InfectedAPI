@@ -73,5 +73,14 @@ class PasswordResetCodeHandler {
 		
 		MySQL::close($con);
 	}
+	
+	public static function removeUserPasswordResetCode($user) {
+		$con = MySQL::open(Settings::db_name_infected);
+		
+		mysqli_query($con, 'DELETE FROM `' . Settings::db_table_infected_passwordresetcodes . '` 
+							WHERE `userId` = \'' . $con->real_escape_string($user->getId()) . '\';');
+		
+		MySQL::close($con);
+	}
 }
 ?>

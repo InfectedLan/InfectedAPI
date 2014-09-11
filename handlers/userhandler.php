@@ -184,16 +184,50 @@ class UserHandler {
 	 * Remove a user
 	 */
 	public static function removeUser($user) {
-		$con = MySQL::open(Settings::db_name_infected);
-		
-		mysqli_query($con, 'DELETE FROM `' . Settings::db_table_infected_users . '` 
-							WHERE `userId` = \'' . $con->real_escape_string($user->getId()) . '\';');
-		
-		if ($user->hasEmergencyContact()) {
-			EmergencyContactHandler::removeEmergenctContact($user);
+		// Only remove users without a ticket, for now...
+		if (TicketHandler::hasUserTicket($user)) {
+			$con = MySQL::open(Settings::db_name_infected);
+			
+			mysqli_query($con, 'DELETE FROM `' . Settings::db_table_infected_users . '` 
+								WHERE `userId` = \'' . $con->real_escape_string($user->getId()) . '\';');
+			
+			MySQL::close($con);
+			
+			// Remove users emergencycontact.
+			if (EmergencyContactHandler::hasEmergencyContact($user)) {
+				EmergencyContactHandler::removeEmergenctContact($user);
+			}
+			
+			// Remove users passwordresetcode.
+			if (PasswordResetCodeHandler::hasPasswordResetCode($user)) {
+				PasswordResetCodeHandler::removeUserPasswordResetCode($user);
+			}
+			
+			// Remove users registrationscode.
+			if (RegistrationCodeHandler::hasUserRegistrationCode($user)) {
+				RegistrationCodeHandler::removeUserRegistrationCode($user);
+			}
+			
+			// Remove users permissions.
+			if (UserPermissionsHandler::hasUserPermissions($user)) {
+				UserPermissionsHandler::removeUserPermissions($user);
+			}
+			
+			// Remove users application.
+			if (ApplicationHandler::hasApplication($user)) {
+				ApplicationHandler::removeUserApplication($user);
+			}
+			
+			// Remove users avatar.
+			if (AvatarHandler::hasAvatar($user)) {
+				AvatarHandler::deleteAvatar($user->getAvatar());
+			}
+			
+			// Remove users memberof entry.
+			if (GroupHandler::isGroupMember($user->getId())) {
+				GroupHandler::removeUserFromGroup($user);
+			}
 		}
-		
-		MySQL::close($con);
 	}
 	
 	/* 

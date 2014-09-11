@@ -124,6 +124,19 @@ class ApplicationHandler {
 		return $applicationList;
 	}
 	
+	public static function hasApplication($user) {
+		$con = MySQL::open(Settings::db_name_infected_crew);
+		
+		$result = mysqli_query($con, 'SELECT `id` FROM `' . Settings::db_table_infected_crew_applications . '` 
+									  WHERE `userId` = \'' . $con->real_escape_string($user->getId()) . '\';');
+									  
+		$row = mysqli_fetch_array($result);
+		
+		MySQL::close($con);
+
+		return $row ? true : false;
+	}
+	
 	/* Creates an application in database */
 	public static function createApplication($event, $user, $group, $content) {
 		$con = MySQL::open(Settings::db_name_infected_crew);
@@ -150,6 +163,18 @@ class ApplicationHandler {
 		
 		MySQL::close($con);
 	}
+
+	/* 
+	 * Remove a application.
+	 */
+	public static function removeUserApplication($user) {
+		$con = MySQL::open(Settings::db_name_infected_crew);
+		
+		mysqli_query($con, 'DELETE FROM `' . Settings::db_table_infected_crew_applications . '` 
+							WHERE `userId` = \'' . $con->real_escape_string($user->getId()) . '\';');
+		
+		MySQL::close($con);
+	}	
 	
 	public static function acceptApplication($id) {
 		$con = MySQL::open(Settings::db_name_infected_crew);
