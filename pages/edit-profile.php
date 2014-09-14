@@ -119,14 +119,17 @@ if (Session::isAuthenticated()) {
 						echo '<td><input type="submit" value="Lagre"></td>';
 					echo '</tr>';
 				echo '</form>';
-				echo '<tr>';
-					echo '<td></td>';
-					echo '<td><a href="index.php?page=edit-avatar">Endre/Last opp profilbilde</a></td>';
-				echo '</tr>';
-				echo '<tr>';
-					echo '<td></td>';
-					echo '<td><a href="index.php?page=edit-password">Endre passord</a></td>';
-				echo '</tr>';
+				
+				if ($user->getId() == $editUser->getId()) {
+					echo '<tr>';
+						echo '<td></td>';
+						echo '<td><a href="index.php?page=edit-avatar">Endre/Last opp profilbilde</a></td>';
+					echo '</tr>';
+					echo '<tr>';
+						echo '<td></td>';
+						echo '<td><a href="index.php?page=edit-password">Endre passord</a></td>';
+					echo '</tr>';
+				}
 			echo '</table>';
 		} else {
 			echo '<p>Du har ikke rettigehter til dette.</p>';
