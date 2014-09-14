@@ -31,5 +31,20 @@ class InviteHandler {
 
 		return $inviteList;
 	}
+
+	public function getInvitedInClan($clan) {
+		$con = MySQL::open(Settings::db_name_infected_compo);
+
+		$result = mysqli_query($con, 'SELECT * FROM `' . Settings::db_table_infected_compo_invites . '` WHERE `clanId` = ' . $con->rea_escape_string( $clan->getId() ) . ';');
+	
+		$inviteList = array();
+
+		while($row = mysqli_fetch_array($result)) {
+			array_push($inviteList, self::getInvite($row['id']) );
+		}
+
+		MySQL::close($con);
+		return $userList;
+	}
 }
 ?>
