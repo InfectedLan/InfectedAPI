@@ -17,7 +17,7 @@ if (Session::isAuthenticated()) {
 	$temp = explode(".", $_FILES["file"]["name"]);
 	$extension = strtolower(end($temp));
 	$allowedExts = array("jpeg", "jpg", "png");
-	if(($_FILES["file"]["type"] == "image/jpeg") || ($_FILES["file"]["type"] == "image/jpg") || ($_FILES["file"]["type"] == "image/x-png") || ($_FILES["file"]["type"] == "image/png")) {
+	//if(($_FILES["file"]["type"] == "image/jpeg") || ($_FILES["file"]["type"] == "image/jpg") || ($_FILES["file"]["type"] == "image/x-png") || ($_FILES["file"]["type"] == "image/png")) {
 		if (($_FILES["file"]["size"] < 7000000)) {
 			if(in_array($extension, $allowedExts)) {
 				if ($_FILES["file"]["error"] == 0) {
@@ -49,9 +49,9 @@ if (Session::isAuthenticated()) {
 		} else {
 			$message = "Filen er for stor!";
 		}
-	} else {
+	/*} else {
 		$message = "Filen har ikke riktig MIME-format(" . $_FILES["file"]["type"] . ")";
-	} 
+	} */
 } else {
 	$message = "Du er ikke logget inn!";
 } 
