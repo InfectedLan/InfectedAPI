@@ -14,7 +14,7 @@ class ClanHandler {
 		MySQL::close($con);
 		
 		if($row) {
-			return new Clan($row['id'], $row['chief'], $row['name'], $row['event']);
+			return new Clan($row['id'], $row['chief'], $row['name'], $row['event'], $row['tag']);
 		}
 	}
 

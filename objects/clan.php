@@ -7,12 +7,14 @@ class Clan {
 	private $chief;
 	private $name;
 	private $event;
+	private $tag;
 
-	public function __construct($id, $chief, $name, $event) {
+	public function __construct($id, $chief, $name, $event, $tag) {
 		$this->id = $id;
 		$this->chief = $chief;
 		$this->name = $name;
 		$this->event = $event;
+		$this->tag = $tag;
 	}
 
 	public function getId() {
@@ -25,6 +27,10 @@ class Clan {
 
 	public function getName() {
 		return $this->name;
+	}
+
+	public function getTag() {
+		return $this->tag;
 	}
 
 	public function getEvent() {
