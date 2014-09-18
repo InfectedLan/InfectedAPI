@@ -3,7 +3,7 @@ require_once 'session.php';
 require_once 'handlers/avatarhandler.php';
 
 $result = false;
-$message = null;
+$message = "Ingen feilmelding er tilgjengelig O.o";
 
 if (Session::isAuthenticated()) {
 	$user = Session::getCurrentUser();
@@ -41,7 +41,7 @@ if (Session::isAuthenticated()) {
 						$message = "Bildet er for smått! Det må være minimum " . Settings::avatar_minimum_width . ' x ' . Settings::avatar_minimum_height . ' piksler stort.';
 					}
 				} else {
-					$message = urlencode($_FILES["file"]["error"]);
+					$message = 'Det har skjedd en intern feil da vi behandlet bildet. Vennligst gi oss feilkoden "' . urlencode($_FILES["file"]["error"] . '"');
 				}
 			} else {
 				$message = "Ugyldig filtype";
