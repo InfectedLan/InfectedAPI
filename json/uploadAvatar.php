@@ -18,7 +18,7 @@ if (Session::isAuthenticated()) {
 	$extension = strtolower(end($temp));
 	$allowedExts = array("jpeg", "jpg", "png");
 	//if(($_FILES["file"]["type"] == "image/jpeg") || ($_FILES["file"]["type"] == "image/jpg") || ($_FILES["file"]["type"] == "image/x-png") || ($_FILES["file"]["type"] == "image/png")) {
-		if (($_FILES["file"]["size"] < 7000000)) {
+		if (($_FILES["file"]["size"] < 7*1024*1024)) {
 			if(in_array($extension, $allowedExts)) {
 				if ($_FILES["file"]["error"] == 0) {
 					//Validate size
@@ -41,7 +41,12 @@ if (Session::isAuthenticated()) {
 						$message = "Bildet er for smått! Det må være minimum " . Settings::avatar_minimum_width . ' x ' . Settings::avatar_minimum_height . ' piksler stort.';
 					}
 				} else {
-					$message = 'Det har skjedd en intern feil da vi behandlet bildet. Vennligst gi oss feilkoden "' . urlencode($_FILES["file"]["error"] . '"');
+					$error = $_FILES["file"]["error"];
+					if($error==2 || $error == 1) {
+						$message = "Det har skjedd en intern feil: Filen er for stor! Vennligst si ifra til admins.";
+					} else {
+						$message = 'Det har skjedd en intern feil da vi behandlet bildet. Vennligst gi oss feilkoden "' . urlencode($_FILES["file"]["error"]) . '"';
+					}
 				}
 			} else {
 				$message = "Ugyldig filtype";
