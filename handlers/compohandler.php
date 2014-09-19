@@ -13,7 +13,7 @@ class CompoHandler {
 		MySQL::close($con);
 		
 		if($row) {
-			return new Compo($row['id'], $row['startTime'], $row['registrationDeadline'], $row['name'], $row['desc']);
+			return new Compo($row['id'], $row['startTime'], $row['registrationDeadline'], $row['name'], $row['desc'], $row['event']);
 		}
 	}
 }

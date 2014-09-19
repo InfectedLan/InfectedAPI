@@ -5,13 +5,15 @@ class Compo {
 	private $registrationDeadline;
 	private $name;
 	private $desc;
+	private $event;
 
-	public function __construct($id, $startTime, $registrationDeadline, $name, $desc) {
+	public function __construct($id, $startTime, $registrationDeadline, $name, $desc, $event) {
 		$this->id = $id;
 		$this->startTime = $startTime;
 		$this->registrationDeadline = $registrationDeadline;
 		$this->name = $name;
 		$this->desc = $desc;
+		$this->event = $event;
 	}
 
 	public function getId() {
@@ -32,6 +34,10 @@ class Compo {
 
 	public function getDesc() {
 		return $this->desc;
+	}
+
+	public function getEvent() {
+		return $this->event;
 	}
 }
 ?>
