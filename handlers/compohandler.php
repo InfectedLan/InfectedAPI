@@ -16,5 +16,17 @@ class CompoHandler {
 			return new Compo($row['id'], $row['startTime'], $row['registrationDeadline'], $row['name'], $row['desc'], $row['event']);
 		}
 	}
+	public static function getComposForEvent($event) {
+		$con = MySQL::open(Settings::db_name_infected_compo);
+
+		$result = mysqli_query($con, 'SELECT * FROM `' . Settings::db_table_infected_compo_compos . '` WHERE `event` = \'' . $event->getId() . '\';');
+
+		$compoList = array();
+
+		while($row = mysqli_fetch_array($result)) {
+			array_push($compoList, self::getCompo($row['id']));
+		}
+		return $compoList;
+	}
 }
 ?>
