@@ -6,7 +6,7 @@ class CompoHandler {
 	public static function getCompo($id) {
 		$con = MySQL::open(Settings::db_name_infected_compo);
 		
-		$result = mysqli_query($con, 'SELECT * FROM `' . Settings::db_table_infected_compo_compos . '` WHERE `id` = \'$id\';');
+		$result = mysqli_query($con, 'SELECT * FROM `' . Settings::db_table_infected_compo_compos . '` WHERE `id` = ' . $id . ';');
 		
 		$row = mysqli_fetch_array($result);
 		
