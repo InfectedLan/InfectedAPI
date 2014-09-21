@@ -6,14 +6,16 @@ class Compo {
 	private $name;
 	private $desc;
 	private $event;
+	private $teamSize;
 
-	public function __construct($id, $startTime, $registrationDeadline, $name, $desc, $event) {
+	public function __construct($id, $startTime, $registrationDeadline, $name, $desc, $event, $teamSize) {
 		$this->id = $id;
 		$this->startTime = $startTime;
 		$this->registrationDeadline = $registrationDeadline;
 		$this->name = $name;
 		$this->desc = $desc;
 		$this->event = $event;
+		$this->teamSize = $teamSize;
 	}
 
 	public function getId() {
@@ -38,6 +40,10 @@ class Compo {
 
 	public function getEvent() {
 		return $this->event;
+	}
+
+	public function getTeamSize() {
+		return $this->teamSize;
 	}
 }
 ?>
