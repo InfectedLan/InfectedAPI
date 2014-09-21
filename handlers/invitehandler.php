@@ -6,7 +6,7 @@ class InviteHandler {
 	public static function getInvite($id) {
 		$con = MySQL::open(Settings::db_name_infected_compo);
 		
-		$result = mysqli_query($con, 'SELECT * FROM `' . Settings::db_table_infected_compo_invites . '` WHERE `id` = \'$id\';');
+		$result = mysqli_query($con, 'SELECT * FROM `' . Settings::db_table_infected_compo_invites . '` WHERE `id` = \'' . $id . '\';');
 		
 		$row = mysqli_fetch_array($result);
 		
@@ -19,7 +19,7 @@ class InviteHandler {
 	public static function getInvitesForUser($user) {
 		$con = MySQL::open(Settings::db_name_infected_compo);
 
-		$result = mysqli_query($con, 'SELECT * FROM `'  . Settings::db_table_infected_compo_invites . '` WHERE `userId` = ' . $user->getId() . ';');
+		$result = mysqli_query($con, 'SELECT * FROM `'  . Settings::db_table_infected_compo_invites . '` WHERE `userId` = ' . $con->real_escape_string($user->getId()) . ';');
 	
 		$inviteList = array();
 
@@ -35,7 +35,7 @@ class InviteHandler {
 	public function getInvitedInClan($clan) {
 		$con = MySQL::open(Settings::db_name_infected_compo);
 
-		$result = mysqli_query($con, 'SELECT * FROM `' . Settings::db_table_infected_compo_invites . '` WHERE `clanId` = ' . $con->rea_escape_string( $clan->getId() ) . ';');
+		$result = mysqli_query($con, 'SELECT * FROM `' . Settings::db_table_infected_compo_invites . '` WHERE `clanId` = ' . $con->real_escape_string( $clan->getId() ) . ';');
 	
 		$inviteList = array();
 

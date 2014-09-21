@@ -7,8 +7,9 @@ class Compo {
 	private $desc;
 	private $event;
 	private $teamSize;
+	private $tag;
 
-	public function __construct($id, $startTime, $registrationDeadline, $name, $desc, $event, $teamSize) {
+	public function __construct($id, $startTime, $registrationDeadline, $name, $desc, $event, $teamSize, $tag) {
 		$this->id = $id;
 		$this->startTime = $startTime;
 		$this->registrationDeadline = $registrationDeadline;
@@ -16,6 +17,7 @@ class Compo {
 		$this->desc = $desc;
 		$this->event = $event;
 		$this->teamSize = $teamSize;
+		$this->tag = $tag;
 	}
 
 	public function getId() {
@@ -44,6 +46,10 @@ class Compo {
 
 	public function getTeamSize() {
 		return $this->teamSize;
+	}
+
+	public function getTag() {
+		return $this->tag;
 	}
 }
 ?>
