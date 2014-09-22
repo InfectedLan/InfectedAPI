@@ -44,6 +44,8 @@ class Clan {
 	
 		$userList = array();
 
+		array_push($userList, UserHandler::getUser($this->chief));
+
 		while($row = mysqli_fetch_array($result)) {
 			array_push($userList, UserHandler::getUser($row['userId']) );
 		}
