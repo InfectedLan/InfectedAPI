@@ -2,6 +2,7 @@
 require_once 'settings.php';
 require_once 'mysql.php';
 require_once 'objects/compo.php';
+require_once 'handlers/clanhandler.php';
 class CompoHandler {
 	public static function getCompo($id) {
 		$con = MySQL::open(Settings::db_name_infected_compo);
@@ -27,6 +28,22 @@ class CompoHandler {
 			array_push($compoList, self::getCompo($row['id']));
 		}
 		return $compoList;
+	}
+
+	public static function getClans($compo) {
+		$con = MySQL::open(Settings::db_name_infected_compo);
+
+		$result = mysqli_query($con, 'SELECT * FROM `' . Settings::db_table_infected_compo_participantof . '` WHERE `compoId` = ' . $con->real_escape_string($compo->getId()) . ';');
+
+		$clanList = array();
+
+		while ($row = mysqli_fetch_array($result)) {
+			array_push($clanList, ClanHandler::getClan($row['clanId']));
+		}
+
+		MySQL::close($con);
+		
+		return $clanList;
 	}
 }
 ?>

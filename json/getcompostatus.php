@@ -29,8 +29,9 @@ if (Session::isAuthenticated()) {
 		$clan = ClanHandler::getClan($invite->getClanId());
 		$compo = ClanHandler::getCompo($clan);
 		$compoData = array("name" => $compo->getName(), "tag" => $compo->getTag());
+		$invitedClanData = array("name" => $clan->getName(), "tag" => $clan->getTag(), "id" => $clan->getId());
 
-		$inviteData = array('id' => $invite->getId(), 'clanName' => $clan->getName(), 'compo' => $compoData, 'clanTag' => $clan->getTag());
+		$inviteData = array('id' => $invite->getId(), 'compo' => $compoData, 'clanData' => $invitedClanData);
 		array_push($inviteArray, $inviteData);
 	}
 

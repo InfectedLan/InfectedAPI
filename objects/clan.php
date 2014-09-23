@@ -53,5 +53,18 @@ class Clan {
 		MySQL::close($con);
 		return $userList;
 	}
+
+	public function isQualified($compo) {
+		if(count($this->getMembers()) != $compo->getTeamSize())
+			return false;
+
+		$con = MySQL::open(Settings::db_name_infected_compo);
+
+		$result = mysqli_query($con, 'SELECT * FROM `' . Settings::db_table_infected_compo_participantof . '` WHERE `clanId` = ' . $this->id . ' AND `compoId` = ' . $con->real_escape_string($compo->getId()) . ';');
+
+		MySQL::close($con);
+
+		return $row = mysqli_fetch_array($result);
+	}
 }
 ?>
