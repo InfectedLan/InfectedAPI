@@ -27,6 +27,9 @@ class CompoHandler {
 		while($row = mysqli_fetch_array($result)) {
 			array_push($compoList, self::getCompo($row['id']));
 		}
+
+		MySQL::close($con);
+
 		return $compoList;
 	}
 
@@ -38,7 +41,8 @@ class CompoHandler {
 		$clanList = array();
 
 		while ($row = mysqli_fetch_array($result)) {
-			array_push($clanList, ClanHandler::getClan($row['clanId']));
+			$clan =  ClanHandler::getClan($row['clanId']);
+			array_push($clanList, $clan);
 		}
 
 		MySQL::close($con);
