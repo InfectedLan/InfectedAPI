@@ -51,6 +51,7 @@ class Match {
 		}
 	}
 
+	//Returns true if the match can be run
 	public function isReady() {
 		return MatchHandler::isReady($this);
 	}

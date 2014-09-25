@@ -89,5 +89,18 @@ class MatchHandler {
 
 		return $hasParticipants;
 	}
+
+	//Used in the ready check
+	public static function isUserReady($user, $match) {
+		$con = MySQL::open(Settings::db_name_infected_compo);
+
+		$result = mysqli_query($con, 'SELECT * FROM `' . Settings::db_table_infected_compo_readyusers . '` WHERE `userId` = ' . $con->real_escape_string($user->getId()) . ' AND `matchId` = ' . $con->real_escape_string($match->getId()) . ';');
+	
+		$row = mysqli_fetch_array($result);
+		if($row) {
+			return true;
+		}
+		return false;
+	}
 }
 ?>
