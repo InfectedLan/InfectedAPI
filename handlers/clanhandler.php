@@ -31,12 +31,12 @@ class ClanHandler {
 		while($row = mysqli_fetch_array($result)) {
 			array_push($clanArray, self::getClan($row['clanId']));
 		}
-
+		/*
 		$result = mysqli_query($con, 'SELECT * FROM `' . Settings::db_table_infected_compo_clans . '` WHERE `chief` = ' . $con->real_escape_string($user->getId()) . ';');
 
 		while($row = mysqli_fetch_array($result)) {
 			array_push($clanArray, self::getClan($row['id']));
-		}
+		}*/
 
 		return $clanArray;
 	}

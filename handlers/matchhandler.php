@@ -41,7 +41,7 @@ class MatchHandler {
 	}
 
 	public static function hasClanMatch($clan) {
-		return isset(self::getMatchForClan($clan));
+		return null !== self::getMatchForClan($clan);
 	}
 
 	//Unstable if user has multiple matches happening
