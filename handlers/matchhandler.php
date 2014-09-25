@@ -1,0 +1,58 @@
+<?php
+require_once 'settings.php';
+require_once 'mysql.php';
+require_once 'objects/match.php';
+require_once 'handlers/clanhandler.php';
+
+/*
+ * EPIC WARNING:
+ * 
+ * participantOfMatch should only have a clan linked if the clan is ready to play that match
+ */
+
+class MatchHandler {
+	public static function getMatch($id) {
+		$con = MySQL::open(Settings::db_name_infected_compo);
+		
+		$result = mysqli_query($con, 'SELECT * FROM `' . Settings::db_table_infected_compo_match . '` WHERE `id` = \'$id\';');
+		
+		$row = mysqli_fetch_array($result);
+		
+		MySQL::close($con);
+		
+		if($row) {
+			return new Match($row['id'], $row['scheduledTime'], $row['connectDetails'], $row['winner']);
+		}
+	}
+
+	public static function getMatchForClan($clan) {
+		 $con = MySQL::open(Settings::db_name_infected_compo);
+
+		 $result = mysqli_query($con, 'SELECT * FROM `' . Settings::db_table_infected_compo_participantOfMatch . '` WHERE `type` = ' . Settings::compo_match_participant_type_clan . ' 
+		 						AND `participantId` = ' . $con->real_escape_string($clan->getId()) . ';');
+
+		 $row = mysqli_fetch_array($result);
+
+		 MySQL::close($con);
+
+		 if($row) {
+		 	return self::getMatch($row['matchId']);
+		 }
+	}
+
+	public static function hasClanMatch($clan) {
+		return isset(self::getMatchForClan($clan));
+	}
+
+	//Unstable if user has multiple matches happening
+	public static function getMatchForUser($user) {
+		$clans = ClanHandler::getClansForUser($user);
+		foreach($clans as $clan) {
+			$match = self::getMatchForClan($clan);
+			if(isset($match)) {
+				return $match;
+			}
+		}
+	}
+}
+?>

@@ -57,6 +57,8 @@ class Settings {
 	const db_table_infected_compo_memberof = 'memberof';
 	const db_table_infected_compo_participantof = 'participantof';
 	const db_table_infected_compo_voteoptions = 'voteOptions';
+	const db_table_infected_compo_participantOfMatch = 'participantOfMatch';
+	const db_table_infected_compo_matches = 'matches';
 	
 	/* Permissions */
     public static $permissions = array('*' 				    	   => 'Gir tilgang til absolutt alt, du er nå en udødelig administrator.',
@@ -109,5 +111,9 @@ class Settings {
 
 	// Defines how long a ticket should be stored on your account before payment is successful.
 	const storeSessionTime = 3600; // You have an hour to pay on paypal,
+
+	//Match participant of state
+	const compo_match_participant_type_clan = 0;
+	const compo_match_participant_type_match_result = 1;
 }
 ?>
