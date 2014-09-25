@@ -87,6 +87,18 @@ class ClanHandler {
 		return $peopleArray;
 	}
 
+	public static function isMember($user, $clan) {
+		$con = MySQL::open(Settings::db_name_infected_compo);
+
+		$result = mysqli_query($con, 'SELECT * FROM `' . Settings::db_table_infected_compo_memberof . '` WHERE `clanId` = ' . $con->real_escape_string($clan->getId()) . ' AND `userId` = '. $con->real_escape_string($user->getId()) . ';');
+
+		$row = mysqli_fetch_array($result);
+
+		MySQL::close($con);
+
+		return null ==! $row;
+	}
+
 	public static function inviteUser($clan, $user)
 	{
 		$con = MySQL::open(Settings::db_name_infected_compo);

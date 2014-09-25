@@ -14,14 +14,14 @@ class MatchHandler {
 	public static function getMatch($id) {
 		$con = MySQL::open(Settings::db_name_infected_compo);
 		
-		$result = mysqli_query($con, 'SELECT * FROM `' . Settings::db_table_infected_compo_match . '` WHERE `id` = \'$id\';');
+		$result = mysqli_query($con, 'SELECT * FROM `' . Settings::db_table_infected_compo_matches . '` WHERE `id` = \'' . $id . '\';');
 		
 		$row = mysqli_fetch_array($result);
 		
 		MySQL::close($con);
 		
 		if($row) {
-			return new Match($row['id'], $row['scheduledTime'], $row['connectDetails'], $row['winner']);
+			return new Match($row['id'], $row['scheduledTime'], $row['connectDetails'], $row['winner'], $row['state']);
 		}
 	}
 
@@ -53,6 +53,41 @@ class MatchHandler {
 				return $match;
 			}
 		}
+	}
+
+	public static function getParticipants($match) {
+		$con = MySQL::open(Settings::db_name_infected_compo);
+
+		$result = mysqli_query($con, 'SELECT * FROM `' . Settings::db_table_infected_compo_participantOfMatch . '` WHERE `matchId` = ' . $con->real_escape_string($match->getId()) . ' AND `type` = ' . Settings::compo_match_participant_type_clan . ';');
+	
+		$clanArray = array();
+
+		while($row = mysqli_fetch_array($result)) {
+			array_push($clanArray, ClanHandler::getClan($row['participantId']) );
+		}
+
+		MySQL::close($con);
+
+		return $clanArray;
+	}
+
+	public static function isReady($match) {
+		$con = MySQL::open(Settings::db_name_infected_compo);
+
+		$result = mysqli_query($con, 'SELECT * FROM `' . Settings::db_table_infected_compo_participantOfMatch . '` WHERE `matchId` = ' . $con->real_escape_string($match->getId()) . ';');
+
+		$hasParticipants = false;
+
+		MySQL::close($con);
+
+		while($row = mysqli_fetch_array($result)) {
+			$hasParticipants = true;
+			if($row['type'] == Settings::compo_match_participant_type_match_result) {
+				return false;
+			}
+		}
+
+		return $hasParticipants;
 	}
 }
 ?>

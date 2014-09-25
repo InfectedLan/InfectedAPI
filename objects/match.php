@@ -1,15 +1,23 @@
 <?php
+require_once 'handlers/matchhandler.php';
+require_once 'handlers/clanhandler.php';
 class Match {
+	const STATE_READYCHECK = 0;
+	const STATE_CUSTOM_PREGAME = 1;
+	const STATE_JOIN_GAME = 2;
+
 	private $id;
 	private $scheduledTime;
 	private $connectDetails;
 	private $winner;
+	private $state;
 
-	public function __construct($id, $scheduledTime, $connectDetails, $winner) {
+	public function __construct($id, $scheduledTime, $connectDetails, $winner, $state) {
 		$this->id = $id;
 		$this->scheduledTime = $scheduledTime;
 		$this->connectDetails = $connectDetails;
 		$this->winner = $winner;
+		$this->state = $state;
 	}
 
 	public function getId() {
@@ -26,6 +34,25 @@ class Match {
 
 	public function getWinner() {
 		return $this->winner;
+	}
+
+	public function getState() {
+		return $this->state;
+	}
+
+	public function isParticipant($user) {
+		//Get list of clans
+		$participants = MatchHandler::getParticipants($this);
+
+		foreach($participants as $clan) {
+			if(ClanHandler::isMember($user, $clan)) {
+				return true;
+			}
+		}
+	}
+
+	public function isReady() {
+		return MatchHandler::isReady($this);
 	}
 }
 ?>
