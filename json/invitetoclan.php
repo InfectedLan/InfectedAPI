@@ -5,7 +5,6 @@ require_once 'handlers/clanhandler.php';
 
 $result = false;
 $message = null;
-$clanId = 0;
 
 if (Session::isAuthenticated()) {
 	$user = Session::getCurrentUser();
@@ -25,6 +24,7 @@ if (Session::isAuthenticated()) {
 
 					if($inClan < $compo->getTeamSize()) {
 						ClanHandler::inviteUser($clan, $invitee);
+						$result = true;
 					} else {
 						$message = "Laget er fullt!";
 					}
@@ -44,9 +44,5 @@ if (Session::isAuthenticated()) {
 	$message = 'Du er ikke logget inn.';
 }
 
-if($result) {
-	echo json_encode(array('result' => $result, 'clanId' => $clanId));
-} else {
-	echo json_encode(array('result' => $result, 'message' => $message));
-}
+echo json_encode(array('result' => $result, 'message' => $message));
 ?>

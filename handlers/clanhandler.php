@@ -79,7 +79,7 @@ class ClanHandler {
 		$peopleArray = array();
 
 		while($row = mysqli_fetch_array($result)) {
-			array_push($peopleArray, UserHandler::getInvite($row['userId']));
+			array_push($peopleArray, UserHandler::getUser($row['userId']));
 		}
 
 		MySQL::close($con);
