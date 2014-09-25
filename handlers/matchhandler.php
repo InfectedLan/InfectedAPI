@@ -102,5 +102,31 @@ class MatchHandler {
 		}
 		return false;
 	}
+
+	public static function acceptMatch($user, $match) {
+		$con = MySQL::open(Settings::db_name_infected_compo);
+
+		$result = mysqli_query($con, 'INSERT INTO `' . Settings::db_table_infected_compo_readyusers . '` (`userId`, `matchId`) VALUES (\'' . $con->real_escape_string($user->getId()) . '\', \'' . $con->real_escape_string($match->getId()) . '\');');
+
+		MySQL::close($con);
+	}
+
+	public static function allHasAccepted($match) {
+		$con = MySQL::open(Settings::db_name_infected_compo);
+
+		$result = mysqli_query($con, 'SELECT * FROM `' . Settings::db_table_infected_compo_participantOfMatch . '` WHERE `type` = 0 AND `matchId` = ' . $con->real_escape_string($match->getId()) . ';');
+
+		//Iterate through clans
+		while($row = mysqli_fetch_array($result)) {
+			$users = mysqli_query($con, 'SELECT * FROM `' . Settings::db_table_infected_compo_memberof . '` WHERE `clanId` = ' . $row['participantId'] . ';');
+			while($userRow = mysqli_fetch_array($users)) {
+				$userCheck = mysqli_query($con, 'SELECT * FROM `' . Settings::db_table_infected_compo_readyusers . '` WHERE `userId` = ' . $userRow['userId'] . ' AND `matchId` = ' . $con->real_escape_string($match->getId()) . ';');
+			}
+		}
+
+		MySQL::close($con);
+
+		return true;
+	}
 }
 ?>

@@ -32,30 +32,36 @@ if (Session::isAuthenticated()) {
 					$clanData['clanName'] = $clan->getName();
 					$clanData['clanTag'] = $clan->getTag();
 
+					$memberData = array();
+
 					foreach($members as $member) {
 						$memberReadyStatus = array();
 
 						$memberReadyStatus['userId'] = $member->getId();
-						$memberReadyStatus['userDisplayName'] = $member->getDisplayName();
+						$memberReadyStatus['nick'] = $member->getNickname();
 
 						$avatarFile = null;		
 						if ($user->hasValidAvatar()) {
-							$avatarFile = $user->getAvatar()->getThumbnail();
+							$avatarFile = $$member->getAvatar()->getThumbnail();
 						} else {
-							$avatarFile = AvatarHandler::getDefaultAvatar($user);
+							$avatarFile = AvatarHandler::getDefaultAvatar($member);
 						}
 
 						$memberReadyStatus['avatarUrl'] = $avatarFile;
 						$memberReadyStatus['ready'] = MatchHandler::isUserReady($member, $match);
 
-						$clanData['members'] = $memberReadyStatus;
+						array_push($memberData, $memberReadyStatus);
 					}
+
+					$clanData['members'] = $memberData;
 
 					array_push($readyData, $clanData);
 				}
 
 				$matchData['readyData'] = $readyData;
 				$result = true;
+			} else if($match->getState() == Match::STATE_CUSTOM_PREGAME && $match->isReady()) {
+				
 			}
 		} else {
 			$message = "Du har ikke lov til å se på denne matchen!";

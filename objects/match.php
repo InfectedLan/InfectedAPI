@@ -1,6 +1,8 @@
 <?php
 require_once 'handlers/matchhandler.php';
 require_once 'handlers/clanhandler.php';
+require_once 'mysql.php';
+require_once 'settings.php';
 class Match {
 	const STATE_READYCHECK = 0;
 	const STATE_CUSTOM_PREGAME = 1;
@@ -54,6 +56,14 @@ class Match {
 	//Returns true if the match can be run
 	public function isReady() {
 		return MatchHandler::isReady($this);
+	}
+
+	public function setState($newState) {
+		$con = MySQL::open(Settings::db_name_infected_compo);
+
+		$result = mysqli_query($con, 'UPDATE `' . Settings::db_table_infected_compo_matches . '` SET `state` = ' . $con->real_escape_string($newState) . ' WHERE `id` = ' . $this->id . ';');
+
+		MySQL::close($con);
 	}
 }
 ?>

@@ -374,7 +374,7 @@ class User {
 	 */
 	public function isEligibleForCompos() {
 		//For now we 
-		return $this->hasTicket();
+		return $this->hasTicket() || $this->isGroupMember();
 	}
 
 	/* 

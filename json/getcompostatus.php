@@ -44,7 +44,7 @@ if (Session::isAuthenticated()) {
 
 	if(isset($match))
 	{
-		array_push($compoStatusArray, array("match" => array('id' => $match->getId() ) ) );
+		$compoStatusArray["match"] = array('id' => $match->getId() );
 	}
 
 	$result = true;
