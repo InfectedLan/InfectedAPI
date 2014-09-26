@@ -25,7 +25,7 @@ class Invite {
 	}
 
 	public function decline() {
-		$con = MySQL::open(Setttings::db_name_infected_compo);
+		$con = MySQL::open(Settings::db_name_infected_compo);
 
 		mysqli_query($con, 'DELETE FROM `' . Settings::db_table_infected_compo_invites . '` WHERE `id` = ' . $this->id . ';');
 	

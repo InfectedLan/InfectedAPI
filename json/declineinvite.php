@@ -13,7 +13,8 @@ if (Session::isAuthenticated()) {
 	if(isset($_GET['id'])) {
 		$invite = InviteHandler::getInvite($_GET['id']);
 		if(isset($invite)) {
-			if($invite->getUserId() == $user->getId()) {
+			$clan = ClanHandler::getClan($invite->getClanId());
+			if($invite->getUserId() == $user->getId() || $user->getId() == $clan->getChief()) {
 				$invite->decline();
 				$result = true;
 			} else {
