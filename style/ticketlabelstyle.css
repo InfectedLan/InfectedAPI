@@ -1,0 +1,16 @@
+body {
+text-align: center;
+
+}
+#navn {
+/*margin-top: 350px;*/
+margin-top: -39px;
+font-size: 70px;
+font-family: Arial;
+font-weight: bold;
+}
+
+#sete {
+font-size: 50px;
+margin-bottom: 450px;
+}
