@@ -121,6 +121,14 @@ class MatchHandler {
 			$users = mysqli_query($con, 'SELECT * FROM `' . Settings::db_table_infected_compo_memberof . '` WHERE `clanId` = ' . $row['participantId'] . ';');
 			while($userRow = mysqli_fetch_array($users)) {
 				$userCheck = mysqli_query($con, 'SELECT * FROM `' . Settings::db_table_infected_compo_readyusers . '` WHERE `userId` = ' . $userRow['userId'] . ' AND `matchId` = ' . $con->real_escape_string($match->getId()) . ';');
+				
+				$row = mysqli_fetch_array($userCheck);
+				if($row) {
+
+				} else {
+					return false;
+				}
+
 			}
 		}
 

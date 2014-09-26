@@ -26,6 +26,11 @@ if (Session::isAuthenticated()) {
 					if(isset($voteOption)) {
 						if($voteOption->getCompoId() == $match->getCompoId()) {
 							VoteHandler::banMap($voteOption, $match->getId());
+							//Check if state should be switched
+							$numBanned = VoteHandler::getNumBanned($match->getId());
+							if($numBanned == 6) {
+								$match->setState(2);
+							}
 							$result = true;
 						} else {
 							$message = "Dette mappet er ikke for denne compoen!";
