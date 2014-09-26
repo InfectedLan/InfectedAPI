@@ -138,5 +138,13 @@ class ClanHandler {
 
 		return $fetchedId;
 	}
+
+	public static function kickFromClan($user, $clan) {
+		$con = MySQL::open(Settings::db_name_infected_compo);
+
+		$result = mysqli_query($con, 'DELETE FROM `' . Settings::db_table_infected_compo_memberof . '` WHERE `userId` = ' . $con->real_escape_string($user->getId()) . ' AND `clanId` = ' . $con->real_escape_string($clan->getId()) . ';');
+		
+		MySQL::close($con);
+	}
 }
 ?>
