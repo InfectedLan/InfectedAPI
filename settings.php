@@ -61,6 +61,7 @@ class Settings {
 	const db_table_infected_compo_participantOfMatch = 'participantOfMatch';
 	const db_table_infected_compo_matches = 'matches';
 	const db_table_infected_compo_readyusers = 'readyUsers';
+	const db_table_infected_compo_votes =  'votes';
 	
 	/* Permissions */
     public static $permissions = array('*' 				    	   => 'Gir tilgang til absolutt alt, du er nå en udødelig administrator.',

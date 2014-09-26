@@ -14,7 +14,11 @@ if (Session::isAuthenticated()) {
 		if($match->isParticipant($user)) {
 			MatchHandler::acceptMatch($user, $match);
 			if(MatchHandler::allHasAccepted($match)) {
-				$match->setState(1);
+				if($match->getCompoId() == 1) {
+					$match->setState(1);
+				} else {
+					$match->setState(2);
+				}
 			}
 			$result = true;
 		} else {

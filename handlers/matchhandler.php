@@ -21,7 +21,7 @@ class MatchHandler {
 		MySQL::close($con);
 		
 		if($row) {
-			return new Match($row['id'], $row['scheduledTime'], $row['connectDetails'], $row['winner'], $row['state']);
+			return new Match($row['id'], $row['scheduledTime'], $row['connectDetails'], $row['winner'], $row['state'], $row['compoId']);
 		}
 	}
 

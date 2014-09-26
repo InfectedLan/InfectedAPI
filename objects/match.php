@@ -13,13 +13,15 @@ class Match {
 	private $connectDetails;
 	private $winner;
 	private $state;
+	private $compoId;
 
-	public function __construct($id, $scheduledTime, $connectDetails, $winner, $state) {
+	public function __construct($id, $scheduledTime, $connectDetails, $winner, $state, $compoId) {
 		$this->id = $id;
 		$this->scheduledTime = $scheduledTime;
 		$this->connectDetails = $connectDetails;
 		$this->winner = $winner;
 		$this->state = $state;
+		$this->compoId = $compoId;
 	}
 
 	public function getId() {
@@ -64,6 +66,10 @@ class Match {
 		$result = mysqli_query($con, 'UPDATE `' . Settings::db_table_infected_compo_matches . '` SET `state` = ' . $con->real_escape_string($newState) . ' WHERE `id` = ' . $this->id . ';');
 
 		MySQL::close($con);
+	}
+
+	public function getCompoId() {
+		return $this->compoId;
 	}
 }
 ?>
