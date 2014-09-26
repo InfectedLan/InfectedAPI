@@ -1,12 +1,12 @@
 <?php
 class Vote {
 	private $id;
-	private $userId;
+	private $consumerId;
 	private $voteOptionId;
 
-	public function __construct($id, $userId, $voteOptionId) {
+	public function __construct($id, $consumerId, $voteOptionId) {
 		$this->id = $id;
-		$this->userId = $userId;
+		$this->consumerId = $consumerId;
 		$this->voteOptionId = $voteOptionId;
 	}
 
@@ -14,8 +14,8 @@ class Vote {
 		return $this->id;
 	}
 
-	public function getUserId() {
-		return $this->userId;
+	public function getConsumerId() {
+		return $this->consumerId;
 	}
 
 	public function getVoteOptionId() {

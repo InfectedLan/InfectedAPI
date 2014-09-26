@@ -49,6 +49,7 @@ class Settings {
 	const db_table_infected_tickets_storesessions = 'storesessions';
 	const db_table_infected_tickets_tickets = 'tickets';
 	const db_table_infected_tickets_tickettypes = 'tickettypes';
+	const db_table_infected_tickets_checkinstate = 'checkinStates';
 
 	//InfectedCompo
 	const db_table_infected_compo_clans = 'clans';

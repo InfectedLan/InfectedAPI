@@ -62,6 +62,8 @@ if (Session::isAuthenticated()) {
 				$result = true;
 			} else if($match->getState() == Match::STATE_CUSTOM_PREGAME && $match->isReady()) {
 				
+
+				$result = true;
 			}
 		} else {
 			$message = "Du har ikke lov til å se på denne matchen!";

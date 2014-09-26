@@ -13,8 +13,23 @@ class VoteHandler {
 		MySQL::close($con);
 		
 		if($row) {
-			return new Vote($row['id'], $row['userId'], $row['voteOptionId']);
+			return new Vote($row['id'], $row['consumerId'], $row['voteOptionId']);
 		}
+	}
+
+	public static function isVoted($voteOption) {
+		$con = MySQL::open(Settings::db_name_infected_compo);
+
+		$result = mysqli_query($con, 'SELECT * FROM `' . Settings::db_table_infected_compo_votes . '` WHERE `voteOptionId` = '. $con->real_escape_string($voteOption->getId()) . ';');
+
+		$row = mysqli_fetch_array($result);
+
+		MySQL::close($con);
+
+		if($row) {
+			return true;
+		}
+		return false;
 	}
 }
 ?>
