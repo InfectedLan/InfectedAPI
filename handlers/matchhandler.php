@@ -59,7 +59,7 @@ class MatchHandler {
 		$con = MySQL::open(Settings::db_name_infected_compo);
 
 		//Set winner of match
-		mysqli_query($con, 'UPDATE `' . Settings::db_table_infected_matches . '` SET `winner` = ' . $con->real_escape_string($clan->getId()) . ' WHERE `id` = ' . $con->real_escape_string($match->getId()) . ';');
+		mysqli_query($con, 'UPDATE `' . Settings::db_table_infected_compo_matches . '` SET `winner` = ' . $con->real_escape_string($clan->getId()) . ' WHERE `id` = ' . $con->real_escape_string($match->getId()) . ';');
 
 		//Update match results
 		mysqli_query($con, 'UPDATE `' . Settings::db_table_infected_compo_participantOfMatch . '` SET `type` = 0, `participantId` = ' . $con->real_escape_string($clan->getId()) . ' WHERE `type` = 1 AND `participantId` = ' . $con->real_escape_string($match->getId()) . ';');

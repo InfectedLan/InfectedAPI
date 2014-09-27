@@ -44,7 +44,7 @@ if (Session::isAuthenticated()) {
 						$memberReadyStatus['nick'] = $member->getNickname();
 
 						$avatarFile = null;		
-						if ($user->hasValidAvatar()) {
+						if ($member->hasValidAvatar()) {
 							$avatarFile = $member->getAvatar()->getThumbnail();
 						} else {
 							$avatarFile = AvatarHandler::getDefaultAvatar($member);
@@ -146,9 +146,10 @@ if (Session::isAuthenticated()) {
 				}
 
 				$gameData['clans'] = $clanArray;
-				//Get map
-				if($match->getId() == 1) { //Only CS:GO
-					$compo = CompoHandler::getCompo($match->getCompoId());
+				//Get map+
+				$compo = CompoHandler::getCompo($match->getCompoId());
+				if($compo->getId() == 1) { //Only CS:GO
+					
 					$options = VoteOptionHandler::getVoteOptionsForCompo($compo);
 					foreach($options as $option) {
 						if(!VoteOptionHandler::isVoted($option, $match)) {
