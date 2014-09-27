@@ -20,6 +20,7 @@ if (Session::isAuthenticated()) {
 		if($match->isParticipant($user)|| $user->hasPermission('*') || $user->hasPermission('functions.compoadmin')) {
 			$matchData['state'] = $match->getState();
 			$matchData['ready'] = $match->isReady();
+			$matchData['compoId'] = $match->getCompoId();
 			$matchData['currentTime'] = time(); //Used for synchronizing time
 			$matchData['startTime'] = $match->getScheduledTime();
 			if($match->getState() == Match::STATE_READYCHECK && $match->isReady()) {
@@ -44,7 +45,7 @@ if (Session::isAuthenticated()) {
 
 						$avatarFile = null;		
 						if ($user->hasValidAvatar()) {
-							$avatarFile = $$member->getAvatar()->getThumbnail();
+							$avatarFile = $member->getAvatar()->getThumbnail();
 						} else {
 							$avatarFile = AvatarHandler::getDefaultAvatar($member);
 						}
@@ -113,6 +114,58 @@ if (Session::isAuthenticated()) {
 
 				$matchData['banData'] = $banData;
 				$result = true;
+			} else if($match->getState() == Match::STATE_JOIN_GAME && $match->isReady()) {
+				$gameData = array();
+				$gameData['connectDetails'] = $match->getConnectDetails();
+
+				$clanArray = array();
+				$participants = MatchHandler::getParticipants($match);
+
+				foreach($participants as $clan) {
+					$members = $clan->getMembers();
+
+					$clanData = array();
+					$clanData['clanName'] = $clan->getName();
+					$clanData['clanTag'] = $clan->getTag();
+
+					$memberData = array();
+
+					foreach($members as $member) {
+						$userData = array();
+
+						$userData['userId'] = $member->getId();
+						$userData['nick'] = $member->getNickname();
+						$userData['chief'] = ($member->getId() == $clan->getChief());
+
+						array_push($memberData, $userData);
+					}
+
+					$clanData['members'] = $memberData;
+
+					array_push($clanArray, $clanData);
+				}
+
+				$gameData['clans'] = $clanArray;
+				//Get map
+				if($match->getId() == 1) { //Only CS:GO
+					$compo = CompoHandler::getCompo($match->getCompoId());
+					$options = VoteOptionHandler::getVoteOptionsForCompo($compo);
+					foreach($options as $option) {
+						if(!VoteOptionHandler::isVoted($option, $match)) {
+							$mapData = array();
+
+							$mapData['name'] = $option->getName();
+							$mapData['thumbnail'] = $option->getThumbnailUrl();
+
+							$gameData['mapData'] = $mapData;
+							break;
+						}
+					}
+				}
+
+				$matchData['gameData'] = $gameData;
+				$result = true;
+
 			}
 		} else {
 			$message = "Du har ikke lov til å se på denne matchen!";

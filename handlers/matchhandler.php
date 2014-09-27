@@ -26,18 +26,18 @@ class MatchHandler {
 	}
 
 	public static function getMatchForClan($clan) {
-		 $con = MySQL::open(Settings::db_name_infected_compo);
+		$con = MySQL::open(Settings::db_name_infected_compo);
 
-		 $result = mysqli_query($con, 'SELECT * FROM `' . Settings::db_table_infected_compo_participantOfMatch . '` WHERE `type` = ' . Settings::compo_match_participant_type_clan . ' 
-		 						AND `participantId` = ' . $con->real_escape_string($clan->getId()) . ';');
+		$result = mysqli_query($con, 'SELECT * FROM `' . Settings::db_table_infected_compo_participantOfMatch . '` WHERE `type` = ' . Settings::compo_match_participant_type_clan . ' AND `participantId` = ' . $con->real_escape_string($clan->getId()) . ';');
 
-		 $row = mysqli_fetch_array($result);
+		MySQL::close($con);
+		while($row = mysqli_fetch_array($result)) {
+		 	$match = self::getMatch($row['matchId']);
 
-		 MySQL::close($con);
-
-		 if($row) {
-		 	return self::getMatch($row['matchId']);
-		 }
+		 	if($match->getWinner() == 0 && $match->getScheduledTime() < time()) {
+		 		return $match;
+		 	}
+		}
 	}
 
 	public static function hasClanMatch($clan) {
@@ -53,6 +53,30 @@ class MatchHandler {
 				return $match;
 			}
 		}
+	}
+
+	public static function setWinner($match, $clan) {
+		$con = MySQL::open(Settings::db_name_infected_compo);
+
+		//Set winner of match
+		mysqli_query($con, 'UPDATE `' . Settings::db_table_infected_matches . '` SET `winner` = ' . $con->real_escape_string($clan->getId()) . ' WHERE `id` = ' . $con->real_escape_string($match->getId()) . ';');
+
+		//Update match results
+		mysqli_query($con, 'UPDATE `' . Settings::db_table_infected_compo_participantOfMatch . '` SET `type` = 0, `participantId` = ' . $con->real_escape_string($clan->getId()) . ' WHERE `type` = 1 AND `participantId` = ' . $con->real_escape_string($match->getId()) . ';');
+
+		$looser = null;
+
+		$participants = self::getParticipants($match);
+
+		foreach($participants as $participant) {
+			if($participant->getId() != $clan->getId()) {
+				$looser = $participant;
+			}
+		}
+
+		mysqli_query($con, 'UPDATE `' . Settings::db_table_infected_compo_participantOfMatch . '` SET `type` = 0, `participantId` = ' . $con->real_escape_string($looser->getId()) . ' WHERE `type` = 2 AND `participantId` = ' . $con->real_escape_string($match->getId()) . ';');
+	
+		MySQL::open(Settings::db_name_infected_compo);
 	}
 
 	public static function getParticipants($match) {

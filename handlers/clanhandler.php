@@ -15,7 +15,7 @@ class ClanHandler {
 		$row = mysqli_fetch_array($result);
 		
 		MySQL::close($con);
-		
+
 		if($row) {
 			return new Clan($row['id'], $row['chief'], $row['name'], $row['event'], $row['tag']);
 		}
