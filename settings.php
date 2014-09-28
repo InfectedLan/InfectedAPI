@@ -117,6 +117,7 @@ class Settings {
 
 	//Match participant of state
 	const compo_match_participant_type_clan = 0;
-	const compo_match_participant_type_match_result = 1;
+	const compo_match_participant_type_match_winner = 1;
+	const compo_match_participant_type_match_looser = 2;
 }
 ?>

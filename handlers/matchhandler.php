@@ -25,6 +25,64 @@ class MatchHandler {
 		}
 	}
 
+	public static function getPendingMatches($compo) {
+		$con = MySQL::open(Settings::db_name_infected_compo);
+
+		$result = mysqli_query($con, 'SELECT * FROM `' . Settings::db_table_infected_compo_matches . '` WHERE `compoId` = ' . $con->real_escape_string( $compo->getId() ) . ';');
+
+		$matchList = array();
+
+		while($row = mysqli_fetch_array($result)) {
+			$match = self::getMatch($row['id']);
+			if($match->getScheduledTime() > time()) {
+				array_push($matchList, $match);
+			} else if(!self::isReady($match)) {
+				array_push($matchList, $match);
+			}
+		}
+
+		MySQL::close($con);
+
+		return $matchList;
+	}
+
+	public static function getCurrentMatches($compo) {
+		$con = MySQL::open(Settings::db_name_infected_compo);
+
+		//Picks matches that "should" be running.
+		$result = mysqli_query($con, 'SELECT * FROM `' . Settings::db_table_infected_compo_matches . '` WHERE `compoId` = ' . $con->real_escape_string( $compo->getId() ) . ' AND `winner` = 0 AND `scheduledTime` < ' . time() . ';');
+
+		$matchList = array();
+
+		while($row = mysqli_fetch_array($result)) {
+			$match = self::getMatch($row['id']);
+			if(self::isReady($match)) {
+				array_push($matchList, $match);
+			}
+		}
+
+		MySQL::close($con);
+
+		return $matchList;
+	}
+
+	public static function getFinishedMatches($compo) {
+		$con = MySQL::open(Settings::db_name_infected_compo);
+
+		//Picks matches that "should" be running.
+		$result = mysqli_query($con, 'SELECT * FROM `' . Settings::db_table_infected_compo_matches . '` WHERE `compoId` = ' . $con->real_escape_string( $compo->getId() ) . ' AND `winner` != 0;');
+
+		$matchList = array();
+
+		while($row = mysqli_fetch_array($result)) {
+			array_push($matchList, self::getMatch($row['id']));
+		}
+
+		MySQL::close($con);
+
+		return $matchList;
+	}
+
 	public static function getMatchForClan($clan) {
 		$con = MySQL::open(Settings::db_name_infected_compo);
 
@@ -95,6 +153,7 @@ class MatchHandler {
 		return $clanArray;
 	}
 
+	//Checks if the match can run(If we have enough participants. Returns false if we have to wait for earlier matches to complete)
 	public static function isReady($match) {
 		$con = MySQL::open(Settings::db_name_infected_compo);
 
@@ -106,7 +165,7 @@ class MatchHandler {
 
 		while($row = mysqli_fetch_array($result)) {
 			$hasParticipants = true;
-			if($row['type'] == Settings::compo_match_participant_type_match_result) {
+			if($row['type'] == Settings::compo_match_participant_type_match_winner || $row['type'] == Settings::compo_match_participant_type_match_looser) {
 				return false;
 			}
 		}
