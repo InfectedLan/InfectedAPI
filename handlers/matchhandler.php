@@ -153,6 +153,29 @@ class MatchHandler {
 		return $clanArray;
 	}
 
+	public static function getParticipantString($match) {
+		$con = MySQL::open(Settings::db_name_infected_compo);
+
+		$result = mysqli_query($con, 'SELECT * FROM `' . Settings::db_table_infected_compo_participantOfMatch . '` WHERE `matchId` = ' . $con->real_escape_string($match->getId()) . ';');
+
+		$stringArray = array();
+
+		while($row = mysqli_fetch_array($result)) {
+			if($result['type'] == Settings::compo_match_participant_type_match_winner) {
+				array_push($stringArray, "Winner of match " . $result['participantId']);
+			} else if($result['type'] == Settings::compo_match_participant_type_match_looser) {
+				array_push($stringArray, "Looser of match " . $result['participantId']);
+			} else if($result['type'] == Settings::compo_match_participant_type_clan) {
+				$clan = ClanHandler::getClan($result['participantId']);
+				array_push($stringArray, $clan->getName() . " (id " . $clan->getId() . ")");
+			} 
+		}
+
+		MySQL::close($con);
+
+		return $stringArray;
+	}
+
 	//Checks if the match can run(If we have enough participants. Returns false if we have to wait for earlier matches to complete)
 	public static function isReady($match) {
 		$con = MySQL::open(Settings::db_name_infected_compo);
