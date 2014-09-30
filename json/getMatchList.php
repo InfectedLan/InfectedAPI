@@ -32,6 +32,41 @@ if (Session::isAuthenticated()) {
 			}
 			$matchArray['pending'] = $pendingArray;
 
+			//Get current matches
+			$currentMatches = MatchHandler::getCurrentMatches($compo);
+
+			$currentArray = array();
+			foreach($currentMatches as $match) {
+				$matchData = array();
+
+				$matchData['id'] = $match->getId();
+				$matchData['startTime'] = $match->getScheduledTime();
+				$matchData['startString'] = date('d F H:i', $match->getScheduledTime());
+
+				$matchData['participants'] = MatchHandler::getParticipantString($match);
+
+				array_push($currentArray, $matchData);
+			}
+			$matchArray['current'] = $currentArray;
+
+			//Get finished matches
+
+			$finishedMatches = MatchHandler::getFinishedMatches($compo);
+
+			$finishedArray = array();
+			foreach($finishedMatches as $match) {
+				$matchData = array();
+
+				$matchData['id'] = $match->getId();
+				$matchData['startTime'] = $match->getScheduledTime();
+				$matchData['startString'] = date('d F H:i', $match->getScheduledTime());
+
+				$matchData['participants'] = MatchHandler::getParticipantString($match);
+
+				array_push($currentArray, $matchData);
+			}
+			$matchArray['finished'] = $finishedArray;
+
 			$result = true;
 		} else {
 			$message = 'Vi mangler felt';
