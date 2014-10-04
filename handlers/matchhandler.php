@@ -161,12 +161,12 @@ class MatchHandler {
 		$stringArray = array();
 
 		while($row = mysqli_fetch_array($result)) {
-			if($result['type'] == Settings::compo_match_participant_type_match_winner) {
-				array_push($stringArray, "Winner of match " . $result['participantId']);
-			} else if($result['type'] == Settings::compo_match_participant_type_match_looser) {
-				array_push($stringArray, "Looser of match " . $result['participantId']);
-			} else if($result['type'] == Settings::compo_match_participant_type_clan) {
-				$clan = ClanHandler::getClan($result['participantId']);
+			if($row['type'] == Settings::compo_match_participant_type_match_winner) {
+				array_push($stringArray, "Winner of match " . $row['participantId']);
+			} else if($row['type'] == Settings::compo_match_participant_type_match_looser) {
+				array_push($stringArray, "Looser of match " . $row['participantId']);
+			} else if($row['type'] == Settings::compo_match_participant_type_clan) {
+				$clan = ClanHandler::getClan($row['participantId']);
 				array_push($stringArray, $clan->getName() . " (id " . $clan->getId() . ")");
 			} 
 		}
