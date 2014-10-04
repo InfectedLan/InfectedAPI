@@ -43,7 +43,22 @@ if (Session::isAuthenticated()) {
 				$matchData['startTime'] = $match->getScheduledTime();
 				$matchData['startString'] = date('d F H:i', $match->getScheduledTime());
 
-				$matchData['participants'] = MatchHandler::getParticipantString($match);
+				$participantData = array();
+				$participantData['strings'] = MatchHandler::getParticipantString($match);
+				$participantObjects = MatchHandler::getParticipants($match);
+				$participantData['list'] = array();
+
+				foreach($participantObjects as $participant) {
+					$data = array();
+
+					$data['name'] = $participant->getName();
+					$data['id'] = $participant->getId();
+
+					array_push($participantData['list'], $data);
+				}
+
+
+				$matchData['participants'] = $participantData;
 
 				array_push($currentArray, $matchData);
 			}
