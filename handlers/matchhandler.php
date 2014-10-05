@@ -167,7 +167,7 @@ class MatchHandler {
 				array_push($stringArray, "Looser of match " . $row['participantId']);
 			} else if($row['type'] == Settings::compo_match_participant_type_clan) {
 				$clan = ClanHandler::getClan($row['participantId']);
-				array_push($stringArray, $clan->getName() . " (id " . $clan->getId() . ")");
+				array_push($stringArray, $clan->getName() . ' - ' . $clan->getTag() . " (id " . $clan->getId() . ")");
 			} 
 		}
 

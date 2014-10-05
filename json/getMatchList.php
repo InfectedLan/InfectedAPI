@@ -2,7 +2,7 @@
 require_once 'session.php';
 require_once 'handlers/userhandler.php';
 require_once 'handlers/matchhandler.php';
-require_once 'handlers/matchhandler.php';
+require_once 'handlers/clanhandler.php';
 
 $result = false;
 $message = null;
@@ -25,6 +25,7 @@ if (Session::isAuthenticated()) {
 				$matchData['id'] = $match->getId();
 				$matchData['startTime'] = $match->getScheduledTime();
 				$matchData['startString'] = date('d F H:i', $match->getScheduledTime());
+				$matchData['connectData'] = $match->getConnectDetails();
 
 				$matchData['participants'] = MatchHandler::getParticipantString($match);
 
@@ -42,6 +43,7 @@ if (Session::isAuthenticated()) {
 				$matchData['id'] = $match->getId();
 				$matchData['startTime'] = $match->getScheduledTime();
 				$matchData['startString'] = date('d F H:i', $match->getScheduledTime());
+				$matchData['connectData'] = $match->getConnectDetails();
 
 				$participantData = array();
 				$participantData['strings'] = MatchHandler::getParticipantString($match);
@@ -53,6 +55,7 @@ if (Session::isAuthenticated()) {
 
 					$data['name'] = $participant->getName();
 					$data['id'] = $participant->getId();
+					$data['tag'] = $participant->getTag();
 
 					array_push($participantData['list'], $data);
 				}
@@ -75,10 +78,20 @@ if (Session::isAuthenticated()) {
 				$matchData['id'] = $match->getId();
 				$matchData['startTime'] = $match->getScheduledTime();
 				$matchData['startString'] = date('d F H:i', $match->getScheduledTime());
+				$matchData['connectData'] = $match->getConnectDetails();
+
+				//Winner stuff
+				$winnerArray = array();
+
+					$winnerArray['id'] = $match->getWinner();
+					$clan = ClanHandler::getClan($match->getWinner());
+					$winnerArray['name'] = $clan->getName() . ' - ' . $clan->getTag();
+
+				$matchData['winner'] = $winnerArray;
 
 				$matchData['participants'] = MatchHandler::getParticipantString($match);
 
-				array_push($currentArray, $matchData);
+				array_push($finishedArray, $matchData);
 			}
 			$matchArray['finished'] = $finishedArray;
 
