@@ -44,6 +44,7 @@ if (Session::isAuthenticated()) {
 				$matchData['startTime'] = $match->getScheduledTime();
 				$matchData['startString'] = date('d F H:i', $match->getScheduledTime());
 				$matchData['connectData'] = $match->getConnectDetails();
+				$matchData['state'] = $match->getState();
 
 				$participantData = array();
 				$participantData['strings'] = MatchHandler::getParticipantString($match);
