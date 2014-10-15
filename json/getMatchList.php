@@ -90,7 +90,23 @@ if (Session::isAuthenticated()) {
 
 				$matchData['winner'] = $winnerArray;
 
-				$matchData['participants'] = MatchHandler::getParticipantString($match);
+				//$matchData['participants'] = MatchHandler::getParticipantString($match);
+
+				$participantData = array();
+				$participantData['list'] = array();
+
+				foreach($participantObjects as $participant) {
+					$data = array();
+
+					$data['name'] = $participant->getName();
+					$data['id'] = $participant->getId();
+					$data['tag'] = $participant->getTag();
+
+					array_push($participantData['list'], $data);
+				}
+
+
+				$matchData['participants'] = $participantData;
 
 				array_push($finishedArray, $matchData);
 			}
