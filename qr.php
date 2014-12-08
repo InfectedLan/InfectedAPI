@@ -1,5 +1,5 @@
 <?php
-require_once 'phpqrcode/qrlib.php';
+require_once 'libraries/phpqrcode/qrlib.php';
 require_once 'settings.php';
 
 class QR {
