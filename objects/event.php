@@ -1,5 +1,6 @@
 <?php
 require_once 'handlers/locationhandler.php';
+require_once 'handlers/seatmaphandler.php';
 require_once 'handlers/tickethandler.php';
 require_once 'handlers/tickettypehandler.php';
 require_once 'handlers/storesessionhandler.php';
@@ -78,7 +79,7 @@ class Event {
 	}
 
 	public function getSeatmap() {
-		return $this->seatmap;
+		return SeatmapHandler::getSeatmap($this->seatmap);
 	}
 
 	public function getTicketType() {

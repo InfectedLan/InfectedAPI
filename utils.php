@@ -1,15 +1,15 @@
 <?php
 class Utils {
 	public static function getDayFromInt($day) {
-		$dayList = array('Mandag', 
+		$dayList = array('Søndag',
+						 'Mandag', 
 						 'Tirsdag', 
 						 'Onsdag', 
 						 'Torsdag', 
 						 'Fredag', 
-						 'Lørdag',
-						 'Søndag');
+						 'Lørdag');
 		
-		return $dayList[$day - 1];
+		return $dayList[$day];
 	}
 	
 	public static function getMonthFromInt($month) {

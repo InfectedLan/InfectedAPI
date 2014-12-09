@@ -5,40 +5,40 @@ require_once 'objects/storesession.php';
 require_once 'handlers/tickethandler.php';
 require_once 'handlers/tickettypehandler.php';
 
-class StoreSessionHandler
-{
+class StoreSessionHandler {
 	public static function getStoreSession($id) {
 		$con = MySQL::open(Settings::db_name_infected_tickets);
 
-		$result = mysqli_query($con, 'SELECT * FROM `' . Settings::db_table_infected_tickets_storesessions . '` WHERE `id`=' . $con->real_escape_string($id) . ';');
+		$result = mysqli_query($con, 'SELECT * FROM `' . Settings::db_table_infected_tickets_storesessions . '` 
+									  WHERE `id` = ' . $con->real_escape_string($id) . ';');
 		
 		$row = mysqli_fetch_array($result);
 
 		MySQL::close($con);
 
-		if($row) {
+		if ($row) {
 			return new StoreSession($row['id'], 
 									$row['userId'], 
-									$row['timeCreated'],
 									$row['ticketType'],
 									$row['amount'],
 									$row['code'],
-									$row['price']);
+									$row['price'],
+									$row['datetime']);
 		}
 	}
 	
 	public static function registerStoreSession($user, $type, $amount, $price) {
+		$code = bin2hex(openssl_random_pseudo_bytes(16));
+	
 		$con = MySQL::open(Settings::db_name_infected_tickets);
 
-		$code = md5(time() . $user->getId() . "123"); // TODO: Replace with fancy openssl function.
-
-		$result = mysqli_query($con, 'INSERT INTO `' . Settings::db_table_infected_tickets_storesessions . '` (`userId`, `timeCreated`, `ticketType`, `amount`, `code`, `price`) 
-									  VALUES (' . $con->real_escape_string($user->getId()) . ', 
-											  ' . $con->real_escape_string(time()) . ', 
-											  ' . $con->real_escape_string($type->getId()) . ', 
-											  ' . $con->real_escape_string($amount) . ', 
-											  \'' . $con->real_escape_string($code) . '\',
-											  ' . $con->real_escape_string($price) .  ')');
+		$result = mysqli_query($con, 'INSERT INTO `' . Settings::db_table_infected_tickets_storesessions . '` (`userId`, `ticketType`, `amount`, `code`, `price`, `datetime`) 
+									  VALUES (\'' . $con->real_escape_string($user->getId()) . '\', 
+											  \'' . $con->real_escape_string($type->getId()) . '\', 
+											  \'' . $con->real_escape_string($amount) . '\', 
+											  \'' . $code . '\',
+											  \'' . $con->real_escape_string($price) . '\',
+											  \'' . $con->real_escape_string(date('Y-m-d H:i:s')) . '\');');
 
 		MySQL::close($con);
 
@@ -50,20 +50,19 @@ class StoreSessionHandler
 
 		$result = mysqli_query($con, 'SELECT `id` FROM `' . Settings::db_table_infected_tickets_storesessions . '` 
 									  WHERE `userId` = ' . $con->real_escape_string($user->getId()) . ' 
-									  AND `timeCreated` > ' . self::oldestValidTimestamp() . ';');
+									  AND `datetime` > ' . self::oldestValidTimestamp() . ';');
 
 		$row = mysqli_fetch_array($result);
 
 		MySQL::close($con);
 
-		if($row) {
+		if ($row) {
 			return self::getStoreSession($row['id']);
 		}
 	}
 
 	//Used to validate a payment
-	public static function isPaymentValid($totalPrice, $session)
-	{
+	public static function isPaymentValid($totalPrice, $session) {
 		return $totalPrice == $session->getPrice();
 	}
 	
@@ -76,7 +75,7 @@ class StoreSessionHandler
 
 		$result = mysqli_query($con, 'SELECT `amount` FROM `' . Settings::db_table_infected_tickets_storesessions . '` 
 									  WHERE `ticketType` = ' . $con->real_escape_string($ticketType->getId()) . ' 
-									  AND `timeCreated` > ' . self::oldestValidTimestamp() . ';');
+									  AND `datetime` > ' . self::oldestValidTimestamp() . ';');
 
 		$reservedCount = 0;
 
@@ -90,7 +89,7 @@ class StoreSessionHandler
 	}
 
 	private static function oldestValidTimestamp() {
-		return time() - Settings::storeSessionTime;
+		return date('Y-m-d H:i:s') - Settings::storeSessionTime;
 	}
 
 	public static function deleteStoreSession($storeSession) {
@@ -107,7 +106,7 @@ class StoreSessionHandler
 
 		$result = mysqli_query($con, 'SELECT `id` FROM `' . Settings::db_table_infected_tickets_storesessions . '` 
 									  WHERE `code` = ' . $con->real_escape_string($code) . ' 
-									  AND `timeCreated` > ' . self::oldestValidTimestamp() . ';');
+									  AND `datetime` > ' . self::oldestValidTimestamp() . ';');
 
 		$row = mysqli_fetch_array($result);
 
@@ -123,13 +122,13 @@ class StoreSessionHandler
 
 		$result = mysqli_query($con, 'SELECT `userId` FROM `' . Settings::db_table_infected_tickets_storesessions . '` 
 									  WHERE `code`=' . $con->real_escape_string($code) . ' 
-									  AND `timeCreated` > ' . self::oldestValidTimestamp() . ';');
+									  AND `datetime` > ' . self::oldestValidTimestamp() . ';');
 
 		$row = mysqli_fetch_array($result);
 
 		MySQL::close($con);
 
-		if($row) {
+		if ($row) {
 			return $row['userId'];
 		}
 	}

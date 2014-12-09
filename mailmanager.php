@@ -1,6 +1,6 @@
 <?php
 require_once 'settings.php';
-require_once 'phpmailer/PHPMailerAutoload.php';
+require_once 'libraries/phpmailer/PHPMailerAutoload.php';
 
 class MailManager {
 	public static function sendMail($user, $subject, $message) {

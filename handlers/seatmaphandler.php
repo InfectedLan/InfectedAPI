@@ -96,7 +96,7 @@ class SeatmapHandler {
 
 		MySQL::close($con);
 
-		if($row) {
+		if ($row) {
 			return EventHandler::getEvent($row['id']);
 		}
 	}

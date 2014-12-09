@@ -28,6 +28,7 @@ class SeatHandler {
 	 */
 	public static function getHumanString($seat) {
 		$row = $seat->getRow();
+		
 		return 'R' . $row->getNumber() . ' S' . $seat->getNumber();
 	}
 
@@ -63,7 +64,7 @@ class SeatHandler {
 
 		MySQL::close($con);
 
-		if($row) {
+		if ($row) {
 			return UserHandler::getUser($row['ownerId']);
 		}		
 	}

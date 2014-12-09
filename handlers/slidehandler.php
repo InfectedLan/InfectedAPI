@@ -27,9 +27,12 @@ class SlideHandler {
 	public static function getSlides() {
 		$con = MySQL::open(Settings::db_name_infected_main);
 		
-		$result = mysqli_query($con, 'SELECT `id` 
-									  FROM `' . Settings::db_table_infected_main_slides . '` 
+		$result = mysqli_query($con, 'SELECT `id` FROM `' . Settings::db_table_infected_main_slides . '`
+									  WHERE `start` <= NOW()
+									  AND `end` >= NOW()
+									  AND `published` = 1
 									  ORDER BY `start`;');
+									  
 		$slideList = array();
 		
 		while ($row = mysqli_fetch_array($result)) {

@@ -79,13 +79,13 @@ class RowHandler {
 	
 	public static function safeToDelete($row) {
 		$seats = self::getSeats($row);
-		foreach($seats as $seat)
-		{
-			if(SeatHandler::hasOwner($seat))
-			{
+		
+		foreach($seats as $seat) {
+			if (SeatHandler::hasOwner($seat)) {
 				return false;
 			}
 		}
+		
 		return true;
 	}
 	
