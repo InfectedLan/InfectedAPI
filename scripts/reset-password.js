@@ -1,7 +1,7 @@
 $(document).ready(function() {
 	$('.request-reset-password').submit(function(e) {
 		e.preventDefault();
-	    $.getJSON('../api/json/resetPassword.php' + '?' + $(this).serialize(), function(data){
+	    $.getJSON('../api/json/user/resetUserPassword.php' + '?' + $(this).serialize(), function(data){
 			if (data.result) {
 				$(location).attr('href', '.');
 			} else {
@@ -12,7 +12,7 @@ $(document).ready(function() {
 	
 	$('.reset-password').submit(function(e) {
 		e.preventDefault();
-		$.getJSON('../api/json/resetPassword.php' + '?' + $(this).serialize(), function(data){
+		$.getJSON('../api/json/user/resetUserPassword.php' + '?' + $(this).serialize(), function(data){
 			if (data.result) {
 				$(location).attr('href', '.');
 			} else {

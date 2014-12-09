@@ -1,5 +1,5 @@
 function logout() {
-	$.getJSON('../api/json/logout.php', function(data){
+	$.getJSON('../api/json/session/logout.php', function(data){
 		if (data.result) {
 			location.reload();
 		} else {

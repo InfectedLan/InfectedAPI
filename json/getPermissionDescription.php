@@ -4,6 +4,7 @@ require_once 'handlers/permissionshandler.php';
 
 $message = null;
 
+// TODO: This should not be stored in the database as this is constant information, we'll have to move this to some static variable.
 if (Session::isAuthenticated()) {
 	$user = Session::getCurrentUser();
 	
