@@ -180,9 +180,9 @@ class TicketHandler {
 		$con = MySQL::open(Settings::db_name_infected_tickets);
 
 		$result = mysqli_query($con, 'INSERT INTO `' . Settings::db_table_infected_tickets_tickets . '` (`ownerId`, `eventId`, `typeId`) 
-									  VALUES (' . $con->real_escape_string($user->getId()) . ', 
-											  ' . $con->real_escape_string($currentEvent->getId()) . ', 
-											  ' . $con->real_escape_string($ticketType->getId()) . ');');
+									  VALUES (\'' . $con->real_escape_string($user->getId()) . ', 
+											  \'' . $con->real_escape_string($currentEvent->getId()) . ', 
+											  \''. $con->real_escape_string($ticketType->getId()) . ');');
 
 		MySQL::close($con);
 	}	
