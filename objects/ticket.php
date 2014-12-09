@@ -9,8 +9,8 @@ require_once 'handlers/seathandler.php';
 class Ticket {
 	private $id;
 	private $eventId;
-	private $ownerId;
 	private $typeId;
+	private $userId;
 	private $seatId;
 	private $seaterId;
 
@@ -25,11 +25,11 @@ class Ticket {
 	 * User: User account that will be using the ticket
 	 * Seater: User account that can seat this ticket
 	 */
-	public function __construct($id, $eventId, $ownerId, $typeId, $seatId, $seaterId) {
+	public function __construct($id, $eventId, $typeId, $userId, $seatId, $seaterId) {
 		$this->id = $id;
 		$this->eventId = $eventId;
-		$this->ownerId = $ownerId;
 		$this->typeId = $typeId;
+		$this->userId = $userId;
 		$this->seatId = $seatId;
 		$this->seaterId = $seaterId;
 	}
@@ -49,21 +49,19 @@ class Ticket {
 	}
 
 	/*
-	 * Rerturns the owner of this ticket.
-	 *
-	 * The owner is the user account that purchased the ticket.
-	 */
-	public function getOwner() {
-		return UserHandler::getUser($this->ownerId);
-	}
-
-	/*
 	 * Returns the ticket type
 	 */
 	public function getType() {
 		return TicketTypeHandler::getTicketType($this->typeId);
 	}
 
+	/*
+	 * Returns the user of this ticket.
+	 */
+	public function getUser() {
+		return UserHandler::getUser($this->userId);
+	}
+	
 	/*
 	 * Returns the seat that this ticket is seated at
 	 */
@@ -96,7 +94,8 @@ class Ticket {
 	}
 
 	public function canSeat($user) {
-		return ($this->ownerId == $user->getId() && $this->seaterId == 0) || $this->seaterId == $user->getId();
+		return ($this->ownerId == $user->getId() && 
+				$this->seaterId == 0) || $this->seaterId == $user->getId();
 	}
 }
 ?>
