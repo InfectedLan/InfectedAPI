@@ -4,7 +4,6 @@ class Settings {
 	const name = 'Infected';
 	const description = 'Infected er et av Akershus største datatreff (LAN-party), og holder til i kulturhuset i Asker kommune.';
 	const keywords = 'infected, lan, party, asker, kulturhus, ungdom, gaming';
-	public static $authors = array('halvors', 'petterroea');
 	
 	/* Database */
 	const db_host = 'localhost';
