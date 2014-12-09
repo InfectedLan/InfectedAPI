@@ -22,7 +22,7 @@ class StoreSessionHandler {
 									$row['ticketType'],
 									$row['amount'],
 									$row['code'],
-									$row['price']
+									$row['price'],
 									$row['datetime']);
 		}
 	}
