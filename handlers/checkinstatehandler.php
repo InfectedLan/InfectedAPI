@@ -16,7 +16,8 @@ class CheckinStateHandler {
 		
 		if ($row) {
 			return new CheckinState($row['id'], 
-									$row['ticketId']);
+									$row['ticketId'],
+									$row['userId']);
 		}
 	}
 
