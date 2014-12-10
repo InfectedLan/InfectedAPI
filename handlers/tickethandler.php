@@ -22,7 +22,8 @@ class TicketHandler {
 		if ($row) {
 			return new Ticket($row['id'],
 							  $row['eventId'], 
-							  $row['typeId'], 
+							  $row['typeId'],
+							  $row['ownerId'],							  
 							  $row['userId'],
 							  $row['seatId'],
 							  $row['seaterId']);
@@ -192,7 +193,7 @@ class TicketHandler {
 
 		$con = MySQL::open(Settings::db_name_infected_tickets);
 
-		$result = mysqli_query($con, 'INSERT INTO `' . Settings::db_table_infected_tickets_tickets . '` (`ownerId`, `eventId`, `typeId`) 
+		$result = mysqli_query($con, 'INSERT INTO `' . Settings::db_table_infected_tickets_tickets . '` (`userId`, `eventId`, `typeId`) 
 									  VALUES (\'' . $con->real_escape_string($user->getId()) . ', 
 											  \'' . $con->real_escape_string($currentEvent->getId()) . ', 
 											  \''. $con->real_escape_string($ticketType->getId()) . ');');
@@ -203,7 +204,7 @@ class TicketHandler {
 	public static function getTicketsSeatableByUser($user, $event) {
 		$con = MySQL::open(Settings::db_name_infected_tickets);
 
-		$result = mysqli_query($con, 'SELECT `id` FROM `' . Settings::db_table_infected_tickets_tickets . '` WHERE (`seaterId`=' . $con->real_escape_string($user->getId()) . ' OR (`ownerId`=' . $con->real_escape_string($user->getId()) . ' AND `seaterId` = 0) ) AND `eventId`=' . $con->real_escape_string($event->getId()) . ';');
+		$result = mysqli_query($con, 'SELECT `id` FROM `' . Settings::db_table_infected_tickets_tickets . '` WHERE (`seaterId`=' . $con->real_escape_string($user->getId()) . ' OR (`userId`=' . $con->real_escape_string($user->getId()) . ' AND `seaterId` = 0) ) AND `eventId`=' . $con->real_escape_string($event->getId()) . ';');
 	
 		$ticketList = array();
 

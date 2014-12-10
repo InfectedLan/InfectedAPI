@@ -10,6 +10,7 @@ class Ticket {
 	private $id;
 	private $eventId;
 	private $typeId;
+	private $ownerId;
 	private $userId;
 	private $seatId;
 	private $seaterId;
@@ -25,10 +26,11 @@ class Ticket {
 	 * User: User account that will be using the ticket
 	 * Seater: User account that can seat this ticket
 	 */
-	public function __construct($id, $eventId, $typeId, $userId, $seatId, $seaterId) {
+	public function __construct($id, $eventId, $typeId, $ownerId, $userId, $seatId, $seaterId) {
 		$this->id = $id;
 		$this->eventId = $eventId;
 		$this->typeId = $typeId;
+		$this->ownerId = $ownerId;
 		$this->userId = $userId;
 		$this->seatId = $seatId;
 		$this->seaterId = $seaterId;
@@ -55,6 +57,13 @@ class Ticket {
 		return TicketTypeHandler::getTicketType($this->typeId);
 	}
 
+	/*
+	 * Returns the owner of this ticket, also who bought/got it in the first place.
+	 */
+	public function getOwner() {
+		return UserHandler::getUser($this->ownerId);
+	}
+	
 	/*
 	 * Returns the user of this ticket.
 	 */
