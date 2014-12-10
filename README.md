@@ -1,7 +1,6 @@
-Infected.no API
+Infected API
 ===============
 
-API used by infected.no
-
+This is the backend currently used by infected.no.
 
 ![Fuck you, missing code](http://i.imgur.com/BkS0Y.jpg)
