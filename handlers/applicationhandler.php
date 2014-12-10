@@ -25,7 +25,8 @@ class ApplicationHandler {
 								   $row['content'], 
 								   $row['datetime'], 
 								   $row['state'], 
-								   $row['reason']);
+								   $row['reason'],
+								   $row['queued']);
 		}
 	}
 	
@@ -197,6 +198,32 @@ class ApplicationHandler {
 							SET `state` =  \'3\', 
 								`reason` = \'' . $con->real_escape_string($reason) . '\'
 							WHERE `id` = \'' . $con->real_escape_string($id) . '\';');
+									
+		MySQL::close($con);
+	}
+	
+	/*
+	 * Adds an application to the queue.
+	 */
+	public static function queue($id) {
+		$con = MySQL::open(Settings::db_name_infected_crew);
+		
+		mysqli_query($con, 'UPDATE `' . Settings::db_table_infected_crew_applications . '` 
+							SET `queued` =  \'1\'
+							WHERE `id` = \'' . $id . '\';');
+									
+		MySQL::close($con);
+	}
+	
+	/*
+	 * Removes an application to the queue.
+	 */
+	public static function unqueue($id) {
+		$con = MySQL::open(Settings::db_name_infected_crew);
+		
+		mysqli_query($con, 'UPDATE `' . Settings::db_table_infected_crew_applications . '` 
+							SET `queued` =  \'0\'
+							WHERE `id` = \'' . $id . '\';');
 									
 		MySQL::close($con);
 	}

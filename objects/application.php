@@ -12,8 +12,9 @@ class Application {
 	private $datetime;
 	private $state;
 	private $reason;
+	private $queued;
 	
-	public function __construct($id, $eventId, $userId, $groupId, $content, $datetime, $state, $reason) {
+	public function __construct($id, $eventId, $userId, $groupId, $content, $datetime, $state, $reason, $queued) {
 		$this->id = $id;
 		$this->eventId = $eventId;
 		$this->userId = $userId;
@@ -22,6 +23,7 @@ class Application {
 		$this->datetime = $datetime;
 		$this->state = $state;
 		$this->reason = $reason;
+		$this->queued = $queued;
 	}
 	
 	public function getId() {
@@ -54,6 +56,10 @@ class Application {
 	
 	public function getReason() {
 		return $this->reason;
+	}
+	
+	public function isQueued() {
+		return $this->queued ? true : false;
 	}
 }
 ?>
