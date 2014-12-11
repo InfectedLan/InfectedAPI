@@ -13,7 +13,9 @@ if (Session::isAuthenticated()) {
 		$user->isGroupLeader()) {
 		if (isset($_GET['id']) &&
 			is_numeric($_GET['id'])) {
-			ApplicationHandler::removeApplication($_GET['id']);
+			$application = ApplicationHandler::getApplication($_GET['id']);
+			
+			ApplicationHandler::removeApplication($application);
 			$result = true;
 		} else {
 			$message = 'Ingen søknad spesifisert.';

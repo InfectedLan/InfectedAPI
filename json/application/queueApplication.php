@@ -15,7 +15,7 @@ if (Session::isAuthenticated()) {
 			is_numeric($_GET['id'])) {
 			$application = ApplicationHandler::getApplication($_GET['id']);
 			
-			ApplicationHandler::queue($_GET['id']);
+			ApplicationHandler::queue($application);
 			$result = true;
 		} else {
 			$message = 'Ingen søknad spesifisert.';

@@ -15,11 +15,12 @@ if (Session::isAuthenticated()) {
 			is_numeric($_GET['id'])) {
 			$id = $_GET['id'];
 			
-			if (isset($_GET['reason']) &&
-				!empty($_GET['reason'])) {
-				$reason = $_GET['reason'];
+			if (isset($_GET['comment']) &&
+				!empty($_GET['comment'])) {
+				$application = ApplicationHandler::getApplication($_GET['id']);
+				$comment = $_GET['comment'];
 			
-				ApplicationHandler::rejectApplication($id, $reason);
+				ApplicationHandler::rejectApplication($application, $comment);
 				$result = true;
 			} else {
 				$message = 'Du har ikke oppgitt noen grunn på hvorfor søkneden skal bli avvist.';

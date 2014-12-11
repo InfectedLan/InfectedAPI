@@ -22,11 +22,10 @@ if (Session::isAuthenticated()) {
 					isset($_GET['content']) &&
 					is_numeric($_GET['groupId']) &&
 					!empty($_GET['content'])) {
-					
 					$group = GroupHandler::getGroup($_GET['groupId']);
 					$content = $_GET['content'];
 					
-					ApplicationHandler::createApplication($event, $user, $group, $content);
+					ApplicationHandler::createApplication($event, $group, $user, $content);
 					
 					$result = true;
 					$message = 'Din søknad til crewet "' . $group->getTitle() . '" er nå sendt.';

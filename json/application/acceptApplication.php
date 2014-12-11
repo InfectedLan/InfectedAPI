@@ -13,7 +13,10 @@ if (Session::isAuthenticated()) {
 		$user->isGroupLeader()) {
 		if (isset($_GET['id']) &&
 			is_numeric($_GET['id'])) {
-			ApplicationHandler::acceptApplication($_GET['id']);
+			$application = ApplicationHandler::getApplication($_GET['id']);
+			$comment = $_GET['comment'];
+			
+			ApplicationHandler::acceptApplication($application, $comment);
 			$result = true;
 		} else {
 			$message = 'Ingen søknad spesifisert.';
