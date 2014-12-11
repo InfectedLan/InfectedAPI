@@ -203,6 +203,49 @@ class ApplicationHandler {
 	}
 	
 	/*
+	 * Returns a list of all queued applications.
+	 */
+	public static function getQueuedApplications() {
+		$con = MySQL::open(Settings::db_name_infected_crew);
+		
+		$result = mysqli_query($con, 'SELECT `id` FROM `' . Settings::db_table_infected_crew_applications . '`
+									  WHERE `queued` = 1
+									  ORDER BY `id`;');
+		
+		$queuedApplicationList = array();
+		
+		while ($row = mysqli_fetch_array($result)) {
+			array_push($queuedApplicationList, self::getApplication($row['id']));
+		}
+		
+		MySQL::close($con);
+		
+		return $queuedApplicationList;
+	}
+	
+	/*
+	 * Returns a list of all queued applications.
+	 */
+	public static function getQueuedApplicationsForGroup($group) {
+		$con = MySQL::open(Settings::db_name_infected_crew);
+		
+		$result = mysqli_query($con, 'SELECT `id` FROM `' . Settings::db_table_infected_crew_applications . '`
+									  WHERE `groupId` = \'' . $con->real_escape_string($group->getId()) .  '\'
+									  and `queued` = 1
+									  ORDER BY `id`;');
+		
+		$queuedApplicationList = array();
+		
+		while ($row = mysqli_fetch_array($result)) {
+			array_push($queuedApplicationList, self::getApplication($row['id']));
+		}
+		
+		MySQL::close($con);
+		
+		return $queuedApplicationList;
+	}
+	
+	/*
 	 * Adds an application to the queue.
 	 */
 	public static function queue($id) {
