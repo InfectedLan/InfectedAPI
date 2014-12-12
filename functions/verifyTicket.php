@@ -18,7 +18,7 @@ echo '<html>';
 						$ticket = TicketHandler::getTicket($_GET['id']);
 
 						if(!CheckinStateHandler::isCheckedIn($ticket)) {
-							echo "$.getJSON('../json/getticketdata.php?id=" . htmlentities($_GET['id'], ENT_QUOTES, 'UTF-8') . "', function(data){";
+							echo "$.getJSON('../json/ticket/getTicketData.php?id=" . htmlentities($_GET['id'], ENT_QUOTES, 'UTF-8') . "', function(data){";
 								echo "if(data.result == true) {";
 									echo 'if(confirm("Sjekk at disse detaljene er riktige:\\nNavn: " + data.userData.fullName + "\\nKjønn: " + data.userData.gender + "\\nFødt: " + data.userData.birthDate + "\\nAlder: " + data.userData.age)) {';
 										echo "$.getJSON('../json/checkinticket.php?id=" . htmlentities($_GET['id'], ENT_QUOTES, 'UTF-8') . "', function(data){";

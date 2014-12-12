@@ -14,7 +14,7 @@ if (Session::isAuthenticated()) {
 		if (isset($_GET['id']) &&
 			is_numeric($_GET['id'])) {
 			$application = ApplicationHandler::getApplication($_GET['id']);
-			$comment = $_GET['comment'];
+			$comment = isset($_GET['comment']) ? $_GET['comment'] : null;
 			
 			ApplicationHandler::acceptApplication($application, $comment);
 			$result = true;

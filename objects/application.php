@@ -11,11 +11,10 @@ class Application {
 	private $openedTime;
 	private $closedTime;
 	private $state;
-	private $queued;
 	private $content;
 	private $comment;
 	
-	public function __construct($id, $eventId, $groupId, $userId, $openedTime, $closedTime, $state, $queued, $content, $comment) {
+	public function __construct($id, $eventId, $groupId, $userId, $openedTime, $closedTime, $state, $content, $comment) {
 		$this->id = $id;
 		$this->eventId = $eventId;
 		$this->groupId = $groupId;
@@ -23,7 +22,6 @@ class Application {
 		$this->openedTime = $openedTime;
 		$this->closedTime = $closedTime;
 		$this->state = $state;
-		$this->queued = $queued;
 		$this->content = $content;
 		$this->comment = $comment;
 	}
@@ -57,7 +55,7 @@ class Application {
 	}
 	
 	public function isQueued() {
-		return $this->queued ? true : false;
+		return ApplicationHandler::isQueued($this);
 	}
 	
 	public function getContent() {

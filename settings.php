@@ -32,6 +32,7 @@ class Settings {
 	const db_table_infected_main_slides = 'slides';
 	
 	// InfectedCrew
+	const db_table_infected_crew_applicationqueue = 'applicationqueue';
 	const db_table_infected_crew_applications = 'applications';
 	const db_table_infected_crew_avatars = 'avatars';
 	const db_table_infected_crew_groups = 'groups';
