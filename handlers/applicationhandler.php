@@ -5,7 +5,7 @@ require_once 'objects/application.php';
 
 class ApplicationHandler {
 	/* 
-	 * Get an application by it's internal id.
+	 * Get an application by it's internal id (No matter event).
 	 */
 	public static function getApplication($id) {
 		$con = MySQL::open(Settings::db_name_infected_crew);
@@ -31,7 +31,7 @@ class ApplicationHandler {
 	}
 	
 	/*
-	 * Returns a list of all applications.
+	 * Returns a list of all applications (For all events)
 	 */
 	public static function getApplications() {
 		$con = MySQL::open(Settings::db_name_infected_crew);
@@ -59,6 +59,7 @@ class ApplicationHandler {
 								      LEFT JOIN `' . Settings::db_table_infected_crew_applicationqueue . '`
 									  ON `' . Settings::db_table_infected_crew_applications . '`.`id` = `applicationId`
 									  WHERE `applicationId` IS NULL
+									  AND `eventId` = \'' . EventHandler::getCurrentEvent()->getId() . '\'
 									  AND `state` = \'1\'
 									  ORDER BY `openedTime`;');
 		
@@ -83,6 +84,7 @@ class ApplicationHandler {
 								      LEFT JOIN `' . Settings::db_table_infected_crew_applicationqueue . '`
 									  ON `' . Settings::db_table_infected_crew_applications . '`.`id` = `applicationId`
 									  WHERE `applicationId` IS NULL
+									  AND `eventId` = \'' . EventHandler::getCurrentEvent()->getId() . '\'
 									  AND `groupId` = \'' . $con->real_escape_string($group->getId()) .  '\'
 									  AND `state` = \'1\'
 									  ORDER BY `openedTime`;');
@@ -108,6 +110,7 @@ class ApplicationHandler {
 									  LEFT JOIN `' . Settings::db_table_infected_crew_applicationqueue . '`
 								      ON `' . Settings::db_table_infected_crew_applications . '`.`id` = `applicationId`
 									  WHERE `applicationId` IS NOT NULL
+									  AND `eventId` = \'' . EventHandler::getCurrentEvent()->getId() . '\'
 									  AND `state` = \'1\'
 									  ORDER BY `' . Settings::db_table_infected_crew_applicationqueue . '`.`id`;');
 		
@@ -132,6 +135,7 @@ class ApplicationHandler {
 									  LEFT JOIN `' . Settings::db_table_infected_crew_applicationqueue . '`
 									  ON `' . Settings::db_table_infected_crew_applications . '`.`id` = `applicationId`
 									  WHERE `applicationId` IS NOT NULL
+									  AND `eventId` = \'' . EventHandler::getCurrentEvent()->getId() . '\'
 									  AND `groupId` = \'' . $con->real_escape_string($group->getId()) .  '\'
 									  AND `state` = \'1\'
 									  ORDER BY `' . Settings::db_table_infected_crew_applicationqueue . '`.`id`;');
