@@ -10,29 +10,29 @@ class Ticket {
 	private $id;
 	private $eventId;
 	private $typeId;
-	private $ownerId;
-	private $userId;
 	private $seatId;
+	private $buyerId;
+	private $userId;
 	private $seaterId;
 
 	/*
 	 * Ticket - implementation of backend ticket db.
 	 * 
 	 * Id: Unique id of ticket
-	 * Event_Id: Id of event ticket is connected to
-	 * Owner: User that owns the ticket
-	 * Type: Ticket type. Object.
-	 * Seat: Object of seat ticket is seated on
-	 * User: User account that will be using the ticket
-	 * Seater: User account that can seat this ticket
+	 * Event Id: Id of event ticket is connected to
+	 * Type Id: Ticket type. Object.
+	 * Seat Id: Object of seat ticket is seated on
+	 * Buyer Id: User that bought the ticket
+	 * User Id: User account that will be using the ticket
+	 * Seater Id: User account that can seat this ticket
 	 */
-	public function __construct($id, $eventId, $typeId, $ownerId, $userId, $seatId, $seaterId) {
+	public function __construct($id, $eventId, $typeId, $seatId, $buyerId, $userId, $seaterId) {
 		$this->id = $id;
 		$this->eventId = $eventId;
 		$this->typeId = $typeId;
-		$this->ownerId = $ownerId;
-		$this->userId = $userId;
 		$this->seatId = $seatId;
+		$this->buyerId = $buyerId;
+		$this->userId = $userId;
 		$this->seaterId = $seaterId;
 	}
 
@@ -58,10 +58,17 @@ class Ticket {
 	}
 
 	/*
-	 * Returns the owner of this ticket, also who bought/got it in the first place.
+	 * Returns the seat that this ticket is seated at
 	 */
-	public function getOwner() {
-		return UserHandler::getUser($this->ownerId);
+	public function getSeat() {
+		return SeatHandler::getSeat($this->seatId);
+	}
+	
+	/*
+	 * Returns the buyer of this ticket, also who bought/got it in the first place.
+	 */
+	public function getBuyer() {
+		return UserHandler::getUser($this->buyerId);
 	}
 	
 	/*
@@ -69,13 +76,6 @@ class Ticket {
 	 */
 	public function getUser() {
 		return UserHandler::getUser($this->userId);
-	}
-	
-	/*
-	 * Returns the seat that this ticket is seated at
-	 */
-	public function getSeat() {
-		return SeatHandler::getSeat($this->seatId);
 	}
 
 	/*
@@ -103,8 +103,8 @@ class Ticket {
 	}
 
 	public function canSeat($user) {
-		return ($this->ownerId == $user->getId() && 
-				$this->seaterId == 0) || $this->seaterId == $user->getId();
+		return ($this->userId == $user->getId() && $this->seaterId == 0) || 
+				$this->seaterId == $user->getId();
 	}
 }
 ?>

@@ -23,9 +23,9 @@ class TicketHandler {
 			return new Ticket($row['id'],
 							  $row['eventId'], 
 							  $row['typeId'],
-							  $row['ownerId'],							  
-							  $row['userId'],
 							  $row['seatId'],
+							  $row['buyerId'],							  
+							  $row['userId'],
 							  $row['seaterId']);
 		}
 	}
