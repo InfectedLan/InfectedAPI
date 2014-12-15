@@ -7,12 +7,12 @@ class TicketTypeHandler {
 	public static function getTicketType($id) {
 		$con = MySQL::open(Settings::db_name_infected_tickets);
 
-		$result = mysqli_query($con, 'SELECT * FROM `' . Settings::db_table_infected_tickets_tickettypes . '` 
-									  WHERE `id` = \'' . $con->real_escape_string($id) . '\';');
+		$result = $con->query('SELECT * FROM `' . Settings::db_table_infected_tickets_tickettypes . '` 
+							   WHERE `id` = \'' . $con->real_escape_string($id) . '\';');
 									  
 		$row = mysqli_fetch_array($result);
 
-		MySQL::close($con);
+		$con->close();
 
 		if ($row) {
 			return new TicketType($row['id'], 

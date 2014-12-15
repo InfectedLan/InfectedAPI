@@ -2,6 +2,7 @@
 require_once 'settings.php';
 require_once 'qr.php';
 require_once 'handlers/eventhandler.php';
+require_once 'handlers/paymenthandler.php';
 require_once 'handlers/userhandler.php';
 require_once 'handlers/tickettypehandler.php';
 require_once 'handlers/seathandler.php';
@@ -9,10 +10,11 @@ require_once 'handlers/seathandler.php';
 class Ticket {
 	private $id;
 	private $eventId;
+	private $paymentId;
 	private $typeId;
-	private $seatId;
 	private $buyerId;
 	private $userId;
+	private $seatId;
 	private $seaterId;
 
 	/*
@@ -26,13 +28,14 @@ class Ticket {
 	 * User Id: User account that will be using the ticket
 	 * Seater Id: User account that can seat this ticket
 	 */
-	public function __construct($id, $eventId, $typeId, $seatId, $buyerId, $userId, $seaterId) {
+	public function __construct($id, $eventId, $paymentId, $typeId, $buyerId, $userId, $seatId, $seaterId) {
 		$this->id = $id;
 		$this->eventId = $eventId;
+		$this->paymentId = $paymentId;
 		$this->typeId = $typeId;
-		$this->seatId = $seatId;
 		$this->buyerId = $buyerId;
 		$this->userId = $userId;
+		$this->seatId = $seatId;
 		$this->seaterId = $seaterId;
 	}
 
@@ -49,19 +52,19 @@ class Ticket {
 	public function getEvent() {
 		return EventHandler::getEvent($this->eventId);
 	}
+	
+	/*
+	 * Returns the payment that this ticket is linked to, if any.
+	 */
+	public function getPayment() {
+		return PaymentHandler::getPayment($this->paymentId);
+	}
 
 	/*
 	 * Returns the ticket type
 	 */
 	public function getType() {
 		return TicketTypeHandler::getTicketType($this->typeId);
-	}
-
-	/*
-	 * Returns the seat that this ticket is seated at
-	 */
-	public function getSeat() {
-		return SeatHandler::getSeat($this->seatId);
 	}
 	
 	/*
@@ -77,7 +80,14 @@ class Ticket {
 	public function getUser() {
 		return UserHandler::getUser($this->userId);
 	}
-
+	
+	/*
+	 * Returns the seat that this ticket is seated at
+	 */
+	public function getSeat() {
+		return SeatHandler::getSeat($this->seatId);
+	}
+	
 	/*
 	 * Returns the seater of this ticket.
 	 *
@@ -86,7 +96,7 @@ class Ticket {
 	public function getSeater() {
 		return UserHandler::getUser($this->seaterId);
 	}
-
+	
 	/*
 	 * Returns a human readable representation of the ticket
 	 */
@@ -102,6 +112,9 @@ class Ticket {
 		return QR::getCode('https://api.infected.no/functions/verifyTicket.php?id=' . $this->getId());
 	}
 
+	/*
+	 * Returns true if given user is allowed to seat this ticket.
+	 */
 	public function canSeat($user) {
 		return ($this->userId == $user->getId() && $this->seaterId == 0) || 
 				$this->seaterId == $user->getId();

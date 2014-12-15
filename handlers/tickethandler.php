@@ -1,11 +1,7 @@
 <?php
 require_once 'settings.php';
 require_once 'mysql.php';
-require_once 'handlers/userhandler.php';
 require_once 'handlers/eventhandler.php';
-require_once 'handlers/tickettypehandler.php';
-require_once 'handlers/seathandler.php';
-require_once 'handlers/storesessionhandler.php';
 require_once 'objects/ticket.php';
 
 class TicketHandler {
@@ -22,10 +18,11 @@ class TicketHandler {
 		if ($row) {
 			return new Ticket($row['id'],
 							  $row['eventId'], 
+							  $row['paymentId'],
 							  $row['typeId'],
-							  $row['seatId'],
 							  $row['buyerId'],							  
 							  $row['userId'],
+							  $row['seatId'],
 							  $row['seaterId']);
 		}
 	}
