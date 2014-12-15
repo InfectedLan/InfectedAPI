@@ -166,6 +166,29 @@ class ApplicationHandler {
 							 \'' . $con->real_escape_string($content) . '\');');
 		
 		$con->close();
+		
+		// Notify the group leader by email.
+		self::sendApplicationCreatedMail($user, $group);
+	}
+	
+	/*
+	 * Sends an mail to the users address with status information.
+	 */
+	public function sendApplicationCreatedMail($user, $group) {
+		if ($group->getLeader() != null) {
+			$message = array();
+			$message[] = '<!DOCTYPE html>';
+			$message[] = '<html>';
+				$message[] = '<body>';
+					$message[] = '<h3>Hei!</h3>';
+					$message[] = '<p>Du har fått en ny søknad til crewet ditt (' . $group->getTitle() . ') fra ' . $user->getFullName() . '<p>';
+					$message[] = '<p>Klikk <a href="https://crew.infected.no/v2/index.php?page=chief-applications">her</a> for å se den.</p>';
+					$message[] = '<p>Med vennlig hilsen <a href="http://infected.no/">Infected</a>.</p>';
+				$message[] = '</body>';
+			$message[] = '</html>';
+				
+			return MailManager::sendMail($group->getLeader(), 'Ny søknad til ' . $group->getTitle() . ' crew', implode("\r\n", $message));
+		}
 	}
 	
 	/* 
