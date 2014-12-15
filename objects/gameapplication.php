@@ -1,9 +1,9 @@
 <?php
 require_once 'handlers/eventhandler.php';
 require_once 'handlers/gamehandler.php';
+require_once 'objects/object.php';
 
-class GameApplication {
-	private $id;
+class GameApplication extends Object {
 	private $eventId;
 	private $gameId;
 	private $name;
@@ -14,7 +14,8 @@ class GameApplication {
 	private $phone;
 	
 	public function __construct($id, $eventId, $gameId, $name, $tag, $contactname, $contactnick, $phone, $email) {
-		$this->id = $id;
+		parent::__construct($id);
+	
 		$this->eventId = $eventId;
 		$this->gameId = $gameId;
 		$this->name = $name;
@@ -23,10 +24,6 @@ class GameApplication {
 		$this->contactnick = $contactnick;
 		$this->email = $email;
 		$this->phone = $phone;
-	}
-	
-	public function getId() {
-		return $this->id;
 	}
 	
 	public function getEvent() {

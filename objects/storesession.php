@@ -1,6 +1,7 @@
 <?php
-class StoreSession {
-	private $id;
+require_once 'objects/object.php';
+
+class StoreSession extends Object {
 	private $userId;
 	private $ticketType;
 	private $amount;
@@ -19,20 +20,14 @@ class StoreSession {
 	 * TimeCreated: time this session was created, used for calculating if session has timed out
 	 */
 	public function __construct($id, $userId, $ticketType, $amount, $code, $price, $datetime) {
-		$this->id = $id;
+		parent::__construct($id);
+		
 		$this->userId = $userId;
 		$this->ticketType = $ticketType;
 		$this->amount = $amount;
 		$this->code = $code;
 		$this->price = $price;
 		$this->datetime = $datetime;
-	}
-
-	/*
-	 * Returns unique id of this session
-	 */
-	public function getId() {
-		return $this->id;
 	}
 
 	/*

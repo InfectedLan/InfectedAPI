@@ -1,22 +1,16 @@
 <?php
 require_once 'objects/emergencycontact.php';
+require_once 'objects/object.php';
 
-class EmergencyContact {
-	private $id;
+class EmergencyContact extends Object {
 	private $userId;
 	private $phone;
 	
 	public function __construct($id, $userId, $phone) {
-		$this->id = $id;
+		parent::__construct($id);
+	
 		$this->userId = $userId;
 		$this->phone = $phone;
-	}
-	
-	/* 
-	 * Returns internal id.
-	 */
-	public function getId() {
-		return $this->id;
 	}
 	
 	/* 

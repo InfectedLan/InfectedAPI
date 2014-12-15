@@ -15,7 +15,7 @@ class PaymentLogHandler {
 		$con->close();
 
 		if ($row) {
-			return new Payment($row['id']
+			return new Payment($row['id'],
 							   $row['userId'],
 							   $row['ticketType'],
 							   $row['price'],

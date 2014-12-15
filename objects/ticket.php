@@ -6,9 +6,9 @@ require_once 'handlers/paymenthandler.php';
 require_once 'handlers/userhandler.php';
 require_once 'handlers/tickettypehandler.php';
 require_once 'handlers/seathandler.php';
+require_once 'objects/object.php';
 
-class Ticket {
-	private $id;
+class Ticket extends Object {
 	private $eventId;
 	private $paymentId;
 	private $typeId;
@@ -29,7 +29,8 @@ class Ticket {
 	 * Seater Id: User account that can seat this ticket
 	 */
 	public function __construct($id, $eventId, $paymentId, $typeId, $buyerId, $userId, $seatId, $seaterId) {
-		$this->id = $id;
+		parent::__construct($id);
+		
 		$this->eventId = $eventId;
 		$this->paymentId = $paymentId;
 		$this->typeId = $typeId;
@@ -37,13 +38,6 @@ class Ticket {
 		$this->userId = $userId;
 		$this->seatId = $seatId;
 		$this->seaterId = $seaterId;
-	}
-
-	/*
-	 * Returns the unique id for the ticket
-	 */
-	public function getId() {
-		return $this->id;
 	}
 
 	/*

@@ -1,9 +1,9 @@
 <?php
 require_once 'handlers/tickethandler.php';
 require_once 'handlers/eventhandler.php';
+require_once 'objects/object.php';
 
-class TicketType {
-	private $id;
+class TicketType extends Object {
 	private $humanName;
 	private $price;
 	private $internalName;
@@ -17,14 +17,11 @@ class TicketType {
 	 * HumanName: Human readable name for tickets
 	 */
 	public function __construct($id, $humanName, $price, $internalName) {
-		$this->id = $id;
+		parent::__construct($id);
+		
 		$this->humanName = $humanName;
 		$this->price = $price;
 		$this->internalName = $internalName;
-	}
-
-	public function getId() {
-		return $this->id;
 	}
 
 	public function getHumanName() {

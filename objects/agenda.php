@@ -1,8 +1,8 @@
 <?php
 require_once 'handlers/eventhandler.php';
+require_once 'objects/object.php';
 
-class Agenda {
-	private $id;
+class Agenda extends Object {
 	private $event;
 	private $name;
 	private $title;
@@ -10,16 +10,13 @@ class Agenda {
 	private $start;
 	
 	public function __construct($id, $event, $name, $title, $description, $start) {
-		$this->id = $id;
+		parent::__construct($id);
+
 		$this->event = $event;
 		$this->name = $name;
 		$this->title = $title;
 		$this->description = $description;
 		$this->start = $start;
-	}
-	
-	public function getId() {
-		return $this->id;
 	}
 	
 	public function getEvent() {
@@ -44,13 +41,8 @@ class Agenda {
 	
 	public function isHappening() {
 		$now = date('U');
-			
-		if ($this->getStart() - 5 * 60 >= $now ||
-			$this->getStart() + 1 * 60 * 60 >= $now) {
-			return true;
-		}
 		
-		return false;
+		return $this->getStart() - 5 * 60 >= $now || $this->getStart() + 1 * 60 * 60 >= $now;
 	}
 }
 ?>

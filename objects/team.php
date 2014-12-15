@@ -3,10 +3,9 @@ require_once 'session.php';
 require_once 'handlers/grouphandler.php';
 require_once 'handlers/teamhandler.php';
 require_once 'handlers/userhandler.php';
+require_once 'objects/object.php';
 
-
-class Team {
-	private $id;
+class Team extends Object {
 	private $groupId;
 	private $name;
 	private $title;
@@ -14,16 +13,13 @@ class Team {
 	private $leader;
 	
 	public function __construct($id, $groupId, $name, $title, $description, $leader) {
-		$this->id = $id;
+		parent::__construct($id);
+		
 		$this->groupId = $groupId;
 		$this->name = $name;
 		$this->title = $title;
 		$this->description = $description;
 		$this->leader = $leader;
-	}
-	
-	public function getId() {
-		return $this->id;
 	}
 	
 	public function getGroup() {

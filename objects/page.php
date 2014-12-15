@@ -1,26 +1,22 @@
 <?php
+require_once 'objects/object.php';
+
 /*
- * Page.php
  * Page used by main page on infected.no
  * 
- * While merging, i found that there are two different pages for the crewpage and the main page.
+ * While merging, i found that there are two different pages for the crew page and the main page.
  * This is the main page. The crew page is refactored to CrewPage
 */
-class Page {
-	private $id;
+class Page extends Object {
 	private $name;
 	private $title;
 	private $content;
 	
 	public function __construct($id, $name, $title, $content) {
-		$this->id = $id;
+		parent::__construct($id);
 		$this->name = $name;
 		$this->title = $title;
 		$this->content = $content;
-	}
-	
-	public function getId() {
-		return $this->id;
 	}
 	
 	public function getName() {

@@ -5,30 +5,24 @@ require_once 'mysql.php';
 require_once 'handlers/userhandler.php';
 require_once 'handlers/grouphandler.php';
 require_once 'handlers/teamhandler.php';
+require_once 'objects/object.php';
 
 /*
  * Used to store information about a group.
  */
-class Group {
-	private $id;
+class Group extends Object {
 	private $name;
 	private $title;
 	private $description;
 	private $leader;
 	
 	public function __construct($id, $name, $title, $description, $leader) {
-		$this->id = $id;
+		parent::__construct($id);
+	
 		$this->name = $name;
 		$this->title = $title;
 		$this->description = $description;
 		$this->leader = $leader;
-	}
-	
-	/* 
-	 * Returns the internal id for this group.
-	 */
-	public function getId() {
-		return $this->id;
 	}
 	
 	/* 

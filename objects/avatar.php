@@ -1,22 +1,19 @@
 <?php
-require_once 'handlers/userhandler.php';
 require_once 'settings.php';
+require_once 'handlers/userhandler.php';
+require_once 'objects/object.php';
 
-class Avatar {
-	private $id;
+class Avatar extends Object {
 	private $userId;
 	private $file;
 	private $state;
 
 	public function __construct($id, $userId, $file, $state) {
-		$this->id = $id;
+		parent::__construct($id);
+	
 		$this->userId = $userId;
 		$this->file = $file;
 		$this->state = $state;
-	}
-
-	public function getId() {
-		return $this->id;
 	}
 	
 	public function getUser() {

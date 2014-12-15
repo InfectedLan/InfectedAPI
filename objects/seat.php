@@ -1,8 +1,8 @@
 <?php
 require_once 'handlers/rowhandler.php';
+require_once 'objects/object.php';
 
-class Seat {
-	private $id;
+class Seat extends Object {
 	private $rowId;
 	private $number;
 
@@ -14,16 +14,10 @@ class Seat {
 	 * Number: Number relative to row, this seat is at, relative to the row the seat is a part of
 	 */
 	public function __construct($id, $rowId, $number) {
-		$this->id = $id;
+		parent::__construct($id);
+		
 		$this->rowId = $rowId;
 		$this->number = $number;
-	}
-
-	/*
-	 * Returns unique id of this seat
-	 */
-	public function getId() {
-		return $this->id;
 	}
 
 	/*

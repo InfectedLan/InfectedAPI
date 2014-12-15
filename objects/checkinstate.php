@@ -1,19 +1,18 @@
 <?php
-class CheckinState {
-	private $id;
+require_once 'objects/object.php';
+
+class CheckinState extends Object {
 	private $ticketId;
 	private $userId;
 	
 	public function __construct($id, $ticketId, $userId) {
-		$this->id = $id;
+		parent::__construct($id);
+		
 		$this->ticketId = $ticketId;
 		$this->userId = $userId;
 	}
 
-	public function getId() {
-		return $this->id;
-	}
-
+	// TODO: Return ticket instead of ticket id here?
 	public function getTicketId() {
 		return $this->ticketId;
 	}

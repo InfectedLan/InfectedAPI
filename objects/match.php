@@ -1,14 +1,15 @@
 <?php
+require_once 'settings.php';
+require_once 'mysql.php';
 require_once 'handlers/matchhandler.php';
 require_once 'handlers/clanhandler.php';
-require_once 'mysql.php';
-require_once 'settings.php';
-class Match {
+require_once 'objects/object.php';
+
+class Match extends Object {
 	const STATE_READYCHECK = 0;
 	const STATE_CUSTOM_PREGAME = 1;
 	const STATE_JOIN_GAME = 2;
 
-	private $id;
 	private $scheduledTime;
 	private $connectDetails;
 	private $winner;
@@ -16,16 +17,13 @@ class Match {
 	private $compoId;
 
 	public function __construct($id, $scheduledTime, $connectDetails, $winner, $state, $compoId) {
-		$this->id = $id;
+		parent::__construct($id);
+	
 		$this->scheduledTime = $scheduledTime;
 		$this->connectDetails = $connectDetails;
 		$this->winner = $winner;
 		$this->state = $state;
 		$this->compoId = $compoId;
-	}
-
-	public function getId() {
-		return $this->id;
 	}
 
 	public function getScheduledTime() {

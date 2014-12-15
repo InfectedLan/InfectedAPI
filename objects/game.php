@@ -1,6 +1,7 @@
 <?php
-class Game {
-	private $id;
+require_once 'objects/object.php';
+
+class Game extends Object {
 	private $name;
 	private $title;
 	private $price;
@@ -11,7 +12,8 @@ class Game {
 	private $published;
 	
 	public function __construct($id, $name, $title, $price, $mode, $description, $startTime, $endTime, $published) {
-		$this->id = $id;
+		parent::__construct($id);
+	
 		$this->name = $name;
 		$this->title = $title;
 		$this->price = $price;
@@ -20,10 +22,6 @@ class Game {
 		$this->startTime = $startTime;
 		$this->endTime = $endTime;
 		$this->published = $published;
-	}
-	
-	public function getId() {
-		return $this->id;
 	}
 	
 	public function getName() {

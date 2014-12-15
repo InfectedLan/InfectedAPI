@@ -1,19 +1,17 @@
 <?php
 require_once 'mysql.php';
 require_once 'settings.php';
+require_once 'objects/object.php';
+
 class Invite {
-	private $id;
 	private $userId;
 	private $clanId;
 
 	public function __construct($id, $userId, $clanId) {
-		$this->id = $id;
+		parent::__construct($id);
+		
 		$this->userId = $userId;
 		$this->clanId = $clanId;
-	}
-
-	public function getId() {
-		return $this->id;
 	}
 
 	public function getUserId() {

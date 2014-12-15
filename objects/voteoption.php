@@ -1,20 +1,17 @@
 <?php
-//Used by the new compo system
-class VoteOption {
-	private $id;
+require_once 'objects/object.php';
+
+class VoteOption extends Object{
 	private $compoId;
 	private $thumbnailUrl;
 	private $name;
 
 	public function __construct($id, $compoId, $thumbnailUrl, $name) {
-		$this->id = $id;
+		parent::__construct($id);
+		
 		$this->compoId = $compoId;
 		$this->thumbnailUrl = $thumbnailUrl;
 		$this->name = $name;
-	}
-
-	public function getId() {
-		return $this->id;
 	}
 
 	public function getCompoId() {

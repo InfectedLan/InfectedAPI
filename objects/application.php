@@ -2,9 +2,9 @@
 require_once 'handlers/eventhandler.php';
 require_once 'handlers/grouphandler.php';
 require_once 'handlers/userhandler.php';
+require_once 'objects/object.php';
 
-class Application {
-	private $id;
+class Application extends Object {
 	private $eventId;
 	private $groupId;
 	private $userId;
@@ -15,7 +15,8 @@ class Application {
 	private $comment;
 	
 	public function __construct($id, $eventId, $groupId, $userId, $openedTime, $closedTime, $state, $content, $comment) {
-		$this->id = $id;
+		parent::__construct($id);
+		
 		$this->eventId = $eventId;
 		$this->groupId = $groupId;
 		$this->userId = $userId;
@@ -24,10 +25,6 @@ class Application {
 		$this->state = $state;
 		$this->content = $content;
 		$this->comment = $comment;
-	}
-	
-	public function getId() {
-		return $this->id;
 	}
 	
 	public function getEvent() {

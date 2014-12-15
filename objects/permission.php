@@ -1,17 +1,15 @@
 <?php
-class Permission {
-	private $id;
+require_once 'objects/object.php';
+
+class Permission extends Object {
 	private $value;
 	private $description;
 	
 	public function __construct($id, $value, $description) {
-		$this->id = $id;
+		parent::__construct($id);
+		
 		$this->value = $value;
 		$this->description = $description;
-	}
-	
-	public function getId() {
-		return $this->id;
 	}
 	
 	public function getValue() {

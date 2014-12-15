@@ -10,12 +10,12 @@ require_once 'handlers/avatarhandler.php';
 require_once 'handlers/grouphandler.php';
 require_once 'handlers/teamhandler.php';
 require_once 'handlers/eventhandler.php';
+require_once 'objects/object.php';
 
 /*
  * Used to store information about a user.
  */
-class User {	
-	private $id;
+class User extends Object {	
 	private $firstname;
 	private $lastname;
 	private $username;
@@ -29,7 +29,8 @@ class User {
 	private $nickname;
 	
 	public function __construct($id, $firstname, $lastname, $username, $password, $email, $birthdate, $gender, $phone, $address, $postalcode, $nickname) {
-		$this->id = $id;
+		parent::__construct($id);
+		
 		$this->firstname = $firstname;
 		$this->lastname = $lastname;
 		$this->username = $username;
@@ -41,13 +42,6 @@ class User {
 		$this->address = $address;
 		$this->postalcode = $postalcode;
 		$this->nickname = $nickname;
-	}
-	
-	/* 
-	 * Returns the users internal id.
-	 */
-	public function getId() {
-		return $this->id;
 	}
 	
 	/* 

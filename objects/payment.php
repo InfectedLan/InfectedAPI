@@ -1,9 +1,9 @@
 <?php
 require_once 'handlers/userhandler.php';
 require_once 'handlers/tickettypehandler.php';
+require_once 'objects/object.php';
 
 class Payment {
-	private $id;
 	private $userId;
 	private $ticketType;
 	private $price;
@@ -12,17 +12,14 @@ class Payment {
 	private $datetime;
 
 	public function __construct($id, $userId, $ticketType, $price, $totalPrice, $transactionId, $datetime) {
-		$this->id = $id;
+		parent::__construct($id);
+		
 		$this->userId = $userId;
 		$this->ticketType = $ticketType;
 		$this->price = $price;
 		$this->totalPrice = $totalPrice;
 		$this->transactionId = $transactionId;
 		$this->datetime = $datetime;
-	}
-
-	public function getId() {
-		return $this->id;
 	}
 
 	public function getUser() {

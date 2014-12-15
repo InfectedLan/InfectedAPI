@@ -1,17 +1,15 @@
 <?php
-class Vote {
-	private $id;
+require_once 'objects/object.php';
+
+class Vote extends Object {
 	private $consumerId;
 	private $voteOptionId;
 
 	public function __construct($id, $consumerId, $voteOptionId) {
-		$this->id = $id;
+		parent::__construct($id);
+	
 		$this->consumerId = $consumerId;
 		$this->voteOptionId = $voteOptionId;
-	}
-
-	public function getId() {
-		return $this->id;
 	}
 
 	public function getConsumerId() {

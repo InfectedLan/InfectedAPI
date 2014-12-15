@@ -1,17 +1,15 @@
 <?php
-class Entrance {
-	private $id;
+require_once 'objects/object.php';
+
+class Entrance extends Object{
 	private $name;
 	private $title;
 	
 	public function __construct($id, $name, $title) {
-		$this->id = $id;
+		parent::__construct($id);
+
 		$this->name = $name;
 		$this->title = $title;
-	}
-	
-	public function getId() {
-		return $this->id;
 	}
 	
 	public function getName() {

@@ -1,6 +1,7 @@
 <?php
-class Compo {
-	private $id;
+require_once 'objects/object.php';
+
+class Compo extends Object {
 	private $startTime;
 	private $registrationDeadline;
 	private $name;
@@ -10,7 +11,8 @@ class Compo {
 	private $tag;
 
 	public function __construct($id, $startTime, $registrationDeadline, $name, $desc, $event, $teamSize, $tag) {
-		$this->id = $id;
+		parent::__construct($id);
+	
 		$this->startTime = $startTime;
 		$this->registrationDeadline = $registrationDeadline;
 		$this->name = $name;
@@ -18,10 +20,6 @@ class Compo {
 		$this->event = $event;
 		$this->teamSize = $teamSize;
 		$this->tag = $tag;
-	}
-
-	public function getId() {
-		return $this->id;
 	}
 
 	public function getStartTime() {

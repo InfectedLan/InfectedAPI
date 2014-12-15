@@ -1,6 +1,7 @@
 <?php
-class Slide {
-	private $id;
+require_once 'objects/object.php';
+
+class Slide extends Object {
 	private $start;
 	private $end;
 	private $title;
@@ -8,16 +9,13 @@ class Slide {
 	private $published;
 	
 	public function __construct($id, $start, $end, $title, $content, $published) {
-		$this->id = $id;
+		parent::__construct($id);
+		
 		$this->start = $start;
 		$this->end = $end;
 		$this->title = $title;
 		$this->content = $content;
 		$this->published = $published;
-	}
-	
-	public function getId() {
-		return $this->id;
 	}
 	
 	public function getStart() {

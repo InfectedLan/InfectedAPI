@@ -1,8 +1,8 @@
 <?php
 require_once 'handlers/entrancehandler.php';
+require_once 'objects/object.php';
 
-class Row {
-	private $id;
+class Row extends Object {
 	private $number;
 	private $x;
 	private $y;
@@ -20,19 +20,13 @@ class Row {
 	 * Event: Event this section belongs to
 	 */ 
 	public function __construct($id, $number, $x, $y, $entrance, $seatmap) {
-		$this->id = $id;
+		parent::__construct($id);
+		
 		$this->number = $number;
 		$this->x = $x;
 		$this->y = $y;
 		$this->entrance = $entrance;
 		$this->seatmap = $seatmap;
-	}
-
-	/*
-	 * Returns the unique id of the section
-	 */
-	public function getId() {
-		return $this->id;
 	}
 
 	/*

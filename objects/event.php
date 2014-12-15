@@ -4,10 +4,10 @@ require_once 'handlers/seatmaphandler.php';
 require_once 'handlers/tickethandler.php';
 require_once 'handlers/tickettypehandler.php';
 require_once 'handlers/storesessionhandler.php';
-require_once 'location.php';
+require_once 'objects/object.php';
+require_once 'objects/location.php';
 
-class Event {
-	private $id;
+class Event extends Object {
 	private $theme;
 	private $location;
 	private $participants;
@@ -18,7 +18,8 @@ class Event {
 	private $ticketType;
 	
 	public function __construct($id, $theme, $location, $participants, $bookingTime, $startTime, $endTime, $seatmap, $ticketType) {
-		$this->id = $id;
+		parent::__construct($id);
+	
 		$this->theme = $theme;
 		$this->location = $location;
 		$this->participants = $participants;
@@ -27,13 +28,6 @@ class Event {
 		$this->endTime = $endTime;
 		$this->seatmap = $seatmap;
 		$this->ticketType = $ticketType;
-	}
-	
-	/*
-	 * Returns the id.
-	 */
-	public function getId() {
-		return $this->id;
 	}
 	
 	/*
@@ -90,9 +84,10 @@ class Event {
 	 * Returns true if booking for this event is open.
 	 */
 	public function isBookingTime() {
+		$now = date('U');
+		$offset = 86400;
 		$bookingTime = $this->getBookingTime();
-		$bookingEndTime = $this->getStartTime() + 86400;
-		$now = strtotime(date('Y-m-d H:i:s'));
+		$bookingEndTime = $this->getStartTime() + $offset;
 
 		return $now >= $bookingTime && $now <= $bookingEndTime;
 	}

@@ -1,15 +1,13 @@
 <?php
-class ReadyHandler {
-	private $id;
+require_once 'objects/object.php';
+
+class ReadyHandler extends Object{
 	private $compoId;
 
 	public function __construct($id, $compoId) {
-		$this->id = $id;
+		parent::__construct($id);
+		
 		$this->compoId = $compoId;
-	}
-
-	public function getId() {
-		return $this->id;
 	}
 
 	public function getCompoId() {
