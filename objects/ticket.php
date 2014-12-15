@@ -6,6 +6,7 @@ require_once 'handlers/paymenthandler.php';
 require_once 'handlers/userhandler.php';
 require_once 'handlers/tickettypehandler.php';
 require_once 'handlers/seathandler.php';
+require_once 'handlers/checkedinstatehandler.php';
 require_once 'objects/object.php';
 
 class Ticket extends Object {
@@ -92,6 +93,21 @@ class Ticket extends Object {
 	}
 	
 	/*
+	 * Returns true if this ticket is checked in.
+	 */
+	public function isCheckedIn() {
+		return CheckinStateHandler::isCheckedIn($this);
+	}
+	
+	/*
+	 * Returns true if given user is allowed to seat this ticket.
+	 */
+	public function canSeat($user) {
+		return ($this->userId == $user->getId() && $this->seaterId == 0) || 
+				$this->seaterId == $user->getId();
+	}
+	
+	/*
 	 * Returns a human readable representation of the ticket
 	 */
 	public function getHumanName() {
@@ -104,14 +120,6 @@ class Ticket extends Object {
 	
 	public function getQrImagePath() {
 		return QR::getCode('https://api.infected.no/functions/verifyTicket.php?id=' . $this->getId());
-	}
-
-	/*
-	 * Returns true if given user is allowed to seat this ticket.
-	 */
-	public function canSeat($user) {
-		return ($this->userId == $user->getId() && $this->seaterId == 0) || 
-				$this->seaterId == $user->getId();
 	}
 }
 ?>
