@@ -167,6 +167,13 @@ class ApplicationHandler {
 		
 		$con->close();
 		
+		// If the group is set to queue applications, do so automatically.
+		if ($group->isQueuing()) {
+			$application = self::getApplicationForGroup($user, $group);
+		
+			self::queueApplication($application);
+		}
+		
 		// Notify the group leader by email.
 		self::sendApplicationCreatedMail($user, $group);
 	}
@@ -372,6 +379,26 @@ class ApplicationHandler {
 		$con->close();
 		
 		return $row ? true : false;
+	}
+	
+	/*
+	 * Returns the application for group and user.
+	 */
+	public static function getUserApplicationForGroup($user, $group) {
+		$con = MySQL::open(Settings::db_name_infected_crew);
+		
+		$result = $con->query('SELECT `id` FROM `' . Settings::db_table_infected_crew_applications . '`
+							   WHERE `eventId` = \'' . EventHandler::getCurrentEvent()->getId() . '\'
+							   AND `userId` = \'' . $con->real_escape_string($user->getId()) . '\'
+							   AND `groupId` = \'' . $con->real_escape_string($group->getId()) . '\'
+							   AND `state` = \'1\'
+							   OR `state` = \'2\';');
+		
+		$row = mysqli_fetch_array($result);
+		
+		$con->close();
+		
+		return self::getApplication($row['id']);
 	}
 	
 	/*

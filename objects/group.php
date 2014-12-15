@@ -15,14 +15,16 @@ class Group extends Object {
 	private $title;
 	private $description;
 	private $leader;
+	private $queuing;
 	
-	public function __construct($id, $name, $title, $description, $leader) {
+	public function __construct($id, $name, $title, $description, $leader, $queuing) {
 		parent::__construct($id);
 	
 		$this->name = $name;
 		$this->title = $title;
 		$this->description = $description;
 		$this->leader = $leader;
+		$this->queuing = $queuing;
 	}
 	
 	/* 
@@ -51,6 +53,13 @@ class Group extends Object {
 	 */
 	public function getLeader() {
 		return UserHandler::getUser($this->leader);
+	}
+	
+	/*
+	 * Return true if new applications for this group automatically should be queued.
+	 */
+	public function isQueuing() {
+		return $this->queuing ? true : false;
 	}
 	
 	/* 

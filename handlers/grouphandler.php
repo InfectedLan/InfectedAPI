@@ -21,7 +21,8 @@ class GroupHandler {
 							 $row['name'], 
 							 $row['title'], 
 							 $row['description'], 
-							 $row['leader']);
+							 $row['leader'],
+							 $row['queuing']);
 		}
 	}
 	
