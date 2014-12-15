@@ -7,6 +7,7 @@ require_once 'handlers/tickettypehandler.php';
 require_once 'handlers/seathandler.php';
 require_once 'handlers/storesessionhandler.php';
 require_once 'objects/ticket.php';
+require_once 'objects/tickettransfer.php';
 
 class TicketHandler {
 	public static function getTicket($id) {
@@ -224,6 +225,91 @@ class TicketHandler {
 		$result = mysqli_query($con, 'UPDATE `' . Settings::db_table_infected_tickets_tickets . '` SET `seatId` = ' . $con->real_escape_string($seat->getId()) . ' WHERE `id` = ' . $con->real_escape_string($ticket->getId()) . ';');
 		
 		MySQL::close($con);
+	}
+	
+	// Here begins the updated API functions, over this is gonna be re-factored in the nearest future.
+	
+	public static function getTransfer($ticket, $user) {
+		$con = MySQL::open(Settings::db_name_infected_tickets);
+
+		$result = $con->query($con, 'SELECT * FROM `' . Settings::db_table_infected_tickets_tickettransfers . '` 
+									 WHERE `ticketId` = \'' . $con->real_escape_string($ticket->getId()) . '\'
+									 AND `fromId` = \'' . $con->real_escape_string($user->getId()) . '\'
+									 ORDER BY `datetime` DESC
+									 LIMIT 1;');
+
+		$row = mysqli_fetch_array($result);
+
+		$con->close();
+
+		if ($row) {
+			return new TicketTransfer($row['id'],
+									  $row['ticketId'], 
+								      $row['fromId'],
+							          $row['toId'],
+							          $row['datetime'],							  
+							          $row['revertable']);
+		}
+	}
+	
+	public static function createTransfer($ticket, $user, $revertable) {
+		$con = MySQL::open(Settings::db_name_infected_tickets);
+
+		$con->query('INSERT INTO `' . Settings::db_table_infected_tickets_tickettransfers . '` (`ticketId`, `fromId`, `toId`, `datetime`, `revertable`)
+					 VALUES (\'' . $con->real_escape_string($ticket->getId()) . ', 
+							 \'' . $con->real_escape_string($ticket->getUser()->getId()) . ', 
+							 \'' . $con->real_escape_string($user->getId()) . ',
+							 \'' . date('Y-m-d H:i:s') . ',
+							 \'' . $revertable . ');');
+
+		$con->close();
+	}
+	
+	/*
+	 * Transfers a given ticket from it's current user to the user specified.
+	 */
+	public static function transfer($ticket, $user) {
+		// Check that the new user isn't the same as the old one.
+		if ($ticket->getUser()->getId != $user->getId()) {
+			$con = MySQL::open(Settings::db_name_infected_tickets);
+
+			// Add row to ticket transfers table.
+			self::createTransfer($ticket, $user, true);
+										
+			// Actually change the user of the ticket.
+			self::updateUser($ticket, $user);
+
+			$con->close();
+		}
+	}
+	
+	public static function revertTransfer($ticket) {
+		$transfer = self::getTransfer($ticket, $user);
+		$timeLimit = 86400;
+		
+		// Check if the ticket is revertable and that the time limit isn't run out.
+		if ($transfer->getDatetime() + $timeLimit <= time() && $transfer->isRevertable()) {
+			// Add row to ticket transfers table.
+			self::createTransfer($ticket, $transfer->getFrom(), false);
+			
+			// Actually change the user of the ticket.
+			self::updateUser($user);
+		}
+	}
+	
+	public static function updateUser($ticket, $user) {
+		if ($ticket->getUser()->getId != $user->getId()) {
+			$con = MySQL::open(Settings::db_name_infected_tickets);
+						
+			// Change the user of the ticket.
+			if ($con->query($con, 'UPDATE `' . Settings::db_table_infected_tickets_tickets . '` 
+								SET `userId` = ' . $con->real_escape_string($user->getId()) . ' 
+								WHERE `id` = ' . $con->real_escape_string($ticket->getId()) . ';') {
+								return true,
+								}
+
+			$con->close();
+		}
 	}
 }
 ?>
