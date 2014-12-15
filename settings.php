@@ -42,7 +42,7 @@ class Settings {
 	
 	// InfectedTickets
 	const db_table_infected_tickets_entrances = 'entrances';
-	const db_table_infected_tickets_paymentlog = 'paymentlog';
+	const db_table_infected_tickets_paymentlog = 'payments';
 	const db_table_infected_tickets_rows = 'rows';
 	const db_table_infected_tickets_seatmaps = 'seatmaps';
 	const db_table_infected_tickets_seats = 'seats';
