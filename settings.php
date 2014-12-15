@@ -41,6 +41,7 @@ class Settings {
 	const db_table_infected_crew_teams = 'teams';
 	
 	// InfectedTickets
+	const db_table_infected_tickets_checkinstate = 'checkinstates';
 	const db_table_infected_tickets_entrances = 'entrances';
 	const db_table_infected_tickets_paymentlog = 'payments';
 	const db_table_infected_tickets_rows = 'rows';
@@ -48,10 +49,10 @@ class Settings {
 	const db_table_infected_tickets_seats = 'seats';
 	const db_table_infected_tickets_storesessions = 'storesessions';
 	const db_table_infected_tickets_tickets = 'tickets';
+	const db_table_infected_tickets_tickettransfers = 'tickettransfers';
 	const db_table_infected_tickets_tickettypes = 'tickettypes';
-	const db_table_infected_tickets_checkinstate = 'checkinStates';
-
-	//InfectedCompo
+	
+	// InfectedCompo
 	const db_table_infected_compo_clans = 'clans';
 	const db_table_infected_compo_compos = 'compos';
 	const db_table_infected_compo_invites = 'invites';

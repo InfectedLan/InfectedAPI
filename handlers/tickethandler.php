@@ -3,6 +3,7 @@ require_once 'settings.php';
 require_once 'mysql.php';
 require_once 'handlers/eventhandler.php';
 require_once 'objects/ticket.php';
+require_once 'objects/tickettransfer.php';
 
 class TicketHandler {
 	public static function getTicket($id) {
@@ -214,13 +215,25 @@ class TicketHandler {
 		return $ticketList;
 	}
 	
-	public static function changeSeat($ticket, $seat)
-	{
+	public static function changeSeat($ticket, $seat) {
 		$con = MySQL::open(Settings::db_name_infected_tickets);
 
 		$result = mysqli_query($con, 'UPDATE `' . Settings::db_table_infected_tickets_tickets . '` SET `seatId` = ' . $con->real_escape_string($seat->getId()) . ' WHERE `id` = ' . $con->real_escape_string($ticket->getId()) . ';');
 		
 		MySQL::close($con);
+	}
+	
+	public static function updateTicketUser($ticket, $user) {
+		if ($ticket->getUser()->getId != $user->getId()) {
+			$con = MySQL::open(Settings::db_name_infected_tickets);
+			
+			// Change the user of the ticket.
+			$con->query($con, 'UPDATE `' . Settings::db_table_infected_tickets_tickets . '` 
+							   SET `userId` = ' . $con->real_escape_string($user->getId()) . ' 
+							   WHERE `id` = ' . $con->real_escape_string($ticket->getId()) . ';');
+			
+			$con->close();
+		}
 	}
 }
 ?>
