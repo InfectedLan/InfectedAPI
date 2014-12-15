@@ -10,12 +10,12 @@ class ApplicationHandler {
 	public static function getApplication($id) {
 		$con = MySQL::open(Settings::db_name_infected_crew);
 		
-		$result = mysqli_query($con, 'SELECT * FROM `' . Settings::db_table_infected_crew_applications . '` 
-									  WHERE `id` = \'' . $con->real_escape_string($id) . '\';');
+		$result = $con->query('SELECT * FROM `' . Settings::db_table_infected_crew_applications . '` 
+							   WHERE `id` = \'' . $con->real_escape_string($id) . '\';');
 									  
 		$row = mysqli_fetch_array($result);
 		
-		MySQL::close($con);
+		$con->close();
 
 		if ($row) {
 			return new Application($row['id'], 
@@ -36,7 +36,7 @@ class ApplicationHandler {
 	public static function getApplications() {
 		$con = MySQL::open(Settings::db_name_infected_crew);
 		
-		$result = mysqli_query($con, 'SELECT `id` FROM `' . Settings::db_table_infected_crew_applications . '`;');
+		$result = $con->query('SELECT `id` FROM `' . Settings::db_table_infected_crew_applications . '`;');
 		
 		$applicationList = array();
 		
@@ -44,7 +44,7 @@ class ApplicationHandler {
 			array_push($applicationList, self::getApplication($row['id']));
 		}
 		
-		MySQL::close($con);
+		$con->close();
 		
 		return $applicationList;
 	}
@@ -55,13 +55,13 @@ class ApplicationHandler {
 	public static function getPendingApplications() {
 		$con = MySQL::open(Settings::db_name_infected_crew);
 		
-		$result = mysqli_query($con, 'SELECT `' . Settings::db_table_infected_crew_applications . '`.`id` FROM `' . Settings::db_table_infected_crew_applications . '`
-								      LEFT JOIN `' . Settings::db_table_infected_crew_applicationqueue . '`
-									  ON `' . Settings::db_table_infected_crew_applications . '`.`id` = `applicationId`
-									  WHERE `applicationId` IS NULL
-									  AND `eventId` = \'' . EventHandler::getCurrentEvent()->getId() . '\'
-									  AND `state` = \'1\'
-									  ORDER BY `openedTime`;');
+		$result = $con->query('SELECT `' . Settings::db_table_infected_crew_applications . '`.`id` FROM `' . Settings::db_table_infected_crew_applications . '`
+							   LEFT JOIN `' . Settings::db_table_infected_crew_applicationqueue . '`
+							   ON `' . Settings::db_table_infected_crew_applications . '`.`id` = `applicationId`
+							   WHERE `applicationId` IS NULL
+							   AND `eventId` = \'' . EventHandler::getCurrentEvent()->getId() . '\'
+							   AND `state` = \'1\'
+							   ORDER BY `openedTime`;');
 		
 		$applicationList = array();
 		
@@ -69,7 +69,7 @@ class ApplicationHandler {
 			array_push($applicationList, self::getApplication($row['id']));
 		}
 		
-		MySQL::close($con);
+		$con->close();
 		
 		return $applicationList;
 	}
@@ -80,14 +80,14 @@ class ApplicationHandler {
 	public static function getPendingApplicationsForGroup($group) {
 		$con = MySQL::open(Settings::db_name_infected_crew);
 		
-		$result = mysqli_query($con, 'SELECT `' . Settings::db_table_infected_crew_applications . '`.`id` FROM `' . Settings::db_table_infected_crew_applications . '`
-								      LEFT JOIN `' . Settings::db_table_infected_crew_applicationqueue . '`
-									  ON `' . Settings::db_table_infected_crew_applications . '`.`id` = `applicationId`
-									  WHERE `applicationId` IS NULL
-									  AND `eventId` = \'' . EventHandler::getCurrentEvent()->getId() . '\'
-									  AND `groupId` = \'' . $con->real_escape_string($group->getId()) .  '\'
-									  AND `state` = \'1\'
-									  ORDER BY `openedTime`;');
+		$result = $con->query('SELECT `' . Settings::db_table_infected_crew_applications . '`.`id` FROM `' . Settings::db_table_infected_crew_applications . '`
+							   LEFT JOIN `' . Settings::db_table_infected_crew_applicationqueue . '`
+							   ON `' . Settings::db_table_infected_crew_applications . '`.`id` = `applicationId`
+							   WHERE `applicationId` IS NULL
+							   AND `eventId` = \'' . EventHandler::getCurrentEvent()->getId() . '\'
+							   AND `groupId` = \'' . $con->real_escape_string($group->getId()) .  '\'
+							   AND `state` = \'1\'
+							   ORDER BY `openedTime`;');
 		
 		$applicationList = array();
 		
@@ -95,7 +95,7 @@ class ApplicationHandler {
 			array_push($applicationList, self::getApplication($row['id']));
 		}
 		
-		MySQL::close($con);
+		$con->close();
 		
 		return $applicationList;
 	}
@@ -106,13 +106,13 @@ class ApplicationHandler {
 	public static function getQueuedApplications() {
 		$con = MySQL::open(Settings::db_name_infected_crew);
 		
-		$result = mysqli_query($con, 'SELECT `' . Settings::db_table_infected_crew_applications . '`.`id` FROM `' . Settings::db_table_infected_crew_applications . '`
-									  LEFT JOIN `' . Settings::db_table_infected_crew_applicationqueue . '`
-								      ON `' . Settings::db_table_infected_crew_applications . '`.`id` = `applicationId`
-									  WHERE `applicationId` IS NOT NULL
-									  AND `eventId` = \'' . EventHandler::getCurrentEvent()->getId() . '\'
-									  AND `state` = \'1\'
-									  ORDER BY `' . Settings::db_table_infected_crew_applicationqueue . '`.`id`;');
+		$result = $con->query('SELECT `' . Settings::db_table_infected_crew_applications . '`.`id` FROM `' . Settings::db_table_infected_crew_applications . '`
+							   LEFT JOIN `' . Settings::db_table_infected_crew_applicationqueue . '`
+							   ON `' . Settings::db_table_infected_crew_applications . '`.`id` = `applicationId`
+							   WHERE `applicationId` IS NOT NULL
+							   AND `eventId` = \'' . EventHandler::getCurrentEvent()->getId() . '\'
+							   AND `state` = \'1\'
+							   ORDER BY `' . Settings::db_table_infected_crew_applicationqueue . '`.`id`;');
 		
 		$queuedApplicationList = array();
 		
@@ -120,7 +120,7 @@ class ApplicationHandler {
 			array_push($queuedApplicationList, self::getApplication($row['id']));
 		}
 		
-		MySQL::close($con);
+		$con->close();
 		
 		return $queuedApplicationList;
 	}
@@ -131,14 +131,14 @@ class ApplicationHandler {
 	public static function getQueuedApplicationsForGroup($group) {
 		$con = MySQL::open(Settings::db_name_infected_crew);
 		
-		$result = mysqli_query($con, 'SELECT `' . Settings::db_table_infected_crew_applications . '`.`id` FROM `' . Settings::db_table_infected_crew_applications . '`
-									  LEFT JOIN `' . Settings::db_table_infected_crew_applicationqueue . '`
-									  ON `' . Settings::db_table_infected_crew_applications . '`.`id` = `applicationId`
-									  WHERE `applicationId` IS NOT NULL
-									  AND `eventId` = \'' . EventHandler::getCurrentEvent()->getId() . '\'
-									  AND `groupId` = \'' . $con->real_escape_string($group->getId()) .  '\'
-									  AND `state` = \'1\'
-									  ORDER BY `' . Settings::db_table_infected_crew_applicationqueue . '`.`id`;');
+		$result = $con->query('SELECT `' . Settings::db_table_infected_crew_applications . '`.`id` FROM `' . Settings::db_table_infected_crew_applications . '`
+							   LEFT JOIN `' . Settings::db_table_infected_crew_applicationqueue . '`
+							   ON `' . Settings::db_table_infected_crew_applications . '`.`id` = `applicationId`
+							   WHERE `applicationId` IS NOT NULL
+							   AND `eventId` = \'' . EventHandler::getCurrentEvent()->getId() . '\'
+							   AND `groupId` = \'' . $con->real_escape_string($group->getId()) .  '\'
+							   AND `state` = \'1\'
+							   ORDER BY `' . Settings::db_table_infected_crew_applicationqueue . '`.`id`;');
 		
 		$queuedApplicationList = array();
 		
@@ -146,7 +146,7 @@ class ApplicationHandler {
 			array_push($queuedApplicationList, self::getApplication($row['id']));
 		}
 		
-		MySQL::close($con);
+		$con->close();
 		
 		return $queuedApplicationList;
 	}
@@ -157,15 +157,15 @@ class ApplicationHandler {
 	public static function createApplication($event, $group, $user, $content) {
 		$con = MySQL::open(Settings::db_name_infected_crew);
 		
-		mysqli_query($con, 'INSERT INTO `' . Settings::db_table_infected_crew_applications . '` (`eventId`, `groupId`, `userId`, `openedTime`, `state`, `content`) 
-							VALUES (\'' . $con->real_escape_string($event->getId()) . '\', 
-									\'' . $con->real_escape_string($group->getId()) . '\', 
-									\'' . $con->real_escape_string($user->getId()) . '\', 
-									\'' . date('Y-m-d H:i:s') . '\',
-									\'1\',
-									\'' . $con->real_escape_string($content) . '\');');
-									
-		MySQL::close($con);
+		$con->query('INSERT INTO `' . Settings::db_table_infected_crew_applications . '` (`eventId`, `groupId`, `userId`, `openedTime`, `state`, `content`) 
+					 VALUES (\'' . $con->real_escape_string($event->getId()) . '\', 
+							 \'' . $con->real_escape_string($group->getId()) . '\', 
+							 \'' . $con->real_escape_string($user->getId()) . '\', 
+							 \'' . date('Y-m-d H:i:s') . '\',
+							 \'1\',
+							 \'' . $con->real_escape_string($content) . '\');');
+		
+		$con->close();
 	}
 	
 	/* 
@@ -175,13 +175,13 @@ class ApplicationHandler {
 		$con = MySQL::open(Settings::db_name_infected_crew);
 		
 		// Remove the application.
-		mysqli_query($con, 'DELETE FROM `' . Settings::db_table_infected_crew_applications . '` 
+		$con->query('DELETE FROM `' . Settings::db_table_infected_crew_applications . '` 
 							WHERE `id` = \'' . $con->real_escape_string($application->getId()) . '\';');
 		
 		// Remove the application from the queue, if present.
 		self::unqueueApplication($application);
 		
-		MySQL::close($con);
+		$con->close();
 	}
 	
 	/*
@@ -190,11 +190,11 @@ class ApplicationHandler {
 	public static function acceptApplication($application, $comment) {
 		$con = MySQL::open(Settings::db_name_infected_crew);
 		
-		mysqli_query($con, 'UPDATE `' . Settings::db_table_infected_crew_applications . '` 
-							SET `closedTime` = \'' . date('Y-m-d H:i:s') . '\',
-								`state` = \'2\',
-								`comment` = \'' . $con->real_escape_string($comment) . '\'
-							WHERE `id` = \'' . $con->real_escape_string($application->getId()) . '\';');
+		$con->query('UPDATE `' . Settings::db_table_infected_crew_applications . '` 
+					 SET `closedTime` = \'' . date('Y-m-d H:i:s') . '\',
+						 `state` = \'2\',
+						 `comment` = \'' . $con->real_escape_string($comment) . '\'
+					 WHERE `id` = \'' . $con->real_escape_string($application->getId()) . '\';');
 		
 		// Remove the application from the queue, if present.
 		self::unqueueApplication($application);
@@ -202,7 +202,29 @@ class ApplicationHandler {
 		// Set the user in the new group
 		GroupHandler::changeGroupForUser($application->getUser(), $application->getGroup());
 		
-		MySQL::close($con);
+		// Send email notification to the user.
+		self::sendApplicationAccpetedMail($application);
+		
+		$con->close();
+	}
+	
+	/*
+	 * Sends an mail to the users address with status information.
+	 */
+	public function sendApplicationAccpetedMail($application) {
+		$message = array();
+		$message[] = '<!DOCTYPE html>';
+		$message[] = '<html>';
+			$message[] = '<body>';
+				$message[] = '<h3>Hei!</h3>';
+				$message[] = '<p>Din crew søknad til ' . $application->getGroup()->getTitle() . ' crew har blitt godkjent.</p>';
+				$message[] = 'Du kan nå logge inn på <a href="https://crew.infected.no/">Infected Crew</a> å bli kjent med det nye crewet ditt.<br>';
+				$message[] = 'Ta deg tid til å gå igjennom profilen din å sjekk at du har oppgitt alle og riktige opplysninger da dette blir brukt til adgangskort osv. under arrangementet.</p>';
+				$message[] = '<p>Med vennlig hilsen <a href="http://infected.no/">Infected</a>.</p>';
+			$message[] = '</body>';
+		$message[] = '</html>';
+			
+		return MailManager::sendMail($application->getUser(), 'Din Infected Crew søknad har blitt oppdatert', implode("\r\n", $message));
 	}
 	
 	/*
@@ -211,16 +233,37 @@ class ApplicationHandler {
 	public static function rejectApplication($application, $comment) {
 		$con = MySQL::open(Settings::db_name_infected_crew);
 		
-		mysqli_query($con, 'UPDATE `' . Settings::db_table_infected_crew_applications . '` 
-							SET `closedTime` = \'' . date('Y-m-d H:i:s') . '\',
-								`state` = \'3\', 
-								`comment` = \'' . $con->real_escape_string($comment) . '\'
-							WHERE `id` = \'' . $con->real_escape_string($application->getId()) . '\';');
+		$con->query('UPDATE `' . Settings::db_table_infected_crew_applications . '` 
+					 SET `closedTime` = \'' . date('Y-m-d H:i:s') . '\',
+					     `state` = \'3\', 
+						 `comment` = \'' . $con->real_escape_string($comment) . '\'
+					 WHERE `id` = \'' . $con->real_escape_string($application->getId()) . '\';');
 							
 		// Remove the application from the queue, if present.
 		self::unqueueApplication($application);
-							
-		MySQL::close($con);
+		
+		// Send email notification to the user.
+		self::sendApplicationRejectedMail($application);
+		
+		$con->close();
+	}
+	
+	/*
+	 * Sends an mail to the users address with status information.
+	 */
+	public function sendApplicationRejectedMail($application) {
+		$message = array();
+		$message[] = '<!DOCTYPE html>';
+		$message[] = '<html>';
+			$message[] = '<body>';
+				$message[] = '<h3>Hei!</h3>';
+				$message[] = '<p>Din crew søknad til ' . $application->getGroup()->getTitle() . ' crew har blitt avvist.<br>';
+				$message[] = 'Du er velkommen til å søke til et annet crew eller prøve på nytt neste gang.</p>';
+				$message[] = '<p>Med vennlig hilsen <a href="http://infected.no/">Infected</a>.</p>';
+			$message[] = '</body>';
+		$message[] = '</html>';
+			
+		return MailManager::sendMail($application->getUser(), 'Din Infected Crew søknad har blitt oppdatert', implode("\r\n", $message));
 	}
 	
 	/*
@@ -229,12 +272,12 @@ class ApplicationHandler {
 	public static function isQueued($application) {
 		$con = MySQL::open(Settings::db_name_infected_crew);
 		
-		$result = mysqli_query($con, 'SELECT `id` FROM `' . Settings::db_table_infected_crew_applicationqueue . '` 
-									  WHERE `applicationId` = \'' . $con->real_escape_string($application->getId()) . '\';');
+		$result = $con->query('SELECT `id` FROM `' . Settings::db_table_infected_crew_applicationqueue . '` 
+							   WHERE `applicationId` = \'' . $con->real_escape_string($application->getId()) . '\';');
 		
 		$row = mysqli_fetch_array($result);
 		
-		MySQL::close($con);
+		$con->close();
 		
 		return $row ? true : false;
 	}
@@ -246,11 +289,34 @@ class ApplicationHandler {
 		$con = MySQL::open(Settings::db_name_infected_crew);
 		
 		if (!self::isQueued($application)) {
-			mysqli_query($con, 'INSERT INTO `' . Settings::db_table_infected_crew_applicationqueue . '` (`applicationId`) 
-								VALUES (\'' . $con->real_escape_string($application->getId()) . '\');');
+			$con->query('INSERT INTO `' . Settings::db_table_infected_crew_applicationqueue . '` (`applicationId`) 
+						 VALUES (\'' . $con->real_escape_string($application->getId()) . '\');');
 		}
 									
-		MySQL::close($con);
+		$con->close();
+		
+		// Send email notification to the user.
+		self::sendApplicationQueuedMail($application);
+	}
+	
+	/*
+	 * Sends an mail to the users address with status information.
+	 */
+	public function sendApplicationQueuedMail($application) {
+		$message = array();
+		$message[] = '<!DOCTYPE html>';
+		$message[] = '<html>';
+			$message[] = '<body>';
+				$message[] = '<h3>Hei!</h3>';
+				$message[] = '<p>Din crew søknad til ' . $application->getGroup()->getTitle() . ' crew har blitt satt i kø.<br>';
+				$message[] = 'Dette betyr at crewet du søkte for øyeblikket er fullt, men at er en aktuell kandidat, <br>';
+				$message[] = 'søknaden din vil bli godkjent senere dersom det blir behov for flere medlemmer.</p>';
+				$message[] = '<p>I mellomtiden er du velkommen til å søke deg inn i andre crew, men merk at det da er den første godkjente søknaden som bil bli godkjent.</p>';
+				$message[] = '<p>Med vennlig hilsen <a href="http://infected.no/">Infected</a>.</p>';
+			$message[] = '</body>';
+		$message[] = '</html>';
+			
+		return MailManager::sendMail($application->getUser(), 'Din Infected Crew søknad har blitt oppdatert', implode("\r\n", $message));
 	}
 	
 	/*
@@ -259,10 +325,30 @@ class ApplicationHandler {
 	public static function unqueueApplication($application) {
 		$con = MySQL::open(Settings::db_name_infected_crew);
 		
-		mysqli_query($con, 'DELETE FROM `' . Settings::db_table_infected_crew_applicationqueue . '` 
-							WHERE `applicationId` = \'' . $con->real_escape_string($application->getId()) . '\';');
+		$con->query('DELETE FROM `' . Settings::db_table_infected_crew_applicationqueue . '` 
+					 WHERE `applicationId` = \'' . $con->real_escape_string($application->getId()) . '\';');
 									
-		MySQL::close($con);
+		$con->close();
+	}
+	
+	/*
+	 * Returns a true if user has application for group.
+	 */
+	public static function hasUserApplicationForGroup($user, $group) {
+		$con = MySQL::open(Settings::db_name_infected_crew);
+		
+		$result = $con->query('SELECT `id` FROM `' . Settings::db_table_infected_crew_applications . '`
+							   WHERE `eventId` = \'' . EventHandler::getCurrentEvent()->getId() . '\'
+							   AND `userId` = \'' . $con->real_escape_string($user->getId()) . '\'
+							   AND `groupId` = \'' . $con->real_escape_string($group->getId()) . '\'
+							   AND `state` = \'1\'
+							   OR `state` = \'2\';');
+		
+		$row = mysqli_fetch_array($result);
+		
+		$con->close();
+		
+		return $row ? true : false;
 	}
 	
 	/*
@@ -271,8 +357,8 @@ class ApplicationHandler {
 	public static function getUserApplications($user) {
 		$con = MySQL::open(Settings::db_name_infected_crew);
 		
-		$result = mysqli_query($con, 'SELECT `id` FROM `' . Settings::db_table_infected_crew_applications . '`
-									  WHERE `userId` = \'' . $user->getId() . '\';');
+		$result = $con->query('SELECT `id` FROM `' . Settings::db_table_infected_crew_applications . '`
+							   WHERE `userId` = \'' . $user->getId() . '\';');
 		
 		$applicationList = array();
 		
@@ -280,7 +366,7 @@ class ApplicationHandler {
 			array_push($applicationList, self::getApplication($row['id']));
 		}
 		
-		MySQL::close($con);
+		$con->close();
 		
 		return $applicationList;
 	}
@@ -291,8 +377,8 @@ class ApplicationHandler {
 	public static function getApplicationsForEvent($event) {
 		$con = MySQL::open(Settings::db_name_infected_crew);
 		
-		$result = mysqli_query($con, 'SELECT `id` FROM `' . Settings::db_table_infected_crew_applications . '`
-									  WHERE `eventId` = \'' . $event->getId() . '\';');
+		$result = $con->query('SELECT `id` FROM `' . Settings::db_table_infected_crew_applications . '`
+							   WHERE `eventId` = \'' . $event->getId() . '\';');
 		
 		$applicationList = array();
 		
@@ -300,7 +386,7 @@ class ApplicationHandler {
 			array_push($applicationList, self::getApplication($row['id']));
 		}
 		
-		MySQL::close($con);
+		$con->close();
 		
 		return $applicationList;
 	}
