@@ -169,7 +169,7 @@ class ApplicationHandler {
 		
 		// If the group is set to queue applications, do so automatically.
 		if ($group->isQueuing()) {
-			$application = self::getApplicationForGroup($user, $group);
+			$application = self::getUserApplicationForGroup($user, $group);
 		
 			self::queueApplication($application);
 		}
