@@ -1,7 +1,8 @@
 <?php
 require_once 'settings.php';
 require_once 'mysql.php';
-require_once 'handlers/tickettype.php';
+require_once 'handlers/tickethandler.php';
+require_once 'handlers/eventhandler.php';
 require_once 'objects/tickettransfer.php';
 
 class TicketTransferHandler {
@@ -45,17 +46,21 @@ class TicketTransferHandler {
 	 * Transfers a given ticket from it's current user to the user specified.
 	 */
 	public static function transfer($ticket, $user) {
-		// Check that the new user isn't the same as the old one.
-		if ($ticket->getUser()->getId != $user->getId()) {
-			$con = MySQL::open(Settings::db_name_infected_tickets);
+		// Check that the ticket is for current event, we don't allow transfers of old tickets.
+		if ($ticket->getEvent()->getId() == EventHandler::getCurrentEvent()->getId()) {
+		
+			// Check that the new user isn't the same as the old one.
+			if ($ticket->getUser()->getId != $user->getId()) {
+				$con = MySQL::open(Settings::db_name_infected_tickets);
 
-			// Add row to ticket transfers table.
-			self::createTransfer($ticket, $user, true);
-										
-			// Actually change the user of the ticket.
-			TicketHandler::updateTicketUser($ticket, $user);
+				// Add row to ticket transfers table.
+				self::createTransfer($ticket, $user, true);
+											
+				// Actually change the user of the ticket.
+				TicketHandler::updateTicketUser($ticket, $user);
 
-			$con->close();
+				$con->close();
+			}
 		}
 	}
 	
@@ -66,15 +71,19 @@ class TicketTransferHandler {
 		$transfer = self::getTransfer($ticket, $user);
 		$timeLimit = 86400;
 		
-		// Check if the user specified matches the former user of the ticket.
-		if ($transfer->getFrom()->getId() == $user->getId()) {
-			// Check if the ticket is revertable and that the time limit isn't run out.
-			if ($transfer->getDateTime() + $timeLimit <= time() && $transfer->isRevertable()) {
-				// Add row to ticket transfers table.
-				self::createTransfer($ticket, $transfer->getFrom(), false);
-				
-				// Actually change the user of the ticket.
-				TicketHandler::updateTicketUser($user);
+		// Check that the ticket is for current event, we don't allow reverting transfers for old tickets.
+		if ($ticket->getEvent()->getId() == EventHandler::getCurrentEvent()->getId()) {
+		
+			// Check if the user specified matches the former user of the ticket.
+			if ($transfer->getFrom()->getId() == $user->getId()) {
+				// Check if the ticket is revertable and that the time limit isn't run out.
+				if ($transfer->getDateTime() + $timeLimit <= time() && $transfer->isRevertable()) {
+					// Add row to ticket transfers table.
+					self::createTransfer($ticket, $transfer->getFrom(), false);
+					
+					// Actually change the user of the ticket.
+					TicketHandler::updateTicketUser($user);
+				}
 			}
 		}
 	}

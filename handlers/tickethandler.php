@@ -1,7 +1,11 @@
 <?php
 require_once 'settings.php';
 require_once 'mysql.php';
+require_once 'handlers/userhandler.php';
 require_once 'handlers/eventhandler.php';
+require_once 'handlers/tickettypehandler.php';
+require_once 'handlers/seathandler.php';
+require_once 'handlers/storesessionhandler.php';
 require_once 'objects/ticket.php';
 require_once 'objects/tickettransfer.php';
 
@@ -19,11 +23,10 @@ class TicketHandler {
 		if ($row) {
 			return new Ticket($row['id'],
 							  $row['eventId'], 
-							  $row['paymentId'],
 							  $row['typeId'],
+							  $row['seatId'],
 							  $row['buyerId'],							  
 							  $row['userId'],
-							  $row['seatId'],
 							  $row['seaterId']);
 		}
 	}
@@ -216,11 +219,16 @@ class TicketHandler {
 	}
 	
 	public static function changeSeat($ticket, $seat) {
-		$con = MySQL::open(Settings::db_name_infected_tickets);
+		// Check that the current event matches tickets, we don't allow seating of old tickets.
+		if ($ticket->getEvent()->getId() == EventHandler::getCurrentEvent()) {
+			$con = MySQL::open(Settings::db_name_infected_tickets);
 
-		$result = mysqli_query($con, 'UPDATE `' . Settings::db_table_infected_tickets_tickets . '` SET `seatId` = ' . $con->real_escape_string($seat->getId()) . ' WHERE `id` = ' . $con->real_escape_string($ticket->getId()) . ';');
-		
-		MySQL::close($con);
+			$result = $con->query('UPDATE `' . Settings::db_table_infected_tickets_tickets . '` 
+								   SET `seatId` = ' . $con->real_escape_string($seat->getId()) . ' 
+								   WHERE `id` = ' . $con->real_escape_string($ticket->getId()) . ';');
+			
+			$con->close();
+		}
 	}
 	
 	public static function updateTicketUser($ticket, $user) {
