@@ -6,7 +6,7 @@ require_once 'handlers/paymenthandler.php';
 require_once 'handlers/userhandler.php';
 require_once 'handlers/tickettypehandler.php';
 require_once 'handlers/seathandler.php';
-require_once 'handlers/checkedinstatehandler.php';
+require_once 'handlers/checkinstatehandler.php';
 require_once 'objects/object.php';
 
 class Ticket extends Object {
