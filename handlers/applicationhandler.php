@@ -155,11 +155,11 @@ class ApplicationHandler {
 	/* 
 	 * Create a new application. 
 	 */
-	public static function createApplication($event, $group, $user, $content) {
+	public static function createApplication($group, $user, $content) {
 		$con = MySQL::open(Settings::db_name_infected_crew);
 		
 		$con->query('INSERT INTO `' . Settings::db_table_infected_crew_applications . '` (`eventId`, `groupId`, `userId`, `openedTime`, `state`, `content`) 
-					 VALUES (\'' . $con->real_escape_string($event->getId()) . '\', 
+					 VALUES (\'' . EventHandler::getCurrentEvent() . '\', 
 							 \'' . $con->real_escape_string($group->getId()) . '\', 
 							 \'' . $con->real_escape_string($user->getId()) . '\', 
 							 \'' . date('Y-m-d H:i:s') . '\',
@@ -198,7 +198,7 @@ class ApplicationHandler {
 	/*
 	 * Accepts an application, with a optional comment.
 	 */
-	public static function acceptApplication($application, $comment) {
+	public static function acceptApplication($application, $comment, $notify) {
 		$con = MySQL::open(Settings::db_name_infected_crew);
 		
 		$con->query('UPDATE `' . Settings::db_table_infected_crew_applications . '` 
@@ -207,14 +207,29 @@ class ApplicationHandler {
 						 `comment` = \'' . $con->real_escape_string($comment) . '\'
 					 WHERE `id` = \'' . $con->real_escape_string($application->getId()) . '\';');
 		
+		$user = $application->getUser();
+		$group = $application->getGroup();
+		
 		// Remove the application from the queue, if present.
 		self::unqueueApplication($application);
 		
-		// Set the user in the new group
-		GroupHandler::changeGroupForUser($application->getUser(), $application->getGroup());
+		// Reject users application for all other groups.
+		$applicationList = self::getUserApplications($user);
 		
-		// Send email notification to the user.
-		NotificationManager::sendApplicationAccpetedNotification($application);
+		foreach ($applicationList as $value) {
+			if ($group->getId() != $value->getGroup()->getId()) {
+				self::rejectApplication($value, 'Avslått på grunn av godkjent søknad i ' . $group->getTitle() . '.', false);
+			}
+		}
+		
+		// Set the user in the new group
+		GroupHandler::changeGroupForUser($user, $group);
+		
+		// Notify the user by email, if notify is true.
+		if ($notify) {
+			// Send email notification to the user.
+			NotificationManager::sendApplicationAccpetedNotification($application);
+		}
 		
 		$con->close();
 	}
@@ -222,7 +237,7 @@ class ApplicationHandler {
 	/*
 	 * Rejects an application, with a optional comment.
 	 */
-	public static function rejectApplication($application, $comment) {
+	public static function rejectApplication($application, $comment, $notify) {
 		$con = MySQL::open(Settings::db_name_infected_crew);
 		
 		$con->query('UPDATE `' . Settings::db_table_infected_crew_applications . '` 
@@ -234,8 +249,10 @@ class ApplicationHandler {
 		// Remove the application from the queue, if present.
 		self::unqueueApplication($application);
 		
-		// Send email notification to the user.
-		NotificationManager::sendApplicationRejectedNotification($application);
+		// Notify the user by email, if notify is true.
+		if ($notify) {
+			NotificationManager::sendApplicationRejectedNotification($application, $comment);
+		}
 		
 		$con->close();
 	}
@@ -259,7 +276,7 @@ class ApplicationHandler {
 	/*
 	 * Puts an application in queue.
 	 */
-	public static function queueApplication($application) {
+	public static function queueApplication($application, $notify) {
 		$con = MySQL::open(Settings::db_name_infected_crew);
 		
 		if (!self::isQueued($application)) {
@@ -269,8 +286,10 @@ class ApplicationHandler {
 									
 		$con->close();
 		
-		// Send email notification to the user.
-		NotificationManager::sendApplicationQueuedNotification($application);
+		// Notify the user by email, if notify is true.
+		if ($notify) {
+			NotificationManager::sendApplicationQueuedNotification($application);
+		}
 	}
 	
 	/*
@@ -332,7 +351,8 @@ class ApplicationHandler {
 		$con = MySQL::open(Settings::db_name_infected_crew);
 		
 		$result = $con->query('SELECT `id` FROM `' . Settings::db_table_infected_crew_applications . '`
-							   WHERE `userId` = \'' . $user->getId() . '\';');
+							   WHERE `eventId` = \'' . EventHandler::getCurrentEvent()->getId() . '\'
+							   AND `userId` = \'' . $user->getId() . '\';');
 		
 		$applicationList = array();
 		

@@ -44,14 +44,15 @@ class NotificationManager {
 	/*
 	 * Sends an mail to the users address with status information.
 	 */
-	public function sendApplicationRejectedNotification($application) {
+	public function sendApplicationRejectedNotification($application, $comment) {
 		$message = array();
 		$message[] = '<!DOCTYPE html>';
 		$message[] = '<html>';
 			$message[] = '<body>';
 				$message[] = '<h3>Hei!</h3>';
 				$message[] = '<p>Din crew søknad til ' . $application->getGroup()->getTitle() . ' crew har blitt avvist.<br>';
-				$message[] = 'Du er velkommen til å søke til et annet crew eller prøve på nytt neste gang.</p>';
+				$message[] = 'Grunnen var: ' . $comment . '</p>';
+				$message[] = '<p>Du er velkommen til å søke til et annet crew eller prøve på nytt neste gang.</p>';
 				$message[] = '<p>Med vennlig hilsen <a href="http://infected.no/">Infected</a>.</p>';
 			$message[] = '</body>';
 		$message[] = '</html>';

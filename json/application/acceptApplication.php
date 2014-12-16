@@ -16,7 +16,7 @@ if (Session::isAuthenticated()) {
 			$application = ApplicationHandler::getApplication($_GET['id']);
 			$comment = isset($_GET['comment']) ? $_GET['comment'] : null;
 			
-			ApplicationHandler::acceptApplication($application, $comment);
+			ApplicationHandler::acceptApplication($application, $comment, true);
 			$result = true;
 		} else {
 			$message = 'Ingen søknad spesifisert.';

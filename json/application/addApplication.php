@@ -20,7 +20,7 @@ if (Session::isAuthenticated()) {
 				$content = $_GET['content'];
 
 				if (!ApplicationHandler::hasUserApplicationForGroup($user, $group)) {
-					ApplicationHandler::createApplication(EventHandler::getCurrentEvent(), $group, $user, $content);
+					ApplicationHandler::createApplication($group, $user, $content);
 				
 					$result = true;
 					$message = 'Din søknad til crewet "' . $group->getTitle() . '" er nå sendt.';

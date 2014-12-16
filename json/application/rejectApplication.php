@@ -20,7 +20,7 @@ if (Session::isAuthenticated()) {
 				$application = ApplicationHandler::getApplication($_GET['id']);
 				$comment = $_GET['comment'];
 			
-				ApplicationHandler::rejectApplication($application, $comment);
+				ApplicationHandler::rejectApplication($application, $comment, true);
 				$result = true;
 			} else {
 				$message = 'Du har ikke oppgitt noen grunn på hvorfor søkneden skal bli avvist.';
