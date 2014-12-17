@@ -220,7 +220,7 @@ class ApplicationHandler {
         
         foreach ($applicationList as $value) {
             if ($group->getId() != $value->getGroup()->getId()) {
-                self::closeApplication($value, 'Lukket av systemet.');
+                self::closeApplication($value);
             }
         }
         
@@ -260,13 +260,13 @@ class ApplicationHandler {
     /*
      * Rejects an application, with a optional comment.
      */
-    public static function closeApplication($application, $comment) {
+    public static function closeApplication($application) {
         $mysql = MySQL::open(Settings::db_name_infected_crew);
         
         $mysql->query('UPDATE `' . Settings::db_table_infected_crew_applications . '` 
                        SET `closedTime` = \'' . date('Y-m-d H:i:s') . '\',
                            `state` = \'4\',
-                           `comment` = \'' . $mysql->real_escape_string($comment) . '\'
+                           `comment` = \'Closed by the system.\'
                        WHERE `id` = \'' . $mysql->real_escape_string($application->getId()) . '\';');
         
         $mysql->close();
