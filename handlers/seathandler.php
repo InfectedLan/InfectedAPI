@@ -12,7 +12,7 @@ class SeatHandler {
         $result = $mysql->query('SELECT * FROM `' . Settings::db_table_infected_tickets_seats . '` 
                                       WHERE `id` = \'' . $mysql->real_escape_string($id) . '\';');
                                       
-        $row = mysqli_fetch_array($result);
+        $row = $result->fetch_array();
 
         $mysql->close();
 
@@ -47,7 +47,7 @@ class SeatHandler {
         $result = $mysql->query('SELECT * FROM `' . Settings::db_table_infected_tickets_tickets . '` 
                                       WHERE `seatId` = ' . $mysql->real_escape_string($seat->getId()) . ';');
 
-        $row = mysqli_fetch_array($result);
+        $row = $result->fetch_array();
 
         $mysql->close();
 
@@ -60,7 +60,7 @@ class SeatHandler {
         $result = $mysql->query('SELECT `ownerId` FROM `' . Settings::db_table_infected_tickets_tickets . '` 
                                       WHERE `seatId` = ' . $mysql->real_escape_string($seat->getId()) . ';');
         
-        $row = mysqli_fetch_array($result);
+        $row = $result->fetch_array();
 
         $mysql->close();
 
@@ -75,7 +75,7 @@ class SeatHandler {
         $result = $mysql->query('SELECT `id` FROM `' . Settings::db_table_infected_tickets_tickets . '` 
                                       WHERE `seatId` = ' . $mysql->real_escape_string($seat->getId()) . ';');
         
-        $row = mysqli_fetch_array($result);
+        $row = $result->fetch_array();
 
         $mysql->close();
 

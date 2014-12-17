@@ -30,7 +30,7 @@ class PasswordResetCodeHandler {
         $result = $mysql->query('SELECT `id` FROM `' . Settings::db_table_infected_passwordresetcodes . '` 
                                       WHERE `userId` = \'' . $mysql->real_escape_string($user->getId()) . '\';');
                             
-        $row = mysqli_fetch_array($result);
+        $row = $result->fetch_array();
         
         $mysql->close();
 
@@ -43,7 +43,7 @@ class PasswordResetCodeHandler {
         $result = $mysql->query('SELECT `id` FROM `' . Settings::db_table_infected_passwordresetcodes . '` 
                                       WHERE `code` = \'' . $mysql->real_escape_string($code) . '\';');
                             
-        $row = mysqli_fetch_array($result);
+        $row = $result->fetch_array();
         
         $mysql->close();
 
@@ -56,7 +56,7 @@ class PasswordResetCodeHandler {
         $result = $mysql->query('SELECT `userId` FROM `' . Settings::db_table_infected_passwordresetcodes . '` 
                                       WHERE `code` = \'' . $mysql->real_escape_string($code) . '\';');
                             
-        $row = mysqli_fetch_array($result);
+        $row = $result->fetch_array();
         
         $mysql->close();
 

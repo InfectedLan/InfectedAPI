@@ -12,7 +12,7 @@ class CityDictionary {
         $result = $mysql->query('SELECT `city` FROM `' . Settings::db_table_infected_postalcodes . '`
                                       WHERE `code` = \'' . $mysql->real_escape_string($postalcode) . '\';');
                                       
-        $row = mysqli_fetch_array($result);
+        $row = $result->fetch_array();
         
         $mysql->close();
         
@@ -30,7 +30,7 @@ class CityDictionary {
         $result = $mysql->query('SELECT `code` FROM `' . Settings::db_table_infected_postalcodes . '` 
                                       WHERE `city` = \'' . $mysql->real_escape_string($city) . '\';');
         
-        $row = mysqli_fetch_array($result);
+        $row = $result->fetch_array();
         
         $mysql->close();
         
@@ -45,7 +45,7 @@ class CityDictionary {
         $result = $mysql->query('SELECT `id` FROM `' . Settings::db_table_infected_postalcodes . '` 
                                       WHERE `code` = \'' . $mysql->real_escape_string($code) . '\';');
         
-        $row = mysqli_fetch_array($result);
+        $row = $result->fetch_array();
         
         $mysql->close();
         

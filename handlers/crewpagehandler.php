@@ -26,7 +26,7 @@ class CrewPageHandler {
                                                   AND `teamId` = \'0\';');
                 }
                 
-                $row = mysqli_fetch_array($result);
+                $row = $result->fetch_array();
                 
                 $mysql->close();
 
@@ -51,7 +51,7 @@ class CrewPageHandler {
             $result = $mysql->query('SELECT `id` FROM `' . Settings::db_table_infected_crew_pages . '` 
                                           WHERE `name` = \'' . $mysql->real_escape_string($name) . '\';');
             
-            $row = mysqli_fetch_array($result);
+            $row = $result->fetch_array();
             
             $mysql->close();
 
@@ -68,7 +68,7 @@ class CrewPageHandler {
         $result = $mysql->query('SELECT `id` FROM `' . Settings::db_table_infected_crew_pages . '`;');
         $pageList = array();
         
-        while ($row = mysqli_fetch_array($result)) {
+        while ($row = $result->fetch_array()) {
             array_push($pageList, self::getPage($row['id']));
         }
         
@@ -91,7 +91,7 @@ class CrewPageHandler {
                                       AND `teamId` = \'' . $mysql->real_escape_string($teamId) . '\';');
         $pageList = array();
         
-        while ($row = mysqli_fetch_array($result)) {
+        while ($row = $result->fetch_array()) {
             array_push($pageList, self::getPage($row['id']));
         }
 

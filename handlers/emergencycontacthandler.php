@@ -11,7 +11,7 @@ class EmergencyContactHandler {
         $result = $mysql->query('SELECT * FROM `'. Settings::db_table_infected_emergencycontacts . '`
                                       WHERE `id` = \'' . $mysql->real_escape_string($id) . '\';');
         
-        $row = mysqli_fetch_array($result);
+        $row = $result->fetch_array();
         
         $mysql->close();
 
@@ -28,7 +28,7 @@ class EmergencyContactHandler {
         $result = $mysql->query('SELECT `id` FROM `'. Settings::db_table_infected_emergencycontacts . '`
                                       WHERE `userId` = \'' . $mysql->real_escape_string($user->getId()) . '\';');
         
-        $row = mysqli_fetch_array($result);
+        $row = $result->fetch_array();
         
         $mysql->close();
 
@@ -45,7 +45,7 @@ class EmergencyContactHandler {
         
         $emergencyContactsList = array();
         
-        while ($row = mysqli_fetch_array($result)) {
+        while ($row = $result->fetch_array()) {
             array_push($emergencyContactsList, self::getEmergencyContact($row['id']));
         }
         
@@ -60,7 +60,7 @@ class EmergencyContactHandler {
         $result = $mysql->query('SELECT `id` FROM `'. Settings::db_table_infected_emergencycontacts . '`
                                       WHERE `userId` = \'' . $mysql->real_escape_string($user->getId()) . '\';');
         
-        $row = mysqli_fetch_array($result);
+        $row = $result->fetch_array();
         
         $mysql->close();
 

@@ -12,7 +12,7 @@ class GroupHandler {
         $result = $mysql->query('SELECT * FROM `' . Settings::db_table_infected_crew_groups . '` 
                                       WHERE `id` = \'' . $mysql->real_escape_string($id) . '\';');
                                     
-        $row = mysqli_fetch_array($result);
+        $row = $result->fetch_array();
         
         $mysql->close();
         
@@ -33,7 +33,7 @@ class GroupHandler {
         $result = $mysql->query('SELECT `groupId` FROM `' . Settings::db_table_infected_crew_memberof . '` 
                                       WHERE `userId` = \'' . $mysql->real_escape_string($userId) . '\';');
                                     
-        $row = mysqli_fetch_array($result);
+        $row = $result->fetch_array();
         
         $mysql->close();
         
@@ -51,7 +51,7 @@ class GroupHandler {
         
         $groupList = array();
         
-        while ($row = mysqli_fetch_array($result)) {
+        while ($row = $result->fetch_array()) {
             array_push($groupList, self::getGroup($row['id']));
         }
         
@@ -109,7 +109,7 @@ class GroupHandler {
         
         $memberList = array();
         
-        while ($row = mysqli_fetch_array($result)) {
+        while ($row = $result->fetch_array()) {
             array_push($memberList, UserHandler::getUser($row['id']));
         }
         
@@ -129,7 +129,7 @@ class GroupHandler {
                                       WHERE `userId` = \'' . $mysql->real_escape_string($userId) . '\'
                                       AND `groupId` != \'0\';');
                                       
-        $row = mysqli_fetch_array($result);
+        $row = $result->fetch_array();
         
         $mysql->close();
         
@@ -146,7 +146,7 @@ class GroupHandler {
                                       FROM `' . Settings::db_table_infected_crew_groups . '` 
                                       WHERE `leader` = \'' . $mysql->real_escape_string($userId) . '\';');
                                       
-        $row = mysqli_fetch_array($result);
+        $row = $result->fetch_array();
         
         $mysql->close();
         

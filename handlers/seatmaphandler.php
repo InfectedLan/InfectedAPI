@@ -12,7 +12,7 @@ class SeatmapHandler {
         $result = $mysql->query('SELECT * FROM `' . Settings::db_table_infected_tickets_seatmaps . '` 
                                 WHERE `id` = \'' . $mysql->real_escape_string($id) . '\';');
                                       
-        $row = mysqli_fetch_array($result);
+        $row = $result->fetch_array();
 
         $mysql->close();
 
@@ -33,7 +33,7 @@ class SeatmapHandler {
         $result = $mysql->query('SELECT id FROM ' .  Settings::db_table_infected_tickets_seatmaps . ' 
                                  ORDER BY id DESC LIMIT 1;');
 
-        $row = mysqli_fetch_array($result);
+        $row = $result->fetch_array();
 
         $mysql->close();
 
@@ -50,7 +50,7 @@ class SeatmapHandler {
 
         $seatmapArray = array();
 
-        while ($row = mysqli_fetch_array($result)) {
+        while ($row = $result->fetch_array()) {
             array_push($seatmapArray, self::getSeatmap($row['id']));
         }
 
@@ -67,7 +67,7 @@ class SeatmapHandler {
 
         $rowArray = array();
 
-        while ($row = mysqli_fetch_array($result)) {
+        while ($row = $result->fetch_array()) {
             array_push($rowArray, RowHandler::getRow($row['id']));
         }
 
@@ -92,7 +92,7 @@ class SeatmapHandler {
         $result = $mysql->query('SELECT `id` FROM `' . Settings::db_table_infected_events . '` 
                                 WHERE `seatmap`=' . $mysql->real_escape_string($seatmap->getId()) . ';');
 
-        $row = mysqli_fetch_array($result);
+        $row = $result->fetch_array();
 
         $mysql->close();
 

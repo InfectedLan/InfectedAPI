@@ -12,7 +12,7 @@ class EventHandler {
         $result = $mysql->query('SELECT * FROM `'. Settings::db_table_infected_events . '`
                                       WHERE `id` = \'' . $mysql->real_escape_string($id) . '\';');
 
-        $row = mysqli_fetch_array($result);
+        $row = $result->fetch_array();
         
         $mysql->close();
 
@@ -38,7 +38,7 @@ class EventHandler {
                                       ORDER BY `startTime` ASC
                                       LIMIT 1;');
 
-        $row = mysqli_fetch_array($result);
+        $row = $result->fetch_array();
         
         $mysql->close();
         
@@ -53,7 +53,7 @@ class EventHandler {
         
         $eventList = array();
         
-        while ($row = mysqli_fetch_array($result)) {
+        while ($row = $result->fetch_array()) {
             array_push($eventList, self::getEvent($row['id']));
         }
         

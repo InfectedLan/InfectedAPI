@@ -10,7 +10,7 @@ class GameApplicationHandler {
         $result = $mysql->query('SELECT * FROM `' . Settings::db_table_infected_main_gameapplications . '` 
                                       WHERE `id` = \'' . $mysql->real_escape_string($id) . '\';');
                                         
-        $row = mysqli_fetch_array($result);
+        $row = $result->fetch_array();
         
         $mysql->close();
         
@@ -35,7 +35,7 @@ class GameApplicationHandler {
                                     
         $gameApplicationList = array();
         
-        while ($row = mysqli_fetch_array($result)) {
+        while ($row = $result->fetch_array()) {
             array_push($gameApplicationList, self::getGameApplication($row['id']));
         }
         
@@ -53,7 +53,7 @@ class GameApplicationHandler {
                                     
         $gameApplicationList = array();
         
-        while ($row = mysqli_fetch_array($result)) {
+        while ($row = $result->fetch_array()) {
             array_push($gameApplicationList, self::getGameApplication($row['id']));
         }
         

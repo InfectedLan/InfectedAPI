@@ -12,7 +12,7 @@ class StoreSessionHandler {
         $result = $mysql->query('SELECT * FROM `' . Settings::db_table_infected_tickets_storesessions . '` 
                                       WHERE `id` = ' . $mysql->real_escape_string($id) . ';');
         
-        $row = mysqli_fetch_array($result);
+        $row = $result->fetch_array();
 
         $mysql->close();
 
@@ -52,7 +52,7 @@ class StoreSessionHandler {
                                       WHERE `userId` = ' . $mysql->real_escape_string($user->getId()) . ' 
                                       AND `datetime` > ' . self::oldestValidTimestamp() . ';');
 
-        $row = mysqli_fetch_array($result);
+        $row = $result->fetch_array();
 
         $mysql->close();
 
@@ -79,7 +79,7 @@ class StoreSessionHandler {
 
         $reservedCount = 0;
 
-        while ($row = mysqli_fetch_array($result)) {
+        while ($row = $result->fetch_array()) {
             $reservedCount += $row['amount'];
         }
 
@@ -108,7 +108,7 @@ class StoreSessionHandler {
                                       WHERE `code` = ' . $mysql->real_escape_string($code) . ' 
                                       AND `datetime` > ' . self::oldestValidTimestamp() . ';');
 
-        $row = mysqli_fetch_array($result);
+        $row = $result->fetch_array();
 
         $mysql->close();
 
@@ -124,7 +124,7 @@ class StoreSessionHandler {
                                       WHERE `code`=' . $mysql->real_escape_string($code) . ' 
                                       AND `datetime` > ' . self::oldestValidTimestamp() . ';');
 
-        $row = mysqli_fetch_array($result);
+        $row = $result->fetch_array();
 
         $mysql->close();
 

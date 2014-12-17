@@ -11,7 +11,7 @@ class AvatarHandler {
         $result = $mysql->query('SELECT * FROM `' . Settings::db_table_infected_crew_avatars . '` 
                                       WHERE `id` = \'' . $mysql->real_escape_string($id) . '\';');
                                       
-        $row = mysqli_fetch_array($result);
+        $row = $result->fetch_array();
         
         $mysql->close();
 
@@ -29,7 +29,7 @@ class AvatarHandler {
         $result = $mysql->query('SELECT `id` FROM `' . Settings::db_table_infected_crew_avatars . '` 
                                       WHERE `userId` = \'' . $mysql->real_escape_string($user->getId()) . '\';');
         
-        $row = mysqli_fetch_array($result);
+        $row = $result->fetch_array();
         
         $mysql->close();
         
@@ -45,7 +45,7 @@ class AvatarHandler {
         
         $avatarList = array();
         
-        while ($row = mysqli_fetch_array($result)) {
+        while ($row = $result->fetch_array()) {
             array_push($avatarList, self::getAvatar($row['id']));
         }
         
@@ -62,7 +62,7 @@ class AvatarHandler {
         
         $pendingAvatarList = array();
         
-        while ($row = mysqli_fetch_array($result)) {
+        while ($row = $result->fetch_array()) {
             array_push($pendingAvatarList, self::getAvatar($row['id']));
         }
         
@@ -77,7 +77,7 @@ class AvatarHandler {
         $result = $mysql->query('SELECT `id` FROM `' . Settings::db_table_infected_crew_avatars . '` 
                                       WHERE `userId` = \'' . $mysql->real_escape_string($user->getId()) . '\';');
         
-        $row = mysqli_fetch_array($result);
+        $row = $result->fetch_array();
         
         $mysql->close();
         
@@ -91,7 +91,7 @@ class AvatarHandler {
                                       WHERE `userId` = \'' . $mysql->real_escape_string($user->getId()) . '\'
                                       AND (`state` = 1 OR `state` = 2);');
         
-        $row = mysqli_fetch_array($result);
+        $row = $result->fetch_array();
         
         $mysql->close();
         
@@ -105,7 +105,7 @@ class AvatarHandler {
                                       WHERE `userId` = \'' . $mysql->real_escape_string($user->getId()) . '\'
                                       AND `state` = 2;');
         
-        $row = mysqli_fetch_array($result);
+        $row = $result->fetch_array();
         
         $mysql->close();
         

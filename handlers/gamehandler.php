@@ -10,7 +10,7 @@ class GameHandler {
         $result = $mysql->query('SELECT * FROM `' . Settings::db_table_infected_main_games . '` 
                                       WHERE `id` = \'' . $mysql->real_escape_string($id) . '\';');
                                       
-        $row = mysqli_fetch_array($result);
+        $row = $result->fetch_array();
         
         $mysql->close();
 
@@ -34,7 +34,7 @@ class GameHandler {
                                       
         $gameList = array();
         
-        while ($row = mysqli_fetch_array($result)) {
+        while ($row = $result->fetch_array()) {
             array_push($gameList, self::getGame($row['id']));
         }
 
@@ -51,7 +51,7 @@ class GameHandler {
         
         $gameList = array();
         
-        while ($row = mysqli_fetch_array($result)) {
+        while ($row = $result->fetch_array()) {
             array_push($gameList, self::getGame($row['id']));
         }
         

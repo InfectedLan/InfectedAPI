@@ -10,7 +10,7 @@ class ReadyHandlerHandler {
         $result = $mysql->query('SELECT * FROM `' . Settings::db_table_infected_compo_readyInstances . '` 
                                       WHERE `id` = \'' . $id . '\';');
         
-        $row = mysqli_fetch_array($result);
+        $row = $result->fetch_array();
         
         $mysql->close();
         

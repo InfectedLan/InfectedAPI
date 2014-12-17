@@ -10,7 +10,7 @@ class CheckinStateHandler {
         $result = $mysql->query('SELECT * FROM `' . Settings::db_table_infected_tickets_checkinstate . '` 
                                       WHERE `id` = \'' . $id . '\';');
         
-        $row = mysqli_fetch_array($result);
+        $row = $result->fetch_array();
         
         $mysql->close();
         
@@ -27,7 +27,7 @@ class CheckinStateHandler {
         $result = $mysql->query('SELECT * FROM `' . Settings::db_table_infected_tickets_checkinstate . '` 
                                       WHERE `ticketId` = ' . $mysql->real_escape_string($ticket->getId()) . ';');
 
-        $row = mysqli_fetch_array($result);
+        $row = $result->fetch_array();
         
         $mysql->close();
 

@@ -10,7 +10,7 @@ class PaymentLogHandler {
         $result = $mysql->query('SELECT `userId` FROM `' . Settings::db_table_infected_passwordresetcodes . '` 
                                       WHERE `code` = \'' . $mysql->real_escape_string($code) . '\';');
                             
-        $row = mysqli_fetch_array($result);
+        $row = $result->fetch_array();
         
         $mysql->close();
 

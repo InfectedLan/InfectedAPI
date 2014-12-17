@@ -12,7 +12,7 @@ class RowHandler {
         $result = $mysql->query('SELECT * FROM `' . Settings::db_table_infected_tickets_rows . '`
                                       WHERE `id` = \'' . $mysql->real_escape_string($id) . '\';');
                                       
-        $row = mysqli_fetch_array($result);
+        $row = $result->fetch_array();
 
         $mysql->close();
 
@@ -34,7 +34,7 @@ class RowHandler {
 
         $seatArray = array();
 
-        while ($seat = mysqli_fetch_array($result)) {
+        while ($seat = $result->fetch_array()) {
             array_push($seatArray, SeatHandler::getSeat($seat['id']));
         }
 
@@ -67,7 +67,7 @@ class RowHandler {
                                       ORDER BY `id` DESC 
                                       LIMIT 1;');
 
-        $row = mysqli_fetch_array($result);
+        $row = $result->fetch_array();
 
         $mysql->close();
 

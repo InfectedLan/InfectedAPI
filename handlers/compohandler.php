@@ -11,7 +11,7 @@ class CompoHandler {
         $result = $mysql->query('SELECT * FROM `' . Settings::db_table_infected_compo_compos . '` 
                                       WHERE `id` = \'' . $mysql->real_escape_string($id) . '\';');
         
-        $row = mysqli_fetch_array($result);
+        $row = $result->fetch_array();
         
         $mysql->close();
         
@@ -34,7 +34,7 @@ class CompoHandler {
 
         $compoList = array();
 
-        while ($row = mysqli_fetch_array($result)) {
+        while ($row = $result->fetch_array()) {
             array_push($compoList, self::getCompo($row['id']));
         }
 
@@ -51,7 +51,7 @@ class CompoHandler {
 
         $clanList = array();
 
-        while ($row = mysqli_fetch_array($result)) {
+        while ($row = $result->fetch_array()) {
             $clan =  ClanHandler::getClan($row['clanId']);
             array_push($clanList, $clan);
         }

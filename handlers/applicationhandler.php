@@ -14,7 +14,7 @@ class ApplicationHandler {
         $result = $mysql->query('SELECT * FROM `' . Settings::db_table_infected_crew_applications . '` 
                                WHERE `id` = \'' . $mysql->real_escape_string($id) . '\';');
                                       
-        $row = mysqli_fetch_array($result);
+        $row = $result->fetch_array();
         
         $mysql->close();
 
@@ -41,7 +41,7 @@ class ApplicationHandler {
         
         $applicationList = array();
         
-        while ($row = mysqli_fetch_array($result)) {
+        while ($row = $result->fetch_array()) {
             array_push($applicationList, self::getApplication($row['id']));
         }
         
@@ -66,7 +66,7 @@ class ApplicationHandler {
         
         $applicationList = array();
         
-        while ($row = mysqli_fetch_array($result)) {
+        while ($row = $result->fetch_array()) {
             array_push($applicationList, self::getApplication($row['id']));
         }
         
@@ -92,7 +92,7 @@ class ApplicationHandler {
         
         $applicationList = array();
         
-        while ($row = mysqli_fetch_array($result)) {
+        while ($row = $result->fetch_array()) {
             array_push($applicationList, self::getApplication($row['id']));
         }
         
@@ -117,7 +117,7 @@ class ApplicationHandler {
         
         $queuedApplicationList = array();
         
-        while ($row = mysqli_fetch_array($result)) {
+        while ($row = $result->fetch_array()) {
             array_push($queuedApplicationList, self::getApplication($row['id']));
         }
         
@@ -143,7 +143,7 @@ class ApplicationHandler {
         
         $queuedApplicationList = array();
         
-        while ($row = mysqli_fetch_array($result)) {
+        while ($row = $result->fetch_array()) {
             array_push($queuedApplicationList, self::getApplication($row['id']));
         }
         
@@ -284,7 +284,7 @@ class ApplicationHandler {
         $result = $mysql->query('SELECT `id` FROM `' . Settings::db_table_infected_crew_applicationqueue . '` 
                                  WHERE `applicationId` = \'' . $mysql->real_escape_string($application->getId()) . '\';');
         
-        $row = mysqli_fetch_array($result);
+        $row = $result->fetch_array();
         
         $mysql->close();
         
@@ -335,7 +335,7 @@ class ApplicationHandler {
                                AND `state` = \'1\'
                                OR `state` = \'2\';');
         
-        $row = mysqli_fetch_array($result);
+        $row = $result->fetch_array();
         
         $mysql->close();
         
@@ -355,7 +355,7 @@ class ApplicationHandler {
                                AND `state` = \'1\'
                                OR `state` = \'2\';');
         
-        $row = mysqli_fetch_array($result);
+        $row = $result->fetch_array();
         
         $mysql->close();
         
@@ -374,7 +374,7 @@ class ApplicationHandler {
         
         $applicationList = array();
         
-        while ($row = mysqli_fetch_array($result)) {
+        while ($row = $result->fetch_array()) {
             array_push($applicationList, self::getApplication($row['id']));
         }
         
@@ -394,7 +394,7 @@ class ApplicationHandler {
         
         $applicationList = array();
         
-        while ($row = mysqli_fetch_array($result)) {
+        while ($row = $result->fetch_array()) {
             array_push($applicationList, self::getApplication($row['id']));
         }
         

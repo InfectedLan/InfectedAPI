@@ -14,7 +14,7 @@ class ClanHandler {
         $result = $mysql->query('SELECT * FROM `' . Settings::db_table_infected_compo_clans . '` 
                                       WHERE `id` = \'' . $mysql->real_escape_string($id) . '\';');
         
-        $row = mysqli_fetch_array($result);
+        $row = $result->fetch_array();
         
         $mysql->close();
 
@@ -35,14 +35,14 @@ class ClanHandler {
 
         $clanArray = array();
 
-        while ($row = mysqli_fetch_array($result)) {
+        while ($row = $result->fetch_array()) {
             array_push($clanArray, self::getClan($row['clanId']));
         }
         
         /*
         $result = $mysql->query('SELECT * FROM `' . Settings::db_table_infected_compo_clans . '` WHERE `chief` = ' . $mysql->real_escape_string($user->getId()) . ';');
 
-        while($row = mysqli_fetch_array($result)) {
+        while($row = $result->fetch_array()) {
             array_push($clanArray, self::getClan($row['id']));
         }*/
 
@@ -55,7 +55,7 @@ class ClanHandler {
         $result = $mysql->query('SELECT * FROM `' . Settings::db_table_infected_compo_participantof . '` 
                                       WHERE `clanId` = \'' . $mysql->real_escape_string( $clan->getId() ) . '\';');
 
-        $row = mysqli_fetch_array($result);
+        $row = $result->fetch_array();
 
         $mysql->close();
 
@@ -72,7 +72,7 @@ class ClanHandler {
 
         $peopleArray = array();
 
-        while ($row = mysqli_fetch_array($result)) {
+        while ($row = $result->fetch_array()) {
             array_push($peopleArray, InviteHandler::getInvite($row['id']));
         }
 
@@ -89,7 +89,7 @@ class ClanHandler {
 
         $memberList = array();
 
-        while ($row = mysqli_fetch_array($result)) {
+        while ($row = $result->fetch_array()) {
             array_push($memberList, UserHandler::getUser($row['userId']));
         }
 
@@ -105,7 +105,7 @@ class ClanHandler {
                                       WHERE `clanId` = \'' . $mysql->real_escape_string($clan->getId()) . '\'
                                       AND `userId` = \'' . $mysql->real_escape_string($user->getId()) . '\';');
 
-        $row = mysqli_fetch_array($result);
+        $row = $result->fetch_array();
 
         $mysql->close();
 

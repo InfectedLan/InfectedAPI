@@ -17,7 +17,7 @@ class MatchHandler {
         $result = $mysql->query('SELECT * FROM `' . Settings::db_table_infected_compo_matches . '` 
                                       WHERE `id` = \'' . $id . '\';');
         
-        $row = mysqli_fetch_array($result);
+        $row = $result->fetch_array();
         
         $mysql->close();
         
@@ -39,7 +39,7 @@ class MatchHandler {
 
         $matchList = array();
 
-        while ($row = mysqli_fetch_array($result)) {
+        while ($row = $result->fetch_array()) {
             $match = self::getMatch($row['id']);
             
             if ($match->getScheduledTime() > time()) {
@@ -64,7 +64,7 @@ class MatchHandler {
 
         $matchList = array();
 
-        while ($row = mysqli_fetch_array($result)) {
+        while ($row = $result->fetch_array()) {
             $match = self::getMatch($row['id']);
             
             if (self::isReady($match)) {
@@ -87,7 +87,7 @@ class MatchHandler {
 
         $matchList = array();
 
-        while ($row = mysqli_fetch_array($result)) {
+        while ($row = $result->fetch_array()) {
             array_push($matchList, self::getMatch($row['id']));
         }
 
@@ -105,7 +105,7 @@ class MatchHandler {
 
         $mysql->close();
         
-        while ($row = mysqli_fetch_array($result)) {
+        while ($row = $result->fetch_array()) {
              $match = self::getMatch($row['matchId']);
 
              if ($match->getWinner() == 0 && $match->getScheduledTime() < time()) {
@@ -171,7 +171,7 @@ class MatchHandler {
     
         $clanArray = array();
 
-        while ($row = mysqli_fetch_array($result)) {
+        while ($row = $result->fetch_array()) {
             array_push($clanArray, ClanHandler::getClan($row['participantId']) );
         }
 
@@ -188,7 +188,7 @@ class MatchHandler {
 
         $stringArray = array();
 
-        while ($row = mysqli_fetch_array($result)) {
+        while ($row = $result->fetch_array()) {
             if ($row['type'] == Settings::compo_match_participant_type_match_winner) {
                 array_push($stringArray, "Winner of match " . $row['participantId']);
             } else if ($row['type'] == Settings::compo_match_participant_type_match_looser) {
@@ -215,7 +215,7 @@ class MatchHandler {
 
         $mysql->close();
 
-        while($row = mysqli_fetch_array($result)) {
+        while($row = $result->fetch_array()) {
             $hasParticipants = true;
             
             if ($row['type'] == Settings::compo_match_participant_type_match_winner || 
@@ -235,7 +235,7 @@ class MatchHandler {
                                       WHERE `userId` = ' . $mysql->real_escape_string($user->getId()) . ' 
                                       AND `matchId` = ' . $mysql->real_escape_string($match->getId()) . ';');
     
-        $row = mysqli_fetch_array($result);
+        $row = $result->fetch_array();
         
         return $row ? true : false;
     }
@@ -257,7 +257,7 @@ class MatchHandler {
                                       WHERE `type` = 0 AND `matchId` = ' . $mysql->real_escape_string($match->getId()) . ';');
 
         //Iterate through clans
-        while($row = mysqli_fetch_array($result)) {
+        while($row = $result->fetch_array()) {
             $users = $mysql->query('SELECT * FROM `' . Settings::db_table_infected_compo_memberof . '` 
                                          WHERE `clanId` = ' . $row['participantId'] . ';');
             
