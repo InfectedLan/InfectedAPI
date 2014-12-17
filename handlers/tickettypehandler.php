@@ -4,22 +4,22 @@ require_once 'mysql.php';
 require_once 'objects/tickettype.php';
 
 class TicketTypeHandler {
-	public static function getTicketType($id) {
-		$con = MySQL::open(Settings::db_name_infected_tickets);
+    public static function getTicketType($id) {
+        $mysql = MySQL::open(Settings::db_name_infected_tickets);
 
-		$result = $con->query('SELECT * FROM `' . Settings::db_table_infected_tickets_tickettypes . '` 
-							   WHERE `id` = \'' . $con->real_escape_string($id) . '\';');
-									  
-		$row = mysqli_fetch_array($result);
+        $result = $mysql->query('SELECT * FROM `' . Settings::db_table_infected_tickets_tickettypes . '` 
+                               WHERE `id` = \'' . $mysql->real_escape_string($id) . '\';');
+                                      
+        $row = mysqli_fetch_array($result);
 
-		$con->close();
+        $mysql->close();
 
-		if ($row) {
-			return new TicketType($row['id'], 
-								  $row['humanName'],
-								  $row['price'],
-								  $row['internalName']);
-		}
-	}
+        if ($row) {
+            return new TicketType($row['id'], 
+                                  $row['humanName'],
+                                  $row['price'],
+                                  $row['internalName']);
+        }
+    }
 }
 ?>

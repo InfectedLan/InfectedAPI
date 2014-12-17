@@ -12,285 +12,285 @@ require_once 'handlers/grouphandler.php';
 require_once 'objects/user.php';
 
 class UserHandler {
-	/* 
-	 * Get an user by the internal id.
-	 */
-	public static function getUser($id) {
-		$con = MySQL::open(Settings::db_name_infected);
-		
-		$result = mysqli_query($con, 'SELECT * FROM `' . Settings::db_table_infected_users . '` 
-									  WHERE `id` = \'' . $con->real_escape_string($id) . '\';');
-							
-		$row = mysqli_fetch_array($result);
-		
-		MySQL::close($con);
+    /* 
+     * Get an user by the internal id.
+     */
+    public static function getUser($id) {
+        $mysql = MySQL::open(Settings::db_name_infected);
+        
+        $result = $mysql->query('SELECT * FROM `' . Settings::db_table_infected_users . '` 
+                                      WHERE `id` = \'' . $mysql->real_escape_string($id) . '\';');
+                            
+        $row = mysqli_fetch_array($result);
+        
+        $mysql->close();
 
-		if ($row) {
-			return new User($row['id'], 
-							$row['firstname'], 
-							$row['lastname'], 
-							$row['username'], 
-							$row['password'], 
-							$row['email'], 
-							$row['birthdate'], 
-							$row['gender'], 
-							$row['phone'], 
-							$row['address'], 
-							$row['postalcode'], 
-							$row['nickname']);
-		}
-	}
-	
-	/* 
-	 * Get user by it's username.
-	 */
-	public static function getUserByName($username) {
-		$con = MySQL::open(Settings::db_name_infected);
-		
-		$result = mysqli_query($con, 'SELECT `id` FROM `' . Settings::db_table_infected_users . '` 
-									  WHERE `username` = \'' . $con->real_escape_string($username) . '\' 
-									  OR `email` = \'' . $con->real_escape_string($username) . '\';');
-									  
-		$row = mysqli_fetch_array($result);
-		
-		MySQL::close($con);
+        if ($row) {
+            return new User($row['id'], 
+                            $row['firstname'], 
+                            $row['lastname'], 
+                            $row['username'], 
+                            $row['password'], 
+                            $row['email'], 
+                            $row['birthdate'], 
+                            $row['gender'], 
+                            $row['phone'], 
+                            $row['address'], 
+                            $row['postalcode'], 
+                            $row['nickname']);
+        }
+    }
+    
+    /* 
+     * Get user by it's username.
+     */
+    public static function getUserByName($username) {
+        $mysql = MySQL::open(Settings::db_name_infected);
+        
+        $result = $mysql->query('SELECT `id` FROM `' . Settings::db_table_infected_users . '` 
+                                      WHERE `username` = \'' . $mysql->real_escape_string($username) . '\' 
+                                      OR `email` = \'' . $mysql->real_escape_string($username) . '\';');
+                                      
+        $row = mysqli_fetch_array($result);
+        
+        $mysql->close();
 
-		if ($row) {
-			return self::getUser($row['id']);
-		}
-	}
-	
-	/* 
-	 * Get a list of all users.
-	 */
-	public static function getUsers() {
-		$con = MySQL::open(Settings::db_name_infected);
-		
-		$result = mysqli_query($con, 'SELECT `id` FROM `' . Settings::db_table_infected_users . '`
-									  ORDER BY `firstname` ASC;');
-									  
-		$userList = array();
-		
-		while ($row = mysqli_fetch_array($result)) {
-			array_push($userList, self::getUser($row['id']));
-		}
-		
-		MySQL::close($con);
+        if ($row) {
+            return self::getUser($row['id']);
+        }
+    }
+    
+    /* 
+     * Get a list of all users.
+     */
+    public static function getUsers() {
+        $mysql = MySQL::open(Settings::db_name_infected);
+        
+        $result = $mysql->query('SELECT `id` FROM `' . Settings::db_table_infected_users . '`
+                                      ORDER BY `firstname` ASC;');
+                                      
+        $userList = array();
+        
+        while ($row = mysqli_fetch_array($result)) {
+            array_push($userList, self::getUser($row['id']));
+        }
+        
+        $mysql->close();
 
-		return $userList;
-	}
+        return $userList;
+    }
 
-	/*
-	 * Returns all users that have one or more permission values in the permissions table.
-	 */
-	public static function getPermissionUsers() {
-		$con = MySQL::open(Settings::db_name_infected);
-		
-		$result = mysqli_query($con, 'SELECT DISTINCT `userId` FROM `' . Settings::db_table_infected_userpermissions . '`;');
-		
-		$userList = array();
-		
-		while ($row = mysqli_fetch_array($result)) {
-			array_push($userList, self::getUser($row['userId']));
-		}
-		
-		MySQL::close($con);
+    /*
+     * Returns all users that have one or more permission values in the permissions table.
+     */
+    public static function getPermissionUsers() {
+        $mysql = MySQL::open(Settings::db_name_infected);
+        
+        $result = $mysql->query('SELECT DISTINCT `userId` FROM `' . Settings::db_table_infected_userpermissions . '`;');
+        
+        $userList = array();
+        
+        while ($row = mysqli_fetch_array($result)) {
+            array_push($userList, self::getUser($row['userId']));
+        }
+        
+        $mysql->close();
 
-		return $userList;
-	}
-	
-	/* 
-	 * Get a list of all users which is member in a group
-	 */
-	public static function getMemberUsers() {
-		$con = MySQL::open(Settings::db_name_infected);
-		
-		$result = mysqli_query($con, 'SELECT `' . Settings::db_table_infected_users . '`.`id` FROM `' . Settings::db_table_infected_users . '`
-									  LEFT JOIN `' . Settings::db_name_infected_crew . '`.`' . Settings::db_table_infected_crew_memberof . '` ON `' . Settings::db_table_infected_users . '`.`id` = `userId`
-									  WHERE `groupId` IS NOT NULL 
-									  ORDER BY `firstname` ASC;');
-		
-		$userList = array();
-		
-		while ($row = mysqli_fetch_array($result)) {
-			array_push($userList, self::getUser($row['id']));
-		}
-		
-		MySQL::close($con);
-		
-		return $userList;
-	}
-	
-	/* 
-	 * Get a list of all users which is not member in a group
-	 */
-	public static function getNonMemberUsers() {
-		$con = MySQL::open(Settings::db_name_infected);
-		
-		$result = mysqli_query($con, 'SELECT `' . Settings::db_table_infected_users . '`.`id` FROM ' . Settings::db_table_infected_users . ' 
-									  LEFT JOIN `' . Settings::db_name_infected_crew . '`.`' . Settings::db_table_infected_crew_memberof . '` ON `' . Settings::db_table_infected_users . '`.`id` = `userId`
-									  WHERE `groupId` IS NULL 
-									  ORDER BY `firstname` ASC;');
-		
-		$userList = array();
-		
-		while ($row = mysqli_fetch_array($result)) {
-			array_push($userList, self::getUser($row['id']));
-		}
-		
-		MySQL::close($con);
-		
-		return $userList;
-	}
-	
-	/*
-	 * Create a new user
-	 */
-	public static function createUser($firstname, $lastname, $username, $password, $email, $birthDate, $gender, $phone, $address, $postalCode, $nickname) {
-		$con = MySQL::open(Settings::db_name_infected);
-		
-		mysqli_query($con, 'INSERT INTO `' . Settings::db_table_infected_users . '` (`firstname`, `lastname`, `username`, `password`, `email`, `birthdate`, `gender`, `phone`, `address`, `postalcode`, `nickname`) 
-							VALUES (\'' . $con->real_escape_string($firstname) . '\', 
-									\'' . $con->real_escape_string($lastname) . '\', 
-									\'' . $con->real_escape_string($username) . '\', 
-									\'' . $con->real_escape_string($password) . '\', 
-									\'' . $con->real_escape_string($email) . '\', 
-									\'' . $con->real_escape_string($birthDate) . '\', 
-									\'' . $con->real_escape_string($gender) . '\', 
-									\'' . $con->real_escape_string($phone) . '\', 
-									\'' . $con->real_escape_string($address) . '\', 
-									\'' . $con->real_escape_string($postalCode) . '\', 
-									\'' . $con->real_escape_string($nickname) . '\');');
-									
-		MySQL::close($con);
-	}
-	
-	/* 
-	 * Update a user
-	 */
-	public static function updateUser($id, $firstname, $lastname, $username, $email, $birthDate, $gender, $phone, $address, $postalCode, $nickname) {
-		$con = MySQL::open(Settings::db_name_infected);
-		
-		mysqli_query($con, 'UPDATE `' . Settings::db_table_infected_users . '` 
-							SET `firstname` = \'' . $con->real_escape_string($firstname) . '\', 
-								`lastname` = \'' . $con->real_escape_string($lastname) . '\', 
-								`username` = \'' . $con->real_escape_string($username) . '\', 
-								`email` = \'' . $con->real_escape_string($email) . '\', 
-								`birthdate` = \'' . $con->real_escape_string($birthDate) . '\', 
-								`gender` = \'' . $con->real_escape_string($gender) . '\', 
-								`phone` = \'' . $con->real_escape_string($phone) . '\', 
-								`address` = \'' . $con->real_escape_string($address) . '\', 
-								`postalcode` = \'' . $con->real_escape_string($postalCode) . '\', 
-								`nickname` = \'' . $con->real_escape_string($nickname) . '\' 
-							WHERE `id` = \'' . $con->real_escape_string($id) . '\';');
-		
-		MySQL::close($con);
-	}
-	
-	/* 
-	 * Remove a user
-	 */
-	public static function removeUser($user) {
-		// Only remove users without a ticket, for now...
-		if (!TicketHandler::hasUserTicket($user)) {
-			$con = MySQL::open(Settings::db_name_infected);
-			
-			mysqli_query($con, 'DELETE FROM `' . Settings::db_table_infected_users . '` 
-								WHERE `id` = \'' . $con->real_escape_string($user->getId()) . '\';');
-			
-			MySQL::close($con);
-			
-			// Remove users emergencycontact.
-			if (EmergencyContactHandler::hasEmergencyContact($user)) {
-				EmergencyContactHandler::removeEmergenctContact($user);
-			}
-			
-			// Remove users passwordresetcode.
-			if (PasswordResetCodeHandler::hasPasswordResetCode($user)) {
-				PasswordResetCodeHandler::removeUserPasswordResetCode($user);
-			}
-			
-			// Remove users registrationscode.
-			if (RegistrationCodeHandler::hasUserRegistrationCode($user)) {
-				RegistrationCodeHandler::removeUserRegistrationCode($user);
-			}
-			
-			// Remove users permissions.
-			if (UserPermissionsHandler::hasUserPermissions($user)) {
-				UserPermissionsHandler::removeUserPermissions($user);
-			}
-			
-			// Remove users application.
-			if (ApplicationHandler::hasApplication($user)) {
-				ApplicationHandler::removeUserApplication($user);
-			}
-			
-			// Remove users avatar.
-			if (AvatarHandler::hasAvatar($user)) {
-				AvatarHandler::deleteAvatar($user->getAvatar());
-			}
-			
-			// Remove users memberof entry.
-			if (GroupHandler::isGroupMember($user->getId())) {
-				GroupHandler::removeUserFromGroup($user);
-			}
-		}
-	}
-	
-	/* 
-	 * Update a users password
-	 */
-	public static function updateUserPassword($userId, $password) {
-		$con = MySQL::open(Settings::db_name_infected);
-		
-		mysqli_query($con, 'UPDATE `' . Settings::db_table_infected_users . '` 
-							SET `password` = \'' . $con->real_escape_string($password) . '\'
-							WHERE `id` = \'' . $con->real_escape_string($userId) . '\';');
-		
-		MySQL::close($con);
-	}
-	
-	/* 
-	 * Check if a user with given username or email already exists.
-	 */
-	public static function userExists($username) {
-		$con = MySQL::open(Settings::db_name_infected);
+        return $userList;
+    }
+    
+    /* 
+     * Get a list of all users which is member in a group
+     */
+    public static function getMemberUsers() {
+        $mysql = MySQL::open(Settings::db_name_infected);
+        
+        $result = $mysql->query('SELECT `' . Settings::db_table_infected_users . '`.`id` FROM `' . Settings::db_table_infected_users . '`
+                                      LEFT JOIN `' . Settings::db_name_infected_crew . '`.`' . Settings::db_table_infected_crew_memberof . '` ON `' . Settings::db_table_infected_users . '`.`id` = `userId`
+                                      WHERE `groupId` IS NOT NULL 
+                                      ORDER BY `firstname` ASC;');
+        
+        $userList = array();
+        
+        while ($row = mysqli_fetch_array($result)) {
+            array_push($userList, self::getUser($row['id']));
+        }
+        
+        $mysql->close();
+        
+        return $userList;
+    }
+    
+    /* 
+     * Get a list of all users which is not member in a group
+     */
+    public static function getNonMemberUsers() {
+        $mysql = MySQL::open(Settings::db_name_infected);
+        
+        $result = $mysql->query('SELECT `' . Settings::db_table_infected_users . '`.`id` FROM ' . Settings::db_table_infected_users . ' 
+                                      LEFT JOIN `' . Settings::db_name_infected_crew . '`.`' . Settings::db_table_infected_crew_memberof . '` ON `' . Settings::db_table_infected_users . '`.`id` = `userId`
+                                      WHERE `groupId` IS NULL 
+                                      ORDER BY `firstname` ASC;');
+        
+        $userList = array();
+        
+        while ($row = mysqli_fetch_array($result)) {
+            array_push($userList, self::getUser($row['id']));
+        }
+        
+        $mysql->close();
+        
+        return $userList;
+    }
+    
+    /*
+     * Create a new user
+     */
+    public static function createUser($firstname, $lastname, $username, $password, $email, $birthDate, $gender, $phone, $address, $postalCode, $nickname) {
+        $mysql = MySQL::open(Settings::db_name_infected);
+        
+        $mysql->query('INSERT INTO `' . Settings::db_table_infected_users . '` (`firstname`, `lastname`, `username`, `password`, `email`, `birthdate`, `gender`, `phone`, `address`, `postalcode`, `nickname`) 
+                            VALUES (\'' . $mysql->real_escape_string($firstname) . '\', 
+                                    \'' . $mysql->real_escape_string($lastname) . '\', 
+                                    \'' . $mysql->real_escape_string($username) . '\', 
+                                    \'' . $mysql->real_escape_string($password) . '\', 
+                                    \'' . $mysql->real_escape_string($email) . '\', 
+                                    \'' . $mysql->real_escape_string($birthDate) . '\', 
+                                    \'' . $mysql->real_escape_string($gender) . '\', 
+                                    \'' . $mysql->real_escape_string($phone) . '\', 
+                                    \'' . $mysql->real_escape_string($address) . '\', 
+                                    \'' . $mysql->real_escape_string($postalCode) . '\', 
+                                    \'' . $mysql->real_escape_string($nickname) . '\');');
+                                    
+        $mysql->close();
+    }
+    
+    /* 
+     * Update a user
+     */
+    public static function updateUser($id, $firstname, $lastname, $username, $email, $birthDate, $gender, $phone, $address, $postalCode, $nickname) {
+        $mysql = MySQL::open(Settings::db_name_infected);
+        
+        $mysql->query('UPDATE `' . Settings::db_table_infected_users . '` 
+                            SET `firstname` = \'' . $mysql->real_escape_string($firstname) . '\', 
+                                `lastname` = \'' . $mysql->real_escape_string($lastname) . '\', 
+                                `username` = \'' . $mysql->real_escape_string($username) . '\', 
+                                `email` = \'' . $mysql->real_escape_string($email) . '\', 
+                                `birthdate` = \'' . $mysql->real_escape_string($birthDate) . '\', 
+                                `gender` = \'' . $mysql->real_escape_string($gender) . '\', 
+                                `phone` = \'' . $mysql->real_escape_string($phone) . '\', 
+                                `address` = \'' . $mysql->real_escape_string($address) . '\', 
+                                `postalcode` = \'' . $mysql->real_escape_string($postalCode) . '\', 
+                                `nickname` = \'' . $mysql->real_escape_string($nickname) . '\' 
+                            WHERE `id` = \'' . $mysql->real_escape_string($id) . '\';');
+        
+        $mysql->close();
+    }
+    
+    /* 
+     * Remove a user
+     */
+    public static function removeUser($user) {
+        // Only remove users without a ticket, for now...
+        if (!TicketHandler::hasUserTicket($user)) {
+            $mysql = MySQL::open(Settings::db_name_infected);
+            
+            $mysql->query('DELETE FROM `' . Settings::db_table_infected_users . '` 
+                                WHERE `id` = \'' . $mysql->real_escape_string($user->getId()) . '\';');
+            
+            $mysql->close();
+            
+            // Remove users emergencycontact.
+            if (EmergencyContactHandler::hasEmergencyContact($user)) {
+                EmergencyContactHandler::removeEmergenctContact($user);
+            }
+            
+            // Remove users passwordresetcode.
+            if (PasswordResetCodeHandler::hasPasswordResetCode($user)) {
+                PasswordResetCodeHandler::removeUserPasswordResetCode($user);
+            }
+            
+            // Remove users registrationscode.
+            if (RegistrationCodeHandler::hasUserRegistrationCode($user)) {
+                RegistrationCodeHandler::removeUserRegistrationCode($user);
+            }
+            
+            // Remove users permissions.
+            if (UserPermissionsHandler::hasUserPermissions($user)) {
+                UserPermissionsHandler::removeUserPermissions($user);
+            }
+            
+            // Remove users application.
+            if (ApplicationHandler::hasApplication($user)) {
+                ApplicationHandler::removeUserApplication($user);
+            }
+            
+            // Remove users avatar.
+            if (AvatarHandler::hasAvatar($user)) {
+                AvatarHandler::deleteAvatar($user->getAvatar());
+            }
+            
+            // Remove users memberof entry.
+            if (GroupHandler::isGroupMember($user->getId())) {
+                GroupHandler::removeUserFromGroup($user);
+            }
+        }
+    }
+    
+    /* 
+     * Update a users password
+     */
+    public static function updateUserPassword($userId, $password) {
+        $mysql = MySQL::open(Settings::db_name_infected);
+        
+        $mysql->query('UPDATE `' . Settings::db_table_infected_users . '` 
+                            SET `password` = \'' . $mysql->real_escape_string($password) . '\'
+                            WHERE `id` = \'' . $mysql->real_escape_string($userId) . '\';');
+        
+        $mysql->close();
+    }
+    
+    /* 
+     * Check if a user with given username or email already exists.
+     */
+    public static function userExists($username) {
+        $mysql = MySQL::open(Settings::db_name_infected);
 
-		$result = mysqli_query($con, 'SELECT `id` FROM `' . Settings::db_table_infected_users . '` 
-									  WHERE `username` = \'' . $con->real_escape_string($username) . '\' 
-									  OR `email` = \'' . $con->real_escape_string($username) . '\';');
-									  
-		$row = mysqli_fetch_array($result);
-		
-		MySQL::close($con);
+        $result = $mysql->query('SELECT `id` FROM `' . Settings::db_table_infected_users . '` 
+                                      WHERE `username` = \'' . $mysql->real_escape_string($username) . '\' 
+                                      OR `email` = \'' . $mysql->real_escape_string($username) . '\';');
+                                      
+        $row = mysqli_fetch_array($result);
+        
+        $mysql->close();
 
-		return $row ? true : false;
-	}
-	
-	/*
-	 * Lookup users by set values and return a list of users as result.
-	 */
-	public static function search($query) {
-		$con = MySQL::open(Settings::db_name_infected);
+        return $row ? true : false;
+    }
+    
+    /*
+     * Lookup users by set values and return a list of users as result.
+     */
+    public static function search($query) {
+        $mysql = MySQL::open(Settings::db_name_infected);
 
-		$result = mysqli_query($con, 'SELECT `id` FROM `' . Settings::db_table_infected_users . '` 
-									  WHERE `firstname` LIKE \'%' . $con->real_escape_string($query) . '%\'
-									  OR `lastname` LIKE \'%' . $con->real_escape_string($query) . '%\' 
-									  OR `username` LIKE \'%' . $con->real_escape_string($query) . '%\' 
-									  OR `email` LIKE \'%' . $con->real_escape_string($query) . '%\' 
-									  OR `phone` LIKE \'%' . $con->real_escape_string($query) . '%\' 
-									  OR `nickname` LIKE \'%' . $con->real_escape_string($query) . '%\' 
-									  LIMIT 10;');
-		
-		$userList = array();
+        $result = $mysql->query('SELECT `id` FROM `' . Settings::db_table_infected_users . '` 
+                                      WHERE `firstname` LIKE \'%' . $mysql->real_escape_string($query) . '%\'
+                                      OR `lastname` LIKE \'%' . $mysql->real_escape_string($query) . '%\' 
+                                      OR `username` LIKE \'%' . $mysql->real_escape_string($query) . '%\' 
+                                      OR `email` LIKE \'%' . $mysql->real_escape_string($query) . '%\' 
+                                      OR `phone` LIKE \'%' . $mysql->real_escape_string($query) . '%\' 
+                                      OR `nickname` LIKE \'%' . $mysql->real_escape_string($query) . '%\' 
+                                      LIMIT 10;');
+        
+        $userList = array();
 
-		while($row = mysqli_fetch_array($result)) {
-			array_push($userList, self::getUser($row['id']));
-		}
-		
-		MySQL::close($con);
-		
-		return $userList;
-	}
+        while($row = mysqli_fetch_array($result)) {
+            array_push($userList, self::getUser($row['id']));
+        }
+        
+        $mysql->close();
+        
+        return $userList;
+    }
 }
 ?>

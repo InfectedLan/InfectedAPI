@@ -4,136 +4,136 @@ require_once 'mysql.php';
 require_once 'objects/row.php';
 require_once 'handlers/seatmaphandler.php';
 require_once 'handlers/seathandler.php';
-	
+    
 class RowHandler {
-	public static function getRow($id) {
-		$con = MySQL::open(Settings::db_name_infected_tickets);
+    public static function getRow($id) {
+        $mysql = MySQL::open(Settings::db_name_infected_tickets);
 
-		$result = mysqli_query($con, 'SELECT * FROM `' . Settings::db_table_infected_tickets_rows . '`
-									  WHERE `id` = \'' . $con->real_escape_string($id) . '\';');
-									  
-		$row = mysqli_fetch_array($result);
+        $result = $mysql->query('SELECT * FROM `' . Settings::db_table_infected_tickets_rows . '`
+                                      WHERE `id` = \'' . $mysql->real_escape_string($id) . '\';');
+                                      
+        $row = mysqli_fetch_array($result);
 
-		MySQL::close($con);
+        $mysql->close();
 
-		if ($row) {
-			return new Row($row['id'], 
-						   $row['number'],
-						   $row['x'], 
-						   $row['y'], 
-						   $row['entrance'], 
-						   $row['seatmap']);
-		}
-	}
+        if ($row) {
+            return new Row($row['id'], 
+                           $row['number'],
+                           $row['x'], 
+                           $row['y'], 
+                           $row['entrance'], 
+                           $row['seatmap']);
+        }
+    }
 
-	public static function getSeats($row) {
-		$con = MySQL::open(Settings::db_name_infected_tickets);
+    public static function getSeats($row) {
+        $mysql = MySQL::open(Settings::db_name_infected_tickets);
 
-		$result = mysqli_query($con, 'SELECT `id` FROM `' . Settings::db_table_infected_tickets_seats . '` 
-									  WHERE `rowId` = \'' . $con->real_escape_string($row->getId()) . '\';');
+        $result = $mysql->query('SELECT `id` FROM `' . Settings::db_table_infected_tickets_seats . '` 
+                                      WHERE `rowId` = \'' . $mysql->real_escape_string($row->getId()) . '\';');
 
-		$seatArray = array();
+        $seatArray = array();
 
-		while ($seat = mysqli_fetch_array($result)) {
-			array_push($seatArray, SeatHandler::getSeat($seat['id']));
-		}
+        while ($seat = mysqli_fetch_array($result)) {
+            array_push($seatArray, SeatHandler::getSeat($seat['id']));
+        }
 
-		MySQL::close($con);
+        $mysql->close();
 
-		return $seatArray;
-	}
+        return $seatArray;
+    }
 
-	public static function createNewRow($seatmapId, $x, $y) {
-		$con = MySQL::open(Settings::db_name_infected_tickets);
+    public static function createNewRow($seatmapId, $x, $y) {
+        $mysql = MySQL::open(Settings::db_name_infected_tickets);
 
-		//Find out what row is max row
-		$highestRowNum = mysqli_query($con, 'SELECT `row` FROM `' . Settings::db_table_infected_tickets_rows . '`
-											 WHERE `seatmap`=' . $con->real_escape_string($seatmapId) . ' 
-											 ORDER BY `row` DESC LIMIT 1;');
+        //Find out what row is max row
+        $highestRowNum = $mysql->query('SELECT `row` FROM `' . Settings::db_table_infected_tickets_rows . '`
+                                             WHERE `seatmap`=' . $mysql->real_escape_string($seatmapId) . ' 
+                                             ORDER BY `row` DESC LIMIT 1;');
 
-		$row = mysqli_fetch_array($highestRowNum);
+        $row = mysqli_fetch_array($highestRowNum);
 
-		$newRowNumber = $row['row'] + 1;
-		$entrance = 1; // TODO: Set this somewere else?
+        $newRowNumber = $row['row'] + 1;
+        $entrance = 1; // TODO: Set this somewere else?
 
-		mysqli_query($con, 'INSERT INTO ' . Settings::db_table_infected_tickets_rows . '(`number`, `x`, `y`, `entrance`, `seatmap`) 
-							VALUES (\'' . $con->real_escape_string($newRowNumber) . '\', 
-									  ' . $con->real_escape_string($x) . ', 
-									  ' . $con->real_escape_string($y) . ', 
-									  ' . $con->real_escape_string($entrance) . ', 
-									  ' . $con->real_escape_string($seatmapId) . ');');
+        $mysql->query('INSERT INTO ' . Settings::db_table_infected_tickets_rows . '(`number`, `x`, `y`, `entrance`, `seatmap`) 
+                            VALUES (\'' . $mysql->real_escape_string($newRowNumber) . '\', 
+                                      ' . $mysql->real_escape_string($x) . ', 
+                                      ' . $mysql->real_escape_string($y) . ', 
+                                      ' . $mysql->real_escape_string($entrance) . ', 
+                                      ' . $mysql->real_escape_string($seatmapId) . ');');
 
-		$result = mysqli_query($con, 'SELECT `id` FROM `' .  Settings::db_table_infected_tickets_rows . '`
-									  ORDER BY `id` DESC 
-									  LIMIT 1;');
+        $result = $mysql->query('SELECT `id` FROM `' .  Settings::db_table_infected_tickets_rows . '`
+                                      ORDER BY `id` DESC 
+                                      LIMIT 1;');
 
-		$row = mysqli_fetch_array($result);
+        $row = mysqli_fetch_array($result);
 
-		MySQL::close($con);
+        $mysql->close();
 
-		if ($row) {
-			return self::getRow($row['id']);
-		}
+        if ($row) {
+            return self::getRow($row['id']);
+        }
 
-	}
-	
-	public static function safeToDelete($row) {
-		$seats = self::getSeats($row);
-		
-		foreach($seats as $seat) {
-			if (SeatHandler::hasOwner($seat)) {
-				return false;
-			}
-		}
-		
-		return true;
-	}
-	
-	public static function deleteRow($row) {
-		$con = MySQL::open(Settings::db_name_infected_tickets);
+    }
+    
+    public static function safeToDelete($row) {
+        $seats = self::getSeats($row);
+        
+        foreach($seats as $seat) {
+            if (SeatHandler::hasOwner($seat)) {
+                return false;
+            }
+        }
+        
+        return true;
+    }
+    
+    public static function deleteRow($row) {
+        $mysql = MySQL::open(Settings::db_name_infected_tickets);
 
-		$result = mysqli_query($con, 'DELETE FROM `' . Settings::db_table_infected_tickets_rows . '` 
-									  WHERE `id` = ' . $con->real_escape_string($row->getId()) . ';');
+        $result = $mysql->query('DELETE FROM `' . Settings::db_table_infected_tickets_rows . '` 
+                                      WHERE `id` = ' . $mysql->real_escape_string($row->getId()) . ';');
 
-		$seats = self::getSeats($row);
-		
-		foreach($seats as $seat) {
-			SeatHandler::deleteSeat($seat);
-		}
+        $seats = self::getSeats($row);
+        
+        foreach($seats as $seat) {
+            SeatHandler::deleteSeat($seat);
+        }
 
-		MySQL::close($con);
-	}
-	
-	public static function addSeat($row) {
-		$con = MySQL::open(Settings::db_name_infected_tickets);
+        $mysql->close();
+    }
+    
+    public static function addSeat($row) {
+        $mysql = MySQL::open(Settings::db_name_infected_tickets);
 
-		//Find out what seat number we are at
-		$highestSeatNum = mysqli_query($con, 'SELECT `number` FROM `' . Settings::db_table_infected_tickets_seats . '` 
-											  WHERE `rowId` = ' . $con->real_escape_string($row->getId()) . ' 
-											  ORDER BY `number` DESC LIMIT 1;');
+        //Find out what seat number we are at
+        $highestSeatNum = $mysql->query('SELECT `number` FROM `' . Settings::db_table_infected_tickets_seats . '` 
+                                              WHERE `rowId` = ' . $mysql->real_escape_string($row->getId()) . ' 
+                                              ORDER BY `number` DESC LIMIT 1;');
 
-		$seatRow = mysqli_fetch_array($highestSeatNum);
+        $seatRow = mysqli_fetch_array($highestSeatNum);
 
-		$newSeatNumber = $seatRow['number']+1;
+        $newSeatNumber = $seatRow['number']+1;
 
-		mysqli_query($con, 'INSERT INTO `seats` (`rowId`, `number`) 
-							VALUES (' . $con->real_escape_string($row->getId()) . ', 
-									' . $con->real_escape_string($newSeatNumber) . ')');
+        $mysql->query('INSERT INTO `seats` (`rowId`, `number`) 
+                            VALUES (' . $mysql->real_escape_string($row->getId()) . ', 
+                                    ' . $mysql->real_escape_string($newSeatNumber) . ')');
 
-		MySQL::close($con);
-	}
-	
-	public static function moveRow($row, $x, $y) {
-		$con = MySQL::open(Settings::db_name_infected_tickets);
+        $mysql->close();
+    }
+    
+    public static function moveRow($row, $x, $y) {
+        $mysql = MySQL::open(Settings::db_name_infected_tickets);
 
-		mysqli_query($con, 'UPDATE `rows` SET `x`=' . $x . ',`y`=' . $y . ' 
-							WHERE `id` = ' . $con->real_escape_string($row->getId()) . ';');
+        $mysql->query('UPDATE `rows` SET `x`=' . $x . ',`y`=' . $y . ' 
+                            WHERE `id` = ' . $mysql->real_escape_string($row->getId()) . ';');
 
-		MySQL::close($con);
-	}
+        $mysql->close();
+    }
 
-	public static function getEvent($row) {
-		return SeatmapHandler::getEvent(SeatmapHandler::getSeatmap($row->getSeatmap()));
-	}
+    public static function getEvent($row) {
+        return SeatmapHandler::getEvent(SeatmapHandler::getSeatmap($row->getSeatmap()));
+    }
 }
 ?>

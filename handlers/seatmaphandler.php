@@ -6,99 +6,99 @@ require_once 'handlers/eventhandler.php';
 require_once 'objects/seatmap.php';
 
 class SeatmapHandler {
-	public static function getSeatmap($id) {
-		$mysql = MySQL::open(Settings::db_name_infected_tickets);
+    public static function getSeatmap($id) {
+        $mysql = MySQL::open(Settings::db_name_infected_tickets);
 
-		$result = $mysql->query('SELECT * FROM `' . Settings::db_table_infected_tickets_seatmaps . '` 
-								WHERE `id` = \'' . $mysql->real_escape_string($id) . '\';');
-									  
-		$row = mysqli_fetch_array($result);
+        $result = $mysql->query('SELECT * FROM `' . Settings::db_table_infected_tickets_seatmaps . '` 
+                                WHERE `id` = \'' . $mysql->real_escape_string($id) . '\';');
+                                      
+        $row = mysqli_fetch_array($result);
 
-		$mysql->close();
+        $mysql->close();
 
-		if ($row) {
-			return new Seatmap($row['id'], 
-							   $row['humanName'],
-							   $row['backgroundImage']);
-		}
-	}
+        if ($row) {
+            return new Seatmap($row['id'], 
+                               $row['humanName'],
+                               $row['backgroundImage']);
+        }
+    }
 
-	public static function createNewSeatmap($name, $backgroundImage) {
-		$mysql = MySQL::open(Settings::db_name_infected_tickets);
+    public static function createNewSeatmap($name, $backgroundImage) {
+        $mysql = MySQL::open(Settings::db_name_infected_tickets);
 
-		$mysql->query('INSERT INTO ' . Settings::db_table_infected_tickets_seatmaps . '(`humanName`, `backgroundImage`) 
-					   VALUES (\'' . $mysql->real_escape_string($name) . '\', 
-							   \'' . $mysql->real_escape_string($backgroundImage) . '\')');
+        $mysql->query('INSERT INTO ' . Settings::db_table_infected_tickets_seatmaps . '(`humanName`, `backgroundImage`) 
+                       VALUES (\'' . $mysql->real_escape_string($name) . '\', 
+                               \'' . $mysql->real_escape_string($backgroundImage) . '\')');
 
-		$result = $mysql->query('SELECT id FROM ' .  Settings::db_table_infected_tickets_seatmaps . ' 
-							     ORDER BY id DESC LIMIT 1;');
+        $result = $mysql->query('SELECT id FROM ' .  Settings::db_table_infected_tickets_seatmaps . ' 
+                                 ORDER BY id DESC LIMIT 1;');
 
-		$row = mysqli_fetch_array($result);
+        $row = mysqli_fetch_array($result);
 
-		$mysql->close();
+        $mysql->close();
 
-		if ($row) {
-			return self::getSeatmap($row['id']);
-		}
+        if ($row) {
+            return self::getSeatmap($row['id']);
+        }
 
-	}
-	
-	public static function getSeatmaps() {
-		$mysql = MySQL::open(Settings::db_name_infected_tickets);
+    }
+    
+    public static function getSeatmaps() {
+        $mysql = MySQL::open(Settings::db_name_infected_tickets);
 
-		$result = $mysql->query('SELECT `id` FROM `' . Settings::db_table_infected_tickets_seatmaps . '`;');
+        $result = $mysql->query('SELECT `id` FROM `' . Settings::db_table_infected_tickets_seatmaps . '`;');
 
-		$seatmapArray = array();
+        $seatmapArray = array();
 
-		while ($row = mysqli_fetch_array($result)) {
-			array_push($seatmapArray, self::getSeatmap($row['id']));
-		}
+        while ($row = mysqli_fetch_array($result)) {
+            array_push($seatmapArray, self::getSeatmap($row['id']));
+        }
 
-		$mysql->close();
+        $mysql->close();
 
-		return $seatmapArray;
-	}
-	
-	public static function getRows($seatmap) {
-		$mysql = MySQL::open(Settings::db_name_infected_tickets);
+        return $seatmapArray;
+    }
+    
+    public static function getRows($seatmap) {
+        $mysql = MySQL::open(Settings::db_name_infected_tickets);
 
-		$result = $mysql->query('SELECT `id` FROM `' . Settings::db_table_infected_tickets_rows . '` 
-							     WHERE `seatmap` = \'' . $mysql->real_escape_string($seatmap->getId()) . '\';');
+        $result = $mysql->query('SELECT `id` FROM `' . Settings::db_table_infected_tickets_rows . '` 
+                                 WHERE `seatmap` = \'' . $mysql->real_escape_string($seatmap->getId()) . '\';');
 
-		$rowArray = array();
+        $rowArray = array();
 
-		while ($row = mysqli_fetch_array($result)) {
-			array_push($rowArray, RowHandler::getRow($row['id']));
-		}
+        while ($row = mysqli_fetch_array($result)) {
+            array_push($rowArray, RowHandler::getRow($row['id']));
+        }
 
-		$mysql->close();
+        $mysql->close();
 
-		return $rowArray;
-	}
-	
-	public static function setBackground($seatmap, $filename) {
-		$mysql = MySQL::open(Settings::db_name_infected_tickets);
+        return $rowArray;
+    }
+    
+    public static function setBackground($seatmap, $filename) {
+        $mysql = MySQL::open(Settings::db_name_infected_tickets);
 
-		$mysql->query('UPDATE `' . Settings::db_table_infected_tickets_seatmaps . '` 
-					   SET `backgroundImage` = \'' . $mysql->real_escape_string($filename) . '\' 
-					   WHERE `id` = ' . $mysql->real_escape_string($seatmap->getId()) . ';');
-	
-		$mysql->close();
-	}
+        $mysql->query('UPDATE `' . Settings::db_table_infected_tickets_seatmaps . '` 
+                       SET `backgroundImage` = \'' . $mysql->real_escape_string($filename) . '\' 
+                       WHERE `id` = ' . $mysql->real_escape_string($seatmap->getId()) . ';');
+    
+        $mysql->close();
+    }
 
-	public static function getEvent($seatmap) {
-		$mysql = MySQL::open(Settings::db_name_infected);
+    public static function getEvent($seatmap) {
+        $mysql = MySQL::open(Settings::db_name_infected);
 
-		$result = $mysql->query('SELECT `id` FROM `' . Settings::db_table_infected_events . '` 
-								WHERE `seatmap`=' . $mysql->real_escape_string($seatmap->getId()) . ';');
+        $result = $mysql->query('SELECT `id` FROM `' . Settings::db_table_infected_events . '` 
+                                WHERE `seatmap`=' . $mysql->real_escape_string($seatmap->getId()) . ';');
 
-		$row = mysqli_fetch_array($result);
+        $row = mysqli_fetch_array($result);
 
-		$mysql->close();
+        $mysql->close();
 
-		if ($row) {
-			return EventHandler::getEvent($row['id']);
-		}
-	}
+        if ($row) {
+            return EventHandler::getEvent($row['id']);
+        }
+    }
 }
 ?>

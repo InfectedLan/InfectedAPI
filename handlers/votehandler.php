@@ -4,52 +4,54 @@ require_once 'mysql.php';
 require_once 'objects/vote.php';
 
 class VoteHandler {
-	public static function getVote($id) {
-		$con = MySQL::open(Settings::db_name_infected_compo);
-		
-		$result = mysqli_query($con, 'SELECT * FROM `' . Settings::db_table_infected_compo_votes . '` 
-									  WHERE `id` = \'$id\';');
-		
-		$row = mysqli_fetch_array($result);
-		
-		MySQL::close($con);
-		
-		if ($row) {
-			return new Vote($row['id'], $row['consumerId'], $row['voteOptionId']);
-		}
-	}
-	
-	public static function getNumBanned($consumerId) {
-		$con = MySQL::open(Settings::db_name_infected_compo);
+    public static function getVote($id) {
+        $mysql = MySQL::open(Settings::db_name_infected_compo);
+        
+        $result = $mysql->query('SELECT * FROM `' . Settings::db_table_infected_compo_votes . '` 
+                                 WHERE `id` = \'$id\';');
+        
+        $row = mysqli_fetch_array($result);
+        
+        $mysql->close();
+        
+        if ($row) {
+            return new Vote($row['id'], 
+                            $row['consumerId'], 
+                            $row['voteOptionId']);
+        }
+    }
+    
+    public static function getNumBanned($mysqlsumerId) {
+        $mysql = MySQL::open(Settings::db_name_infected_compo);
 
-		$result = mysqli_query($con, 'SELECT * FROM `' . Settings::db_table_infected_compo_votes . '` 
-									  WHERE `consumerId` = ' . $con->real_escape_string($consumerId) . ';');
+        $result = $mysql->query('SELECT * FROM `' . Settings::db_table_infected_compo_votes . '` 
+                                 WHERE `consumerId` = ' . $mysql->real_escape_string($mysqlsumerId) . ';');
 
-		$count = 0;
+        $count = 0;
 
-		while($row = mysqli_fetch_array($result)) {
-			$count++;
-		}
+        while($row = mysqli_fetch_array($result)) {
+            $count++;
+        }
 
-		MySQL::close($con);
+        $mysql->close();
 
-		return $count;
-	}
-	
-	public static function getCurrentBanner($numBanned) {
-		$turnArray = array(0, 1, 0, 1, 1, 0, 2);
-		
-		return $turnArray[$numBanned];
-	}
-	
-	public static function banMap($voteOption, $consumerId) {
-		$con = MySQL::open(Settings::db_name_infected_compo);
+        return $count;
+    }
+    
+    public static function getCurrentBanner($numBanned) {
+        $turnArray = array(0, 1, 0, 1, 1, 0, 2);
+        
+        return $turnArray[$numBanned];
+    }
+    
+    public static function banMap($voteOption, $mysqlsumerId) {
+        $mysql = MySQL::open(Settings::db_name_infected_compo);
 
-		$result = mysqli_query($con, 'INSERT INTO `' . Settings::db_table_infected_compo_votes . '` (`consumerId`, `voteOptionId`) 
-									  VALUES (\'' . $con->real_escape_string($consumerId) . '\', 
-										      \'' . $con->real_escape_string($voteOption->getId()) . '\');');
-	
-		MySQL::close($con);
-	}
+        $result = $mysql->query('INSERT INTO `' . Settings::db_table_infected_compo_votes . '` (`consumerId`, `voteOptionId`) 
+                                 VALUES (\'' . $mysql->real_escape_string($mysqlsumerId) . '\', 
+                                         \'' . $mysql->real_escape_string($voteOption->getId()) . '\');');
+    
+        $mysql->close();
+    }
 }
 ?>

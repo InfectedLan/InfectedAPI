@@ -4,48 +4,51 @@ require_once 'mysql.php';
 require_once 'objects/voteoption.php';
 
 class VoteOptionHandler {
-	public static function getVoteOption($id) {
-		$con = MySQL::open(Settings::db_name_infected_compo);
-		
-		$result = mysqli_query($con, 'SELECT * FROM `' . Settings::db_table_infected_compo_voteoptions . '` WHERE `id` = \'' . $id . '\';');
-		
-		$row = mysqli_fetch_array($result);
-		
-		MySQL::close($con);
-		
-		if ($row) {
-			return new VoteOption($row['id'], $row['compoId'], $row['thumbnailUrl'], $row['name']);
-		}
-	}
+    public static function getVoteOption($id) {
+        $mysql = MySQL::open(Settings::db_name_infected_compo);
+        
+        $result = $mysql->query('SELECT * FROM `' . Settings::db_table_infected_compo_voteoptions . '` WHERE `id` = \'' . $id . '\';');
+        
+        $row = mysqli_fetch_array($result);
+        
+        $mysql->close();
+        
+        if ($row) {
+            return new VoteOption($row['id'], 
+                                  $row['compoId'], 
+                                  $row['thumbnailUrl'], 
+                                  $row['name']);
+        }
+    }
 
-	public static function getVoteOptionsForCompo($compo) {
-		$con = MySQL::open(Settings::db_name_infected_compo);
-		
-		$result = mysqli_query($con, 'SELECT * FROM `' . Settings::db_table_infected_compo_voteoptions . '` 
-									  WHERE `compoId` = '. $con->real_escape_string($compo->getId()) . ';');
-		
-		MySQL::close($con);
+    public static function getVoteOptionsForCompo($compo) {
+        $mysql = MySQL::open(Settings::db_name_infected_compo);
+        
+        $result = $mysql->query('SELECT * FROM `' . Settings::db_table_infected_compo_voteoptions . '` 
+                                 WHERE `compoId` = '. $mysql->real_escape_string($compo->getId()) . ';');
+        
+        $mysql->close();
 
-		$returnArray = array();
+        $returnArray = array();
 
-		while ($row = mysqli_fetch_array($result)) {
-			array_push($returnArray, self::getVoteOption($row['id']));
-		}
-		
-		return $returnArray;
-	}
+        while ($row = mysqli_fetch_array($result)) {
+            array_push($returnArray, self::getVoteOption($row['id']));
+        }
+        
+        return $returnArray;
+    }
 
-	public static function isVoted($voteOption, $match) {
-		$con = MySQL::open(Settings::db_name_infected_compo);
+    public static function isVoted($voteOption, $match) {
+        $mysql = MySQL::open(Settings::db_name_infected_compo);
 
-		$result = mysqli_query($con, 'SELECT * FROM `' . Settings::db_table_infected_compo_votes . '` 
-								      WHERE `voteOptionId` = '. $con->real_escape_string($voteOption->getId()) . ' AND `consumerId` = ' . $con->real_escape_string($match->getId()) . ';');
+        $result = $mysql->query('SELECT * FROM `' . Settings::db_table_infected_compo_votes . '` 
+                                 WHERE `voteOptionId` = '. $mysql->real_escape_string($voteOption->getId()) . ' AND `consumerId` = ' . $mysql->real_escape_string($match->getId()) . ';');
 
-		$row = mysqli_fetch_array($result);
+        $row = mysqli_fetch_array($result);
 
-		MySQL::close($con);
+        $mysql->close();
 
-		return $row ? true : false;
-	}
+        return $row ? true : false;
+    }
 }
 ?>
