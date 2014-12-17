@@ -9,9 +9,9 @@ class VoteOptionHandler {
         
         $result = $mysql->query('SELECT * FROM `' . Settings::db_table_infected_compo_voteoptions . '` WHERE `id` = \'' . $id . '\';');
         
-        $row = mysqli_fetch_array($result);
-        
         $mysql->close();
+        
+        $row = $result->fetch_array();
         
         if ($row) {
             return new VoteOption($row['id'], 
@@ -31,7 +31,7 @@ class VoteOptionHandler {
 
         $returnArray = array();
 
-        while ($row = mysqli_fetch_array($result)) {
+        while ($row = $result->fetch_array()) {
             array_push($returnArray, self::getVoteOption($row['id']));
         }
         
@@ -43,10 +43,10 @@ class VoteOptionHandler {
 
         $result = $mysql->query('SELECT * FROM `' . Settings::db_table_infected_compo_votes . '` 
                                  WHERE `voteOptionId` = '. $mysql->real_escape_string($voteOption->getId()) . ' AND `consumerId` = ' . $mysql->real_escape_string($match->getId()) . ';');
-
-        $row = mysqli_fetch_array($result);
-
-        $mysql->close();
+        
+        $mysql->close();                         
+        
+        $row = $result->fetch_array();
 
         return $row ? true : false;
     }

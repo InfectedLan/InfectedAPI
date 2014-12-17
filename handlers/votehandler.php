@@ -10,9 +10,9 @@ class VoteHandler {
         $result = $mysql->query('SELECT * FROM `' . Settings::db_table_infected_compo_votes . '` 
                                  WHERE `id` = \'$id\';');
         
-        $row = mysqli_fetch_array($result);
-        
         $mysql->close();
+        
+        $row = $result->fetch_array();
         
         if ($row) {
             return new Vote($row['id'], 
@@ -27,13 +27,13 @@ class VoteHandler {
         $result = $mysql->query('SELECT * FROM `' . Settings::db_table_infected_compo_votes . '` 
                                  WHERE `consumerId` = ' . $mysql->real_escape_string($mysqlsumerId) . ';');
 
+        $mysql->close();
+                                 
         $count = 0;
 
-        while($row = mysqli_fetch_array($result)) {
+        while($row = $result->fetch_array()) {
             $count++;
         }
-
-        $mysql->close();
 
         return $count;
     }

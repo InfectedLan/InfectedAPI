@@ -10,14 +10,14 @@ class TicketTransferHandler {
         $mysql = MySQL::open(Settings::db_name_infected_tickets);
 
         $result = $mysql->query($mysql, 'SELECT * FROM `' . Settings::db_table_infected_tickets_tickettransfers . '` 
-                                     WHERE `ticketId` = \'' . $mysql->real_escape_string($ticket->getId()) . '\'
-                                     AND `fromId` = \'' . $mysql->real_escape_string($user->getId()) . '\'
-                                     ORDER BY `datetime` DESC
-                                     LIMIT 1;');
-
-        $row = mysqli_fetch_array($result);
+                                         WHERE `ticketId` = \'' . $mysql->real_escape_string($ticket->getId()) . '\'
+                                         AND `fromId` = \'' . $mysql->real_escape_string($user->getId()) . '\'
+                                         ORDER BY `datetime` DESC
+                                         LIMIT 1;');
 
         $mysql->close();
+                                         
+        $row = $result->fetch_array();
 
         if ($row) {
             return new TicketTransfer($row['id'],
@@ -33,11 +33,11 @@ class TicketTransferHandler {
         $mysql = MySQL::open(Settings::db_name_infected_tickets);
 
         $mysql->query('INSERT INTO `' . Settings::db_table_infected_tickets_tickettransfers . '` (`ticketId`, `fromId`, `toId`, `datetime`, `revertable`)
-                     VALUES (\'' . $mysql->real_escape_string($ticket->getId()) . ', 
-                             \'' . $mysql->real_escape_string($ticket->getUser()->getId()) . ', 
-                             \'' . $mysql->real_escape_string($user->getId()) . ',
-                             \'' . date('Y-m-d H:i:s') . ',
-                             \'' . $revertable . ');');
+                       VALUES (\'' . $mysql->real_escape_string($ticket->getId()) . ', 
+                               \'' . $mysql->real_escape_string($ticket->getUser()->getId()) . ', 
+                               \'' . $mysql->real_escape_string($user->getId()) . ',
+                               \'' . date('Y-m-d H:i:s') . ',
+                               \'' . $revertable . ');');
 
         $mysql->close();
     }

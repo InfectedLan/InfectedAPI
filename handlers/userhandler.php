@@ -19,11 +19,11 @@ class UserHandler {
         $mysql = MySQL::open(Settings::db_name_infected);
         
         $result = $mysql->query('SELECT * FROM `' . Settings::db_table_infected_users . '` 
-                                      WHERE `id` = \'' . $mysql->real_escape_string($id) . '\';');
-                            
-        $row = mysqli_fetch_array($result);
-        
+                                 WHERE `id` = \'' . $mysql->real_escape_string($id) . '\';');
+         
         $mysql->close();
+         
+        $row = $result->fetch_array();
 
         if ($row) {
             return new User($row['id'], 
@@ -48,12 +48,12 @@ class UserHandler {
         $mysql = MySQL::open(Settings::db_name_infected);
         
         $result = $mysql->query('SELECT `id` FROM `' . Settings::db_table_infected_users . '` 
-                                      WHERE `username` = \'' . $mysql->real_escape_string($username) . '\' 
-                                      OR `email` = \'' . $mysql->real_escape_string($username) . '\';');
-                                      
-        $row = mysqli_fetch_array($result);
+                                 WHERE `username` = \'' . $mysql->real_escape_string($username) . '\' 
+                                 OR `email` = \'' . $mysql->real_escape_string($username) . '\';');
         
         $mysql->close();
+        
+        $row = $result->fetch_array();
 
         if ($row) {
             return self::getUser($row['id']);
@@ -67,15 +67,15 @@ class UserHandler {
         $mysql = MySQL::open(Settings::db_name_infected);
         
         $result = $mysql->query('SELECT `id` FROM `' . Settings::db_table_infected_users . '`
-                                      ORDER BY `firstname` ASC;');
-                                      
-        $userList = array();
-        
-        while ($row = mysqli_fetch_array($result)) {
-            array_push($userList, self::getUser($row['id']));
-        }
+                                 ORDER BY `firstname` ASC;');
         
         $mysql->close();
+        
+        $userList = array();
+        
+        while ($row = $result->fetch_array()) {
+            array_push($userList, self::getUser($row['id']));
+        }
 
         return $userList;
     }
@@ -88,13 +88,13 @@ class UserHandler {
         
         $result = $mysql->query('SELECT DISTINCT `userId` FROM `' . Settings::db_table_infected_userpermissions . '`;');
         
+        $mysql->close();
+        
         $userList = array();
         
-        while ($row = mysqli_fetch_array($result)) {
+        while ($row = $result->fetch_array()) {
             array_push($userList, self::getUser($row['userId']));
         }
-        
-        $mysql->close();
 
         return $userList;
     }
@@ -106,18 +106,18 @@ class UserHandler {
         $mysql = MySQL::open(Settings::db_name_infected);
         
         $result = $mysql->query('SELECT `' . Settings::db_table_infected_users . '`.`id` FROM `' . Settings::db_table_infected_users . '`
-                                      LEFT JOIN `' . Settings::db_name_infected_crew . '`.`' . Settings::db_table_infected_crew_memberof . '` ON `' . Settings::db_table_infected_users . '`.`id` = `userId`
-                                      WHERE `groupId` IS NOT NULL 
-                                      ORDER BY `firstname` ASC;');
-        
+                                 LEFT JOIN `' . Settings::db_name_infected_crew . '`.`' . Settings::db_table_infected_crew_memberof . '` ON `' . Settings::db_table_infected_users . '`.`id` = `userId`
+                                 WHERE `groupId` IS NOT NULL 
+                                 ORDER BY `firstname` ASC;');
+
+        $mysql->close();
+                                      
         $userList = array();
         
-        while ($row = mysqli_fetch_array($result)) {
+        while ($row = $result->fetch_array()) {
             array_push($userList, self::getUser($row['id']));
         }
-        
-        $mysql->close();
-        
+
         return $userList;
     }
     
@@ -134,7 +134,7 @@ class UserHandler {
         
         $userList = array();
         
-        while ($row = mysqli_fetch_array($result)) {
+        while ($row = $result->fetch_array()) {
             array_push($userList, self::getUser($row['id']));
         }
         
@@ -196,7 +196,7 @@ class UserHandler {
             $mysql = MySQL::open(Settings::db_name_infected);
             
             $mysql->query('DELETE FROM `' . Settings::db_table_infected_users . '` 
-                                WHERE `id` = \'' . $mysql->real_escape_string($user->getId()) . '\';');
+                           WHERE `id` = \'' . $mysql->real_escape_string($user->getId()) . '\';');
             
             $mysql->close();
             
@@ -244,8 +244,8 @@ class UserHandler {
         $mysql = MySQL::open(Settings::db_name_infected);
         
         $mysql->query('UPDATE `' . Settings::db_table_infected_users . '` 
-                            SET `password` = \'' . $mysql->real_escape_string($password) . '\'
-                            WHERE `id` = \'' . $mysql->real_escape_string($userId) . '\';');
+                       SET `password` = \'' . $mysql->real_escape_string($password) . '\'
+                       WHERE `id` = \'' . $mysql->real_escape_string($userId) . '\';');
         
         $mysql->close();
     }
@@ -257,13 +257,13 @@ class UserHandler {
         $mysql = MySQL::open(Settings::db_name_infected);
 
         $result = $mysql->query('SELECT `id` FROM `' . Settings::db_table_infected_users . '` 
-                                      WHERE `username` = \'' . $mysql->real_escape_string($username) . '\' 
-                                      OR `email` = \'' . $mysql->real_escape_string($username) . '\';');
-                                      
-        $row = mysqli_fetch_array($result);
+                                 WHERE `username` = \'' . $mysql->real_escape_string($username) . '\' 
+                                  OR `email` = \'' . $mysql->real_escape_string($username) . '\';');
         
         $mysql->close();
-
+                
+        $row = $result->fetch_array();
+        
         return $row ? true : false;
     }
     
@@ -274,21 +274,21 @@ class UserHandler {
         $mysql = MySQL::open(Settings::db_name_infected);
 
         $result = $mysql->query('SELECT `id` FROM `' . Settings::db_table_infected_users . '` 
-                                      WHERE `firstname` LIKE \'%' . $mysql->real_escape_string($query) . '%\'
-                                      OR `lastname` LIKE \'%' . $mysql->real_escape_string($query) . '%\' 
-                                      OR `username` LIKE \'%' . $mysql->real_escape_string($query) . '%\' 
-                                      OR `email` LIKE \'%' . $mysql->real_escape_string($query) . '%\' 
-                                      OR `phone` LIKE \'%' . $mysql->real_escape_string($query) . '%\' 
-                                      OR `nickname` LIKE \'%' . $mysql->real_escape_string($query) . '%\' 
-                                      LIMIT 10;');
+                                 WHERE `firstname` LIKE \'%' . $mysql->real_escape_string($query) . '%\'
+                                 OR `lastname` LIKE \'%' . $mysql->real_escape_string($query) . '%\' 
+                                 OR `username` LIKE \'%' . $mysql->real_escape_string($query) . '%\' 
+                                 OR `email` LIKE \'%' . $mysql->real_escape_string($query) . '%\' 
+                                 OR `phone` LIKE \'%' . $mysql->real_escape_string($query) . '%\' 
+                                 OR `nickname` LIKE \'%' . $mysql->real_escape_string($query) . '%\' 
+                                 LIMIT 10;');
+        
+        $mysql->close();
         
         $userList = array();
 
-        while($row = mysqli_fetch_array($result)) {
+        while($row = $result->fetch_array()) {
             array_push($userList, self::getUser($row['id']));
         }
-        
-        $mysql->close();
         
         return $userList;
     }
