@@ -113,7 +113,8 @@ class Ticket extends Object {
 	public function getHumanName() {
 		$event = $this->getEvent();
 		$season = date('m', $event->getStartTime()) == 2 ? 'VINTER' : 'HØST';
-		$eventName = !empty($event->getTheme()) ? $event->getTheme() : $season . date('Y', $event->getStartTime());
+		$theme = $event->getTheme();
+		$eventName = !empty($theme) ? $theme : $season . date('Y', $event->getStartTime());
 	
 		return strtoupper(Settings::name . '_' . $eventName . '_' . $this->getId());
 	}
