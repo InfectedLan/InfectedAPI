@@ -112,6 +112,21 @@ class ClanHandler {
         return null ==! $row;
     }
 
+    public static function isMemberStepin($user, $clan) {
+        $mysql = MySQL::open(Settings::db_name_infected_compo);
+
+        $result = $mysql->query('SELECT * FROM `' . Settings::db_table_infected_compo_memberof . '` 
+                                      WHERE `clanId` = \'' . $mysql->real_escape_string($clan->getId()) . '\'
+                                      AND `userId` = \'' . $mysql->real_escape_string($user->getId()) . '\'
+                                      AND `stepin` = 1;');
+
+        $row = $result->fetch_array();
+
+        $mysql->close();
+
+        return null ==! $row;
+    }
+
     public static function inviteUser($clan, $user) {
         $mysql = MySQL::open(Settings::db_name_infected_compo);
 
