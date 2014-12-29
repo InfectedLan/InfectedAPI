@@ -98,6 +98,42 @@ class ClanHandler {
         return $memberList;
     }
 
+    public static function getPlayingMembers($clan) {
+        $mysql = MySQL::open(Settings::db_name_infected_compo);
+
+        $result = $mysql->query('SELECT * FROM `' . Settings::db_table_infected_compo_memberof . '` 
+                                      WHERE `clanId` = \'' . $mysql->real_escape_string($clan->getId()) . '\'
+                                      AND `stepin` = 0;');
+
+        $memberList = array();
+
+        while ($row = $result->fetch_array()) {
+            array_push($memberList, UserHandler::getUser($row['userId']));
+        }
+
+        $mysql->close();
+
+        return $memberList;
+    }
+
+    public static function getStepinMembers($clan) {
+        $mysql = MySQL::open(Settings::db_name_infected_compo);
+
+        $result = $mysql->query('SELECT * FROM `' . Settings::db_table_infected_compo_memberof . '` 
+                                      WHERE `clanId` = \'' . $mysql->real_escape_string($clan->getId()) . '\'
+                                      AND `stepin` = 1;');
+
+        $memberList = array();
+
+        while ($row = $result->fetch_array()) {
+            array_push($memberList, UserHandler::getUser($row['userId']));
+        }
+
+        $mysql->close();
+
+        return $memberList;
+    }
+
     public static function isMember($user, $clan) {
         $mysql = MySQL::open(Settings::db_name_infected_compo);
 
