@@ -88,7 +88,11 @@ class TicketHandler {
                                  LIMIT 1;');
 
 		$mysql->close();
-								 
+				
+        if(empty($result)) {
+          return false;
+        }
+
         $row = $result->fetch_array();
         
         return $row ? true : false;
