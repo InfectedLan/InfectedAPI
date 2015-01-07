@@ -57,7 +57,7 @@ class SeatHandler {
     public static function getOwner($seat) {
         $mysql = MySQL::open(Settings::db_name_infected_tickets);
 
-        $result = $mysql->query('SELECT `ownerId` FROM `' . Settings::db_table_infected_tickets_tickets . '` 
+        $result = $mysql->query('SELECT `userId` FROM `' . Settings::db_table_infected_tickets_tickets . '` 
                                       WHERE `seatId` = ' . $mysql->real_escape_string($seat->getId()) . ';');
         
         $row = $result->fetch_array();
@@ -65,7 +65,7 @@ class SeatHandler {
         $mysql->close();
 
         if ($row) {
-            return UserHandler::getUser($row['ownerId']);
+            return UserHandler::getUser($row['userId']);
         }        
     }
 

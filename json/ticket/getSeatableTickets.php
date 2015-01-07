@@ -18,7 +18,7 @@
 				$tickets = TicketHandler::getTicketsSeatableByUser($user, $event);
 				foreach($tickets as $ticket)
 				{
-					$ticketOwner = $ticket->getOwner();
+					$ticketOwner = $ticket->getUser();
 					$data = array();
 					$data['id'] = $ticket->getId();
 					$data['humanName'] = $ticket->getHumanName();

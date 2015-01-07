@@ -23,10 +23,11 @@ class TicketHandler {
         if ($row) {
             return new Ticket($row['id'],
                               $row['eventId'], 
+                              $row['paymentId'],
                               $row['typeId'],
-                              $row['seatId'],
                               $row['buyerId'],                              
                               $row['userId'],
+                              $row['seatId'],
                               $row['seaterId']);
         }
     }
@@ -212,7 +213,7 @@ class TicketHandler {
         $result = $mysql->query('SELECT `id` FROM `' . Settings::db_table_infected_tickets_tickets . '` 
 								 WHERE `seaterId`=' . $mysql->real_escape_string($user->getId()) . ' 
 								 OR (`userId`=' . $mysql->real_escape_string($user->getId()) . ' 
-								 AND `seaterId` = 0) ) 
+								 AND `seaterId` = 0)
 								 AND `eventId`=' . $mysql->real_escape_string($event->getId()) . ';');
     
 		$mysql->close();
