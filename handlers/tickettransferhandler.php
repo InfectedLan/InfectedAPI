@@ -33,12 +33,26 @@ class TicketTransferHandler {
     public static function getRevertableTransfers($user) {
         $mysql = MySQL::open(Settings::db_name_infected_tickets);
 
-        $wantedTimeLimit = time() - 86400;
+        $wantedTimeLimit = time() - Settings::ticketTransferTime;
 
         $result = $mysql->query('SELECT * FROM `' . Settings::db_table_infected_tickets_tickettransfers . '` 
           WHERE `revertable` = true 
           AND `fromId` = \'' . $mysql->real_escape_string($user->getId()) . '\'
-          AND `datetime` > ' . TODO . ';');
+          AND `datetime` > ' . date('Y-m-d H:i:s', $wantedTimeLimit) . ';');
+
+        $transferrableList = array();
+
+        while($row = $result->fetch_array()) {
+        	$transferrableTicket = new TicketTransfer($row['id'],
+                                      $row['ticketId'], 
+                                      $row['fromId'],
+                                      $row['toId'],
+                                      $row['datetime'],                              
+                                      $row['revertable']);
+            array_push($transferrableList, $transferrableTicket);
+        }
+
+        return $transferrableList;
     }
     
     public static function createTransfer($ticket, $user, $revertable) {
@@ -81,7 +95,7 @@ class TicketTransferHandler {
      */
     public static function revertTransfer($ticket, $user) {
         $transfer = self::getTransfer($ticket, $user);
-        $timeLimit = 86400;
+        $timeLimit = Settings::ticketTransferTime;
         
         // Check that the ticket is for current event, we don't allow reverting transfers for old tickets.
         if ($ticket->getEvent()->getId() == EventHandler::getCurrentEvent()->getId()) {

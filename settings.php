@@ -95,6 +95,7 @@ class Settings {
 
 	// Defines how long a ticket should be stored on your account before payment is successful.
 	const storeSessionTime = 3600; // You have an hour to pay on paypal,
+	const ticketTransferTime = 86400;
 
 	//Match participant of state
 	const compo_match_participant_type_clan = 0;
