@@ -41,7 +41,14 @@ class Clan extends Object {
 	}
 
 	public function isQualified($compo) {
-		if(count($this->getMembers()) != $compo->getTeamSize())
+		$nonStepinCount = 0;
+		$members = $this->getMembers();
+		foreach ($members as $member) {
+			if(!$member->isStepin()) {
+				$nonStepinCount++;
+			}
+		}
+		if($nonStepinCount != $compo->getTeamSize())
 			return false;
 
 		$con = MySQL::open(Settings::db_name_infected_compo);
