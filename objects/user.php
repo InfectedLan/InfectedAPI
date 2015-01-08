@@ -240,7 +240,7 @@ class User extends Object {
 		$message[] = '<html>';
 			$message[] = '<body>';
 				$message[] = '<h3>Hei!</h3>';
-				$message[] = '<p>For å aktivere din bruker på ' . $_SERVER['HTTP_HOST'] . ', klikk på <a href="' . $url . '">denne</a> linken.</p>';
+				$message[] = '<p>For å aktivere din bruker på ' . $_SERVER['HTTP_HOST'] . ', klikk på denne: <a href="' . $url . '">' . $url . '</a>.</p>';
 				$message[] = '<p>Med vennlig hilsen <a href="http://infected.no/">Infected</a>.</p>';
 			$message[] = '</body>';
 		$message[] = '</html>';
@@ -262,7 +262,7 @@ class User extends Object {
 		$message[] = '<html>';
 			$message[] = '<body>';
 				$message[] = '<h3>Hei!</h3>';
-				$message[] = '<p>For å tilbakestille ditt passord på ' . $_SERVER['HTTP_HOST'] . ', klikk på <a href="' . $url . '">denne</a> linken.</p>';
+				$message[] = '<p>For å tilbakestille ditt passord på ' . $_SERVER['HTTP_HOST'] . ', klikk på denne:<a href="' . $url . '">' . $url . '</a>.</p>';
 				$message[] = '<p>Med vennlig hilsen <a href="http://infected.no/">Infected</a>.</p>';
 			$message[] = '</body>';
 		$message[] = '</html>';
