@@ -201,8 +201,8 @@ class User extends Object {
 	/*
 	 * Returns true if user has an ticket for the current/upcoming event.
 	 */
-	public function hasTicket() {
-		return TicketHandler::hasTicket(EventHandler::getCurrentEvent(), $this);
+	public function hasCurrentTicket() {
+		return TicketHandler::hasTicketForEvent(EventHandler::getCurrentEvent(), $this);
 	}
 	
 	/*
@@ -368,7 +368,7 @@ class User extends Object {
 	 */
 	public function isEligibleForCompos() {
 		//For now we 
-		return $this->hasTicket() || $this->isGroupMember();
+		return $this->hasCurrentTicket() || $this->isGroupMember();
 	}
 
 	/* 

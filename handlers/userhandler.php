@@ -192,7 +192,7 @@ class UserHandler {
      */
     public static function removeUser($user) {
         // Only remove users without a ticket, for now...
-        if (!TicketHandler::hasUserTicket($user)) {
+        if (!TicketHandler::hasUserAnyTicket($user)) {
             $mysql = MySQL::open(Settings::db_name_infected);
             
             $mysql->query('DELETE FROM `' . Settings::db_table_infected_users . '` 

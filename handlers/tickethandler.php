@@ -66,8 +66,8 @@ class TicketHandler {
 
         return $ticketList;
     }
-    
-    public static function hasUserTicket($user) {
+    //Renamed from hasUserTicket to make function behaviour more obvious
+    public static function hasUserAnyTicket($user) {
         $mysql = MySQL::open(Settings::db_name_infected_tickets);
 
         $result = $mysql->query('SELECT `id` FROM `' . Settings::db_table_infected_tickets_tickets . '` 
@@ -79,8 +79,8 @@ class TicketHandler {
         
         return $row ? true : false;    
     }
-
-    public static function hasTicket($event, $user) {
+    //Renamed from hasTicket to make function behaviour more obvious
+    public static function hasTicketForEvent($event, $user) {
         $mysql = MySQL::open(Settings::db_name_infected_tickets);
 
         $result = $mysql->query('SELECT `id` FROM `' . Settings::db_table_infected_tickets_tickets . '` 
