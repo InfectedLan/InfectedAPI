@@ -11,7 +11,7 @@ if (Session::isAuthenticated()) {
 	if (isset($_GET['id'])) {
 		$ticket = TicketHandler::getTicket($_GET['id']);
 		
-		if ($user->getId() == $ticket->getOwner()->getId()) {
+		if ($user->getId() == $ticket->getUser()->getId()) {
 			if (isset($_GET['target'])) {
 				$target = UserHandler::getUser($_GET['target']);
 				

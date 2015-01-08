@@ -15,7 +15,7 @@ if (Session::isAuthenticated()) {
 			$ticket = TicketHandler::getTicket($_GET['id']);
 
 			if(!CheckinStateHandler::isCheckedIn($ticket)) {
-				$ticketOwner = $ticket->getOwner();
+				$ticketOwner = $ticket->getUser();
 
 				$userData['fullName'] = $ticketOwner->getFullName();
 				$userData['gender'] = $ticketOwner->getGenderName();
