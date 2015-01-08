@@ -120,7 +120,7 @@ class Ticket extends Object {
 	}
 	
 	public function getQrImagePath() {
-		return QR::getCode('https://api.infected.no/functions/verifyTicket.php?id=' . $this->getId());
+		return QR::getCode('https://crew.infected.no/api/pages/utils/verifyTicket.php?id=' . $this->getId());
 	}
 }
 ?>
