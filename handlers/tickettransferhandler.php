@@ -28,6 +28,18 @@ class TicketTransferHandler {
                                       $row['revertable']);
         }
     }
+
+    //Returns list of transfers that are eligible for reverting
+    public static function getRevertableTransfers($user) {
+        $mysql = MySQL::open(Settings::db_name_infected_tickets);
+
+        $wantedTimeLimit = time() - 86400;
+
+        $result = $mysql->query('SELECT * FROM `' . Settings::db_table_infected_tickets_tickettransfers . '` 
+          WHERE `revertable` = true 
+          AND `fromId` = \'' . $mysql->real_escape_string($user->getId()) . '\'
+          AND `datetime` > ' . TODO . ';');
+    }
     
     public static function createTransfer($ticket, $user, $revertable) {
         $mysql = MySQL::open(Settings::db_name_infected_tickets);
