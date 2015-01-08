@@ -3,7 +3,7 @@ require_once 'mailmanager.php';
 
 class NotificationManager {
 	/*
-	 * Sends an mail to the users address with status information.
+	 * Sends an mail to the users e-mail address with status information.
 	 */
 	public function sendApplicationCreatedNotification($user, $group) {
 		if ($group->getLeader() != null) {
@@ -23,7 +23,7 @@ class NotificationManager {
 	}
 	
 	/*
-	 * Sends an mail to the users address with status information.
+	 * Sends an mail to the users e-mail address with status information.
 	 */
 	public function sendApplicationAccpetedNotification($application) {
 		$message = array();
@@ -42,7 +42,7 @@ class NotificationManager {
 	}
 	
 	/*
-	 * Sends an mail to the users address with status information.
+	 * Sends an mail to the users e-mail address with status information.
 	 */
 	public function sendApplicationRejectedNotification($application, $comment) {
 		$message = array();
@@ -61,7 +61,7 @@ class NotificationManager {
 	}
 	
 	/*
-	 * Sends an mail to the users address with status information.
+	 * Sends an mail to the users e-mail address with status information.
 	 */
 	public function sendApplicationQueuedNotification($application) {
 		$message = array();
@@ -78,6 +78,25 @@ class NotificationManager {
 		$message[] = '</html>';
 			
 		return MailManager::sendMail($application->getUser(), 'Din Infected Crew søknad har blitt oppdatert', implode("\r\n", $message));
+	}
+	
+	/*
+	 * Sends a notification to the users e-mail address with purchase information.
+	 */
+	public function sendPurchaseCompleteNotification($user, $reference) {
+		$message = array();
+		$message[] = '<!DOCTYPE html>';
+		$message[] = '<html>';
+			$message[] = '<body>';
+				$message[] = '<h3>Hei!</h3>';
+				$message[] = '<p>Takk for din bestilling.<p>';
+				$message[] = '<p>Bestillingsreferansen din er: <b>' . $reference . '</b>';
+				$message[] = '<p>Du kan nå plassere deg ved å trykke <a href="https://tickets.infected.no/v2/index.php?page=viewSeatmap">her</a>.</p>';
+				$message[] = '<p>Med vennlig hilsen <a href="http://infected.no/">Infected</a>.</p>';
+			$message[] = '</body>';
+		$message[] = '</html>';
+			
+		return MailManager::sendMail($user, 'Takk for ditt kjøp av billett til Infected.', implode("\r\n", $message));
 	}
 }
 ?>
