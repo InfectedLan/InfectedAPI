@@ -14,7 +14,7 @@ if (Session::isAuthenticated()) {
 			$removeUser = UserHandler::getUser($_GET['id']); 
 			
 			if ($removeUser != null) {
-				if (!TicketHandler::hasUserTicket($removeUser)) {
+				if (!TicketHandler::hasUserAnyTicket($removeUser)) {
 					UserHandler::removeUser($removeUser);
 					$result = true;
 				} else {
