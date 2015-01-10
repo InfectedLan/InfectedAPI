@@ -59,7 +59,7 @@ class Avatar extends Object {
  	public function setFileName($newName) {
  		$con = MySQL::open(Settings::db_name_infected_crew);
 
- 		mysqli_query($con, 'UPDATE `' . Settings::db_table_infected_crew_avatars . '` SET `file` = \'' . $con->real_escape_string($newName) . '\' WHERE `id`=' . $this->id . ';');
+ 		mysqli_query($con, 'UPDATE `' . Settings::db_table_infected_crew_avatars . '` SET `file` = \'' . $con->real_escape_string($newName) . '\' WHERE `id`=' . $this->getId() . ';');
 		$this->file  = $newName;
 
 		MySQL::close($con);

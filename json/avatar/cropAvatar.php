@@ -22,8 +22,8 @@ if (Session::isAuthenticated()) {
 		$state = $avatar->getState();
 		if($state == 0) {
 			if(isset($_GET["x"])&&isset($_GET["y"])&&isset($_GET["w"])&&isset($_GET["h"])) {
-				$x = $_GET["x"];
-				$y = $_GET["y"];
+				$x = max($_GET["x"], 0);
+				$y = max($_GET["y"], 0);
 				$w = $_GET["w"];
 				$h = $_GET["h"];
 
@@ -48,10 +48,10 @@ if (Session::isAuthenticated()) {
 						//Get scale factor. Image scaler is 800 px wide.
 						$scalefactor = imagesx($image)/800;
 
-						$cropWidth = $w*$scalefactor;
-						$cropHeight = $h*$scalefactor;
+						$cropWidth = ceil($w*$scalefactor);
+						$cropHeight = ceil($h*$scalefactor);
 
-						if($cropWidth >= Settings::avatar_minimum_width && $cropWidth >= Settings::avatar_minimum_height) {
+						if($cropWidth >= Settings::avatar_minimum_width && $cropHeight >= Settings::avatar_minimum_height) {
 							//Render to tumbnail
 							$target = imagecreatetruecolor(Settings::avatar_thumb_w, Settings::avatar_thumb_h);
 							imagecopyresized($target, $image, 0, 0, $x*$scalefactor, $y*$scalefactor, Settings::avatar_thumb_w, Settings::avatar_thumb_h, $w*$scalefactor, $h*$scalefactor);
