@@ -203,10 +203,11 @@ class TicketHandler {
 
         $mysql = MySQL::open(Settings::db_name_infected_tickets);
 
-        $result = $mysql->query('INSERT INTO `' . Settings::db_table_infected_tickets_tickets . '` (`userId`, `eventId`, `typeId`) 
-                                 VALUES (\'' . $mysql->real_escape_string($user->getId()) . ', 
-                                         \'' . $mysql->real_escape_string($currentEvent->getId()) . ', 
-                                         \''. $mysql->real_escape_string($ticketType->getId()) . ');');
+        $result = $mysql->query('INSERT INTO `' . Settings::db_table_infected_tickets_tickets . '` (`buyerId`, `userId`, `eventId`, `typeId`) 
+                                 VALUES (\'' . $mysql->real_escape_string($user->getId()) . '\', 
+                                        \'' . $mysql->real_escape_string($user->getId()) . '\', 
+                                         \'' . $mysql->real_escape_string($currentEvent->getId()) . '\', 
+                                         \''. $mysql->real_escape_string($ticketType->getId()) . '\');');
 
         $mysql->close();
     }    
