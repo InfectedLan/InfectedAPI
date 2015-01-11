@@ -6,12 +6,11 @@ require_once 'handlers/eventhandler.php';
 require_once 'objects/tickettransfer.php';
 
 class TicketTransferHandler {
-    public static function getTransfer($ticket, $user) {
+    public static function getTransferFromTicket($ticket) {
         $mysql = MySQL::open(Settings::db_name_infected_tickets);
 
         $result = $mysql->query('SELECT * FROM `' . Settings::db_table_infected_tickets_tickettransfers . '` 
                                          WHERE `ticketId` = \'' . $mysql->real_escape_string($ticket->getId()) . '\'
-                                         AND `fromId` = \'' . $mysql->real_escape_string($user->getId()) . '\'
                                          ORDER BY `datetime` DESC
                                          LIMIT 1;');
 
@@ -94,7 +93,7 @@ class TicketTransferHandler {
      * Reverts most recent transfer for given ticket, if a 
      */
     public static function revertTransfer($ticket, $user) {
-        $transfer = self::getTransfer($ticket, $user);
+        $transfer = self::getTransferFromTicket($ticket);
         $timeLimit = Settings::ticketTransferTime;
         
         // Check that the ticket is for current event, we don't allow reverting transfers for old tickets.
@@ -109,10 +108,13 @@ class TicketTransferHandler {
                     // Check if the ticket is revertable and that the time limit isn't run out.
                     if ($transfer->getDateTime() + $timeLimit >= time() && $transfer->isRevertable()) {
                         // Add row to ticket transfers table.
-                        self::createTransfer($ticket, $transfer->getFrom(), false);
+                        //self::createTransfer($ticket, $transfer->getFrom(), false);
                         
                         // Actually change the user of the ticket.
-                        TicketHandler::updateTicketUser($user);
+                        TicketHandler::updateTicketUser($ticket, $user);
+
+                        //Void the ticket transfer
+                        self::voidTransfer($transfer->getId());
                     } else {
                     	return "Det er for sent å overføre denne billetten!";
                     }
@@ -126,5 +128,12 @@ class TicketTransferHandler {
         	return "Billetten er for et gammelt arrangement!";
         }
     }
+
+	public static function voidTransfer($id) 
+	{
+		$mysql = MySQL::open(Settings::db_name_infected_tickets);
+
+		$result = $mysql->query('UPDATE `' . Settings::db_table_infected_tickets_tickettransfers .  '` SET `revertable`=\'0\' WHERE `id` = \'' . $mysql->real_escape_string($id) . '\';');
+	}
 }
 ?>
