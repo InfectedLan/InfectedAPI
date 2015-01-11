@@ -7,8 +7,8 @@ class PaymentLogHandler {
     public static function getPayment($id) {
         $mysql = MySQL::open(Settings::db_name_infected_tickets);
         
-        $result = $mysql->query('SELECT `userId` FROM `' . Settings::db_table_infected_passwordresetcodes . '` 
-                                      WHERE `code` = \'' . $mysql->real_escape_string($code) . '\';');
+        $result = $mysql->query('SELECT * FROM `' . Settings::db_table_infected_tickets_paymentlog . '` 
+                                      WHERE `id` = \'' . $mysql->real_escape_string($id) . '\';');
                             
         $row = $result->fetch_array();
         
@@ -28,7 +28,7 @@ class PaymentLogHandler {
     public static function createPayment($user, $ticketType, $price, $totalPrice, $transactionId) {
         $mysql = MySQL::open(Settings::db_name_infected_tickets);
 
-        $mysql->query('INSERT INTO `' . Settings::db_table_infected_tickets_payments . '` (`userId`, `ticketType`, `price`, `totalPrice`, `transactionId`, `datetime`) 
+        $mysql->query('INSERT INTO `' . Settings::db_table_infected_tickets_paymentlog . '` (`userId`, `ticketType`, `price`, `totalPrice`, `transactionId`, `datetime`) 
                                 VALUES (\'' . $mysql->real_escape_string($user->getId()) . '\', 
                                         \'' . $mysql->real_escape_string($ticketType->getId()) . '\', 
                                         \'' . $mysql->real_escape_string($price) . '\', 

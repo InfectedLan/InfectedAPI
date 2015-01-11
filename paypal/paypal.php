@@ -12,8 +12,8 @@ class PayPal {
 		/*$returnURL =urlencode('https://tickets.infected.no/v2/index.php?page=reviewOrder');
 		$cancelURL =urlencode('https://tickets.infected.no/v2/index.php');*/
 
-		$returnURL = urlencode('https://tickets.infected.no/v2/index.php?page=reviewOrder');
-		$cancelURL = urlencode('https://tickets.infected.no/v2/index.php');
+		//$returnURL = urlencode('https://tickets.infected.no/v2/index.php?page=reviewOrder');
+		//$cancelURL = urlencode('https://tickets.infected.no/v2/index.php');
 
 		//Calculate total price		   	
 		$itemamt = $amount*$ticketType->getPriceForUser($user);
@@ -23,7 +23,7 @@ class PayPal {
 		$nvpstr = "&_LITEMCATEGORY0=Digital&NOSHIPPING=1&L_NAME0=" . $ticketType->getHumanName() . "&L_AMT0=" . $ticketType->getPriceForUser($user) . 
 		"&L_QTY0=" . $amount . "&MAXAMT=" . (string)$maxamt . "&AMT=" . (string)$amt . "&ITEMAMT=" . 
 		(string)$itemamt . "&CALLBACKTIMEOUT=4&L_NUMBER0=10001&L_DESC0=" . $ticketType->getHumanName() . 
-		"&ReturnUrl=" . $returnURL . "&CANCELURL=" . $cancelURL ."&CURRENCYCODE=" . $currencyCodeType . 
+		"&ReturnUrl=" . PaypalSecret::ReturnUrl . "&CANCELURL=" . PaypalSecret::CancelUrl ."&CURRENCYCODE=" . $currencyCodeType . 
 		"&PAYMENTACTION=" . $paymentType;
 	   
 		$nvpstr = /*$nvpHeader .*/$nvpstr;
