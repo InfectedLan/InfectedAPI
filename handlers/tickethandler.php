@@ -6,6 +6,7 @@ require_once 'handlers/eventhandler.php';
 require_once 'handlers/tickettypehandler.php';
 require_once 'handlers/seathandler.php';
 require_once 'handlers/storesessionhandler.php';
+require_once 'handlers/tickettransferhandler.php';
 require_once 'objects/ticket.php';
 require_once 'objects/tickettransfer.php';
 
@@ -168,7 +169,9 @@ class TicketHandler {
         return $event->getParticipants() - count($ticketList);
     }
     
+    //DEPRECATED - use TicketTransferHandler instead
     public static function transferTicket($ticket, $newOwner) {
+        /*
         $mysql = MySQL::open(Settings::db_name_infected_tickets);
 
         $result = $mysql->query('UPDATE `' . Settings::db_table_infected_tickets_tickets . '` 
@@ -176,6 +179,7 @@ class TicketHandler {
                                  WHERE `id` = \'' . $mysql->real_escape_string($ticket->getId()) . '\';');
  
         $mysql->close();
+        */
     }
 
     public static function setSeater($ticket, $newSeater) {
@@ -241,11 +245,11 @@ class TicketHandler {
     }
     
     public static function updateTicketUser($ticket, $user) {
-        if ($ticket->getUser()->getId != $user->getId()) {
+        if ($ticket->getUser()->getId() != $user->getId()) {
             $mysql = MySQL::open(Settings::db_name_infected_tickets);
             
             // Change the user of the ticket.
-            $mysql->query($mysql, 'UPDATE `' . Settings::db_table_infected_tickets_tickets . '` 
+            $mysql->query('UPDATE `' . Settings::db_table_infected_tickets_tickets . '` 
                                    SET `userId` = ' . $mysql->real_escape_string($user->getId()) . ' 
                                    WHERE `id` = ' . $mysql->real_escape_string($ticket->getId()) . ';');
             

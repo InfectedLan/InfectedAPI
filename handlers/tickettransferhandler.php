@@ -9,7 +9,7 @@ class TicketTransferHandler {
     public static function getTransfer($ticket, $user) {
         $mysql = MySQL::open(Settings::db_name_infected_tickets);
 
-        $result = $mysql->query($mysql, 'SELECT * FROM `' . Settings::db_table_infected_tickets_tickettransfers . '` 
+        $result = $mysql->query('SELECT * FROM `' . Settings::db_table_infected_tickets_tickettransfers . '` 
                                          WHERE `ticketId` = \'' . $mysql->real_escape_string($ticket->getId()) . '\'
                                          AND `fromId` = \'' . $mysql->real_escape_string($user->getId()) . '\'
                                          ORDER BY `datetime` DESC
@@ -38,7 +38,7 @@ class TicketTransferHandler {
         $result = $mysql->query('SELECT * FROM `' . Settings::db_table_infected_tickets_tickettransfers . '` 
           WHERE `revertable` = true 
           AND `fromId` = \'' . $mysql->real_escape_string($user->getId()) . '\'
-          AND `datetime` > ' . date('Y-m-d H:i:s', $wantedTimeLimit) . ';');
+          AND `datetime` > \'' . date('Y-m-d H:i:s', $wantedTimeLimit) . '\';');
 
         $transferrableList = array();
 
@@ -59,11 +59,11 @@ class TicketTransferHandler {
         $mysql = MySQL::open(Settings::db_name_infected_tickets);
 
         $mysql->query('INSERT INTO `' . Settings::db_table_infected_tickets_tickettransfers . '` (`ticketId`, `fromId`, `toId`, `datetime`, `revertable`)
-                       VALUES (\'' . $mysql->real_escape_string($ticket->getId()) . ', 
-                               \'' . $mysql->real_escape_string($ticket->getUser()->getId()) . ', 
-                               \'' . $mysql->real_escape_string($user->getId()) . ',
-                               \'' . date('Y-m-d H:i:s') . ',
-                               \'' . $revertable . ');');
+                       VALUES (\'' . $mysql->real_escape_string($ticket->getId()) . '\', 
+                               \'' . $mysql->real_escape_string($ticket->getUser()->getId()) . '\', 
+                               \'' . $mysql->real_escape_string($user->getId()) . '\',
+                               \'' . date('Y-m-d H:i:s') . '\',
+                               \'' . $revertable . '\');');
 
         $mysql->close();
     }
@@ -79,7 +79,7 @@ class TicketTransferHandler {
             if (!$ticket->isCheckedIn()) {
             
                 // Check that the new user isn't the same as the old one.
-                if ($ticket->getUser()->getId != $user->getId()) {
+                if ($ticket->getUser()->getId() != $user->getId()) {
                     // Add row to ticket transfers table.
                     self::createTransfer($ticket, $user, true);
                                                 
@@ -107,15 +107,23 @@ class TicketTransferHandler {
                 if ($transfer->getFrom()->getId() == $user->getId()) {
                 
                     // Check if the ticket is revertable and that the time limit isn't run out.
-                    if ($transfer->getDateTime() + $timeLimit <= time() && $transfer->isRevertable()) {
+                    if ($transfer->getDateTime() + $timeLimit >= time() && $transfer->isRevertable()) {
                         // Add row to ticket transfers table.
                         self::createTransfer($ticket, $transfer->getFrom(), false);
                         
                         // Actually change the user of the ticket.
                         TicketHandler::updateTicketUser($user);
+                    } else {
+                    	return "Det er for sent å overføre denne billetten!";
                     }
+                } else {
+                	return "Du er ikke den gamle eieren av billetten!";
                 }
+            } else {
+            	return "Billetten er sjekket inn!";
             }
+        } else {
+        	return "Billetten er for et gammelt arrangement!";
         }
     }
 }

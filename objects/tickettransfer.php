@@ -2,8 +2,7 @@
 require_once 'handlers/tickethandler.php';
 require_once 'handlers/userhandler.php';
 
-class TicketTransfer {
-	private $id;
+class TicketTransfer extends Object{
 	private $ticketId;
 	private $fromId;
 	private $toId;
@@ -11,7 +10,8 @@ class TicketTransfer {
 	private $revertable;
 
 	public function __construct($id, $ticketId, $fromId, $toId, $datetime, $revertable) {
-		$this->id = $id;
+		parent::__construct($id);
+
 		$this->ticketId = $ticketId;
 		$this->fromId = $fromId;
 		$this->toId = $toId;
