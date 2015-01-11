@@ -1,6 +1,7 @@
 <?php
 require_once 'session.php';
 require_once 'handlers/tickethandler.php';
+require_once 'handlers/tickettransferhandler.php';
 
 $result = false;
 $message = null;
@@ -16,7 +17,7 @@ if (Session::isAuthenticated()) {
 				$target = UserHandler::getUser($_GET['target']);
 				
 				if ($target != null) {
-					TicketHandler::transferTicket($ticket, $target);
+					TicketTransferHandler::transfer($ticket, $target);
 					
 					$result = true;
 					$message = 'Biletten er overført.';
