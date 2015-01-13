@@ -2,7 +2,7 @@
 require_once 'settings.php';
 require_once 'qr.php';
 require_once 'handlers/eventhandler.php';
-require_once 'handlers/paymentloghandler.php';
+require_once 'handlers/paymenthandler.php';
 require_once 'handlers/userhandler.php';
 require_once 'handlers/tickettypehandler.php';
 require_once 'handlers/seathandler.php';
