@@ -216,10 +216,10 @@ class TicketHandler {
         $mysql = MySQL::open(Settings::db_name_infected_tickets);
 
         $result = $mysql->query('SELECT `id` FROM `' . Settings::db_table_infected_tickets_tickets . '` 
-								 WHERE `seaterId`=' . $mysql->real_escape_string($user->getId()) . ' 
-								 OR (`userId`=' . $mysql->real_escape_string($user->getId()) . ' 
-								 AND `seaterId` = 0)
-								 AND `eventId`=' . $mysql->real_escape_string($event->getId()) . ';');
+								 WHERE (`seaterId`=\'' . $mysql->real_escape_string($user->getId()) . '\'
+								 OR (`userId`=\'' . $mysql->real_escape_string($user->getId()) . '\' 
+								 AND `seaterId` = \'0\')
+								 )AND `eventId`=\'' . $mysql->real_escape_string($event->getId()) . '\';');
     
 		$mysql->close();
 	
