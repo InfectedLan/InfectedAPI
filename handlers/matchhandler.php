@@ -119,8 +119,8 @@ class MatchHandler {
     }
 
     // Unstable if user has multiple matches happening
-    public static function getMatchForUser($user) {
-        $clans = ClanHandler::getClansForUser($user);
+    public static function getMatchForUser($user, $event) {
+        $clans = ClanHandler::getClansForUser($user, $event);
         
         foreach ($clans as $clan) {
             $match = self::getMatchForClan($clan);

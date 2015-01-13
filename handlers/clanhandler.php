@@ -27,7 +27,7 @@ class ClanHandler {
         }
     }
 
-    public static function getClansForUser($user) {
+    public static function getClansForUser($user, $event) {
         $mysql = MySQL::open(Settings::db_name_infected_compo);
 
         $result = $mysql->query('SELECT * FROM `' . Settings::db_table_infected_compo_memberof . '` 
@@ -36,7 +36,10 @@ class ClanHandler {
         $clanArray = array();
 
         while ($row = $result->fetch_array()) {
-            array_push($clanArray, self::getClan($row['clanId']));
+            $clan = self::getClan($row['clanId']);
+            if($event->getId() == $clan->getEvent()) {
+                array_push($clanArray, $clan);
+            }
         }
         
         /*

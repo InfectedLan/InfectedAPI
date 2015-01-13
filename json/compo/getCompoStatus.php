@@ -4,6 +4,7 @@ require_once 'handlers/userhandler.php';
 require_once 'handlers/clanhandler.php';
 require_once 'handlers/invitehandler.php';
 require_once 'handlers/matchhandler.php';
+require_once 'handlers/eventhandler.php';
 
 $result = false;
 $message = null;
@@ -11,10 +12,11 @@ $compoStatusArray = null;
 
 if (Session::isAuthenticated()) {
 	$user = Session::getCurrentUser();
+	$event = EventHandler::getCurrentEvent();
 
 	//List clans
 	$clanArray = array();
-	$clans = ClanHandler::getClansForUser($user);
+	$clans = ClanHandler::getClansForUser($user, $event);
 
 	foreach($clans as $clan) {
 		$compo = ClanHandler::getCompo($clan);
@@ -40,7 +42,7 @@ if (Session::isAuthenticated()) {
 	$compoStatusArray = array('clans' => $clanArray, 'invites' => $inviteArray);
 
 	//Match
-	$match = MatchHandler::getMatchForUser($user);
+	$match = MatchHandler::getMatchForUser($user, $event);
 
 	if(isset($match))
 	{
