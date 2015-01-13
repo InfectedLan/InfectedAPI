@@ -234,12 +234,12 @@ class TicketHandler {
     
     public static function changeSeat($ticket, $seat) {
         // Check that the current event matches tickets, we don't allow seating of old tickets.
-        if ($ticket->getEvent()->getId() == EventHandler::getCurrentEvent()) {
+        if ($ticket->getEvent()->getId() == EventHandler::getCurrentEvent()->getId()) {
             $mysql = MySQL::open(Settings::db_name_infected_tickets);
 
             $result = $mysql->query('UPDATE `' . Settings::db_table_infected_tickets_tickets . '` 
-                                     SET `seatId` = ' . $mysql->real_escape_string($seat->getId()) . ' 
-                                     WHERE `id` = ' . $mysql->real_escape_string($ticket->getId()) . ';');
+                                     SET `seatId` = \'' . $mysql->real_escape_string($seat->getId()) . '\' 
+                                     WHERE `id` = \'' . $mysql->real_escape_string($ticket->getId()) . '\';');
             
             $mysql->close();
         }
