@@ -100,5 +100,18 @@ class SeatmapHandler {
             return EventHandler::getEvent($row['id']);
         }
     }
+
+    public static function duplicateSeatmap($seatmap) {
+        $mysql = MySQL::open(Settings::db_name_infected_tickets);
+
+        //Create the seatmap object
+        $mysql->query('INSERT INTO `' . Settings::db_table_infected_tickets_seatmaps . '` (`humanName`, `backgroundImage`) 
+            VALUES (\'Duplicate of ' . $mysql->real_escape_string($seatmap->getHumanName()) . '\', 
+                \'' . $mysql->real_escape_string($seatmap->getBackgroundImage()) . '\')');
+        //Get id
+        $getIdResult = $mysql->query('SELECT `id` FROM `' . Settings::db_table_infected_tickets_seatmaps . '` ORDER BY `id` DESC LIMIT 1;');
+        $row = $mysql->fetch_array($getIdResult);
+        $id = $row['id'];
+    }
 }
 ?>
