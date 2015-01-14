@@ -3,6 +3,7 @@ require_once 'session.php';
 require_once 'handlers/userhandler.php';
 
 $result = false;
+$message = null;
 $users = array();
 
 if (Session::isAuthenticated()) {
@@ -22,9 +23,11 @@ if (Session::isAuthenticated()) {
 										 'lastname' => $userValue->getLastname(),
 										 'nickname' => $userValue->getNickname()));
 			}
+		} else {
+			$message = 'Fant ingen resultater.';
 		}
 	}
 }
 
-echo json_encode(array('result' => $result, 'users' => $users));
+echo json_encode(array('result' => $result, 'message' => $message, 'users' => $users));
 ?>
