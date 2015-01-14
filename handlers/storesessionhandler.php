@@ -49,8 +49,8 @@ class StoreSessionHandler {
         $mysql = MySQL::open(Settings::db_name_infected_tickets);
 
         $result = $mysql->query('SELECT `id` FROM `' . Settings::db_table_infected_tickets_storesessions . '` 
-                                      WHERE `userId` = ' . $mysql->real_escape_string($user->getId()) . ' 
-                                      AND `datetime` > ' . self::oldestValidTimestamp() . ';');
+                                      WHERE `userId` = \'' . $mysql->real_escape_string($user->getId()) . '\' 
+                                      AND `datetime` > \'' . self::oldestValidTimestamp() . '\';');
 
         $row = $result->fetch_array();
 
@@ -74,8 +74,8 @@ class StoreSessionHandler {
         $mysql = MySQL::open(Settings::db_name_infected_tickets);
 
         $result = $mysql->query('SELECT `amount` FROM `' . Settings::db_table_infected_tickets_storesessions . '` 
-                                      WHERE `ticketType` = ' . $mysql->real_escape_string($ticketType->getId()) . ' 
-                                      AND `datetime` > ' . self::oldestValidTimestamp() . ';');
+                                      WHERE `ticketType` = \'' . $mysql->real_escape_string($ticketType->getId()) . '\' 
+                                      AND `datetime` > \'' . self::oldestValidTimestamp() . '\';');
 
         $reservedCount = 0;
 
@@ -89,7 +89,7 @@ class StoreSessionHandler {
     }
 
     private static function oldestValidTimestamp() {
-        return date('Y-m-d H:i:s') - Settings::storeSessionTime;
+        return date('Y-m-d H:i:s', time() - Settings::storeSessionTime);
     }
 
     public static function deleteStoreSession($storeSession) {
