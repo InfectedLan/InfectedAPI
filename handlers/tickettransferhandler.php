@@ -10,9 +10,9 @@ class TicketTransferHandler {
         $mysql = MySQL::open(Settings::db_name_infected_tickets);
 
         $result = $mysql->query('SELECT * FROM `' . Settings::db_table_infected_tickets_tickettransfers . '` 
-                                         WHERE `ticketId` = \'' . $mysql->real_escape_string($ticket->getId()) . '\'
-                                         ORDER BY `datetime` DESC
-                                         LIMIT 1;');
+                                 WHERE `ticketId` = \'' . $mysql->real_escape_string($ticket->getId()) . '\'
+                                 ORDER BY `datetime` DESC
+                                 LIMIT 1;');
 
         $mysql->close();
                                          
@@ -28,16 +28,16 @@ class TicketTransferHandler {
         }
     }
 
-    //Returns list of transfers that are eligible for reverting
+    // Returns list of transfers that are eligible for reverting
     public static function getRevertableTransfers($user) {
         $mysql = MySQL::open(Settings::db_name_infected_tickets);
 
         $wantedTimeLimit = time() - Settings::ticketTransferTime;
 
         $result = $mysql->query('SELECT * FROM `' . Settings::db_table_infected_tickets_tickettransfers . '` 
-          WHERE `revertable` = true 
-          AND `fromId` = \'' . $mysql->real_escape_string($user->getId()) . '\'
-          AND `datetime` > \'' . date('Y-m-d H:i:s', $wantedTimeLimit) . '\';');
+								 WHERE `fromId` = \'' . $mysql->real_escape_string($user->getId()) . '\'
+								 AND `revertable` = \'1\'
+								 AND `datetime` > \'' . date('Y-m-d H:i:s', $wantedTimeLimit) . '\';');
 
         $transferrableList = array();
 
@@ -48,6 +48,7 @@ class TicketTransferHandler {
                                       $row['toId'],
                                       $row['datetime'],                              
                                       $row['revertable']);
+									  
             array_push($transferrableList, $transferrableTicket);
         }
 
@@ -110,30 +111,36 @@ class TicketTransferHandler {
             // If the ticket is checked in, we don't allow transfers.
             if (!$ticket->isCheckedIn()) {
             
-                // Check if the user specified matches the former user of the ticket.
-                if ($transfer->getFrom()->getId() == $user->getId()) {
-                
-                    // Check if the ticket is revertable and that the time limit isn't run out.
-                    if ($transfer->getDateTime() + $timeLimit >= time() && $transfer->isRevertable()) {
-                        // Add row to ticket transfers table.
-						self::createTransfer($ticket, $transfer->getFrom(), false);
-						
-						// Prevent the original transfer from being reverted.
-						self::freezeTransfer($transfer->getId());
-                        
-                        // Actually change the user of the ticket.
-                        TicketHandler::updateTicketUser($ticket, $user);
-                    } else {
-                    	return "Det er for sent å overføre denne billetten!";
-                    }
+                // Check if the user specified matches the former user of the ticket.            
+				if ($transfer->getFrom()->getId() == $user->getId()) {
+	
+					// Check if the ticket is revertable.
+					if ($transfer->isRevertable()) {
+					
+						// Check that the time limit isn't run out.
+						if ($transfer->getDateTime() + $timeLimit >= time()) {
+							// Add row to ticket transfers table.
+							self::createTransfer($ticket, $transfer->getFrom(), false);
+							
+							// Prevent the original transfer from being reverted.
+							self::freezeTransfer($transfer->getId());
+							
+							// Actually change the user of the ticket.
+							TicketHandler::updateTicketUser($ticket, $user);
+						} else {
+							return 'Det er for sent å overføre denne billetten!';
+						}
+					} else {
+						return 'Billeten kan ikke angres.';
+					}
                 } else {
-                	return "Du er ikke den gamle eieren av billetten!";
+                	return 'Du er ikke den gamle eieren av billetten!';
                 }
             } else {
-            	return "Billetten er sjekket inn!";
+            	return 'Billetten er sjekket inn!';
             }
         } else {
-        	return "Billetten er for et gammelt arrangement!";
+        	return 'Billetten er for et gammelt arrangement!';
         }
     }
 }
