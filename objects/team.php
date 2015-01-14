@@ -44,7 +44,7 @@ class Team extends Object {
 	
 	/* Returns an array of users that are members of this group */
 	public function getMembers() {
-		return TeamHandler::getMembers($this->groupId, $this->id);
+		return TeamHandler::getMembers($this->groupId, $this->getId());
 	}
 	
 	public function displayWithInfo() {
