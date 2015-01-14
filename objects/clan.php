@@ -44,18 +44,20 @@ class Clan extends Object {
 		$nonStepinCount = 0;
 		$members = $this->getMembers();
 		foreach ($members as $member) {
-			if(!$member->isStepin()) {
+			if (!$member->isStepIn()) {
 				$nonStepinCount++;
 			}
 		}
-		if($nonStepinCount != $compo->getTeamSize())
+
+		if ($nonStepinCount != $compo->getTeamSize()) {
 			return false;
+		}
 
-		$con = MySQL::open(Settings::db_name_infected_compo);
+		$mysql = MySQL::open(Settings::db_name_infected_compo);
 
-		$result = mysqli_query($con, 'SELECT * FROM `' . Settings::db_table_infected_compo_participantof . '` WHERE `clanId` = ' . $this->id . ' AND `compoId` = ' . $con->real_escape_string($compo->getId()) . ';');
+		$result = $mysql->query('SELECT * FROM `' . Settings::db_table_infected_compo_participantof . '` WHERE `clanId` = ' . $this->id . ' AND `compoId` = ' . $con->real_escape_string($compo->getId()) . ';');
 
-		MySQL::close($con);
+		$mysql->close();
 
 		return $row = mysqli_fetch_array($result);
 	}

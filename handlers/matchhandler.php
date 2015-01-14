@@ -99,9 +99,9 @@ class MatchHandler {
     public static function getMatchForClan($clan) {
         $mysql = MySQL::open(Settings::db_name_infected_compo);
 
-        $result = $mysql->query('SELECT * FROM `' . Settings::db_table_infected_compo_participantOfMatch . '` 
-                                      WHERE `type` = ' . Settings::compo_match_participant_type_clan . ' 
-                                      AND `participantId` = ' . $mysql->real_escape_string($clan->getId()) . ';');
+        $result = $mysql->query('SELECT `matchId` FROM `' . Settings::db_table_infected_compo_participantOfMatch . '` 
+                                 WHERE `type` = \'' . Settings::compo_match_participant_type_clan . '\' 
+                                 AND `participantId` = \'' . $mysql->real_escape_string($clan->getId()) . '\';');
 
         $mysql->close();
         
