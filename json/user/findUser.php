@@ -26,6 +26,8 @@ if (Session::isAuthenticated()) {
 		} else {
 			$message = 'Fant ingen resultater.';
 		}
+	} else {
+		$message = 'Intet søkeord oppgitt.';
 	}
 }
 
