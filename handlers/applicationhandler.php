@@ -2,6 +2,7 @@
 require_once 'settings.php';
 require_once 'mysql.php';
 require_once 'notificationmanager.php';
+require_once 'handlers/eventhandler.php';
 require_once 'objects/application.php';
 
 class ApplicationHandler {
@@ -12,7 +13,7 @@ class ApplicationHandler {
         $mysql = MySQL::open(Settings::db_name_infected_crew);
         
         $result = $mysql->query('SELECT * FROM `' . Settings::db_table_infected_crew_applications . '` 
-                               WHERE `id` = \'' . $mysql->real_escape_string($id) . '\';');
+                                 WHERE `id` = \'' . $mysql->real_escape_string($id) . '\';');
                                       
         $row = $result->fetch_array();
         
@@ -159,12 +160,12 @@ class ApplicationHandler {
         $mysql = MySQL::open(Settings::db_name_infected_crew);
         
         $mysql->query('INSERT INTO `' . Settings::db_table_infected_crew_applications . '` (`eventId`, `groupId`, `userId`, `openedTime`, `state`, `content`) 
-                       VALUES (\'' . EventHandler::getCurrentEvent() . '\', 
-                             \'' . $mysql->real_escape_string($group->getId()) . '\', 
-                             \'' . $mysql->real_escape_string($user->getId()) . '\', 
-                             \'' . date('Y-m-d H:i:s') . '\',
-                             \'1\',
-                             \'' . $mysql->real_escape_string($mysqltent) . '\');');
+                       VALUES (\'' . EventHandler::getCurrentEvent()->getId() . '\', 
+                               \'' . $mysql->real_escape_string($group->getId()) . '\', 
+                               \'' . $mysql->real_escape_string($user->getId()) . '\', 
+                               \'' . date('Y-m-d H:i:s') . '\',
+                               \'1\',
+                               \'' . $mysql->real_escape_string($mysqltent) . '\');');
         
         $mysql->close();
         
@@ -299,7 +300,7 @@ class ApplicationHandler {
         
         if (!self::isQueued($application)) {
             $mysql->query('INSERT INTO `' . Settings::db_table_infected_crew_applicationqueue . '` (`applicationId`) 
-                         VALUES (\'' . $mysql->real_escape_string($application->getId()) . '\');');
+                           VALUES (\'' . $mysql->real_escape_string($application->getId()) . '\');');
         }
                                     
         $mysql->close();
@@ -317,7 +318,7 @@ class ApplicationHandler {
         $mysql = MySQL::open(Settings::db_name_infected_crew);
         
         $mysql->query('DELETE FROM `' . Settings::db_table_infected_crew_applicationqueue . '` 
-                     WHERE `applicationId` = \'' . $mysql->real_escape_string($application->getId()) . '\';');
+                       WHERE `applicationId` = \'' . $mysql->real_escape_string($application->getId()) . '\';');
                                     
         $mysql->close();
     }
@@ -329,16 +330,15 @@ class ApplicationHandler {
         $mysql = MySQL::open(Settings::db_name_infected_crew);
         
         $result = $mysql->query('SELECT `id` FROM `' . Settings::db_table_infected_crew_applications . '`
-                               WHERE `eventId` = \'' . EventHandler::getCurrentEvent()->getId() . '\'
-                               AND `userId` = \'' . $mysql->real_escape_string($user->getId()) . '\'
-                               AND `groupId` = \'' . $mysql->real_escape_string($group->getId()) . '\'
-                               AND `state` = \'1\'
-                               OR `state` = \'2\';');
+                                 WHERE `eventId` = \'' . EventHandler::getCurrentEvent()->getId() . '\'
+                                 AND `userId` = \'' . $mysql->real_escape_string($user->getId()) . '\'
+                                 AND `groupId` = \'' . $mysql->real_escape_string($group->getId()) . '\'
+                                 AND (`state` = \'1\' OR `state` = \'2\');');
         
         $row = $result->fetch_array();
         
-        $mysql->close();
-        
+		$mysql->close();
+		
         return $row ? true : false;
     }
     
@@ -349,11 +349,10 @@ class ApplicationHandler {
         $mysql = MySQL::open(Settings::db_name_infected_crew);
         
         $result = $mysql->query('SELECT `id` FROM `' . Settings::db_table_infected_crew_applications . '`
-                               WHERE `eventId` = \'' . EventHandler::getCurrentEvent()->getId() . '\'
-                               AND `userId` = \'' . $mysql->real_escape_string($user->getId()) . '\'
-                               AND `groupId` = \'' . $mysql->real_escape_string($group->getId()) . '\'
-                               AND `state` = \'1\'
-                               OR `state` = \'2\';');
+                                 WHERE `eventId` = \'' . EventHandler::getCurrentEvent()->getId() . '\'
+                                 AND `userId` = \'' . $mysql->real_escape_string($user->getId()) . '\'
+                                 AND `groupId` = \'' . $mysql->real_escape_string($group->getId()) . '\'
+                                 AND (`state` = \'1\' OR `state` = \'2\');');
         
         $row = $result->fetch_array();
         
@@ -369,8 +368,8 @@ class ApplicationHandler {
         $mysql = MySQL::open(Settings::db_name_infected_crew);
         
         $result = $mysql->query('SELECT `id` FROM `' . Settings::db_table_infected_crew_applications . '`
-                               WHERE `eventId` = \'' . EventHandler::getCurrentEvent()->getId() . '\'
-                               AND `userId` = \'' . $user->getId() . '\';');
+                                 WHERE `eventId` = \'' . EventHandler::getCurrentEvent()->getId() . '\'
+                                 AND `userId` = \'' . $user->getId() . '\';');
         
         $applicationList = array();
         
@@ -390,7 +389,7 @@ class ApplicationHandler {
         $mysql = MySQL::open(Settings::db_name_infected_crew);
         
         $result = $mysql->query('SELECT `id` FROM `' . Settings::db_table_infected_crew_applications . '`
-                               WHERE `eventId` = \'' . $event->getId() . '\';');
+                                 WHERE `eventId` = \'' . $event->getId() . '\';');
         
         $applicationList = array();
         
