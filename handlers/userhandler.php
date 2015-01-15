@@ -150,7 +150,7 @@ class UserHandler {
     public static function createUser($firstname, $lastname, $username, $password, $email, $birthDate, $gender, $phone, $address, $postalCode, $nickname) {
         $mysql = MySQL::open(Settings::db_name_infected);
         
-        $mysql->query('INSERT INTO `' . Settings::db_table_infected_users . '` (`firstname`, `lastname`, `username`, `password`, `email`, `birthdate`, `gender`, `phone`, `address`, `postalcode`, `nickname`) 
+        $mysql->query('INSERT INTO `' . Settings::db_table_infected_users . '` (`firstname`, `lastname`, `username`, `password`, `email`, `birthdate`, `gender`, `phone`, `address`, `postalcode`, `nickname`, `registereddate`) 
                             VALUES (\'' . $mysql->real_escape_string($firstname) . '\', 
                                     \'' . $mysql->real_escape_string($lastname) . '\', 
                                     \'' . $mysql->real_escape_string($username) . '\', 
@@ -160,8 +160,9 @@ class UserHandler {
                                     \'' . $mysql->real_escape_string($gender) . '\', 
                                     \'' . $mysql->real_escape_string($phone) . '\', 
                                     \'' . $mysql->real_escape_string($address) . '\', 
-                                    \'' . $mysql->real_escape_string($postalCode) . '\', 
-                                    \'' . $mysql->real_escape_string($nickname) . '\');');
+                                    \'' . $mysql->real_escape_string($postalCode) . '\',
+									\'' . $mysql->real_escape_string($nickname) . '\',
+                                    \'' . time() . '\');');
                                     
         $mysql->close();
     }
