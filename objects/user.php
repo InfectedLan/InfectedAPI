@@ -148,7 +148,7 @@ class User extends Object {
 	 * Returns the date which this user was registered.
 	 */
 	public function getRegisteredDate() {
-		return $this->registeredDate;
+		return strtotime($this->registeredDate);
 	}
 	
 	/*
