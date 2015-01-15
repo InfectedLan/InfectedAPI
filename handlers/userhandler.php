@@ -162,7 +162,7 @@ class UserHandler {
                                     \'' . $mysql->real_escape_string($address) . '\', 
                                     \'' . $mysql->real_escape_string($postalCode) . '\',
 									\'' . $mysql->real_escape_string($nickname) . '\',
-                                    \'' . time() . '\');');
+                                    \'' . date('Y-m-d H:i:s') . '\');');
                                     
         $mysql->close();
     }
