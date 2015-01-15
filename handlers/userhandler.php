@@ -37,7 +37,8 @@ class UserHandler {
                             $row['phone'], 
                             $row['address'], 
                             $row['postalcode'], 
-                            $row['nickname']);
+                            $row['nickname'],
+							$row['registereddate']);
         }
     }
     

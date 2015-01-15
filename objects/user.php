@@ -27,8 +27,9 @@ class User extends Object {
 	private $address;
 	private $postalcode;
 	private $nickname;
+	private $registeredDate;
 	
-	public function __construct($id, $firstname, $lastname, $username, $password, $email, $birthdate, $gender, $phone, $address, $postalcode, $nickname) {
+	public function __construct($id, $firstname, $lastname, $username, $password, $email, $birthdate, $gender, $phone, $address, $postalcode, $nickname, $registeredDate) {
 		parent::__construct($id);
 		
 		$this->firstname = $firstname;
@@ -42,6 +43,7 @@ class User extends Object {
 		$this->address = $address;
 		$this->postalcode = $postalcode;
 		$this->nickname = $nickname;
+		$this->registeredDate = $registeredDate;
 	}
 	
 	/* 
@@ -140,6 +142,13 @@ class User extends Object {
 	 */
 	public function getNickname() {
 		return $this->nickname;
+	}
+	
+	/*
+	 * Returns the date which this user was registered.
+	 */
+	public function getRegisteredDate() {
+		return $this->registeredDate;
 	}
 	
 	/*
