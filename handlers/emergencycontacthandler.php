@@ -72,8 +72,6 @@ class EmergencyContactHandler {
         $mysql = MySQL::open(Settings::db_name_infected);
         
         if (!self::hasEmergencyContact($user)) {
-                echo 'Hello darfin.';
-        
                 $mysql->query('INSERT INTO `' . Settings::db_table_infected_emergencycontacts . '` (`userId`, `phone`) 
                                     VALUES (\'' . $mysql->real_escape_string($user->getId()) . '\', 
                                             \'' . $mysql->real_escape_string($phone) . '\');');
