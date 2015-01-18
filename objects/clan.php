@@ -41,15 +41,9 @@ class Clan extends Object {
 	}
 
 	public function isQualified($compo) {
-		$nonStepinCount = 0;
-		$members = $this->getMembers();
-		foreach ($members as $member) {
-			if (!$member->isStepIn()) {
-				$nonStepinCount++;
-			}
-		}
+		$primaryPlayers = ClanHandler::getPlayingMembers($this);
 
-		if ($nonStepinCount != $compo->getTeamSize()) {
+		if (count($primaryPlayers) != $compo->getTeamSize()) {
 			return false;
 		}
 

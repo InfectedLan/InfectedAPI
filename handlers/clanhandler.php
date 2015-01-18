@@ -8,6 +8,9 @@ require_once 'handlers/compohandler.php';
 require_once 'handlers/invitehandler.php';
 
 class ClanHandler {
+    const STATE_MAIN_PLAYER = 0;
+    const STATE_STEPIN_PLAYER = 1;
+
     public static function getClan($id) {
         $mysql = MySQL::open(Settings::db_name_infected_compo);
         
@@ -164,6 +167,17 @@ class ClanHandler {
         $mysql->close();
 
         return null ==! $row;
+    }
+
+    public static function setMemberStepinState($clan, $user, $state) {
+        $mysql = MySQL::open(Settings::db_name_infected_compo);
+
+        $result = $mysql->query('UPDATE `' . Settings::db_table_infected_compo_memberof . '` 
+                                SET `stepin` = \'' . $mysql->real_escape_string($state) . '\' 
+                                WHERE `clanId` = \'' . $mysql->real_escape_string($clan->getId()) . '\' 
+                                AND `userId` = \'' . $mysql->real_escape_string($user->getId()) . '\';');
+        $mysql->close();
+
     }
 
     public static function inviteUser($clan, $user) {
