@@ -31,7 +31,7 @@ class MailManager {
 	/*
 	 * Sends an email to all given users.
 	 */
-	public static function sendMailToMany($userList, $subject, $message) {
+	public static function sendEmails($userList, $subject, $message) {
 		foreach ($userList as $user) {
 			self::sendMail($user, $subject, $message);
 		}
