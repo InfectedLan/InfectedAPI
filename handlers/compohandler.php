@@ -26,6 +26,18 @@ class CompoHandler {
                              $row['tag']);
         }
     }
+    public static function hasGeneratedMatches($compo) {
+        $mysql = MySQL::open(Settings::db_name_infected_compo);
+
+        $result = $mysql->query('SELECT * FROM `' . Settings::db_table_infected_compo_matches . '` 
+            WHERE `compoId` = \'' . $mysql->real_escape_string($compo->getId()) . '\';');
+        
+        $row = $result->fetch_array();
+
+        $mysql->close();
+
+        return null ==! $row;
+    }
     public static function getComposForEvent($event) {
         $mysql = MySQL::open(Settings::db_name_infected_compo);
 
