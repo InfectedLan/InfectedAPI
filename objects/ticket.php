@@ -92,6 +92,16 @@ class Ticket extends Object {
 		return UserHandler::getUser($this->seaterId);
 	}
 	
+	/* 
+	 * Returns true if this ticket can be refunded.
+	 */
+	public function isRefundable() {
+		$event = $this->getEvent();
+		$timeLeftToEvent = date('U', $event->getStartTime()) - time();
+		
+		return $timeLeftToEvent >= Settings::refundBeforeEventTime;
+	}
+	
 	/*
 	 * Returns true if this ticket is checked in.
 	 */

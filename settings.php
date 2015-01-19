@@ -65,18 +65,27 @@ class Settings {
 	const db_table_infected_compo_votes =  'votes';
 	
 	/* Configuration */
+	
+	/* InfectedAPI */
 	// Full path to the API location.
 	const api_path = '/home/test.infected.no/public_html/api/';
 	
-	// Email information
+	// Email information.
 	const emailName = 'Infected';
 	const email = 'no-reply@infected.no';
 	
-	// Tells where QR images should be stored under API folder.
+	// Tells where QR images should be stored.
 	const qr_path = 'content/qrcache/';
 	const avatar_path = 'content/avatars/';
-
-	// Avatar sizes
+	
+	/* Compo */
+	// Match participant of state.
+	const compo_match_participant_type_clan = 0;
+	const compo_match_participant_type_match_winner = 1;
+	const compo_match_participant_type_match_looser = 2;
+	
+	/* Crew */
+	// Avatar sizes.
 	const avatar_thumb_w = 150;
 	const avatar_thumb_h = 133;
 
@@ -93,13 +102,14 @@ class Settings {
 	const avatar_minimum_width = 1200;
 	const avatar_minimum_height = 900;
 
-	// Defines how long a ticket should be stored on your account before payment is successful.
-	const storeSessionTime = 3600; // You have an hour to pay on paypal,
-	const ticketTransferTime = 86400;
-
-	//Match participant of state
-	const compo_match_participant_type_clan = 0;
-	const compo_match_participant_type_match_winner = 1;
-	const compo_match_participant_type_match_looser = 2;
+	/* Tickets */
+	// How long time before the tickets event should allow it to be refunded?
+	const refundBeforeEventTime = 1209600; // 14 days (14 * 24 * 60 * 60)
+	
+	// How long a time should the ticket be stored on your account before payment is successful?
+	const storeSessionTime = 3600; // 1 Hour (60 * 60)
+	
+	// How long time after ticket is transfered should we allow the former owner to revert the transaction?
+	const ticketTransferTime = 86400; // 1 day (24 * 60 * 60)
 }
 ?>
