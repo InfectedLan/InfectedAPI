@@ -49,7 +49,7 @@ class Clan extends Object {
 
 		$mysql = MySQL::open(Settings::db_name_infected_compo);
 
-		$result = $mysql->query('SELECT * FROM `' . Settings::db_table_infected_compo_participantof . '` WHERE `clanId` = ' . $this->id . ' AND `compoId` = ' . $con->real_escape_string($compo->getId()) . ';');
+		$result = $mysql->query('SELECT * FROM `' . Settings::db_table_infected_compo_participantof . '` WHERE `clanId` = ' . $this->getId() . ' AND `compoId` = ' . $mysql->real_escape_string($compo->getId()) . ';');
 
 		$mysql->close();
 
