@@ -3,6 +3,9 @@ require_once 'settings.php';
 require_once 'libraries/phpmailer/PHPMailerAutoload.php';
 
 class MailManager {
+	/*
+	 * Sends an email to the given user.
+	 */
 	public static function sendMail($user, $subject, $message) {
 		// Create PHPMailer object.
 		$mail = new PHPMailer;
@@ -23,6 +26,15 @@ class MailManager {
 		
 		// Sending the e-mail.
 		$mail->send();
+	}
+	
+	/*
+	 * Sends an email to all given users.
+	 */
+	public static function sendMailToMany($userList, $subject, $message) {
+		foreach ($userList as $user) {
+			self::sendMail($user, $subject, $message);
+		}
 	}
 }
 ?>
