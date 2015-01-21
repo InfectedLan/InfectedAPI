@@ -27,8 +27,29 @@ class MatchHandler {
                              $row['connectDetails'], 
                              $row['winner'], 
                              $row['state'], 
-                             $row['compoId']);
+                             $row['compoId'],
+                             $row['bracketOffset']);
         }
+    }
+
+    public static function createMatch($scheduledTime, $connectData, $compo, $bracketOffset) {
+        $mysql = MySQL::open(Settings::db_name_infected_compo);
+
+        $mysql->query('INSERT INTO `' . Settings::db_table_infected_compo_matches . '` (`scheduledTime`, `connectDetails`, `state`, `winner`, `compoId`, `bracketOffset`) 
+            VALUES (\'' . $mysql->real_escape_string($scheduledTime) . '\', 
+                    \'' . $mysql->real_escape_string($connectData) . '\', 
+                    \'' . Match::STATE_READYCHECK . '\',
+                    \'0\', 
+                    \'' . $mysql->real_escape_string($compo->getId()) . '\',
+                    \'' . $mysql->real_escape_string($bracketOffset) . '\');');
+
+        $fetchNewestResultId = $mysql->query('SELECT `id` FROM `' . Settings::db_table_infected_compo_matches . '` ORDER BY `id` DESC LIMIT 1;');
+
+        $row = $fetchNewestResultId->fetch_array();
+
+        $newId = $row['id'];
+
+        return self::getMatch($newId);
     }
 
     public static function getPendingMatches($compo) {
