@@ -72,5 +72,36 @@ class CompoHandler {
         
         return $clanList;
     }
+
+    public static function generateDoubleElimination($compo) {
+        /*
+         * Psudocode:
+         * Get list of participants, order randomly
+         * Pass to some round iteration function that:
+         * Generates matches based on passed clans/previous matches
+         * Returns matches that should carry on in the winners and loosers bracket.
+        */
+        $clans = self::getClans($compo);
+        $newClanList = array();
+        //Randomize participant list to avoid any cheating
+        $i = 0;
+        while($i < count($clans)) {
+            $toRemove = rand(0, count($clans-1));
+            array_push($newClanList, $clans[$toRemove]);
+            array_splice($array, $toRemove, 1);
+            $i++;
+        }
+    }
+
+    private static function generateMatches($carryMatches, $carryClans, $iteration) {
+        $numberOfObjects = count($carryMatches) + count($carryClans); //The amount of objects we are going to handle
+        $match_start_index = $numberOfObjects % 2; // 0 if even number of objects, 1 if uneven
+
+        $carryObjects = array("matches" => array(), "clans" => array(), "looserClans" => array()); //Prepare all the info to return back
+
+        if(count($carryMatches) > 0 && $match_start_index == 1) { //If we have an uneven number of objects, and we have matches, 
+            array_push($carryObjects['matches'], $carryMatches[0]);
+        }
+    }
 }
 ?>
