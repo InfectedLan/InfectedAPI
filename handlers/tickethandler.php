@@ -162,25 +162,6 @@ class TicketHandler {
 
         return mysqli_num_rows($result);
     }
-    
-    public static function getAvailableTicketsForEvent($event) {
-        $ticketList = self::getTicketsForEvent($event->getId());
-
-        return $event->getParticipants() - count($ticketList);
-    }
-    
-    //DEPRECATED - use TicketTransferHandler instead
-    public static function transferTicket($ticket, $newOwner) {
-        /*
-        $mysql = MySQL::open(Settings::db_name_infected_tickets);
-
-        $result = $mysql->query('UPDATE `' . Settings::db_table_infected_tickets_tickets . '` 
-                                 SET `userId` = \'' . $mysql->real_escape_string($newOwner->getId()) . '\' 
-                                 WHERE `id` = \'' . $mysql->real_escape_string($ticket->getId()) . '\';');
- 
-        $mysql->close();
-        */
-    }
 
     public static function setSeater($ticket, $newSeater) {
         $mysql = MySQL::open(Settings::db_name_infected_tickets);
@@ -251,8 +232,8 @@ class TicketHandler {
             
             // Change the user of the ticket.
             $mysql->query('UPDATE `' . Settings::db_table_infected_tickets_tickets . '` 
-                                   SET `userId` = ' . $mysql->real_escape_string($user->getId()) . ' 
-                                   WHERE `id` = ' . $mysql->real_escape_string($ticket->getId()) . ';');
+                           SET `userId` = ' . $mysql->real_escape_string($user->getId()) . ' 
+                           WHERE `id` = ' . $mysql->real_escape_string($ticket->getId()) . ';');
             
             $mysql->close();
         }

@@ -81,21 +81,26 @@ class Event extends Object {
 	}
 	
 	/*
-	 * Returns true if booking for this event is open.
+	 * Returns true if booking for this event is opened.
 	 */
 	public function isBookingTime() {
-		$now = date('U');
 		$offset = 86400;
 		$bookingTime = $this->getBookingTime();
 		$bookingEndTime = $this->getStartTime() + $offset;
 
-		return $now >= $bookingTime && $now <= $bookingEndTime;
+		return time() >= $bookingTime && time() <= $bookingEndTime;
 	}
 	
+	/*
+	 * Returns the number of tickets for this event.
+	 */
 	public function getTicketCount() {
 		return TicketHandler::getTicketCount($this);
 	}
-
+	
+	/*
+	 * Returns the number of tickets left for this event.
+	 */
 	public function getAvailableTickets() {
 		$ticketCount = $this->getTicketCount();
 		$numLeft = $this->getParticipants() - $ticketCount;
