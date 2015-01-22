@@ -87,14 +87,17 @@ class UserHandler {
     public static function getPermissionUsers() {
         $mysql = MySQL::open(Settings::db_name_infected);
         
-        $result = $mysql->query('SELECT DISTINCT `userId` FROM `' . Settings::db_table_infected_userpermissions . '`;');
-        
+        $result = $mysql->query('SELECT DISTINCT `' . Settings::db_table_infected_users . '`.`id` FROM `' . Settings::db_table_infected_users . '`
+								 LEFT JOIN `' . Settings::db_table_infected_userpermissions . '` ON `' . Settings::db_table_infected_users . '`.`id` = `' . Settings::db_table_infected_userpermissions . '`.`userId`
+								 WHERE `' . Settings::db_table_infected_userpermissions . '`.`id` IS NOT NULL
+								 ORDER BY `' . Settings::db_table_infected_users . '`.`firstname` ASC;');
+
         $mysql->close();
         
         $userList = array();
         
         while ($row = $result->fetch_array()) {
-            array_push($userList, self::getUser($row['userId']));
+            array_push($userList, self::getUser($row['id']));
         }
 
         return $userList;
@@ -107,9 +110,9 @@ class UserHandler {
         $mysql = MySQL::open(Settings::db_name_infected);
         
         $result = $mysql->query('SELECT `' . Settings::db_table_infected_users . '`.`id` FROM `' . Settings::db_table_infected_users . '`
-                                 LEFT JOIN `' . Settings::db_name_infected_crew . '`.`' . Settings::db_table_infected_crew_memberof . '` ON `' . Settings::db_table_infected_users . '`.`id` = `userId`
-                                 WHERE `groupId` IS NOT NULL 
-                                 ORDER BY `firstname` ASC;');
+                                 LEFT JOIN `' . Settings::db_name_infected_crew . '`.`' . Settings::db_table_infected_crew_memberof . '` ON `' . Settings::db_table_infected_users . '`.`id` = `' . Settings::db_table_infected_crew_memberof . '`.`userId`
+                                 WHERE `' . Settings::db_table_infected_crew_memberof . '`.`groupId` IS NOT NULL 
+                                 ORDER BY `' . Settings::db_table_infected_users . '`.`firstname` ASC;');
 
         $mysql->close();
                                       
@@ -128,19 +131,42 @@ class UserHandler {
     public static function getNonMemberUsers() {
         $mysql = MySQL::open(Settings::db_name_infected);
         
-        $result = $mysql->query('SELECT `' . Settings::db_table_infected_users . '`.`id` FROM ' . Settings::db_table_infected_users . ' 
-                                      LEFT JOIN `' . Settings::db_name_infected_crew . '`.`' . Settings::db_table_infected_crew_memberof . '` ON `' . Settings::db_table_infected_users . '`.`id` = `userId`
-                                      WHERE `groupId` IS NULL 
-                                      ORDER BY `firstname` ASC;');
+        $result = $mysql->query('SELECT `' . Settings::db_table_infected_users . '`.`id` FROM `' . Settings::db_table_infected_users . '`
+                                 LEFT JOIN `' . Settings::db_name_infected_crew . '`.`' . Settings::db_table_infected_crew_memberof . '` ON `' . Settings::db_table_infected_users . '`.`id` = `' . Settings::db_table_infected_crew_memberof . '`.`userId`
+                                 WHERE `' . Settings::db_table_infected_crew_memberof . '`.`groupId` IS NULL 
+                                 ORDER BY `' . Settings::db_table_infected_users . '`.`firstname` ASC;');
         
+		$mysql->close();
+		
         $userList = array();
         
         while ($row = $result->fetch_array()) {
             array_push($userList, self::getUser($row['id']));
         }
+
+        return $userList;
+    }
+	
+	/* 
+     * Get a list of all users which is a participant of current event.
+     */
+    public static function getParticipantUsers($event) {
+        $mysql = MySQL::open(Settings::db_name_infected);
         
+		$result = $mysql->query('SELECT DISTINCT `' . Settings::db_table_infected_users . '`.`id` FROM `' . Settings::db_table_infected_users . '`
+								 LEFT JOIN `' . Settings::db_name_infected_tickets . '`.`' . Settings::db_table_infected_tickets_tickets . '` ON `' . Settings::db_table_infected_users . '`.`id` = `' . Settings::db_table_infected_tickets_tickets . '`.`userId`
+								 WHERE `' . Settings::db_table_infected_tickets_tickets . '`.`eventId` = ' . $event->getId() . '
+								 AND `' . Settings::db_table_infected_tickets_tickets . '`.`id` IS NOT NULL
+								 ORDER BY `' . Settings::db_table_infected_users . '`.`firstname` ASC;');
+		
         $mysql->close();
+                                      
+        $userList = array();
         
+        while ($row = $result->fetch_array()) {
+            array_push($userList, self::getUser($row['id']));
+        }
+
         return $userList;
     }
     
