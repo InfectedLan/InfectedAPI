@@ -18,11 +18,10 @@ if (Session::isAuthenticated()) {
 			!empty($_GET['title']) &&
 			!empty($_GET['content'])) {
 			$id = $_GET['id'];
-			$name = strtolower(str_replace(' ', '-', $_GET['title']));
 			$title = $_GET['title'];
 			$content = $_GET['content'];
 			
-			PageHandler::updatePage($id, $name, $title, $content);
+			PageHandler::updatePage($id, $title, $content);
 			$result = true;
 		} else {
 			$message = 'Du har ikke fyllt ut alle feltene.';

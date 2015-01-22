@@ -4,12 +4,11 @@ require_once 'mysql.php';
 require_once 'objects/page.php';
 
 class PageHandler {
-    // Get page.
     public static function getPage($id) {
         $mysql = MySQL::open(Settings::db_name_infected_main);
         
         $result = $mysql->query('SELECT * FROM `' . Settings::db_table_infected_main_pages . '` 
-                                      WHERE id=\'' . $mysql->real_escape_string($id) . '\';');
+                                 WHERE id=\'' . $mysql->real_escape_string($id) . '\';');
                                       
         $row = $result->fetch_array();
         
@@ -23,12 +22,11 @@ class PageHandler {
         }
     }
     
-    // Get page.
     public static function getPageByName($name) {
         $mysql = MySQL::open(Settings::db_name_infected_main);
         
         $result = $mysql->query('SELECT `id` FROM `' . Settings::db_table_infected_main_pages . '`
-                                      WHERE `name` = \'' . $mysql->real_escape_string($name) . '\';');
+                                 WHERE `name` = \'' . $mysql->real_escape_string($name) . '\';');
                                       
         $row = $result->fetch_array();
         
@@ -85,13 +83,12 @@ class PageHandler {
     /*
      * Update a page.
      */
-    public static function updatePage($id, $name, $title, $mysqltent) {
+    public static function updatePage($id, $title, $content) {
         $mysql = MySQL::open(Settings::db_name_infected_main);
         
         $mysql->query('UPDATE `' . Settings::db_table_infected_main_pages . '` 
-                            SET `name` = \'' . $mysql->real_escape_string($name) . '\', 
-                                `title` = \'' . $mysql->real_escape_string($title) . '\', 
-                                `content` = \'' . $mysql->real_escape_string($mysqltent) . '\' 
+                            SET `title` = \'' . $mysql->real_escape_string($title) . '\', 
+                                `content` = \'' . $mysql->real_escape_string($content) . '\' 
                             WHERE `id` = \'' . $mysql->real_escape_string($id) . '\';');
         
         $mysql->close();
