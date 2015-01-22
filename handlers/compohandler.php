@@ -3,6 +3,7 @@ require_once 'settings.php';
 require_once 'mysql.php';
 require_once 'objects/compo.php';
 require_once 'handlers/clanhandler.php';
+require_once 'handlers/matchhandler.php';
 
 class CompoHandler {
     public static function getCompo($id) {
@@ -101,6 +102,13 @@ class CompoHandler {
 
         if(count($carryMatches) > 0 && $match_start_index == 1) { //If we have an uneven number of objects, and we have matches, 
             array_push($carryObjects['matches'], $carryMatches[0]);
+        }
+
+        for($i = 0; $i < ($numberOfObjects-$match_start_index)/2; $i++) { //Loop through amount of matches we are going to make
+            $index = ($i*2)+$match_start_index; //Start acces
+
+            
+            if($index )
         }
     }
 }

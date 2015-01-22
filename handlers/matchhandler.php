@@ -51,6 +51,14 @@ class MatchHandler {
 
         return self::getMatch($newId);
     }
+    public static function addMatchParticipant($type, $participantId, $match) {
+        $mysql = MySQL::open(Settings::db_name_infected_compo);
+
+        $mysql->query('INSERT INTO `' . Settings::db_table_infected_compo_participantOfMatch . '` (`type`, `participantId`, `matchId`) 
+                        VALUES (\'' . $mysql->real_escape_string($type) . '\', \'' . $mysql->real_escape_string($participantId) . '\', \'' . $mysql->real_escape_string($match->getId()) . '\');');
+
+        $mysql->close();
+    }
 
     public static function getPendingMatches($compo) {
         $mysql = MySQL::open(Settings::db_name_infected_compo);
