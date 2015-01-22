@@ -22,10 +22,27 @@ if (Session::isAuthenticated()) {
 			
 			// If the id's in user list is lower or equal to 0, we have to do something special here.
 			if (count($userIdList) <= 1) {
-				if ($userIdList[0] == 0) {
+				$value = $userIdList[0];
+				
+				// Match the given group of users, and build the array.
+				if ($value == 'all') {
 					$userList = UserHandler::getUsers();
-				} else if ($userIdList[0] == -1) {
+				} else if ($value == 'allMembers') {
+					$userList = UserHandler::getMemberUsers();
+				} else if ($value == 'allNonMembers') {
+					$userList = UserHandler::getNonMemberUsers();
+				} else if ($value == 'allWithTicket') {
 					$userList = UserHandler::getParticipantUsers(EventHandler::getCurrentEvent());
+				} else if ($value == 'allWithTickets') {
+					$participantList = UserHandler::getParticipantUsers(EventHandler::getCurrentEvent());
+					
+					// Check which users have more than 1 ticket.
+					foreach ($participantList as $participant) {
+						// If the participant user have more than 1 ticket, add him/her to the user list.
+						if (count($participant->getTickets()) > 1) {
+							array_push($userList, $participant);
+						}
+					}
 				}
 			} else {
 				// Build the userList from the given id's
