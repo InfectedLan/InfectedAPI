@@ -301,13 +301,15 @@ class UserHandler {
     public static function search($query) {
         $mysql = MySQL::open(Settings::db_name_infected);
 
+		$querySafe = $mysql->real_escape_string($query);
+		
         $result = $mysql->query('SELECT `id` FROM `' . Settings::db_table_infected_users . '` 
-                                 WHERE `firstname` LIKE \'%' . $mysql->real_escape_string($query) . '%\'
-                                 OR `lastname` LIKE \'%' . $mysql->real_escape_string($query) . '%\' 
-                                 OR `username` LIKE \'%' . $mysql->real_escape_string($query) . '%\' 
-                                 OR `email` LIKE \'%' . $mysql->real_escape_string($query) . '%\' 
-                                 OR `phone` LIKE \'%' . $mysql->real_escape_string($query) . '%\' 
-                                 OR `nickname` LIKE \'%' . $mysql->real_escape_string($query) . '%\' 
+                                 WHERE `firstname` LIKE \'%' . $querySafe . '%\'
+                                 OR `lastname` LIKE \'%' . $querySafe . '%\' 
+                                 OR `username` LIKE \'%' . $querySafe . '%\' 
+                                 OR `email` LIKE  \'' . $querySafe . '%\' 
+                                 OR `phone` LIKE \'%' . $querySafe . '%\' 
+                                 OR `nickname` LIKE \'%' . $querySafe . '%\' 
                                  LIMIT 10;');
         
         $mysql->close();

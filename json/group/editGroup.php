@@ -15,6 +15,7 @@ if (Session::isAuthenticated()) {
 			isset($_GET['title']) &&
 			isset($_GET['description']) &&
 			isset($_GET['leader']) &&
+			isset($_GET['coleader']) &&
 			!empty($_GET['title']) &&
 			!empty($_GET['description'])) {
 			$id = $_GET['id'];
@@ -22,8 +23,9 @@ if (Session::isAuthenticated()) {
 			$title = $_GET['title'];
 			$description = $_GET['description'];
 			$leader = $_GET['leader'];
+			$coleader = $_GET['coleader'];
 
-			GroupHandler::updateGroup($id, $name, $title, $description, $leader);
+			GroupHandler::updateGroup($id, $name, $title, $description, $leader, $coleader);
 			$result = true;
 		} else {
 			$message = 'Du har ikke fylt ut alle feltene.';

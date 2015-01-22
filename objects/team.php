@@ -44,7 +44,7 @@ class Team extends Object {
 	
 	/* Returns an array of users that are members of this group */
 	public function getMembers() {
-		return TeamHandler::getMembers($this->groupId, $this->getId());
+		return TeamHandler::getMembers($this->getGroup(), $this);
 	}
 	
 	public function displayWithInfo() {
@@ -86,7 +86,11 @@ class Team extends Object {
 					
 						echo '<a href="index.php?page=my-profile&id=' . $member->getId() . '"><img src="../api/' . $avatarFile . '" width="146" height="110" style="float: right;"></a>';
 						echo '<p>Navn: ' . $member->getFirstname() . ' "' . $member->getNickname() . '" ' . $member->getLastname() . '<br>';
-						echo 'Stilling: ' . $member->getPosition() . '<br>';
+						
+						if ($member->getPosition() != 'Medlem') { // TODO: Implement this better.
+							echo 'Stilling: ' . $member->getPosition() . '<br>';
+						}
+						
 						echo 'Telefon: ' . $member->getPhoneString() . '<br>';
 						echo 'E-post: ' . $member->getEmail() . '</p>';
 					echo '</div>';

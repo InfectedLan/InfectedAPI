@@ -334,42 +334,49 @@ class User extends Object {
 	 * Returns the users group.
 	 */
 	public function getGroup() {
-		return GroupHandler::getGroupForUser($this->getId());
+		return GroupHandler::getGroupForUser($this);
 	}
 	
 	/* 
 	 * Is member of a group which means it's not a plain user.
 	 */
 	public function isGroupMember() {
-		return GroupHandler::isGroupMember($this->getId());
+		return GroupHandler::isGroupMember($this);
 	}
 	
 	/* 
 	 * Return true if user is leader of a group.
 	 */
 	public function isGroupLeader() {
-		return GroupHandler::isGroupLeader($this->getId());
+		return GroupHandler::isGroupLeader($this);
+	}
+	
+	/* 
+	 * Return true if user is co-leader of a group.
+	 */
+	public function isGroupCoLeader() {
+		return GroupHandler::isGroupCoLeader($this);
 	}
 	
 	/* 
 	 * Returns the team.
 	 */
 	public function getTeam() {
-		return TeamHandler::getTeamForUser($this->getId());
+		return TeamHandler::getTeamForUser($this);
 	}
 	
 	/* 
 	 * Is member of a team which means it's not a plain user.
 	 */
 	public function isTeamMember() {
-		return TeamHandler::isTeamMember($this->getId());
+		return TeamHandler::isTeamMember($this);
 	}
 	
 	/*
 	 * Return true if user is leader of a team.
 	 */
 	public function isTeamLeader() {
-		return TeamHandler::isTeamLeader($this->getId());
+		return TeamHandler::isTeamLeader($this);
 	}
 	
 	/*

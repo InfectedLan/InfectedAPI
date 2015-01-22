@@ -15,15 +15,17 @@ class Group extends Object {
 	private $title;
 	private $description;
 	private $leader;
+	private $coleader;
 	private $queuing;
 	
-	public function __construct($id, $name, $title, $description, $leader, $queuing) {
+	public function __construct($id, $name, $title, $description, $leader, $coleader, $queuing) {
 		parent::__construct($id);
 	
 		$this->name = $name;
 		$this->title = $title;
 		$this->description = $description;
 		$this->leader = $leader;
+		$this->coleader = $coleader;
 		$this->queuing = $queuing;
 	}
 	
@@ -55,6 +57,13 @@ class Group extends Object {
 		return UserHandler::getUser($this->leader);
 	}
 	
+	/* 
+	 * Returns the user which is the co-leader of this group. 
+	 */
+	public function getCoLeader() {
+		return UserHandler::getUser($this->coleader);
+	}
+	
 	/*
 	 * Return true if new applications for this group automatically should be queued.
 	 */
@@ -66,14 +75,14 @@ class Group extends Object {
 	 * Returns an array of users that are member of this group. 
 	 */
 	public function getMembers() {
-		return GroupHandler::getMembers($this->getId());
+		return GroupHandler::getMembers($this);
 	}
 	
 	/* 
 	 * Returns an array of all teams connected to this group.
 	 */
 	public function getTeams() {		
-		return TeamHandler::getTeamsForGroup($this->getId());
+		return TeamHandler::getTeamsForGroup($this);
 	}
 	
 	public function displayWithInfo() {
@@ -115,7 +124,18 @@ class Group extends Object {
 					
 						echo '<a href="index.php?page=my-profile&id=' . $member->getId() . '"><img src="../api/' . $avatarFile . '" width="146" height="110" style="float: right;"></a>';
 						echo '<p>Navn: ' . $member->getFirstname() . ' "' . $member->getNickname() . '" ' . $member->getLastname() . '<br>';
-						echo 'Stilling: ' . $member->getPosition() . '<br>';
+						echo 'Stilling: ';
+						
+						if ($member->isGroupLeader()) {
+							echo 'Chief' . '<br>';
+						} else if ($member->isTeamLeader()) {
+							echo 'Shift-leder i ' . $member->getTeam()->getTitle() . '<br>';
+						} else if ($member->isTeamMember()){
+							echo $member->getTeam()->getTitle() . '<br>';
+						} else {
+							echo 'Medlem' . '<br>';
+						}
+						
 						echo 'Telefon: ' . $member->getPhoneString() . '<br>';
 						echo 'E-post: ' . $member->getEmail() . '</p>';
 					echo '</div>';

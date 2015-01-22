@@ -15,14 +15,16 @@ if (Session::isAuthenticated()) {
 		if (isset($_GET['title']) &&
 			isset($_GET['description']) &&
 			isset($_GET['leader']) &&
+			isset($_GET['coleader']) &&
 			!empty($_GET['title']) &&
 			!empty($_GET['description'])) {
 			$name = strtolower(str_replace(' ', '-', $_GET['title']));
 			$title = $_GET['title'];
 			$description = $_GET['description'];
 			$leader = $_GET['leader'];
+			$coleader = $_GET['leader'];
 			
-			GroupHandler::createGroup($name, $title, $description, $leader);
+			GroupHandler::createGroup($name, $title, $description, $leader, $coleader);
 			$result = true;
 		} else {
 			$message = 'Du har ikke fyllt ut alle feltene!';

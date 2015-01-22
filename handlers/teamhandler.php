@@ -26,12 +26,12 @@ class TeamHandler {
     }
     
     /* Get a group by userId */
-    public static function getTeamForUser($userId) {
+    public static function getTeamForUser($user) {
         $mysql = MySQL::open(Settings::db_name_infected_crew);
         
         $result = $mysql->query('SELECT `teamId`
                                       FROM `' . Settings::db_table_infected_crew_memberof . '` 
-                                      WHERE `userId` = \'' . $mysql->real_escape_string($userId) . '\';');
+                                      WHERE `userId` = \'' . $mysql->real_escape_string($user->getId()) . '\';');
                                     
         $row = $result->fetch_array();
         
@@ -60,11 +60,11 @@ class TeamHandler {
     }
     
     /* Get an array of all teams */
-    public static function getTeamsForGroup($groupId) {
+    public static function getTeamsForGroup($group) {
         $mysql = MySQL::open(Settings::db_name_infected_crew);
 
         $result = $mysql->query('SELECT `id` FROM `' . Settings::db_table_infected_crew_teams . '`
-                                      WHERE `groupId` = \'' . $mysql->real_escape_string($groupId) . '\';');
+                                      WHERE `groupId` = \'' . $mysql->real_escape_string($group->getId()) . '\';');
         
         $teamList = array();
         
@@ -118,14 +118,14 @@ class TeamHandler {
     }
     
     /* Returns an array of users that are members of this team */
-    public static function getMembers($groupId, $teamId) {
+    public static function getMembers($group, $team) {
         $mysql = MySQL::open(Settings::db_name_infected);
         
         $result = $mysql->query('SELECT `' . Settings::db_table_infected_users . '`.`id` FROM `' . Settings::db_table_infected_users . '`
                                       LEFT JOIN `' . Settings::db_name_infected_crew . '`.`' . Settings::db_table_infected_crew_memberof . '`
                                       ON `' . Settings::db_table_infected_users . '`.`id` = `userId` 
-                                      WHERE `groupId` = \'' . $mysql->real_escape_string($groupId) . '\'
-                                      AND `teamId` = \'' . $mysql->real_escape_string($teamId) . '\' 
+                                      WHERE `groupId` = \'' . $mysql->real_escape_string($group->getId()) . '\'
+                                      AND `teamId` = \'' . $mysql->real_escape_string($team->getId()) . '\' 
                                       ORDER BY `firstname` ASC;');
         
         $memberList = array();
@@ -140,12 +140,12 @@ class TeamHandler {
     }
     
     /* Is member of a team which means it's not a plain user */
-    public static function isTeamMember($userId) {
+    public static function isTeamMember($user) {
         $mysql = MySQL::open(Settings::db_name_infected_crew);
         
         $result = $mysql->query('SELECT `teamId` 
                                       FROM `' . Settings::db_table_infected_crew_memberof. '` 
-                                      WHERE `userId` = \'' . $mysql->real_escape_string($userId) . '\' 
+                                      WHERE `userId` = \'' . $mysql->real_escape_string($user->getId()) . '\' 
                                       AND `teamId` != \'0\'');
                                       
         $row = $result->fetch_array();
@@ -156,12 +156,12 @@ class TeamHandler {
     }
     
     /* Return true if user is leader for a team */
-    public static function isTeamLeader($userId) {
+    public static function isTeamLeader($user) {
         $mysql = MySQL::open(Settings::db_name_infected_crew);
         
         $result = $mysql->query('SELECT `leader` 
                                       FROM `' . Settings::db_table_infected_crew_teams . '` 
-                                      WHERE `leader` = \'' . $mysql->real_escape_string($userId) . '\';');
+                                      WHERE `leader` = \'' . $mysql->real_escape_string($user->getId()) . '\';');
                                       
         $row = $result->fetch_array();
         
