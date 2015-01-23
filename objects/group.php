@@ -128,7 +128,7 @@ class Group extends Object {
 						
 						if ($member->isGroupLeader()) {
 							echo 'Chief' . '<br>';
-						} else if ($member->isTeamLeader()) {
+						} else if ($member->isTeamMember() && $member->isTeamLeader()) {
 							echo 'Shift-leder i ' . $member->getTeam()->getTitle() . '<br>';
 						} else if ($member->isTeamMember()){
 							echo $member->getTeam()->getTitle() . '<br>';
