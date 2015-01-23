@@ -183,6 +183,13 @@ class User extends Object {
 	 * Returns true if user have specified permission, otherwise false.
 	 */
 	public function hasPermission($value) {
+		// If the user is a leader or co leader return true on chief permissions.
+		if ($this->isGroupLeader() || $this->isGroupCoLeader()) {
+			if (strpos($value, 'chief') === 0) {
+				return true;
+			}
+		}
+		
 		return UserPermissionsHandler::hasUserPermission($this, $value);
 	}
 	

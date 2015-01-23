@@ -20,6 +20,19 @@ class UserPermissionsHandler {
         return $row ? true : false;
     }
     
+	public static function hasUserPermissions($user) {
+        $mysql = MySQL::open(Settings::db_name_infected);
+        
+        $result = $mysql->query('SELECT `id` FROM `' . Settings::db_table_infected_userpermissions . '` 
+                                 WHERE `userId` = \'' . $mysql->real_escape_string($user->getId()) . '\';');
+        
+        $mysql->close();
+        
+        $row = $result->fetch_array();
+        
+        return $row ? true : false;
+    }
+	
     public static function getUserPermissions($user) {
         $mysql = MySQL::open(Settings::db_name_infected);
         
@@ -35,19 +48,6 @@ class UserPermissionsHandler {
         }
 
         return $permissionList;
-    }
-    
-    public static function hasUserPermissions($user) {
-        $mysql = MySQL::open(Settings::db_name_infected);
-        
-        $result = $mysql->query('SELECT `id` FROM `' . Settings::db_table_infected_userpermissions . '` 
-                                 WHERE `userId` = \'' . $mysql->real_escape_string($user->getId()) . '\';');
-        
-        $mysql->close();
-        
-        $row = $result->fetch_array();
-        
-        return $row ? true : false;
     }
     
     public static function createUserPermission($user, $value) {
