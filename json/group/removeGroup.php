@@ -8,9 +8,7 @@ $message = null;
 if (Session::isAuthenticated()) {
 	$user = Session::getCurrentUser();
 	
-	if ($user->hasPermission('*') ||
-		$user->hasPermission('functions.groups') ||
-		$user->isGroupLeader()) {
+	if ($user->hasPermission('*')) {
 		if (isset($_GET['id']) &&
 			is_numeric($_GET['id'])) {
 			GroupHandler::removeGroup($_GET['id']);

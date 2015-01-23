@@ -9,8 +9,7 @@ if (Session::isAuthenticated()) {
 	$user = Session::getCurrentUser();
 	
 	if ($user->hasPermission('*') ||
-		$user->hasPermission('chief.avatars') ||
-		$user->isGroupLeader()) {
+		$user->hasPermission('chief.avatars')) {
 		if (isset($_GET['id']) &&
 			is_numeric($_GET['id'])) {
 			AvatarHandler::acceptAvatar($_GET['id']);

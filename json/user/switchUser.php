@@ -9,7 +9,7 @@ if (Session::isAuthenticated()) {
 	$user = Session::getCurrentUser();
 	
 	if ($user->hasPermission('*') ||
-		$user->hasPermission('admin.change-user')) {
+		$user->hasPermission('developer.change-user')) {
 		if (isset($_GET['userId']) &&
 			is_numeric($_GET['userId'])) {
 			$changeUser = UserHandler::getUser($_GET['userId']);

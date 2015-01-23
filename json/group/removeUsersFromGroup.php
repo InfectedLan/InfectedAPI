@@ -9,8 +9,7 @@ if (Session::isAuthenticated()) {
 	$user = Session::getCurrentUser();
 	
 	if ($user->hasPermission('*') ||
-		$user->hasPermission('chief.groups') ||
-		$user->isGroupLeader()) {
+		$user->hasPermission('chief.groups')) {
 		if (isset($_GET['id']) &&
 			is_numeric($_GET['id'])) {
 			$group = GroupHandler::getGroup($_GET['id']);

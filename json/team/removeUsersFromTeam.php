@@ -9,8 +9,7 @@ if (Session::isAuthenticated()) {
 	$user = Session::getCurrentUser();
 	
 	if ($user->hasPermission('*') ||
-		$user->hasPermission('chief.teams') ||
-		$user->isGroupLeader()) {
+		$user->hasPermission('chief.teams')) {
 		if (isset($_GET['id']) &&
 			is_numeric($_GET['id'])) {
 			$team = TeamHandler::getTeam($_GET['id']);
