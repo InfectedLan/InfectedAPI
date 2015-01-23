@@ -86,14 +86,15 @@ class Team extends Object {
 					
 						echo '<a href="index.php?page=my-profile&id=' . $member->getId() . '"><img src="../api/' . $avatarFile . '" width="146" height="110" style="float: right;"></a>';
 						echo '<p>Navn: ' . $member->getFirstname() . ' "' . $member->getNickname() . '" ' . $member->getLastname() . '<br>';
-						echo 'Stilling: ';
-						
+
 						if ($member->isGroupLeader()) {
-							echo 'Chief' . '<br>';
+							echo 'Stilling: Chief<br>';
+						} else if ($member->isGroupCoLeader()) {
+							echo 'Stilling: Co-chief<br>';
 						} else if ($member->isTeamMember() && $member->isTeamLeader()) {
-							echo 'Shift-leder' . '<br>';
+							echo 'Stilling: Shift-leder<br>';
 						}
-						
+
 						echo 'Telefon: ' . $member->getPhoneString() . '<br>';
 						echo 'E-post: ' . $member->getEmail() . '</p>';
 					echo '</div>';

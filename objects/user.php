@@ -401,6 +401,8 @@ class User extends Object {
 		if ($this->isGroupMember()) {
 			if ($this->isGroupLeader()) {
 				return 'Chief';
+			} else if ($this->isGroupCoLeader()) {
+				return 'Co-chief';
 			} else if ($this->isTeamLeader()) {
 				return 'Shift-leder';
 			} else {

@@ -127,14 +127,20 @@ class Group extends Object {
 						echo 'Stilling: ';
 						
 						if ($member->isGroupLeader()) {
-							echo 'Chief' . '<br>';
-						} else if ($member->isTeamMember() && $member->isTeamLeader()) {
-							echo 'Shift-leder i ' . $member->getTeam()->getTitle() . '<br>';
-						} else if ($member->isTeamMember()){
-							echo $member->getTeam()->getTitle() . '<br>';
+							echo 'Chief';
+						} else if ($member->isGroupCoLeader()) {
+							echo 'Co-chief';
+						} else if ($member->isTeamMember()) {
+							if ($member->isTeamLeader()) {
+								echo 'Shift-leder i ' . $member->getTeam()->getTitle();
+							} else {
+								echo $member->getTeam()->getTitle();
+							}
 						} else {
-							echo 'Medlem' . '<br>';
+							echo 'Medlem';
 						}
+						
+						echo '<br>';
 						
 						echo 'Telefon: ' . $member->getPhoneString() . '<br>';
 						echo 'E-post: ' . $member->getEmail() . '</p>';
