@@ -4,27 +4,28 @@ require_once 'handlers/eventhandler.php';
 require_once 'handlers/seatmaphandler.php';
 require_once 'handlers/rowhandler.php';
 require_once 'handlers/seathandler.php';
-if(Session::isAuthenticated()) {
+
+if (Session::isAuthenticated()) {
 	$user = Session::getCurrentUser();
 	
 	if ($user->hasPermission('*') ||
-		$user->hasPermission('functions.print-ticket-labels')) {
+		$user->hasPermission('event.print-ticket-labels')) {
 		echo '<html>';
 			echo '<head>';
 				echo '<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />';
-				echo '<link href="../style/ticketlabelstyle.css" rel="stylesheet" type="text/css" />';
+				echo '<link href="../../styles/ticketlabelstyle.css" rel="stylesheet" type="text/css" />';
 			echo '</head>';
 			echo '<body>';
 				$currEvent = EventHandler::getCurrentEvent();
-				$seatmap = SeatmapHandler::getSeatmap($currEvent->getSeatmap());
+				$seatmap = SeatmapHandler::getSeatmap($currEvent->getSeatmap()->getId());
 				$rows = SeatmapHandler::getRows($seatmap);
 				
 				foreach ($rows as $row) {
 					$seats = RowHandler::getSeats($row);
 					
 					foreach ($seats as $seat) {
-						echo '<div id="navn">';
-							echo '<img width="600px" src="../content/static/infected_logo_print_all.jpg">';
+						echo '<div id="name">';
+							echo '<img width="600px" src="../../content/static/infected_logo_print_all.jpg">';
 							echo '<br>';
 							if (SeatHandler::hasOwner($seat)) {
 								$owner = SeatHandler::getOwner($seat);
@@ -33,7 +34,7 @@ if(Session::isAuthenticated()) {
 								echo 'Ledig plass!';
 							}
 						echo '</div>';
-						echo '<div id="sete">';
+						echo '<div id="seat">';
 							echo SeatHandler::getHumanString($seat);
 						echo '</div>';
 						echo '<br />';
