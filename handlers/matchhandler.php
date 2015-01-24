@@ -11,6 +11,11 @@ require_once 'handlers/clanhandler.php';
  */
 
 class MatchHandler {
+    //State of the "participantOf" table responsible for the participants of a match
+    const participantof_state_clan = 0;
+    const participantof_state_winner = 1;
+    const participantof_state_looser = 2;
+
     public static function getMatch($id) {
         $mysql = MySQL::open(Settings::db_name_infected_compo);
         

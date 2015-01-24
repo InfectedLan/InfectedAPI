@@ -94,7 +94,7 @@ class CompoHandler {
         }
     }
 
-    private static function generateMatches($carryMatches, $carryClans, $iteration) {
+    private static function generateMatches($carryMatches, $carryClans, $iteration, $compo) {
         $numberOfObjects = count($carryMatches) + count($carryClans); //The amount of objects we are going to handle
         $match_start_index = $numberOfObjects % 2; // 0 if even number of objects, 1 if uneven
 
@@ -107,9 +107,22 @@ class CompoHandler {
         for($i = 0; $i < ($numberOfObjects-$match_start_index)/2; $i++) { //Loop through amount of matches we are going to make
             $index = ($i*2)+$match_start_index; //Start acces
 
-            
-            if($index )
+            $match = MatchHandler::createMatch(0, "", $compo, $iteration); //TODO connectData and scheduledTime
+
+            for($x = 0; $x < 2; $x++) {
+                $toCheck = $index + $x;
+                if($toCheck >= count($carryMatches)) {
+                    //We are going to generate a reference to a clan
+                    $toCheck = $toCheck - count($carryMatches);
+                    MatchHandler::addMatchParticipant(0, $carryClans[$toCheck], $match->getId() );
+                } else {
+                    //Generate reference to winner of a match
+                    MatchHandler::addMatchParticipant(1, $carryMatches[$toCheck], $match->getId() );
+                }
+            }
         }
+
+        return $carryObjects;
     }
 }
 ?>
