@@ -94,20 +94,26 @@ class CompoHandler {
         }
     }
 
-    private static function generateMatches($carryMatches, $carryClans, $iteration, $compo) {
+    private static function generateMatches($carryMatches, $carryClans, $carryLoosers, $iteration, $compo) {
         $numberOfObjects = count($carryMatches) + count($carryClans); //The amount of objects we are going to handle
         $match_start_index = $numberOfObjects % 2; // 0 if even number of objects, 1 if uneven
 
         $carryObjects = array("matches" => array(), "clans" => array(), "looserClans" => array()); //Prepare all the info to return back
 
-        if(count($carryMatches) > 0 && $match_start_index == 1) { //If we have an uneven number of objects, and we have matches, 
-            array_push($carryObjects['matches'], $carryMatches[0]);
+        if($match_start_index == 1) { //If there is an uneven amount of objects
+            if(count($carryMatches) > 0 ) { //Prioritize carrying matches
+                array_push($carryObjects['matches'], $carryMatches[0]);
+            } else { //No matches to carry, carry a clan
+                array_push($carryObjects['clans'], $carryClans[0]);
+            }
         }
+        
 
         for($i = 0; $i < ($numberOfObjects-$match_start_index)/2; $i++) { //Loop through amount of matches we are going to make
             $index = ($i*2)+$match_start_index; //Start acces
 
             $match = MatchHandler::createMatch(0, "", $compo, $iteration); //TODO connectData and scheduledTime
+            array_push($carryObjects["matches"], $match);
 
             for($x = 0; $x < 2; $x++) {
                 $toCheck = $index + $x;
@@ -120,7 +126,12 @@ class CompoHandler {
                     MatchHandler::addMatchParticipant(1, $carryMatches[$toCheck], $match->getId() );
                 }
             }
+
         }
+
+        //Generate loosers
+
+        
 
         return $carryObjects;
     }
