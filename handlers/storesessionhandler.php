@@ -133,7 +133,7 @@ class StoreSessionHandler {
         }
     }
 
-    public static function purchaseComplete($storeSession) {
+    public static function purchaseComplete($storeSession, $payment) {
         if (!isset($storeSession)) {
             return false;
         }
@@ -144,7 +144,7 @@ class StoreSessionHandler {
 
         // Checks are ok, lets buy!
         for ($i = 0; $i < $storeSession->getAmount(); $i++) {
-            TicketHandler::createTicket($user, $ticketType);
+            TicketHandler::createTicket($user, $ticketType, $payment->getId());
         }
 
         self::deleteStoreSession($storeSession);

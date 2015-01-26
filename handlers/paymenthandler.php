@@ -36,7 +36,13 @@ class PaymentHandler {
                                         \'' . $mysql->real_escape_string($transactionId) . '\', 
                                         \'' . date('Y-m-d H:i:s') . '\');');
 
+        //Get the id we inserted
+        $paymentId = $mysql->insert_id;
+
         $mysql->close();
+
+        $payment = self::getPayment($paymentId);
+        return $payment;
     }
 }
 ?>

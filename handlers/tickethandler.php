@@ -179,19 +179,20 @@ class TicketHandler {
         $mysql->close();
     }
 
-    public static function createTicket($user, $ticketType) {
+    public static function createTicket($user, $ticketType, $paymentId) {
         $currentEvent = EventHandler::getCurrentEvent();
 
         $mysql = MySQL::open(Settings::db_name_infected_tickets);
 
-        $result = $mysql->query('INSERT INTO `' . Settings::db_table_infected_tickets_tickets . '` (`buyerId`, `userId`, `eventId`, `typeId`) 
+        $result = $mysql->query('INSERT INTO `' . Settings::db_table_infected_tickets_tickets . '` (`buyerId`, `userId`, `eventId`, `typeId`, `paymentId`) 
                                  VALUES (\'' . $mysql->real_escape_string($user->getId()) . '\', 
                                         \'' . $mysql->real_escape_string($user->getId()) . '\', 
                                          \'' . $mysql->real_escape_string($currentEvent->getId()) . '\', 
-                                         \''. $mysql->real_escape_string($ticketType->getId()) . '\');');
+                                         \''. $mysql->real_escape_string($ticketType->getId()) . '\', 
+                                         \'' . $mysql->real_escape_string($paymentId) . '\');');
 
         $mysql->close();
-    }    
+    }  
     
     public static function getTicketsSeatableByUser($user, $event) {
         $mysql = MySQL::open(Settings::db_name_infected_tickets);
