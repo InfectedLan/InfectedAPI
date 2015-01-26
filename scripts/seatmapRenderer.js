@@ -1,7 +1,7 @@
 var seatmapData = null;
 function downloadAndRenderSeatmap(target, seatHandlerFunction, callback)
 {
-	$.getJSON('../api/json/seatmapAvailability.php?id=' + seatmapId, function(data){
+	$.getJSON('../api/json/seatmap/seatmapAvailability.php?id=' + seatmapId, function(data){
 		if(data.result)
 		{
 			seatmapData = data;
