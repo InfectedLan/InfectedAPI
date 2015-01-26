@@ -6,11 +6,13 @@ $result = false;
 $message = null;
 
 if (!isset($_GET['code'])) {
-	if (isset($_GET['username'])) {
-		$username = $_GET['username'];
+	if (isset($_GET['identifier']) &&
+		!empty($_GET['identifier'])) {
 		
-		if (UserHandler::userExists($username)) {
-			$user = UserHandler::getUserByName($username);
+		$identifier = $_GET['identifier'];
+		
+		if (UserHandler::userExists($identifier)) {
+			$user = UserHandler::getUserByIdentifier($identifier);
 			
 			if ($user != null) {
 				$user->sendPasswordResetMail();

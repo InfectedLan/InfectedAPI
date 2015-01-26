@@ -7,7 +7,7 @@ if (!Session::isAuthenticated()) {
 	if (!isset($_GET['code'])) {
 		echo '<h2>Glemt passord?</h2>';
 		echo '<form class="request-reset-password" method="post">';
-			echo '<p>Skriv inn ditt brukernavnet eller din e-postadresse for å nullstille passordet ditt: <input type="text" name="username"></p>';
+			echo '<p>Skriv inn ditt brukernavnet eller din e-postadresse for å nullstille passordet ditt: <input type="text" name="identifier"></p>';
 			echo '<input type="submit" value="Nullstill passord">';
 		echo '</form>';
 	} else {	
