@@ -8,7 +8,7 @@ class PermissionHandler {
         $mysql = MySQL::open(Settings::db_name_infected);
         
         $result = $mysql->query('SELECT * FROM `' . Settings::db_table_infected_permissions . '`
-                                      WHERE `id` = \'' . $mysql->real_escape_string($id) . '\';');
+                                 WHERE `id` = \'' . $mysql->real_escape_string($id) . '\';');
                                 
         $row = $result->fetch_array();
         
@@ -39,7 +39,8 @@ class PermissionHandler {
     public static function getPermissions() {
         $mysql = MySQL::open(Settings::db_name_infected);
         
-        $result = $mysql->query('SELECT `id` FROM `' . Settings::db_table_infected_permissions . '`;');
+        $result = $mysql->query('SELECT `id` FROM `' . Settings::db_table_infected_permissions . '`
+								 ORDER BY `value` ASC;');
         
         $permissionList = array();
         
