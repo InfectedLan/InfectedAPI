@@ -43,6 +43,8 @@ if (Session::isAuthenticated()) {
 							array_push($userList, $participant);
 						}
 					}
+				} else if ($value == 'allWithTicketLast3') {
+					$userList = UserHandler::getPreviousParticipantUsers();
 				}
 			} else {
 				// Build the userList from the given id's

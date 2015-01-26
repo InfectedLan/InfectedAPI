@@ -172,6 +172,34 @@ class UserHandler {
 
         return $userList;
     }
+	
+	/* 
+     * Get a list of all users which was a participant of an event in the given timeperiod.
+     */
+    public static function getPreviousParticipantUsers() {  
+		$currentEvent = EventHandler::getCurrentEvent();
+		$previousEvent = EventHandler::getEvent($currentEvent->getId() - 3);
+		$userList = array();
+	   
+		// Just checking that we're not out of bounds in this array.
+		if (count(EventHandler::getEvents()) >= $previousEvent->getId()) {
+			$mysql = MySQL::open(Settings::db_name_infected);
+			
+			$result = $mysql->query('SELECT DISTINCT `' . Settings::db_table_infected_users . '`.`id` FROM `' . Settings::db_table_infected_users . '`
+									 LEFT JOIN `' . Settings::db_name_infected_tickets . '`.`' . Settings::db_table_infected_tickets_tickets . '` ON `' . Settings::db_table_infected_users . '`.`id` = `' . Settings::db_table_infected_tickets_tickets . '`.`userId`
+									 WHERE `' . Settings::db_table_infected_tickets_tickets . '`.`eventId` >= ' . $previousEvent->getId() . '
+									 AND `' . Settings::db_table_infected_tickets_tickets . '`.`eventId` <= ' . $currentEvent->getId() . '
+									 ORDER BY `' . Settings::db_table_infected_users . '`.`firstname` ASC;');
+			
+			$mysql->close();
+			
+			while ($row = $result->fetch_array()) {
+				array_push($userList, self::getUser($row['id']));
+			}
+		}
+		
+		return $userList;
+    }
     
 	/* 
      * Check if a user with given username or email already exists.
