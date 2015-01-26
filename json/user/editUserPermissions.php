@@ -1,8 +1,8 @@
 <?php
 require_once 'session.php';
 require_once 'handlers/userhandler.php';
-require_once 'handlers/permissionshandler.php';
-require_once 'handlers/userpermissionshandler.php';
+require_once 'handlers/permissionhandler.php';
+require_once 'handlers/userpermissionhandler.php';
 
 $result = false;
 $message = null;
@@ -16,15 +16,15 @@ if (Session::isAuthenticated()) {
 			is_numeric($_GET['id'])) {
 			$permissionUser = UserHandler::getUser($_GET['id']);
 			
-			foreach (PermissionsHandler::getPermissions() as $permission) {
+			foreach (PermissionHandler::getPermissions() as $permission) {
 				// Only allow changes by admin or user with the "admin.permissions" to give permissions that he is assigned to other users.
 				if ($user->hasPermission('*') ||
 					$user->hasPermission('admin.permissions') && 
 					$user->hasPermission($permission->getValue())) {
 					if (isset($_GET['checkbox_' . $permission->getId()])) {
-						UserPermissionsHandler::createUserPermission($permissionUser, $permission->getValue());
+						UserPermissionHandler::createUserPermission($permissionUser, $permission);
 					} else {
-						UserPermissionsHandler::removeUserPermission($permissionUser, $permission->getValue());
+						UserPermissionHandler::removeUserPermission($permissionUser, $permission);
 					}
 				}
 			}

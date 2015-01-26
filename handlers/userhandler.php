@@ -5,7 +5,7 @@ require_once 'handlers/tickethandler.php';
 require_once 'handlers/emergencycontacthandler.php';
 require_once 'handlers/passwordresetcodehandler.php';
 require_once 'handlers/registrationcodehandler.php';
-require_once 'handlers/userpermissionshandler.php';
+require_once 'handlers/userpermissionhandler.php';
 require_once 'handlers/applicationhandler.php';
 require_once 'handlers/avatarhandler.php';
 require_once 'handlers/grouphandler.php';
