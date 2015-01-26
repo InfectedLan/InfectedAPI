@@ -6,15 +6,15 @@ $result = false;
 $message = null;
 
 if (!Session::isAuthenticated()) {
-	if (isset($_GET['username']) &&
+	if (isset($_GET['identifier']) &&
 		isset($_GET['password']) &&
-		!empty($_GET['username']) &&
+		!empty($_GET['identifier']) &&
 		!empty($_GET['password'])) {
-		$username = $_GET['username'];
+		$identifier = $_GET['identifier'];
 		$password = hash('sha256', $_GET['password']);
 		
-		if (UserHandler::userExists($username)) {
-			$user = UserHandler::getUserByName($username);
+		if (UserHandler::userExists($identifier)) {
+			$user = UserHandler::getUserByIdentifier($identifier);
 			$storedPassword = $user->getPassword();
 			
 			if ($user->isActivated()) {

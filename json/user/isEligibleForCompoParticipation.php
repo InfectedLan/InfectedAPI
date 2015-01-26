@@ -6,13 +6,12 @@ $result = false;
 $message = null;
 
 if (Session::isAuthenticated()) {
-	
-	if(isset($_GET['id'])) {
+	if (isset($_GET['id'])) {
 		$id = $_GET['id'];
 		$user = UserHandler::getUser($id);
 		
-		if(isset($user)) {
-			if($user->isEligibleForCompos()) {
+		if (isset($user)) {
+			if ($user->isEligibleForCompos()) {
 				$result = true;
 			} else {
 				$message = "Brukeren har ikke lov til å delta i compoer. Har brukeren en gyldig billett?";

@@ -43,14 +43,17 @@ class UserHandler {
     }
     
     /* 
-     * Get user by it's username.
+     * Get user by it's identifier.
      */
-    public static function getUserByName($username) {
+    public static function getUserByIdentifier($identifier) {
         $mysql = MySQL::open(Settings::db_name_infected);
         
+		$safeIdentifier = $mysql->real_escape_string($identifier);
+		
         $result = $mysql->query('SELECT `id` FROM `' . Settings::db_table_infected_users . '` 
-                                 WHERE `username` = \'' . $mysql->real_escape_string($username) . '\' 
-                                 OR `email` = \'' . $mysql->real_escape_string($username) . '\';');
+                                 WHERE `username` = \'' . $safeIdentifier . '\' 
+                                 OR `email` = \'' . $safeIdentifier . '\'
+								 OR `phone` = \'' . $safeIdentifier . '\';');
         
         $mysql->close();
         
@@ -170,6 +173,26 @@ class UserHandler {
         return $userList;
     }
     
+	/* 
+     * Check if a user with given username or email already exists.
+     */
+    public static function userExists($identifier) {
+        $mysql = MySQL::open(Settings::db_name_infected);
+
+		$safeIdentifier = $mysql->real_escape_string($identifier);
+		
+        $result = $mysql->query('SELECT `id` FROM `' . Settings::db_table_infected_users . '` 
+                                 WHERE `username` = \'' . $safeIdentifier . '\' 
+								 OR `email` = \'' . $safeIdentifier . '\'
+                                 OR `phone` = \'' . $safeIdentifier . '\';');
+        
+        $mysql->close();
+                
+        $row = $result->fetch_array();
+        
+        return $row ? true : false;
+    }
+	
     /*
      * Create a new user
      */
@@ -276,23 +299,6 @@ class UserHandler {
                        WHERE `id` = \'' . $mysql->real_escape_string($userId) . '\';');
         
         $mysql->close();
-    }
-    
-    /* 
-     * Check if a user with given username or email already exists.
-     */
-    public static function userExists($username) {
-        $mysql = MySQL::open(Settings::db_name_infected);
-
-        $result = $mysql->query('SELECT `id` FROM `' . Settings::db_table_infected_users . '` 
-                                 WHERE `username` = \'' . $mysql->real_escape_string($username) . '\' 
-                                  OR `email` = \'' . $mysql->real_escape_string($username) . '\';');
-        
-        $mysql->close();
-                
-        $row = $result->fetch_array();
-        
-        return $row ? true : false;
     }
     
     /*

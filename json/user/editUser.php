@@ -51,19 +51,21 @@ if (Session::isAuthenticated()) {
 					$nickname = !empty($_GET['nickname']) ? $_GET['nickname'] : $editUser->getUsername();
 					$emergencycontactphone = isset($_GET['emergencycontactphone']) ? $_GET['emergencycontactphone'] : 0;
 					
-					if (empty($firstname) || strlen($firstname) > 32) {
-						$message = 'Du har ikke skrevet inn noe fornavn.';
-					} else if (empty($lastname) || strlen($lastname) > 32) {
-						$message = 'Du har ikke skrevet inn noe etternavn.';
-					} else if ($username != $editUser->getUsername() && UserHandler::userExists($username)) {
+					if ($username != $editUser->getUsername() && UserHandler::userExists($username)) {
 						$message = 'Brukernavnet du skrev inn er allerede i bruk.';
 					} else if ($email != $editUser->getEmail() && UserHandler::userExists($email)) {
 						$message = 'E-post adressen du skrev inn er allerede i bruk.';
+					} else if ($phone != $editUser->getPhone() && UserHandler::userExists($phone)) {
+						$message = 'Telefonnummeret er allerede i bruk.';
+					} else if (empty($firstname) || strlen($firstname) > 32) {
+						$message = 'Du har ikke skrevet inn noe fornavn.';
+					} else if (empty($lastname) || strlen($lastname) > 32) {
+						$message = 'Du har ikke skrevet inn noe etternavn.';
 					} else if (empty($email) || !preg_match('/^([a-zæøåA-ZÆØÅ0-9_\.-]+)@([\da-z\.-]+)\.([a-z\.]{2,6})$/', $email) || !filter_var($email, FILTER_VALIDATE_EMAIL)) {
 						$message = 'E-post adressen du skrev inn er ikke gyldig.';
 					} else if (!is_numeric($gender)) {
 						$message = 'Du har oppgitt et ugyldig kjønn.';
-					} else if (!is_numeric($phone) || strlen($phone) > 8) {
+					} else if (!is_numeric($phone) && strlen($phone) > 8) {
 						$message = 'Du har ikke skrevet inn et gyldig telefonnummer.';
 					} else if (empty($address) && strlen($address) > 32) {
 						$message = 'Du må skrive inn en adresse.';
