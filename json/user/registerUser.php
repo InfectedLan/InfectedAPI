@@ -37,8 +37,6 @@ if (isset($_GET['firstname']) &&
 		$message = 'Brukernavnet du skrev inn er allerede i bruk.';
 	} else if (UserHandler::userExists($email)) {
 		$message = 'E-post adressen du skrev inn er allerede i bruk.';
-	} else if (UserHandler::userExists($phone) {
-		$message = 'Telefon nummeret du skrev inn er allerede i bruk.';	
 	} else if (empty($firstname) || strlen($firstname) > 32) {
 		$message = 'Du har ikke skrevet inn noe fornavn.';
 	} else if (empty($lastname) || strlen($lastname) > 32) {
@@ -90,7 +88,7 @@ if (isset($_GET['firstname']) &&
 								$nickname);
 		
 		// Retrives the user object and sends the activation mail.
-		$user = UserHandler::getUserByName($username);
+		$user = UserHandler::getUserByIdentifier($username);
 		
 		if (isset($_GET['emergencycontactphone']) &&
 			is_numeric($emergencycontactphone)) {

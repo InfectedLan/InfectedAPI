@@ -210,8 +210,7 @@ class UserHandler {
 		
         $result = $mysql->query('SELECT `id` FROM `' . Settings::db_table_infected_users . '` 
                                  WHERE `username` = \'' . $safeIdentifier . '\' 
-								 OR `email` = \'' . $safeIdentifier . '\'
-                                 OR `phone` = \'' . $safeIdentifier . '\';');
+								 OR `email` = \'' . $safeIdentifier . '\';');
         
         $mysql->close();
                 
