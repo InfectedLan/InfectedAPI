@@ -96,8 +96,8 @@ class CompoHandler {
         $carryData = array("matches" => array(), "clans" => $newClanList, "looserMatches" => array());
         $iteration = 0;
         while(true) {
-            $carryData = generateMatches($carryData["matches"], $carryData["clans"], $carryData["looserMatches"], $iteration, $compo, $startTime + ($iteration * $compoSpacing));
-            if(count($matches)<2) {
+            $carryData = self::generateMatches($carryData["matches"], $carryData["clans"], $carryData["looserMatches"], $iteration, $compo, $startTime + ($iteration * $compoSpacing));
+            if(count($carryData['matches'])<2) {
                 break;
             }
 
