@@ -95,7 +95,7 @@ class Team extends Object {
 							echo 'Stilling: Shift-leder<br>';
 						}
 
-						echo 'Telefon: ' . $member->getPhoneString() . '<br>';
+						echo 'Telefon: ' . $member->getPhoneAsString() . '<br>';
 						echo 'E-post: ' . $member->getEmail() . '</p>';
 					echo '</div>';
 						

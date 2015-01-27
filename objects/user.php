@@ -10,6 +10,7 @@ require_once 'handlers/avatarhandler.php';
 require_once 'handlers/grouphandler.php';
 require_once 'handlers/teamhandler.php';
 require_once 'handlers/eventhandler.php';
+require_once 'handlers/useroptionhandler.php';
 require_once 'objects/object.php';
 
 /*
@@ -103,17 +104,19 @@ class User extends Object {
 	}
 	
 	/* 
-	 * Returns the users phone number.
+	 * Returns the users phone number, if hidden it return zero.
 	 */
 	public function getPhone() {
-		return $this->phone;
+		return !UserOptionHandler::isPhoneHidden($this) ? $this->phone : 0;
 	}
 	
 	/* 
 	 * Returns the users phone number formatted as a string.
 	 */
-	public function getPhoneString() {
-		return !empty($this->phone) ? chunk_split($this->phone, 2, ' ') : 'Ikke oppgitt';
+	public function getPhoneAsString() {
+		$phone = $this->getPhone();
+		
+		return $phone != 0 ? chunk_split($phone, 2, ' ') : 'Skjult nummer';
 	}
 	
 	/*

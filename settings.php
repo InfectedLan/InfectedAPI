@@ -21,6 +21,7 @@ class Settings {
 	const db_table_infected_permissions = 'permissions';
 	const db_table_infected_postalcodes = 'postalcodes';
 	const db_table_infected_registrationcodes = 'registrationcodes';
+	const db_table_infected_useroptions = 'useroptions';
 	const db_table_infected_userpermissions = 'userpermissions';
 	const db_table_infected_users = 'users';
 	
