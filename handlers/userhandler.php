@@ -52,7 +52,8 @@ class UserHandler {
 		
         $result = $mysql->query('SELECT `id` FROM `' . Settings::db_table_infected_users . '` 
                                  WHERE `username` = \'' . $safeIdentifier . '\' 
-                                 OR `email` = \'' . $safeIdentifier . '\';');
+                                 OR `email` = \'' . $safeIdentifier . '\'
+								 OR `phone` = \'' . $safeIdentifier . '\';');
         
         $mysql->close();
         
@@ -207,10 +208,11 @@ class UserHandler {
         $mysql = MySQL::open(Settings::db_name_infected);
 
 		$safeIdentifier = $mysql->real_escape_string($identifier);
-		
+
         $result = $mysql->query('SELECT `id` FROM `' . Settings::db_table_infected_users . '` 
                                  WHERE `username` = \'' . $safeIdentifier . '\' 
-								 OR `email` = \'' . $safeIdentifier . '\';');
+								 OR `email` = \'' . $safeIdentifier . '\'
+								 OR `phone` = \'' . $safeIdentifier . '\';');
         
         $mysql->close();
                 
