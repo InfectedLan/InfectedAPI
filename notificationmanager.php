@@ -18,7 +18,7 @@ class NotificationManager {
 				$message[] = '</body>';
 			$message[] = '</html>';
 				
-			return MailManager::sendMail($group->getLeader(), 'Ny søknad til ' . $group->getTitle() . ' crew', implode("\r\n", $message));
+			return MailManager::sendMails(array($group->getLeader(), $group->getCoLeader()), 'Ny søknad til ' . $group->getTitle() . ' crew', implode("\r\n", $message));
 		}
 	}
 	
