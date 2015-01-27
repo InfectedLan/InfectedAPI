@@ -37,6 +37,8 @@ if (isset($_GET['firstname']) &&
 		$message = 'Brukernavnet du skrev inn er allerede i bruk.';
 	} else if (UserHandler::userExists($email)) {
 		$message = 'E-post adressen du skrev inn er allerede i bruk.';
+	} else if (UserHandler::userExists($phone)) {
+		$message = 'Telefon nummeret du skrev inn er allerede i bruk.';
 	} else if (empty($firstname) || strlen($firstname) > 32) {
 		$message = 'Du har ikke skrevet inn noe fornavn.';
 	} else if (empty($lastname) || strlen($lastname) > 32) {
@@ -57,7 +59,7 @@ if (isset($_GET['firstname']) &&
 		$message = 'E-post adressene er ikke like.';
 	} else if (!is_numeric($gender)) {
 		$message = 'Du har oppgitt et ugyldig kjønn.';
-	} else if (!is_numeric($phone) || strlen($phone) != 8) {
+	} else if (!is_numeric($phone) || $phone <= 0 || strlen($phone) < 8 || strlen($phone) > 8) {
 		$message = 'Du har ikke skrevet inn et gyldig telefonnummer.';
 	} else if (empty($address) && strlen($address) > 32) {
 		$message = 'Du må skrive inn en adresse.';
