@@ -12,9 +12,10 @@ if (Session::isAuthenticated()) {
 	if (isset($_GET['id'])) {
 		$ticketToRevert = TicketHandler::getTicket($_GET['id']);
 		
-		if(isset($ticketToRevert)) {
+		if (isset($ticketToRevert)) {
 			$transferResult = TicketTransferHandler::revertTransfer($ticketToRevert, $user);
-			if(!isset($transferResult)) {
+			
+			if (!isset($transferResult)) {
 				$result = true;
 			} else {
 				$message = $transferResult;

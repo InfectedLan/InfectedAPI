@@ -87,28 +87,32 @@ class TicketTransferHandler {
         // Check that the ticket is for current event, we don't allow transfers of old tickets.
         if ($ticket->getEvent()->getId() == EventHandler::getCurrentEvent()->getId()) {
         
-            // If the ticket is checked in, we don't allow transfers.
-            if (!$ticket->isCheckedIn()) {
-            
-                // Check that the new user isn't the same as the old one.
-                if ($ticket->getUser()->getId() != $user->getId()) {
-					// Prevent the original transfer from being reverted.
-                    if ($transfer != null) {
-						self::freezeTransfer($transfer);
-					}
+			// Check that the recipient user is activated.
+			if ($user->isActivated()) {
+		
+				// If the ticket is checked in, we don't allow transfers.
+				if (!$ticket->isCheckedIn()) {
 				
-                    // Add row to ticket transfers table.
-                    self::createTransfer($ticket, $user, true);
-                                                
-                    // Actually change the user of the ticket.
-                    TicketHandler::updateTicketUser($ticket, $user);
-                }
-            }
+					// Check that the new user isn't the same as the old one.
+					if ($ticket->getUser()->getId() != $user->getId()) {
+						// Prevent the original transfer from being reverted.
+						if ($transfer != null) {
+							self::freezeTransfer($transfer);
+						}
+					
+						// Add row to ticket transfers table.
+						self::createTransfer($ticket, $user, true);
+													
+						// Actually change the user of the ticket.
+						TicketHandler::updateTicketUser($ticket, $user);
+					}
+				}
+			}
         }
     }
     
     /*
-     * Reverts most recent transfer for given ticket, if a 
+     * Reverts most recent transfer for given ticket.
      */
     public static function revertTransfer($ticket, $user) {
         $transfer = self::getTransferFromTicket($ticket);
@@ -117,37 +121,43 @@ class TicketTransferHandler {
         // Check that the ticket is for current event, we don't allow reverting transfers for old tickets.
         if ($ticket->getEvent()->getId() == EventHandler::getCurrentEvent()->getId()) {
         
-            // If the ticket is checked in, we don't allow transfers.
-            if (!$ticket->isCheckedIn()) {
-            
-                // Check if the user specified matches the former user of the ticket.            
-                if ($transfer->getFrom()->getId() == $user->getId()) {
-    
-                    // Check if the ticket is revertable.
-                    if ($transfer->isRevertable()) {
-					
-                        // Check that the time limit isn't run out.
-                        if ($transfer->getDateTime() + $timeLimit >= time()) {
-                            // Prevent the original transfer from being reverted.
-                            self::freezeTransfer($transfer);
-                            
-                            // Add row to ticket transfers table.
-                            self::createTransfer($ticket, $transfer->getFrom(), false);
-                            
-                            // Actually change the user of the ticket.
-                            TicketHandler::updateTicketUser($ticket, $user);
-                        } else {
-                            return 'Det er for sent å overføre denne billetten!';
-                        }
-                    } else {
-                        return 'Billeten kan ikke angres.';
-                    }
-                } else {
-                    return 'Du er ikke den gamle eieren av billetten!';
-                }
-            } else {
-                return 'Billetten er sjekket inn!';
-            }
+			// Check that the recipient user is activated.
+			if ($user->isActivated()) {
+				
+				// If the ticket is checked in, we don't allow transfers.
+				if (!$ticket->isCheckedIn()) {
+				
+					// Check if the user specified matches the former user of the ticket.            
+					if ($transfer->getFrom()->getId() == $user->getId()) {
+		
+						// Check if the ticket is revertable.
+						if ($transfer->isRevertable()) {
+						
+							// Check that the time limit isn't run out.
+							if ($transfer->getDateTime() + $timeLimit >= time()) {
+								// Prevent the original transfer from being reverted.
+								self::freezeTransfer($transfer);
+								
+								// Add row to ticket transfers table.
+								self::createTransfer($ticket, $transfer->getFrom(), false);
+								
+								// Actually change the user of the ticket.
+								TicketHandler::updateTicketUser($ticket, $user);
+							} else {
+								return 'Det er for sent å overføre denne billetten!';
+							}
+						} else {
+							return 'Billeten kan ikke angres.';
+						}
+					} else {
+						return 'Du er ikke den gamle eieren av billetten!';
+					}
+				} else {
+					return 'Billetten er sjekket inn!';
+				}
+			} else {
+				return 'Brukeren er ikke aktivert, be personen om å aktivere sin bruker.';
+			}
         } else {
             return 'Billetten er for et gammelt arrangement!';
         }
