@@ -77,20 +77,17 @@ if (isset($_GET['firstname']) &&
 		$message = 'Du er under 18 år, og må derfor oppgi et telefonnummer til en forelder.';
 	} else {
 		// Creates the user in database.
-		UserHandler::createUser($firstname, 
-								$lastname, 
-								$username, 
-								$password, 
-								$email, 
-								$birthdate, 
-								$gender, 
-								$phone, 
-								$address, 
-								$postalcode, 
-								$nickname);
-		
-		// Retrives the user object and sends the activation mail.
-		$user = UserHandler::getUserByIdentifier($username);
+		$user = UserHandler::createUser($firstname, 
+										$lastname, 
+										$username, 
+										$password, 
+										$email, 
+										$birthdate, 
+										$gender, 
+										$phone, 
+										$address, 
+										$postalcode, 
+										$nickname);
 		
 		if (isset($_GET['emergencycontactphone']) &&
 			is_numeric($emergencycontactphone)) {

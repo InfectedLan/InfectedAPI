@@ -240,8 +240,12 @@ class UserHandler {
                                     \'' . $mysql->real_escape_string($postalCode) . '\',
 									\'' . $mysql->real_escape_string($nickname) . '\',
                                     \'' . date('Y-m-d H:i:s') . '\');');
-                                    
+                     
+		$user = self::getUser($mysql->insert_id);
+					 
         $mysql->close();
+		
+		return $user;
     }
     
     /* 
