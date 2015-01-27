@@ -90,7 +90,10 @@ if (isset($_GET['firstname']) &&
 										$nickname);
 		
 		if (isset($_GET['emergencycontactphone']) &&
-			is_numeric($emergencycontactphone)) {
+			is_numeric($emergencycontactphone) && 
+			$emergencycontactphone > 0 &&
+			strlen($emergencycontactphone) < 8 &&
+			strlen($emergencycontactphone) > 8) {
 			EmergencyContactHandler::createEmergencyContact($user, $emergencycontactphone);
 		}
 		
