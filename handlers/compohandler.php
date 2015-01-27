@@ -74,7 +74,7 @@ class CompoHandler {
         return $clanList;
     }
 
-    public static function generateDoubleElimination($compo) {
+    public static function generateDoubleElimination($compo, $startTime, $compoSpacing) {
         /*
          * Psudocode:
          * Get list of participants, order randomly
@@ -92,13 +92,24 @@ class CompoHandler {
             array_splice($array, $toRemove, 1);
             $i++;
         }
+
+        $carryData = array("matches" => array(), "clans" => $newClanList, "looserMatches" => array());
+        $iteration = 0;
+        while(true) {
+            $carryData = generateMatches($carryData["matches"], $carryData["clans"], $carryData["looserMatches"], $iteration, $compo, $startTime + ($iteration * $compoSpacing));
+            if(count($matches)<2) {
+                break;
+            }
+
+            $iteration++;
+        }
     }
 
-    private static function generateMatches($carryMatches, $carryClans, $carryLoosers, $iteration, $compo) {
+    private static function generateMatches($carryMatches, $carryClans, $carryLoosers, $iteration, $compo, $time) {
         $numberOfObjects = count($carryMatches) + count($carryClans); //The amount of objects we are going to handle
         $match_start_index = $numberOfObjects % 2; // 0 if even number of objects, 1 if uneven
 
-        $carryObjects = array("matches" => array(), "clans" => array(), "looserClans" => array()); //Prepare all the info to return back
+        $carryObjects = array("matches" => array(), "clans" => array(), "looserMatches" => array()); //Prepare all the info to return back
 
         if($match_start_index == 1) { //If there is an uneven amount of objects
             if(count($carryMatches) > 0 ) { //Prioritize carrying matches
@@ -112,7 +123,7 @@ class CompoHandler {
         for($i = 0; $i < ($numberOfObjects-$match_start_index)/2; $i++) { //Loop through amount of matches we are going to make
             $index = ($i*2)+$match_start_index; //Start acces
 
-            $match = MatchHandler::createMatch(0, "", $compo, $iteration); //TODO connectData and scheduledTime
+            $match = MatchHandler::createMatch($time, "", $compo, $iteration); //TODO connectData
             array_push($carryObjects["matches"], $match);
 
             for($x = 0; $x < 2; $x++) {
@@ -131,7 +142,41 @@ class CompoHandler {
 
         //Generate loosers
 
-        
+        $oldLooserCarry = $carryLoosers;
+        $currentMatches = $carryObjects['matches'];
+
+        $looserCount = count($oldLooserCarry) + count($currentMatches);
+
+        if($looserCount % 2 != 0) {
+            //Prioritize carrying old matches
+            if(count($oldLooserCarry) > 0) {
+                $matchToPush = array_shift($oldLooserCarry);
+                array_push($carryObjects['looserMatches'], $matchToPush);
+            } else if(count($currentMatches) > 0) {
+                $matchToPush = array_shift($currentMatches);
+                array_push($carryObjects['looserMatches'], $matchToPush);
+            }
+        }
+
+        while($looserCount > 0)
+        {
+            $match = MatchHandler::createMatch($time, "", $compo, $iteration); //TODO connectData
+
+            if(count($oldLooserCarry) > 0) {
+                MatchHandler::addMatchParticipant(MatchHandler::participantof_state_winner, array_shift($oldLooserCarry), $match->getId() );
+            } else {
+                MatchHandler::addMatchParticipant(MatchHandler::participantof_state_looser, array_shift($currentMatches), $match->getId() );
+            }
+
+            if(count($currentMatches) > 0) {
+                MatchHandler::addMatchParticipant(MatchHandler::participantof_state_looser, array_shift($currentMatches), $match->getId() );
+            } else {
+                MatchHandler::addMatchParticipant(MatchHandler::participantof_state_winner, array_shift($oldLooserCarry), $match->getId() );
+            }
+            $looserCount = count($oldLooserCarry) + count($currentMatches);
+        }
+
+
 
         return $carryObjects;
     }
