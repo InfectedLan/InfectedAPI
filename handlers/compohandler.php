@@ -94,11 +94,11 @@ class CompoHandler {
         }
     }
 
-    private static function generateMatches($carryMatches, $carryClans, $carryLoosers, $iteration, $compo) {
+    private static function generateMatches($carryMatches, $carryClans, $carryLoosers, $iteration, $compo, $time) {
         $numberOfObjects = count($carryMatches) + count($carryClans); //The amount of objects we are going to handle
         $match_start_index = $numberOfObjects % 2; // 0 if even number of objects, 1 if uneven
 
-        $carryObjects = array("matches" => array(), "clans" => array(), "looserClans" => array()); //Prepare all the info to return back
+        $carryObjects = array("matches" => array(), "clans" => array(), "looserMatches" => array()); //Prepare all the info to return back
 
         if($match_start_index == 1) { //If there is an uneven amount of objects
             if(count($carryMatches) > 0 ) { //Prioritize carrying matches
@@ -112,7 +112,7 @@ class CompoHandler {
         for($i = 0; $i < ($numberOfObjects-$match_start_index)/2; $i++) { //Loop through amount of matches we are going to make
             $index = ($i*2)+$match_start_index; //Start acces
 
-            $match = MatchHandler::createMatch(0, "", $compo, $iteration); //TODO connectData and scheduledTime
+            $match = MatchHandler::createMatch($time, "", $compo, $iteration); //TODO connectData
             array_push($carryObjects["matches"], $match);
 
             for($x = 0; $x < 2; $x++) {
@@ -130,8 +130,28 @@ class CompoHandler {
         }
 
         //Generate loosers
+        $loosersCount = count($carryObjects['matches']) + count($carryLoosers);
 
-        
+        $loosers_start_index = $loosersCount % 2;
+
+        if($loosers_start_index == 1) {
+            if(count($carryObjects['matches']) != 0) {
+                array_push($carryObjects['looserMatches'], $carryObjects['matches'][0]);
+            } else if(count($carryLoosers) != 0) {
+                array_push($carryLoosers['looserMatches'], $carryLoosers[0]);
+            }
+        }
+
+        $iterations = ($loosersCount-$loosers_start_index)/2;
+
+        for($i = 0; $i < $iterations; $i++) {
+            //Create a new loosing match
+
+            $match = MatchHandler::createMatch($time, "", $compo, $iteration);
+
+            //Pick a carying match
+            
+        }
 
         return $carryObjects;
     }
