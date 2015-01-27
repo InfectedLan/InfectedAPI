@@ -15,14 +15,17 @@ if (Session::isAuthenticated()) {
 		$userList = UserHandler::search($query);
 		
 		if (!empty($userList)) {
-			$result = true;
-		
 			foreach ($userList as $userValue) {
-				array_push($users, array('id' => $userValue->getId(),
-										 'firstname' => $userValue->getFirstname(),
-										 'lastname' => $userValue->getLastname(),
-										 'nickname' => $userValue->getNickname()));
+				if ($userValue->isActivated() ||
+					!$userValue->isActivated() && $user->hasPermission('*')) {
+					array_push($users, array('id' => $userValue->getId(),
+											 'firstname' => $userValue->getFirstname(),
+											 'lastname' => $userValue->getLastname(),
+											 'nickname' => $userValue->getNickname()));
+				}
 			}
+			
+			$result = true;
 		} else {
 			$message = 'Fant ingen resultater.';
 		}

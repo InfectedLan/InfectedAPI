@@ -343,8 +343,8 @@ class UserHandler {
                                  OR `username` LIKE \'%' . $querySafe . '%\' 
                                  OR `email` LIKE  \'' . $querySafe . '%\' 
                                  OR `phone` LIKE \'%' . $querySafe . '%\' 
-                                 OR `nickname` LIKE \'%' . $querySafe . '%\' 
-                                 LIMIT 10;');
+                                 OR `nickname` LIKE \'%' . $querySafe . '%\'
+                                 LIMIT 15;');
         
         $mysql->close();
         
