@@ -165,7 +165,7 @@ class User extends Object {
 	 * Returns users displayname.
 	 */
 	public function getDisplayName() {
-		return $this->getFirstname() . ' "' . $this->getNickname() . '" ' . $this->getLastname();
+		return $this->getFirstname() . ' "' . $this->getUsername() . '" ' . $this->getLastname();
 	}
 	
 	/* 
@@ -405,6 +405,13 @@ class User extends Object {
 		return $this->hasCurrentTicket() || $this->isGroupMember();
 	}
 
+	/* 
+	 * Returns the full name with nickname instead of username for use in compos.
+	 */
+	public function getCompoDisplayName() {
+		return $this->getFirstname() . ' "' . $this->getNickname() . '" ' . $this->getLastname();
+	}
+	
 	/* 
 	 * Returns the name of the users position.
 	 */
