@@ -351,7 +351,8 @@ class UserHandler {
 		// Query the database using a Full-Text Search.
 		$result = $mysql->query('SELECT `id` FROM `' . Settings::db_table_infected_users . '` 
 								 WHERE MATCH (`firstname`, `lastname`, `username`, `email`, `nickname`)
-								 AGAINST (\'' . implode(' ', $wordList) . '\' IN BOOLEAN MODE)');
+								 AGAINST (\'' . implode(' ', $wordList) . '\' IN BOOLEAN MODE)
+								 LIMIT 15;');
         
         $mysql->close();
         
