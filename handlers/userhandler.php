@@ -338,17 +338,21 @@ class UserHandler {
      */
     public static function search($query) {
         $mysql = MySQL::open(Settings::db_name_infected);
-
-		$querySafe = $mysql->real_escape_string($query);
 		
-        $result = $mysql->query('SELECT `id` FROM `' . Settings::db_table_infected_users . '` 
-                                 WHERE `firstname` LIKE \'%' . $querySafe . '%\'
-                                 OR `lastname` LIKE \'%' . $querySafe . '%\' 
-                                 OR `username` LIKE \'%' . $querySafe . '%\' 
-                                 OR `email` LIKE  \'' . $querySafe . '%\' 
-                                 OR `phone` LIKE \'%' . $querySafe . '%\' 
-                                 OR `nickname` LIKE \'%' . $querySafe . '%\'
-                                 LIMIT 15;');
+		// Sanitize the input and split the query string into an array.
+		$queryList = $mysql->real_escape_string(explode(' ', $query));
+		$wordList = array();
+		
+		// Build the word list, and add "+" and "*" to the start and end of every word.
+		foreach ($queryList) as $value) {
+			array_push($wordList, '+' . $value . '*');
+		}
+		
+		// Query the database using a Full-Text Search.
+		$result = $mysql->query('SELECT `id` FROM `' . Settings::db_table_infected_users . '` 
+								 WHERE MATCH (`firstname`, `lastname`, `username`,`email`)
+								 AGAINST (\'' . implode(' ', $wordList) . '\' IN BOOLEAN MODE)
+								 LIMIT 10;');
         
         $mysql->close();
         
