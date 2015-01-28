@@ -11,7 +11,7 @@ foreach ($agendaList as $agenda) {
 								'name' => $agenda->getName(),
 								'title' => $agenda->getTitle(),
 								'description' => $agenda->getDescription(),
-								'start' => Utils::getDayFromInt(date('w', $agenda->getStart())) . ' ' . date('H:i', $agenda->getStart()),
+								'start' => Utils::getDayFromInt(date('w', $agenda->getStartTime())) . ' ' . date('H:i', $agenda->getStartTime()),
 								'isHappening' => $agenda->isHappening()));
 }
 

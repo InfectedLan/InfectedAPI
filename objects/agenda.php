@@ -40,7 +40,7 @@ class Agenda extends Object {
 	}
 	
 	public function isHappening() {
-		return $this->getStart() - 5 * 60 >= time() || $this->getStart() + 1 * 60 * 60 >= time();
+		return $this->getStartTime() - 5 * 60 >= time() || $this->getStartTime() + 1 * 60 * 60 >= time();
 	}
 }
 ?>
