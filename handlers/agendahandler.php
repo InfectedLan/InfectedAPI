@@ -8,7 +8,7 @@ class AgendaHandler {
         $mysql = MySQL::open(Settings::db_name_infected_main);
         
         $result = $mysql->query('SELECT * FROM `' . Settings::db_table_infected_main_agenda . '` 
-                                      WHERE `id` = \'' . $mysql->real_escape_string($id) . '\';');
+                                 WHERE `id` = \'' . $mysql->real_escape_string($id) . '\';');
                                       
         $row = $result->fetch_array();
         
@@ -16,11 +16,11 @@ class AgendaHandler {
         
         if ($row) {
             return new Agenda($row['id'], 
-                              $row['event'], 
+                              $row['eventId'], 
                               $row['name'], 
                               $row['title'], 
                               $row['description'],
-                              $row['start']);
+                              $row['startTime']);
         }
     }
     
@@ -28,8 +28,8 @@ class AgendaHandler {
         $mysql = MySQL::open(Settings::db_name_infected_main);
         
         $result = $mysql->query('SELECT `id` FROM `' . Settings::db_table_infected_main_agenda . '`
-                                      WHERE `event` = ' . EventHandler::getCurrentEvent()->getId() . '
-                                      ORDER BY `start`;');
+                                 WHERE `eventId` = ' . EventHandler::getCurrentEvent()->getId() . '
+                                 ORDER BY `startTime`;');
                                       
         $agendaList = array();
         
@@ -46,10 +46,10 @@ class AgendaHandler {
         $mysql = MySQL::open(Settings::db_name_infected_main);
         
         $result = $mysql->query('SELECT `id` FROM `' . Settings::db_table_infected_main_agenda . '`
-                                      WHERE `start` 
+                                      WHERE `startTime` 
                                       BETWEEN ' . $mysql->real_escape_string($first) . ' 
                                       AND ' . $mysql->real_escape_string($last) . '
-                                      ORDER BY `start`;'); 
+                                      ORDER BY `startTime`;'); 
                                       
         $agendaList = array();
         

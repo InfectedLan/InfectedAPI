@@ -3,24 +3,24 @@ require_once 'handlers/eventhandler.php';
 require_once 'objects/object.php';
 
 class Agenda extends Object {
-	private $event;
+	private $eventId;
 	private $name;
 	private $title;
 	private $description;
-	private $start;
+	private $startTime;
 	
-	public function __construct($id, $event, $name, $title, $description, $start) {
+	public function __construct($id, $eventId, $name, $title, $description, $startTime) {
 		parent::__construct($id);
 
-		$this->event = $event;
+		$this->eventId = $eventId;
 		$this->name = $name;
 		$this->title = $title;
 		$this->description = $description;
-		$this->start = $start;
+		$this->startTime = $startTime;
 	}
 	
 	public function getEvent() {
-		return EventHandler::getEvent($this->event);
+		return EventHandler::getEvent($this->eventId);
 	}
 	
 	public function getName() {
@@ -35,14 +35,12 @@ class Agenda extends Object {
 		return $this->description;
 	}
 	
-	public function getStart() {
-		return strtotime($this->start);
+	public function getStartTime() {
+		return strtotime($this->startTime);
 	}
 	
 	public function isHappening() {
-		$now = date('U');
-		
-		return $this->getStart() - 5 * 60 >= $now || $this->getStart() + 1 * 60 * 60 >= $now;
+		return $this->getStart() - 5 * 60 >= time() || $this->getStart() + 1 * 60 * 60 >= time();
 	}
 }
 ?>
