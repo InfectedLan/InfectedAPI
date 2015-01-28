@@ -21,6 +21,8 @@ if (Session::isAuthenticated()) {
 					array_push($users, array('id' => $userValue->getId(),
 											 'firstname' => $userValue->getFirstname(),
 											 'lastname' => $userValue->getLastname(),
+											 'username' => $userValue->getUsername(),
+											 'email' => $userValue->getEmail(),
 											 'nickname' => $userValue->getNickname()));
 				}
 			}

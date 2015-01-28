@@ -340,19 +340,18 @@ class UserHandler {
         $mysql = MySQL::open(Settings::db_name_infected);
 		
 		// Sanitize the input and split the query string into an array.
-		$queryList = $mysql->real_escape_string(explode(' ', $query));
+		$queryList = explode(' ', $mysql->real_escape_string($query));
 		$wordList = array();
 		
 		// Build the word list, and add "+" and "*" to the start and end of every word.
-		foreach ($queryList) as $value) {
+		foreach ($queryList as $value) {
 			array_push($wordList, '+' . $value . '*');
 		}
 		
 		// Query the database using a Full-Text Search.
 		$result = $mysql->query('SELECT `id` FROM `' . Settings::db_table_infected_users . '` 
-								 WHERE MATCH (`firstname`, `lastname`, `username`,`email`)
-								 AGAINST (\'' . implode(' ', $wordList) . '\' IN BOOLEAN MODE)
-								 LIMIT 10;');
+								 WHERE MATCH (`firstname`, `lastname`, `username`, `email`, `nickname`)
+								 AGAINST (\'' . implode(' ', $wordList) . '\' IN BOOLEAN MODE)');
         
         $mysql->close();
         
