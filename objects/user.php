@@ -186,6 +186,14 @@ class User extends Object {
 	 * Returns true if user have specified permission, otherwise false.
 	 */
 	public function hasPermission($value) {
+		// Returns true if one of the users permissions contains the value. 
+		// Example if user has permissions "admin.permissions", "admin" would also return true.
+		foreach ($this->getPermissions() as $permission) {
+			if (strpos($permission->getValue(), $value) === 0) {
+				return true;
+			}
+		}
+		
 		// If the user is a leader or co leader return true on chief permissions.
 		if ($this->isGroupLeader() || $this->isGroupCoLeader()) {
 			if (strpos($value, 'chief') === 0) {
