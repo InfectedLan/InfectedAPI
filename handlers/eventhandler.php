@@ -163,22 +163,25 @@ class EventHandler {
 		$mysql = MySQL::open(Settings::db_name_infected);
 		
 		// Extract event id's from the event list.
+		$dateLimit = date('Y-m-d', end($eventList)->getStartTime());
+		$ageLimit = 20;
 		$eventIdList = array();
 		
 		foreach ($eventList as $event) {
 			array_push($eventIdList, '\'' . $event->getId() . '\'');
 		}
 		
-		$result = $mysql->query('SELECT * FROM (SELECT `' . Settings::db_table_infected_users . '`.`id`, `' . Settings::db_table_infected_crew_memberof . '`.`eventId` FROM `' . Settings::db_table_infected_users . '`
+		$result = $mysql->query('SELECT * FROM (SELECT `' . Settings::db_table_infected_users . '`.`id`, `eventId`, `birthdate` FROM `' . Settings::db_table_infected_users . '`
 												LEFT JOIN `' . Settings::db_name_infected_crew . '`.`' . Settings::db_table_infected_crew_memberof . '` 
-												ON `' . Settings::db_table_infected_users . '`.`id` = `' . Settings::db_table_infected_crew_memberof . '`.`userId`
+												ON `' . Settings::db_table_infected_users . '`.`id` = `userId`
 												WHERE `groupId` IS NOT NULL
 												UNION ALL
-											   	SELECT `' . Settings::db_table_infected_users . '`.`id`, `' . Settings::db_table_infected_tickets_tickets . '`.`eventId` FROM `' . Settings::db_table_infected_users . '`
+											   	SELECT `' . Settings::db_table_infected_users . '`.`id`, `eventId`, `birthdate` FROM `' . Settings::db_table_infected_users . '`
 												LEFT JOIN `' . Settings::db_name_infected_tickets . '`.`' . Settings::db_table_infected_tickets_tickets . '` 
-												ON `' . Settings::db_table_infected_users . '`.`id` = `' . Settings::db_table_infected_tickets_tickets . '`.`userId`
+												ON `' . Settings::db_table_infected_users . '`.`id` = `userId`
 												WHERE `userId` IS NOT NULL) AS `users`
-								 WHERE `users`.`eventId` IN (' . implode(', ', $eventIdList) . ')
+								 WHERE `eventId` IN (' . implode(', ', $eventIdList) . ')
+								 AND TIMESTAMPDIFF(YEAR, `birthdate`, \'' . $dateLimit . '\') < \'' . $ageLimit . '\'
 								 GROUP BY `users`.`id`;');
 		
 		$mysql->close();
