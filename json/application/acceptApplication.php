@@ -1,6 +1,7 @@
 <?php
 require_once 'session.php';
 require_once 'handlers/applicationhandler.php';
+require_once 'handlers/eventhandler.php';
 
 $result = false;
 $message = null;
@@ -15,8 +16,13 @@ if (Session::isAuthenticated()) {
 			$application = ApplicationHandler::getApplication($_GET['id']);
 			$comment = isset($_GET['comment']) ? $_GET['comment'] : null;
 			
-			ApplicationHandler::acceptApplication($application, $comment, true);
-			$result = true;
+			// Only allow application for current event to be accepted.
+			if ($application->getEvent()->getId() == EventHandler::getCurrentEvent()->getId()) {
+				ApplicationHandler::acceptApplication($application, $comment, true);
+				$result = true;
+			} else {
+				$message = 'Kan ikke godkjenne søknader for tidligere arrangementer.';
+			}
 		} else {
 			$message = 'Ingen søknad spesifisert.';
 		}

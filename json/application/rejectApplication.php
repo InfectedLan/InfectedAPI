@@ -19,8 +19,13 @@ if (Session::isAuthenticated()) {
 				$application = ApplicationHandler::getApplication($_GET['id']);
 				$comment = $_GET['comment'];
 			
-				ApplicationHandler::rejectApplication($application, $comment, true);
-				$result = true;
+				// Only allow application for current event to be rejected.
+				if ($application->getEvent()->getId() == EventHandler::getCurrentEvent()->getId()) {
+					ApplicationHandler::rejectApplication($application, $comment, true);
+					$result = true;
+				} else {
+					$message = 'Kan ikke avslå søknader for tidligere arrangementer.';
+				}
 			} else {
 				$message = 'Du har ikke oppgitt noen grunn på hvorfor søkneden skal bli avvist.';
 			}

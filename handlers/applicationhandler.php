@@ -156,7 +156,7 @@ class ApplicationHandler {
     /* 
      * Create a new application. 
      */
-    public static function createApplication($group, $user, $mysqltent) {
+    public static function createApplication($group, $user, $content) {
         $mysql = MySQL::open(Settings::db_name_infected_crew);
         
         $mysql->query('INSERT INTO `' . Settings::db_table_infected_crew_applications . '` (`eventId`, `groupId`, `userId`, `openedTime`, `state`, `content`) 
@@ -165,7 +165,7 @@ class ApplicationHandler {
                                \'' . $mysql->real_escape_string($user->getId()) . '\', 
                                \'' . date('Y-m-d H:i:s') . '\',
                                \'1\',
-                               \'' . $mysql->real_escape_string($mysqltent) . '\');');
+                               \'' . $mysql->real_escape_string($content) . '\');');
         
         $mysql->close();
         
@@ -202,37 +202,40 @@ class ApplicationHandler {
     public static function acceptApplication($application, $comment, $notify) {
         $mysql = MySQL::open(Settings::db_name_infected_crew);
         
-        $mysql->query('UPDATE `' . Settings::db_table_infected_crew_applications . '` 
-                       SET `closedTime` = \'' . date('Y-m-d H:i:s') . '\',
-                           `state` = \'2\',
-                           `comment` = \'' . $mysql->real_escape_string($comment) . '\'
-                       WHERE `id` = \'' . $mysql->real_escape_string($application->getId()) . '\';');
-        
-        $mysql->close();
-        
-        $user = $application->getUser();
-        $group = $application->getGroup();
-        
-        // Remove the application from the queue, if present.
-        self::unqueueApplication($application);
-        
-        // Reject users application for all other groups.
-        $applicationList = self::getUserApplications($user);
-        
-        foreach ($applicationList as $value) {
-            if ($group->getId() != $value->getGroup()->getId()) {
-                self::closeApplication($value);
-            }
-        }
-        
-        // Set the user in the new group
-        GroupHandler::changeGroupForUser($user, $group);
-        
-        // Notify the user by email, if notify is true.
-        if ($notify) {
-            // Send email notification to the user.
-            NotificationManager::sendApplicationAccpetedNotification($application);
-        }
+		// Only allow application for current event to be accepted.
+		if ($application->getEvent()->getId() == EventHandler::getCurrentEvent()->getId()) {
+			$mysql->query('UPDATE `' . Settings::db_table_infected_crew_applications . '` 
+						   SET `closedTime` = \'' . date('Y-m-d H:i:s') . '\',
+							   `state` = \'2\',
+							   `comment` = \'' . $mysql->real_escape_string($comment) . '\'
+						   WHERE `id` = \'' . $mysql->real_escape_string($application->getId()) . '\';');
+			
+			$mysql->close();
+			
+			$user = $application->getUser();
+			$group = $application->getGroup();
+			
+			// Remove the application from the queue, if present.
+			self::unqueueApplication($application);
+			
+			// Reject users application for all other groups.
+			$applicationList = self::getUserApplications($user);
+			
+			foreach ($applicationList as $value) {
+				if ($group->getId() != $value->getGroup()->getId()) {
+					self::closeApplication($value);
+				}
+			}
+			
+			// Set the user in the new group
+			GroupHandler::changeGroupForUser($user, $group);
+			
+			// Notify the user by email, if notify is true.
+			if ($notify) {
+				// Send email notification to the user.
+				NotificationManager::sendApplicationAccpetedNotification($application);
+			}
+		}
     }
     
     /*
@@ -240,22 +243,26 @@ class ApplicationHandler {
      */
     public static function rejectApplication($application, $comment, $notify) {
         $mysql = MySQL::open(Settings::db_name_infected_crew);
+		
+		// Only allow application for current event to be rejected.
+		if ($application->getEvent()->getId() == EventHandler::getCurrentEvent()->getId()) {
         
-        $mysql->query('UPDATE `' . Settings::db_table_infected_crew_applications . '` 
-                       SET `closedTime` = \'' . date('Y-m-d H:i:s') . '\',
-                           `state` = \'3\', 
-                           `comment` = \'' . $mysql->real_escape_string($comment) . '\'
-                       WHERE `id` = \'' . $mysql->real_escape_string($application->getId()) . '\';');
-        
-        $mysql->close();
-        
-        // Remove the application from the queue, if present.
-        self::unqueueApplication($application);
-        
-        // Notify the user by email, if notify is true.
-        if ($notify) {
-            NotificationManager::sendApplicationRejectedNotification($application, $comment);
-        }
+			$mysql->query('UPDATE `' . Settings::db_table_infected_crew_applications . '` 
+						   SET `closedTime` = \'' . date('Y-m-d H:i:s') . '\',
+							   `state` = \'3\', 
+							   `comment` = \'' . $mysql->real_escape_string($comment) . '\'
+						   WHERE `id` = \'' . $mysql->real_escape_string($application->getId()) . '\';');
+			
+			$mysql->close();
+			
+			// Remove the application from the queue, if present.
+			self::unqueueApplication($application);
+			
+			// Notify the user by email, if notify is true.
+			if ($notify) {
+				NotificationManager::sendApplicationRejectedNotification($application, $comment);
+			}
+		}
     }
     
     /*
@@ -298,17 +305,20 @@ class ApplicationHandler {
     public static function queueApplication($application, $notify) {
         $mysql = MySQL::open(Settings::db_name_infected_crew);
         
-        if (!self::isQueued($application)) {
-            $mysql->query('INSERT INTO `' . Settings::db_table_infected_crew_applicationqueue . '` (`applicationId`) 
-                           VALUES (\'' . $mysql->real_escape_string($application->getId()) . '\');');
-        }
-                                    
-        $mysql->close();
-        
-        // Notify the user by email, if notify is true.
-        if ($notify) {
-            NotificationManager::sendApplicationQueuedNotification($application);
-        }
+		// Only allow application for current event to be queued.
+		if ($application->getEvent()->getId() == EventHandler::getCurrentEvent()->getId()) {
+			if (!self::isQueued($application)) {
+				$mysql->query('INSERT INTO `' . Settings::db_table_infected_crew_applicationqueue . '` (`applicationId`) 
+							   VALUES (\'' . $mysql->real_escape_string($application->getId()) . '\');');
+			}
+										
+			$mysql->close();
+			
+			// Notify the user by email, if notify is true.
+			if ($notify) {
+				NotificationManager::sendApplicationQueuedNotification($application);
+			}
+		}
     }
     
     /*
@@ -317,10 +327,13 @@ class ApplicationHandler {
     public static function unqueueApplication($application) {
         $mysql = MySQL::open(Settings::db_name_infected_crew);
         
-        $mysql->query('DELETE FROM `' . Settings::db_table_infected_crew_applicationqueue . '` 
-                       WHERE `applicationId` = \'' . $mysql->real_escape_string($application->getId()) . '\';');
+		// Only allow application for current event to be unqueued.
+		if ($application->getEvent()->getId() == EventHandler::getCurrentEvent()->getId()) {
+			$mysql->query('DELETE FROM `' . Settings::db_table_infected_crew_applicationqueue . '` 
+						   WHERE `applicationId` = \'' . $mysql->real_escape_string($application->getId()) . '\';');
                                     
-        $mysql->close();
+			$mysql->close();
+		}
     }
     
     /*

@@ -14,8 +14,13 @@ if (Session::isAuthenticated()) {
 			is_numeric($_GET['id'])) {
 			$application = ApplicationHandler::getApplication($_GET['id']);
 			
-			ApplicationHandler::queueApplication($application, true);
-			$result = true;
+			// Only allow application for current event to be queued.
+			if ($application->getEvent()->getId() == EventHandler::getCurrentEvent()->getId()) {
+				ApplicationHandler::queueApplication($application, true);
+				$result = true;
+			} else {
+				$message = 'Kan ikke sette søknader for tidligere arrangementer i kø.';
+			}
 		} else {
 			$message = 'Ingen søknad spesifisert.';
 		}
