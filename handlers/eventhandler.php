@@ -136,15 +136,16 @@ class EventHandler {
     }
 	
 	/*
-	 * Clones members from fromEvent to toEvent.
+	 * Clones members from fromEvent to toEvent, but only if toEvent don't have any members yet (Maybe improve in the future).
 	 */
     public static function cloneMembers($fromEvent, $toEvent) {
         $mysql = MySQL::open(Settings::db_name_infected_crew);
         
         $mysql->query('INSERT INTO `' . Settings::db_table_infected_crew_memberof . '` (`eventId`, `userId`, `groupId`, `teamId`)
 					   SELECT \'' . $toEvent->getId() . '\', `userId`, `groupId`, `teamId` FROM `' . Settings::db_table_infected_crew_memberof . '`
-					   WHERE `eventId` = \'' . $fromEvent->getId() . '\';');
-        
+					   WHERE `eventId` = \'' . $fromEvent->getId() . '\'
+					   AND NOT EXISTS (SELECT `id` FROM `' . Settings::db_table_infected_crew_memberof . '`
+									   WHERE `eventId` = \'' . $toEvent->getId() . '\');');
         $mysql->close();
     }
 }

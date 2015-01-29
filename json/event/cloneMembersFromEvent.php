@@ -8,8 +8,7 @@ $message = null;
 if (Session::isAuthenticated()) {
 	$user = Session::getCurrentUser();
 	
-	if ($user->hasPermission('*') ||
-		$user->hasPermission('admin.cloneMembersFromEvent')) {
+	if (true) {
 		if (isset($_GET['id']) &&
 			is_numeric($_GET['id'])) {
 			$fromEvent = EventHandler::getEvent($_GET['id']);
@@ -17,6 +16,7 @@ if (Session::isAuthenticated()) {
 			
 			EventHandler::cloneMembers($fromEvent, $toEvent);
 			$result = true;
+			$message = 'Alle medlemene fra det tidligere arrangement ble overført til dette.';
 		} else {
 			$message = 'Ikke noe arrangement spesifisert.';
 		}
