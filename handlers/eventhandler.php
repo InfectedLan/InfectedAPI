@@ -87,6 +87,26 @@ class EventHandler {
 
         return $eventList;
     }
+	
+	/*
+	 * Returns a list of all registred events.
+	 */
+    public static function getEventsByYear($year) {
+        $mysql = MySQL::open(Settings::db_name_infected);
+        
+        $result = $mysql->query('SELECT `id` FROM `' . Settings::db_table_infected_events . '`
+								 WHERE EXTRACT(YEAR FROM `startTime`) = \'' . $year . '\';');
+        
+		$mysql->close();
+		
+        $eventList = array();
+        
+        while ($row = $result->fetch_array()) {
+            array_push($eventList, self::getEvent($row['id']));
+        }
+
+        return $eventList;
+    }
     
     /* 
      * Create new event
