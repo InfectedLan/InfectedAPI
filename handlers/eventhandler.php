@@ -1,7 +1,6 @@
 <?php
 require_once 'settings.php';
 require_once 'mysql.php';
-require_once 'handlers/locationhandler.php';
 require_once 'objects/event.php';
 
 class EventHandler {
@@ -12,7 +11,7 @@ class EventHandler {
         $mysql = MySQL::open(Settings::db_name_infected);
         
         $result = $mysql->query('SELECT * FROM `'. Settings::db_table_infected_events . '`
-                                      WHERE `id` = \'' . $mysql->real_escape_string($id) . '\';');
+                                 WHERE `id` = \'' . $mysql->real_escape_string($id) . '\';');
         
         $mysql->close();
 
@@ -132,6 +131,19 @@ class EventHandler {
         
         $mysql->query('DELETE FROM `' . Settings::db_table_infected_events . '` 
                        WHERE `id` = \'' . $mysql->real_escape_string($id) . '\';');
+        
+        $mysql->close();
+    }
+	
+	/*
+	 * Clones members from fromEvent to toEvent.
+	 */
+    public static function cloneMembers($fromEvent, $toEvent) {
+        $mysql = MySQL::open(Settings::db_name_infected_crew);
+        
+        $mysql->query('INSERT INTO `' . Settings::db_table_infected_crew_memberof . '` (`eventId`, `userId`, `groupId`, `teamId`)
+					   SELECT \'' . $toEvent->getId() . '\', `userId`, `groupId`, `teamId` FROM `' . Settings::db_table_infected_crew_memberof . '`
+					   WHERE `eventId` = \'' . $fromEvent->getId() . '\';');
         
         $mysql->close();
     }

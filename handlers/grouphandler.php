@@ -102,7 +102,9 @@ class GroupHandler {
         $mysql->close();
     }
     
-    /* Returns an array of users that are members of this group */
+    /* 
+	 * Returns an array of users that are members of this group.
+	 */
     public static function getMembers($group) {
         $mysql = MySQL::open(Settings::db_name_infected);
         
@@ -123,7 +125,7 @@ class GroupHandler {
         
         return $memberList;
     }
-
+	
     /* 
      * Is member of a group which means it's not a member user.
      */
