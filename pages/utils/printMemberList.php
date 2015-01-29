@@ -5,17 +5,18 @@ require_once 'handlers/eventhandler.php';
 if (Session::isAuthenticated()) {
 	$user = Session::getCurrentUser();
 	
+	echo '<meta charset="UTF-8">';
+	
 	if ($user->hasPermission('*')) {
 		if (isset($_GET['year']) &&
-			is_numeric($_GET['year'])) {
+			is_numeric($_GET['year']) &&
+			date('Y') >= $_GET['year']) {
 			$eventList = EventHandler::getEventsByYear($_GET['year']);
 			
 			if (!empty($eventList)) {
 				$userList = EventHandler::getMembersAndParticipantsForEvents($eventList);
 				
 				if (!empty($userList)) {
-					echo '<meta charset="UTF-8">';
-					
 					echo '<p>Fant ' . count($userList) . ' brukere i databasen.</p>';
 					
 					echo '<table>';
@@ -44,7 +45,7 @@ if (Session::isAuthenticated()) {
 				echo 'Det var ingen arrangementer dette året.';
 			}
 		} else {
-			echo 'Du må oppgi et gyldig år.';
+			echo 'Du må oppgi et gyldig år, året må være omme før du kan hente ut medlemslister.';
 		}
 	} else {
 		echo 'Du har ikke tillatelse til dette!';
