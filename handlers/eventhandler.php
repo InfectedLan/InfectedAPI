@@ -2,6 +2,7 @@
 require_once 'settings.php';
 require_once 'mysql.php';
 require_once 'objects/event.php';
+require_once 'handlers/userhandler.php';
 
 class EventHandler {
     /*
@@ -154,6 +155,35 @@ class EventHandler {
         
         $mysql->close();
     }
+	
+	/*
+	 * Returns members and participants for given events.
+	 */
+	public static function getMembersAndParticipantsForEvents($eventList) {
+		$mysql = MySQL::open(Settings::db_name_infected);
+	 
+		$mysql->query('SELECT * FROM (SELECT `' . Settings::db_table_infected_users . '` .`id`, `memberof`.`eventId` FROM `users`
+								      LEFT JOIN `' . Settings::db_name_infected_crew . '`.`' . Settings::db_table_infected_crew_memberof . '` 
+									  ON `' . Settings::db_table_infected_users . '`.`id` = `' . Settings::db_table_infected_crew_memberof . '`.`userId`
+									  WHERE `groupId` IS NOT NULL
+									  UNION ALL
+								      SELECT `' . Settings::db_table_infected_users . '`.`id`, `' . Settings::db_table_infected_tickets_tickets . '`.`eventId` FROM `users`
+									  LEFT JOIN `' . Settings::db_name_infected_tickets . '`.`' . Settings::db_table_infected_tickets_tickets . '` 
+									  ON `' . Settings::db_table_infected_users . '`.`id` = `' . Settings::db_table_infected_tickets_tickets . '`.`userId`
+									  WHERE `userId` IS NOT NULL) AS `users`
+					   WHERE `users`.`eventId` IN (\'' . 4 . '\', \'' . 5 . '\')
+					   GROUP BY `users`.`id`');
+		
+		$mysql->close();
+		
+		$userList = array();
+        
+        while ($row = $result->fetch_array()) {
+            array_push($userList, UserHandler::getUser($row['id']));
+        }
+
+        return $userList;
+	}
 	
 	/*
 	 * Clones members from fromEvent to toEvent, but only if toEvent don't have any members yet (Maybe improve in the future).
