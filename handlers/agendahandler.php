@@ -47,10 +47,11 @@ class AgendaHandler {
         $mysql = MySQL::open(Settings::db_name_infected_main);
         
         $result = $mysql->query('SELECT `id` FROM `' . Settings::db_table_infected_main_agenda . '`
-                                 WHERE `eventId` = \'' . EventHandler::getCurrentEvent()->getId() . '\'
+								 WHERE `eventId` = \'' . EventHandler::getCurrentEvent()->getId() . '\'
+								 AND DATE_ADD(`startTime`, INTERVAL 1 HOUR) >= NOW()
 								 AND `published` = \'1\'
-                                 ORDER BY `startTime`;');
-
+								 ORDER BY `startTime`;');
+								 
 		$mysql->close();	
 	   
         $agendaList = array();
