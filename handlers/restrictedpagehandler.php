@@ -142,13 +142,13 @@ class RestrictedPageHandler {
     /* 
      * Create a new page.
      */
-    public static function createPage($name, $title, $mysqltent, $groupId, $teamId) {
+    public static function createPage($name, $title, $content, $groupId, $teamId) {
         $mysql = MySQL::open(Settings::db_name_infected_crew);
         
         $mysql->query('INSERT INTO `' . Settings::db_table_infected_crew_pages . '` (`name`, `title`, `content`, `groupId`, `teamId`) 
                             VALUES (\'' . $mysql->real_escape_string($name) . '\', 
                                     \'' . $mysql->real_escape_string($title) . '\', 
-                                    \'' . $mysql->real_escape_string($mysqltent) . '\', 
+                                    \'' . $mysql->real_escape_string($content) . '\', 
                                     \'' . $mysql->real_escape_string($groupId) . '\', 
                                     \'' . $mysql->real_escape_string($teamId) . '\')');
         
@@ -170,13 +170,13 @@ class RestrictedPageHandler {
     /*
      * Update a page.
      */
-    public static function updatePage($id, $name, $title, $mysqltent) {
+    public static function updatePage($id, $name, $title, $content) {
         $mysql = MySQL::open(Settings::db_name_infected_crew);
         
         $mysql->query('UPDATE `' . Settings::db_table_infected_crew_pages . '` 
                             SET `name` = \'' . $mysql->real_escape_string($name) . '\', 
                                 `title` = \'' . $mysql->real_escape_string($title) . '\', 
-                                `content` = \'' . $mysql->real_escape_string($mysqltent) . '\' 
+                                `content` = \'' . $mysql->real_escape_string($content) . '\' 
                             WHERE `id` = \'' . $mysql->real_escape_string($id) . '\';');
         
         $mysql->close();
