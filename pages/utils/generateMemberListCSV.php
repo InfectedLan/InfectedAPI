@@ -5,20 +5,15 @@ require_once 'handlers/eventhandler.php';
 if (Session::isAuthenticated()) {
 	$user = Session::getCurrentUser();
 	
-	echo '<meta charset="UTF-8">';
-	
 	if ($user->hasPermission('*')) {
 		if (isset($_GET['year']) &&
-			is_numeric($_GET['year']) &&
-			date('Y') >= $_GET['year']) {
+			is_numeric($_GET['year'])) {
 			$eventList = EventHandler::getEventsByYear($_GET['year']);
 			
 			if (!empty($eventList)) {
 				$userList = EventHandler::getMembersAndParticipantsForEvents($eventList);
 				
 				if (!empty($userList)) {
-					echo '<p>Fant ' . count($userList) . ' brukere i databasen.</p>';
-					
 					$fieldList = array(array('Navn:', 'E-post:', 'Telefon:', 'Adresse:', 'Fødselsdato:'));
 					
 					foreach ($userList as $value) {
@@ -37,7 +32,7 @@ if (Session::isAuthenticated()) {
 					// tell the browser it's going to be a csv file
 					header('Content-Type: application/csv');
 					// tell the browser we want to save it instead of displaying it
-					header('Content-Disposition: attachement; filename="' . 'test.csv' . '";');
+					header('Content-Disposition: attachement; filename="' . 'Medlemmsliste ' .  $year . '.csv' . '";');
 					// make php send the generated csv lines to the browser
 					fpassthru($fp);
 					
@@ -69,7 +64,7 @@ if (Session::isAuthenticated()) {
 				echo 'Det var ingen arrangementer dette året.';
 			}
 		} else {
-			echo 'Du må oppgi et gyldig år, året må være omme før du kan hente ut medlemslister.';
+			echo 'Du må oppgi et gyldig år.';
 		}
 	} else {
 		echo 'Du har ikke tillatelse til dette!';
