@@ -8,11 +8,11 @@ class SlideHandler {
         $mysql = MySQL::open(Settings::db_name_infected_main);
         
         $result = $mysql->query('SELECT * FROM `' . Settings::db_table_infected_main_slides . '` 
-                                      WHERE `id` = \'' . $mysql->real_escape_string($id) . '\';');
-                                        
-        $row = $result->fetch_array();
+                                 WHERE `id` = \'' . $mysql->real_escape_string($id) . '\';');
         
-        $mysql->close();
+		$mysql->close();
+		
+        $row = $result->fetch_array();
         
         if ($row) {
             return new Slide($row['id'], 
@@ -28,18 +28,37 @@ class SlideHandler {
         $mysql = MySQL::open(Settings::db_name_infected_main);
         
         $result = $mysql->query('SELECT `id` FROM `' . Settings::db_table_infected_main_slides . '`
-                                      WHERE `start` <= NOW()
-                                      AND `end` >= NOW()
-                                      AND `published` = 1
-                                      ORDER BY `start`;');
-                                      
+                                 WHERE `startTime` <= NOW()
+                                 AND `end` >= NOW()
+                                 ORDER BY `startTime`;');
+		
+		$mysql->close();
+		
         $slideList = array();
         
         while ($row = $result->fetch_array()) {
             array_push($slideList, self::getSlide($row['id']));
         }
         
-        $mysql->close();
+        return $slideList;
+    }
+	
+	public static function getPublishedSlides() {
+        $mysql = MySQL::open(Settings::db_name_infected_main);
+        
+        $result = $mysql->query('SELECT `id` FROM `' . Settings::db_table_infected_main_slides . '`
+                                 WHERE `startTime` <= NOW()
+                                 AND `end` >= NOW()
+                                 AND `published` = \'1\'
+                                 ORDER BY `startTime`;');
+        
+		$mysql->close();
+		
+        $slideList = array();
+        
+        while ($row = $result->fetch_array()) {
+            array_push($slideList, self::getSlide($row['id']));
+        }
         
         return $slideList;
     }

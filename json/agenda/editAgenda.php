@@ -24,9 +24,10 @@ if (Session::isAuthenticated()) {
 			$title = $_GET['title'];
 			$description = $_GET['description'];
 			$startTime = $_GET['startDate'] . ' ' . $_GET['startTime'];
+			$published = isset($_GET['published']) ? $_GET['published'] : 0;
 			
 			if ($agenda != null) {
-				AgendaHandler::updateAgenda($agenda, $title, $description, $startTime);
+				AgendaHandler::updateAgenda($agenda, $title, $description, $startTime, $published);
 				$result = true;
 			} else {
 				$message = 'Agendaen du prøver å endre finnes ikke.';

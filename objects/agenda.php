@@ -8,8 +8,9 @@ class Agenda extends Object {
 	private $title;
 	private $description;
 	private $startTime;
+	private $published;
 	
-	public function __construct($id, $eventId, $name, $title, $description, $startTime) {
+	public function __construct($id, $eventId, $name, $title, $description, $startTime, $published) {
 		parent::__construct($id);
 
 		$this->eventId = $eventId;
@@ -17,6 +18,7 @@ class Agenda extends Object {
 		$this->title = $title;
 		$this->description = $description;
 		$this->startTime = $startTime;
+		$this->published = $published;
 	}
 	
 	public function getEvent() {
@@ -37,6 +39,10 @@ class Agenda extends Object {
 	
 	public function getStartTime() {
 		return strtotime($this->startTime);
+	}
+	
+	public function isPublished() {
+		return $this->published ? true : false;
 	}
 	
 	public function isHappening() {
