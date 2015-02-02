@@ -25,6 +25,9 @@ class AgendaHandler {
         }
     }
     
+	/*
+	 * Returns agendas.
+	 */
     public static function getAgendas() {
         $mysql = MySQL::open(Settings::db_name_infected_main);
         
@@ -43,7 +46,32 @@ class AgendaHandler {
         return $agendaList;
     }
 	
+	/*
+	 * Returns published agendas.
+	 */
 	public static function getPublishedAgendas() {
+        $mysql = MySQL::open(Settings::db_name_infected_main);
+        
+        $result = $mysql->query('SELECT `id` FROM `' . Settings::db_table_infected_main_agenda . '`
+								 WHERE `eventId` = \'' . EventHandler::getCurrentEvent()->getId() . '\'
+								 AND `published` = \'1\'
+								 ORDER BY `startTime`;');
+								 
+		$mysql->close();	
+	   
+        $agendaList = array();
+        
+        while ($row = $result->fetch_array()) {
+            array_push($agendaList, self::getAgenda($row['id']));
+        }
+        
+        return $agendaList;
+    }
+	
+	/*
+	 * Returns only published agendas that have not happend yet.
+	 */
+	public static function getPublishedNotHappendAgendas() {
         $mysql = MySQL::open(Settings::db_name_infected_main);
         
         $result = $mysql->query('SELECT `id` FROM `' . Settings::db_table_infected_main_agenda . '`
