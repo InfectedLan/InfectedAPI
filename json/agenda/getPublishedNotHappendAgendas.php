@@ -7,11 +7,10 @@ $newAgendaList = array();
 
 foreach ($agendaList as $agenda) {
 	array_push($newAgendaList, array('id' => $agenda->getId(),
-									 'event' => $agenda->getEvent()->getId(),
 									 'name' => $agenda->getName(),
 									 'title' => $agenda->getTitle(),
 									 'description' => $agenda->getDescription(),
-									 'start' => Utils::getDayFromInt(date('w', $agenda->getStartTime())) . ' ' . date('H:i', $agenda->getStartTime()),
+									 'startTime' => Utils::getDayFromInt(date('w', $agenda->getStartTime())) . ' ' . date('H:i', $agenda->getStartTime()),
 									 'isHappening' => $agenda->isHappening()));
 }
 
