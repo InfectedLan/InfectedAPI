@@ -9,7 +9,7 @@ if (Session::isAuthenticated()) {
 	$user = Session::getCurrentUser();
 	
 	if ($user->hasPermission('*') ||
-		$user->hasPermission('event.screen')) {
+		$user->hasPermission('event.agenda')) {
 		if (isset($_GET['id']) &&
 			isset($_GET['title']) &&
 			isset($_GET['description']) &&
