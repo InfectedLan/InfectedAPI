@@ -6,10 +6,11 @@ $slides = array();
 
 foreach ($slideList as $slide) {
 	array_push($slides, array('id' => $slide->getId(),
-							  'start' => $slide->getStart(),
-							  'end' => $slide->getEnd(),
+							  'name' => $slide->getName(),
 							  'title' => $slide->getTitle(),
 							  'content' => $slide->getContent(),
+							  'startTime' => $slide->getStartTime(),
+							  'endTime' => $slide->getEndTime(),
 							  'isPublished' => $slide->isPublished()));
 }
 

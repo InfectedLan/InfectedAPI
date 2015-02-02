@@ -8,11 +8,12 @@ class Settings {
 	/* Database */
 	const db_host = 'localhost';
 	const db_name_infected = 'test_infected_no';
-	const db_name_infected_main = 'test_infected_no_main';
-	const db_name_infected_crew = 'test_infected_no_crew';
-	const db_name_infected_tickets = 'test_infected_no_tickets';
 	const db_name_infected_compo = 'test_infected_no_compo';
-
+	const db_name_infected_crew = 'test_infected_no_crew';
+	const db_name_infected_info = 'test_infected_no_info';
+	const db_name_infected_main = 'test_infected_no_main';
+	const db_name_infected_tickets = 'test_infected_no_tickets';
+	
 	// Infected
 	const db_table_infected_emergencycontacts = 'emergencycontacts';
 	const db_table_infected_events = 'events';
@@ -25,12 +26,17 @@ class Settings {
 	const db_table_infected_userpermissions = 'userpermissions';
 	const db_table_infected_users = 'users';
 	
-	// InfectedMain
-	const db_table_infected_main_agenda = 'agenda';
-	const db_table_infected_main_gameapplications = 'gameapplications';
-	const db_table_infected_main_games = 'games';
-	const db_table_infected_main_pages = 'pages';
-	const db_table_infected_main_slides = 'slides';
+	// InfectedCompo
+	const db_table_infected_compo_clans = 'clans';
+	const db_table_infected_compo_compos = 'compos';
+	const db_table_infected_compo_invites = 'invites';
+	const db_table_infected_compo_memberof = 'memberof';
+	const db_table_infected_compo_participantof = 'participantof';
+	const db_table_infected_compo_voteoptions = 'voteOptions';
+	const db_table_infected_compo_participantOfMatch = 'participantofmatch';
+	const db_table_infected_compo_matches = 'matches';
+	const db_table_infected_compo_readyusers = 'readyUsers';
+	const db_table_infected_compo_votes =  'votes';
 	
 	// InfectedCrew
 	const db_table_infected_crew_applicationqueue = 'applicationqueue';
@@ -40,6 +46,15 @@ class Settings {
 	const db_table_infected_crew_memberof = 'memberof';
 	const db_table_infected_crew_pages = 'pages';
 	const db_table_infected_crew_teams = 'teams';
+	
+	// InfectedInfo
+	const db_table_infected_info_slides = 'slides';
+	
+	// InfectedMain
+	const db_table_infected_main_agenda = 'agenda';
+	const db_table_infected_main_gameapplications = 'gameapplications';
+	const db_table_infected_main_games = 'games';
+	const db_table_infected_main_pages = 'pages';
 	
 	// InfectedTickets
 	const db_table_infected_tickets_checkinstate = 'checkinstates';
@@ -52,18 +67,6 @@ class Settings {
 	const db_table_infected_tickets_tickets = 'tickets';
 	const db_table_infected_tickets_tickettransfers = 'tickettransfers';
 	const db_table_infected_tickets_tickettypes = 'tickettypes';
-	
-	// InfectedCompo
-	const db_table_infected_compo_clans = 'clans';
-	const db_table_infected_compo_compos = 'compos';
-	const db_table_infected_compo_invites = 'invites';
-	const db_table_infected_compo_memberof = 'memberof';
-	const db_table_infected_compo_participantof = 'participantof';
-	const db_table_infected_compo_voteoptions = 'voteOptions';
-	const db_table_infected_compo_participantOfMatch = 'participantofmatch';
-	const db_table_infected_compo_matches = 'matches';
-	const db_table_infected_compo_readyusers = 'readyUsers';
-	const db_table_infected_compo_votes =  'votes';
 	
 	/* Configuration */
 	
