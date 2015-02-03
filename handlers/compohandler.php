@@ -87,9 +87,9 @@ class CompoHandler {
         //Randomize participant list to avoid any cheating
         $i = 0;
         while($i < count($clans)) {
-            $toRemove = rand(0, count($clans-1));
+            $toRemove = rand(0, count($clans)-1);
             array_push($newClanList, $clans[$toRemove]);
-            array_splice($array, $toRemove, 1);
+            array_splice($clans, $toRemove, 1);
             $i++;
         }
 
@@ -131,10 +131,10 @@ class CompoHandler {
                 if($toCheck >= count($carryMatches)) {
                     //We are going to generate a reference to a clan
                     $toCheck = $toCheck - count($carryMatches);
-                    MatchHandler::addMatchParticipant(0, $carryClans[$toCheck], $match->getId() );
+                    MatchHandler::addMatchParticipant(0, $carryClans[$toCheck]->getId(), $match);
                 } else {
                     //Generate reference to winner of a match
-                    MatchHandler::addMatchParticipant(1, $carryMatches[$toCheck], $match->getId() );
+                    MatchHandler::addMatchParticipant(1, $carryMatches[$toCheck]->getId(), $match);
                 }
             }
 
@@ -163,15 +163,15 @@ class CompoHandler {
             $match = MatchHandler::createMatch($time, "", $compo, $iteration); //TODO connectData
 
             if(count($oldLooserCarry) > 0) {
-                MatchHandler::addMatchParticipant(MatchHandler::participantof_state_winner, array_shift($oldLooserCarry), $match->getId() );
+                MatchHandler::addMatchParticipant(MatchHandler::participantof_state_winner, array_shift($oldLooserCarry)->getId(), $match);
             } else {
-                MatchHandler::addMatchParticipant(MatchHandler::participantof_state_looser, array_shift($currentMatches), $match->getId() );
+                MatchHandler::addMatchParticipant(MatchHandler::participantof_state_looser, array_shift($currentMatches)->getId(), $match);
             }
 
             if(count($currentMatches) > 0) {
-                MatchHandler::addMatchParticipant(MatchHandler::participantof_state_looser, array_shift($currentMatches), $match->getId() );
+                MatchHandler::addMatchParticipant(MatchHandler::participantof_state_looser, array_shift($currentMatches)->getId(), $match);
             } else {
-                MatchHandler::addMatchParticipant(MatchHandler::participantof_state_winner, array_shift($oldLooserCarry), $match->getId() );
+                MatchHandler::addMatchParticipant(MatchHandler::participantof_state_winner, array_shift($oldLooserCarry)->getId(), $match);
             }
             $looserCount = count($oldLooserCarry) + count($currentMatches);
         }
