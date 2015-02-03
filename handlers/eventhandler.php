@@ -159,12 +159,11 @@ class EventHandler {
 	/*
 	 * Returns members and participants for given events.
 	 */
-	public static function getMembersAndParticipantsForEvents($eventList) {
+	public static function getMembersAndParticipantsForEvents($eventList, $ageLimit) {
 		$mysql = MySQL::open(Settings::db_name_infected);
 		
 		// Extract event id's from the event list.
 		$dateLimit = date('Y-m-d', end($eventList)->getStartTime());
-		$ageLimit = 20;
 		$eventIdList = array();
 		
 		foreach ($eventList as $event) {
@@ -181,7 +180,7 @@ class EventHandler {
 												ON `' . Settings::db_table_infected_users . '`.`id` = `userId`
 												WHERE `userId` IS NOT NULL) AS `users`
 								 WHERE `eventId` IN (' . implode(', ', $eventIdList) . ')
-								 AND TIMESTAMPDIFF(YEAR, `birthdate`, \'' . $dateLimit . '\') < \'' . $ageLimit . '\'
+								 AND TIMESTAMPDIFF(YEAR, `birthdate`, \'' . $dateLimit . '\') <= \'' . $ageLimit . '\'
 								 GROUP BY `users`.`id`;');
 		
 		$mysql->close();
