@@ -170,18 +170,19 @@ class EventHandler {
 			array_push($eventIdList, '\'' . $event->getId() . '\'');
 		}
 		
-		$result = $mysql->query('SELECT * FROM (SELECT `' . Settings::db_table_infected_users . '`.`id`, `eventId`, `birthdate` FROM `' . Settings::db_table_infected_users . '`
+		$result = $mysql->query('SELECT * FROM (SELECT `' . Settings::db_table_infected_users . '`.`id`, `firstname`, `birthdate`, `eventId` FROM `' . Settings::db_table_infected_users . '`
 												LEFT JOIN `' . Settings::db_name_infected_crew . '`.`' . Settings::db_table_infected_crew_memberof . '` 
 												ON `' . Settings::db_table_infected_users . '`.`id` = `userId`
 												WHERE `groupId` IS NOT NULL
 												UNION ALL
-											   	SELECT `' . Settings::db_table_infected_users . '`.`id`, `eventId`, `birthdate` FROM `' . Settings::db_table_infected_users . '`
+											   	SELECT `' . Settings::db_table_infected_users . '`.`id`, `firstname`, `birthdate`, `eventId` FROM `' . Settings::db_table_infected_users . '`
 												LEFT JOIN `' . Settings::db_name_infected_tickets . '`.`' . Settings::db_table_infected_tickets_tickets . '` 
 												ON `' . Settings::db_table_infected_users . '`.`id` = `userId`
 												WHERE `userId` IS NOT NULL) AS `users`
 								 WHERE `eventId` IN (' . implode(', ', $eventIdList) . ')
 								 AND TIMESTAMPDIFF(YEAR, `birthdate`, \'' . $dateLimit . '\') <= \'' . $ageLimit . '\'
-								 GROUP BY `users`.`id`;');
+								 GROUP BY `users`.`id`
+								 ORDER BY `firstname` ASC;');
 		
 		$mysql->close();
 		
