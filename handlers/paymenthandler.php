@@ -8,7 +8,7 @@ class PaymentHandler {
         $mysql = MySQL::open(Settings::db_name_infected_tickets);
         
         $result = $mysql->query('SELECT * FROM `' . Settings::db_table_infected_tickets_paymentlog . '` 
-                                      WHERE `id` = \'' . $mysql->real_escape_string($id) . '\';');
+                                 WHERE `id` = \'' . $mysql->real_escape_string($id) . '\';');
                             
         $row = $result->fetch_array();
         
