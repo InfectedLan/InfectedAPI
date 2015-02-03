@@ -9,7 +9,7 @@ if (Session::isAuthenticated()) {
 	$user = Session::getCurrentUser();
 	
 	if ($user->hasPermission('*') ||
-		$user->hasPermission('event.print-ticket-labels')) {
+		$user->hasPermission('event.table-labels')) {
 		echo '<html>';
 			echo '<head>';
 				echo '<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />';

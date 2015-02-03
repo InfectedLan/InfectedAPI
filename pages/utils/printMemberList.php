@@ -32,16 +32,18 @@ if (Session::isAuthenticated()) {
 							echo '<th>Adresse:</th>';
 							echo '<th>Fødselsdato:</th>';
 							echo '<th>Alder:</th>';
+							echo '<th>Rolle:</th>';
 						echo '</tr>';
 					
 						foreach ($userList as $value) {
 							echo '<tr>';
 								echo '<td>' . $value->getFullName() . '</td>';
-								echo '<td>' . $value->getEmail() . '</th>';
-								echo '<td>' . $value->getPhoneAsString() . '</th>';
-								echo '<td>' . $value->getAddress() . ', ' . $value->getPostalCode() . ' ' . $value->getCity() . '</th>';
-								echo '<td>' . date('d.m.Y', $value->getBirthdate()) . '</th>';
-								echo '<td>' . $value->getAge() . ' år</th>';
+								echo '<td>' . $value->getEmail() . '</td>';
+								echo '<td>' . $value->getPhoneAsString() . '</td>';
+								echo '<td>' . $value->getAddress() . ', ' . $value->getPostalCode() . ' ' . $value->getCity() . '</td>';
+								echo '<td>' . date('d.m.Y', $value->getBirthdate()) . '</td>';
+								echo '<td>' . $value->getAge() . ' år</td>';
+								echo '<td>' . ($value->isGroupMember() ? 'Crew' : 'Deltaker') . '</td>';
 							echo '</tr>';
 						}
 					echo '</table>';
