@@ -40,7 +40,6 @@ if (Session::isAuthenticated()) {
 								echo '<td>' . $value->getEmail() . '</th>';
 								echo '<td>' . $value->getPhoneAsString() . '</th>';
 								echo '<td>' . $value->getAddress() . ', ' . $value->getPostalCode() . ' ' . $value->getCity() . '</th>';
-								echo '<td>' . $value->getPostalCode() . ' ' . $value->getCity() . '</th>';
 								echo '<td>' . date('d.m.Y', $value->getBirthdate()) . '</th>';
 								echo '<td>' . $value->getAge() . ' år</th>';
 							echo '</tr>';
