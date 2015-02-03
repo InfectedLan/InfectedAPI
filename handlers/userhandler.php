@@ -9,6 +9,7 @@ require_once 'handlers/userpermissionhandler.php';
 require_once 'handlers/applicationhandler.php';
 require_once 'handlers/avatarhandler.php';
 require_once 'handlers/grouphandler.php';
+require_once 'handlers/eventhandler.php';
 require_once 'objects/user.php';
 
 class UserHandler {
@@ -114,7 +115,8 @@ class UserHandler {
         
         $result = $mysql->query('SELECT `' . Settings::db_table_infected_users . '`.`id` FROM `' . Settings::db_table_infected_users . '`
                                  LEFT JOIN `' . Settings::db_name_infected_crew . '`.`' . Settings::db_table_infected_crew_memberof . '` ON `' . Settings::db_table_infected_users . '`.`id` = `' . Settings::db_table_infected_crew_memberof . '`.`userId`
-                                 WHERE `' . Settings::db_table_infected_crew_memberof . '`.`groupId` IS NOT NULL 
+                                 WHERE `eventId` = \'' . EventHandler::getCurrentEvent()->getId() . '\'
+								 AND `' . Settings::db_table_infected_crew_memberof . '`.`groupId` IS NOT NULL 
                                  ORDER BY `' . Settings::db_table_infected_users . '`.`firstname` ASC;');
 
         $mysql->close();
@@ -136,7 +138,8 @@ class UserHandler {
         
         $result = $mysql->query('SELECT `' . Settings::db_table_infected_users . '`.`id` FROM `' . Settings::db_table_infected_users . '`
                                  LEFT JOIN `' . Settings::db_name_infected_crew . '`.`' . Settings::db_table_infected_crew_memberof . '` ON `' . Settings::db_table_infected_users . '`.`id` = `' . Settings::db_table_infected_crew_memberof . '`.`userId`
-                                 WHERE `' . Settings::db_table_infected_crew_memberof . '`.`groupId` IS NULL 
+                                 WHERE `eventId` = \'' . EventHandler::getCurrentEvent()->getId() . '\'
+								 AND `' . Settings::db_table_infected_crew_memberof . '`.`groupId` IS NULL 
                                  ORDER BY `' . Settings::db_table_infected_users . '`.`firstname` ASC;');
         
 		$mysql->close();
