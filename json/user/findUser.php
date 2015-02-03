@@ -22,7 +22,8 @@ if (Session::isAuthenticated()) {
 											 'firstname' => $userValue->getFirstname(),
 											 'lastname' => $userValue->getLastname(),
 											 'username' => $userValue->getUsername(),
-											 'email' => $userValue->getEmail()));
+											 'email' => $userValue->getEmail(),
+											 'nickname' => $userValue->getNickname()));
 				}
 			}
 			
