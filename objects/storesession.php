@@ -43,7 +43,7 @@ class StoreSession extends Object {
 	 * Returns the ticket type the user is buying
 	 */
 	public function getTicketType() {
-		return TicketTypeHandler:getTicketType($this->ticketType);
+		return TicketTypeHandler::getTicketType($this->ticketType);
 	}
 
 	/*

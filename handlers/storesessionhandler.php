@@ -140,7 +140,7 @@ class StoreSessionHandler {
 		
         // Checks are ok, lets buy!
         for ($i = 0; $i < $storeSession->getAmount(); $i++) {
-            TicketHandler::createTicket($storeSession->getUser(), $payment, $storeSession->getTicketType());
+            TicketHandler::createTicket($storeSession->getUser(), $storeSession->getTicketType(), $payment);
         }
 
         self::deleteStoreSession($storeSession);

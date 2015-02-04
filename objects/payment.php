@@ -3,7 +3,7 @@ require_once 'handlers/userhandler.php';
 require_once 'handlers/tickettypehandler.php';
 require_once 'objects/object.php';
 
-class Payment {
+class Payment extends Object{
 	private $userId;
 	private $ticketType;
 	private $price;
