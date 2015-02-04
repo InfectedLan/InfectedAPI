@@ -184,10 +184,10 @@ class TicketHandler {
 
         $result = $mysql->query('INSERT INTO `' . Settings::db_table_infected_tickets_tickets . '` (`eventId`, `paymentId`, `typeId`, `buyerId`, `userId`) 
                                  VALUES (\'' . EventHandler::getCurrentEvent()->getId() . '\', 
-										 \'' . $mysql->real_escape_string($payment->getId()) . '\', 
-										 \'' . $mysql->real_escape_string($ticketType->getId()) . '\', 
-										 \'' . $mysql->real_escape_string($user->getId()) . '\', 
-										 \'' . $mysql->real_escape_string($user->getId()) . '\');');
+                                         \'' . $mysql->real_escape_string($payment->getId()) . '\', 
+                                         \'' . $mysql->real_escape_string($ticketType->getId()) . '\', 
+                                         \'' . $mysql->real_escape_string($user->getId()) . '\', 
+                                         \'' . $mysql->real_escape_string($user->getId()) . '\');');
 
         $mysql->close();
     }    
