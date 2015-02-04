@@ -85,12 +85,10 @@ class CompoHandler {
         $clans = self::getClans($compo);
         $newClanList = array();
         //Randomize participant list to avoid any cheating
-        $i = 0;
-        while($i < count($clans)) {
+        while(count($clans) > 0) {
             $toRemove = rand(0, count($clans)-1);
             array_push($newClanList, $clans[$toRemove]);
             array_splice($clans, $toRemove, 1);
-            $i++;
         }
 
         $carryData = array("matches" => array(), "clans" => $newClanList, "looserMatches" => array());
@@ -108,6 +106,7 @@ class CompoHandler {
     private static function generateMatches($carryMatches, $carryClans, $carryLoosers, $iteration, $compo, $time) {
         $numberOfObjects = count($carryMatches) + count($carryClans); //The amount of objects we are going to handle
         $match_start_index = $numberOfObjects % 2; // 0 if even number of objects, 1 if uneven
+        echo ";Num of objects: " . $numberOfObjects . ", " . count($carryMatches) . " matches and " . count($carryClans) . " clans;";
 
         $carryObjects = array("matches" => array(), "clans" => array(), "looserMatches" => array()); //Prepare all the info to return back
 
@@ -147,13 +146,17 @@ class CompoHandler {
 
         $looserCount = count($oldLooserCarry) + count($currentMatches);
 
+        echo ";Number of loosers: " . count($looserCount) . ". Old loosers: " . count($oldLooserCarry) . ". Newer matches: " + count($currentMatches);
+
         if($looserCount % 2 != 0) {
-            //Prioritize carrying old matches
-            if(count($oldLooserCarry) > 0) {
-                $matchToPush = array_shift($oldLooserCarry);
-                array_push($carryObjects['looserMatches'], $matchToPush);
-            } else if(count($currentMatches) > 0) {
+            //Prioritize carrying new
+            if(count($currentMatches) > 0) {
                 $matchToPush = array_shift($currentMatches);
+                echo ";we have to carry a looser match. Carrying a current match: " . $matchToPush->getId() . ".";
+                array_push($carryObjects['looserMatches'], $matchToPush);
+            } else if(count($oldLooserCarry) > 0) {
+                $matchToPush = array_shift($oldLooserCarry);
+                echo ";we have to carry a looser match. Carrying a old match: " . $matchToPush->getId() . ".";
                 array_push($carryObjects['looserMatches'], $matchToPush);
             }
         }
@@ -173,6 +176,8 @@ class CompoHandler {
             } else {
                 MatchHandler::addMatchParticipant(MatchHandler::participantof_state_winner, array_shift($oldLooserCarry)->getId(), $match);
             }
+            array_push($carryObjects['looserMatches'], $match);
+
             $looserCount = count($oldLooserCarry) + count($currentMatches);
         }
 
