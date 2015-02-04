@@ -1,4 +1,6 @@
 <?php
+require_once 'handlers/userhandler.php';
+require_once 'handlers/tickettypehandler.php';
 require_once 'objects/object.php';
 
 class StoreSession extends Object {
@@ -33,15 +35,15 @@ class StoreSession extends Object {
 	/*
 	 * Returns the user connected to this session
 	 */
-	public function getUserId() {
-		return $this->userId;
+	public function getUser() {
+		return UserHandler::getUser($this->userId);
 	}
 
 	/*
 	 * Returns the ticket type the user is buying
 	 */
 	public function getTicketType() {
-		return $this->ticketType;
+		return TicketTypeHandler::getTicketType($this->ticketType);
 	}
 
 	/*

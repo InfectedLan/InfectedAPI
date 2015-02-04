@@ -179,16 +179,15 @@ class TicketHandler {
         $mysql->close();
     }
 
-    public static function createTicket($user, $ticketType) {
-        $currentEvent = EventHandler::getCurrentEvent();
-
+    public static function createTicket($user, $ticketType, $payment) {
         $mysql = MySQL::open(Settings::db_name_infected_tickets);
 
-        $result = $mysql->query('INSERT INTO `' . Settings::db_table_infected_tickets_tickets . '` (`buyerId`, `userId`, `eventId`, `typeId`) 
-                                 VALUES (\'' . $mysql->real_escape_string($user->getId()) . '\', 
-                                        \'' . $mysql->real_escape_string($user->getId()) . '\', 
-                                         \'' . $mysql->real_escape_string($currentEvent->getId()) . '\', 
-                                         \''. $mysql->real_escape_string($ticketType->getId()) . '\');');
+        $result = $mysql->query('INSERT INTO `' . Settings::db_table_infected_tickets_tickets . '` (`eventId`, `paymentId`, `typeId`, `buyerId`, `userId`) 
+                                 VALUES (\'' . EventHandler::getCurrentEvent()->getId() . '\', 
+                                         \'' . $mysql->real_escape_string($payment->getId()) . '\', 
+                                         \'' . $mysql->real_escape_string($ticketType->getId()) . '\', 
+                                         \'' . $mysql->real_escape_string($user->getId()) . '\', 
+                                         \'' . $mysql->real_escape_string($user->getId()) . '\');');
 
         $mysql->close();
     }    
