@@ -72,12 +72,25 @@ class Event extends Object {
 		return strtotime($this->endTime);
 	}
 
+	/*
+	 * Returns the seatmap for this event.
+	 */
 	public function getSeatmap() {
 		return SeatmapHandler::getSeatmap($this->seatmap);
 	}
 
+	/*
+	 * Returns the ticket type for this event.
+	 */
 	public function getTicketType() {
 		return TicketTypeHandler::getTicketType($this->ticketType);
+	}
+	
+	/*
+	 * Returns the title for this event.
+	 */
+	public function getTitle() {
+		return 'Infected ' . (date('m', $event->getStartTime()) == 2 ? 'Vinter' : 'Høst') . ' ' . date('Y', $event->getStartTime()
 	}
 	
 	/*
