@@ -153,6 +153,49 @@ class ApplicationHandler {
         return $queuedApplicationList;
     }
     
+	/*
+     * Returns a list of all accepted applications.
+     */
+    public static function getAcceptedApplications() {
+        $mysql = MySQL::open(Settings::db_name_infected_crew);
+        
+        $result = $mysql->query('SELECT `' . Settings::db_table_infected_crew_applications . '`.`id` FROM `' . Settings::db_table_infected_crew_applications . '`
+                                 WHERE `state` = \'2\'
+								 ORDER BY `openedTime`;');
+        
+		$mysql->close();
+		
+        $acceptedApplicationList = array();
+        
+        while ($row = $result->fetch_array()) {
+            array_push($acceptedApplicationList, self::getApplication($row['id']));
+        }
+        
+        return $acceptedApplicationList;
+    }
+    
+    /*
+     * Returns a list of all accepted applications for a given group.
+     */
+    public static function getAcceptedApplicationsForGroup($group) {
+        $mysql = MySQL::open(Settings::db_name_infected_crew);
+        
+        $result = $mysql->query('SELECT `' . Settings::db_table_infected_crew_applications . '`.`id` FROM `' . Settings::db_table_infected_crew_applications . '`
+                                 WHERE `groupId` = \'' . $mysql->real_escape_string($group->getId()) .  '\'
+								 AND `state` = \'2\'
+                                 ORDER BY `openedTime`;');
+        
+		$mysql->close();
+		
+        $acceptedApplicationList = array();
+        
+        while ($row = $result->fetch_array()) {
+            array_push($acceptedApplicationList, self::getApplication($row['id']));
+        }
+        
+        return $acceptedApplicationList;
+    }
+	
     /* 
      * Create a new application. 
      */
