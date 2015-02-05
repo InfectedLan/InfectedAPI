@@ -90,7 +90,7 @@ class Event extends Object {
 	 * Returns the title for this event.
 	 */
 	public function getTitle() {
-		return 'Infected ' . (date('m', $event->getStartTime()) == 2 ? 'Vinter' : 'Høst') . ' ' . date('Y', $event->getStartTime()
+		return 'Infected ' . (date('m', $this->getStartTime()) == 2 ? 'Vinter' : 'Høst') . ' ' . date('Y', $this->getStartTime());
 	}
 	
 	/*
