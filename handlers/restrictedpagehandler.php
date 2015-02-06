@@ -100,12 +100,12 @@ class RestrictedPageHandler {
     /* 
      * Get a list of pages for specified group.
      */
-    public static function getPagesForGroup($groupId) {
+    public static function getPagesForGroup($group) {
         $mysql = MySQL::open(Settings::db_name_infected_crew);
         
         $result = $mysql->query('SELECT `id` FROM `' . Settings::db_table_infected_crew_pages . '`
-                                      WHERE `groupId` = \'' . $mysql->real_escape_string($groupId) . '\'
-                                      AND `teamId` = \'0\';');
+                                 WHERE `groupId` = \'' . $mysql->real_escape_string($group->getId()) . '\'
+                                 AND `teamId` = \'0\';');
         
         $pageList = array();
         
@@ -121,12 +121,12 @@ class RestrictedPageHandler {
     /*
      * Get a list of pages for specified team.
      */
-    public static function getPagesForTeam($groupId, $teamId) {
+    public static function getPagesForTeam($group, $team) {
         $mysql = MySQL::open(Settings::db_name_infected_crew);
         
         $result = $mysql->query('SELECT `id` FROM `' . Settings::db_table_infected_crew_pages . '`
-                                      WHERE `groupId` = \'' . $mysql->real_escape_string($groupId) . '\'
-                                      AND `teamId` = \'' . $mysql->real_escape_string($teamId) . '\';');
+                                      WHERE `groupId` = \'' . $mysql->real_escape_string($group->getId()) . '\'
+                                      AND `teamId` = \'' . $mysql->real_escape_string($team->getId()) . '\';');
         
         $pageList = array();
         
