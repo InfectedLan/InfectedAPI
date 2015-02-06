@@ -161,7 +161,7 @@ class ApplicationHandler {
         
         $result = $mysql->query('SELECT `' . Settings::db_table_infected_crew_applications . '`.`id` FROM `' . Settings::db_table_infected_crew_applications . '`
                                  WHERE `state` = \'2\'
-								 ORDER BY `openedTime`;');
+								 ORDER BY `openedTime` DESC;');
         
 		$mysql->close();
 		
@@ -183,7 +183,7 @@ class ApplicationHandler {
         $result = $mysql->query('SELECT `' . Settings::db_table_infected_crew_applications . '`.`id` FROM `' . Settings::db_table_infected_crew_applications . '`
                                  WHERE `groupId` = \'' . $mysql->real_escape_string($group->getId()) .  '\'
 								 AND `state` = \'2\'
-                                 ORDER BY `openedTime`;');
+                                 ORDER BY `openedTime` DESC;');
         
 		$mysql->close();
 		
