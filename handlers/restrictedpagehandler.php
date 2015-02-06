@@ -121,12 +121,12 @@ class RestrictedPageHandler {
     /*
      * Get a list of pages for specified team.
      */
-    public static function getPagesForTeam($group, $team) {
+    public static function getPagesForGroupAndTeam($group, $team) {
         $mysql = MySQL::open(Settings::db_name_infected_crew);
         
         $result = $mysql->query('SELECT `id` FROM `' . Settings::db_table_infected_crew_pages . '`
                                       WHERE `groupId` = \'' . $mysql->real_escape_string($group->getId()) . '\'
-                                      AND `teamId` = \'' . $mysql->real_escape_string($team->getId()) . '\';');
+                                      AND (`teamId` = \'' . $mysql->real_escape_string($team->getId()) . '\' OR `teamId` = \'0\');');
         
 		$mysql->close();
 		
