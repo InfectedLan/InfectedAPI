@@ -95,6 +95,19 @@ class CompoHandler {
         $iteration = 0;
         while(true) {
             $carryData = self::generateMatches($carryData["matches"], $carryData["clans"], $carryData["looserMatches"], $iteration, $compo, $startTime + ($iteration * $compoSpacing));
+            echo ";Iteration finished. Matches:";
+            foreach($carryData["matches"] as $match) {
+                echo "Match: " . $match->getId() . ",";
+            }
+            echo " clans: ";
+            foreach($carryData["clans"] as $clan) {
+                echo "Clan: " . $clan->getId() . ",";
+            }
+            echo ", looser matches:";
+            foreach($carryData["looserMatches"] as $looserMatches) {
+                echo "Old looser: " . $looserMatches->getId() . ",";
+            }
+
             if(count($carryData['matches'])<2) {
                 break;
             }
@@ -112,31 +125,27 @@ class CompoHandler {
 
         if($match_start_index == 1) { //If there is an uneven amount of objects
             if(count($carryMatches) > 0 ) { //Prioritize carrying matches
-                array_push($carryObjects['matches'], $carryMatches[0]);
+                array_push($carryObjects['matches'], array_shift($carryMatches));
             } else { //No matches to carry, carry a clan
-                array_push($carryObjects['clans'], $carryClans[0]);
+                array_push($carryObjects['clans'], array_shift($carryClans));
             }
         }
         
-
-        for($i = 0; $i < ($numberOfObjects-$match_start_index)/2; $i++) { //Loop through amount of matches we are going to make
-            $index = ($i*2)+$match_start_index; //Start acces
-
+        while($numberOfObjects > 0) {
+            //Create match
             $match = MatchHandler::createMatch($time, "", $compo, $iteration); //TODO connectData
             array_push($carryObjects["matches"], $match);
 
-            for($x = 0; $x < 2; $x++) {
-                $toCheck = $index + $x;
-                if($toCheck >= count($carryMatches)) {
-                    //We are going to generate a reference to a clan
-                    $toCheck = $toCheck - count($carryMatches);
-                    MatchHandler::addMatchParticipant(0, $carryClans[$toCheck]->getId(), $match);
+            //Assign participants
+            for($a = 0; $a < 2; $a++) {
+                if(count($carryClans) > 0) {
+                    MatchHandler::addMatchParticipant(0, array_shift($carryClans)->getId(), $match);
                 } else {
-                    //Generate reference to winner of a match
-                    MatchHandler::addMatchParticipant(1, $carryMatches[$toCheck]->getId(), $match);
+                    MatchHandler::addMatchParticipant(1, array_shift($carryMatches)->getId(), $match);
                 }
             }
 
+            $numberOfObjects = count($carryMatches) + count($carryClans); //The amount of objects we are going to handle
         }
 
         //Generate loosers
@@ -146,7 +155,13 @@ class CompoHandler {
 
         $looserCount = count($oldLooserCarry) + count($currentMatches);
 
-        echo ";Number of loosers: " . count($looserCount) . ". Old loosers: " . count($oldLooserCarry) . ". Newer matches: " + count($currentMatches);
+        echo ";Number of loosers: " . $looserCount . ". Old loosers: " . count($oldLooserCarry) . ". Newer matches: " . count($currentMatches) . ". Data: ";
+        foreach($oldLooserCarry as $old) {
+            echo "Old looser: " . $old->getId() . ",";
+        }
+        foreach($currentMatches as $new) {
+            echo "New match: " . $new->getId() . ",";
+        }
 
         if($looserCount % 2 != 0) {
             //Prioritize carrying new
