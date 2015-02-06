@@ -103,6 +103,11 @@ class CompoHandler {
             foreach($carryData["clans"] as $clan) {
                 echo "Clan: " . $clan->getId() . ",";
             }
+            echo " carry matches: ";
+            foreach($carryData["carryMatches"] as $match) {
+                echo "Carrymatch: " . $match->getId() . ",";
+                array_push($carryData["matches"], $match);
+            }
             echo ", looser matches:";
             foreach($carryData["looserMatches"] as $looserMatches) {
                 echo "Old looser: " . $looserMatches->getId() . ",";
@@ -121,11 +126,11 @@ class CompoHandler {
         $match_start_index = $numberOfObjects % 2; // 0 if even number of objects, 1 if uneven
         echo ";Num of objects: " . $numberOfObjects . ", " . count($carryMatches) . " matches and " . count($carryClans) . " clans;";
 
-        $carryObjects = array("matches" => array(), "clans" => array(), "looserMatches" => array()); //Prepare all the info to return back
+        $carryObjects = array("matches" => array(), "clans" => array(), "looserMatches" => array(), "carryMatches" => array()); //Prepare all the info to return back
 
         if($match_start_index == 1) { //If there is an uneven amount of objects
             if(count($carryMatches) > 0 ) { //Prioritize carrying matches
-                array_push($carryObjects['matches'], array_shift($carryMatches));
+                array_push($carryObjects['carryMatches'], array_shift($carryMatches));
             } else { //No matches to carry, carry a clan
                 array_push($carryObjects['clans'], array_shift($carryClans));
             }
