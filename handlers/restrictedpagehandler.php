@@ -107,13 +107,13 @@ class RestrictedPageHandler {
                                  WHERE `groupId` = \'' . $mysql->real_escape_string($group->getId()) . '\'
                                  AND `teamId` = \'0\';');
         
+		$mysql->close();
+		
         $pageList = array();
         
         while ($row = $result->fetch_array()) {
             array_push($pageList, self::getPage($row['id']));
         }
-
-        $mysql->close();
         
         return $pageList;
     }
@@ -128,13 +128,13 @@ class RestrictedPageHandler {
                                       WHERE `groupId` = \'' . $mysql->real_escape_string($group->getId()) . '\'
                                       AND `teamId` = \'' . $mysql->real_escape_string($team->getId()) . '\';');
         
+		$mysql->close();
+		
         $pageList = array();
         
         while ($row = $result->fetch_array()) {
             array_push($pageList, self::getPage($row['id']));
         }
-
-        $mysql->close();
         
         return $pageList;
     }
