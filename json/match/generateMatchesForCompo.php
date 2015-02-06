@@ -1,5 +1,6 @@
 <?php
 require_once 'session.php';
+require_once 'handlers/compohandler.php';
 
 $message = null;
 $result = false;
@@ -16,11 +17,21 @@ if (Session::isAuthenticated()) {
 			$compo = CompoHandler::getCompo($_GET['id']);
 
 			if(isset($compo)) {
-				if(!CompoHandler::hasGeneratedMatches($compo)) {
-					CompoHandler::generateDoubleElimination($compo);
-					$result = true;
+
+				if(isset($_GET['startTime']) && 
+					!empty($_GET['startTime']) && 
+					isset($_GET['compoSpacing']) && 
+					!empty($_GET['compoSpacing'])) {
+
+					if(!CompoHandler::hasGeneratedMatches($compo)) {
+						
+						CompoHandler::generateDoubleElimination($compo, $_GET['startTime'], $_GET['compoSpacing']);
+						$result = true;
+					} else {
+						$message = "Compoen har allerede genererte matcher";
+					}
 				} else {
-					$message = "Compoen har allerede genererte matcher";
+					$message = "Felt mangler";
 				}
 			} else {
 				$message = "Compoen finnes ikke!";
