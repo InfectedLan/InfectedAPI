@@ -11,6 +11,11 @@ require_once 'handlers/clanhandler.php';
  */
 
 class MatchHandler {
+    //State of the "participantOf" table responsible for the participants of a match
+    const participantof_state_clan = 0;
+    const participantof_state_winner = 1;
+    const participantof_state_looser = 2;
+
     public static function getMatch($id) {
         $mysql = MySQL::open(Settings::db_name_infected_compo);
         
@@ -27,8 +32,39 @@ class MatchHandler {
                              $row['connectDetails'], 
                              $row['winner'], 
                              $row['state'], 
-                             $row['compoId']);
+                             $row['compoId'],
+                             $row['bracketOffset']);
         }
+    }
+
+    public static function createMatch($scheduledTime, $connectData, $compo, $bracketOffset) {
+        $mysql = MySQL::open(Settings::db_name_infected_compo);
+
+        $mysql->query('INSERT INTO `' . Settings::db_table_infected_compo_matches . '` (`scheduledTime`, `connectDetails`, `state`, `winner`, `compoId`, `bracketOffset`) 
+            VALUES (\'' . $mysql->real_escape_string($scheduledTime) . '\', 
+                    \'' . $mysql->real_escape_string($connectData) . '\', 
+                    \'' . Match::STATE_READYCHECK . '\',
+                    \'0\', 
+                    \'' . $mysql->real_escape_string($compo->getId()) . '\',
+                    \'' . $mysql->real_escape_string($bracketOffset) . '\');');
+
+        $fetchNewestResultId = $mysql->query('SELECT `id` FROM `' . Settings::db_table_infected_compo_matches . '` ORDER BY `id` DESC LIMIT 1;');
+
+        $row = $fetchNewestResultId->fetch_array();
+
+        $newId = $row['id'];
+
+        return self::getMatch($newId);
+    }
+    public static function addMatchParticipant($type, $participantId, $match) {
+        $mysql = MySQL::open(Settings::db_name_infected_compo);
+
+        $mysql->query('INSERT INTO `' . Settings::db_table_infected_compo_participantOfMatch . '` (`type`, `participantId`, `matchId`) 
+                        VALUES (\'' . $mysql->real_escape_string($type) . '\', 
+                                \'' . $mysql->real_escape_string($participantId) . '\', 
+                                \'' . $mysql->real_escape_string($match->getId()) . '\');');
+
+        $mysql->close();
     }
 
     public static function getPendingMatches($compo) {
