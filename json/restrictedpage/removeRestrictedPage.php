@@ -12,8 +12,20 @@ if (Session::isAuthenticated()) {
 		$user->hasPermission('chief.my-crew')) {
 		if (isset($_GET['id']) &&
 			is_numeric($_GET['id'])) {
-			RestrictedPageHandler::removePage($_GET['id']);
-			$result = true;
+			$page = RestrictedPageHandler::getPage($_GET['id']);
+			
+			if ($page != null) {
+				if ($user->hasPermission('*') ||
+					$user->hasPermission('chief.my-crew') &&
+					($page->getGroup()->getId() == $user->getGroup()->getId())) {
+					RestrictedPageHandler::removePage($_GET['id']);
+					$result = true;
+				} else {
+					$message = 'Du har ikke rettigheter til dette.';
+				}
+			} else {
+				$message = 'Siden finnes ikke.';
+			}
 		} else {
 			$message = 'Ikke noen side spesifisert.';
 		}
