@@ -261,7 +261,7 @@ class ApplicationHandler {
 			$group = $application->getGroup();
 			
 			// Remove the application from the queue, if present.
-			self::unqueueApplication($application);
+			self::unqueueApplication($user, $application);
 			
 			// Reject users application for all other groups.
 			$applicationList = self::getUserApplications($applicationUser);
@@ -301,7 +301,7 @@ class ApplicationHandler {
 			$mysql->close();
 			
 			// Remove the application from the queue, if present.
-			self::unqueueApplication($application);
+			self::unqueueApplication($user, $application);
 			
 			// Notify the user by email, if notify is true.
 			if ($notify) {
@@ -326,7 +326,7 @@ class ApplicationHandler {
         $mysql->close();
         
         // Remove the application from the queue, if present.
-        self::unqueueApplication($application);
+        self::unqueueApplication($user, $application);
     }
     
     /*

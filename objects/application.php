@@ -75,20 +75,22 @@ class Application extends Object {
 	 * Returns the state of this application.
 	 */
 	public function getStateAsString() {
-		if ($application->isQueued()) {
+		$updatedByUser = $this->getUpdatedByUser();
+		
+		if ($this->isQueued()) {
 			return 'Står i kø';
 		} else {
-			switch ($application->getState()) {
+			switch ($this->getState()) {
 				case 1:
 					return 'Ubehandlet';
 					break;
 					
 				case 2:
-					return 'Godkjent';
+					return 'Godkjent' . ($updatedByUser != null ? ' av ' . $updatedByUser->getDisplayName() : null);
 					break;
 					
 				case 3:
-					return 'Avslått';
+					return 'Avslått' . ($updatedByUser != null ? ' av ' . $updatedByUser->getDisplayName() : null);
 					break;
 			}
 		}
@@ -105,7 +107,7 @@ class Application extends Object {
 	 * Returns the user that last updated this application.
 	 */
 	public function getUpdatedByUser() {
-		UserHandler::getUser($this->updatedByUserId);
+		return UserHandler::getUser($this->updatedByUserId);
 	}
 	
 	/*
