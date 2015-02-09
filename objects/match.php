@@ -16,8 +16,9 @@ class Match extends Object {
 	private $state;
 	private $compoId;
 	private $bracketOffset;
+	private $chat;
 
-	public function __construct($id, $scheduledTime, $connectDetails, $winner, $state, $compoId, $bracketOffset) {
+	public function __construct($id, $scheduledTime, $connectDetails, $winner, $state, $compoId, $bracketOffset, $chats) {
 		parent::__construct($id);
 	
 		$this->scheduledTime = $scheduledTime;
@@ -26,6 +27,11 @@ class Match extends Object {
 		$this->state = $state;
 		$this->compoId = $compoId;
 		$this->bracketOffset = $bracketOffset;
+		$this->chat = $chat;
+	}
+
+	public function getChat() {
+		return $this->chat;
 	}
 
 	public function getScheduledTime() {

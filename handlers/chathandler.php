@@ -24,6 +24,17 @@ class ChatHandler {
 							$row['title']);
         }
 	}
+
+	/*
+ 	 * Adds entire clan to chat
+ 	 */
+	public static addClanMembersToChat($chat, $clan) {
+		//Let all chat members chat, just because
+		$members = $clan->getMembers();
+		foreach($members as $member) {
+			self::addChatMember($member, $chat);
+		}
+    }
 	
 	/*
 	 * Return all chats.

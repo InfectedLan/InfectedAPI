@@ -4,6 +4,7 @@ require_once 'mysql.php';
 require_once 'objects/compo.php';
 require_once 'handlers/clanhandler.php';
 require_once 'handlers/matchhandler.php';
+require_once 'handlers/chathandler.php';
 
 class CompoHandler {
     public static function getCompo($id) {
@@ -114,7 +115,8 @@ class CompoHandler {
             }*/
 
             if(count($carryData['matches'])<2) {
-                $match = MatchHandler::createMatch($time, "", $compo, $iteration); //TODO connectData
+                $chat = ChatHandler::createChat("match chat");
+                $match = MatchHandler::createMatch($time, "", $compo, $iteration, $chat->getId()); //TODO connectData
                 MatchHandler::addMatchParticipant(1, $carryData["matches"], $match);
                 MatchHandler::addMatchParticipant(1, $carryData["looserMatches"], $match);
                 break;
@@ -141,13 +143,16 @@ class CompoHandler {
         
         while($numberOfObjects > 0) {
             //Create match
-            $match = MatchHandler::createMatch($time, "", $compo, $iteration); //TODO connectData
+            $chat = ChatHandler::createChat("match chat");
+            $match = MatchHandler::createMatch($time, "", $compo, $iteration, $chat->getId()); //TODO connectData
             array_push($carryObjects["matches"], $match);
 
             //Assign participants
             for($a = 0; $a < 2; $a++) {
                 if(count($carryClans) > 0) {
-                    MatchHandler::addMatchParticipant(0, array_shift($carryClans)->getId(), $match);
+                    $clan = array_shift($carryClans);
+                    MatchHandler::addMatchParticipant(0, $clan->getId(), $match);
+                    ChatHandler::addClanMembersToChat($chat, $clan);
                 } else {
                     MatchHandler::addMatchParticipant(1, array_shift($carryMatches)->getId(), $match);
                 }
@@ -186,7 +191,8 @@ class CompoHandler {
 
         while($looserCount > 0)
         {
-            $match = MatchHandler::createMatch($time, "", $compo, $iteration); //TODO connectData
+            $chat = ChatHandler::createChat("match chat");
+            $match = MatchHandler::createMatch($time, "", $compo, $iteration, $chat->getId()); //TODO connectData
 
             if(count($oldLooserCarry) > 0) {
                 MatchHandler::addMatchParticipant(MatchHandler::participantof_state_winner, array_shift($oldLooserCarry)->getId(), $match);
