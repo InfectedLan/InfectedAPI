@@ -28,6 +28,7 @@ class ApplicationHandler {
                                    $row['closedTime'], 
                                    $row['state'], 
                                    $row['content'], 
+								   $row['updatedByUserId'],
                                    $row['comment']);
         }
     }
@@ -242,27 +243,28 @@ class ApplicationHandler {
     /*
      * Accepts an application, with a optional comment.
      */
-    public static function acceptApplication($application, $comment, $notify) {
-        $mysql = MySQL::open(Settings::db_name_infected_crew);
-        
+    public static function acceptApplication($user, $application, $comment, $notify) {
 		// Only allow application for current event to be accepted.
 		if ($application->getEvent()->getId() == EventHandler::getCurrentEvent()->getId()) {
+			$mysql = MySQL::open(Settings::db_name_infected_crew);
+			
 			$mysql->query('UPDATE `' . Settings::db_table_infected_crew_applications . '` 
 						   SET `closedTime` = \'' . date('Y-m-d H:i:s') . '\',
 							   `state` = \'2\',
+							   `updatedByUserId` = \'' . $mysql->real_escape_string($user->getId()) . '\',
 							   `comment` = \'' . $mysql->real_escape_string($comment) . '\'
 						   WHERE `id` = \'' . $mysql->real_escape_string($application->getId()) . '\';');
 			
 			$mysql->close();
 			
-			$user = $application->getUser();
+			$applicationUser = $application->getUser();
 			$group = $application->getGroup();
 			
 			// Remove the application from the queue, if present.
 			self::unqueueApplication($application);
 			
 			// Reject users application for all other groups.
-			$applicationList = self::getUserApplications($user);
+			$applicationList = self::getUserApplications($applicationUser);
 			
 			foreach ($applicationList as $value) {
 				if ($group->getId() != $value->getGroup()->getId()) {
@@ -271,7 +273,7 @@ class ApplicationHandler {
 			}
 			
 			// Set the user in the new group
-			GroupHandler::changeGroupForUser($user, $group);
+			GroupHandler::changeGroupForUser($applicationUser, $group);
 			
 			// Notify the user by email, if notify is true.
 			if ($notify) {
@@ -284,15 +286,15 @@ class ApplicationHandler {
     /*
      * Rejects an application, with a optional comment.
      */
-    public static function rejectApplication($application, $comment, $notify) {
-        $mysql = MySQL::open(Settings::db_name_infected_crew);
-		
+    public static function rejectApplication($user, $application, $comment, $notify) {
 		// Only allow application for current event to be rejected.
 		if ($application->getEvent()->getId() == EventHandler::getCurrentEvent()->getId()) {
-        
+			$mysql = MySQL::open(Settings::db_name_infected_crew);
+			
 			$mysql->query('UPDATE `' . Settings::db_table_infected_crew_applications . '` 
 						   SET `closedTime` = \'' . date('Y-m-d H:i:s') . '\',
 							   `state` = \'3\', 
+							   `updatedByUserId` = \'' . $mysql->real_escape_string($user->getId()) . '\',
 							   `comment` = \'' . $mysql->real_escape_string($comment) . '\'
 						   WHERE `id` = \'' . $mysql->real_escape_string($application->getId()) . '\';');
 			
@@ -311,12 +313,13 @@ class ApplicationHandler {
     /*
      * Rejects an application, with a optional comment.
      */
-    public static function closeApplication($application) {
+    public static function closeApplication($user, $application) {
         $mysql = MySQL::open(Settings::db_name_infected_crew);
         
         $mysql->query('UPDATE `' . Settings::db_table_infected_crew_applications . '` 
                        SET `closedTime` = \'' . date('Y-m-d H:i:s') . '\',
                            `state` = \'4\',
+						   `updatedByUserId` = \'' . $mysql->real_escape_string($user->getId()) . '\',
                            `comment` = \'Closed by the system.\'
                        WHERE `id` = \'' . $mysql->real_escape_string($application->getId()) . '\';');
         
@@ -345,17 +348,21 @@ class ApplicationHandler {
     /*
      * Puts an application in queue.
      */
-    public static function queueApplication($application, $notify) {
-        $mysql = MySQL::open(Settings::db_name_infected_crew);
-        
+    public static function queueApplication($user, $application, $notify) {
 		// Only allow application for current event to be queued.
 		if ($application->getEvent()->getId() == EventHandler::getCurrentEvent()->getId()) {
 			if (!self::isQueued($application)) {
+				$mysql = MySQL::open(Settings::db_name_infected_crew);
+				
 				$mysql->query('INSERT INTO `' . Settings::db_table_infected_crew_applicationqueue . '` (`applicationId`) 
 							   VALUES (\'' . $mysql->real_escape_string($application->getId()) . '\');');
+							   
+				$mysql->query('UPDATE `' . Settings::db_table_infected_crew_applications . '` 
+							   SET `updatedByUserId` = \'' . $mysql->real_escape_string($user->getId()) . '\'
+							   WHERE `id` = \'' . $mysql->real_escape_string($application->getId()) . '\';');
+							   
+				$mysql->close();
 			}
-										
-			$mysql->close();
 			
 			// Notify the user by email, if notify is true.
 			if ($notify) {
@@ -367,13 +374,17 @@ class ApplicationHandler {
     /*
      * Removes an application from queue.
      */
-    public static function unqueueApplication($application) {
-        $mysql = MySQL::open(Settings::db_name_infected_crew);
-        
+    public static function unqueueApplication($user, $application) {
 		// Only allow application for current event to be unqueued.
 		if ($application->getEvent()->getId() == EventHandler::getCurrentEvent()->getId()) {
+			$mysql = MySQL::open(Settings::db_name_infected_crew);
+			
 			$mysql->query('DELETE FROM `' . Settings::db_table_infected_crew_applicationqueue . '` 
 						   WHERE `applicationId` = \'' . $mysql->real_escape_string($application->getId()) . '\';');
+						   
+			$mysql->query('UPDATE `' . Settings::db_table_infected_crew_applications . '` 
+			               SET `updatedByUserId` = \'' . $mysql->real_escape_string($user->getId()) . '\'
+			               WHERE `id` = \'' . $mysql->real_escape_string($application->getId()) . '\';');
                                     
 			$mysql->close();
 		}

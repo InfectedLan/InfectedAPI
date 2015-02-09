@@ -16,7 +16,7 @@ if (Session::isAuthenticated()) {
 			
 			// Only allow application for current event to be accepted.
 			if ($application->getEvent()->getId() == EventHandler::getCurrentEvent()->getId()) {
-				ApplicationHandler::unqueueApplication($application);
+				ApplicationHandler::unqueueApplication($user, $application);
 				$result = true;
 			} else {
 				$message = 'Kan ikke ta søknader for tidligere arrangementer ut av kø.';

@@ -21,7 +21,7 @@ if (Session::isAuthenticated()) {
 			
 				// Only allow application for current event to be rejected.
 				if ($application->getEvent()->getId() == EventHandler::getCurrentEvent()->getId()) {
-					ApplicationHandler::rejectApplication($application, $comment, true);
+					ApplicationHandler::rejectApplication($user, $application, $comment, true);
 					$result = true;
 				} else {
 					$message = 'Kan ikke avslå søknader for tidligere arrangementer.';
