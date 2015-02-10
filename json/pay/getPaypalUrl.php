@@ -13,41 +13,53 @@ if (Session::isAuthenticated()) {
 	$user = Session::getCurrentUser();
 	
 	if (isset($_GET['ticketType']) &&
-		isset($_GET['amount'])) {		
-		$type = $_GET['ticketType'];
+		isset($_GET['amount']) &&
+		is_numeric($_GET['ticketType']) &&
+		is_numeric($_GET['amount'])) {
+		$ticketType = TicketTypeHandler::getTicketType($_GET['ticketType']);
 		$amount = $_GET['amount'];
-
-		if(!StoreSessionHandler::hasStoreSession($user)) {
-			$ticketType = TicketTypeHandler::getTicketType($type);
-
-			$current = EventHandler::getCurrentEvent();
-			if($current->isBookingTime())
-			{
-				//Register store session
-				$price = $ticketType->getPriceForUser($user) * $amount;
+		$event = EventHandler::getCurrentEvent();
+		
+		// Only allow users to buy tickets within the booking time period.
+		if ($event->isBookingTime()) {
+			
+			// Verify that this type of ticket actually exists.
+			if ($ticketType != null) {
+				$availableCount = 0;
+				$amountLimit = 10;
 				
-				$code = StoreSessionHandler::registerStoreSession($user, $ticketType, $amount, $price);
+				// Check that ticket count isn't higher than the limit, and that available ticket count afterwards is still greater than zero.
+				if ($amount <= $amountLimit &&
+					($availableCount - $amount) >= 0) {
+					
+					// Check that the user don't already has a reserved set of tickets.
+					if (!StoreSessionHandler::hasStoreSession($user)) {
+						$price = $ticketType->getPriceForUser($user) * $amount;
+						$code = StoreSessionHandler::registerStoreSession($user, $ticketType, $amount, $price);
+						$url = PayPal::getPaymentUrl($ticketType, $amount, $code, $user);
 
-				$url = PayPal::getPaymentUrl($ticketType, $amount, $code, $user);
-
-				if (isset($url)) {
-					$result = true;
+						if (isset($url)) {
+							$result = true;
+						} else {
+							$message = 'Noe gikk galt da vi snakket med paypal';
+						}
+					} else {
+						$message = 'Du har allerede en session!';
+					}
 				} else {
-					$message = "Noe gikk galt da vi snakket med paypal";
+					$message = 'Du har enten valgt for mange billetter, eller så er det utsolgt.';
 				}
-			}
-			else
-			{
-				$message = "Billettsalget har ikke åpnet!";
+			} else {
+				$message = 'Du har valgt en ugyldig billett type.';
 			}
 		} else {
-			$message = "Du har allerede en session!";
+			$message = 'Billettsalget har ikke åpnet!';
 		}
 	} else {
 		$message = 'Du har ikke fyllt ut alle feltene.';
 	}
 } else {
-	$message = "Du er ikke logget inn!";
+	$message = 'Du er ikke logget inn!';
 } 
 
 if ($result) {
