@@ -1,6 +1,8 @@
 <?php
 require_once 'session.php';
 require_once 'handlers/restrictedpagehandler.php';
+require_once 'handlers/grouphandler.php';
+require_once 'handlers/teamhandler.php';
 
 $result = false;
 $message = null;
@@ -24,8 +26,10 @@ if (Session::isAuthenticated()) {
 					($page->getGroup()->getId() == $user->getGroup()->getId())) {
 					$title = $_GET['title'];
 					$content = $_GET['content'];
+					$group = isset($_GET['groupId']) ? GroupHandler::getGroup($_GET['groupId']) : $page->getGroup();
+					$team = isset($_GET['teamId']) ? TeamHandler::getTeam($_GET['teamId']) : $page->getTeam();
 					
-					RestrictedPageHandler::updatePage($page, $title, $content);
+					RestrictedPageHandler::updatePage($page, $title, $content, $group, $team);
 					$result = true;
 				} else {
 					$message = 'Du har ikke rettigheter til dette.';

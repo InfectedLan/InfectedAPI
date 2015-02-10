@@ -155,15 +155,15 @@ class RestrictedPageHandler {
     /* 
      * Create a new page.
      */
-    public static function createPage($name, $title, $content, $groupId, $teamId) {
+    public static function createPage($name, $title, $content, $group, $team) {
         $mysql = MySQL::open(Settings::db_name_infected_crew);
         
         $mysql->query('INSERT INTO `' . Settings::db_table_infected_crew_pages . '` (`name`, `title`, `content`, `groupId`, `teamId`) 
                        VALUES (\'' . $mysql->real_escape_string($name) . '\', 
                                \'' . $mysql->real_escape_string($title) . '\', 
                                \'' . $mysql->real_escape_string($content) . '\', 
-                               \'' . $mysql->real_escape_string($groupId) . '\', 
-                               \'' . $mysql->real_escape_string($teamId) . '\')');
+                               \'' . $mysql->real_escape_string(($group != null ? $group->getId() : '0')) . '\', 
+                               \'' . $mysql->real_escape_string(($team != null ? $team->getId() : '0')) . '\')');
         
         $mysql->close();
     }
@@ -171,12 +171,14 @@ class RestrictedPageHandler {
 	/*
      * Update a page.
      */
-    public static function updatePage($page, $title, $content) {
+    public static function updatePage($page, $title, $content, $group, $team) {
         $mysql = MySQL::open(Settings::db_name_infected_crew);
         
         $mysql->query('UPDATE `' . Settings::db_table_infected_crew_pages . '` 
                        SET `title` = \'' . $mysql->real_escape_string($title) . '\', 
-                           `content` = \'' . $mysql->real_escape_string($content) . '\' 
+                           `content` = \'' . $mysql->real_escape_string($content) . '\',
+						   `groupId` = \'' . $mysql->real_escape_string($group->getId()) . '\', 
+						   `teamId` = \'' . $mysql->real_escape_string($team->getId()) . '\'
                        WHERE `id` = \'' . $mysql->real_escape_string($page->getId()) . '\';');
         
         $mysql->close();
