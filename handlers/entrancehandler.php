@@ -27,7 +27,7 @@ class EntranceHandler {
     /*
      * Get an entrance by name.
      */
-    public static function getEntrance($name) {
+    public static function getEntranceByName($name) {
         $mysql = MySQL::open(Settings::db_name_infected_tickets);
 
         $result = $mysql->query('SELECT `id` FROM `' . Settings::db_table_infected_tickets_entrances . '` 
@@ -38,7 +38,7 @@ class EntranceHandler {
         $row = $result->fetch_array();
 
         if ($row) {
-            return self::getEntrance($row['id']));
+            return self::getEntrance($row['id']);
         }
     }
 
