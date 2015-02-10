@@ -55,18 +55,18 @@ class RestrictedPageHandler {
                                              AND (`teamId` = \'0\' OR `teamId` = \'' . $mysql->real_escape_string($user->getTeam()->getId()) . '\');');
                 } else {
                     $result = $mysql->query('SELECT * FROM `' . Settings::db_table_infected_crew_pages . '`
-                                             WHERE `name` = \'' . $mysql->real_escape_string($id) . '\' 
+                                             WHERE `name` = \'' . $mysql->real_escape_string($name) . '\' 
                                              AND (`groupId` = \'0\' OR `groupId` = \'' . $mysql->real_escape_string($user->getGroup()->getId()) . '\') 
                                              AND `teamId` = \'0\';');
                 }
 				
 				$mysql->close();
-            }
-			
-            $row = $result->fetch_array();
+				
+				$row = $result->fetch_array();
             
-            if ($row) {
-                return self::getPage($row['id']);
+				if ($row) {
+					return self::getPage($row['id']);
+				}
             }
         }
     }
