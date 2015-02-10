@@ -14,10 +14,10 @@ class ApplicationHandler {
         
         $result = $mysql->query('SELECT * FROM `' . Settings::db_table_infected_crew_applications . '` 
                                  WHERE `id` = \'' . $mysql->real_escape_string($id) . '\';');
-                                      
-        $row = $result->fetch_array();
         
         $mysql->close();
+
+        $row = $result->fetch_array();
 
         if ($row) {
             return new Application($row['id'], 
@@ -41,13 +41,13 @@ class ApplicationHandler {
         
         $result = $mysql->query('SELECT `id` FROM `' . Settings::db_table_infected_crew_applications . '`;');
         
+        $mysql->close();
+
         $applicationList = array();
         
         while ($row = $result->fetch_array()) {
             array_push($applicationList, self::getApplication($row['id']));
         }
-        
-        $mysql->close();
         
         return $applicationList;
     }
@@ -66,13 +66,13 @@ class ApplicationHandler {
                                  AND `state` = \'1\'
                                  ORDER BY `openedTime`;');
         
+        $mysql->close();
+
         $applicationList = array();
         
         while ($row = $result->fetch_array()) {
             array_push($applicationList, self::getApplication($row['id']));
         }
-        
-        $mysql->close();
         
         return $applicationList;
     }
@@ -92,13 +92,13 @@ class ApplicationHandler {
                                  AND `state` = \'1\'
                                  ORDER BY `openedTime`;');
         
+        $mysql->close();
+
         $applicationList = array();
         
         while ($row = $result->fetch_array()) {
             array_push($applicationList, self::getApplication($row['id']));
         }
-        
-        $mysql->close();
         
         return $applicationList;
     }
@@ -117,13 +117,13 @@ class ApplicationHandler {
                                  AND `state` = \'1\'
                                  ORDER BY `' . Settings::db_table_infected_crew_applicationqueue . '`.`id`;');
         
+        $mysql->close();
+
         $queuedApplicationList = array();
         
         while ($row = $result->fetch_array()) {
             array_push($queuedApplicationList, self::getApplication($row['id']));
         }
-        
-        $mysql->close();
         
         return $queuedApplicationList;
     }
@@ -143,13 +143,13 @@ class ApplicationHandler {
                                  AND `state` = \'1\'
                                  ORDER BY `' . Settings::db_table_infected_crew_applicationqueue . '`.`id`;');
         
+        $mysql->close();
+
         $queuedApplicationList = array();
         
         while ($row = $result->fetch_array()) {
             array_push($queuedApplicationList, self::getApplication($row['id']));
         }
-        
-        $mysql->close();
         
         return $queuedApplicationList;
     }
@@ -338,10 +338,11 @@ class ApplicationHandler {
         $result = $mysql->query('SELECT `id` FROM `' . Settings::db_table_infected_crew_applicationqueue . '` 
                                  WHERE `applicationId` = \'' . $mysql->real_escape_string($application->getId()) . '\';');
         
-        $row = $result->fetch_array();
-        
+
         $mysql->close();
-        
+
+        $row = $result->fetch_array();
+                
         return $row ? true : false;
     }
     
@@ -402,9 +403,9 @@ class ApplicationHandler {
                                  AND `groupId` = \'' . $mysql->real_escape_string($group->getId()) . '\'
                                  AND (`state` = \'1\' OR `state` = \'2\');');
         
+        $mysql->close();
+
         $row = $result->fetch_array();
-        
-		$mysql->close();
 		
         return $row ? true : false;
     }
@@ -421,9 +422,9 @@ class ApplicationHandler {
                                  AND `groupId` = \'' . $mysql->real_escape_string($group->getId()) . '\'
                                  AND (`state` = \'1\' OR `state` = \'2\');');
         
-        $row = $result->fetch_array();
-        
         $mysql->close();
+
+        $row = $result->fetch_array();
         
         return self::getApplication($row['id']);
     }
@@ -438,13 +439,13 @@ class ApplicationHandler {
                                  WHERE `eventId` = \'' . EventHandler::getCurrentEvent()->getId() . '\'
                                  AND `userId` = \'' . $user->getId() . '\';');
         
+        $mysql->close();
+
         $applicationList = array();
         
         while ($row = $result->fetch_array()) {
             array_push($applicationList, self::getApplication($row['id']));
         }
-        
-        $mysql->close();
         
         return $applicationList;
     }
@@ -458,13 +459,13 @@ class ApplicationHandler {
         $result = $mysql->query('SELECT `id` FROM `' . Settings::db_table_infected_crew_applications . '`
                                  WHERE `eventId` = \'' . $event->getId() . '\';');
         
+        $mysql->close();
+
         $applicationList = array();
         
         while ($row = $result->fetch_array()) {
             array_push($applicationList, self::getApplication($row['id']));
         }
-        
-        $mysql->close();
         
         return $applicationList;
     }

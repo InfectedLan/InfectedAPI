@@ -10,8 +10,8 @@ class AgendaHandler {
         $result = $mysql->query('SELECT * FROM `' . Settings::db_table_infected_main_agenda . '` 
                                  WHERE `id` = \'' . $mysql->real_escape_string($id) . '\';');
         
-		$mysql->close();
-		
+		    $mysql->close();
+		    
         $row = $result->fetch_array();
         
         if ($row) {
@@ -25,9 +25,9 @@ class AgendaHandler {
         }
     }
     
-	/*
-	 * Returns agendas.
-	 */
+    /*
+	   * Returns agendas.
+	   */
     public static function getAgendas() {
         $mysql = MySQL::open(Settings::db_name_infected_main);
         
@@ -46,8 +46,8 @@ class AgendaHandler {
         return $agendaList;
     }
 	
-	/*
-	 * Returns published agendas.
+  /*
+   * Returns published agendas.
 	 */
 	public static function getPublishedAgendas() {
         $mysql = MySQL::open(Settings::db_name_infected_main);
@@ -56,13 +56,13 @@ class AgendaHandler {
 								 WHERE `eventId` = \'' . EventHandler::getCurrentEvent()->getId() . '\'
 								 AND `published` = \'1\'
 								 ORDER BY `startTime`;');
-								 
-		$mysql->close();	
-	   
+				
+		    $mysql->close();	
+
         $agendaList = array();
         
         while ($row = $result->fetch_array()) {
-            array_push($agendaList, self::getAgenda($row['id']));
+          array_push($agendaList, self::getAgenda($row['id']));
         }
         
         return $agendaList;
@@ -80,7 +80,7 @@ class AgendaHandler {
 								 AND `published` = \'1\'
 								 ORDER BY `startTime`;');
 								 
-		$mysql->close();	
+        $mysql->close();	
 	   
         $agendaList = array();
         
@@ -99,19 +99,19 @@ class AgendaHandler {
                                       BETWEEN ' . $mysql->real_escape_string($first) . ' 
                                       AND ' . $mysql->real_escape_string($last) . '
                                       ORDER BY `startTime`;');
-		
+		    
         $mysql->close();
-		
+		    
         $agendaList = array();
         
         while ($row = $result->fetch_array()) {
-            array_push($agendaList, self::getAgenda($row['id']));
+          array_push($agendaList, self::getAgenda($row['id']));
         }
         
         return $agendaList;
     }
 	
-	/* 
+    /* 
      * Create a new agenda entry.
      */
     public static function createAgenda($event, $name, $title, $description, $startTime) {
@@ -127,18 +127,18 @@ class AgendaHandler {
         $mysql->close();
     }
     
-	/*
+    /*
      * Update an agenda.
      */
     public static function updateAgenda($agenda, $title, $description, $startTime, $published) {
         $mysql = MySQL::open(Settings::db_name_infected_main);
         
         $mysql->query('UPDATE `' . Settings::db_table_infected_main_agenda . '` 
-                            SET `title` = \'' . $mysql->real_escape_string($title) . '\', 
-                                `description` = \'' . $mysql->real_escape_string($description) . '\', 
-                                `startTime` = \'' . $mysql->real_escape_string($startTime) . '\',
-								`published` = \'' . $mysql->real_escape_string($published) . '\'
-                            WHERE `id` = \'' . $mysql->real_escape_string($agenda->getId()) . '\';');
+                       SET `title` = \'' . $mysql->real_escape_string($title) . '\', 
+                           `description` = \'' . $mysql->real_escape_string($description) . '\', 
+                           `startTime` = \'' . $mysql->real_escape_string($startTime) . '\',
+								           `published` = \'' . $mysql->real_escape_string($published) . '\'
+                       WHERE `id` = \'' . $mysql->real_escape_string($agenda->getId()) . '\';');
         
         $mysql->close();
     }

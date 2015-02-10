@@ -6,15 +6,15 @@ class CityDictionary {
     /* 
      * Returns the city from given postalcode.
      */
-    public static function getCity($postalcode) {
+    public static function getCity($postalCode) {
         $mysql = MySQL::open(Settings::db_name_infected);
         
         $result = $mysql->query('SELECT `city` FROM `' . Settings::db_table_infected_postalcodes . '`
-                                      WHERE `code` = \'' . $mysql->real_escape_string($postalcode) . '\';');
-                                      
-        $row = $result->fetch_array();
+                                 WHERE `code` = \'' . $mysql->real_escape_string($postalCode) . '\';');
         
         $mysql->close();
+
+        $row = $result->fetch_array();
         
         if ($row) {
             return ucfirst(strtolower($row['city']));
@@ -28,26 +28,29 @@ class CityDictionary {
         $mysql = MySQL::open(Settings::db_name_infected);
         
         $result = $mysql->query('SELECT `code` FROM `' . Settings::db_table_infected_postalcodes . '` 
-                                      WHERE `city` = \'' . $mysql->real_escape_string($city) . '\';');
-        
-        $row = $result->fetch_array();
+                                 WHERE `city` = \'' . $mysql->real_escape_string($city) . '\';');
         
         $mysql->close();
+
+        $row = $result->fetch_array();
         
         if ($row) {
             return $row['city'];
         }
     }
     
-    public static function hasPostalCode($code) {
+    /*
+     * Return true if the specified postal code exists.
+     */
+    public static function hasPostalCode($postalCode) {
         $mysql = MySQL::open(Settings::db_name_infected);
         
         $result = $mysql->query('SELECT `id` FROM `' . Settings::db_table_infected_postalcodes . '` 
-                                      WHERE `code` = \'' . $mysql->real_escape_string($code) . '\';');
-        
-        $row = $result->fetch_array();
+                                 WHERE `code` = \'' . $mysql->real_escape_string($postalCode) . '\';');
         
         $mysql->close();
+
+        $row = $result->fetch_array();
         
         return $row ? true : false;
     }
