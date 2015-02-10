@@ -28,7 +28,7 @@ class ChatHandler {
 	/*
  	 * Adds entire clan to chat
  	 */
-	public static addClanMembersToChat($chat, $clan) {
+	public static function addClanMembersToChat($chat, $clan) {
 		//Let all chat members chat, just because
 		$members = $clan->getMembers();
 		foreach($members as $member) {
@@ -69,7 +69,7 @@ class ChatHandler {
 		$row = $result->fetch_array();
 		
         if ($row) {
-            return new ChatMessage($row['id']);
+            return new ChatMessage($row['id'], $row['userId'], $row['chatId'], $row['message']);
         }
 	}
 	
@@ -100,8 +100,8 @@ class ChatHandler {
 		
 		$result = $mysql->query('SELECT `id` FROM `' . Settings::db_table_infected_compo_chatmessages . '`
                                  WHERE `chatId` = \'' . $mysql->real_escape_string($chat->getId()) . '\'
-                                 ORDER BY `id` ASC
-								 LIMIT ' . $count . ';');
+                                 ORDER BY `id` DESC
+								 LIMIT 1;');
         
 		$mysql->close();
 		
@@ -120,8 +120,8 @@ class ChatHandler {
 		
 		$result = $mysql->query('SELECT `id` FROM `' . Settings::db_table_infected_compo_chatmessages . '`
                                  WHERE `chatId` = \'' . $mysql->real_escape_string($chat->getId()) . '\'
-                                 ORDER BY `id` ASC
-								 LIMIT ' . $count . ';');
+                                 ORDER BY `id` DESC
+								 LIMIT ' . $mysql->real_escape_string($count) . ';');
         
 		$mysql->close();
 		

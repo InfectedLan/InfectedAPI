@@ -23,6 +23,7 @@ if (Session::isAuthenticated()) {
 			$matchData['compoId'] = $match->getCompoId();
 			$matchData['currentTime'] = time(); //Used for synchronizing time
 			$matchData['startTime'] = $match->getScheduledTime();
+			$matchData['chatId'] = $match->getChat();
 			if($match->getState() == Match::STATE_READYCHECK && $match->isReady()) {
 				$readyData = array();
 
