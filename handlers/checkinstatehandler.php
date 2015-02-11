@@ -7,21 +7,15 @@ class CheckinStateHandler {
     /*
      * Get a check in state based on id.
      */
-    public static function getCheckinState($id) {
+    public static function getCheckInState($id) {
         $mysql = MySQL::open(Settings::db_name_infected_tickets);
         
         $result = $mysql->query('SELECT * FROM `' . Settings::db_table_infected_tickets_checkinstate . '` 
                                  WHERE `id` = \'' . $id . '\';');
         
         $mysql->close();
-
-        $row = $result->fetch_array();
-        
-        if ($row) {
-            return new CheckinState($row['id'], 
-                                    $row['ticketId'],
-                                    $row['userId']);
-        }
+		
+		return $result->fetch_object('CheckInState');
     }
 
     /*

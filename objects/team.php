@@ -12,16 +12,6 @@ class Team extends Object {
 	private $description;
 	private $leader;
 	
-	public function __construct($id, $groupId, $name, $title, $description, $leader) {
-		parent::__construct($id);
-		
-		$this->groupId = $groupId;
-		$this->name = $name;
-		$this->title = $title;
-		$this->description = $description;
-		$this->leader = $leader;
-	}
-	
 	public function getGroup() {
 		return GroupHandler::getGroup($this->groupId);
 	}

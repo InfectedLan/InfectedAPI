@@ -8,31 +8,26 @@ class InviteHandler {
         $mysql = MySQL::open(Settings::db_name_infected_compo);
         
         $result = $mysql->query('SELECT * FROM `' . Settings::db_table_infected_compo_invites . '` 
-                                      WHERE `id` = \'' . $id . '\';');
-        
-        $row = $result->fetch_array();
+                                 WHERE `id` = \'' . $id . '\';');
         
         $mysql->close();
-        
-        if ($row) {
-            return new Invite($row['id'], 
-                              $row['userId'], 
-                              $row['clanId']);
-        }
+		
+		return $result->fetch_object('Invite');
     }
+	
     public static function getInvitesForUser($user) {
         $mysql = MySQL::open(Settings::db_name_infected_compo);
 
         $result = $mysql->query('SELECT * FROM `'  . Settings::db_table_infected_compo_invites . '` 
-                                      WHERE `userId` = ' . $mysql->real_escape_string($user->getId()) . ';');
-    
+                                 WHERE `userId` = ' . $mysql->real_escape_string($user->getId()) . ';');
+        
+        $mysql->close();
+
         $inviteList = array();
 
-        while ($row = $result->fetch_array()) {
-            array_push($inviteList, self::getInvite($row['id']) );
+        while ($object = $result->fetch_object('Invite')) {
+            array_push($inviteList, $object);
         }
-
-        $mysql->close();
 
         return $inviteList;
     }
@@ -41,15 +36,15 @@ class InviteHandler {
         $mysql = MySQL::open(Settings::db_name_infected_compo);
 
         $result = $mysql->query('SELECT * FROM `' . Settings::db_table_infected_compo_invites . '` 
-                                      WHERE `clanId` = ' . $mysql->real_escape_string( $clan->getId() ) . ';');
-    
+                                 WHERE `clanId` = ' . $mysql->real_escape_string( $clan->getId() ) . ';');
+        
+        $mysql->close();
+
         $inviteList = array();
 
-        while ($row = $result->fetch_array()) {
-            array_push($inviteList, self::getInvite($row['id']) );
+        while ($object = $result->fetch_object('Invite')) {
+            array_push($inviteList, $object);
         }
-
-        $mysql->close();
 
         return $userList;
     }

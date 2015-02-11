@@ -8,13 +8,6 @@ class Invite extends Object{
 	private $userId;
 	private $clanId;
 
-	public function __construct($id, $userId, $clanId) {
-		parent::__construct($id);
-		
-		$this->userId = $userId;
-		$this->clanId = $clanId;
-	}
-
 	public function getUserId() {
 		return $this->userId;
 	}
@@ -41,7 +34,7 @@ class Invite extends Object{
 		$memberList = ClanHandler::getPlayingMembers($clan);
 		$compo = ClanHandler::getCompo($clan);
 
-		if(count($memberList) < $compo->getTeamSize()) {
+		if (count($memberList) < $compo->getTeamSize()) {
 			mysqli_query($con, 'INSERT INTO `' . Settings::db_table_infected_compo_memberof . '` (`userId`, `clanId`, `stepin`) VALUES (' . $this->userId . ', ' . $this->clanId . ', 0);');
 		} else {
 			mysqli_query($con, 'INSERT INTO `' . Settings::db_table_infected_compo_memberof . '` (`userId`, `clanId`, `stepin`) VALUES (' . $this->userId . ', ' . $this->clanId . ', 1);');

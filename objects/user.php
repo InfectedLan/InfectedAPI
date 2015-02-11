@@ -16,7 +16,7 @@ require_once 'objects/object.php';
 /*
  * Used to store information about a user.
  */
-class User extends Object {	
+class User extends Object {
 	private $firstname;
 	private $lastname;
 	private $username;
@@ -28,24 +28,7 @@ class User extends Object {
 	private $address;
 	private $postalcode;
 	private $nickname;
-	private $registeredDate;
-	
-	public function __construct($id, $firstname, $lastname, $username, $password, $email, $birthdate, $gender, $phone, $address, $postalcode, $nickname, $registeredDate) {
-		parent::__construct($id);
-		
-		$this->firstname = $firstname;
-		$this->lastname = $lastname;
-		$this->username = $username;
-		$this->password = $password;
-		$this->email = $email;
-		$this->birthdate = $birthdate;
-		$this->gender = $gender;
-		$this->phone = $phone;
-		$this->address = $address;
-		$this->postalcode = $postalcode;
-		$this->nickname = $nickname;
-		$this->registeredDate = $registeredDate;
-	}
+	private $registereddate;
 	
 	/* 
 	 * Returns the users firstname.
@@ -151,7 +134,7 @@ class User extends Object {
 	 * Returns the date which this user was registered.
 	 */
 	public function getRegisteredDate() {
-		return strtotime($this->registeredDate);
+		return strtotime($this->registereddate);
 	}
 	
 	/*

@@ -11,12 +11,12 @@ class PasswordResetCodeHandler {
         
         if (!self::hasPasswordResetCode($user)) {
             $mysql->query('INSERT INTO `' . Settings::db_table_infected_passwordresetcodes . '` (`userId`, `code`) 
-                                VALUES (\'' . $mysql->real_escape_string($user->getId()) . '\', 
-                                        \'' . $mysql->real_escape_string($code) . '\');');
+                           VALUES (\'' . $mysql->real_escape_string($user->getId()) . '\', 
+                                   \'' . $mysql->real_escape_string($code) . '\');');
         } else {
             $mysql->query('UPDATE `' . Settings::db_table_infected_passwordresetcodes . '` 
-                                SET `code` = \'' . $mysql->real_escape_string($code) . '\'
-                                WHERE `userId` = \'' . $mysql->real_escape_string($user->getId()) . '\';');
+                           SET `code` = \'' . $mysql->real_escape_string($code) . '\'
+                           WHERE `userId` = \'' . $mysql->real_escape_string($user->getId()) . '\';');
         }
         
         $mysql->close();
@@ -28,11 +28,11 @@ class PasswordResetCodeHandler {
         $mysql = MySQL::open(Settings::db_name_infected);
         
         $result = $mysql->query('SELECT `id` FROM `' . Settings::db_table_infected_passwordresetcodes . '` 
-                                      WHERE `userId` = \'' . $mysql->real_escape_string($user->getId()) . '\';');
+                                 WHERE `userId` = \'' . $mysql->real_escape_string($user->getId()) . '\';');
                             
-        $row = $result->fetch_array();
-        
         $mysql->close();
+
+        $row = $result->fetch_array();
 
         return $row ? true : false;
     }
@@ -41,11 +41,11 @@ class PasswordResetCodeHandler {
         $mysql = MySQL::open(Settings::db_name_infected);
         
         $result = $mysql->query('SELECT `id` FROM `' . Settings::db_table_infected_passwordresetcodes . '` 
-                                      WHERE `code` = \'' . $mysql->real_escape_string($code) . '\';');
-                            
-        $row = $result->fetch_array();
-        
+                                 WHERE `code` = \'' . $mysql->real_escape_string($code) . '\';');
+                      
         $mysql->close();
+
+        $row = $result->fetch_array();
 
         return $row ? true : false;
     }
@@ -54,11 +54,11 @@ class PasswordResetCodeHandler {
         $mysql = MySQL::open(Settings::db_name_infected);
         
         $result = $mysql->query('SELECT `userId` FROM `' . Settings::db_table_infected_passwordresetcodes . '` 
-                                      WHERE `code` = \'' . $mysql->real_escape_string($code) . '\';');
-                            
-        $row = $result->fetch_array();
+                                 WHERE `code` = \'' . $mysql->real_escape_string($code) . '\';');
         
         $mysql->close();
+
+        $row = $result->fetch_array();
 
         if ($row) {
             return UserHandler::getUser($row['userId']);
@@ -69,7 +69,7 @@ class PasswordResetCodeHandler {
         $mysql = MySQL::open(Settings::db_name_infected);
         
         $mysql->query('DELETE FROM `' . Settings::db_table_infected_passwordresetcodes . '` 
-                            WHERE `code` = \'' . $mysql->real_escape_string($code) . '\';');
+                       WHERE `code` = \'' . $mysql->real_escape_string($code) . '\';');
         
         $mysql->close();
     }
@@ -78,7 +78,7 @@ class PasswordResetCodeHandler {
         $mysql = MySQL::open(Settings::db_name_infected);
         
         $mysql->query('DELETE FROM `' . Settings::db_table_infected_passwordresetcodes . '` 
-                            WHERE `userId` = \'' . $mysql->real_escape_string($user->getId()) . '\';');
+                       WHERE `userId` = \'' . $mysql->real_escape_string($user->getId()) . '\';');
         
         $mysql->close();
     }

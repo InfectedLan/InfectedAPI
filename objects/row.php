@@ -10,26 +10,6 @@ class Row extends Object {
 	private $seatmap;
 
 	/*
-	 * Row - implementation of a section of seats
-	 *
-	 * Id: Unique id of section
-	 * Number: Row number
-	 * X: X coordinate of section
-	 * Y: Y coordinate of section
-	 * Entrance: Entrance number
-	 * Event: Event this section belongs to
-	 */ 
-	public function __construct($id, $number, $x, $y, $entrance, $seatmap) {
-		parent::__construct($id);
-		
-		$this->number = $number;
-		$this->x = $x;
-		$this->y = $y;
-		$this->entrance = $entrance;
-		$this->seatmap = $seatmap;
-	}
-
-	/*
 	 * Returns the row of the section
 	 */
 	public function getNumber() {

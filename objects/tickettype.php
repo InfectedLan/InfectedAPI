@@ -8,22 +8,6 @@ class TicketType extends Object {
 	private $price;
 	private $internalName;
 
-	/*
-	 * Ticket type
-	 *
-	 * Ticket type implementation
-	 *
-	 * Id: Unique id of ticket type
-	 * HumanName: Human readable name for tickets
-	 */
-	public function __construct($id, $humanName, $price, $internalName) {
-		parent::__construct($id);
-		
-		$this->humanName = $humanName;
-		$this->price = $price;
-		$this->internalName = $internalName;
-	}
-
 	public function getHumanName() {
 		return $this->humanName;
 	}

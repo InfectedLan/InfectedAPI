@@ -8,16 +8,11 @@ class ReadyHandlerHandler {
         $mysql = MySQL::open(Settings::db_name_infected_compo);
         
         $result = $mysql->query('SELECT * FROM `' . Settings::db_table_infected_compo_readyInstances . '` 
-                                      WHERE `id` = \'' . $id . '\';');
-        
-        $row = $result->fetch_array();
+                                 WHERE `id` = \'' . $id . '\';');
         
         $mysql->close();
-        
-        if ($row) {
-            return new ReadyHandler($row['id'], 
-                                    $row['compoId']);
-        }
+		
+		return $result->fetch_object('ReadyHandler');
     }
 }
 ?>

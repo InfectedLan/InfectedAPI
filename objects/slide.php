@@ -11,18 +11,6 @@ class Slide extends Object {
 	private $endTime;
 	private $published;
 	
-	public function __construct($id, $eventId, $name, $title, $content, $startTime, $endTime, $published) {
-		parent::__construct($id);
-
-		$this->eventId = $eventId;
-		$this->name = $name;
-		$this->title = $title;
-		$this->content = $content;
-		$this->startTime = $startTime;
-		$this->endTime = $endTime;
-		$this->published = $published;
-	}
-	
 	public function getEvent() {
 		return EventHandler::getEvent($this->eventId);
 	}

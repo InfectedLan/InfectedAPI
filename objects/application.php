@@ -15,20 +15,6 @@ class Application extends Object {
 	private $updatedByUserId;
 	private $comment;
 	
-	public function __construct($id, $eventId, $groupId, $userId, $openedTime, $closedTime, $state, $content, $updatedByUserId, $comment) {
-		parent::__construct($id);
-		
-		$this->eventId = $eventId;
-		$this->groupId = $groupId;
-		$this->userId = $userId;
-		$this->openedTime = $openedTime;
-		$this->closedTime = $closedTime;
-		$this->state = $state;
-		$this->content = $content;
-		$this->updatedByUserId = $updatedByUserId;
-		$this->comment = $comment;
-	}
-	
 	/*
 	 * Returns the event this application was submitted to.
 	 */

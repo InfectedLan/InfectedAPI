@@ -16,18 +16,8 @@ class GroupHandler {
                                  WHERE `id` = \'' . $mysql->real_escape_string($id) . '\';');
         
         $mysql->close();
-
-        $row = $result->fetch_array();
-
-        if ($row) {
-            return new Group($row['id'], 
-                             $row['name'], 
-                             $row['title'], 
-                             $row['description'], 
-                             $row['leader'],
-							 $row['coleader'],
-                             $row['queuing']);
-        }
+		
+		return $result->fetch_object('Group');
     }
     
     /* 
@@ -55,15 +45,15 @@ class GroupHandler {
     public static function getGroups() {
         $mysql = MySQL::open(Settings::db_name_infected_crew);
         
-        $result = $mysql->query('SELECT `id` FROM `' . Settings::db_table_infected_crew_groups . '` 
+        $result = $mysql->query('SELECT * FROM `' . Settings::db_table_infected_crew_groups . '` 
                                  ORDER BY `name`;');
         
         $mysql->close();
 
         $groupList = array();
         
-        while ($row = $result->fetch_array()) {
-            array_push($groupList, self::getGroup($row['id']));
+        while ($object = $result->fetch_object('Group')) {
+            array_push($groupList, $object);
         }
         
         return $groupList;
@@ -144,7 +134,7 @@ class GroupHandler {
     public static function isGroupMember($user) {
         $mysql = MySQL::open(Settings::db_name_infected_crew);
         
-        $result = $mysql->query('SELECT `groupId` FROM `' . Settings::db_table_infected_crew_memberof . '`
+        $result = $mysql->query('SELECT `id` FROM `' . Settings::db_table_infected_crew_memberof . '`
                                  WHERE `eventId` = \'' . EventHandler::getCurrentEvent()->getId() . '\'
 								 AND `userId` = \'' . $mysql->real_escape_string($user->getId()) . '\'
                                  AND `groupId` != \'0\';');
@@ -162,8 +152,7 @@ class GroupHandler {
     public static function isGroupLeader($user) {
         $mysql = MySQL::open(Settings::db_name_infected_crew);
         
-        $result = $mysql->query('SELECT `leader` 
-                                 FROM `' . Settings::db_table_infected_crew_groups . '` 
+        $result = $mysql->query('SELECT `id` FROM `' . Settings::db_table_infected_crew_groups . '` 
                                  WHERE `leader` = \'' . $mysql->real_escape_string($user->getId()) . '\';');
 		$mysql->close();
 
@@ -178,8 +167,7 @@ class GroupHandler {
     public static function isGroupCoLeader($user) {
         $mysql = MySQL::open(Settings::db_name_infected_crew);
         
-        $result = $mysql->query('SELECT `coleader` 
-                                 FROM `' . Settings::db_table_infected_crew_groups . '` 
+        $result = $mysql->query('SELECT `id` FROM `' . Settings::db_table_infected_crew_groups . '` 
                                  WHERE `coleader` = \'' . $mysql->real_escape_string($user->getId()) . '\';');
         
         $mysql->close();

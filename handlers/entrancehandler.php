@@ -14,14 +14,8 @@ class EntranceHandler {
                                  WHERE `id` = \'' . $mysql->real_escape_string($id) . '\';');
                                     
         $mysql->close();
-
-        $row = $result->fetch_array();
-
-        if ($row) {
-            return new Entrance($row['id'],
-                                $row['name'], 
-                                $row['title']);
-        }
+		
+		return $result->fetch_object('Entrance');
     }
     
     /*
@@ -30,16 +24,12 @@ class EntranceHandler {
     public static function getEntranceByName($name) {
         $mysql = MySQL::open(Settings::db_name_infected_tickets);
 
-        $result = $mysql->query('SELECT `id` FROM `' . Settings::db_table_infected_tickets_entrances . '` 
+        $result = $mysql->query('SELECT * FROM `' . Settings::db_table_infected_tickets_entrances . '` 
                                  WHERE `name` = \'' . $mysql->real_escape_string($name) . '\';');
                                     
         $mysql->close();
 
-        $row = $result->fetch_array();
-
-        if ($row) {
-            return self::getEntrance($row['id']);
-        }
+        return $result->fetch_object('Entrance');
     }
 
     /*
@@ -48,14 +38,14 @@ class EntranceHandler {
     public static function getEntrances() {
         $mysql = MySQL::open(Settings::db_name_infected_tickets);
 
-        $result = $mysql->query('SELECT `id` FROM `' . Settings::db_table_infected_tickets_entrance . '`;');
+        $result = $mysql->query('SELECT * FROM `' . Settings::db_table_infected_tickets_entrance . '`;');
 
         $mysql->close();
 
         $entranceList = array();
 
-        while($row = $result->fetch_array()) {
-            array_push($entranceList, self::getEntrance($row['id']));
+        while ($object = $result->fetch_object('Entrance')) {
+            array_push($entranceList, $object);
         }
 
         return $entranceList;
