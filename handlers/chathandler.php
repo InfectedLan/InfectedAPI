@@ -60,7 +60,7 @@ class ChatHandler {
                                       
         $mysql->close();
         
-		return $result->fetch_object('Chat');
+		return $result->fetch_object('ChatMessage');
 	}
 	
 	/*
@@ -95,7 +95,7 @@ class ChatHandler {
         
 		$mysql->close();
 		
-		return $result->fetch_object('Chat');
+		return $result->fetch_object('ChatMessage');
 	}
 	
 	/*
