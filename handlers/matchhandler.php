@@ -23,6 +23,7 @@ class MatchHandler {
                                  WHERE `id` = \'' . $id . '\';');
         
         $mysql->close();
+        
         if ($row) {
             return new Match($row['id'], 
                              $row['scheduledTime'], 

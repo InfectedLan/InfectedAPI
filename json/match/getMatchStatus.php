@@ -182,7 +182,7 @@ if (Session::isAuthenticated()) {
 	$message = 'Du er ikke logget inn.';
 }
 
-if($result) {
+if ($result) {
 	echo json_encode(array('result' => $result, 'matchData' => $matchData));
 } else {
 	echo json_encode(array('result' => $result, 'message' => $message));

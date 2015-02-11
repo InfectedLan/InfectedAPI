@@ -37,5 +37,12 @@ class Compo extends Object {
 	public function getTag() {
 		return $this->tag;
 	}
+
+	/*
+	 * Return a list of all matches for this compo.
+	 */ 
+	public function getMatches() {
+		return MatchHandler::getMatchesForCompo($this);
+	}
 }
 ?>
