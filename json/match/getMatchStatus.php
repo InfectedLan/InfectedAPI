@@ -17,7 +17,7 @@ if (Session::isAuthenticated()) {
 	if(isset($_GET['id'])) {
 		$match = MatchHandler::getMatch($_GET['id']);
 
-		if($match->isParticipant($user)|| $user->hasPermission('*') || $user->hasPermission('functions.compoadmin')) {
+		if($match->isParticipant($user)|| $user->hasPermission('*') || $user->hasPermission('event.compo')) {
 			$matchData['state'] = $match->getState();
 			$matchData['ready'] = $match->isReady();
 			$matchData['compoId'] = $match->getCompoId();

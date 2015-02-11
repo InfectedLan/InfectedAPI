@@ -8,15 +8,14 @@ $message = null;
 
 if (Session::isAuthenticated()) {
 	$user = Session::getCurrentUser();
-	if(isset($_GET['id']) && isset($_GET['message'])) {
+	if(isset($_GET['id'])) {
 		$chat = ChatHandler::getChat($_GET['id']);
 
 		if(isset($chat)) {
 			if(ChatHandler::isChatMember($user, $chat) || $user->hasPermission('*') || $user->hasPermission('compo.chat')) {
-				ChatHandler::sendChatMessage($user, $chat, $_GET['message']);
-				$result = true;
+				$result = array("response" => true);
 			} else {
-				$message = "Du er ikke med i denne chatten!";
+				$result = array("response" => false);
 			}
 		} else {
 			$message = 'Chatten finnes ikke!';

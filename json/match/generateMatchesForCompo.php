@@ -10,7 +10,7 @@ if (Session::isAuthenticated()) {
 	$user = Session::getCurrentUser();
 	
 	if ($user->hasPermission('*') ||
-		$user->hasPermission('functions.compoadmin')) {
+		$user->hasPermission('event.compo')) {
 
 		if (isset($_GET['id']) &&
 			!empty($_GET['id'])) {

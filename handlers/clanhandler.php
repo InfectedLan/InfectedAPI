@@ -6,6 +6,7 @@ require_once 'handlers/eventhandler.php';
 require_once 'handlers/userhandler.php';
 require_once 'handlers/compohandler.php';
 require_once 'handlers/invitehandler.php';
+require_once 'handlers/chathandler.php';
 
 class ClanHandler {
     const STATE_MAIN_PLAYER = 0;
@@ -247,6 +248,11 @@ class ClanHandler {
         $mysql->query('INSERT INTO `' . Settings::db_table_infected_compo_memberof . '` (`clanId`, `userId`) 
                        VALUES (\'' . $mysql->real_escape_string($fetchedId) . '\', 
                                \'' . $mysql->real_escape_string($user->getId()) . '\');');
+
+        //Allow user to talk in global chat
+
+        $mainChat = ChatHandler::getChat(1);
+        ChatHandler::addChatMember($user, $mainChat);
 
         $mysql->close();
 

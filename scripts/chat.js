@@ -8,17 +8,26 @@ $(document).ready(function() {
 function createChat(divId, chatId, height) {
 	chatList.push({"divId": divId, "chatId": chatId, "lastId": -1});
 	console.log("Created chat id " + chatId + " for divid " + divId + " with height " + height);
-	$("#" + divId).html('<div class="chatArea" style="height: ' + (height-25-5-10) + 'px;"></div><div style="padding-right:5px;padding-left:0px;margin-right:2px;"><input type="text" placeholder="Skriv her, trykk enter for å sende" class="chatBox" /></div>');
-	//Listen to enter key
-	$("#" + divId).find('.chatBox').keypress({chat: chatId, div: divId}, function(e) {
-	    if(e.which == 13) {
-	    	if($(this).val().length > 0) {
-	    		sendChat(e.data.chat, $(this).val());
-	        	$(this).val("");
-	    	} else {
-	    		error("Chatmeldingen er for kort!");
-	    	}
-	    }
+
+	$.getJSON('../api/json/chat/isInChat.php?id=' + chatId, function(data) {
+		if(data.result != false) {
+			$("#" + divId).html('<div class="chatArea" style="height: ' + (height-25-5-10) + 'px;"></div><div style="padding-right:15px;padding-left:0px;margin-right:0px;"><input type="text" placeholder="' + (data.result.response ? "Skriv her, trykk enter for å sende" : "Kun clan-chiefs kan skrive her!") + '" class="chatBox" /></div>');
+			//Listen to enter key
+			if(data.result.response == true) {
+				$("#" + divId).find('.chatBox').keypress({chat: chatId, div: divId}, function(e) {
+				    if(e.which == 13) {
+				    	if($(this).val().length > 0) {
+				    		sendChat(e.data.chat, $(this).val());
+				        	$(this).val("");
+				    	} else {
+				    		error("Chatmeldingen er for kort!");
+				    	}
+				    }
+				});
+			}
+		} else {
+			error(data.message);
+		}
 	});
 }
 function sendChat(chatId, message) {
@@ -61,6 +70,8 @@ function updateChats() {
 										}
 										//Tell the array that we have the newest content
 										chatList[chatListIndex].lastId = data.result.id;
+										//Scroll down
+										$("#" + chatList[chatListIndex].divId).find(".chatArea").scrollTop($("#" + chatList[chatListIndex].divId).find(".chatArea")[0].scrollHeight);
 									} else {
 										console.log("Something went wrong during fetching the chat data: " + chatData.message);
 										error("Det skjedde en feil under hentingen av chat-data: <br />" + chatData.message);
