@@ -5,7 +5,7 @@ require_once 'objects/emergencycontact.php';
 
 class EmergencyContactHandler {
     /*
-     * Returns the emergency contact with the given id.
+     * Get an emergenctcontacts by the internal id.
      */
     public static function getEmergencyContact($id) {
         $mysql = MySQL::open(Settings::db_name_infected);

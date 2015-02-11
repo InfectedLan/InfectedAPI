@@ -5,7 +5,7 @@ require_once 'objects/checkinstate.php';
 
 class CheckInStateHandler {
     /*
-     * Get a check in state based on id.
+     * Get a checkinstate by the internal id.
      */
     public static function getCheckInState($id) {
         $mysql = MySQL::open(Settings::db_name_infected_tickets);
@@ -38,7 +38,7 @@ class CheckInStateHandler {
         $mysql = MySQL::open(Settings::db_name_infected_tickets);
 
         $result = $mysql->query('SELECT `id` FROM `' . Settings::db_table_infected_tickets_checkinstate . '` 
-                                 WHERE `ticketId` = ' . $mysql->real_escape_string($ticket->getId()) . ';');
+                                 WHERE `ticketId` = \'' . $mysql->real_escape_string($ticket->getId()) . '\';');
 
         $mysql->close();
 

@@ -7,7 +7,7 @@ require_once 'objects/application.php';
 
 class ApplicationHandler {
     /* 
-     * Get an application by it's internal id (No matter event).
+     * Get an application by it's internal id.
      */
     public static function getApplication($id) {
         $mysql = MySQL::open(Settings::db_name_infected_crew);

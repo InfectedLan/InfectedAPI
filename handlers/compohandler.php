@@ -8,7 +8,7 @@ require_once 'handlers/chathandler.php';
 
 class CompoHandler {
     /*
-     * Get a compo by id.
+     * Get a compo by the internal id.
      */
     public static function getCompo($id) {
         $mysql = MySQL::open(Settings::db_name_infected_compo);
@@ -95,11 +95,16 @@ class CompoHandler {
             array_splice($clans, $toRemove, 1);
         }
 
-        $carryData = array('matches' => array(), 'clans' => $newClanList, 'looserMatches' => array());
+        $carryData = array('matches' => array(), 
+                           'clans' => $newClanList, 
+                           'looserMatches' => array());
         $iteration = 0;
         
         while (true) {
-            $carryData = self::generateMatches($carryData['matches'], $carryData['clans'], $carryData['looserMatches'], $iteration, $compo, $startTime + ($iteration * $compoSpacing));
+            $carryData = self::generateMatches($carryData['matches'], 
+                                               $carryData['clans'], 
+                                               $carryData['looserMatches'], 
+                                               $iteration, $compo, $startTime + ($iteration * $compoSpacing));
             
             foreach ($carryData['carryMatches'] as $match) {
                 array_push($carryData['matches'], $match);
@@ -109,7 +114,7 @@ class CompoHandler {
                 //echo "Old looser: " . $looserMatches->getId() . ",";
             }*/
 
-            if(count($carryData['matches'])<2) {
+            if (count($carryData['matches']) < 2) {
                 $chat = ChatHandler::createChat("match chat");
                 $match = MatchHandler::createMatch($time, "", $compo, $iteration, $chat->getId()); //TODO connectData
                 MatchHandler::addMatchParticipant(1, $carryData["matches"], $match);
@@ -125,7 +130,10 @@ class CompoHandler {
         $numberOfObjects = count($carryMatches) + count($carryClans); //The amount of objects we are going to handle
         $match_start_index = $numberOfObjects % 2; // 0 if even number of objects, 1 if uneven
 
-        $carryObjects = array('matches' => array(), 'clans' => array(), 'looserMatches' => array(), 'carryMatches' => array()); // Prepare all the info to return back
+        $carryObjects = array('matches' => array(), 
+                              'clans' => array(), 
+                              'looserMatches' => array(), 
+                              'carryMatches' => array()); // Prepare all the info to return back
 
         if ($match_start_index == 1) { //If there is an uneven amount of objects
             if (count($carryMatches) > 0 ) { //Prioritize carrying matches
@@ -142,8 +150,8 @@ class CompoHandler {
             array_push($carryObjects["matches"], $match);
 
             //Assign participants
-            for($a = 0; $a < 2; $a++) {
-                if(count($carryClans) > 0) {
+            for ($a = 0; $a < 2; $a++) {
+                if (count($carryClans) > 0) {
                     $clan = array_shift($carryClans);
                     MatchHandler::addMatchParticipant(0, $clan->getId(), $match);
                     ChatHandler::addClanMembersToChat($chat, $clan);

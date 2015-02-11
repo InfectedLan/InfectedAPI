@@ -4,6 +4,9 @@ require_once 'mysql.php';
 require_once 'objects/agenda.php';
 
 class AgendaHandler {
+    /*
+     * Get an agenda by the internal id.
+     */
     public static function getAgenda($id) {
         $mysql = MySQL::open(Settings::db_name_infected_main);
         

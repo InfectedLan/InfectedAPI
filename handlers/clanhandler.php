@@ -13,7 +13,7 @@ class ClanHandler {
     const STATE_STEPIN_PLAYER = 1;
 
     /*
-     * Get a clan by id.
+     * Get a clan by the internal id.
      */
     public static function getClan($id) {
         $mysql = MySQL::open(Settings::db_name_infected_compo);
@@ -137,7 +137,7 @@ class ClanHandler {
 
         $result = $mysql->query('SELECT `userId` FROM `' . Settings::db_table_infected_compo_memberof . '` 
                                  WHERE `clanId` = \'' . $mysql->real_escape_string($clan->getId()) . '\'
-                                 AND `stepin` = 1;');
+                                 AND `stepin` = \'1\';');
 
         $mysql->close();
 
@@ -176,7 +176,7 @@ class ClanHandler {
         $result = $mysql->query('SELECT `id` FROM `' . Settings::db_table_infected_compo_memberof . '` 
                                  WHERE `clanId` = \'' . $mysql->real_escape_string($clan->getId()) . '\'
                                  AND `userId` = \'' . $mysql->real_escape_string($user->getId()) . '\'
-                                 AND `stepin` = 1;');
+                                 AND `stepin` = \'1\';');
 
         $mysql->close();
 
@@ -192,9 +192,10 @@ class ClanHandler {
         $mysql = MySQL::open(Settings::db_name_infected_compo);
 
         $result = $mysql->query('UPDATE `' . Settings::db_table_infected_compo_memberof . '` 
-                                SET `stepin` = \'' . $mysql->real_escape_string($state) . '\' 
-                                WHERE `clanId` = \'' . $mysql->real_escape_string($clan->getId()) . '\' 
-                                AND `userId` = \'' . $mysql->real_escape_string($user->getId()) . '\';');
+                                 SET `stepin` = \'' . $mysql->real_escape_string($state) . '\'
+                                 WHERE `clanId` = \'' . $mysql->real_escape_string($clan->getId()) . '\'
+                                 AND `userId` = \'' . $mysql->real_escape_string($user->getId()) . '\';');
+
         $mysql->close();
 
     }
@@ -249,9 +250,8 @@ class ClanHandler {
                        VALUES (\'' . $mysql->real_escape_string($fetchedId) . '\', 
                                \'' . $mysql->real_escape_string($user->getId()) . '\');');
 
-        //Allow user to talk in global chat
-
-        $mainChat = ChatHandler::getChat(1);
+        // Allow user to talk in global chat.
+        $mainChat = ChatHandler::getChat(1); // TODO: Change this to the first chat in the array?
         ChatHandler::addChatMember($user, $mainChat);
 
         $mysql->close();

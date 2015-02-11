@@ -4,6 +4,9 @@ require_once 'mysql.php';
 require_once 'objects/invite.php';
 
 class InviteHandler {
+    /*
+     * Get a invite by the internal id.
+     */
     public static function getInvite($id) {
         $mysql = MySQL::open(Settings::db_name_infected_compo);
         
@@ -15,6 +18,9 @@ class InviteHandler {
 		return $result->fetch_object('Invite');
     }
 	
+    /*
+     * Get all invites for the specified user.
+     */
     public static function getInvitesForUser($user) {
         $mysql = MySQL::open(Settings::db_name_infected_compo);
 
@@ -32,6 +38,9 @@ class InviteHandler {
         return $inviteList;
     }
 
+    /*
+     * Get all invites that is to a clan.
+     */
     public function getInvitedInClan($clan) {
         $mysql = MySQL::open(Settings::db_name_infected_compo);
 

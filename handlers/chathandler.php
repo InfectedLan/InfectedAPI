@@ -6,7 +6,7 @@ require_once 'objects/chatmessage.php';
 
 class ChatHandler {	
 	/*
-	 * Return the chat with the given id.
+	 * Get a chat by the internal id.
 	 */
 	public static function getChat($id) {
 		$mysql = MySQL::open(Settings::db_name_infected_compo);

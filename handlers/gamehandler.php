@@ -4,11 +4,14 @@ require_once 'mysql.php';
 require_once 'objects/game.php';
 
 class GameHandler {
+    /*
+     * Get a game by the internal id.
+     */
     public static function getGame($id) {
         $mysql = MySQL::open(Settings::db_name_infected_main);
         
         $result = $mysql->query('SELECT * FROM `' . Settings::db_table_infected_main_games . '` 
-                                      WHERE `id` = \'' . $mysql->real_escape_string($id) . '\';');
+                                 WHERE `id` = \'' . $mysql->real_escape_string($id) . '\';');
         
         $mysql->close();
 		

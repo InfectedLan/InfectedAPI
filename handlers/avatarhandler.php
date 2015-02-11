@@ -5,7 +5,7 @@ require_once 'objects/avatar.php';
 
 class AvatarHandler {
     /* 
-     * Get an avatar by id
+     * Get an avatar by the internal id.
      */
     public static function getAvatar($id) {
         $mysql = MySQL::open(Settings::db_name_infected_crew);
