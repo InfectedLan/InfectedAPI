@@ -45,7 +45,7 @@ class GroupHandler {
     public static function getGroups() {
         $mysql = MySQL::open(Settings::db_name_infected_crew);
         
-        $result = $mysql->query('SELECT `id` FROM `' . Settings::db_table_infected_crew_groups . '` 
+        $result = $mysql->query('SELECT * FROM `' . Settings::db_table_infected_crew_groups . '` 
                                  ORDER BY `name`;');
         
         $mysql->close();
