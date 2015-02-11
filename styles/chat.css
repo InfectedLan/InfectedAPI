@@ -1,6 +1,15 @@
 .chatArea {
 	background-color: #FFF;
+	margin: 5px;
+	font-size: 13px;
+	color: #000;
+	overflow-y: scroll;
+	position: relative;
+	top: 5px;
 }
 .chatBox {
-	height: 40px;
+	height: 25px;
+	margin: 5px;
+	
+
 }
