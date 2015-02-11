@@ -11,7 +11,7 @@ if (Session::isAuthenticated()) {
 	if ($user->hasPermission('*') || 
 		$user->hasPermission('event.checkin')) {
 
-		if (isset($_GET['id'])
+		if (isset($_GET['id']) &&
 			is_numeric($_GET['id'])) {
 			$ticket = TicketHandler::getTicket($_GET['id']);
 
@@ -24,9 +24,12 @@ if (Session::isAuthenticated()) {
 												'lastname' => $ticketUser->getLastname(),
 											 	'username' => $ticketUser->getUsername(),
 											 	'email' => $ticketUser->getEmail(),
-											 	'bithdate' => date('d.m.Y', $ticketUser->getBirthdate()),
-											 	'gender' => $ticketUser->getGender(),
-											 	'age' => $ticketUser->getAge()));
+											 	'birthdate' => date('d.m.Y', $ticketUser->getBirthdate()),
+											 	'gender' => $ticketUser->getGenderName(),
+											 	'age' => $ticketUser->getAge(),
+											 	'phone' => $ticketUser->getPhone(),
+											 	'address' => $ticketUser->getAddress(),
+												'city' => $ticketUser->getPostalCode() . ', ' . $ticketUser->getCity()));
 
 					$result = true;
 				} else {

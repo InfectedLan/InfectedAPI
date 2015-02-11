@@ -82,7 +82,7 @@ class User extends Object {
 	/* 
 	 * Returns the users gendername.
 	 */
-	public function getGenderName() {
+	public function getGenderName() { // TODO: Rename this to getGenderAsString().
 		return $this->getGender() ? 'Kvinne' : 'Mann';
 	}
 	

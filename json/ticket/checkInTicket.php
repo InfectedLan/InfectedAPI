@@ -13,13 +13,14 @@ if (Session::isAuthenticated()) {
 		$user->hasPermission('event.checkin')) {
 
 		if (isset($_GET['id']) &&
-			is_numeric($id)) {
+			is_numeric($_GET['id'])) {
 			$ticket = TicketHandler::getTicket($_GET['id']);
 
 			if ($ticket != null) {
 				if (!$ticket->isCheckedIn()) {
 					CheckInStateHandler::checkIn($ticket);
 					$result = true;
+					$message = 'Billetten til "' . $ticket->getUser()->getFullName() . '"  er nå sjekket inn.';
 				} else {
 					$message = 'Denne billetten er allerede sjekket inn!';
 				}
