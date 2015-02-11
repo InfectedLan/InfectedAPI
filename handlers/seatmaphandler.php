@@ -11,16 +11,10 @@ class SeatmapHandler {
 
         $result = $mysql->query('SELECT * FROM `' . Settings::db_table_infected_tickets_seatmaps . '` 
                                  WHERE `id` = \'' . $mysql->real_escape_string($id) . '\';');
-                                      
-        $row = $result->fetch_array();
-
+        
         $mysql->close();
-
-        if ($row) {
-            return new Seatmap($row['id'], 
-                               $row['humanName'],
-                               $row['backgroundImage']);
-        }
+		
+		return $result->fetch_object('Seatmap');
     }
 
     public static function createNewSeatmap($name, $backgroundImage) {

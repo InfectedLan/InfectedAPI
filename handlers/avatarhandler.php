@@ -14,15 +14,8 @@ class AvatarHandler {
                                  WHERE `id` = \'' . $mysql->real_escape_string($id) . '\';');
         
         $mysql->close();
-
-        $row = $result->fetch_array();
-
-        if ($row) {
-            return new Avatar($row['id'], 
-                              $row['userId'], 
-                              $row['file'], 
-                              $row['state']);
-        }
+		
+		return $result->fetch_object('Avatar');
     }
     
     /*

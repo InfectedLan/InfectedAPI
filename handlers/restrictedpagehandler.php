@@ -15,19 +15,9 @@ class RestrictedPageHandler {
 		$result = $mysql->query('SELECT * FROM `' . Settings::db_table_infected_crew_pages . '`
 								 WHERE `id` = \'' . $mysql->real_escape_string($id) . '\';');
 		
-		
-		$row = $result->fetch_array();
-			
 		$mysql->close();
             
-		if ($row) {
-			return new RestrictedPage($row['id'], 
-									  $row['name'], 
-									  $row['title'], 
-									  $row['content'], 
-									  $row['groupId'], 
-									  $row['teamId']);
-        }
+		return $result->fetch_object('RestrictedPage');
     }
     
     /* 

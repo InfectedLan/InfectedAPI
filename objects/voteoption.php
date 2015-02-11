@@ -6,14 +6,6 @@ class VoteOption extends Object{
 	private $thumbnailUrl;
 	private $name;
 
-	public function __construct($id, $compoId, $thumbnailUrl, $name) {
-		parent::__construct($id);
-		
-		$this->compoId = $compoId;
-		$this->thumbnailUrl = $thumbnailUrl;
-		$this->name = $name;
-	}
-
 	public function getCompoId() {
 		return $this->compoId;
 	}

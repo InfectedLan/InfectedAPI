@@ -14,14 +14,8 @@ class EmergencyContactHandler {
                                  WHERE `id` = \'' . $mysql->real_escape_string($id) . '\';');
         
         $mysql->close();
-
-        $row = $result->fetch_array();
-
-        if ($row) {
-            return new EmergencyContact($row['id'],
-                                        $row['userId'],
-                                        $row['phone']);
-        }
+		
+		return $result->fetch_object('EmergencyContact');
     }
     
     /*

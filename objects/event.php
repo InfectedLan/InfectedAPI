@@ -17,19 +17,6 @@ class Event extends Object {
 	private $seatmap;
 	private $ticketType;
 	
-	public function __construct($id, $theme, $location, $participants, $bookingTime, $startTime, $endTime, $seatmap, $ticketType) {
-		parent::__construct($id);
-	
-		$this->theme = $theme;
-		$this->location = $location;
-		$this->participants = $participants;
-		$this->bookingTime = $bookingTime;
-		$this->startTime = $startTime;
-		$this->endTime = $endTime;
-		$this->seatmap = $seatmap;
-		$this->ticketType = $ticketType;
-	}
-	
 	/*
 	 * Returns theme of this event.
 	 */

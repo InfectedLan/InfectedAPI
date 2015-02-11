@@ -12,19 +12,9 @@ class StoreSessionHandler {
         $result = $mysql->query('SELECT * FROM `' . Settings::db_table_infected_tickets_storesessions . '` 
                                  WHERE `id` = ' . $mysql->real_escape_string($id) . ';');
         
-        $row = $result->fetch_array();
-
         $mysql->close();
-
-        if ($row) {
-            return new StoreSession($row['id'], 
-                                    $row['userId'], 
-                                    $row['ticketType'],
-                                    $row['amount'],
-                                    $row['code'],
-                                    $row['price'],
-                                    $row['datetime']);
-        }
+		
+		return $result->fetch_object('StoreSessio');
     }
     
     public static function registerStoreSession($user, $type, $amount, $price) {

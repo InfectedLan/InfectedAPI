@@ -9,22 +9,10 @@ class GameHandler {
         
         $result = $mysql->query('SELECT * FROM `' . Settings::db_table_infected_main_games . '` 
                                       WHERE `id` = \'' . $mysql->real_escape_string($id) . '\';');
-                                      
-        $row = $result->fetch_array();
         
         $mysql->close();
-
-        if ($row) {
-            return new Game($row['id'], 
-                            $row['name'], 
-                            $row['title'], 
-                            $row['price'], 
-                            $row['mode'], 
-                            $row['description'], 
-                            $row['startTime'], 
-                            $row['endTime'], 
-                            $row['published']);
-        }
+		
+		return $result->fetch_object('Game');
     }
     
     public static function getGames() {

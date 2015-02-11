@@ -9,16 +9,10 @@ class PermissionHandler {
         
         $result = $mysql->query('SELECT * FROM `' . Settings::db_table_infected_permissions . '`
                                  WHERE `id` = \'' . $mysql->real_escape_string($id) . '\';');
-                                
-        $row = $result->fetch_array();
         
         $mysql->close();
         
-        if ($row) {
-            return new Permission($row['id'],
-                                  $row['value'],
-                                  $row['description']);
-        }
+		return $result->fetch_object('Permission');
     }
     
     public static function getPermissionByValue($value) {

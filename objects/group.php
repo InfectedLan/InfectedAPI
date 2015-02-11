@@ -18,17 +18,6 @@ class Group extends Object {
 	private $coleader;
 	private $queuing;
 	
-	public function __construct($id, $name, $title, $description, $leader, $coleader, $queuing) {
-		parent::__construct($id);
-	
-		$this->name = $name;
-		$this->title = $title;
-		$this->description = $description;
-		$this->leader = $leader;
-		$this->coleader = $coleader;
-		$this->queuing = $queuing;
-	}
-	
 	/* 
 	 * Returns the name of this group.
 	 */

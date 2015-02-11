@@ -19,29 +19,6 @@ class Ticket extends Object {
 	private $seaterId;
 
 	/*
-	 * Ticket - implementation of backend ticket db.
-	 * 
-	 * Id: Unique id of ticket
-	 * Event Id: Id of event ticket is connected to
-	 * Type Id: Ticket type. Object.
-	 * Seat Id: Object of seat ticket is seated on
-	 * Buyer Id: User that bought the ticket
-	 * User Id: User account that will be using the ticket
-	 * Seater Id: User account that can seat this ticket
-	 */
-	public function __construct($id, $eventId, $paymentId, $typeId, $buyerId, $userId, $seatId, $seaterId) {
-		parent::__construct($id);
-		
-		$this->eventId = $eventId;
-		$this->paymentId = $paymentId;
-		$this->typeId = $typeId;
-		$this->buyerId = $buyerId;
-		$this->userId = $userId;
-		$this->seatId = $seatId;
-		$this->seaterId = $seaterId;
-	}
-
-	/*
 	 * Returns the event this ticket is for
 	 */
 	public function getEvent() {

@@ -15,14 +15,8 @@ class ChatHandler {
                                  WHERE `id` = \'' . $mysql->real_escape_string($id) . '\';');
                                       
         $mysql->close();
-        
-		$row = $result->fetch_array();
 		
-        if ($row) {
-            return new Chat($row['id'], 
-							$row['name'],
-							$row['title']);
-        }
+		return $result->fetch_object('Chat');
 	}
 	
 	/*

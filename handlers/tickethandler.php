@@ -18,19 +18,8 @@ class TicketHandler {
                                  WHERE `id` = \'' . $mysql->real_escape_string($id) . '\';');
         
         $mysql->close();
-        
-        $row = $result->fetch_array();
-
-        if ($row) {
-            return new Ticket($row['id'],
-                              $row['eventId'], 
-                              $row['paymentId'],
-                              $row['typeId'],
-                              $row['buyerId'],                              
-                              $row['userId'],
-                              $row['seatId'],
-                              $row['seaterId']);
-        }
+		
+		return $result->fetch_object('Ticket');
     }
     
     public static function getTicketForUser($event, $user) {

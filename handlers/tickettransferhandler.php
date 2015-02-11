@@ -15,17 +15,8 @@ class TicketTransferHandler {
                                  LIMIT 1;');
 
         $mysql->close();
-                                         
-        $row = $result->fetch_array();
-
-        if ($row) {
-            return new TicketTransfer($row['id'],
-                                      $row['ticketId'], 
-                                      $row['fromId'],
-                                      $row['toId'],
-                                      $row['datetime'],                              
-                                      $row['revertable']);
-        }
+		
+		return $result->fetch_object('TicketTransfer');
     }
 
     // Returns list of transfers that are eligible for reverting

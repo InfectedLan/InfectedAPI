@@ -13,18 +13,7 @@ class SlideHandler {
         
 		$mysql->close();
 		
-        $row = $result->fetch_array();
-        
-        if ($row) {
-            return new Slide($row['id'], 
-                             $row['eventId'], 
-                             $row['name'], 
-                             $row['title'], 
-                             $row['content'], 
-                             $row['startTime'], 
-							 $row['endTime'], 
-							 $row['published']);
-        }
+		return $result->fetch_object('Slide');
     }
     
     public static function getSlides() {

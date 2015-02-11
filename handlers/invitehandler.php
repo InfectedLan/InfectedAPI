@@ -10,16 +10,11 @@ class InviteHandler {
         $result = $mysql->query('SELECT * FROM `' . Settings::db_table_infected_compo_invites . '` 
                                       WHERE `id` = \'' . $id . '\';');
         
-        $row = $result->fetch_array();
-        
         $mysql->close();
-        
-        if ($row) {
-            return new Invite($row['id'], 
-                              $row['userId'], 
-                              $row['clanId']);
-        }
+		
+		return $result->fetch_object('Invite');
     }
+	
     public static function getInvitesForUser($user) {
         $mysql = MySQL::open(Settings::db_name_infected_compo);
 

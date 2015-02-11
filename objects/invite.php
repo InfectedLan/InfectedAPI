@@ -8,13 +8,6 @@ class Invite extends Object{
 	private $userId;
 	private $clanId;
 
-	public function __construct($id, $userId, $clanId) {
-		parent::__construct($id);
-		
-		$this->userId = $userId;
-		$this->clanId = $clanId;
-	}
-
 	public function getUserId() {
 		return $this->userId;
 	}

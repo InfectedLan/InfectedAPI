@@ -16,21 +16,8 @@ class ApplicationHandler {
                                  WHERE `id` = \'' . $mysql->real_escape_string($id) . '\';');
         
         $mysql->close();
-
-        $row = $result->fetch_array();
-
-        if ($row) {
-            return new Application($row['id'], 
-                                   $row['eventId'], 
-                                   $row['groupId'],
-                                   $row['userId'],                                    
-                                   $row['openedTime'], 
-                                   $row['closedTime'], 
-                                   $row['state'], 
-                                   $row['content'], 
-								   $row['updatedByUserId'],
-                                   $row['comment']);
-        }
+		
+		return $result->fetch_object('Application');
     }
     
     /*

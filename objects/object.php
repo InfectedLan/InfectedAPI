@@ -1,10 +1,6 @@
 <?php
 class Object {
-	private $id;
-	
-	public function __construct($id) {
-		$this->id = $id;
-	}
+	protected $id;
 	
 	/*
 	 * Retuns the internal id for this object.

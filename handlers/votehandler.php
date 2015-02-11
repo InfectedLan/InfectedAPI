@@ -11,14 +11,8 @@ class VoteHandler {
                                  WHERE `id` = \'$id\';');
         
         $mysql->close();
-        
-        $row = $result->fetch_array();
-        
-        if ($row) {
-            return new Vote($row['id'], 
-                            $row['consumerId'], 
-                            $row['voteOptionId']);
-        }
+		
+		return $result->fetch_object('Vote');
     }
     
     public static function getNumBanned($mysqlsumerId) {

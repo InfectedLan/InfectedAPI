@@ -11,19 +11,10 @@ class TeamHandler {
         
         $result = $mysql->query('SELECT * FROM `' . Settings::db_table_infected_crew_teams . '` 
                                  WHERE `id` = \'' . $mysql->real_escape_string($id) . '\';');
-                                      
-        $row = $result->fetch_array();
         
         $mysql->close();
-        
-        if ($row) {
-            return new Team($row['id'], 
-                            $row['groupId'], 
-                            $row['name'], 
-                            $row['title'], 
-                            $row['description'], 
-                            $row['leader']);
-        }
+		
+		return $result->fetch_object('Team');
     }
     
     /* Get a group by userId */

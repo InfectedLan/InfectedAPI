@@ -8,16 +8,6 @@ class TicketTransfer extends Object{
 	private $toId;
 	private $datetime;
 	private $revertable;
-
-	public function __construct($id, $ticketId, $fromId, $toId, $datetime, $revertable) {
-		parent::__construct($id);
-
-		$this->ticketId = $ticketId;
-		$this->fromId = $fromId;
-		$this->toId = $toId;
-		$this->datetime = $datetime;
-		$this->revertable = $revertable;
-	}
 	
 	public function getTicket() {
 		return TicketHandler::getTicket($this->ticketId);

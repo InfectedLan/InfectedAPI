@@ -9,17 +9,10 @@ class PageHandler {
         
         $result = $mysql->query('SELECT * FROM `' . Settings::db_table_infected_main_pages . '` 
                                  WHERE id=\'' . $mysql->real_escape_string($id) . '\';');
-                                      
-        $row = $result->fetch_array();
         
         $mysql->close();
 
-        if ($row) {
-            return new Page($row['id'], 
-                            $row['name'], 
-                            $row['title'], 
-                            $row['content']);
-        }
+		return $result->fetch_object('Page');
     }
     
     public static function getPageByName($name) {

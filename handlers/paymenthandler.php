@@ -9,20 +9,10 @@ class PaymentHandler {
         
         $result = $mysql->query('SELECT * FROM `' . Settings::db_table_infected_tickets_paymentlog . '` 
                                  WHERE `id` = \'' . $mysql->real_escape_string($id) . '\';');
-                            
-        $row = $result->fetch_array();
         
         $mysql->close();
 
-        if ($row) {
-            return new Payment($row['id'],
-                               $row['userId'],
-                               $row['ticketType'],
-                               $row['price'],
-                               $row['totalPrice'],
-                               $row['transactionId'],
-                               $row['datetime']);
-        }
+		return $result->fetch_object('Payment');
     }
     
     public static function createPayment($user, $ticketType, $price, $totalPrice, $transactionId) {

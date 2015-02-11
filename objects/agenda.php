@@ -10,17 +10,6 @@ class Agenda extends Object {
 	private $startTime;
 	private $published;
 	
-	public function __construct($id, $eventId, $name, $title, $description, $startTime, $published) {
-		parent::__construct($id);
-
-		$this->eventId = $eventId;
-		$this->name = $name;
-		$this->title = $title;
-		$this->description = $description;
-		$this->startTime = $startTime;
-		$this->published = $published;
-	}
-	
 	public function getEvent() {
 		return EventHandler::getEvent($this->eventId);
 	}

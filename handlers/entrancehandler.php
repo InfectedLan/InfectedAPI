@@ -14,14 +14,8 @@ class EntranceHandler {
                                  WHERE `id` = \'' . $mysql->real_escape_string($id) . '\';');
                                     
         $mysql->close();
-
-        $row = $result->fetch_array();
-
-        if ($row) {
-            return new Entrance($row['id'],
-                                $row['name'], 
-                                $row['title']);
-        }
+		
+		return $result->fetch_object('Entrance');
     }
     
     /*

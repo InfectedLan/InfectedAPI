@@ -10,19 +10,9 @@ class AgendaHandler {
         $result = $mysql->query('SELECT * FROM `' . Settings::db_table_infected_main_agenda . '` 
                                  WHERE `id` = \'' . $mysql->real_escape_string($id) . '\';');
         
-		    $mysql->close();
-		    
-        $row = $result->fetch_array();
-        
-        if ($row) {
-            return new Agenda($row['id'], 
-                              $row['eventId'], 
-                              $row['name'], 
-                              $row['title'], 
-                              $row['description'],
-                              $row['startTime'],
-							  $row['published']);
-        }
+		$mysql->close();
+		
+		return $result->fetch_object('Agenda');
     }
     
     /*

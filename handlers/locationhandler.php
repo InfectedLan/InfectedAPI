@@ -10,16 +10,10 @@ class LocationHandler {
         
         $result = $mysql->query('SELECT * FROM `'. Settings::db_table_infected_locations . '`
                                       WHERE `id` = \'' . $mysql->real_escape_string($id) . '\';');
-
-        $row = $result->fetch_array();
-        
+		
         $mysql->close();
-
-        if ($row) {
-            return new Location($row['id'],
-                                $row['name'],
-                                $row['title']);
-        }
+		
+		return $result->fetch_object('Location');
     }
     
     // Returns a list of all locations.

@@ -11,15 +11,8 @@ class TicketTypeHandler {
                                  WHERE `id` = \'' . $mysql->real_escape_string($id) . '\';');
         
         $mysql->close();
-        
-        $row = $result->fetch_array();
-
-        if ($row) {
-            return new TicketType($row['id'], 
-                                  $row['humanName'],
-                                  $row['price'],
-                                  $row['internalName']);
-        }
+		
+		return $result->fetch_object('TicketType');
     }
 }
 ?>

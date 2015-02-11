@@ -14,14 +14,8 @@ class CheckinStateHandler {
                                  WHERE `id` = \'' . $id . '\';');
         
         $mysql->close();
-
-        $row = $result->fetch_array();
-        
-        if ($row) {
-            return new CheckinState($row['id'], 
-                                    $row['ticketId'],
-                                    $row['userId']);
-        }
+		
+		return $result->fetch_object('CheckinState');
     }
 
     /*

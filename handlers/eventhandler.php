@@ -16,19 +16,7 @@ class EventHandler {
         
         $mysql->close();
 
-		$row = $result->fetch_array();
-		
-        if ($row) {
-            return new Event($row['id'],
-                             $row['theme'], 
-                             $row['location'], 
-                             $row['participants'], 
-                             $row['bookingTime'], 
-                             $row['startTime'], 
-                             $row['endTime'], 
-                             $row['seatmap'],
-                             $row['ticketType']);
-        }
+		return $result->fetch_object('Event');
     }
     
     /*

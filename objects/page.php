@@ -12,13 +12,6 @@ class Page extends Object {
 	private $title;
 	private $content;
 	
-	public function __construct($id, $name, $title, $content) {
-		parent::__construct($id);
-		$this->name = $name;
-		$this->title = $title;
-		$this->content = $content;
-	}
-	
 	public function getName() {
 		return $this->name;
 	}

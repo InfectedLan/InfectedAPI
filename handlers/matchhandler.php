@@ -22,19 +22,9 @@ class MatchHandler {
         $result = $mysql->query('SELECT * FROM `' . Settings::db_table_infected_compo_matches . '` 
                                       WHERE `id` = \'' . $id . '\';');
         
-        $row = $result->fetch_array();
-        
         $mysql->close();
         
-        if ($row) {
-            return new Match($row['id'], 
-                             $row['scheduledTime'], 
-                             $row['connectDetails'], 
-                             $row['winner'], 
-                             $row['state'], 
-                             $row['compoId'],
-                             $row['bracketOffset']);
-        }
+		return $result->fetch_object('Match');
     }
 
     public static function createMatch($scheduledTime, $connectData, $compo, $bracketOffset) {

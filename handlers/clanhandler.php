@@ -22,15 +22,7 @@ class ClanHandler {
         
         $mysql->close();
 
-        $row = $result->fetch_array();
-
-        if ($row) {
-            return new Clan($row['id'], 
-                            $row['chief'], 
-                            $row['name'], 
-                            $row['event'], 
-                            $row['tag']);
-        }
+        return $result->fetch_object('Clan');
     }
 
     /*

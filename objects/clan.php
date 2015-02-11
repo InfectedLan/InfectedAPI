@@ -11,15 +11,6 @@ class Clan extends Object {
 	private $event;
 	private $tag;
 
-	public function __construct($id, $chief, $name, $event, $tag) {
-		parent::__construct($id);
-		
-		$this->chief = $chief;
-		$this->name = $name;
-		$this->event = $event;
-		$this->tag = $tag;
-	}
-
 	public function getChief() {
 		return $this->chief;
 	}

@@ -11,16 +11,10 @@ class SeatHandler {
 
         $result = $mysql->query('SELECT * FROM `' . Settings::db_table_infected_tickets_seats . '` 
                                       WHERE `id` = \'' . $mysql->real_escape_string($id) . '\';');
-                                      
-        $row = $result->fetch_array();
-
+        
         $mysql->close();
-
-        if ($row) {
-            return new Seat($row['id'], 
-                            $row['rowId'], 
-                            $row['number']);
-        }
+		
+		return $result->fetch_object('Seat');
     }
 
     /*

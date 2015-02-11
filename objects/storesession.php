@@ -12,27 +12,6 @@ class StoreSession extends Object {
 	private $datetime;
 
 	/*
-	 * StoreSession - represents a session in the ticket shop.
-	 * 
-	 * This is used to reserve a ticket for someone after they pressed "buy", until the payment has been processed.
-	 * I didnt name it session because that would be confusing.
-	 * 
-	 * Id: Unique id of seat
-	 * UserId: ID of user connected to the session
-	 * TimeCreated: time this session was created, used for calculating if session has timed out
-	 */
-	public function __construct($id, $userId, $ticketType, $amount, $code, $price, $datetime) {
-		parent::__construct($id);
-		
-		$this->userId = $userId;
-		$this->ticketType = $ticketType;
-		$this->amount = $amount;
-		$this->code = $code;
-		$this->price = $price;
-		$this->datetime = $datetime;
-	}
-
-	/*
 	 * Returns the user connected to this session
 	 */
 	public function getUser() {

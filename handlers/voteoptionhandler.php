@@ -7,18 +7,12 @@ class VoteOptionHandler {
     public static function getVoteOption($id) {
         $mysql = MySQL::open(Settings::db_name_infected_compo);
         
-        $result = $mysql->query('SELECT * FROM `' . Settings::db_table_infected_compo_voteoptions . '` WHERE `id` = \'' . $id . '\';');
+        $result = $mysql->query('SELECT * FROM `' . Settings::db_table_infected_compo_voteoptions . '` 
+		                         WHERE `id` = \'' . $id . '\';');
         
         $mysql->close();
-        
-        $row = $result->fetch_array();
-        
-        if ($row) {
-            return new VoteOption($row['id'], 
-                                  $row['compoId'], 
-                                  $row['thumbnailUrl'], 
-                                  $row['name']);
-        }
+		
+		return $result->fetch_object('VoteOption');
     }
 
     public static function getVoteOptionsForCompo($compo) {
@@ -42,7 +36,8 @@ class VoteOptionHandler {
         $mysql = MySQL::open(Settings::db_name_infected_compo);
 
         $result = $mysql->query('SELECT * FROM `' . Settings::db_table_infected_compo_votes . '` 
-                                 WHERE `voteOptionId` = '. $mysql->real_escape_string($voteOption->getId()) . ' AND `consumerId` = ' . $mysql->real_escape_string($match->getId()) . ';');
+                                 WHERE `voteOptionId` = '. $mysql->real_escape_string($voteOption->getId()) . '
+								 AND `consumerId` = ' . $mysql->real_escape_string($match->getId()) . ';');
         
         $mysql->close();                         
         

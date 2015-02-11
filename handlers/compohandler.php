@@ -17,18 +17,7 @@ class CompoHandler {
         
         $mysql->close();
 
-        $row = $result->fetch_array();
-        
-        if ($row) {
-            return new Compo($row['id'], 
-                             $row['startTime'], 
-                             $row['registrationDeadline'], 
-                             $row['name'],
-                             $row['desc'], 
-                             $row['event'], 
-                             $row['teamSize'], 
-                             $row['tag']);
-        }
+        return $result->fetch_object('Compo');
     }
 
     /*

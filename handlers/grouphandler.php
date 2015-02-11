@@ -16,18 +16,8 @@ class GroupHandler {
                                  WHERE `id` = \'' . $mysql->real_escape_string($id) . '\';');
         
         $mysql->close();
-
-        $row = $result->fetch_array();
-
-        if ($row) {
-            return new Group($row['id'], 
-                             $row['name'], 
-                             $row['title'], 
-                             $row['description'], 
-                             $row['leader'],
-							 $row['coleader'],
-                             $row['queuing']);
-        }
+		
+		return $result->fetch_object('Group');
     }
     
     /* 

@@ -21,26 +21,10 @@ class UserHandler {
         
         $result = $mysql->query('SELECT * FROM `' . Settings::db_table_infected_users . '` 
                                  WHERE `id` = \'' . $mysql->real_escape_string($id) . '\';');
-         
-        $mysql->close();
-         
-        $row = $result->fetch_array();
-
-        if ($row) {
-            return new User($row['id'], 
-                            $row['firstname'], 
-                            $row['lastname'], 
-                            $row['username'], 
-                            $row['password'], 
-                            $row['email'], 
-                            $row['birthdate'], 
-                            $row['gender'], 
-                            $row['phone'], 
-                            $row['address'], 
-                            $row['postalcode'], 
-                            $row['nickname'],
-							$row['registereddate']);
-        }
+        
+		$mysql->close();
+		
+		return $result->fetch_object('User');
     }
     
     /* 
@@ -51,18 +35,14 @@ class UserHandler {
         
 		$safeIdentifier = $mysql->real_escape_string($identifier);
 		
-        $result = $mysql->query('SELECT `id` FROM `' . Settings::db_table_infected_users . '` 
+        $result = $mysql->query('SELECT * FROM `' . Settings::db_table_infected_users . '` 
                                  WHERE `username` = \'' . $safeIdentifier . '\' 
                                  OR `email` = \'' . $safeIdentifier . '\'
 								 OR `phone` = \'' . $safeIdentifier . '\';');
         
         $mysql->close();
         
-        $row = $result->fetch_array();
-
-        if ($row) {
-            return self::getUser($row['id']);
-        }
+		return $result->fetch_object('User');
     }
     
     /* 
@@ -71,15 +51,15 @@ class UserHandler {
     public static function getUsers() {
         $mysql = MySQL::open(Settings::db_name_infected);
         
-        $result = $mysql->query('SELECT `id` FROM `' . Settings::db_table_infected_users . '`
+        $result = $mysql->query('SELECT * FROM `' . Settings::db_table_infected_users . '`
                                  ORDER BY `firstname` ASC;');
         
         $mysql->close();
         
         $userList = array();
         
-        while ($row = $result->fetch_array()) {
-            array_push($userList, self::getUser($row['id']));
+        while ($object = $result->fetch_object('User')) {
+            array_push($userList, $object);
         }
 
         return $userList;
@@ -91,7 +71,7 @@ class UserHandler {
     public static function getPermissionUsers() {
         $mysql = MySQL::open(Settings::db_name_infected);
         
-        $result = $mysql->query('SELECT DISTINCT `' . Settings::db_table_infected_users . '`.`id` FROM `' . Settings::db_table_infected_users . '`
+        $result = $mysql->query('SELECT DISTINCT * FROM `' . Settings::db_table_infected_users . '`
 								 LEFT JOIN `' . Settings::db_table_infected_userpermissions . '` ON `' . Settings::db_table_infected_users . '`.`id` = `' . Settings::db_table_infected_userpermissions . '`.`userId`
 								 WHERE `' . Settings::db_table_infected_userpermissions . '`.`id` IS NOT NULL
 								 ORDER BY `' . Settings::db_table_infected_users . '`.`firstname` ASC;');
@@ -100,8 +80,8 @@ class UserHandler {
         
         $userList = array();
         
-        while ($row = $result->fetch_array()) {
-            array_push($userList, self::getUser($row['id']));
+        while ($object = $result->fetch_object('User')) {
+            array_push($userList, $object);
         }
 
         return $userList;
@@ -113,7 +93,7 @@ class UserHandler {
     public static function getMemberUsers() {
         $mysql = MySQL::open(Settings::db_name_infected);
         
-        $result = $mysql->query('SELECT `' . Settings::db_table_infected_users . '`.`id` FROM `' . Settings::db_table_infected_users . '`
+        $result = $mysql->query('SELECT * FROM `' . Settings::db_table_infected_users . '`
                                  LEFT JOIN `' . Settings::db_name_infected_crew . '`.`' . Settings::db_table_infected_crew_memberof . '` ON `' . Settings::db_table_infected_users . '`.`id` = `' . Settings::db_table_infected_crew_memberof . '`.`userId`
                                  WHERE `eventId` = \'' . EventHandler::getCurrentEvent()->getId() . '\'
 								 AND `' . Settings::db_table_infected_crew_memberof . '`.`groupId` IS NOT NULL 
@@ -123,8 +103,8 @@ class UserHandler {
                                       
         $userList = array();
         
-        while ($row = $result->fetch_array()) {
-            array_push($userList, self::getUser($row['id']));
+        while ($object = $result->fetch_object('User')) {
+            array_push($userList, $object);
         }
 
         return $userList;
@@ -136,7 +116,7 @@ class UserHandler {
     public static function getNonMemberUsers() {
         $mysql = MySQL::open(Settings::db_name_infected);
         
-        $result = $mysql->query('SELECT `' . Settings::db_table_infected_users . '`.`id` FROM `' . Settings::db_table_infected_users . '`
+        $result = $mysql->query('SELECT * FROM `' . Settings::db_table_infected_users . '`
                                  LEFT JOIN `' . Settings::db_name_infected_crew . '`.`' . Settings::db_table_infected_crew_memberof . '` ON `' . Settings::db_table_infected_users . '`.`id` = `' . Settings::db_table_infected_crew_memberof . '`.`userId`
                                  WHERE `' . Settings::db_table_infected_crew_memberof . '`.`eventId` IS NULL
 								 OR `' . Settings::db_table_infected_crew_memberof . '`.`eventId` != \'' . EventHandler::getCurrentEvent()->getId() . '\'
@@ -146,8 +126,8 @@ class UserHandler {
 		
         $userList = array();
         
-        while ($row = $result->fetch_array()) {
-            array_push($userList, self::getUser($row['id']));
+        while ($object = $result->fetch_object('User')) {
+            array_push($userList, $object);
         }
 
         return $userList;
@@ -159,7 +139,7 @@ class UserHandler {
     public static function getParticipantUsers($event) {
         $mysql = MySQL::open(Settings::db_name_infected);
         
-		$result = $mysql->query('SELECT DISTINCT `' . Settings::db_table_infected_users . '`.`id` FROM `' . Settings::db_table_infected_users . '`
+		$result = $mysql->query('SELECT DISTINCT * FROM `' . Settings::db_table_infected_users . '`
 								 LEFT JOIN `' . Settings::db_name_infected_tickets . '`.`' . Settings::db_table_infected_tickets_tickets . '` ON `' . Settings::db_table_infected_users . '`.`id` = `' . Settings::db_table_infected_tickets_tickets . '`.`userId`
 								 WHERE `' . Settings::db_table_infected_tickets_tickets . '`.`eventId` = ' . $event->getId() . '
 								 AND `' . Settings::db_table_infected_tickets_tickets . '`.`id` IS NOT NULL
@@ -169,8 +149,8 @@ class UserHandler {
                                       
         $userList = array();
         
-        while ($row = $result->fetch_array()) {
-            array_push($userList, self::getUser($row['id']));
+        while ($object = $result->fetch_object('User')) {
+            array_push($userList, $object);
         }
 
         return $userList;
@@ -188,7 +168,7 @@ class UserHandler {
 		if (count(EventHandler::getEvents()) >= $previousEvent->getId()) {
 			$mysql = MySQL::open(Settings::db_name_infected);
 			
-			$result = $mysql->query('SELECT DISTINCT `' . Settings::db_table_infected_users . '`.`id` FROM `' . Settings::db_table_infected_users . '`
+			$result = $mysql->query('SELECT DISTINCT * FROM `' . Settings::db_table_infected_users . '`
 									 LEFT JOIN `' . Settings::db_name_infected_tickets . '`.`' . Settings::db_table_infected_tickets_tickets . '` ON `' . Settings::db_table_infected_users . '`.`id` = `' . Settings::db_table_infected_tickets_tickets . '`.`userId`
 									 WHERE `' . Settings::db_table_infected_tickets_tickets . '`.`eventId` >= ' . $previousEvent->getId() . '
 									 AND `' . Settings::db_table_infected_tickets_tickets . '`.`eventId` <= ' . $currentEvent->getId() . '
@@ -360,9 +340,9 @@ class UserHandler {
         $mysql->close();
         
         $userList = array();
-
-        while($row = $result->fetch_array()) {
-            array_push($userList, self::getUser($row['id']));
+		
+		while ($object = $result->fetch_object('User')) {
+            array_push($userList, $object);
         }
         
         return $userList;

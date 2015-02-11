@@ -10,7 +10,7 @@ class RegistrationCodeHandler {
         $mysql = MySQL::open(Settings::db_name_infected);
         
         $result = $mysql->query('SELECT `code` FROM `' . Settings::db_table_infected_registrationcodes . '` 
-                                      WHERE `userId` = \'' . $mysql->real_escape_string($user->getId()) . '\';');
+                                 WHERE `userId` = \'' . $mysql->real_escape_string($user->getId()) . '\';');
                             
         $row = $result->fetch_array();
         
@@ -25,7 +25,7 @@ class RegistrationCodeHandler {
         $mysql = MySQL::open(Settings::db_name_infected);
         
         $result = $mysql->query('SELECT `id` FROM `' . Settings::db_table_infected_registrationcodes . '` 
-                                      WHERE `code` = \'' . $mysql->real_escape_string($code) . '\';');
+                                 WHERE `code` = \'' . $mysql->real_escape_string($code) . '\';');
                             
         $row = $result->fetch_array();
         
