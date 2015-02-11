@@ -138,8 +138,8 @@ class UserHandler {
         
         $result = $mysql->query('SELECT `' . Settings::db_table_infected_users . '`.`id` FROM `' . Settings::db_table_infected_users . '`
                                  LEFT JOIN `' . Settings::db_name_infected_crew . '`.`' . Settings::db_table_infected_crew_memberof . '` ON `' . Settings::db_table_infected_users . '`.`id` = `' . Settings::db_table_infected_crew_memberof . '`.`userId`
-                                 WHERE `' . Settings::db_table_infected_crew_memberof . '`.`eventId` IS NULL 
-								 AND `' . Settings::db_table_infected_crew_memberof . '`.`groupId` IS NULL 
+                                 WHERE `' . Settings::db_table_infected_crew_memberof . '`.`eventId` IS NULL
+								 OR `' . Settings::db_table_infected_crew_memberof . '`.`eventId` != \'' . EventHandler::getCurrentEvent()->getId() . '\'
                                  ORDER BY `' . Settings::db_table_infected_users . '`.`firstname` ASC;');
         
 		$mysql->close();
