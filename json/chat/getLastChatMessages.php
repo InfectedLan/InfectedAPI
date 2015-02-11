@@ -17,7 +17,7 @@ if (Session::isAuthenticated()) {
 				$result = array();
 
 				foreach ($messages as $message) {
-					$toPush = array("id" => $message->getId(), "message" => $message->getMessage(), "user" => $message->getUser()->getDisplayName());
+					$toPush = array("id" => $message->getId(), "message" => $message->getMessage(), "user" => $message->getUser()->getNickname());
 
 					//Tell chat if admin or not
 					if($user->hasPermission('*') || $user->hasPermission('functions.compoadmin')) {

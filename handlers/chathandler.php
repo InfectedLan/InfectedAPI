@@ -251,7 +251,7 @@ class ChatHandler {
 		$mysql->query('INSERT INTO `' . Settings::db_table_infected_compo_chatmessages . '` (`userId`, `chatId`, `message`) 
                        VALUES (\'' . $mysql->real_escape_string($user->getId()) . '\',
 							   \'' . $mysql->real_escape_string($chat->getId()) . '\',
-							   \'' . $mysql->real_escape_string($message) . '\');');
+							   \'' . htmlspecialchars($mysql->real_escape_string($message), ENT_QUOTES | ENT_HTML401 ) . '\');');
 						
 		$mysql->close();
 	}

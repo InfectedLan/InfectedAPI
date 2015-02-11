@@ -15,7 +15,7 @@ if (Session::isAuthenticated()) {
 			if(ChatHandler::isChatMember($user, $chat) || $user->hasPermission('*') || $user->hasPermission('functions.compoadmin')) {
 				$message = ChatHandler::getLastChatMessage($chat);
 				if(isset($message)) {
-					$result = array("id" => $message->getId(), "message" => $message->getMessage(), "user" => $message->getUser()->getDisplayName());
+					$result = array("id" => $message->getId(), "message" => $message->getMessage(), "user" => $message->getUser()->getNickname());
 					//Tell chat if admin or not
 					if($user->hasPermission('*') || $user->hasPermission('functions.compoadmin')) {
 						$result['admin'] = true;
