@@ -16,7 +16,11 @@ class Match extends Object {
 	private $state;
 	private $compoId;
 	private $bracketOffset;
+	private $chat;
 
+	public function getChat() {
+		return $this->chat;
+	}
 	public function getScheduledTime() {
 		return $this->scheduledTime;
 	}

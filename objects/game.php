@@ -39,10 +39,8 @@ class Game extends Object {
 		return strtotime($this->endTime);
 	}
 	
-	public function isBookingTime() {
-		$now = strtotime(date('Y-m-d H:i:s'));
-				
-		return $now >= $this->getStartTime() && $now <= $this->getEndTime();
+	public function isBookingTime() {	
+		return time() >= $this->getStartTime() && time() <= $this->getEndTime();
 	}
 	
 	public function isPublished() {

@@ -18,6 +18,17 @@ class ChatHandler {
 		
 		return $result->fetch_object('Chat');
 	}
+
+	/*
+ 	 * Adds entire clan to chat
+ 	 */
+	public static function addClanMembersToChat($chat, $clan) {
+		//Let all chat members chat, just because
+		$members = $clan->getMembers();
+		foreach($members as $member) {
+			self::addChatMember($member, $chat);
+		}
+    }
 	
 	/*
 	 * Return all chats.
@@ -49,7 +60,7 @@ class ChatHandler {
                                       
         $mysql->close();
         
-		return $result->fetch_object('Chat');
+		return $result->fetch_object('ChatMessage');
 	}
 	
 	/*
@@ -79,12 +90,12 @@ class ChatHandler {
 		
 		$result = $mysql->query('SELECT * FROM `' . Settings::db_table_infected_compo_chatmessages . '`
                                  WHERE `chatId` = \'' . $mysql->real_escape_string($chat->getId()) . '\'
-                                 ORDER BY `id` ASC
-								 LIMIT ' . $count . ';');
+                                 ORDER BY `id` DESC
+								 LIMIT 1;');
         
 		$mysql->close();
 		
-		return $result->fetch_object('Chat');
+		return $result->fetch_object('ChatMessage');
 	}
 	
 	/*
@@ -95,8 +106,8 @@ class ChatHandler {
 		
 		$result = $mysql->query('SELECT * FROM `' . Settings::db_table_infected_compo_chatmessages . '`
                                  WHERE `chatId` = \'' . $mysql->real_escape_string($chat->getId()) . '\'
-                                 ORDER BY `id` ASC
-								 LIMIT ' . $count . ';');
+                                 ORDER BY `id` DESC
+								 LIMIT ' . $mysql->real_escape_string($count) . ';');
         
 		$mysql->close();
 		
@@ -240,7 +251,7 @@ class ChatHandler {
 		$mysql->query('INSERT INTO `' . Settings::db_table_infected_compo_chatmessages . '` (`userId`, `chatId`, `message`) 
                        VALUES (\'' . $mysql->real_escape_string($user->getId()) . '\',
 							   \'' . $mysql->real_escape_string($chat->getId()) . '\',
-							   \'' . $mysql->real_escape_string($message) . '\');');
+							   \'' . htmlspecialchars($mysql->real_escape_string($message), ENT_QUOTES | ENT_HTML401 ) . '\');');
 						
 		$mysql->close();
 	}
