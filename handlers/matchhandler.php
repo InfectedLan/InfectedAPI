@@ -332,5 +332,21 @@ class MatchHandler {
 
         return true;
     }
+
+    public static function getMatchesForCompo($compo) {
+        $mysql = MySQL::open(Settings::db_name_infected_compo);
+
+        $result = $mysql->query('SELECT * FROM `' . Settings::db_table_infected_compo_matches . '` WHERE `compoId`=\'' + $compo->getId() + '\';');
+
+        $mysql->close();
+
+        $matchList = array();
+
+        while ($object = $result->fetch_object('Match')) {
+            array_push($matchList, $object);
+        }
+
+        return $matchList;
+    }
 }
 ?>
