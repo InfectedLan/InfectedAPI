@@ -1,7 +1,7 @@
 <?php
 require_once 'objects/object.php';
 
-class CheckinState extends Object {
+class CheckInState extends Object {
 	private $ticketId;
 	private $userId;
 

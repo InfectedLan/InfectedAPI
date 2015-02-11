@@ -31,8 +31,8 @@ class ChatHandler {
         
 		$chatList = array();
 		
-        while ($row = $result->fetch_array()) {
-            array_push($chatList, self::getChat($row['id']));
+        while ($object = $result->fetch_object('Chat')) {
+            array_push($chatList, $object);
         }
 
         return $chatList;
@@ -49,11 +49,7 @@ class ChatHandler {
                                       
         $mysql->close();
         
-		$row = $result->fetch_array();
-		
-        if ($row) {
-            return new ChatMessage($row['id']);
-        }
+		return $result->fetch_object('Chat');
 	}
 	
 	/*
@@ -68,8 +64,8 @@ class ChatHandler {
         
 		$chatMessageList = array();
 		
-        while ($row = $result->fetch_array()) {
-            array_push($chatMessageList, self::getChatMessage($row['id']));
+        while ($object = $result->fetch_object('ChatMessage')) {
+            array_push($chatMessageList, $object);
         }
 
         return $chatMessageList;
@@ -81,18 +77,14 @@ class ChatHandler {
 	public static function getLastChatMessage($chat) {
 		$mysql = MySQL::open(Settings::db_name_infected_compo);
 		
-		$result = $mysql->query('SELECT `id` FROM `' . Settings::db_table_infected_compo_chatmessages . '`
+		$result = $mysql->query('SELECT * FROM `' . Settings::db_table_infected_compo_chatmessages . '`
                                  WHERE `chatId` = \'' . $mysql->real_escape_string($chat->getId()) . '\'
                                  ORDER BY `id` ASC
 								 LIMIT ' . $count . ';');
         
 		$mysql->close();
 		
-		$row = $result->fetch_array();
-		
-		if ($row) {
-			return self::getChatMessage($row['id']);
-		}
+		return $result->fetch_object('Chat');
 	}
 	
 	/*
@@ -101,7 +93,7 @@ class ChatHandler {
 	public static function getLastMessages($chat, $count) {
 		$mysql = MySQL::open(Settings::db_name_infected_compo);
 		
-		$result = $mysql->query('SELECT `id` FROM `' . Settings::db_table_infected_compo_chatmessages . '`
+		$result = $mysql->query('SELECT * FROM `' . Settings::db_table_infected_compo_chatmessages . '`
                                  WHERE `chatId` = \'' . $mysql->real_escape_string($chat->getId()) . '\'
                                  ORDER BY `id` ASC
 								 LIMIT ' . $count . ';');
@@ -110,8 +102,8 @@ class ChatHandler {
 		
 		$chatMessageList = array();
 		
-        while ($row = $result->fetch_array()) {
-            array_push($chatMessageList, self::getChatMessage($row['id']));
+        while ($object = $result->fetch_object('ChatMessage')) {
+            array_push($chatMessageList, $object);
         }
 
         return $chatMessageList;

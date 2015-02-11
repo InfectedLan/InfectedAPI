@@ -36,17 +36,17 @@ class ClanHandler {
 
         $mysql->close();
 
-        $clanArray = array();
+        $clanList = array();
 
         while ($row = $result->fetch_array()) {
             $clan = self::getClan($row['clanId']);
             
             if ($event->getId() == $clan->getEvent()) {
-                array_push($clanArray, $clan);
+                array_push($clanList, $clan);
             }
         }
 
-        return $clanArray;
+        return $clanList;
     }
 
     /*
@@ -237,8 +237,8 @@ class ClanHandler {
                                \'' . $mysql->real_escape_string(htmlentities($tag, ENT_QUOTES, 'UTF-8')) . '\', 
                                \'' . $mysql->real_escape_string($event->getId()) . '\');');
         
-        //Fetch the id of the clan we just added
-        $fetchedId = mysqli_insert_id($mysql);
+        // Fetch the id of the clan we just added
+        $fetchedId = $mysql->insert_id($mysql);
 
         $mysql->query('INSERT INTO `' . Settings::db_table_infected_compo_participantof . '` (`clanId`, `compoId`) 
                        VALUES (\'' . $mysql->real_escape_string($fetchedId) . '\', 

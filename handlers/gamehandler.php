@@ -18,15 +18,15 @@ class GameHandler {
     public static function getGames() {
         $mysql = MySQL::open(Settings::db_name_infected_main);
         
-        $result = $mysql->query('SELECT `id` FROM `' . Settings::db_table_infected_main_games . '`;');
-                                      
+        $result = $mysql->query('SELECT * FROM `' . Settings::db_table_infected_main_games . '`;');
+                   
+        $mysql->close();
+
         $gameList = array();
         
-        while ($row = $result->fetch_array()) {
-            array_push($gameList, self::getGame($row['id']));
+        while ($object = $result->fetch_object('Game')) {
+            array_push($gameList, $object);
         }
-
-        $mysql->close();
         
         return $gameList;
     }
@@ -34,16 +34,16 @@ class GameHandler {
     public static function getPublishedGames() {
         $mysql = MySQL::open(Settings::db_name_infected_main);
         
-        $result = $mysql->query('SELECT `id` FROM `' . Settings::db_table_infected_main_games . '` 
-                                      WHERE `published` = \'1\'');
-        
-        $gameList = array();
-        
-        while ($row = $result->fetch_array()) {
-            array_push($gameList, self::getGame($row['id']));
-        }
+        $result = $mysql->query('SELECT * FROM `' . Settings::db_table_infected_main_games . '` 
+                                 WHERE `published` = \'1\'');
         
         $mysql->close();
+
+        $gameList = array();
+        
+        while ($object = $result->fetch_object('Game')) {
+            array_push($gameList, $object);
+        }
 
         return $gameList;
     }

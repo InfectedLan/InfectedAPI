@@ -24,16 +24,12 @@ class AvatarHandler {
     public static function getAvatarForUser($user) {
         $mysql = MySQL::open(Settings::db_name_infected_crew);
         
-        $result = $mysql->query('SELECT `id` FROM `' . Settings::db_table_infected_crew_avatars . '` 
+        $result = $mysql->query('SELECT * FROM `' . Settings::db_table_infected_crew_avatars . '` 
                                  WHERE `userId` = \'' . $mysql->real_escape_string($user->getId()) . '\';');
         
         $mysql->close();
 
-        $row = $result->fetch_array();
-        
-        if ($row) {
-            return self::getAvatar($row['id']);
-        }
+        return $result->fetch_object('Avatar');
     }
     
     /*
@@ -42,14 +38,14 @@ class AvatarHandler {
     public static function getAvatars() {
         $mysql = MySQL::open(Settings::db_name_infected_crew);
         
-        $result = $mysql->query('SELECT `id` FROM `' . Settings::db_table_infected_crew_avatars . '`;');
+        $result = $mysql->query('SELECT * FROM `' . Settings::db_table_infected_crew_avatars . '`;');
         
         $mysql->close();
 
         $avatarList = array();
         
-        while ($row = $result->fetch_array()) {
-            array_push($avatarList, self::getAvatar($row['id']));
+        while ($object = $result->fetch_object('Avatar')) {
+            array_push($avatarList, $object);
         }
         
         return $avatarList;
@@ -61,18 +57,18 @@ class AvatarHandler {
     public static function getPendingAvatars() {
         $mysql = MySQL::open(Settings::db_name_infected_crew);
         
-        $result = $mysql->query('SELECT `id` FROM `' . Settings::db_table_infected_crew_avatars . '` 
+        $result = $mysql->query('SELECT * FROM `' . Settings::db_table_infected_crew_avatars . '` 
                                  WHERE `state` = \'1\';');
         
         $mysql->close();
 
-        $pendingAvatarList = array();
+        $avatarList = array();
         
-        while ($row = $result->fetch_array()) {
-            array_push($pendingAvatarList, self::getAvatar($row['id']));
+        while ($object = $result->fetch_object('Avatar')) {
+            array_push($avatarList, $object);
         }
         
-        return $pendingAvatarList;
+        return $avatarList;
     }
     
     /*

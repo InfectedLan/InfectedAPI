@@ -24,16 +24,12 @@ class EmergencyContactHandler {
     public static function getEmergencyContactForUser($user) {
         $mysql = MySQL::open(Settings::db_name_infected);
         
-        $result = $mysql->query('SELECT `id` FROM `'. Settings::db_table_infected_emergencycontacts . '`
+        $result = $mysql->query('SELECT * FROM `'. Settings::db_table_infected_emergencycontacts . '`
                                  WHERE `userId` = \'' . $mysql->real_escape_string($user->getId()) . '\';');
         
         $mysql->close();
 
-        $row = $result->fetch_array();
-        
-        if ($row) {
-            return self::getEmergencyContact($row['id']);
-        }
+        return $result->fetch_object('EmergencyContact');
     }
     
     /*
@@ -42,14 +38,14 @@ class EmergencyContactHandler {
     public static function getEmergencyContacts() {
         $mysql = MySQL::open(Settings::db_name_infected);
         
-        $result = $mysql->query('SELECT `id` FROM `' . Settings::db_table_infected_emergencycontacts . '`;');
+        $result = $mysql->query('SELECT * FROM `' . Settings::db_table_infected_emergencycontacts . '`;');
         
         $mysql->close();
 
         $emergencyContactsList = array();
-        
-        while ($row = $result->fetch_array()) {
-            array_push($emergencyContactsList, self::getEmergencyContact($row['id']));
+
+        while ($object = $result->fetch_object('EmergencyContact')) {
+            array_push($emergenctContactList, $object);
         }
 
         return $emergencyContactsList;

@@ -26,14 +26,14 @@ class ApplicationHandler {
     public static function getApplications() {
         $mysql = MySQL::open(Settings::db_name_infected_crew);
         
-        $result = $mysql->query('SELECT `id` FROM `' . Settings::db_table_infected_crew_applications . '`;');
+        $result = $mysql->query('SELECT * FROM `' . Settings::db_table_infected_crew_applications . '`;');
         
         $mysql->close();
 
         $applicationList = array();
         
-        while ($row = $result->fetch_array()) {
-            array_push($applicationList, self::getApplication($row['id']));
+        while ($object = $result->fetch_object('Application')) {
+            array_push($applicationList, $object);
         }
         
         return $applicationList;
@@ -45,7 +45,7 @@ class ApplicationHandler {
     public static function getPendingApplications() {
         $mysql = MySQL::open(Settings::db_name_infected_crew);
         
-        $result = $mysql->query('SELECT `' . Settings::db_table_infected_crew_applications . '`.`id` FROM `' . Settings::db_table_infected_crew_applications . '`
+        $result = $mysql->query('SELECT * FROM `' . Settings::db_table_infected_crew_applications . '`
                                  LEFT JOIN `' . Settings::db_table_infected_crew_applicationqueue . '`
                                  ON `' . Settings::db_table_infected_crew_applications . '`.`id` = `applicationId`
                                  WHERE `applicationId` IS NULL
@@ -57,8 +57,8 @@ class ApplicationHandler {
 
         $applicationList = array();
         
-        while ($row = $result->fetch_array()) {
-            array_push($applicationList, self::getApplication($row['id']));
+        while ($object = $result->fetch_object('Application')) {
+            array_push($applicationList, $object);
         }
         
         return $applicationList;
@@ -70,7 +70,7 @@ class ApplicationHandler {
     public static function getPendingApplicationsForGroup($group) {
         $mysql = MySQL::open(Settings::db_name_infected_crew);
         
-        $result = $mysql->query('SELECT `' . Settings::db_table_infected_crew_applications . '`.`id` FROM `' . Settings::db_table_infected_crew_applications . '`
+        $result = $mysql->query('SELECT * FROM `' . Settings::db_table_infected_crew_applications . '`
                                  LEFT JOIN `' . Settings::db_table_infected_crew_applicationqueue . '`
                                  ON `' . Settings::db_table_infected_crew_applications . '`.`id` = `applicationId`
                                  WHERE `applicationId` IS NULL
@@ -83,8 +83,8 @@ class ApplicationHandler {
 
         $applicationList = array();
         
-        while ($row = $result->fetch_array()) {
-            array_push($applicationList, self::getApplication($row['id']));
+        while ($object = $result->fetch_object('Application')) {
+            array_push($applicationList, $object);
         }
         
         return $applicationList;
@@ -96,7 +96,7 @@ class ApplicationHandler {
     public static function getQueuedApplications() {
         $mysql = MySQL::open(Settings::db_name_infected_crew);
         
-        $result = $mysql->query('SELECT `' . Settings::db_table_infected_crew_applications . '`.`id` FROM `' . Settings::db_table_infected_crew_applications . '`
+        $result = $mysql->query('SELECT * FROM `' . Settings::db_table_infected_crew_applications . '`
                                  LEFT JOIN `' . Settings::db_table_infected_crew_applicationqueue . '`
                                  ON `' . Settings::db_table_infected_crew_applications . '`.`id` = `applicationId`
                                  WHERE `applicationId` IS NOT NULL
@@ -108,8 +108,8 @@ class ApplicationHandler {
 
         $queuedApplicationList = array();
         
-        while ($row = $result->fetch_array()) {
-            array_push($queuedApplicationList, self::getApplication($row['id']));
+        while ($object = $result->fetch_object('Application')) {
+            array_push($queuedApplicationList, $object);
         }
         
         return $queuedApplicationList;
@@ -121,7 +121,7 @@ class ApplicationHandler {
     public static function getQueuedApplicationsForGroup($group) {
         $mysql = MySQL::open(Settings::db_name_infected_crew);
         
-        $result = $mysql->query('SELECT `' . Settings::db_table_infected_crew_applications . '`.`id` FROM `' . Settings::db_table_infected_crew_applications . '`
+        $result = $mysql->query('SELECT * FROM `' . Settings::db_table_infected_crew_applications . '`
                                  LEFT JOIN `' . Settings::db_table_infected_crew_applicationqueue . '`
                                  ON `' . Settings::db_table_infected_crew_applications . '`.`id` = `applicationId`
                                  WHERE `applicationId` IS NOT NULL
@@ -134,8 +134,8 @@ class ApplicationHandler {
 
         $queuedApplicationList = array();
         
-        while ($row = $result->fetch_array()) {
-            array_push($queuedApplicationList, self::getApplication($row['id']));
+        while ($object = $result->fetch_object('Application')) {
+            array_push($queuedApplicationList, $object);
         }
         
         return $queuedApplicationList;
@@ -147,7 +147,7 @@ class ApplicationHandler {
     public static function getAcceptedApplications() {
         $mysql = MySQL::open(Settings::db_name_infected_crew);
         
-        $result = $mysql->query('SELECT `' . Settings::db_table_infected_crew_applications . '`.`id` FROM `' . Settings::db_table_infected_crew_applications . '`
+        $result = $mysql->query('SELECT * FROM `' . Settings::db_table_infected_crew_applications . '`
                                  WHERE `state` = \'2\'
 								 ORDER BY `openedTime` DESC;');
         
@@ -155,8 +155,8 @@ class ApplicationHandler {
 		
         $acceptedApplicationList = array();
         
-        while ($row = $result->fetch_array()) {
-            array_push($acceptedApplicationList, self::getApplication($row['id']));
+        while ($object = $result->fetch_object('Application')) {
+            array_push($acceptedApplicationList, $object);
         }
         
         return $acceptedApplicationList;
@@ -168,7 +168,7 @@ class ApplicationHandler {
     public static function getAcceptedApplicationsForGroup($group) {
         $mysql = MySQL::open(Settings::db_name_infected_crew);
         
-        $result = $mysql->query('SELECT `' . Settings::db_table_infected_crew_applications . '`.`id` FROM `' . Settings::db_table_infected_crew_applications . '`
+        $result = $mysql->query('SELECT * FROM `' . Settings::db_table_infected_crew_applications . '`
                                  WHERE `groupId` = \'' . $mysql->real_escape_string($group->getId()) .  '\'
 								 AND `state` = \'2\'
                                  ORDER BY `openedTime` DESC;');
@@ -177,8 +177,8 @@ class ApplicationHandler {
 		
         $acceptedApplicationList = array();
         
-        while ($row = $result->fetch_array()) {
-            array_push($acceptedApplicationList, self::getApplication($row['id']));
+        while ($object = $result->fetch_object('Application')) {
+            array_push($acceptedApplicationList, $object);
         }
         
         return $acceptedApplicationList;
@@ -403,17 +403,15 @@ class ApplicationHandler {
     public static function getUserApplicationForGroup($user, $group) {
         $mysql = MySQL::open(Settings::db_name_infected_crew);
         
-        $result = $mysql->query('SELECT `id` FROM `' . Settings::db_table_infected_crew_applications . '`
+        $result = $mysql->query('SELECT * FROM `' . Settings::db_table_infected_crew_applications . '`
                                  WHERE `eventId` = \'' . EventHandler::getCurrentEvent()->getId() . '\'
                                  AND `userId` = \'' . $mysql->real_escape_string($user->getId()) . '\'
                                  AND `groupId` = \'' . $mysql->real_escape_string($group->getId()) . '\'
                                  AND (`state` = \'1\' OR `state` = \'2\');');
         
         $mysql->close();
-
-        $row = $result->fetch_array();
         
-        return self::getApplication($row['id']);
+        return $result->fetch_object('Application');
     }
     
     /*
@@ -422,7 +420,7 @@ class ApplicationHandler {
     public static function getUserApplications($user) {
         $mysql = MySQL::open(Settings::db_name_infected_crew);
         
-        $result = $mysql->query('SELECT `id` FROM `' . Settings::db_table_infected_crew_applications . '`
+        $result = $mysql->query('SELECT * FROM `' . Settings::db_table_infected_crew_applications . '`
                                  WHERE `eventId` = \'' . EventHandler::getCurrentEvent()->getId() . '\'
                                  AND `userId` = \'' . $user->getId() . '\';');
         
@@ -430,8 +428,8 @@ class ApplicationHandler {
 
         $applicationList = array();
         
-        while ($row = $result->fetch_array()) {
-            array_push($applicationList, self::getApplication($row['id']));
+        while ($object = $result->fetch_object('Application')) {
+            array_push($applicationList, $object);
         }
         
         return $applicationList;
@@ -443,15 +441,15 @@ class ApplicationHandler {
     public static function getApplicationsForEvent($event) {
         $mysql = MySQL::open(Settings::db_name_infected_crew);
         
-        $result = $mysql->query('SELECT `id` FROM `' . Settings::db_table_infected_crew_applications . '`
+        $result = $mysql->query('SELECT * FROM `' . Settings::db_table_infected_crew_applications . '`
                                  WHERE `eventId` = \'' . $event->getId() . '\';');
         
         $mysql->close();
 
         $applicationList = array();
         
-        while ($row = $result->fetch_array()) {
-            array_push($applicationList, self::getApplication($row['id']));
+        while ($object = $result->fetch_object('Application')) {
+            array_push($applicationList, $object);
         }
         
         return $applicationList;

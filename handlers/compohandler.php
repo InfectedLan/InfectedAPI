@@ -26,7 +26,7 @@ class CompoHandler {
     public static function hasGeneratedMatches($compo) {
         $mysql = MySQL::open(Settings::db_name_infected_compo);
 
-        $result = $mysql->query('SELECT * FROM `' . Settings::db_table_infected_compo_matches . '` 
+        $result = $mysql->query('SELECT `id` FROM `' . Settings::db_table_infected_compo_matches . '` 
                                  WHERE `compoId` = \'' . $mysql->real_escape_string($compo->getId()) . '\';');
         
         $mysql->close();
@@ -49,8 +49,8 @@ class CompoHandler {
 
         $compoList = array();
 
-        while ($row = $result->fetch_array()) {
-            array_push($compoList, self::getCompo($row['id']));
+        while ($object = $result->fetch_object('Compo')) {
+            array_push($compoList, $object);
         }
 
         return $compoList;
