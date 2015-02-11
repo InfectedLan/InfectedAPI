@@ -11,8 +11,14 @@ if (Session::isAuthenticated()) {
 	if ($user->hasPermission('*')) {
 		if (isset($_GET['id']) &&
 			is_numeric($_GET['id'])) {
-			GroupHandler::removeGroup($_GET['id']);
-			$result = true;
+			$group = GroupHandler::getGroup($_GET['id']);
+
+			if ($group != null) {
+				GroupHandler::removeGroup($group);
+				$result = true;
+			} else {
+				$message = 'Gruppen finnes ikke.';
+			}
 		} else {
 			$message = 'Ingen gruppe spesifisert.';
 		}

@@ -8,13 +8,6 @@ class ChatMessage extends Object {
 	private $chatId;
 	private $message;
 	
-	public function __construct($id, $userId, $chatId, $message) {
-		parent::__construct($id);
-		$this->userId = $userId;
-		$this->chatId = $chatId;
-		$this->message = $message;
-	}
-	
 	/*
 	 * Returns the user who sent this chat message.
 	 */

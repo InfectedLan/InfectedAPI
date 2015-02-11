@@ -1,29 +1,18 @@
 <?php
+require_once 'handlers/grouphandler.php';
+require_once 'handlers/teamhandler.php';
 require_once 'page.php';
 
 class RestrictedPage extends Page {
 	private $groupId;
 	private $teamId;
-	private $isPrivate;
-	
-	public function __construct($id, $name, $title, $content, $groupId, $teamId, $isPrivate) {
-		parent::__construct($id, $name, $title, $content);
-	
-		$this->groupId = $groupId;
-		$this->teamId = $teamId;
-		$this->isPrivate = $isPrivate;
-	}
 	
 	public function getGroup() {
-		return $this->groupId;
+		return GroupHandler::getGroup($this->groupId);
 	}
 	
 	public function getTeam() {
-		return $this->teamId;
-	}
-	
-	public function isPrivate() {
-		return $this->isPrivate;
+		return TeamHandler::getTeam($this->teamId);
 	}
 }
 ?>

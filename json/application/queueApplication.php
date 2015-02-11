@@ -16,7 +16,7 @@ if (Session::isAuthenticated()) {
 			
 			// Only allow application for current event to be queued.
 			if ($application->getEvent()->getId() == EventHandler::getCurrentEvent()->getId()) {
-				ApplicationHandler::queueApplication($application, true);
+				ApplicationHandler::queueApplication($user, $application, true);
 				$result = true;
 			} else {
 				$message = 'Kan ikke sette søknader for tidligere arrangementer i kø.';

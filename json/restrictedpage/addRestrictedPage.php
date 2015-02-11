@@ -17,10 +17,10 @@ if (Session::isAuthenticated()) {
 			$name = strtolower(str_replace(' ', '-', $_GET['title']));
 			$title = $_GET['title'];
 			$content = $_GET['content'];
-			$groupId = isset($_GET['groupId']) ? $_GET['groupId'] : 0;
-			$teamId = isset($_GET['teamId']) ? $_GET['teamId'] : 0;
+			$group = isset($_GET['groupId']) ? GroupHandler::getGroup($_GET['groupId']) : null;
+			$team = isset($_GET['teamId']) ? TeamHandler::getTeam($_GET['teamId']) : null;
 			
-			RestrictedPageHandler::createPage($name, $title, $content, $groupId, $teamId);
+			RestrictedPageHandler::createPage($name, $title, $content, $group, $team);
 			$result = true;
 		} else {
 			$message = 'Du har ikke fyllt ut alle feltene!';

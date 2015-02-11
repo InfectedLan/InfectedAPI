@@ -6,13 +6,6 @@ class EmergencyContact extends Object {
 	private $userId;
 	private $phone;
 	
-	public function __construct($id, $userId, $phone) {
-		parent::__construct($id);
-	
-		$this->userId = $userId;
-		$this->phone = $phone;
-	}
-	
 	/* 
 	 * Returns associated user.
 	 */

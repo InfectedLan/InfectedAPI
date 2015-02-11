@@ -21,26 +21,10 @@ class UserHandler {
         
         $result = $mysql->query('SELECT * FROM `' . Settings::db_table_infected_users . '` 
                                  WHERE `id` = \'' . $mysql->real_escape_string($id) . '\';');
-         
-        $mysql->close();
-         
-        $row = $result->fetch_array();
-
-        if ($row) {
-            return new User($row['id'], 
-                            $row['firstname'], 
-                            $row['lastname'], 
-                            $row['username'], 
-                            $row['password'], 
-                            $row['email'], 
-                            $row['birthdate'], 
-                            $row['gender'], 
-                            $row['phone'], 
-                            $row['address'], 
-                            $row['postalcode'], 
-                            $row['nickname'],
-							$row['registereddate']);
-        }
+        
+		$mysql->close();
+		
+		return $result->fetch_object('User');
     }
     
     /* 
@@ -51,18 +35,14 @@ class UserHandler {
         
 		$safeIdentifier = $mysql->real_escape_string($identifier);
 		
-        $result = $mysql->query('SELECT `id` FROM `' . Settings::db_table_infected_users . '` 
+        $result = $mysql->query('SELECT * FROM `' . Settings::db_table_infected_users . '` 
                                  WHERE `username` = \'' . $safeIdentifier . '\' 
                                  OR `email` = \'' . $safeIdentifier . '\'
 								 OR `phone` = \'' . $safeIdentifier . '\';');
         
         $mysql->close();
         
-        $row = $result->fetch_array();
-
-        if ($row) {
-            return self::getUser($row['id']);
-        }
+		return $result->fetch_object('User');
     }
     
     /* 
@@ -71,15 +51,15 @@ class UserHandler {
     public static function getUsers() {
         $mysql = MySQL::open(Settings::db_name_infected);
         
-        $result = $mysql->query('SELECT `id` FROM `' . Settings::db_table_infected_users . '`
+        $result = $mysql->query('SELECT * FROM `' . Settings::db_table_infected_users . '`
                                  ORDER BY `firstname` ASC;');
         
         $mysql->close();
         
         $userList = array();
         
-        while ($row = $result->fetch_array()) {
-            array_push($userList, self::getUser($row['id']));
+        while ($object = $result->fetch_object('User')) {
+            array_push($userList, $object);
         }
 
         return $userList;
@@ -138,8 +118,8 @@ class UserHandler {
         
         $result = $mysql->query('SELECT `' . Settings::db_table_infected_users . '`.`id` FROM `' . Settings::db_table_infected_users . '`
                                  LEFT JOIN `' . Settings::db_name_infected_crew . '`.`' . Settings::db_table_infected_crew_memberof . '` ON `' . Settings::db_table_infected_users . '`.`id` = `' . Settings::db_table_infected_crew_memberof . '`.`userId`
-                                 WHERE `' . Settings::db_table_infected_crew_memberof . '`.`eventId` IS NULL 
-								 AND `' . Settings::db_table_infected_crew_memberof . '`.`groupId` IS NULL 
+                                 WHERE `' . Settings::db_table_infected_crew_memberof . '`.`eventId` IS NULL
+								 OR `' . Settings::db_table_infected_crew_memberof . '`.`eventId` != \'' . EventHandler::getCurrentEvent()->getId() . '\'
                                  ORDER BY `' . Settings::db_table_infected_users . '`.`firstname` ASC;');
         
 		$mysql->close();
@@ -196,9 +176,9 @@ class UserHandler {
 			
 			$mysql->close();
 			
-			while ($row = $result->fetch_array()) {
-				array_push($userList, self::getUser($row['id']));
-			}
+            while ($row = $result->fetch_array()) {
+                array_push($userList, self::getUser($row['id']));
+            }
 		}
 		
 		return $userList;
@@ -352,7 +332,7 @@ class UserHandler {
 		}
 		
 		// Query the database using a Full-Text Search.
-		$result = $mysql->query('SELECT `id` FROM `' . Settings::db_table_infected_users . '` 
+		$result = $mysql->query('SELECT * FROM `' . Settings::db_table_infected_users . '` 
 								 WHERE MATCH (`firstname`, `lastname`, `username`, `email`, `nickname`)
 								 AGAINST (\'' . implode(' ', $wordList) . '\' IN BOOLEAN MODE)
 								 LIMIT 15;');
@@ -360,9 +340,9 @@ class UserHandler {
         $mysql->close();
         
         $userList = array();
-
-        while($row = $result->fetch_array()) {
-            array_push($userList, self::getUser($row['id']));
+		
+		while ($object = $result->fetch_object('User')) {
+            array_push($userList, $object);
         }
         
         return $userList;

@@ -6,12 +6,6 @@ class Chat extends Object {
 	private $name;
 	private $title;
 	
-	public function __construct($id, $name, $title) {
-		parent::__construct($id);
-		$this->name = $name;
-		$this->title = $title;
-	}
-	
 	/*
 	 * Returns the name of this chat.
 	 */

@@ -1,6 +1,8 @@
 <?php
 require_once 'session.php';
 require_once 'handlers/restrictedpagehandler.php';
+require_once 'handlers/grouphandler.php';
+require_once 'handlers/teamhandler.php';
 
 $result = false;
 $message = null;
@@ -16,13 +18,25 @@ if (Session::isAuthenticated()) {
 			is_numeric($_GET['id']) &&
 			!empty($_GET['title']) &&
 			!empty($_GET['content'])) {
-			$id = $_GET['id'];
-			$name = strtolower(str_replace(' ', '-', $_GET['title']));
-			$title = $_GET['title'];
-			$content = $_GET['content'];
-
-			RestrictedPageHandler::updatePage($id, $name, $title, $content);
-			$result = true;
+			$page = RestrictedPageHandler::getPage($_GET['id']);
+			
+			if ($page != null) {
+				if ($user->hasPermission('*') ||
+					$user->hasPermission('chief.my-crew') &&
+					($page->getGroup()->getId() == $user->getGroup()->getId())) {
+					$title = $_GET['title'];
+					$content = $_GET['content'];
+					$group = isset($_GET['groupId']) ? GroupHandler::getGroup($_GET['groupId']) : $page->getGroup();
+					$team = isset($_GET['teamId']) ? TeamHandler::getTeam($_GET['teamId']) : $page->getTeam();
+					
+					RestrictedPageHandler::updatePage($page, $title, $content, $group, $team);
+					$result = true;
+				} else {
+					$message = 'Du har ikke rettigheter til dette.';
+				}
+			} else {
+				$message = 'Siden finnes ikke.';
+			}
 		} else {
 			$message = 'Du har ikke fylt ut alle feltene.';
 		}
