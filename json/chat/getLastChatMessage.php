@@ -8,16 +8,19 @@ $message = null;
 
 if (Session::isAuthenticated()) {
 	$user = Session::getCurrentUser();
-	if(isset($_GET['id'])) {
+	
+	if (isset($_GET['id'])) {
 		$chat = ChatHandler::getChat($_GET['id']);
 
-		if(isset($chat)) {
-			if(ChatHandler::isChatMember($user, $chat) || $user->hasPermission('*') || $user->hasPermission('compo.chat')) {
+		if (isset($chat)) {
+			if (ChatHandler::isChatMember($user, $chat) || $user->hasPermission('*') || $user->hasPermission('compo.chat')) {
 				$message = ChatHandler::getLastChatMessage($chat);
-				if(isset($message)) {
+				
+				if (isset($message)) {
 					$result = array("id" => $message->getId(), "message" => $message->getMessage(), "user" => $message->getUser()->getNickname());
 					//Tell chat if admin or not
-					if($user->hasPermission('*') || $user->hasPermission('event.compo')) {
+					
+					if ($user->hasPermission('*') || $user->hasPermission('event.compo')) {
 						$result['admin'] = true;
 					} else {
 						$result['admin'] = false;

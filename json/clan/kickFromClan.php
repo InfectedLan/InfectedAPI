@@ -8,12 +8,15 @@ $message = null;
 
 if (Session::isAuthenticated()) {
 	$user = Session::getCurrentUser();
-	if(isset($_GET['user']) && isset($_GET['clan'])) {
+	
+	if (isset($_GET['user']) && isset($_GET['clan'])) {
 		$victim = UserHandler::getUser($_GET['user']);
-		if(isset($victim)) {
+		
+		if (isset($victim)) {
 			$clan = ClanHandler::getClan($_GET['clan']);
-			if(isset($clan)) {
-				if($clan->getChief() == $user->getId()) {
+		
+			if (isset($clan)) {
+				if ($clan->getChief() == $user->getId()) {
 					ClanHandler::kickFromClan($victim, $clan);
 					$result = true;
 				} else {

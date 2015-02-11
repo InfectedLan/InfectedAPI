@@ -8,16 +8,17 @@ $message = null;
 
 if (Session::isAuthenticated()) {
 	$user = Session::getCurrentUser();
-	if(isset($_GET['user']) && isset($_GET['clan'])) {
+	
+	if (isset($_GET['user']) && isset($_GET['clan'])) {
 		$targetUser = UserHandler::getUser($_GET['user']);
-		if(isset($targetUser)) {
+		
+		if (isset($targetUser)) {
 			$clan = ClanHandler::getClan($_GET['clan']);
-			if(isset($clan)) {
-				if($clan->getChief() == $user->getId()) {
-					
+			
+			if (isset($clan)) {
+				if ($clan->getChief() == $user->getId()) {	
 					ClanHandler::setMemberStepinState($clan, $targetUser, ClanHandler::STATE_STEPIN_PLAYER);
 					$result = true;
-
 				} else {
 					$message = "Du er ikke chief";
 				}

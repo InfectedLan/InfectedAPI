@@ -17,14 +17,17 @@ if (Session::isAuthenticated()) {
 	if(isset($_GET['id'])) {
 		$match = MatchHandler::getMatch($_GET['id']);
 
-		if($match->isParticipant($user)|| $user->hasPermission('*') || $user->hasPermission('event.compo')) {
+		if ($user->hasPermission('*') ||
+			$user->hasPermission('event.compo') ||
+			$match->isParticipant($user)) {
 			$matchData['state'] = $match->getState();
 			$matchData['ready'] = $match->isReady();
 			$matchData['compoId'] = $match->getCompoId();
 			$matchData['currentTime'] = time(); //Used for synchronizing time
 			$matchData['startTime'] = $match->getScheduledTime();
 			$matchData['chatId'] = $match->getChat();
-			if($match->getState() == Match::STATE_READYCHECK && $match->isReady()) {
+			
+			if ($match->getState() == Match::STATE_READYCHECK && $match->isReady()) {
 				$readyData = array();
 
 				$participants = MatchHandler::getParticipants($match);

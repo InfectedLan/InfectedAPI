@@ -13,24 +13,30 @@ $clanId = 0;
 if (Session::isAuthenticated()) {
 	$user = Session::getCurrentUser();
 
-	if(isset($_GET['id']) && isset($_GET['matchId']) ) {
+	if (isset($_GET['id']) && isset($_GET['matchId']) ) {
 		$match = MatchHandler::getMatch($_GET['matchId']);
-		if(isset($match)) {
+		
+		if (isset($match)) {
 			$numBanned = VoteHandler::getNumBanned($match->getId());
 			$turn = VoteHandler::getCurrentBanner($numBanned);
-			if($turn != 2) {
+			
+			if ($turn != 2) {
 				$participants = MatchHandler::getParticipants($match);
 				$clan = $participants[$turn];
-				if($clan->getChief() == $user->getId()) {
+				
+				if ($clan->getChief() == $user->getId()) {
 					$voteOption = VoteOptionHandler::getVoteOption($_GET['id']);
-					if(isset($voteOption)) {
-						if($voteOption->getCompoId() == $match->getCompoId()) {
+					
+					if (isset($voteOption)) {
+						if ($voteOption->getCompoId() == $match->getCompoId()) {
 							VoteHandler::banMap($voteOption, $match->getId());
 							//Check if state should be switched
 							$numBanned = VoteHandler::getNumBanned($match->getId());
-							if($numBanned == 6) {
+							
+							if ($numBanned == 6) {
 								$match->setState(2);
 							}
+
 							$result = true;
 						} else {
 							$message = "Dette mappet er ikke for denne compoen!";
@@ -54,7 +60,7 @@ if (Session::isAuthenticated()) {
 	$message = 'Du er ikke logget inn.';
 }
 
-if($result) {
+if ($result) {
 	echo json_encode(array('result' => $result, 'clanId' => $clanId));
 } else {
 	echo json_encode(array('result' => $result, 'message' => $message));

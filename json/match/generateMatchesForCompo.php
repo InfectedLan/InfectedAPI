@@ -16,9 +16,9 @@ if (Session::isAuthenticated()) {
 			!empty($_GET['id'])) {
 			$compo = CompoHandler::getCompo($_GET['id']);
 
-			if(isset($compo)) {
+			if (isset($compo)) {
 
-				if(isset($_GET['startTime']) && 
+				if (isset($_GET['startTime']) && 
 					!empty($_GET['startTime']) && 
 					isset($_GET['compoSpacing']) && 
 					!empty($_GET['compoSpacing'])) {

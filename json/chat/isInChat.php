@@ -1,6 +1,5 @@
 <?php
 require_once 'session.php';
-require_once 'handlers/userhandler.php';
 require_once 'handlers/chathandler.php';
 
 $result = false;
@@ -8,11 +7,14 @@ $message = null;
 
 if (Session::isAuthenticated()) {
 	$user = Session::getCurrentUser();
-	if(isset($_GET['id'])) {
+
+	if (isset($_GET['id'])) {
 		$chat = ChatHandler::getChat($_GET['id']);
 
-		if(isset($chat)) {
-			if(ChatHandler::isChatMember($user, $chat) || $user->hasPermission('*') || $user->hasPermission('compo.chat')) {
+		if (isset($chat)) {
+			if ($user->hasPermission('*') || 
+				$user->hasPermission('compo.chat') ||
+				ChatHandler::isChatMember($user, $chat)) {
 				$result = array("response" => true);
 			} else {
 				$result = array("response" => false);

@@ -10,10 +10,10 @@ $clanId = 0;
 if (Session::isAuthenticated()) {
 	$user = Session::getCurrentUser();
 
-	if(isset($_GET['id'])) {
+	if (isset($_GET['id'])) {
 		$invite = InviteHandler::getInvite($_GET['id']);
-		if(isset($invite)) {
-			if($invite->getUserId() == $user->getId()) {
+		if (isset($invite)) {
+			if ($invite->getUserId() == $user->getId()) {
 				$invite->accept();
 				$result = true;
 			} else {
@@ -29,7 +29,7 @@ if (Session::isAuthenticated()) {
 	$message = 'Du er ikke logget inn.';
 }
 
-if($result) {
+if ($result) {
 	echo json_encode(array('result' => $result, 'clanId' => $clanId));
 } else {
 	echo json_encode(array('result' => $result, 'message' => $message));

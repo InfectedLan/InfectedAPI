@@ -8,18 +8,21 @@ $message = null;
 
 if (Session::isAuthenticated()) {
 	$user = Session::getCurrentUser();
-	if(isset($_GET['id'])) {
+	
+	if (isset($_GET['id'])) {
 		$match = MatchHandler::getMatch($_GET['id']);
 		
-		if($match->isParticipant($user)) {
+		if ($match->isParticipant($user)) {
 			MatchHandler::acceptMatch($user, $match);
-			if(MatchHandler::allHasAccepted($match)) {
+			
+			if (MatchHandler::allHasAccepted($match)) {
 				if($match->getCompoId() == 1) {
 					$match->setState(1);
 				} else {
 					$match->setState(2);
 				}
 			}
+
 			$result = true;
 		} else {
 			$message = "Du er ikke med i denne matchen!";

@@ -11,15 +11,18 @@ $matchArray = array();
 if (Session::isAuthenticated()) {
 	$user = Session::getCurrentUser();
 
-	if($user->hasPermission("*") || $user->hasPermission("functions.compoadmin")) {
-		if(isset($_GET['id'])) {
+	if ($user->hasPermission('*') ||
+		$user->hasPermission('event.compo')) {
+		
+		if (isset($_GET['id'])) {
 			$compo = CompoHandler::getCompo($_GET['id']);
 
 			//First, get pending matches
 			$pendingMatches = MatchHandler::getPendingMatches($compo);
 
 			$pendingArray = array();
-			foreach($pendingMatches as $match) {
+
+			foreach ($pendingMatches as $match) {
 				$matchData = array();
 
 				$matchData['id'] = $match->getId();
@@ -31,13 +34,15 @@ if (Session::isAuthenticated()) {
 
 				array_push($pendingArray, $matchData);
 			}
+
 			$matchArray['pending'] = $pendingArray;
 
 			//Get current matches
 			$currentMatches = MatchHandler::getCurrentMatches($compo);
 
 			$currentArray = array();
-			foreach($currentMatches as $match) {
+
+			foreach ($currentMatches as $match) {
 				$matchData = array();
 
 				$matchData['id'] = $match->getId();
@@ -51,7 +56,7 @@ if (Session::isAuthenticated()) {
 				$participantObjects = MatchHandler::getParticipants($match);
 				$participantData['list'] = array();
 
-				foreach($participantObjects as $participant) {
+				foreach ($participantObjects as $participant) {
 					$data = array();
 
 					$data['name'] = $participant->getName();
@@ -73,7 +78,8 @@ if (Session::isAuthenticated()) {
 			$finishedMatches = MatchHandler::getFinishedMatches($compo);
 
 			$finishedArray = array();
-			foreach($finishedMatches as $match) {
+
+			foreach ($finishedMatches as $match) {
 				$matchData = array();
 
 				$matchData['id'] = $match->getId();
@@ -95,7 +101,7 @@ if (Session::isAuthenticated()) {
 				$participantData = array();
 				$participantData['list'] = array();
 
-				foreach($participantObjects as $participant) {
+				foreach ($participantObjects as $participant) {
 					$data = array();
 
 					$data['name'] = $participant->getName();
@@ -123,7 +129,7 @@ if (Session::isAuthenticated()) {
 	$message = 'Du er ikke logget inn.';
 }
 
-if($result) {
+if ($result) {
 	echo json_encode(array('result' => $result, 'data' => $matchArray));
 } else {
 	echo json_encode(array('result' => $result, 'message' => $message));

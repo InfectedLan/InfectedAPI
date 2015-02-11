@@ -9,20 +9,21 @@ $message = null;
 if (Session::isAuthenticated()) {
 	$user = Session::getCurrentUser();
 
-	if(isset($_GET['id']) && isset($_GET['user'])) {
+	if (isset($_GET['id']) && 
+		isset($_GET['user'])) {
 		$clan = ClanHandler::getClan($_GET['id']);
 
-		if($clan->getChief() == $user->getId()) {
+		if ($clan->getChief() == $user->getId()) {
 
 			$invitee = UserHandler::getUser($_GET['user']);
 
-			if(isset($invitee)) {
-				if($invitee->isEligibleForCompos()) {
+			if (isset($invitee)) {
+				if ($invitee->isEligibleForCompos()) {
 					$compo = ClanHandler::getCompo($clan);
 
 					$inClan = count(ClanHandler::getInvites($clan)) + count(ClanHandler::getMembers($clan));
 
-					if($inClan < $compo->getTeamSize()) {
+					if ($inClan < $compo->getTeamSize()) {
 						ClanHandler::inviteUser($clan, $invitee);
 						$result = true;
 					} else {

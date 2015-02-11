@@ -10,12 +10,11 @@ $clanId = 0;
 if (Session::isAuthenticated()) {
 	$user = Session::getCurrentUser();
 
-	if($user->isEligibleForCompos()) {
+	if ($user->isEligibleForCompos()) {
 		
-		if( isset($_GET['name']) &&
+		if (isset($_GET['name']) &&
 			isset($_GET['tag']) &&
 			isset($_GET['compo']) ) {
-
 			$clanId = ClanHandler::registerClan($_GET['name'], $_GET['tag'], $_GET['compo'], $user);
 
 			$result = true;
@@ -30,7 +29,7 @@ if (Session::isAuthenticated()) {
 	$message = 'Du er ikke logget inn.';
 }
 
-if($result) {
+if ($result) {
 	echo json_encode(array('result' => $result, 'clanId' => $clanId));
 } else {
 	echo json_encode(array('result' => $result, 'message' => $message));

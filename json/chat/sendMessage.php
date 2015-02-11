@@ -8,11 +8,14 @@ $message = null;
 
 if (Session::isAuthenticated()) {
 	$user = Session::getCurrentUser();
-	if(isset($_GET['id']) && isset($_GET['message'])) {
+	
+	if (isset($_GET['id']) && isset($_GET['message'])) {
 		$chat = ChatHandler::getChat($_GET['id']);
 
-		if(isset($chat)) {
-			if(ChatHandler::isChatMember($user, $chat) || $user->hasPermission('*') || $user->hasPermission('compo.chat')) {
+		if (isset($chat)) {
+			if ($user->hasPermission('*') || 
+				$user->hasPermission('compo.chat') ||
+				ChatHandler::isChatMember($user, $chat)) {
 				ChatHandler::sendChatMessage($user, $chat, $_GET['message']);
 				$result = true;
 			} else {
