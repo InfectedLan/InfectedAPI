@@ -13,7 +13,7 @@ class Object {
 	 * Compare is a function that allows you to easily compare this object with the specified one. 
 	 * It returns true if the specified object is identical to this one.
 	 */
-	public function compare($object) {
+	public function equals($object) {
 		// Check that the specified object is an instance of this one.
 		if ($object instanceof $this) {
 			// Compare this objects by the internal id.
