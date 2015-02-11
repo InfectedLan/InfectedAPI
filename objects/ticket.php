@@ -83,7 +83,7 @@ class Ticket extends Object {
 	 * Returns true if this ticket is checked in.
 	 */
 	public function isCheckedIn() {
-		return CheckinStateHandler::isCheckedIn($this);
+		return CheckInStateHandler::isCheckedIn($this);
 	}
 	
 	/*

@@ -3,7 +3,7 @@ require_once 'settings.php';
 require_once 'mysql.php';
 require_once 'objects/checkinstate.php';
 
-class CheckinStateHandler {
+class CheckInStateHandler {
     /*
      * Get a check in state based on id.
      */
@@ -24,8 +24,9 @@ class CheckinStateHandler {
     public static function checkIn($ticket) {
         $mysql = MySQL::open(Settings::db_name_infected_tickets);
 
-        $reuslt = $mysql->query('INSERT INTO `' . Settings::db_table_infected_tickets_checkinstate . '` (`ticketId`) 
-                                 VALUES (\'' . $mysql->real_escape_string($ticket->getId()) . '\');');
+        $reuslt = $mysql->query('INSERT INTO `' . Settings::db_table_infected_tickets_checkinstate . '` (`ticketId`, `userId`) 
+                                 VALUES (\'' . $mysql->real_escape_string($ticket->getId()) . '\',
+                                         \'' . $mysql->real_escape_string($ticket->getUser()->getId()) . '\');');
 
         $mysql->close();
     }
