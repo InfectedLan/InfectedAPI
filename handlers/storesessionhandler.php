@@ -1,9 +1,8 @@
 <?php
 require_once 'settings.php';
 require_once 'mysql.php';
-require_once 'objects/storesession.php';
 require_once 'handlers/tickethandler.php';
-require_once 'handlers/tickettypehandler.php';
+require_once 'objects/storesession.php';
 
 class StoreSessionHandler {
     public static function getStoreSession($id) {
@@ -14,41 +13,46 @@ class StoreSessionHandler {
         
         $mysql->close();
 		
-		return $result->fetch_object('StoreSessio');
+		return $result->fetch_object('StoreSession');
     }
     
+    public static function getStoreSessionForUser($user) {
+        $mysql = MySQL::open(Settings::db_name_infected_tickets);
+
+        $result = $mysql->query('SELECT * FROM `' . Settings::db_table_infected_tickets_storesessions . '` 
+                                 WHERE `userId` = \'' . $mysql->real_escape_string($user->getId()) . '\' 
+                                 AND `datetime` > \'' . self::oldestValidTimestamp() . '\';');
+
+        $mysql->close();
+
+        return $result->fetch_object('StoreSession');
+    }
+
     public static function registerStoreSession($user, $type, $amount, $price) {
         $code = bin2hex(openssl_random_pseudo_bytes(16));
     
         $mysql = MySQL::open(Settings::db_name_infected_tickets);
 
         $result = $mysql->query('INSERT INTO `' . Settings::db_table_infected_tickets_storesessions . '` (`userId`, `ticketType`, `amount`, `code`, `price`, `datetime`) 
-								 VALUES (\'' . $mysql->real_escape_string($user->getId()) . '\', 
-									     \'' . $mysql->real_escape_string($type->getId()) . '\', 
-										 \'' . $mysql->real_escape_string($amount) . '\', 
-									     \'' . $code . '\',
-									     \'' . $mysql->real_escape_string($price) . '\',
-										 \'' . $mysql->real_escape_string(date('Y-m-d H:i:s')) . '\');');
+                                 VALUES (\'' . $mysql->real_escape_string($user->getId()) . '\', 
+                                         \'' . $mysql->real_escape_string($type->getId()) . '\', 
+                                         \'' . $mysql->real_escape_string($amount) . '\', 
+                                         \'' . $code . '\',
+                                         \'' . $mysql->real_escape_string($price) . '\',
+                                         \'' . $mysql->real_escape_string(date('Y-m-d H:i:s')) . '\');');
 
         $mysql->close();
 
         return $code;
     }
-    
-    public static function getStoreSessionForUser($user) {
+
+    public static function deleteStoreSession($storeSession) {
         $mysql = MySQL::open(Settings::db_name_infected_tickets);
 
-        $result = $mysql->query('SELECT `id` FROM `' . Settings::db_table_infected_tickets_storesessions . '` 
-                                 WHERE `userId` = \'' . $mysql->real_escape_string($user->getId()) . '\' 
-                                 AND `datetime` > \'' . self::oldestValidTimestamp() . '\';');
-
-        $row = $result->fetch_array();
+        $result = $mysql->query('DELETE FROM `' . Settings::db_table_infected_tickets_storesessions . '` 
+                                 WHERE `id` = ' . $mysql->real_escape_string($storeSession->getId()) . ';');
 
         $mysql->close();
-
-        if ($row) {
-            return self::getStoreSession($row['id']);
-        }
     }
 
     //Used to validate a payment
@@ -67,28 +71,19 @@ class StoreSessionHandler {
                                  WHERE `ticketType` = \'' . $mysql->real_escape_string($ticketType->getId()) . '\' 
                                  AND `datetime` > \'' . self::oldestValidTimestamp() . '\';');
 
+        $mysql->close();
+
         $reservedCount = 0;
 
         while ($row = $result->fetch_array()) {
             $reservedCount += $row['amount'];
         }
 
-        $mysql->close();
-
         return $reservedCount;
     }
 
     private static function oldestValidTimestamp() {
         return date('Y-m-d H:i:s', time() - Settings::storeSessionTime);
-    }
-
-    public static function deleteStoreSession($storeSession) {
-        $mysql = MySQL::open(Settings::db_name_infected_tickets);
-
-        $result = $mysql->query('DELETE FROM `' . Settings::db_table_infected_tickets_storesessions . '` 
-                                 WHERE `id` = ' . $mysql->real_escape_string($storeSession->getId()) . ';');
-
-        $mysql->close();
     }
 
     private static function getStoreSessionFromKey($key) {
@@ -98,9 +93,9 @@ class StoreSessionHandler {
                                  WHERE `code` = ' . $mysql->real_escape_string($code) . ' 
                                  AND `datetime` > ' . self::oldestValidTimestamp() . ';');
 
-        $row = $result->fetch_array();
-
         $mysql->close();
+
+        $row = $result->fetch_array();
 
         if ($row) {
             return self::getStoreSession($row['id']);
@@ -114,9 +109,9 @@ class StoreSessionHandler {
                                  WHERE `code`=' . $mysql->real_escape_string($code) . ' 
                                  AND `datetime` > ' . self::oldestValidTimestamp() . ';');
 
-        $row = $result->fetch_array();
-
         $mysql->close();
+
+        $row = $result->fetch_array();
 
         if ($row) {
             return $row['userId'];

@@ -18,18 +18,12 @@ class VoteHandler {
     public static function getNumBanned($mysqlsumerId) {
         $mysql = MySQL::open(Settings::db_name_infected_compo);
 
-        $result = $mysql->query('SELECT * FROM `' . Settings::db_table_infected_compo_votes . '` 
+        $result = $mysql->query('SELECT `id` FROM `' . Settings::db_table_infected_compo_votes . '` 
                                  WHERE `consumerId` = ' . $mysql->real_escape_string($mysqlsumerId) . ';');
 
         $mysql->close();
-                                 
-        $count = 0;
 
-        while($row = $result->fetch_array()) {
-            $count++;
-        }
-
-        return $count;
+        return $result->num_rows;
     }
     
     public static function getCurrentBanner($numBanned) {

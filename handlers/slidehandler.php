@@ -5,6 +5,9 @@ require_once 'handlers/eventhandler.php';
 require_once 'objects/slide.php';
 
 class SlideHandler {
+    /*
+     * Get a slide by the internal id.
+     */
     public static function getSlide($id) {
         $mysql = MySQL::open(Settings::db_name_infected_info);
         
@@ -16,10 +19,13 @@ class SlideHandler {
 		return $result->fetch_object('Slide');
     }
     
+    /*
+     * Get a list of all slides.
+     */
     public static function getSlides() {
         $mysql = MySQL::open(Settings::db_name_infected_info);
         
-        $result = $mysql->query('SELECT `id` FROM `' . Settings::db_table_infected_info_slides . '`
+        $result = $mysql->query('SELECT * FROM `' . Settings::db_table_infected_info_slides . '`
 								 WHERE `eventId` = \'' . EventHandler::getCurrentEvent()->getId() . '\'
                                  ORDER BY `startTime`;');
 		
@@ -27,17 +33,20 @@ class SlideHandler {
 		
         $slideList = array();
         
-        while ($row = $result->fetch_array()) {
-            array_push($slideList, self::getSlide($row['id']));
+        while ($object = $result->fetch_object('Slide')) {
+            array_push($slideList, $object);
         }
         
         return $slideList;
     }
 	
+    /*
+     * Get a list of all published slides.
+     */
 	public static function getPublishedSlides() {
         $mysql = MySQL::open(Settings::db_name_infected_info);
         
-        $result = $mysql->query('SELECT `id` FROM `' . Settings::db_table_infected_info_slides . '`
+        $result = $mysql->query('SELECT * FROM `' . Settings::db_table_infected_info_slides . '`
                                  WHERE `eventId` = \'' . EventHandler::getCurrentEvent()->getId() . '\'
 								 AND `startTime` <= NOW()
                                  AND `endTime` >= NOW()
@@ -48,8 +57,8 @@ class SlideHandler {
 		
         $slideList = array();
         
-        while ($row = $result->fetch_array()) {
-            array_push($slideList, self::getSlide($row['id']));
+        while ($object = $result->fetch_object('Slide')) {
+            array_push($slideList, $object);
         }
         
         return $slideList;
@@ -91,7 +100,7 @@ class SlideHandler {
     }
 	
     /*
-     * Remove an agenda entry.
+     * Remove a slide.
      */
     public static function removeSlide($slide) {
         $mysql = MySQL::open(Settings::db_name_infected_info);

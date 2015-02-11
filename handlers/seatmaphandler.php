@@ -16,41 +16,21 @@ class SeatmapHandler {
 		
 		return $result->fetch_object('Seatmap');
     }
-
-    public static function createNewSeatmap($name, $backgroundImage) {
-        $mysql = MySQL::open(Settings::db_name_infected_tickets);
-
-        $mysql->query('INSERT INTO ' . Settings::db_table_infected_tickets_seatmaps . '(`humanName`, `backgroundImage`) 
-                       VALUES (\'' . $mysql->real_escape_string($name) . '\', 
-                               \'' . $mysql->real_escape_string($backgroundImage) . '\')');
-
-        $result = $mysql->query('SELECT id FROM ' .  Settings::db_table_infected_tickets_seatmaps . ' 
-                                 ORDER BY id DESC LIMIT 1;');
-
-        $row = $result->fetch_array();
-
-        $mysql->close();
-
-        if ($row) {
-            return self::getSeatmap($row['id']);
-        }
-
-    }
     
     public static function getSeatmaps() {
         $mysql = MySQL::open(Settings::db_name_infected_tickets);
 
         $result = $mysql->query('SELECT `id` FROM `' . Settings::db_table_infected_tickets_seatmaps . '`;');
 
-        $seatmapArray = array();
-
-        while ($row = $result->fetch_array()) {
-            array_push($seatmapArray, self::getSeatmap($row['id']));
-        }
-
         $mysql->close();
 
-        return $seatmapArray;
+        $seatmapList = array();
+
+        while ($object = $result->fetch_object('Seatmap')) {
+            array_push($seatmapList, $object);
+        }
+
+        return $seatmapList;
     }
     
     public static function getRows($seatmap) {
@@ -59,15 +39,30 @@ class SeatmapHandler {
         $result = $mysql->query('SELECT `id` FROM `' . Settings::db_table_infected_tickets_rows . '` 
                                  WHERE `seatmap` = \'' . $mysql->real_escape_string($seatmap->getId()) . '\';');
 
-        $rowArray = array();
+        $mysql->close();
+
+        $rowList = array();
 
         while ($row = $result->fetch_array()) {
-            array_push($rowArray, RowHandler::getRow($row['id']));
+            array_push($rowList, RowHandler::getRow($row['id']));
         }
+
+        return $rowList;
+    }
+
+    public static function getEvent($seatmap) {
+        $mysql = MySQL::open(Settings::db_name_infected);
+
+        $result = $mysql->query('SELECT `id` FROM `' . Settings::db_table_infected_events . '` 
+                                 WHERE `seatmap`=' . $mysql->real_escape_string($seatmap->getId()) . ';');
 
         $mysql->close();
 
-        return $rowArray;
+        $row = $result->fetch_array();
+
+        if ($row) {
+            return EventHandler::getEvent($row['id']);
+        }
     }
     
     public static function setBackground($seatmap, $filename) {
@@ -75,24 +70,26 @@ class SeatmapHandler {
 
         $mysql->query('UPDATE `' . Settings::db_table_infected_tickets_seatmaps . '` 
                        SET `backgroundImage` = \'' . $mysql->real_escape_string($filename) . '\' 
-                       WHERE `id` = ' . $mysql->real_escape_string($seatmap->getId()) . ';');
+                       WHERE `id` = \'' . $mysql->real_escape_string($seatmap->getId()) . '\';');
     
         $mysql->close();
     }
 
-    public static function getEvent($seatmap) {
-        $mysql = MySQL::open(Settings::db_name_infected);
+    public static function createNewSeatmap($name, $backgroundImage) {
+        $mysql = MySQL::open(Settings::db_name_infected_tickets);
 
-        $result = $mysql->query('SELECT `id` FROM `' . Settings::db_table_infected_events . '` 
-                                WHERE `seatmap`=' . $mysql->real_escape_string($seatmap->getId()) . ';');
+        $mysql->query('INSERT INTO ' . Settings::db_table_infected_tickets_seatmaps . '(`humanName`, `backgroundImage`) 
+                       VALUES (\'' . $mysql->real_escape_string($name) . '\', 
+                               \'' . $mysql->real_escape_string($backgroundImage) . '\')');
 
-        $row = $result->fetch_array();
+        $result = $mysql->query('SELECT * FROM `' .  Settings::db_table_infected_tickets_seatmaps . '`
+                                 ORDER BY id DESC
+                                 LIMIT 1;');
 
         $mysql->close();
 
-        if ($row) {
-            return EventHandler::getEvent($row['id']);
-        }
+        return $result->fetch_object('Seatmap');
+
     }
 
     public static function duplicateSeatmap($seatmap) {
@@ -100,12 +97,10 @@ class SeatmapHandler {
 
         //Create the seatmap object
         $mysql->query('INSERT INTO `' . Settings::db_table_infected_tickets_seatmaps . '` (`humanName`, `backgroundImage`) 
-            VALUES (\'Duplicate of ' . $mysql->real_escape_string($seatmap->getHumanName()) . '\', 
-                \'' . $mysql->real_escape_string($seatmap->getBackgroundImage()) . '\')');
-        //Get id
-        $getIdResult = $mysql->query('SELECT `id` FROM `' . Settings::db_table_infected_tickets_seatmaps . '` ORDER BY `id` DESC LIMIT 1;');
-        $row = $mysql->fetch_array($getIdResult);
-        $id = $row['id'];
+                       VALUES (\'Duplicate of ' . $mysql->real_escape_string($seatmap->getHumanName()) . '\', 
+                               \'' . $mysql->real_escape_string($seatmap->getBackgroundImage()) . '\')');
+
+        $mysql->close();
     }
 }
 ?>

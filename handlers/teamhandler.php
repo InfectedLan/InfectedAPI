@@ -21,14 +21,13 @@ class TeamHandler {
     public static function getTeamForUser($user) {
         $mysql = MySQL::open(Settings::db_name_infected_crew);
         
-        $result = $mysql->query('SELECT `teamId`
-                                 FROM `' . Settings::db_table_infected_crew_memberof . '` 
+        $result = $mysql->query('SELECT `teamId` FROM `' . Settings::db_table_infected_crew_memberof . '` 
                                  WHERE `eventId` = \'' . EventHandler::getCurrentEvent()->getId() . '\'
 								 AND `userId` = \'' . $mysql->real_escape_string($user->getId()) . '\';');
-                                    
-        $row = $result->fetch_array();
-        
+         
         $mysql->close();
+
+        $row = $result->fetch_array();
         
         if ($row) {
             return self::getTeam($row['teamId']);
@@ -39,15 +38,15 @@ class TeamHandler {
     public static function getTeams() {
         $mysql = MySQL::open(Settings::db_name_infected_crew);
         
-        $result = $mysql->query('SELECT `id` FROM `' . Settings::db_table_infected_crew_teams . '`;');
-        
-        $teamList = array();
-        
-        while ($row = $result->fetch_array()) {
-            array_push($teamList, self::getTeam($row['id']));
-        }
+        $result = $mysql->query('SELECT * FROM `' . Settings::db_table_infected_crew_teams . '`;');
         
         $mysql->close();
+
+        $teamList = array();
+
+        while ($object = $result->fetch_object('Team')) {
+            array_push($teamList, $object);
+        }
         
         return $teamList;
     }
@@ -56,16 +55,16 @@ class TeamHandler {
     public static function getTeamsForGroup($group) {
         $mysql = MySQL::open(Settings::db_name_infected_crew);
 
-        $result = $mysql->query('SELECT `id` FROM `' . Settings::db_table_infected_crew_teams . '`
+        $result = $mysql->query('SELECT * FROM `' . Settings::db_table_infected_crew_teams . '`
                                  WHERE `groupId` = \'' . $mysql->real_escape_string($group->getId()) . '\';');
         
+        $mysql->close();
+
         $teamList = array();
         
-        while ($row = $result->fetch_array()) {
-            array_push($teamList, self::getTeam($row['id']));
+        while ($object = $result->fetch_object('Team')) {
+            array_push($teamList, $object);
         }
-        
-        $mysql->close();
         
         return $teamList;
     }
@@ -83,19 +82,10 @@ class TeamHandler {
         
         $mysql->close();
     }
-    
-    /* Remove a team */
-    public static function removeTeam($group, $team) {
-        $mysql = MySQL::open(Settings::db_name_infected_crew);
-        
-        $mysql->query('DELETE FROM `' . Settings::db_table_infected_crew_teams . '` 
-                       WHERE `id` = \'' . $mysql->real_escape_string($team->getId()) . '\'
-                       AND `groupId` = \'' . $mysql->real_escape_string($group->getId()) . '\';');
-        
-        $mysql->close();
-    }
-    
-    /* Update a team */
+
+    /* 
+     * Update a team.
+     */
     public static function updateTeam($team, $group, $name, $title, $description, $leader) {
         $mysql = MySQL::open(Settings::db_name_infected_crew);
         
@@ -110,7 +100,22 @@ class TeamHandler {
         $mysql->close();
     }
     
-    /* Returns an array of users that are members of this team */
+    /*
+     * Remove a team.
+     */
+    public static function removeTeam($group, $team) {
+        $mysql = MySQL::open(Settings::db_name_infected_crew);
+        
+        $mysql->query('DELETE FROM `' . Settings::db_table_infected_crew_teams . '` 
+                       WHERE `id` = \'' . $mysql->real_escape_string($team->getId()) . '\'
+                       AND `groupId` = \'' . $mysql->real_escape_string($group->getId()) . '\';');
+        
+        $mysql->close();
+    }
+    
+    /*
+     * Returns an array of users that are members of this team.
+     */
     public static function getMembers($group, $team) {
         $mysql = MySQL::open(Settings::db_name_infected);
         
@@ -122,50 +127,54 @@ class TeamHandler {
                                  AND `teamId` = \'' . $mysql->real_escape_string($team->getId()) . '\' 
                                  ORDER BY `firstname` ASC;');
         
+        $mysql->close();
+
         $memberList = array();
         
         while ($row = $result->fetch_array()) {
             array_push($memberList, UserHandler::getUser($row['id']));
         }
         
-        $mysql->close();
-        
         return $memberList;
     }
     
-    /* Is member of a team which means it's not a plain user */
+    /*
+     * Is member of a team which means it's not a plain user.
+     */
     public static function isTeamMember($user) {
         $mysql = MySQL::open(Settings::db_name_infected_crew);
         
-        $result = $mysql->query('SELECT `teamId` 
-                                 FROM `' . Settings::db_table_infected_crew_memberof. '` 
+        $result = $mysql->query('SELECT `id` FROM `' . Settings::db_table_infected_crew_memberof. '` 
                                  WHERE `eventId` = \'' . EventHandler::getCurrentEvent()->getId() . '\'
 								 AND `userId` = \'' . $mysql->real_escape_string($user->getId()) . '\' 
                                  AND `teamId` != \'0\';');
-                                      
-        $row = $result->fetch_array();
         
         $mysql->close();
+
+        $row = $result->fetch_array();
         
         return $row ? true : false;
     }
     
-    /* Return true if user is leader for a team */
+    /*
+     * Return true if user is leader for a team.
+     */
     public static function isTeamLeader($user) {
         $mysql = MySQL::open(Settings::db_name_infected_crew);
         
-        $result = $mysql->query('SELECT `leader` 
-                                 FROM `' . Settings::db_table_infected_crew_teams . '` 
+        $result = $mysql->query('SELECT `id` FROM `' . Settings::db_table_infected_crew_teams . '` 
                                  WHERE `leader` = \'' . $mysql->real_escape_string($user->getId()) . '\';');
-                                      
-        $row = $result->fetch_array();
-        
+            
         $mysql->close();
+
+        $row = $result->fetch_array();
         
         return $row ? true : false;
     }
     
-    /* Sets the users team */
+    /*
+     * Sets the users team.
+     */
     public static function changeTeamForUser($user, $group, $team) {
         $mysql = MySQL::open(Settings::db_name_infected_crew);
         

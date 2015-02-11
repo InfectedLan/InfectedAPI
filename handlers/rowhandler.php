@@ -21,15 +21,15 @@ class RowHandler {
         $mysql = MySQL::open(Settings::db_name_infected_tickets);
 
         $result = $mysql->query('SELECT `id` FROM `' . Settings::db_table_infected_tickets_seats . '` 
-                                      WHERE `rowId` = \'' . $mysql->real_escape_string($row->getId()) . '\';');
+                                 WHERE `rowId` = \'' . $mysql->real_escape_string($row->getId()) . '\';');
+
+        $mysql->close();
 
         $seatArray = array();
 
         while ($seat = $result->fetch_array()) {
             array_push($seatArray, SeatHandler::getSeat($seat['id']));
         }
-
-        $mysql->close();
 
         return $seatArray;
     }
@@ -54,18 +54,13 @@ class RowHandler {
                                       ' . $mysql->real_escape_string($entrance) . ', 
                                       ' . $mysql->real_escape_string($seatmapId) . ');');
 
-        $result = $mysql->query('SELECT `id` FROM `' .  Settings::db_table_infected_tickets_rows . '`
-                                      ORDER BY `id` DESC 
-                                      LIMIT 1;');
-
-        $row = $result->fetch_array();
+        $result = $mysql->query('SELECT * FROM `' .  Settings::db_table_infected_tickets_rows . '`
+                                 ORDER BY `id` DESC 
+                                 LIMIT 1;');
 
         $mysql->close();
 
-        if ($row) {
-            return self::getRow($row['id']);
-        }
-
+        return $result->fetch_object('Row');
     }
     
     public static function safeToDelete($row) {
@@ -84,7 +79,9 @@ class RowHandler {
         $mysql = MySQL::open(Settings::db_name_infected_tickets);
 
         $result = $mysql->query('DELETE FROM `' . Settings::db_table_infected_tickets_rows . '` 
-                                      WHERE `id` = ' . $mysql->real_escape_string($row->getId()) . ';');
+                                 WHERE `id` = ' . $mysql->real_escape_string($row->getId()) . ';');
+
+        $mysql->close();
 
         $seats = self::getSeats($row);
         
@@ -92,7 +89,7 @@ class RowHandler {
             SeatHandler::deleteSeat($seat);
         }
 
-        $mysql->close();
+        
     }
     
     public static function addSeat($row) {
@@ -100,16 +97,17 @@ class RowHandler {
 
         //Find out what seat number we are at
         $highestSeatNum = $mysql->query('SELECT `number` FROM `' . Settings::db_table_infected_tickets_seats . '` 
-                                              WHERE `rowId` = ' . $mysql->real_escape_string($row->getId()) . ' 
-                                              ORDER BY `number` DESC LIMIT 1;');
+                                         WHERE `rowId` = ' . $mysql->real_escape_string($row->getId()) . ' 
+                                         ORDER BY `number` DESC
+                                         LIMIT 1;');
 
         $seatRow = mysqli_fetch_array($highestSeatNum);
 
         $newSeatNumber = $seatRow['number']+1;
 
         $mysql->query('INSERT INTO `seats` (`rowId`, `number`) 
-                            VALUES (' . $mysql->real_escape_string($row->getId()) . ', 
-                                    ' . $mysql->real_escape_string($newSeatNumber) . ')');
+                       VALUES (\'' . $mysql->real_escape_string($row->getId()) . '\', 
+                               \'' . $mysql->real_escape_string($newSeatNumber) . '\');');
 
         $mysql->close();
     }
@@ -117,8 +115,8 @@ class RowHandler {
     public static function moveRow($row, $x, $y) {
         $mysql = MySQL::open(Settings::db_name_infected_tickets);
 
-        $mysql->query('UPDATE `rows` SET `x`=' . $x . ',`y`=' . $y . ' 
-                            WHERE `id` = ' . $mysql->real_escape_string($row->getId()) . ';');
+        $mysql->query('UPDATE `rows` SET `x` = \'' . $x . '\', `y` = \'' . $y . '\' 
+                       WHERE `id` = ' . $mysql->real_escape_string($row->getId()) . ';');
 
         $mysql->close();
     }

@@ -10,7 +10,7 @@ class SeatHandler {
         $mysql = MySQL::open(Settings::db_name_infected_tickets);
 
         $result = $mysql->query('SELECT * FROM `' . Settings::db_table_infected_tickets_seats . '` 
-                                      WHERE `id` = \'' . $mysql->real_escape_string($id) . '\';');
+                                 WHERE `id` = \'' . $mysql->real_escape_string($id) . '\';');
         
         $mysql->close();
 		
@@ -30,7 +30,7 @@ class SeatHandler {
         $mysql = MySQL::open(Settings::db_name_infected_tickets);
 
         $result = $mysql->query('DELETE FROM `' . Settings::db_table_infected_tickets_seats . '` 
-                                      WHERE `id` = ' . $mysql->real_escape_string($seat->getId()) . ';');
+                                 WHERE `id` = ' . $mysql->real_escape_string($seat->getId()) . ';');
 
         $mysql->close();
     }
@@ -38,8 +38,8 @@ class SeatHandler {
     public static function hasOwner($seat) {
         $mysql = MySQL::open(Settings::db_name_infected_tickets);
 
-        $result = $mysql->query('SELECT * FROM `' . Settings::db_table_infected_tickets_tickets . '` 
-                                      WHERE `seatId` = ' . $mysql->real_escape_string($seat->getId()) . ';');
+        $result = $mysql->query('SELECT `id` FROM `' . Settings::db_table_infected_tickets_tickets . '` 
+                                 WHERE `seatId` = ' . $mysql->real_escape_string($seat->getId()) . ';');
 
         $row = $result->fetch_array();
 
@@ -52,11 +52,11 @@ class SeatHandler {
         $mysql = MySQL::open(Settings::db_name_infected_tickets);
 
         $result = $mysql->query('SELECT `userId` FROM `' . Settings::db_table_infected_tickets_tickets . '` 
-                                      WHERE `seatId` = ' . $mysql->real_escape_string($seat->getId()) . ';');
+                                 WHERE `seatId` = ' . $mysql->real_escape_string($seat->getId()) . ';');
         
-        $row = $result->fetch_array();
-
         $mysql->close();
+
+        $row = $result->fetch_array();
 
         if ($row) {
             return UserHandler::getUser($row['userId']);
@@ -69,9 +69,9 @@ class SeatHandler {
         $result = $mysql->query('SELECT `id` FROM `' . Settings::db_table_infected_tickets_tickets . '` 
                                       WHERE `seatId` = ' . $mysql->real_escape_string($seat->getId()) . ';');
         
-        $row = $result->fetch_array();
-
         $mysql->close();
+
+        $row = $result->fetch_array();
 
         if ($row) {
             return TicketHandler::getTicket($row['id']);

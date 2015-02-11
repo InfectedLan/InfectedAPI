@@ -21,29 +21,24 @@ class TicketTransferHandler {
 
     // Returns list of transfers that are eligible for reverting
     public static function getRevertableTransfers($user) {
-        $mysql = MySQL::open(Settings::db_name_infected_tickets);
+ 		$wantedTimeLimit = time() - Settings::ticketTransferTime;
 
-        $wantedTimeLimit = time() - Settings::ticketTransferTime;
+        $mysql = MySQL::open(Settings::db_name_infected_tickets);
 
         $result = $mysql->query('SELECT * FROM `' . Settings::db_table_infected_tickets_tickettransfers . '` 
                                  WHERE `fromId` = \'' . $mysql->real_escape_string($user->getId()) . '\'
                                  AND `revertable` = \'1\'
                                  AND `datetime` > \'' . date('Y-m-d H:i:s', $wantedTimeLimit) . '\';');
 
-        $transferrableList = array();
+        $mysql->close();
 
-        while($row = $result->fetch_array()) {
-            $transferrableTicket = new TicketTransfer($row['id'],
-                                                      $row['ticketId'], 
-                                                      $row['fromId'],
-                                                      $row['toId'],
-                                                      $row['datetime'],                              
-                                                      $row['revertable']);
-                                      
-            array_push($transferrableList, $transferrableTicket);
+        $transferList = array();
+
+        while ($object = $result->fetch_object('TicketTransfer')) {
+            array_push($transferList, $object);
         }
 
-        return $transferrableList;
+        return $transferList;
     }
     
     public static function createTransfer($ticket, $user, $revertable) {
