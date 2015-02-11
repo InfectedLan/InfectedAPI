@@ -12,7 +12,7 @@ class PaymentHandler {
         
         $mysql->close();
 
-		return $result->fetch_object('Payment');
+		    return $result->fetch_object('Payment');
     }
     
     public static function createPayment($user, $ticketType, $price, $totalPrice, $transactionId) {

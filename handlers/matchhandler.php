@@ -38,7 +38,9 @@ class MatchHandler {
                     \'' . $mysql->real_escape_string($compo->getId()) . '\',
                     \'' . $mysql->real_escape_string($bracketOffset) . '\');');
 
-        $fetchNewestResultId = $mysql->query('SELECT `id` FROM `' . Settings::db_table_infected_compo_matches . '` ORDER BY `id` DESC LIMIT 1;');
+        $fetchNewestResultId = $mysql->query('SELECT `id` FROM `' . Settings::db_table_infected_compo_matches . '` 
+                                              ORDER BY `id` 
+                                              DESC LIMIT 1;');
 
         $row = $fetchNewestResultId->fetch_array();
 
@@ -49,9 +51,9 @@ class MatchHandler {
         $mysql = MySQL::open(Settings::db_name_infected_compo);
 
         $mysql->query('INSERT INTO `' . Settings::db_table_infected_compo_participantOfMatch . '` (`type`, `participantId`, `matchId`) 
-                        VALUES (\'' . $mysql->real_escape_string($type) . '\', 
-                                \'' . $mysql->real_escape_string($participantId) . '\', 
-                                \'' . $mysql->real_escape_string($match->getId()) . '\');');
+                       VALUES (\'' . $mysql->real_escape_string($type) . '\', 
+                               \'' . $mysql->real_escape_string($participantId) . '\', 
+                               \'' . $mysql->real_escape_string($match->getId()) . '\');');
 
         $mysql->close();
     }
@@ -82,8 +84,9 @@ class MatchHandler {
 
         //Picks matches that "should" be running.
         $result = $mysql->query('SELECT * FROM `' . Settings::db_table_infected_compo_matches . '` 
-                                 WHERE `compoId` = ' . $mysql->real_escape_string( $compo->getId() ) . ' 
-                                 AND `winner` = 0 AND `scheduledTime` < ' . time() . ';');
+                                 WHERE `compoId` = \'' . $mysql->real_escape_string( $compo->getId() ) . '\'
+                                 AND `winner` = \'0\' 
+                                 AND `scheduledTime` < \'' . time() . '\';');
 
         $mysql->close();
 
@@ -157,14 +160,15 @@ class MatchHandler {
 
         // Set winner of match
         $mysql->query('UPDATE `' . Settings::db_table_infected_compo_matches . '` 
-                            SET `winner` = ' . $mysql->real_escape_string($clan->getId()) . ' 
-                            WHERE `id` = ' . $mysql->real_escape_string($match->getId()) . ';');
+                       SET `winner` = \'' . $mysql->real_escape_string($clan->getId()) . '\'
+                       WHERE `id` = \'' . $mysql->real_escape_string($match->getId()) . '\';');
 
         // Update match results
         $mysql->query('UPDATE `' . Settings::db_table_infected_compo_participantOfMatch . '` 
-                            SET `type` = 0, `participantId` = ' . $mysql->real_escape_string($clan->getId()) . ' 
-                            WHERE `type` = 1 
-                            AND `participantId` = ' . $mysql->real_escape_string($match->getId()) . ';');
+                       SET `type` = \'0\', 
+                           `participantId` = \'' . $mysql->real_escape_string($clan->getId()) . '\'
+                       WHERE `type` = \'1\' 
+                       AND `participantId` = \'' . $mysql->real_escape_string($match->getId()) . '\';');
 
         $looser = null;
 
@@ -177,8 +181,10 @@ class MatchHandler {
         }
 
         $mysql->query('UPDATE `' . Settings::db_table_infected_compo_participantOfMatch . '` 
-                       SET `type` = 0, `participantId` = ' . $mysql->real_escape_string($looser->getId()) . ' 
-                       WHERE `type` = 2 AND `participantId` = ' . $mysql->real_escape_string($match->getId()) . ';');
+                       SET `type` = \'0\', 
+                           `participantId` = \'' . $mysql->real_escape_string($looser->getId()) . '\'
+                       WHERE `type` = \'2\'
+                       AND `participantId` = \'' . $mysql->real_escape_string($match->getId()) . '\';');
     
         $mysql->close();
     }
@@ -187,8 +193,8 @@ class MatchHandler {
         $mysql = MySQL::open(Settings::db_name_infected_compo);
 
         $result = $mysql->query('SELECT `participantId` FROM `' . Settings::db_table_infected_compo_participantOfMatch . '` 
-                                 WHERE `matchId` = ' . $mysql->real_escape_string($match->getId()) . ' 
-                                 AND `type` = ' . Settings::compo_match_participant_type_clan . ';');
+                                 WHERE `matchId` = \'' . $mysql->real_escape_string($match->getId()) . '\' 
+                                 AND `type` = \'' . Settings::compo_match_participant_type_clan . '\';');
         
         $mysql->close();
 
@@ -205,7 +211,7 @@ class MatchHandler {
         $mysql = MySQL::open(Settings::db_name_infected_compo);
 
         $result = $mysql->query('SELECT * FROM `' . Settings::db_table_infected_compo_participantOfMatch . '` 
-                                 WHERE `matchId` = ' . $mysql->real_escape_string($match->getId()) . ';');
+                                 WHERE `matchId` = \'' . $mysql->real_escape_string($match->getId()) . '\';');
 
         $mysql->close();
 
@@ -230,13 +236,13 @@ class MatchHandler {
         $mysql = MySQL::open(Settings::db_name_infected_compo);
 
         $result = $mysql->query('SELECT `type` FROM `' . Settings::db_table_infected_compo_participantOfMatch . '` 
-                                 WHERE `matchId` = ' . $mysql->real_escape_string($match->getId()) . ';');
+                                 WHERE `matchId` = \'' . $mysql->real_escape_string($match->getId()) . '\';');
 
         $mysql->close();
 
         $hasParticipants = false;
 
-        while($row = $result->fetch_array()) {
+        while ($row = $result->fetch_array()) {
             $hasParticipants = true;
             
             if ($row['type'] == Settings::compo_match_participant_type_match_winner || 
@@ -253,8 +259,8 @@ class MatchHandler {
         $mysql = MySQL::open(Settings::db_name_infected_compo);
 
         $result = $mysql->query('SELECT `id` FROM `' . Settings::db_table_infected_compo_readyusers . '` 
-                                 WHERE `userId` = ' . $mysql->real_escape_string($user->getId()) . ' 
-                                 AND `matchId` = ' . $mysql->real_escape_string($match->getId()) . ';');
+                                 WHERE `userId` = \'' . $mysql->real_escape_string($user->getId()) . '\'
+                                 AND `matchId` = \'' . $mysql->real_escape_string($match->getId()) . '\';');
     
         $row = $result->fetch_array();
         
@@ -275,16 +281,18 @@ class MatchHandler {
         $mysql = MySQL::open(Settings::db_name_infected_compo);
 
         $result = $mysql->query('SELECT * FROM `' . Settings::db_table_infected_compo_participantOfMatch . '` 
-                                 WHERE `type` = 0 AND `matchId` = ' . $mysql->real_escape_string($match->getId()) . ';');
+                                 WHERE `type` = \'0\'
+                                 AND `matchId` = \'' . $mysql->real_escape_string($match->getId()) . '\';');
 
-        //Iterate through clans
-        while($row = $result->fetch_array()) {
+        // Iterate through clans
+        while ($row = $result->fetch_array()) {
             $users = $mysql->query('SELECT * FROM `' . Settings::db_table_infected_compo_memberof . '` 
-                                    WHERE `clanId` = ' . $row['participantId'] . ';');
+                                    WHERE `clanId` = \'' . $row['participantId'] . '\';');
             
             while($userRow = mysqli_fetch_array($users)) {
                 $userCheck = $mysql->query('SELECT * FROM `' . Settings::db_table_infected_compo_readyusers . '` 
-                                            WHERE `userId` = ' . $userRow['userId'] . ' AND `matchId` = ' . $mysql->real_escape_string($match->getId()) . ';');
+                                            WHERE `userId` = \'' . $userRow['userId'] . '\'
+                                            AND `matchId` = \'' . $mysql->real_escape_string($match->getId()) . '\';');
                 
                 $row = mysqli_fetch_array($userCheck);
                 

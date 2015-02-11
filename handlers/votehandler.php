@@ -20,7 +20,7 @@ class VoteHandler {
 
         $result = $mysql->query('SELECT `id` FROM `' . Settings::db_table_infected_compo_votes . '` 
                                  WHERE `consumerId` = ' . $mysql->real_escape_string($mysqlsumerId) . ';');
-
+        
         $mysql->close();
 
         return $result->num_rows;

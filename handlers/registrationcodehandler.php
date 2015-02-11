@@ -56,8 +56,8 @@ class RegistrationCodeHandler {
         $mysql = MySQL::open(Settings::db_name_infected);
         
         $mysql->query('INSERT INTO `' . Settings::db_table_infected_registrationcodes . '` (`userId`, `code`) 
-                            VALUES (\'' . $mysql->real_escape_string($user->getId()) . '\', 
-                                    \'' . $code . '\');');
+                       VALUES (\'' . $mysql->real_escape_string($user->getId()) . '\', 
+                               \'' . $code . '\');');
                                     
         $mysql->close();
         

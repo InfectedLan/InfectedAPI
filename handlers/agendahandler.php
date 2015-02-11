@@ -10,9 +10,9 @@ class AgendaHandler {
         $result = $mysql->query('SELECT * FROM `' . Settings::db_table_infected_main_agenda . '` 
                                  WHERE `id` = \'' . $mysql->real_escape_string($id) . '\';');
         
-  		  $mysql->close();
+  		$mysql->close();
   		  
-  		  return $result->fetch_object('Agenda');
+  		return $result->fetch_object('Agenda');
     }
     
     /*
@@ -43,11 +43,11 @@ class AgendaHandler {
         $mysql = MySQL::open(Settings::db_name_infected_main);
         
         $result = $mysql->query('SELECT * FROM `' . Settings::db_table_infected_main_agenda . '`
-								                 WHERE `eventId` = \'' . EventHandler::getCurrentEvent()->getId() . '\'
-								                 AND `published` = \'1\'
-								                 ORDER BY `startTime`;');
+								 WHERE `eventId` = \'' . EventHandler::getCurrentEvent()->getId() . '\'
+								 AND `published` = \'1\'
+								 ORDER BY `startTime`;');
 				
-		    $mysql->close();	
+		$mysql->close();	
 
         $agendaList = array();
         
@@ -65,10 +65,10 @@ class AgendaHandler {
         $mysql = MySQL::open(Settings::db_name_infected_main);
         
         $result = $mysql->query('SELECT * FROM `' . Settings::db_table_infected_main_agenda . '`
-								                 WHERE `eventId` = \'' . EventHandler::getCurrentEvent()->getId() . '\'
-								                 AND DATE_ADD(`startTime`, INTERVAL 1 HOUR) >= NOW()
-								                 AND `published` = \'1\'
-								                 ORDER BY `startTime`;');
+								 WHERE `eventId` = \'' . EventHandler::getCurrentEvent()->getId() . '\'
+								 AND DATE_ADD(`startTime`, INTERVAL 1 HOUR) >= NOW()
+								 AND `published` = \'1\'
+								 ORDER BY `startTime`;');
 								 
         $mysql->close();	
 	   
@@ -108,11 +108,11 @@ class AgendaHandler {
         $mysql = MySQL::open(Settings::db_name_infected_main);
         
         $mysql->query('INSERT INTO `' . Settings::db_table_infected_main_agenda . '` (`eventId`, `name`, `title`, `description`, `startTime`) 
-                            VALUES (\'' . $mysql->real_escape_string($event->getId()) . '\', 
-									                  \'' . $mysql->real_escape_string($name) . '\', 
-                                    \'' . $mysql->real_escape_string($title) . '\', 
-                                    \'' . $mysql->real_escape_string($description) . '\', 
-                                    \'' . $mysql->real_escape_string($startTime) . '\');');
+                       VALUES (\'' . $mysql->real_escape_string($event->getId()) . '\', 
+							   \'' . $mysql->real_escape_string($name) . '\', 
+                               \'' . $mysql->real_escape_string($title) . '\', 
+                               \'' . $mysql->real_escape_string($description) . '\', 
+                               \'' . $mysql->real_escape_string($startTime) . '\');');
         
         $mysql->close();
     }

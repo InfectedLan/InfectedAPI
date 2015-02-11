@@ -25,7 +25,7 @@ class ChatHandler {
 	public static function getChats() {
 		$mysql = MySQL::open(Settings::db_name_infected_compo);
         
-        $result = $mysql->query('SELECT `id` FROM `' . Settings::db_table_infected_compo_chats . '`;');
+        $result = $mysql->query('SELECT * FROM `' . Settings::db_table_infected_compo_chats . '`;');
                                       
         $mysql->close();
         
@@ -187,7 +187,7 @@ class ChatHandler {
 		$chatMemberList = array();
 		
         while ($row = $result->fetch_array()) {
-            array_push($chatMemberList, UserHandler::getUser($row['id']));
+            array_push($chatMemberList, UserHandler::getUser($row['userId']));
         }
 
         return $chatMemberList;

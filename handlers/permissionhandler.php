@@ -18,7 +18,7 @@ class PermissionHandler {
     public static function getPermissionByValue($value) {
         $mysql = MySQL::open(Settings::db_name_infected);
         
-        $result = $mysql->query('SELECT `id` FROM `' . Settings::db_table_infected_permissions . '`
+        $result = $mysql->query('SELECT * FROM `' . Settings::db_table_infected_permissions . '`
                                  WHERE `value` = \'' . $mysql->real_escape_string($value) . '\';');
         
         $mysql->close();

@@ -67,7 +67,7 @@ class SeatHandler {
         $mysql = MySQL::open(Settings::db_name_infected_tickets);
 
         $result = $mysql->query('SELECT `id` FROM `' . Settings::db_table_infected_tickets_tickets . '` 
-                                      WHERE `seatId` = ' . $mysql->real_escape_string($seat->getId()) . ';');
+                                 WHERE `seatId` = ' . $mysql->real_escape_string($seat->getId()) . ';');
         
         $mysql->close();
 

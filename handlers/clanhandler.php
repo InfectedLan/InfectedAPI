@@ -31,7 +31,7 @@ class ClanHandler {
     public static function getClansForUser($user, $event) {
         $mysql = MySQL::open(Settings::db_name_infected_compo);
 
-        $result = $mysql->query('SELECT * FROM `' . Settings::db_table_infected_compo_memberof . '` 
+        $result = $mysql->query('SELECT `clanId` FROM `' . Settings::db_table_infected_compo_memberof . '` 
                                  WHERE `userId` = \'' . $mysql->real_escape_string($user->getId()) . '\';');
 
         $mysql->close();
@@ -55,7 +55,7 @@ class ClanHandler {
     public static function getCompo($clan) {
         $mysql = MySQL::open(Settings::db_name_infected_compo);
 
-        $result = $mysql->query('SELECT * FROM `' . Settings::db_table_infected_compo_participantof . '` 
+        $result = $mysql->query('SELECT `compoId` FROM `' . Settings::db_table_infected_compo_participantof . '` 
                                  WHERE `clanId` = \'' . $mysql->real_escape_string( $clan->getId() ) . '\';');
 
         $mysql->close();
@@ -73,7 +73,7 @@ class ClanHandler {
     public static function getInvites($clan) {
         $mysql = MySQL::open(Settings::db_name_infected_compo);
 
-        $result = $mysql->query('SELECT * FROM `' . Settings::db_table_infected_compo_invites . '` 
+        $result = $mysql->query('SELECT `id` FROM `' . Settings::db_table_infected_compo_invites . '` 
                                  WHERE `clanId` = \'' . $mysql->real_escape_string($clan->getId()) . '\';');
 
         $mysql->close();
@@ -93,7 +93,7 @@ class ClanHandler {
     public static function getMembers($clan) {
         $mysql = MySQL::open(Settings::db_name_infected_compo);
 
-        $result = $mysql->query('SELECT * FROM `' . Settings::db_table_infected_compo_memberof . '` 
+        $result = $mysql->query('SELECT `userId` FROM `' . Settings::db_table_infected_compo_memberof . '` 
                                  WHERE `clanId` = \'' . $mysql->real_escape_string($clan->getId()) . '\';');
 
         $mysql->close();
@@ -113,7 +113,7 @@ class ClanHandler {
     public static function getPlayingMembers($clan) {
         $mysql = MySQL::open(Settings::db_name_infected_compo);
 
-        $result = $mysql->query('SELECT * FROM `' . Settings::db_table_infected_compo_memberof . '` 
+        $result = $mysql->query('SELECT `userId` FROM `' . Settings::db_table_infected_compo_memberof . '` 
                                  WHERE `clanId` = \'' . $mysql->real_escape_string($clan->getId()) . '\'
                                  AND `stepin` = 0;');
 
@@ -134,7 +134,7 @@ class ClanHandler {
     public static function getStepinMembers($clan) {
         $mysql = MySQL::open(Settings::db_name_infected_compo);
 
-        $result = $mysql->query('SELECT * FROM `' . Settings::db_table_infected_compo_memberof . '` 
+        $result = $mysql->query('SELECT `userId` FROM `' . Settings::db_table_infected_compo_memberof . '` 
                                  WHERE `clanId` = \'' . $mysql->real_escape_string($clan->getId()) . '\'
                                  AND `stepin` = 1;');
 
@@ -155,7 +155,7 @@ class ClanHandler {
     public static function isMember($user, $clan) {
         $mysql = MySQL::open(Settings::db_name_infected_compo);
 
-        $result = $mysql->query('SELECT * FROM `' . Settings::db_table_infected_compo_memberof . '` 
+        $result = $mysql->query('SELECT `id` FROM `' . Settings::db_table_infected_compo_memberof . '` 
                                  WHERE `clanId` = \'' . $mysql->real_escape_string($clan->getId()) . '\'
                                  AND `userId` = \'' . $mysql->real_escape_string($user->getId()) . '\';');
 
@@ -172,7 +172,7 @@ class ClanHandler {
     public static function isMemberStepin($user, $clan) {
         $mysql = MySQL::open(Settings::db_name_infected_compo);
 
-        $result = $mysql->query('SELECT * FROM `' . Settings::db_table_infected_compo_memberof . '` 
+        $result = $mysql->query('SELECT `id` FROM `' . Settings::db_table_infected_compo_memberof . '` 
                                  WHERE `clanId` = \'' . $mysql->real_escape_string($clan->getId()) . '\'
                                  AND `userId` = \'' . $mysql->real_escape_string($user->getId()) . '\'
                                  AND `stepin` = 1;');

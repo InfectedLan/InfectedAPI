@@ -1,20 +1,20 @@
 <?php
 require_once 'settings.php';
 require_once 'mysql.php';
-require_once 'objects/row.php';
 require_once 'handlers/seatmaphandler.php';
 require_once 'handlers/seathandler.php';
-    
+require_once 'objects/row.php';
+
 class RowHandler {
     public static function getRow($id) {
         $mysql = MySQL::open(Settings::db_name_infected_tickets);
 
         $result = $mysql->query('SELECT * FROM `' . Settings::db_table_infected_tickets_rows . '`
-                                      WHERE `id` = \'' . $mysql->real_escape_string($id) . '\';');
+                                 WHERE `id` = \'' . $mysql->real_escape_string($id) . '\';');
         
         $mysql->close();
 		
-		return $result->fetch_object('Row');
+		    return $result->fetch_object('Row');
     }
 
     public static function getSeats($row) {
@@ -25,13 +25,13 @@ class RowHandler {
 
         $mysql->close();
 
-        $seatArray = array();
+        $seatList = array();
 
-        while ($seat = $result->fetch_array()) {
-            array_push($seatArray, SeatHandler::getSeat($seat['id']));
+        while ($row = $result->fetch_array()) {
+            array_push($seatList, SeatHandler::getSeat($row['id']));
         }
 
-        return $seatArray;
+        return $seatList;
     }
 
     public static function createNewRow($seatmapId, $x, $y) {
@@ -39,8 +39,9 @@ class RowHandler {
 
         //Find out what row is max row
         $highestRowNum = $mysql->query('SELECT `row` FROM `' . Settings::db_table_infected_tickets_rows . '`
-                                             WHERE `seatmap`=' . $mysql->real_escape_string($seatmapId) . ' 
-                                             ORDER BY `row` DESC LIMIT 1;');
+                                        WHERE `seatmap`=' . $mysql->real_escape_string($seatmapId) . ' 
+                                        ORDER BY `row` DESC 
+                                        LIMIT 1;');
 
         $row = mysqli_fetch_array($highestRowNum);
 
@@ -48,11 +49,11 @@ class RowHandler {
         $entrance = 1; // TODO: Set this somewere else?
 
         $mysql->query('INSERT INTO ' . Settings::db_table_infected_tickets_rows . '(`number`, `x`, `y`, `entrance`, `seatmap`) 
-                            VALUES (\'' . $mysql->real_escape_string($newRowNumber) . '\', 
-                                      ' . $mysql->real_escape_string($x) . ', 
-                                      ' . $mysql->real_escape_string($y) . ', 
-                                      ' . $mysql->real_escape_string($entrance) . ', 
-                                      ' . $mysql->real_escape_string($seatmapId) . ');');
+                       VALUES (\'' . $mysql->real_escape_string($newRowNumber) . '\', 
+                               \'' . $mysql->real_escape_string($x) . '\', 
+                               \'' . $mysql->real_escape_string($y) . '\', 
+                               \'' . $mysql->real_escape_string($entrance) . '\', 
+                               \'' . $mysql->real_escape_string($seatmapId) . '\');');
 
         $result = $mysql->query('SELECT * FROM `' .  Settings::db_table_infected_tickets_rows . '`
                                  ORDER BY `id` DESC 
@@ -83,13 +84,11 @@ class RowHandler {
 
         $mysql->close();
 
-        $seats = self::getSeats($row);
+        $seatList = self::getSeats($row);
         
-        foreach($seats as $seat) {
+        foreach($seatList as $seat) {
             SeatHandler::deleteSeat($seat);
         }
-
-        
     }
     
     public static function addSeat($row) {
@@ -115,8 +114,10 @@ class RowHandler {
     public static function moveRow($row, $x, $y) {
         $mysql = MySQL::open(Settings::db_name_infected_tickets);
 
-        $mysql->query('UPDATE `rows` SET `x` = \'' . $x . '\', `y` = \'' . $y . '\' 
-                       WHERE `id` = ' . $mysql->real_escape_string($row->getId()) . ';');
+        $mysql->query('UPDATE `rows` 
+                       SET `x` = \'' . $x . '\',
+                           `y` = \'' . $y . '\'
+                       WHERE `id` = \'' . $mysql->real_escape_string($row->getId()) . '\';');
 
         $mysql->close();
     }

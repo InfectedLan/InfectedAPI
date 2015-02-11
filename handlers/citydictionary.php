@@ -35,7 +35,7 @@ class CityDictionary {
         $row = $result->fetch_array();
         
         if ($row) {
-            return $row['city'];
+            return $row['code'];
         }
     }
     

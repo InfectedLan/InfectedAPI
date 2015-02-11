@@ -111,8 +111,8 @@ class AvatarHandler {
         $mysql = MySQL::open(Settings::db_name_infected_crew);
         
         $result = $mysql->query('SELECT `id` FROM `' . Settings::db_table_infected_crew_avatars . '` 
-                                      WHERE `userId` = \'' . $mysql->real_escape_string($user->getId()) . '\'
-                                      AND `state` = 2;');
+                                 WHERE `userId` = \'' . $mysql->real_escape_string($user->getId()) . '\'
+                                 AND `state` = 2;');
         
         $mysql->close();
 
@@ -143,7 +143,7 @@ class AvatarHandler {
         $mysql = MySQL::open(Settings::db_name_infected_crew);
 
         $result = $mysql->query('DELETE FROM `' . Settings::db_table_infected_crew_avatars . '` 
-                                      WHERE `id` = \'' . $mysql->real_escape_string($avatar->getId()) . '\';');
+                                 WHERE `id` = \'' . $mysql->real_escape_string($avatar->getId()) . '\';');
         
         $mysql->close();
 

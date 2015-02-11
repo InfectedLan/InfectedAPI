@@ -19,7 +19,7 @@ class InviteHandler {
         $mysql = MySQL::open(Settings::db_name_infected_compo);
 
         $result = $mysql->query('SELECT * FROM `'  . Settings::db_table_infected_compo_invites . '` 
-                                 WHERE `userId` = ' . $mysql->real_escape_string($user->getId()) . ';');
+                                 WHERE `userId` = \'' . $mysql->real_escape_string($user->getId()) . '\';');
         
         $mysql->close();
 
@@ -36,7 +36,7 @@ class InviteHandler {
         $mysql = MySQL::open(Settings::db_name_infected_compo);
 
         $result = $mysql->query('SELECT * FROM `' . Settings::db_table_infected_compo_invites . '` 
-                                 WHERE `clanId` = ' . $mysql->real_escape_string( $clan->getId() ) . ';');
+                                 WHERE `clanId` = \'' . $mysql->real_escape_string( $clan->getId() ) . '\';');
         
         $mysql->close();
 

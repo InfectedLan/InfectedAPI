@@ -20,7 +20,7 @@ class SeatmapHandler {
     public static function getSeatmaps() {
         $mysql = MySQL::open(Settings::db_name_infected_tickets);
 
-        $result = $mysql->query('SELECT `id` FROM `' . Settings::db_table_infected_tickets_seatmaps . '`;');
+        $result = $mysql->query('SELECT * FROM `' . Settings::db_table_infected_tickets_seatmaps . '`;');
 
         $mysql->close();
 
@@ -99,7 +99,7 @@ class SeatmapHandler {
         $mysql->query('INSERT INTO `' . Settings::db_table_infected_tickets_seatmaps . '` (`humanName`, `backgroundImage`) 
                        VALUES (\'Duplicate of ' . $mysql->real_escape_string($seatmap->getHumanName()) . '\', 
                                \'' . $mysql->real_escape_string($seatmap->getBackgroundImage()) . '\')');
-
+        
         $mysql->close();
     }
 }

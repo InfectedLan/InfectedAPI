@@ -197,7 +197,7 @@ class TicketHandler {
     
     public static function changeSeat($ticket, $seat) {
         // Check that the current event matches tickets, we don't allow seating of old tickets.
-        if ($ticket->getEvent()->getId() == EventHandler::getCurrentEvent()->getId()) {
+        if ($ticket->getEvent()->compare(EventHandler::getCurrentEvent())) {
             $mysql = MySQL::open(Settings::db_name_infected_tickets);
 
             $result = $mysql->query('UPDATE `' . Settings::db_table_infected_tickets_tickets . '` 
@@ -209,7 +209,7 @@ class TicketHandler {
     }
     
     public static function updateTicketUser($ticket, $user) {
-        if ($ticket->getUser()->getId() != $user->getId()) {
+        if (!$user->compare($ticket->getUser())) {
             $mysql = MySQL::open(Settings::db_name_infected_tickets);
             
             // Change the user of the ticket.
