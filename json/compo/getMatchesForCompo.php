@@ -1,25 +1,26 @@
 <?php
 require_once 'session.php';
+require_once 'utils.php';
 require_once 'handlers/compohandler.php';
+require_once 'handlers/matchhandler.php';
 
 $result = false;
 $message = null;
 $data = array();
 
 if (Session::isAuthenticated()) {
-	$user = Session::getCurrentUser();
-
+	
 	if (isset($_GET['id']) &&
 		is_numeric($_GET['id'])) {
 		$compo = CompoHandler::getCompo($_GET['id']);
 
 		if ($compo != null) {
-			foreach ($compo->getMatchesForCompo() as $match) {
+			foreach (MatchHandler::getMatchesForCompo($compo) as $match) {
 				array_push($data, array('matchId' => $match->getId(),
 					  					'participants' => MatchHandler::getParticipantString($match),
-					  					'startTime' => $match->getScheduledTime(),
+					  					'startTime' => Utils::getDayFromInt(date('w', $match->getScheduledTime())) . ' ' . date('H:i', $match->getScheduledTime()),
 					  					'bracketOffset' => $match->getBracketOffset(),
-					  					'state' => getState());
+					  					'state' => $match->getState()));
 			}
 
 			$result = true;
