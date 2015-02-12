@@ -23,7 +23,7 @@ class Match extends Object {
 	private $bracket;
 
 	public function getBracket() {
-		return $bracket;
+		return $this->bracket;
 	}
 
 	public function getChat() {
