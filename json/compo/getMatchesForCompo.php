@@ -14,9 +14,9 @@ if (Session::isAuthenticated()) {
 		$compo = CompoHandler::getCompo($_GET['id']);
 
 		if ($compo != null) {
-			foreach (MatchHandler::getMatchesForCompo($compo) as $match) {
+			foreach (MatchHandler::getMatchesForCompo($compo) as $match) {				
 				array_push($data, array('matchId' => $match->getId(),
-					  					'participants' => MatchHandler::getParticipantString($match),
+					  					'participants' => MatchHandler::getParticipantsJson($match),
 					  					'startTime' => Utils::getDayFromInt(date('w', $match->getScheduledTime())) . ' ' . date('H:i', $match->getScheduledTime()),
 					  					'bracketOffset' => $match->getBracketOffset(),
 					  					'state' => $match->getState()));
