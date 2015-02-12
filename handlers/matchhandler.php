@@ -284,7 +284,7 @@ class MatchHandler {
     public static function getParents($match) {
         $mysql = MySQL::open(Settings::db_name_infected_compo);
 
-        $result = $mysql->query('SELECT `from` FROM `' . Settings::db_table_infected_compo_matchrelationships . '` WHERE `to` = \'' . $mysql->real_escape_string($match->getId()) . '\';');
+        $result = $mysql->query('SELECT `fromCompo` FROM `' . Settings::db_table_infected_compo_matchrelationships . '` WHERE `toCompo` = \'' . $mysql->real_escape_string($match->getId()) . '\';');
 
         $mysql->close();
 
