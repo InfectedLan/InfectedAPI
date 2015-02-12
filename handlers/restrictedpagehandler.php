@@ -3,11 +3,10 @@ require_once 'session.php';
 require_once 'settings.php';
 require_once 'mysql.php';
 require_once 'objects/restrictedpage.php';
-require_once 'objects/user.php';
 
 class RestrictedPageHandler {
     /*
-     * Get page by id.
+     * Get page by the internal id.
      */
     public static function getPage($id) {
 		$mysql = MySQL::open(Settings::db_name_infected_crew);
