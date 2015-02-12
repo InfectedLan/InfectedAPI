@@ -39,7 +39,7 @@ class Settings {
 	const db_table_infected_compo_voteoptions = 'voteOptions';
 	const db_table_infected_compo_participantOfMatch = 'participantofmatch';
 	const db_table_infected_compo_matches = 'matches';
-	const db_table_infected_compo_readyusers = 'readyUsers';
+	const db_table_infected_compo_readyusers = 'readyusers';
 	const db_table_infected_compo_votes =  'votes';
 	
 	// InfectedCrew
