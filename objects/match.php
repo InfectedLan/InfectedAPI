@@ -10,6 +10,9 @@ class Match extends Object {
 	const STATE_CUSTOM_PREGAME = 1;
 	const STATE_JOIN_GAME = 2;
 
+	const BRACKET_WINNER = 1;
+	const BRACKET_LOOSER = 0;
+
 	private $scheduledTime;
 	private $connectDetails;
 	private $winner;
@@ -17,10 +20,10 @@ class Match extends Object {
 	private $compoId;
 	private $bracketOffset;
 	private $chat;
-	private $winner;
+	private $bracket;
 
-	public function getWinner() {
-		return $winner == 1;
+	public function getBracket() {
+		return $bracket;
 	}
 
 	public function getChat() {

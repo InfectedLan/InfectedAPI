@@ -49,7 +49,7 @@ class MatchHandler {
                     \'' . $mysql->real_escape_string($compo->getId()) . '\',
                     \'' . $mysql->real_escape_string($bracketOffset) . '\',
                     \'' . $mysql->real_escape_string($chatId) . '\',
-                    \'' . ($bracket == true ? 1 : 0) . '\');');
+                    \'' . $mysql->real_escape_string($bracket) . '\');');
 
         $fetchNewestResultId = $mysql->query('SELECT `id` FROM `' . Settings::db_table_infected_compo_matches . '` 
                                               ORDER BY `id` 

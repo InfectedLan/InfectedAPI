@@ -118,7 +118,7 @@ class CompoHandler {
 
             if (count($carryData['matches']) < 2) {
                 $chat = ChatHandler::createChat("match chat");
-                $match = MatchHandler::createMatch($startTime + ($iteration * $compoSpacing), "", $compo, $iteration, $chat->getId(), true); //TODO connectData
+                $match = MatchHandler::createMatch($startTime + ($iteration * $compoSpacing), "", $compo, $iteration, $chat->getId(), Match::BRACKET_WINNER); //TODO connectData
                 MatchHandler::addMatchParticipant(1, $carryData["matches"][0]->getId(), $match);
                 MatchHandler::addMatchParticipant(1, $carryData["looserMatches"][0]->getId(), $match);
                 break;
@@ -146,7 +146,7 @@ class CompoHandler {
         while ($numberOfObjects > 0) {
             //Create match
             $chat = ChatHandler::createChat("match chat");
-            $match = MatchHandler::createMatch($time, "", $compo, $iteration, $chat->getId(), true); //TODO connectData
+            $match = MatchHandler::createMatch($time, "", $compo, $iteration, $chat->getId(), Match::BRACKET_WINNER); //TODO connectData
             array_push($carryObjects["matches"], $match);
 
             //Assign participants
@@ -194,7 +194,7 @@ class CompoHandler {
         while($looserCount > 0)
         {
             $chat = ChatHandler::createChat("match chat");
-            $match = MatchHandler::createMatch($time + $looserOffsetTime, "", $compo, $iteration, $chat->getId(), false); //TODO connectData
+            $match = MatchHandler::createMatch($time + $looserOffsetTime, "", $compo, $iteration, $chat->getId(), Match::BRACKET_LOOSER); //TODO connectData
 
             if (count($oldLooserCarry) > 0) {
                 MatchHandler::addMatchParticipant(MatchHandler::participantof_state_winner, array_shift($oldLooserCarry)->getId(), $match);
