@@ -67,6 +67,11 @@ class MatchHandler {
                                \'' . $mysql->real_escape_string($participantId) . '\', 
                                \'' . $mysql->real_escape_string($match->getId()) . '\');');
 
+        if($type != self::participantof_state_clan) {
+            $mysql->query('INSERT INTO `' . Settings::db_table_infected_compo_matchrelationships . '` (`fromCompo`, `toCompo`) 
+                VALUES (\'' . $mysql->real_escape_string($participantId) . '\', \'' . $mysql->real_escape_string($match->getId()) . '\');');
+        }
+
         $mysql->close();
     }
 
