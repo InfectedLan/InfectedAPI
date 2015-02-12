@@ -1,0 +1,20 @@
+.bracket {
+	width: 300px;
+	height: 200px;
+}
+.bracket_title {
+	font-weight: bold;
+}
+.bracket_participant {
+	
+}
+.winnersBracket {
+	background-image: url("../content/static/bracket_background.png") repeat;
+}
+.loosersBracket {
+	background-image: url("../content/static/bracket_background.png") repeat;
+}
+.bracket_time {
+	font-size: 70%;
+	text-align: center;
+}
