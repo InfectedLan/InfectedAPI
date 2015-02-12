@@ -1,6 +1,5 @@
 <?php
 require_once 'session.php';
-require_once 'handlers/userhandler.php';
 require_once 'handlers/chathandler.php';
 
 $result = false;
@@ -12,14 +11,14 @@ if (Session::isAuthenticated()) {
 	if (isset($_GET['id']) && isset($_GET['message'])) {
 		$chat = ChatHandler::getChat($_GET['id']);
 
-		if (isset($chat)) {
+		if ($chat != null) {
 			if ($user->hasPermission('*') || 
 				$user->hasPermission('compo.chat') ||
 				ChatHandler::isChatMember($user, $chat)) {
 				ChatHandler::sendChatMessage($user, $chat, $_GET['message']);
 				$result = true;
 			} else {
-				$message = "Du er ikke med i denne chatten!";
+				$message = 'Du er ikke med i denne chatten!';
 			}
 		} else {
 			$message = 'Chatten finnes ikke!';

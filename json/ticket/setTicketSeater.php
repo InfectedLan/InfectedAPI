@@ -14,7 +14,6 @@ if (Session::isAuthenticated()) {
 		if ($ticket != null) {
 			if ($user->getId() == $ticket->getUser()->getId()) {
 				if (isset($_GET['target'])) {
-					
 					$target = UserHandler::getUser($_GET['target']);
 					TicketHandler::setSeater($ticket, $target);
 
@@ -27,7 +26,7 @@ if (Session::isAuthenticated()) {
 				$message = 'Du eier ikke denne billetten!';
 			}
 		} else {
-			
+			$message = 'Billetten finnes ikke.';
 		}
 	} else {
 		$merssage = 'Ugyldig bilett.';

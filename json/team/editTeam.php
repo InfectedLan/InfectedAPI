@@ -11,6 +11,7 @@ if (Session::isAuthenticated()) {
 	
 	if ($user->hasPermission('*') ||
 		$user->hasPermission('chief.teams')) {
+		
 		if (isset($_GET['teamId']) &&
 			isset($_GET['groupId']) &&
 			isset($_GET['title']) &&
@@ -41,5 +42,4 @@ if (Session::isAuthenticated()) {
 }
 
 echo json_encode(array('result' => $result, 'message' => $message));
-
 ?>

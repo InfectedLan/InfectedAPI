@@ -13,18 +13,17 @@ if (Session::isAuthenticated()) {
 		isset($_GET['user'])) {
 		$clan = ClanHandler::getClan($_GET['id']);
 
-		if ($clan->getChief() == $user->getId()) {
+		if ($user->equals($clan->getChief())) {
+			$invite = UserHandler::getUser($_GET['user']);
 
-			$invitee = UserHandler::getUser($_GET['user']);
-
-			if (isset($invitee)) {
-				if ($invitee->isEligibleForCompos()) {
+			if ($invite != null) {
+				if ($invite->isEligibleForCompos()) {
 					$compo = ClanHandler::getCompo($clan);
 
 					$inClan = count(ClanHandler::getInvites($clan)) + count(ClanHandler::getMembers($clan));
 
 					if ($inClan < $compo->getTeamSize()) {
-						ClanHandler::inviteUser($clan, $invitee);
+						ClanHandler::inviteUser($clan, $invite);
 						$result = true;
 					} else {
 						$message = "Laget er fullt!";

@@ -10,13 +10,14 @@ if (Session::isAuthenticated()) {
 	
 	if ($user->hasPermission('*') ||
 		$user->hasPermission('chief.groups')) {
+		
 		if (isset($_GET['id']) &&
 			is_numeric($_GET['id'])) {
 			$group = GroupHandler::getGroup($_GET['id']);
 			$memberList = $group->getMembers();
 			
 			foreach ($memberList as $member) {
-				if ($user->getId() != $member->getId()) {
+				if (!$user->equals($member)) {
 					GroupHandler::removeUserFromGroup($member);
 				}
 			}

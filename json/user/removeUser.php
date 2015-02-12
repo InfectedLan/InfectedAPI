@@ -1,6 +1,7 @@
 <?php
 require_once 'session.php';
 require_once 'handlers/userhandler.php';
+require_once 'handlers/tickethandler.php';
 
 $result = false;
 $message = null;

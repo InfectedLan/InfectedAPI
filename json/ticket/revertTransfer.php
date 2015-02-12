@@ -9,7 +9,8 @@ $message = null;
 if (Session::isAuthenticated()) {
 	$user = Session::getCurrentUser();
 
-	if (isset($_GET['id'])) {
+	if (isset($_GET['id']) &&
+		is_numeric($_GET['id'])) {
 		$ticketToRevert = TicketHandler::getTicket($_GET['id']);
 		
 		if (isset($ticketToRevert)) {

@@ -1,7 +1,7 @@
 <?php
 require_once 'session.php';
 require_once 'handlers/storesessionhandler.php';
-require_once 'handlers/userhandler.php';
+require_once 'handlers/tickettypehandler.php';
 require_once 'handlers/eventhandler.php';
 require_once 'paypal/paypal.php';
 
@@ -17,17 +17,14 @@ if (Session::isAuthenticated()) {
 		$type = $_GET['ticketType'];
 		$amount = $_GET['amount'];
 
-		if(!StoreSessionHandler::hasStoreSession($user)) {
+		if (!StoreSessionHandler::hasStoreSession($user)) {
 			$ticketType = TicketTypeHandler::getTicketType($type);
-
 			$current = EventHandler::getCurrentEvent();
-			if($current->isBookingTime())
-			{
+			
+			if ($current->isBookingTime()) {
 				//Register store session
 				$price = $ticketType->getPriceForUser($user) * $amount;
-				
 				$code = StoreSessionHandler::registerStoreSession($user, $ticketType, $amount, $price);
-
 				$url = PayPal::getPaymentUrl($ticketType, $amount, $code, $user);
 
 				if (isset($url)) {
@@ -35,9 +32,7 @@ if (Session::isAuthenticated()) {
 				} else {
 					$message = "Noe gikk galt da vi snakket med paypal";
 				}
-			}
-			else
-			{
+			} else {
 				$message = "Billettsalget har ikke åpnet!";
 			}
 		} else {

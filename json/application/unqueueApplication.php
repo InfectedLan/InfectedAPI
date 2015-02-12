@@ -14,12 +14,16 @@ if (Session::isAuthenticated()) {
 			is_numeric($_GET['id'])) {
 			$application = ApplicationHandler::getApplication($_GET['id']);
 			
-			// Only allow application for current event to be accepted.
-			if ($application->getEvent()->getId() == EventHandler::getCurrentEvent()->getId()) {
-				ApplicationHandler::unqueueApplication($user, $application);
-				$result = true;
+			if ($application != null) {
+				// Only allow application for current event to be accepted.
+				if ($application->getEvent()->getId() == EventHandler::getCurrentEvent()->getId()) {
+					ApplicationHandler::unqueueApplication($user, $application);
+					$result = true;
+				} else {
+					$message = 'Kan ikke ta søknader for tidligere arrangementer ut av kø.';
+				}
 			} else {
-				$message = 'Kan ikke ta søknader for tidligere arrangementer ut av kø.';
+				$message = 'Søknaden finnes ikke.';
 			}
 		} else {
 			$message = 'Ingen søknad spesifisert.';

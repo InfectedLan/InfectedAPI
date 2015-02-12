@@ -1,21 +1,20 @@
 <?php
 require_once 'session.php';
 require_once 'handlers/rowhandler.php';
-require_once 'handlers/seatmaphandler.php';
 
 $result = false;
 $message = null;
-$id = null;
 
 if (Session::isAuthenticated()) {
 	$user = Session::getCurrentUser();
 	
 	if ($user->hasPermission('*') ||
 		$user->hasPermission('admin.seatmap')) {
+		
 		if(isset($_GET["row"])) {
 			$row = RowHandler::getRow($_GET["row"]);
 			
-			if (isset($row)) {
+			if ($row != null) {
 				if (isset($_GET["numSeats"])) {
 					$seats = $_GET["numSeats"];
 					
@@ -26,22 +25,22 @@ if (Session::isAuthenticated()) {
 						
 						$result = true;
 					} else {
-						$message = "Antall seter er ikke et tall!";
+						$message = 'Antall seter er ikke et tall!';
 					}
 				} else {
-					$message = "Antall seter er ikke satt!";
+					$message = 'Antall seter er ikke satt!';
 				}
 			} else {
-				$message = "Raden eksisterer ikke!";
+				$message = 'Raden eksisterer ikke!';
 			}
 		} else {
-			$message = "Raden er ikke satt!";
+			$message = 'Raden er ikke satt!';
 		}
 	} else {
-		$message = "Du har ikke tillatelse til å legge til en rad!";
+		$message = 'Du har ikke tillatelse til å legge til en rad!';
 	}
 } else {
-	$message = "Du må logge inn først!";
+	$message = 'Du må logge inn først!';
 }
 
 if ($result) {

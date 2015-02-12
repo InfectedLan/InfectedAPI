@@ -10,16 +10,21 @@ if (Session::isAuthenticated()) {
 	
 	if ($user->hasPermission('*') ||
 		$user->hasPermission('chief.applications')) {
+		
 		if (isset($_GET['id']) &&
 			is_numeric($_GET['id'])) {
 			$application = ApplicationHandler::getApplication($_GET['id']);
 			
-			// Only allow application for current event to be queued.
-			if ($application->getEvent()->getId() == EventHandler::getCurrentEvent()->getId()) {
-				ApplicationHandler::queueApplication($user, $application, true);
-				$result = true;
+			if ($application != null) {
+				// Only allow application for current event to be queued.
+				if ($application->getEvent()->equals(EventHandler::getCurrentEvent())) {
+					ApplicationHandler::queueApplication($user, $application, true);
+					$result = true;
+				} else {
+					$message = 'Kan ikke sette søknader for tidligere arrangementer i kø.';
+				}
 			} else {
-				$message = 'Kan ikke sette søknader for tidligere arrangementer i kø.';
+				$message = 'Søknaden finnes ikke.';
 			}
 		} else {
 			$message = 'Ingen søknad spesifisert.';

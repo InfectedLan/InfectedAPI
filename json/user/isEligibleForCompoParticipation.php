@@ -6,18 +6,18 @@ $result = false;
 $message = null;
 
 if (Session::isAuthenticated()) {
-	if (isset($_GET['id'])) {
-		$id = $_GET['id'];
-		$user = UserHandler::getUser($id);
+	if (isset($_GET['id']) &&
+		is_numeric($_GET['id'])) {
+		$user = UserHandler::getUser($_GET['id']);
 		
-		if (isset($user)) {
+		if ($user != null) {
 			if ($user->isEligibleForCompos()) {
 				$result = true;
 			} else {
-				$message = "Brukeren har ikke lov til å delta i compoer. Har brukeren en gyldig billett?";
+				$message = 'Brukeren har ikke lov til å delta i compoer. Har brukeren en gyldig billett?';
 			}
 		} else {
-			$message = "Brukeren eksisterer ikke!";
+			$message = 'Brukeren eksisterer ikke!';
 		}
 	} else {
 		$message = 'Vi mangler felt';

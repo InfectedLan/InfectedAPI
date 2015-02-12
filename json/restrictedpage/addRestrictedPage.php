@@ -10,6 +10,7 @@ if (Session::isAuthenticated()) {
 	
 	if ($user->hasPermission('*') || 
 		$user->hasPermission('chief.my-crew')) {
+		
 		if (isset($_GET['title']) &&
 			isset($_GET['content']) &&
 			!empty($_GET['title']) &&
@@ -33,5 +34,4 @@ if (Session::isAuthenticated()) {
 }
 
 echo json_encode(array('result' => $result, 'message' => $message));
-
 ?>

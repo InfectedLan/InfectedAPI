@@ -1,13 +1,11 @@
 <?php
 require_once 'session.php';
-require_once 'handlers/userhandler.php';
-require_once 'handlers/avatarhandler.php';
 
 $result = false;
 $message = null;
 
 function str_replace_last( $search , $replace , $str ) {
-    if( ($pos = strrpos($str, $search)) !== false ) {
+    if (($pos = strrpos($str, $search)) !== false) {
         $search_length  = strlen( $search );
         $str    = substr_replace( $str , $replace , $pos , $search_length );
     }
@@ -24,7 +22,10 @@ if (Session::isAuthenticated()) {
 		$state = $avatar->getState();
 		
 		if ($state == 0) {
-			if (isset($_GET['x']) && isset($_GET['y']) && isset($_GET['w']) && isset($_GET['h'])) {
+			if (isset($_GET['x']) && 
+				isset($_GET['y']) && 
+				isset($_GET['w']) && 
+				isset($_GET['h'])) {
 				$x = max($_GET['x'], 0);
 				$y = max($_GET['y'], 0);
 				$w = $_GET['w'];
@@ -40,7 +41,8 @@ if (Session::isAuthenticated()) {
 
 					if ($extension == 'png') {
 						$image = imagecreatefrompng(Settings::api_path . $avatar->getTemp());
-					} else if($extension == 'jpeg' || $extension == 'jpg') {
+					} else if ($extension == 'jpeg' || 
+							   $extension == 'jpg') {
 						$image = imagecreatefromjpeg(Settings::api_path . $avatar->getTemp())	;
 					}
 
@@ -51,7 +53,8 @@ if (Session::isAuthenticated()) {
 						$cropWidth = ceil($w*$scalefactor);
 						$cropHeight = ceil($h*$scalefactor);
 
-						if($cropWidth >= Settings::avatar_minimum_width && $cropHeight >= Settings::avatar_minimum_height) {
+						if ($cropWidth >= Settings::avatar_minimum_width && 
+							$cropHeight >= Settings::avatar_minimum_height) {
 							// Render to tumbnail
 							$target = imagecreatetruecolor(Settings::avatar_thumb_w, Settings::avatar_thumb_h);
 							imagecopyresized($target, $image, 0, 0, $x*$scalefactor, $y*$scalefactor, Settings::avatar_thumb_w, Settings::avatar_thumb_h, $w*$scalefactor, $h*$scalefactor);
@@ -99,5 +102,4 @@ if (Session::isAuthenticated()) {
 }
 
 echo json_encode(array('result' => $result, 'message' => $message));
-
 ?>

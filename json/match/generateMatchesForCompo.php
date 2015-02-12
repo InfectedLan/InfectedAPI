@@ -16,34 +16,35 @@ if (Session::isAuthenticated()) {
 			!empty($_GET['id'])) {
 			$compo = CompoHandler::getCompo($_GET['id']);
 
-			if (isset($compo)) {
-
+			if ($compo != null) {
 				if (isset($_GET['startTime']) && 
 					!empty($_GET['startTime']) && 
 					isset($_GET['compoSpacing']) && 
 					!empty($_GET['compoSpacing'])) {
 
-					if(!CompoHandler::hasGeneratedMatches($compo)) {
+					if (!CompoHandler::hasGeneratedMatches($compo)) {
+						CompoHandler::generateDoubleElimination($compo, 
+																$_GET['startTime'], 
+																$_GET['compoSpacing']);
 						
-						CompoHandler::generateDoubleElimination($compo, $_GET['startTime'], $_GET['compoSpacing']);
 						$result = true;
 					} else {
-						$message = "Compoen har allerede genererte matcher";
+						$message = 'Compoen har allerede genererte matcher.';
 					}
 				} else {
-					$message = "Felt mangler";
+					$message = 'Felt mangler.';
 				}
 			} else {
-				$message = "Compoen finnes ikke!";
+				$message = 'Compoen finnes ikke!';
 			}
 		} else {
-			$message = "Felt mangler!";
+			$message = 'Felt mangler!';
 		}
 	} else {
-		$message = "Du har ikke tillatelse til å gjøre dette!";
+		$message = 'Du har ikke tillatelse til å gjøre dette!';
 	}
 } else {
-	$message = "Du er ikke logget inn!";
+	$message = 'Du er ikke logget inn!';
 }
 
 echo json_encode(array('result' => $result, 'message' => $message));

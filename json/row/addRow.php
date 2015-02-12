@@ -12,28 +12,30 @@ if (Session::isAuthenticated()) {
 	
 	if ($user->hasPermission('*') ||
 		$user->hasPermission('admin.seatmap')) {
+		
 		if (isset($_GET["seatmap"])) {
 			$seatmap = SeatmapHandler::getSeatmap($_GET["seatmap"]);
 			
-			if (isset($seatmap)) {
-				if (isset($_GET["x"]) && isset($_GET["y"])) {
+			if ($seatmap != null) {
+				if (isset($_GET["x"]) && 
+					isset($_GET["y"])) {
 					$row = RowHandler::createNewRow($_GET["seatmap"], $_GET["x"], $_GET["y"]);
 					$result = true;
 					$id = $row->getId();
 				} else {
-					$message = "Posisjonen er ikke satt!";
+					$message = 'Posisjonen er ikke satt!';
 				}
 			} else {
-				$message = "Seatmappet eksisterer ikke!";
+				$message = 'Seatmappet eksisterer ikke!';
 			}
 		} else {
-			$message = "Seatmap er ikke satt!";
+			$message = 'Seatmap er ikke satt!';
 		}
 	} else {
-		$message = "Du har ikke tillatelse til å legge til en rad!";
+		$message = 'Du har ikke tillatelse til å legge til en rad!';
 	}
 } else {
-	$message = "Du må logge inn først!";
+	$message = 'Du må logge inn først!';
 }
 
 if ($result) {

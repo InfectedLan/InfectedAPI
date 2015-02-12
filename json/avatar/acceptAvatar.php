@@ -10,6 +10,7 @@ if (Session::isAuthenticated()) {
 	
 	if ($user->hasPermission('*') ||
 		$user->hasPermission('chief.avatars')) {
+		
 		if (isset($_GET['id']) &&
 			is_numeric($_GET['id'])) {
 			$avatar = AvatarHandler::getAvatar($_GET['id']);

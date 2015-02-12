@@ -11,6 +11,7 @@ if (Session::isAuthenticated()) {
 	
 	if ($user->hasPermission('*') ||
 		$user->hasPermission('chief.email')) {
+		
 		if (isset($_GET['userIdList']) &&
 			isset($_GET['subject']) &&
 			isset($_GET['message']) &&

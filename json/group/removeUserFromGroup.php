@@ -11,6 +11,7 @@ if (Session::isAuthenticated()) {
 	
 	if ($user->hasPermission('*') ||
 		$user->hasPermission('chief.groups')) {
+		
 		if (isset($_GET['id']) &&
 			is_numeric($_GET['id'])) {
 			$groupUser = UserHandler::getUser($_GET['id']);

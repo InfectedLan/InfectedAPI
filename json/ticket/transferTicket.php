@@ -1,6 +1,7 @@
 <?php
 require_once 'session.php';
 require_once 'handlers/tickethandler.php';
+require_once 'handlers/userhandler.php';
 require_once 'handlers/tickettransferhandler.php';
 
 $result = false;
@@ -9,10 +10,11 @@ $message = null;
 if (Session::isAuthenticated()) {
 	$user = Session::getCurrentUser();
 
-	if (isset($_GET['id'])) {
+	if (isset($_GET['id']) &&
+		is_numeric($_GET['id'])) {
 		$ticket = TicketHandler::getTicket($_GET['id']);
 		
-		if ($user->getId() == $ticket->getUser()->getId()) {
+		if ($user->equals($ticket->getUser())) {
 			if (isset($_GET['target'])) {
 				$target = UserHandler::getUser($_GET['target']);
 				

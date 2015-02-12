@@ -12,6 +12,7 @@ if (Session::isAuthenticated()) {
 	
 	if ($user->hasPermission('*') ||
 		$user->hasPermission('chief.my-crew')) {
+		
 		if (isset($_GET['id']) &&
 			isset($_GET['title']) &&
 			isset($_GET['content']) &&

@@ -12,21 +12,25 @@ if (Session::isAuthenticated()) {
 	if (isset($_GET['id'])) {
 		$match = MatchHandler::getMatch($_GET['id']);
 		
-		if ($match->isParticipant($user)) {
-			MatchHandler::acceptMatch($user, $match);
-			
-			if (MatchHandler::allHasAccepted($match)) {
-				if($match->getCompoId() == 1) {
-					$match->setState(1);
-				} else {
-					$match->setState(2);
+		if ($match != null) {
+			if ($match->isParticipant($user)) {
+				MatchHandler::acceptMatch($user, $match);
+				
+				if (MatchHandler::allHasAccepted($match)) {
+					if ($match->getCompoId() == 1) {
+						$match->setState(1);
+					} else {
+						$match->setState(2);
+					}
 				}
-			}
 
-			$result = true;
+				$result = true;
+			} else {
+				$message = 'Du er ikke med i denne matchen!';
+			}
 		} else {
-			$message = "Du er ikke med i denne matchen!";
-		}	
+			$message = 'Denne matchen finnes ikke.';
+		}
 	} else {
 		$message = 'Vi mangler felt';
 	}

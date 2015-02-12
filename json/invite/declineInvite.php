@@ -13,20 +13,21 @@ if (Session::isAuthenticated()) {
 	if (isset($_GET['id'])) {
 		$invite = InviteHandler::getInvite($_GET['id']);
 		
-		if (isset($invite)) {
+		if ($invite != null) {
 			$clan = ClanHandler::getClan($invite->getClanId());
-			
-			if ($invite->getUserId() == $user->getId() || $user->getId() == $clan->getChief()) {
+
+			if ($invite->getUserId() == $user->getId() || 
+				$user->equals($clan->getChief())) {
 				$invite->decline();
 				$result = true;
 			} else {
-				$message = "Denne invitasjonen er ikke din!";
+				$message = 'Denne invitasjonen er ikke din!';
 			}
 		} else {
-			$message = "Invitasjonen finnes ikke! :(";
+			$message = 'Invitasjonen finnes ikke!';
 		}
 	} else {
-		$message = "Felt mangler!";
+		$message = 'Felt mangler!';
 	}
 } else {
 	$message = 'Du er ikke logget inn.';

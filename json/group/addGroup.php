@@ -11,6 +11,7 @@ if (Session::isAuthenticated()) {
 	
 	if ($user->hasPermission('*') ||
 		$user->hasPermission('chief.groups')) {
+		
 		if (isset($_GET['title']) &&
 			isset($_GET['description']) &&
 			isset($_GET['leader']) &&
@@ -36,5 +37,4 @@ if (Session::isAuthenticated()) {
 }
 
 echo json_encode(array('result' => $result, 'message' => $message));
-
 ?>

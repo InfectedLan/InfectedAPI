@@ -8,7 +8,7 @@ $message = null;
 if (Session::isAuthenticated()) {
 	$user = Session::getCurrentUser();
 	
-	if (true) {
+	if ($user->hasPermission('*')) {
 		if (isset($_GET['id']) &&
 			is_numeric($_GET['id'])) {
 			$fromEvent = EventHandler::getEvent($_GET['id']);

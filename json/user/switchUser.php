@@ -10,6 +10,7 @@ if (Session::isAuthenticated()) {
 	
 	if ($user->hasPermission('*') ||
 		$user->hasPermission('developer.change-user')) {
+		
 		if (isset($_GET['userId']) &&
 			is_numeric($_GET['userId'])) {
 			$changeUser = UserHandler::getUser($_GET['userId']);
@@ -21,13 +22,13 @@ if (Session::isAuthenticated()) {
 				$message = '<p>Brukeren du prøvde å bytte til eksisterer ikke.</p>';
 			}
 		} else {
-			$message = 'Du har ikke fyllt ut alle feltene.';
+			$message = '<p>Du har ikke fyllt ut alle feltene.</p>';
 		}
 	} else {
-		$message = 'Du har ikke rettigheter til dette.';
+		$message = '<p>Du har ikke rettigheter til dette.</p>';
 	}
 } else {
-	$message = "Du er allerede logget inn!";
+	$message = '<p>Du er allerede logget inn!</p>';
 } 
 
 echo json_encode(array('result' => $result, 'message' => $message));

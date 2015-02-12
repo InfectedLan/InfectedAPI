@@ -9,14 +9,15 @@ $message = null;
 if (Session::isAuthenticated()) {
 	$user = Session::getCurrentUser();
 	
-	if (isset($_GET['user']) && isset($_GET['clan'])) {
+	if (isset($_GET['user']) && 
+		isset($_GET['clan'])) {
 		$targetUser = UserHandler::getUser($_GET['user']);
 		
-		if (isset($targetUser)) {
+		if ($targetUser != null) {
 			$clan = ClanHandler::getClan($_GET['clan']);
 			
-			if (isset($clan)) {
-				if ($clan->getChief() == $user->getId()) {
+			if ($clan != null) {
+				if ($user->equals($clan->getChief())) {
 					$compo = ClanHandler::getCompo($clan);
 					$currentMainPlayers = ClanHandler::getPlayingMembers($clan);
 
@@ -24,19 +25,19 @@ if (Session::isAuthenticated()) {
 						ClanHandler::setMemberStepinState($clan, $targetUser, ClanHandler::STATE_MAIN_PLAYER);
 						$result = true;
 					} else {
-						$message = "Det er allerede for mange spillere som deltar!";
+						$message = 'Det er allerede for mange spillere som deltar!';
 					}
 				} else {
-					$message = "Du er ikke chief";
+					$message = 'Du er ikke chief.';
 				}
 			} else {
-				$message = "Klanen finnes ikke!";
+				$message = 'Clanen finnes ikke!';
 			}
 		} else {
-			$message = "Brukeren du prøvde å kicke finnes ikke!";
+			$message = 'Brukeren du prøvde å kicke finnes ikke!';
 		}
 	} else {
-		$message = 'Vi mangler felt';
+		$message = 'Vi mangler felt.';
 	}
 } else {
 	$message = 'Du er ikke logget inn.';

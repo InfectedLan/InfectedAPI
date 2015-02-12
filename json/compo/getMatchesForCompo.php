@@ -9,7 +9,6 @@ $message = null;
 $data = array();
 
 if (Session::isAuthenticated()) {
-	
 	if (isset($_GET['id']) &&
 		is_numeric($_GET['id'])) {
 		$compo = CompoHandler::getCompo($_GET['id']);

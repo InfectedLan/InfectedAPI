@@ -25,7 +25,8 @@ if (Session::isAuthenticated()) {
 
 				if ($extension == 'png') {
 					$image = imagecreatefrompng($_FILES['file']['tmp_name']);
-				} else if ($extension == 'jpeg' || $extension == 'jpg') {
+				} else if ($extension == 'jpeg' || 
+					       $extension == 'jpg') {
 					$image = imagecreatefromjpeg($_FILES['file']['tmp_name']);
 				}
 
@@ -40,7 +41,8 @@ if (Session::isAuthenticated()) {
 			} else {
 				$error = $_FILES['file']['error'];
 				
-				if($error == 2 || $error == 1) {
+				if ($error == 2 || 
+					$error == 1) {
 					$message = 'Det har skjedd en intern feil: Filen er for stor! Vennligst si ifra til admins.';
 				} else {
 					$message = 'Det har skjedd en intern feil da vi behandlet bildet. Vennligst gi oss feilkoden "' . urlencode($_FILES["file"]["error"]) . '"';

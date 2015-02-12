@@ -11,13 +11,13 @@ if (Session::isAuthenticated()) {
 	if (isset($_GET['id'])) {
 		$chat = ChatHandler::getChat($_GET['id']);
 
-		if (isset($chat)) {
+		if ($chat != null) {
 			if ($user->hasPermission('*') || 
 				$user->hasPermission('compo.chat') ||
 				ChatHandler::isChatMember($user, $chat)) {
-				$result = array("response" => true);
+				$result = array('response' => true);
 			} else {
-				$result = array("response" => false);
+				$result = array('response' => false);
 			}
 		} else {
 			$message = 'Chatten finnes ikke!';

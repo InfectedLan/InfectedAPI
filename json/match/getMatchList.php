@@ -17,110 +17,115 @@ if (Session::isAuthenticated()) {
 		if (isset($_GET['id'])) {
 			$compo = CompoHandler::getCompo($_GET['id']);
 
-			//First, get pending matches
-			$pendingMatches = MatchHandler::getPendingMatches($compo);
+			if ($compo != null) {
+				//First, get pending matches
+				$pendingMatches = MatchHandler::getPendingMatches($compo);
 
-			$pendingArray = array();
+				$pendingArray = array();
 
-			foreach ($pendingMatches as $match) {
-				$matchData = array();
+				foreach ($pendingMatches as $match) {
+					$matchData = array();
 
-				$matchData['id'] = $match->getId();
-				$matchData['startTime'] = $match->getScheduledTime();
-				$matchData['startString'] = date('d F H:i', $match->getScheduledTime());
-				$matchData['connectData'] = $match->getConnectDetails();
+					$matchData['id'] = $match->getId();
+					$matchData['startTime'] = $match->getScheduledTime();
+					$matchData['startString'] = date('d F H:i', $match->getScheduledTime());
+					$matchData['connectData'] = $match->getConnectDetails();
 
-				$matchData['participants'] = MatchHandler::getParticipantString($match);
+					$matchData['participants'] = MatchHandler::getParticipantString($match);
 
-				array_push($pendingArray, $matchData);
-			}
-
-			$matchArray['pending'] = $pendingArray;
-
-			//Get current matches
-			$currentMatches = MatchHandler::getCurrentMatches($compo);
-
-			$currentArray = array();
-
-			foreach ($currentMatches as $match) {
-				$matchData = array();
-
-				$matchData['id'] = $match->getId();
-				$matchData['startTime'] = $match->getScheduledTime();
-				$matchData['startString'] = date('d F H:i', $match->getScheduledTime());
-				$matchData['connectData'] = $match->getConnectDetails();
-				$matchData['state'] = $match->getState();
-
-				$participantData = array();
-				$participantData['strings'] = MatchHandler::getParticipantString($match);
-				$participantObjects = MatchHandler::getParticipants($match);
-				$participantData['list'] = array();
-
-				foreach ($participantObjects as $participant) {
-					$data = array();
-
-					$data['name'] = $participant->getName();
-					$data['id'] = $participant->getId();
-					$data['tag'] = $participant->getTag();
-
-					array_push($participantData['list'], $data);
+					array_push($pendingArray, $matchData);
 				}
 
+				$matchArray['pending'] = $pendingArray;
 
-				$matchData['participants'] = $participantData;
+				//Get current matches
+				$currentMatches = MatchHandler::getCurrentMatches($compo);
 
-				array_push($currentArray, $matchData);
-			}
-			$matchArray['current'] = $currentArray;
+				$currentArray = array();
 
-			//Get finished matches
+				foreach ($currentMatches as $match) {
+					$matchData = array();
 
-			$finishedMatches = MatchHandler::getFinishedMatches($compo);
+					$matchData['id'] = $match->getId();
+					$matchData['startTime'] = $match->getScheduledTime();
+					$matchData['startString'] = date('d F H:i', $match->getScheduledTime());
+					$matchData['connectData'] = $match->getConnectDetails();
+					$matchData['state'] = $match->getState();
 
-			$finishedArray = array();
+					$participantData = array();
+					$participantData['strings'] = MatchHandler::getParticipantString($match);
+					$participantObjects = MatchHandler::getParticipants($match);
+					$participantData['list'] = array();
 
-			foreach ($finishedMatches as $match) {
-				$matchData = array();
+					foreach ($participantObjects as $participant) {
+						$data = array();
 
-				$matchData['id'] = $match->getId();
-				$matchData['startTime'] = $match->getScheduledTime();
-				$matchData['startString'] = date('d F H:i', $match->getScheduledTime());
-				$matchData['connectData'] = $match->getConnectDetails();
+						$data['name'] = $participant->getName();
+						$data['id'] = $participant->getId();
+						$data['tag'] = $participant->getTag();
 
-				//Winner stuff
-				$winnerArray = array();
+						array_push($participantData['list'], $data);
+					}
 
-					$winnerArray['id'] = $match->getWinner();
-					$clan = ClanHandler::getClan($match->getWinner());
-					$winnerArray['name'] = $clan->getName() . ' - ' . $clan->getTag();
 
-				$matchData['winner'] = $winnerArray;
+					$matchData['participants'] = $participantData;
 
-				//$matchData['participants'] = MatchHandler::getParticipantString($match);
-
-				$participantData = array();
-				$participantData['list'] = array();
-
-				foreach ($participantObjects as $participant) {
-					$data = array();
-
-					$data['name'] = $participant->getName();
-					$data['id'] = $participant->getId();
-					$data['tag'] = $participant->getTag();
-
-					array_push($participantData['list'], $data);
+					array_push($currentArray, $matchData);
 				}
 
+				$matchArray['current'] = $currentArray;
 
-				$matchData['participants'] = $participantData;
+				//Get finished matches
 
-				array_push($finishedArray, $matchData);
+				$finishedMatches = MatchHandler::getFinishedMatches($compo);
+
+				$finishedArray = array();
+
+				foreach ($finishedMatches as $match) {
+					$matchData = array();
+
+					$matchData['id'] = $match->getId();
+					$matchData['startTime'] = $match->getScheduledTime();
+					$matchData['startString'] = date('d F H:i', $match->getScheduledTime());
+					$matchData['connectData'] = $match->getConnectDetails();
+
+					//Winner stuff
+					$winnerArray = array();
+
+						$winnerArray['id'] = $match->getWinner();
+						$clan = ClanHandler::getClan($match->getWinner());
+						$winnerArray['name'] = $clan->getName() . ' - ' . $clan->getTag();
+
+					$matchData['winner'] = $winnerArray;
+
+					//$matchData['participants'] = MatchHandler::getParticipantString($match);
+
+					$participantData = array();
+					$participantData['list'] = array();
+
+					foreach ($participantObjects as $participant) {
+						$data = array();
+
+						$data['name'] = $participant->getName();
+						$data['id'] = $participant->getId();
+						$data['tag'] = $participant->getTag();
+
+						array_push($participantData['list'], $data);
+					}
+
+					$matchData['participants'] = $participantData;
+
+					array_push($finishedArray, $matchData);
+				}
+
+				$matchArray['finished'] = $finishedArray;
+
+				$result = true;
+			} else {
+				$message = 'Vi mangler felt.';
 			}
-			$matchArray['finished'] = $finishedArray;
-
-			$result = true;
 		} else {
-			$message = 'Vi mangler felt';
+			$message = 'Compoen finnes ikke.';
 		}
 	} else {
 		$message = "Du har ikke tillatelse!";

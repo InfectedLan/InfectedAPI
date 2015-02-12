@@ -12,15 +12,15 @@ if (Session::isAuthenticated()) {
 	if ($user->hasPermission('*') ||
 		$user->hasPermission('event.compo')) {
 
-		if (isset($_GET['matchId']) && isset($_GET['winnerId'])) {
+		if (isset($_GET['matchId']) && 
+			isset($_GET['winnerId'])) {
 			$match = MatchHandler::getMatch($_GET['matchId']);
 
-			if (isset($match)) {
+			if ($match != null) {
 				$clan = ClanHandler::getClan($_GET['winnerId']);
 
-				if (isset($clan)) {
+				if ($clan != null) {
 					MatchHandler::setWinner($match, $clan);
-
 					$result = true;
 				} else {
 					$message = "Clanen finnes ikke!";
