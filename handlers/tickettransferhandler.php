@@ -71,7 +71,7 @@ class TicketTransferHandler {
 		$transfer = self::getTransferFromTicket($ticket);
 	
         // Check that the ticket is for current event, we don't allow transfers of old tickets.
-		if ($ticket->getEvent()->compare(EventHandler::getCurrentEvent())) {
+		if ($ticket->getEvent()->equals(EventHandler::getCurrentEvent())) {
 			// Check that the recipient user is activated.
 			if ($user->isActivated()) {
 		
@@ -79,7 +79,7 @@ class TicketTransferHandler {
 				if (!$ticket->isCheckedIn()) {
 				
 					// Check that the new user isn't the same as the old one.
-					if (!$user->compare($ticket->getUser())) {
+					if (!$user->equals($ticket->getUser())) {
 						// Prevent the original transfer from being reverted.
 						if ($transfer != null) {
 							self::freezeTransfer($transfer);
@@ -104,7 +104,7 @@ class TicketTransferHandler {
         $timeLimit = Settings::ticketTransferTime;
 		
         // Check that the ticket is for current event, we don't allow reverting transfers for old tickets.
-        if ($ticket->getEvent()->compare(EventHandler::getCurrentEvent())) {
+        if ($ticket->getEvent()->equals(EventHandler::getCurrentEvent())) {
         
 			// Check that the recipient user is activated.
 			if ($user->isActivated()) {
@@ -113,7 +113,7 @@ class TicketTransferHandler {
 				if (!$ticket->isCheckedIn()) {
 				
 					// Check if the user specified matches the former user of the ticket.     
-					if ($user->compare($transfer->getFrom())) {
+					if ($user->equals($transfer->getFrom())) {
 		
 						// Check if the ticket is revertable.
 						if ($transfer->isRevertable()) {
