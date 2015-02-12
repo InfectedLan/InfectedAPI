@@ -27,6 +27,7 @@ class Settings {
 	const db_table_infected_users = 'users';
 	
 	// InfectedCompo
+	const db_table_infected_compo_matchrelationships = 'matchrelationships';
 	const db_table_infected_compo_chatmessages =  'chatmessages';
 	const db_table_infected_compo_chats =  'chats';
 	const db_table_infected_compo_clans = 'clans';

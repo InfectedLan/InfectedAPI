@@ -281,6 +281,22 @@ class MatchHandler {
         return $jsonArray;
     }
 
+    public static function getParents($match) {
+        $mysql = MySQL::open(Settings::db_name_infected_compo);
+
+        $result = $mysql->query('SELECT `from` FROM `' . Settings::db_table_infected_compo_matchrelationships . '` WHERE `to` = \'' . $mysql->real_escape_string($match->getId()) . '\';');
+
+        $mysql->close();
+
+        $parentArray = array();
+
+        while($row = $result->fetch_array()) {
+            array_push($parentArray, self::getMatch($row['from']));
+        }
+
+        return $parentArray;
+    }
+
     //Checks if the match can run(If we have enough participants. Returns false if we have to wait for earlier matches to complete)
     public static function isReady($match) {
         $mysql = MySQL::open(Settings::db_name_infected_compo);
