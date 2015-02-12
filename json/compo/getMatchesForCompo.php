@@ -25,6 +25,7 @@ if (Session::isAuthenticated()) {
 					  					'parents' => $parentMatchIds,
 					  					'startTime' => Utils::getDayFromInt(date('w', $match->getScheduledTime())) . ' ' . date('H:i', $match->getScheduledTime()),
 					  					'bracketOffset' => $match->getBracketOffset(),
+					  					'bracket' => $match->getBracket(),
 					  					'state' => $match->getState()));
 			}
 
