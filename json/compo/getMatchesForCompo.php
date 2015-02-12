@@ -21,7 +21,7 @@ if (Session::isAuthenticated()) {
 					array_push($parentMatchIds, $parentMatch->getId());
 				}
 				array_push($data, array('matchId' => $match->getId(),
-					  					'participants' => MatchHandler::getParticipantString($match),
+					  					'participants' => MatchHandler::getParticipantTags($match),
 					  					'parents' => $parentMatchIds,
 					  					'startTime' => Utils::getDayFromInt(date('w', $match->getScheduledTime())) . ' ' . date('H:i', $match->getScheduledTime()),
 					  					'bracketOffset' => $match->getBracketOffset(),

@@ -240,7 +240,7 @@ class ClanHandler {
                                \'' . $mysql->real_escape_string($event->getId()) . '\');');
         
         // Fetch the id of the clan we just added
-        $fetchedId = $mysql->insert_id($mysql);
+        $fetchedId = mysqli_insert_id($mysql);
 
         $mysql->query('INSERT INTO `' . Settings::db_table_infected_compo_participantof . '` (`clanId`, `compoId`) 
                        VALUES (\'' . $mysql->real_escape_string($fetchedId) . '\', 

@@ -68,7 +68,7 @@ class MatchHandler {
                                \'' . $mysql->real_escape_string($participantId) . '\', 
                                \'' . $mysql->real_escape_string($match->getId()) . '\');');
 
-        if($type != self::participantof_state_clan) {
+        if($type != self::participantof_state_clan && $type != self::participantof_state_looser) {
             $mysql->query('INSERT INTO `' . Settings::db_table_infected_compo_matchrelationships . '` (`fromCompo`, `toCompo`) 
                 VALUES (\'' . $mysql->real_escape_string($participantId) . '\', \'' . $mysql->real_escape_string($match->getId()) . '\');');
         }
@@ -265,6 +265,28 @@ class MatchHandler {
         return $stringArray;
     }
 
+    public static function getParticipantTags($match) {
+        $mysql = MySQL::open(Settings::db_name_infected_compo);
+
+        $result = $mysql->query('SELECT * FROM `' . Settings::db_table_infected_compo_participantOfMatch . '` 
+                                 WHERE `matchId` = \'' . $mysql->real_escape_string($match->getId()) . '\';');
+
+        $mysql->close();
+
+        $stringArray = array();
+
+        while ($row = $result->fetch_array()) {
+            if ($row['type'] == Settings::compo_match_participant_type_match_winner || $row['type'] == Settings::compo_match_participant_type_match_looser) {
+                array_push($stringArray, "TBA");
+            } else if ($row['type'] == Settings::compo_match_participant_type_clan) {
+                $clan = ClanHandler::getClan($row['participantId']);
+                array_push($stringArray, $clan->getTag());
+            } 
+        }
+
+        return $stringArray;
+    }
+
     public static function getParticipantsJson($match) {
         $mysql = MySQL::open(Settings::db_name_infected_compo);
 
@@ -297,7 +319,7 @@ class MatchHandler {
         $parentArray = array();
 
         while($row = $result->fetch_array()) {
-            array_push($parentArray, self::getMatch($row['from']));
+            array_push($parentArray, self::getMatch($row['fromCompo']));
         }
 
         return $parentArray;

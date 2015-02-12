@@ -1,20 +1,43 @@
 .bracket {
-	width: 300px;
-	height: 200px;
-}
-.bracket_title {
-	font-weight: bold;
+	width: 110px;
+	height: 47px;
+	position: absolute;
+	background: #19415b; /* Old browsers */
+	background: -moz-linear-gradient(top,  #19415b 0%, #102d3f 100%); /* FF3.6+ */
+	background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,#19415b), color-stop(100%,#102d3f)); /* Chrome,Safari4+ */
+	background: -webkit-linear-gradient(top,  #19415b 0%,#102d3f 100%); /* Chrome10+,Safari5.1+ */
+	background: -o-linear-gradient(top,  #19415b 0%,#102d3f 100%); /* Opera 11.10+ */
+	background: -ms-linear-gradient(top,  #19415b 0%,#102d3f 100%); /* IE10+ */
+	background: linear-gradient(to bottom,  #19415b 0%,#102d3f 100%); /* W3C */
+	filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#19415b', endColorstr='#102d3f',GradientType=0 ); /* IE6-9 */
+	border: solid 1px #366079;
+	font-size: 12px;
+	padding: 3px;
 }
 .bracket_participant {
-	
+	width: 100%;
+	text-align: center;
 }
 .winnersBracket {
-	background-image: url("../content/static/bracket_background.png") repeat;
+	background-image: url("../content/static/bracket_background.png");
+	background-repeat: repeat;
 }
 .loosersBracket {
-	background-image: url("../content/static/bracket_background.png") repeat;
+	background-image: url("../content/static/bracket_background.png");
+	background-repeat: repeat;
 }
 .bracket_time {
-	font-size: 70%;
+	font-size: 11px;
+	text-align: center;
+	position: absolute;
+	width: 110px;
+}
+.bracket_container {
+	position: relative;
+	min-height: 600px;
+	overflow: scroll;
+}
+.bracket_vs {
+	width: 100%;
 	text-align: center;
 }
