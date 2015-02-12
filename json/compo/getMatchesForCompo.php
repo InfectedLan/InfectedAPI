@@ -15,8 +15,14 @@ if (Session::isAuthenticated()) {
 
 		if ($compo != null) {
 			foreach (MatchHandler::getMatchesForCompo($compo) as $match) {				
+				$parentMatches = MatchHandler::getParents($match);
+				$parentMatchIds = array();
+				foreach($parentMatches as $parentMatch) {
+					array_push($parentMatchIds, $parentMatch->getId());
+				}
 				array_push($data, array('matchId' => $match->getId(),
-					  					'participants' => MatchHandler::getParticipantsJson($match),
+					  					'participants' => MatchHandler::getParticipantString($match),
+					  					'parents' => $parentMatchIds,
 					  					'startTime' => Utils::getDayFromInt(date('w', $match->getScheduledTime())) . ' ' . date('H:i', $match->getScheduledTime()),
 					  					'bracketOffset' => $match->getBracketOffset(),
 					  					'state' => $match->getState()));
