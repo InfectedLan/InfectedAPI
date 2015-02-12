@@ -104,7 +104,7 @@ class CompoHandler {
             $carryData = self::generateMatches($carryData['matches'], 
                                                $carryData['clans'], 
                                                $carryData['looserMatches'], 
-                                               $iteration, $compo, $startTime + ($iteration * $compoSpacing));
+                                               $iteration, $compo, $startTime + ($iteration * $compoSpacing), $compoSpacing);
             
             foreach ($carryData['carryMatches'] as $match) {
                 array_push($carryData['matches'], $match);
@@ -114,19 +114,19 @@ class CompoHandler {
                 //echo "Old looser: " . $looserMatches->getId() . ",";
             }*/
 
+            $iteration++;
+
             if (count($carryData['matches']) < 2) {
                 $chat = ChatHandler::createChat("match chat");
-                $match = MatchHandler::createMatch($time, "", $compo, $iteration, $chat->getId()); //TODO connectData
-                MatchHandler::addMatchParticipant(1, $carryData["matches"], $match);
-                MatchHandler::addMatchParticipant(1, $carryData["looserMatches"], $match);
+                $match = MatchHandler::createMatch($startTime + ($iteration * $compoSpacing), "", $compo, $iteration, $chat->getId()); //TODO connectData
+                MatchHandler::addMatchParticipant(1, $carryData["matches"][0]->getId(), $match);
+                MatchHandler::addMatchParticipant(1, $carryData["looserMatches"][0]->getId(), $match);
                 break;
             }
-
-            $iteration++;
         }
     }
 
-    private static function generateMatches($carryMatches, $carryClans, $carryLoosers, $iteration, $compo, $time) {
+    private static function generateMatches($carryMatches, $carryClans, $carryLoosers, $iteration, $compo, $time, $looserOffsetTime) {
         $numberOfObjects = count($carryMatches) + count($carryClans); //The amount of objects we are going to handle
         $match_start_index = $numberOfObjects % 2; // 0 if even number of objects, 1 if uneven
 
@@ -194,7 +194,7 @@ class CompoHandler {
         while($looserCount > 0)
         {
             $chat = ChatHandler::createChat("match chat");
-            $match = MatchHandler::createMatch($time, "", $compo, $iteration, $chat->getId()); //TODO connectData
+            $match = MatchHandler::createMatch($time + $looserOffsetTime, "", $compo, $iteration, $chat->getId()); //TODO connectData
 
             if (count($oldLooserCarry) > 0) {
                 MatchHandler::addMatchParticipant(MatchHandler::participantof_state_winner, array_shift($oldLooserCarry)->getId(), $match);

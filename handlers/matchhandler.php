@@ -23,7 +23,9 @@ class MatchHandler {
                                  WHERE `id` = \'' . $id . '\';');
         
         $mysql->close();
-        
+
+        return $result->fetch_object('Match');
+        /*
         if ($row) {
             return new Match($row['id'], 
                              $row['scheduledTime'], 
@@ -33,7 +35,7 @@ class MatchHandler {
                              $row['compoId'],
                              $row['bracketOffset'],
                              $row['chat']);
-        }
+        }*/
     }
 
     public static function createMatch($scheduledTime, $connectData, $compo, $bracketOffset, $chatId) {
@@ -255,6 +257,28 @@ class MatchHandler {
         }
 
         return $stringArray;
+    }
+
+    public static function getParticipantsJson($match) {
+        $mysql = MySQL::open(Settings::db_name_infected_compo);
+
+        $result = $mysql->query('SELECT * FROM `' . Settings::db_table_infected_compo_participantOfMatch . '` 
+                                 WHERE `matchId` = \'' . $mysql->real_escape_string($match->getId()) . '\';');
+
+        $mysql->close();
+
+        $jsonArray = array();
+
+        while ($row = $result->fetch_array()) {
+            if ($row['type'] == Settings::compo_match_participant_type_clan) {
+                $clan = ClanHandler::getClan($row['participantId']);
+                array_push($jsonArray, array("type" => $row['type'], "value" => $clan->getName() . ' - ' . $clan->getTag() . ""));
+            } else {
+                array_push($jsonArray, array("type" => $row['type'], "value" => $row['participantId']));
+            }
+        }
+
+        return $jsonArray;
     }
 
     //Checks if the match can run(If we have enough participants. Returns false if we have to wait for earlier matches to complete)
