@@ -7,7 +7,7 @@ require_once 'objects/user.php';
 
 class GroupHandler {
     /* 
-     * Get a group by the internal id
+     * Get a group by the internal id.
      */
     public static function getGroup($id) {
         $mysql = MySQL::open(Settings::db_name_infected_crew);

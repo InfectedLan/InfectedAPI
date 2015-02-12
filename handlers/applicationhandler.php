@@ -7,7 +7,7 @@ require_once 'objects/application.php';
 
 class ApplicationHandler {
     /* 
-     * Get an application by it's internal id.
+     * Get an application by the internal id.
      */
     public static function getApplication($id) {
         $mysql = MySQL::open(Settings::db_name_infected_crew);
@@ -45,7 +45,7 @@ class ApplicationHandler {
     public static function getPendingApplications() {
         $mysql = MySQL::open(Settings::db_name_infected_crew);
         
-        $result = $mysql->query('SELECT * FROM `' . Settings::db_table_infected_crew_applications . '`
+        $result = $mysql->query('SELECT `' . Settings::db_table_infected_crew_applications . '`.`id` FROM `' . Settings::db_table_infected_crew_applications . '`
                                  LEFT JOIN `' . Settings::db_table_infected_crew_applicationqueue . '`
                                  ON `' . Settings::db_table_infected_crew_applications . '`.`id` = `applicationId`
                                  WHERE `applicationId` IS NULL
@@ -57,8 +57,8 @@ class ApplicationHandler {
 
         $applicationList = array();
         
-        while ($object = $result->fetch_object('Application')) {
-            array_push($applicationList, $object);
+        while ($row = $result->fetch_array()) {
+            array_push($applicationList, self::getApplication($row['id']));
         }
         
         return $applicationList;
@@ -70,7 +70,7 @@ class ApplicationHandler {
     public static function getPendingApplicationsForGroup($group) {
         $mysql = MySQL::open(Settings::db_name_infected_crew);
         
-        $result = $mysql->query('SELECT * FROM `' . Settings::db_table_infected_crew_applications . '`
+        $result = $mysql->query('SELECT `' . Settings::db_table_infected_crew_applications . '`.`id` FROM `' . Settings::db_table_infected_crew_applications . '`
                                  LEFT JOIN `' . Settings::db_table_infected_crew_applicationqueue . '`
                                  ON `' . Settings::db_table_infected_crew_applications . '`.`id` = `applicationId`
                                  WHERE `applicationId` IS NULL
@@ -83,8 +83,8 @@ class ApplicationHandler {
 
         $applicationList = array();
         
-        while ($object = $result->fetch_object('Application')) {
-            array_push($applicationList, $object);
+        while ($row = $result->fetch_array()) {
+            array_push($applicationList, self::getApplication($row['id']));
         }
         
         return $applicationList;
@@ -96,7 +96,7 @@ class ApplicationHandler {
     public static function getQueuedApplications() {
         $mysql = MySQL::open(Settings::db_name_infected_crew);
         
-        $result = $mysql->query('SELECT * FROM `' . Settings::db_table_infected_crew_applications . '`
+        $result = $mysql->query('SELECT `' . Settings::db_table_infected_crew_applications . '`.`id` FROM `' . Settings::db_table_infected_crew_applications . '`
                                  LEFT JOIN `' . Settings::db_table_infected_crew_applicationqueue . '`
                                  ON `' . Settings::db_table_infected_crew_applications . '`.`id` = `applicationId`
                                  WHERE `applicationId` IS NOT NULL
@@ -108,8 +108,8 @@ class ApplicationHandler {
 
         $queuedApplicationList = array();
         
-        while ($object = $result->fetch_object('Application')) {
-            array_push($queuedApplicationList, $object);
+        while ($row = $result->fetch_array()) {
+            array_push($queuedApplicationList, self::getApplication($row['id']));
         }
         
         return $queuedApplicationList;
@@ -121,7 +121,7 @@ class ApplicationHandler {
     public static function getQueuedApplicationsForGroup($group) {
         $mysql = MySQL::open(Settings::db_name_infected_crew);
         
-        $result = $mysql->query('SELECT * FROM `' . Settings::db_table_infected_crew_applications . '`
+        $result = $mysql->query('SELECT `' . Settings::db_table_infected_crew_applications . '`.`id` FROM `' . Settings::db_table_infected_crew_applications . '`
                                  LEFT JOIN `' . Settings::db_table_infected_crew_applicationqueue . '`
                                  ON `' . Settings::db_table_infected_crew_applications . '`.`id` = `applicationId`
                                  WHERE `applicationId` IS NOT NULL
@@ -134,8 +134,8 @@ class ApplicationHandler {
 
         $queuedApplicationList = array();
         
-        while ($object = $result->fetch_object('Application')) {
-            array_push($queuedApplicationList, $object);
+        while ($row = $result->fetch_array()) {
+            array_push($queuedApplicationList, self::getApplication($row['id']));
         }
         
         return $queuedApplicationList;
