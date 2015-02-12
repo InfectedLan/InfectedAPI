@@ -38,10 +38,10 @@ class MatchHandler {
         }*/
     }
 
-    public static function createMatch($scheduledTime, $connectData, $compo, $bracketOffset, $chatId, $winner) {
+    public static function createMatch($scheduledTime, $connectData, $compo, $bracketOffset, $chatId, $bracket) {
         $mysql = MySQL::open(Settings::db_name_infected_compo);
 
-        $mysql->query('INSERT INTO `' . Settings::db_table_infected_compo_matches . '` (`scheduledTime`, `connectDetails`, `state`, `winner`, `compoId`, `bracketOffset`, `chat`, `winner`) 
+        $mysql->query('INSERT INTO `' . Settings::db_table_infected_compo_matches . '` (`scheduledTime`, `connectDetails`, `state`, `winner`, `compoId`, `bracketOffset`, `chat`, `bracket`) 
             VALUES (\'' . $mysql->real_escape_string($scheduledTime) . '\', 
                     \'' . $mysql->real_escape_string($connectData) . '\', 
                     \'' . Match::STATE_READYCHECK . '\',
@@ -49,7 +49,7 @@ class MatchHandler {
                     \'' . $mysql->real_escape_string($compo->getId()) . '\',
                     \'' . $mysql->real_escape_string($bracketOffset) . '\',
                     \'' . $mysql->real_escape_string($chatId) . '\',
-                    \'' . ($winner == true ? 1 : 0) . '\');');
+                    \'' . ($bracket == true ? 1 : 0) . '\');');
 
         $fetchNewestResultId = $mysql->query('SELECT `id` FROM `' . Settings::db_table_infected_compo_matches . '` 
                                               ORDER BY `id` 

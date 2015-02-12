@@ -17,6 +17,11 @@ class Match extends Object {
 	private $compoId;
 	private $bracketOffset;
 	private $chat;
+	private $winner;
+
+	public function getWinner() {
+		return $winner == 1;
+	}
 
 	public function getChat() {
 		return $this->chat;
