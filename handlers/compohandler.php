@@ -77,6 +77,28 @@ class CompoHandler {
         return $clanList;
     }
 
+    public static function getCompleteClans($compo) {
+        $mysql = MySQL::open(Settings::db_name_infected_compo);
+
+        $result = $mysql->query('SELECT `clanId` FROM `' . Settings::db_table_infected_compo_participantof . '` 
+                                 WHERE `compoId` = \'' . $mysql->real_escape_string($compo->getId()) . '\';');
+
+        $mysql->close();
+
+        $clanList = array();
+
+        while ($row = $result->fetch_array()) {
+            $clan = ClanHandler::getClan($row['clanId']);
+            $playing = ClanHandler::getPlayingMembers($clan);
+            if(count($playing) == $compo->getTeamSize()) {
+                array_push($clanList, $clan);
+            }
+            
+        }
+        
+        return $clanList;
+    }
+
     public static function generateDoubleElimination($compo, $startTime, $compoSpacing) {
         /*
          * Psudocode:
@@ -85,7 +107,7 @@ class CompoHandler {
          * Generates matches based on passed clans/previous matches
          * Returns matches that should carry on in the winners and loosers bracket.
         */
-        $clans = self::getClans($compo);
+        $clans = self::getCompleteClans($compo);
         $newClanList = array();
         
         //Randomize participant list to avoid any cheating
