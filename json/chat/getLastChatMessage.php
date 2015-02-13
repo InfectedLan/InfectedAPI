@@ -20,10 +20,10 @@ if (Session::isAuthenticated()) {
 					$result = array('id' => $message->getId(), 
 									'message' => $message->getMessage(), 
 									'user' => $message->getUser()->getNickname());
-					
+					$subject = $message->getUser();
 					//Tell chat if admin or not
-					if ($user->hasPermission('*') || 
-						$user->hasPermission('event.compo')) {
+					if ($subject->hasPermission('*') || 
+						$subject->hasPermission('compo.chat')) {
 						$result['admin'] = true;
 					} else {
 						$result['admin'] = false;

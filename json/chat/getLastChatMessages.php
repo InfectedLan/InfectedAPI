@@ -22,8 +22,9 @@ if (Session::isAuthenticated()) {
 									'message' => $message->getMessage(), 
 									'user' => $message->getUser()->getNickname());
 
+					$subject = $message->getUser();
 					//Tell chat if admin or not
-					if ($user->hasPermission('*') || $user->hasPermission('compo.chat')) {
+					if ($subject->hasPermission('*') || $subject->hasPermission('compo.chat')) {
 						$toPush['admin'] = true;
 					} else {
 						$toPush['admin'] = false;
