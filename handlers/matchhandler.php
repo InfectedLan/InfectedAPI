@@ -57,6 +57,8 @@ class MatchHandler {
 
         $row = $fetchNewestResultId->fetch_array();
 
+        $mysql->close();
+
         return self::getMatch($row['id']);
     }
 
@@ -357,6 +359,8 @@ class MatchHandler {
                                  AND `matchId` = \'' . $mysql->real_escape_string($match->getId()) . '\';');
     
         $row = $result->fetch_array();
+
+        $mysql->close();
         
         return $row ? true : false;
     }
@@ -367,6 +371,8 @@ class MatchHandler {
         $result = $mysql->query('INSERT INTO `' . Settings::db_table_infected_compo_readyusers . '` (`userId`, `matchId`) 
                                  VALUES (\'' . $mysql->real_escape_string($user->getId()) . '\', 
                                          \'' . $mysql->real_escape_string($match->getId()) . '\');');
+
+        $mysql->close();
 
         $mysql->close();
     }
