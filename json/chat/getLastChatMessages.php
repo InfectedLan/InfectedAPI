@@ -13,7 +13,7 @@ if (Session::isAuthenticated()) {
 		$chat = ChatHandler::getChat($_GET['id']);
 
 		if ($chat != null) {
-			if (ChatHandler::isChatMember($user, $chat) || $user->hasPermission('*') || $user->hasPermission('compo.chat')) {
+			if (ChatHandler::isChatMember($user, $chat) || $user->hasPermission('*') || $user->hasPermission('compo.chat') || $chat->getId() == 1) {
 				$messages = ChatHandler::getLastMessages($chat, $_GET['count']);
 				$result = array();
 
