@@ -7,9 +7,13 @@
 	position: relative;
 	top: 5px;
 	padding: 1px;
+	border: solid 1px #CCC;
 }
 .chatBox {
 	height: 23px;
 	margin: 4px;
 	width: 100%;
+	background-color: #EEE;
+	color: #000;
+	border: solid 1px #CCC;
 }

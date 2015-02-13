@@ -21,10 +21,26 @@
 .winnersBracket {
 	background-image: url("../content/static/bracket_background.png");
 	background-repeat: repeat;
+	position: relative;
+}
+.winnersBracket:after {
+    content: ".";
+    display: block;
+    height: 0;
+    clear: both;
+    visibility: hidden;
 }
 .loosersBracket {
 	background-image: url("../content/static/bracket_background.png");
 	background-repeat: repeat;
+	position: relative;
+}
+.loosersBracket:after {
+    content: ".";
+    display: block;
+    height: 0;
+    clear: both;
+    visibility: hidden;
 }
 .bracket_time {
 	font-size: 11px;
@@ -33,7 +49,7 @@
 	width: 110px;
 }
 .bracket_container {
-	position: relative;
+	/* position: relative; */
 	min-height: 600px;
 	overflow: scroll;
 }

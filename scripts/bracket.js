@@ -39,7 +39,7 @@ function updateBrackets() {
 
 						var divHeights = [300, 0];
 						for(var x = 0; x < data.data.length; x++) {
-							var xPos = ( ( data.data[x].bracketOffset + (1 - data.data[x].bracket ) ) * (bracketWidth + bracketWidthMargin + bracketWidthMargin) ) + bracketWidthMargin;
+							var xPos = ( ( Number(data.data[x].bracketOffset) + (1 - Number(data.data[x].bracket) ) ) * (bracketWidth + bracketWidthMargin + bracketWidthMargin) ) + bracketWidthMargin;
 							//This is how we get how many we have pushed for the current offset
 							if(data.data[x].bracketOffset != currentOffset) {
 								currentOffset = data.data[x].bracketOffset;
