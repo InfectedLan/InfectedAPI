@@ -3,6 +3,7 @@ require_once 'session.php';
 require_once 'handlers/userhandler.php';
 require_once 'handlers/matchhandler.php';
 require_once 'handlers/clanhandler.php';
+require_once 'handlers/voteoptionhandler.php';
 
 $result = false;
 $message = null;
@@ -69,6 +70,31 @@ if (Session::isAuthenticated()) {
 
 
 					$matchData['participants'] = $participantData;
+
+
+
+					$compo = CompoHandler::getCompo($match->getCompoId());
+					if($compo->getId() == 3) {
+						$hasVotedMaps = false;
+
+						$options = VoteOptionHandler::getVoteOptionsForCompo($compo);
+						foreach ($options as $option) {
+							if (!VoteOptionHandler::isVoted($option, $match)) {
+								$mapData = array();
+
+								$mapData['name'] = $option->getName();
+
+								$matchData['mapData'] = $mapData;
+								break;
+							} else {
+								$hasVotedMaps = true;
+							}
+						}
+
+						if(!$hasVotedMaps) {
+							$matchData['mapData'] = array("name" => "pending");
+						}
+					}
 
 					array_push($currentArray, $matchData);
 				}
