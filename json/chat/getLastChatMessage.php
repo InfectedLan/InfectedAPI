@@ -29,7 +29,7 @@ if (Session::isAuthenticated()) {
 						$result['admin'] = false;
 					}
 				} else {
-					$result = array();
+					$result = array("id" => -1);
 					$message = "Chatten har ingen meldinger!";
 				}
 			} else {
