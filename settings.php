@@ -36,7 +36,7 @@ class Settings {
 	const db_table_infected_compo_memberof = 'memberof';
 	const db_table_infected_compo_memberofchat =  'memberofchat';
 	const db_table_infected_compo_participantof = 'participantof';
-	const db_table_infected_compo_voteoptions = 'voteOptions';
+	const db_table_infected_compo_voteoptions = 'voteoptions';
 	const db_table_infected_compo_participantOfMatch = 'participantofmatch';
 	const db_table_infected_compo_matches = 'matches';
 	const db_table_infected_compo_readyusers = 'readyusers';

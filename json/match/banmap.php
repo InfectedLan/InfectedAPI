@@ -22,7 +22,7 @@ if (Session::isAuthenticated()) {
 				$participants = MatchHandler::getParticipants($match);
 				$clan = $participants[$turn];
 				
-				if ($user->equals($clan->getChief())) {
+				if ($user->getId() == $clan->getChief()) {
 					$voteOption = VoteOptionHandler::getVoteOption($_GET['id']);
 					
 					if ($voteOption != null) {

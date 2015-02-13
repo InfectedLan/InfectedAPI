@@ -17,7 +17,7 @@ if (Session::isAuthenticated()) {
 				MatchHandler::acceptMatch($user, $match);
 				
 				if (MatchHandler::allHasAccepted($match)) {
-					if ($match->getCompoId() == 1) {
+					if ($match->getCompoId() == 3) {
 						$match->setState(1);
 					} else {
 						$match->setState(2);

@@ -6,6 +6,12 @@ $(document).ready(function() {
 });
 
 function createChat(divId, chatId, height) {
+	for(var i = 0; i < chatList.length; i++) {
+		if(chatList[i].divId == divId) {
+			console.log("Div id " + divId + " allready exists. Deleting older occurance of it");
+			chatList.splice(i, 1);
+		}
+	}
 	chatList.push({"divId": divId, "chatId": chatId, "lastId": -1});
 	console.log("Created chat id " + chatId + " for divid " + divId + " with height " + height);
 
