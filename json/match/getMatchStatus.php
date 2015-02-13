@@ -156,7 +156,7 @@ if (Session::isAuthenticated()) {
 				//Get map+
 				$compo = CompoHandler::getCompo($match->getCompoId());
 
-				if ($compo->getId() == 1) { //Only CS:GO
+				if ($compo->getId() == 3) { //Only CS:GO
 					$options = VoteOptionHandler::getVoteOptionsForCompo($compo);
 					foreach ($options as $option) {
 						if (!VoteOptionHandler::isVoted($option, $match)) {
