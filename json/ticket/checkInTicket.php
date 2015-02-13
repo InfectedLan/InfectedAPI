@@ -20,7 +20,7 @@ if (Session::isAuthenticated()) {
 				if (!$ticket->isCheckedIn()) {
 					CheckInStateHandler::checkIn($ticket);
 					$result = true;
-					$message = 'Billetten til "' . $ticket->getUser()->getFullName() . '"  er nå sjekket inn.';
+					$message = 'Billetten til "' . $ticket->getUser()->getFullName() . '" er nå sjekket inn.';
 				} else {
 					$message = 'Denne billetten er allerede sjekket inn!';
 				}

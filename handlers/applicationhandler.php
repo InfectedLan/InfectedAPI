@@ -255,7 +255,7 @@ class ApplicationHandler {
 			
 			foreach ($applicationList as $value) {
 				if ($group->getId() != $value->getGroup()->getId()) {
-					self::closeApplication($value);
+					self::closeApplication($user, $value);
 				}
 			}
 			
