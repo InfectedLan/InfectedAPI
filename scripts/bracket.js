@@ -36,6 +36,7 @@ function updateBrackets() {
 						var currentOffset = 1;
 						var offsetCount = [0,0];
 						var cachedParentYPositions = [[], []];
+						var shouldMakeLoosersBracket = false;
 
 						var divHeights = [300, 0];
 						for(var x = 0; x < data.data.length; x++) {
@@ -49,8 +50,18 @@ function updateBrackets() {
 									'<br />' + data.data[x].startTime + 
 									'</div>'
 								);
+								shouldMakeLoosersBracket = true;
 							} else {
 								offsetCount[data.data[x].bracket]++;
+							}
+							//Exra date handling for loosers bracket
+							if(shouldMakeLoosersBracket && data.data[x].bracket == 0) {
+								$("#" + currentBracket.divId).find("." + "loosersBracket").append(
+									'<div class="bracket_time" style="left: ' + xPos + 'px; top: 5px;">' + (data.data[x].bracket == 1 ? "HB runde " : "LB runde ") + (data.data[x].bracketOffset+1 + ( 1 - data.data[x].bracket) ) + 
+									'<br />' + data.data[x].startTime + 
+									'</div>'
+								);
+								shouldMakeLoosersBracket = false;
 							}
 							//Find positions
 							var yPos = 0;

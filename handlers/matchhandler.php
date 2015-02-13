@@ -189,7 +189,7 @@ class MatchHandler {
             $mysql->query('UPDATE `' . Settings::db_table_infected_compo_participantOfMatch . '` SET `type` = 0, `participantId` = ' . $mysql->real_escape_string($clan->getId()) . ' WHERE `id` = ' . $row['id'] . ';');
 
             $checkingMatchId = MatchHandler::getMatch($row['matchId']);
-            ChatHandler::addClanMembersToChat($checkingMatchId->getChat(), $clan);
+            ChatHandler::addClanMembersToChat(ChatHandler::getChat($checkingMatchId->getChat()), $clan);
         }
         /*
         $mysql->query('UPDATE `' . Settings::db_table_infected_compo_participantOfMatch . '` 
@@ -213,7 +213,7 @@ class MatchHandler {
             $mysql->query('UPDATE `' . Settings::db_table_infected_compo_participantOfMatch . '` SET `type` = 0, `participantId` = ' . $mysql->real_escape_string($clan->getId()) . ' WHERE `id` = ' . $row['id'] . ';');
 
             $checkingMatchId = MatchHandler::getMatch($row['matchId']);
-            ChatHandler::addClanMembersToChat($checkingMatchId->getChat(), $clan);
+            ChatHandler::addClanMembersToChat(ChatHandler::getChat($checkingMatchId->getChat()), $clan);
         }
 
         /*$mysql->query('UPDATE `' . Settings::db_table_infected_compo_participantOfMatch . '` 

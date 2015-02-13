@@ -14,7 +14,7 @@ echo '<html>';
 				$user = Session::getCurrentUser();
 				
 				if ($user->hasPermission('*') || 
-					$user->hasPermission('functions.checkin')) {
+					$user->hasPermission('event.checkin')) {
 					
 					if (isset($_GET['id'])) {
 						$ticket = TicketHandler::getTicket($_GET['id']);
@@ -23,7 +23,7 @@ echo '<html>';
 							echo '$.getJSON(\'../../json/ticket/getTicketData.php?id=' . htmlentities($_GET['id'], ENT_QUOTES, 'UTF-8') . '\', function(data) {';
 								echo 'if (data.result) {';
 									echo 'var user = data.userData[0];';
-									echo 'if (confirm(\'Sjekk at disse detaljene er riktige:\\nNavn: \' + user.firstname + \' \' + user.lastname + \'\\nKjønn: \' + user.gender + \'\\nFødt: \' + user.birthdate + \'\\nAlder: \' + user.age)) {';
+									echo 'if (confirm(\'Sjekk at disse detaljene er riktige:\\nNavn: \' + user.firstname + \' \' + user.lastname + \'\\nKjønn: \' + user.gender + \'\\nFødt: \' + user.birthdate + \'\\nAlder: \' + user.age + \'\\nAddresse: \' + user.address)) {';
 										echo '$.getJSON(\'../../json/ticket/checkInTicket.php?id=' . htmlentities($_GET['id'], ENT_QUOTES, 'UTF-8') . '\', function(data) {';
 											echo 'if(data.result) {';
 												echo 'alert(\'Brukeren har blitt sjekket inn!\');';
