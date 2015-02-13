@@ -11,7 +11,7 @@ function createChat(divId, chatId, height) {
 
 	$.getJSON('../api/json/chat/isInChat.php?id=' + chatId, function(data) {
 		if(data.result != false) {
-			$("#" + divId).html('<div class="chatArea" style="height: ' + (height-25-5-10) + 'px;"></div><div style="padding-right:15px;padding-left:0px;margin-right:0px;"><input type="text" placeholder="' + (data.result.response ? "Skriv her, trykk enter for å sende" : "Kun clan-chiefs kan skrive her!") + '" class="chatBox" /></div>');
+			$("#" + divId).html('<div class="chatArea" style="height: ' + (height-25-5-10 - 7 - 5) + 'px;"></div><div style="padding-right:27px;padding-left:0px;margin-right:0px;"><input type="text" placeholder="' + (data.result.response ? "Skriv her, trykk enter for å sende" : "Kun clan-chiefs kan skrive her!") + '" class="chatBox" /></div>');
 			//Listen to enter key
 			if(data.result.response == true) {
 				$("#" + divId).find('.chatBox').keypress({chat: chatId, div: divId}, function(e) {
