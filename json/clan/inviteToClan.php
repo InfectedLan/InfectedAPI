@@ -22,12 +22,8 @@ if (Session::isAuthenticated()) {
 
 					$inClan = count(ClanHandler::getInvites($clan)) + count(ClanHandler::getMembers($clan));
 
-					if ($inClan < $compo->getTeamSize()) {
-						ClanHandler::inviteUser($clan, $invite);
-						$result = true;
-					} else {
-						$message = "Laget er fullt!";
-					}
+					ClanHandler::inviteUser($clan, $invite);
+					$result = true;
 				} else {
 					$message = "Du kan ikke invitere denne brukeren.";
 				}
