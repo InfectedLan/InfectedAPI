@@ -110,7 +110,7 @@ class GroupHandler {
     public static function getMembers($group) {
         $mysql = MySQL::open(Settings::db_name_infected);
         
-        $result = $mysql->query('SELECT `' . Settings::db_table_infected_users . '`.`id` FROM `' . Settings::db_table_infected_users . '`
+        $result = $mysql->query('SELECT `' . Settings::db_table_infected_users . '`.* FROM `' . Settings::db_table_infected_users . '`
                                  LEFT JOIN `' . Settings::db_name_infected_crew . '`.`' . Settings::db_table_infected_crew_memberof . '`
                                  ON `' . Settings::db_table_infected_users . '`.`id` = `userId` 
                                  WHERE `eventId` = \'' . EventHandler::getCurrentEvent()->getId() . '\'
@@ -121,8 +121,8 @@ class GroupHandler {
 
         $memberList = array();
         
-        while ($row = $result->fetch_array()) {
-            array_push($memberList, UserHandler::getUser($row['id']));
+        while ($object = $result->fetch_object('User')) {
+            array_push($memberList, $object);
         }
         
         return $memberList;

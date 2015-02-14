@@ -17,9 +17,11 @@ if (Session::isAuthenticated()) {
 			foreach (MatchHandler::getMatchesForCompo($compo) as $match) {				
 				$parentMatches = MatchHandler::getParents($match);
 				$parentMatchIds = array();
+				
 				foreach($parentMatches as $parentMatch) {
 					array_push($parentMatchIds, $parentMatch->getId());
 				}
+
 				array_push($data, array('matchId' => $match->getId(),
 					  					'participants' => MatchHandler::getParticipantTags($match),
 					  					'parents' => $parentMatchIds,

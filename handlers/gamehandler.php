@@ -58,14 +58,14 @@ class GameHandler {
         $mysql = MySQL::open(Settings::db_name_infected_main);
         
         $mysql->query('INSERT INTO `' . Settings::db_table_infected_main_games . '` (`name`, `title`, `price`, `mode`, `description`, `startTime`, `endTime`, `published`) 
-                            VALUES (\'' . $mysql->real_escape_string($name) . '\', 
-                                    \'' . $mysql->real_escape_string($title) . '\', 
-                                    \'' . $mysql->real_escape_string($price) . '\', 
-                                    \'' . $mysql->real_escape_string($mode) . '\', 
-                                    \'' . $mysql->real_escape_string($description) . '\', 
-                                    \'' . $mysql->real_escape_string($startTime) . '\', 
-                                    \'' . $mysql->real_escape_string($endTime) . '\', 
-                                    \'' . $mysql->real_escape_string($published) . '\');');
+                       VALUES (\'' . $mysql->real_escape_string($name) . '\', 
+                               \'' . $mysql->real_escape_string($title) . '\', 
+                               \'' . $mysql->real_escape_string($price) . '\', 
+                               \'' . $mysql->real_escape_string($mode) . '\', 
+                               \'' . $mysql->real_escape_string($description) . '\', 
+                               \'' . $mysql->real_escape_string($startTime) . '\', 
+                               \'' . $mysql->real_escape_string($endTime) . '\', 
+                               \'' . $mysql->real_escape_string($published) . '\');');
         
         $mysql->close();
     }
@@ -77,15 +77,15 @@ class GameHandler {
         $mysql = MySQL::open(Settings::db_name_infected_main);
         
         $mysql->query('UPDATE `' . Settings::db_table_infected_main_games . '` 
-                            SET `name` = \'' . $mysql->real_escape_string($name) . '\', 
-                                `title` = \'' . $mysql->real_escape_string($title) . '\', 
-                                `price` = \'' . $mysql->real_escape_string($price) . '\', 
-                                `mode` = \'' . $mysql->real_escape_string($mode) . '\', 
-                                `description` = \'' . $mysql->real_escape_string($description) . '\', 
-                                `startTime` = \'' . $mysql->real_escape_string($startTime) . '\', 
-                                `endTime` = \'' . $mysql->real_escape_string($endTime) . '\', 
-                                `published` = \'' . $mysql->real_escape_string($published) . '\'
-                            WHERE `id` = \'' . $mysql->real_escape_string($id) . '\';');
+                       SET `name` = \'' . $mysql->real_escape_string($name) . '\', 
+                           `title` = \'' . $mysql->real_escape_string($title) . '\', 
+                           `price` = \'' . $mysql->real_escape_string($price) . '\', 
+                           `mode` = \'' . $mysql->real_escape_string($mode) . '\', 
+                           `description` = \'' . $mysql->real_escape_string($description) . '\', 
+                           `startTime` = \'' . $mysql->real_escape_string($startTime) . '\', 
+                           `endTime` = \'' . $mysql->real_escape_string($endTime) . '\', 
+                           `published` = \'' . $mysql->real_escape_string($published) . '\'
+                       WHERE `id` = \'' . $mysql->real_escape_string($id) . '\';');
         
         $mysql->close();
     }
@@ -97,7 +97,7 @@ class GameHandler {
         $mysql = MySQL::open(Settings::db_name_infected_main);
         
         $mysql->query('DELETE FROM `' . Settings::db_table_infected_main_games . '` 
-                            WHERE `id` = \'' . $mysql->real_escape_string($id) . '\';');
+                       WHERE `id` = \'' . $mysql->real_escape_string($id) . '\';');
         
         $mysql->close();
     }
