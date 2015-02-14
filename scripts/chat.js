@@ -2,7 +2,7 @@ var chatList = [];
 
 //Bootstrap
 $(document).ready(function() {
-	setInterval(updateChats, 10000);
+	setInterval(updateChats, 5000);
 });
 
 function createChat(divId, chatId, height) {
