@@ -1,4 +1,4 @@
-var bracketList = [];
+	var bracketList = [];
 //A few settings...
 var bracketHeight = 47;
 var bracketHeightMargin = 20;
@@ -46,7 +46,7 @@ function updateBrackets() {
 								currentOffset = data.data[x].bracketOffset;
 								offsetCount = [0,0];
 								$("#" + currentBracket.divId).find("." + (data.data[x].bracket == 1 ? "winnersBracket" : "loosersBracket")).append(
-									'<div class="bracket_time" style="left: ' + xPos + 'px; top: 5px;">' + (data.data[x].bracket == 1 ? "HB runde " : "LB runde ") + (data.data[x].bracketOffset+1 + ( 1 - data.data[x].bracket) ) + 
+									'<div class="bracket_time" style="left: ' + xPos + 'px; top: 5px;">' + (data.data[x].bracket == 1 ? "HB runde " : "LB runde ") + (Number(data.data[x].bracketOffset)+1 + ( 1 - Number(data.data[x].bracket)) ) + 
 									'<br />' + data.data[x].startTime + 
 									'</div>'
 								);
@@ -57,7 +57,7 @@ function updateBrackets() {
 							//Exra date handling for loosers bracket
 							if(shouldMakeLoosersBracket && data.data[x].bracket == 0) {
 								$("#" + currentBracket.divId).find("." + "loosersBracket").append(
-									'<div class="bracket_time" style="left: ' + xPos + 'px; top: 5px;">' + (data.data[x].bracket == 1 ? "HB runde " : "LB runde ") + (data.data[x].bracketOffset+1 + ( 1 - data.data[x].bracket) ) + 
+									'<div class="bracket_time" style="left: ' + xPos + 'px; top: 5px;">' + (data.data[x].bracket == 1 ? "HB runde " : "LB runde ") + (Number(data.data[x].bracketOffset)+1 + ( 1 - Number(data.data[x].bracket)) ) + 
 									'<br />' + data.data[x].startTime + 
 									'</div>'
 								);
