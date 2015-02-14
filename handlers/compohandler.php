@@ -90,6 +90,7 @@ class CompoHandler {
         while ($row = $result->fetch_array()) {
             $clan = ClanHandler::getClan($row['clanId']);
             $playing = ClanHandler::getPlayingMembers($clan);
+            
             if(count($playing) == $compo->getTeamSize()) {
                 array_push($clanList, $clan);
             }
@@ -122,7 +123,7 @@ class CompoHandler {
                            'looserMatches' => array());
         $iteration = 0;
         
-        while (true) {
+        while (true) { // Um. Memory leak here?
             $carryData = self::generateMatches($carryData['matches'], 
                                                $carryData['clans'], 
                                                $carryData['looserMatches'], 

@@ -25,17 +25,6 @@ class MatchHandler {
         $mysql->close();
 
         return $result->fetch_object('Match');
-        /*
-        if ($row) {
-            return new Match($row['id'], 
-                             $row['scheduledTime'], 
-                             $row['connectDetails'], 
-                             $row['winner'], 
-                             $row['state'], 
-                             $row['compoId'],
-                             $row['bracketOffset'],
-                             $row['chat']);
-        }*/
     }
 
     public static function createMatch($scheduledTime, $connectData, $compo, $bracketOffset, $chatId, $bracket) {
@@ -51,15 +40,13 @@ class MatchHandler {
                     \'' . $mysql->real_escape_string($chatId) . '\',
                     \'' . $mysql->real_escape_string($bracket) . '\');');
 
-        $fetchNewestResultId = $mysql->query('SELECT `id` FROM `' . Settings::db_table_infected_compo_matches . '` 
-                                              ORDER BY `id` 
-                                              DESC LIMIT 1;');
-
-        $row = $fetchNewestResultId->fetch_array();
+        $result = $mysql->query('SELECT * FROM `' . Settings::db_table_infected_compo_matches . '` 
+                                 ORDER BY `id` 
+                                 DESC LIMIT 1;');
 
         $mysql->close();
 
-        return self::getMatch($row['id']);
+        return $result->fetch_object('Match');
     }
 
     public static function addMatchParticipant($type, $participantId, $match) {
@@ -70,7 +57,7 @@ class MatchHandler {
                                \'' . $mysql->real_escape_string($participantId) . '\', 
                                \'' . $mysql->real_escape_string($match->getId()) . '\');');
 
-        if($type != self::participantof_state_clan && $type != self::participantof_state_looser) {
+        if ($type != self::participantof_state_clan && $type != self::participantof_state_looser) {
             $mysql->query('INSERT INTO `' . Settings::db_table_infected_compo_matchrelationships . '` (`fromCompo`, `toCompo`) 
                 VALUES (\'' . $mysql->real_escape_string($participantId) . '\', \'' . $mysql->real_escape_string($match->getId()) . '\');');
         }
@@ -211,7 +198,7 @@ class MatchHandler {
 
         $toLooseList = $mysql->query('SELECT * FROM `' . Settings::db_table_infected_compo_participantOfMatch . '` WHERE `type` = 2 AND `participantId` = ' . $mysql->real_escape_string($match->getId()) . ';');
 
-        while($row = $toLooseList->fetch_array()) {
+        while ($row = $toLooseList->fetch_array()) {
             $mysql->query('UPDATE `' . Settings::db_table_infected_compo_participantOfMatch . '` SET `type` = 0, `participantId` = ' . $mysql->real_escape_string($clan->getId()) . ' WHERE `id` = ' . $row['id'] . ';');
 
             $checkingMatchId = MatchHandler::getMatch($row['matchId']);
@@ -358,9 +345,9 @@ class MatchHandler {
                                  WHERE `userId` = \'' . $mysql->real_escape_string($user->getId()) . '\'
                                  AND `matchId` = \'' . $mysql->real_escape_string($match->getId()) . '\';');
     
-        $row = $result->fetch_array();
-
         $mysql->close();
+
+        $row = $result->fetch_array();
         
         return $row ? true : false;
     }
@@ -371,8 +358,6 @@ class MatchHandler {
         $result = $mysql->query('INSERT INTO `' . Settings::db_table_infected_compo_readyusers . '` (`userId`, `matchId`) 
                                  VALUES (\'' . $mysql->real_escape_string($user->getId()) . '\', 
                                          \'' . $mysql->real_escape_string($match->getId()) . '\');');
-
-        $mysql->close();
 
         $mysql->close();
     }
