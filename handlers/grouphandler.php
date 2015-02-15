@@ -26,17 +26,14 @@ class GroupHandler {
     public static function getGroupForUser($user) {
         $mysql = MySQL::open(Settings::db_name_infected_crew);
         
-        $result = $mysql->query('SELECT `groupId` FROM `' . Settings::db_table_infected_crew_memberof . '` 
-                                 WHERE `eventId` = \'' . EventHandler::getCurrentEvent()->getId() . '\'
-								 AND `userId` = \'' . $mysql->real_escape_string($user->getId()) . '\';');
-        
+        $result = $mysql->query('SELECT * FROM `' . Settings::db_table_infected_crew_groups . '` 
+                                 WHERE `id` = (SELECT `groupId` FROM `' . Settings::db_table_infected_crew_memberof . '` 
+                                               WHERE `eventId` = \'' . EventHandler::getCurrentEvent()->getId() . '\'
+            								   AND `userId` = \'' . $mysql->real_escape_string($user->getId()) . '\');');
+          
         $mysql->close();
 
-        $row = $result->fetch_array();
-        
-        if ($row) {
-            return self::getGroup($row['groupId']);
-        }
+        return $result->fetch_object('Group');
     }
     
     /*

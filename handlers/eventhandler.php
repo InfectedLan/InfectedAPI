@@ -154,12 +154,12 @@ class EventHandler {
 			array_push($eventIdList, '\'' . $event->getId() . '\'');
 		}
 		
-		$result = $mysql->query('SELECT * FROM (SELECT `' . Settings::db_table_infected_users . '`.`id`, `firstname`, `birthdate`, `eventId` FROM `' . Settings::db_table_infected_users . '`
+		$result = $mysql->query('SELECT * FROM (SELECT `' . Settings::db_table_infected_users . '`.*, `eventId` FROM `' . Settings::db_table_infected_users . '`
 												LEFT JOIN `' . Settings::db_name_infected_crew . '`.`' . Settings::db_table_infected_crew_memberof . '` 
 												ON `' . Settings::db_table_infected_users . '`.`id` = `userId`
 												WHERE `groupId` IS NOT NULL
 												UNION ALL
-											   	SELECT `' . Settings::db_table_infected_users . '`.`id`, `firstname`, `birthdate`, `eventId` FROM `' . Settings::db_table_infected_users . '`
+											   	SELECT `' . Settings::db_table_infected_users . '`.*, `eventId` FROM `' . Settings::db_table_infected_users . '`
 												LEFT JOIN `' . Settings::db_name_infected_tickets . '`.`' . Settings::db_table_infected_tickets_tickets . '` 
 												ON `' . Settings::db_table_infected_users . '`.`id` = `userId`
 												WHERE `userId` IS NOT NULL) AS `users`
@@ -171,9 +171,9 @@ class EventHandler {
 		$mysql->close();
 		
 		$userList = array();
-        
-        while ($row = $result->fetch_array()) {
-            array_push($userList, UserHandler::getUser($row['id']));
+
+        while ($object = $result->fetch_object('User')) {
+            array_push($userList, $object);
         }
 
         return $userList;
@@ -190,6 +190,7 @@ class EventHandler {
 					   WHERE `eventId` = \'' . $fromEvent->getId() . '\'
 					   AND NOT EXISTS (SELECT `id` FROM `' . Settings::db_table_infected_crew_memberof . '`
 									   WHERE `eventId` = \'' . $toEvent->getId() . '\');');
+        
         $mysql->close();
     }
 }

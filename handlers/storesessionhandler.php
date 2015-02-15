@@ -55,9 +55,9 @@ class StoreSessionHandler {
         $mysql->close();
     }
 
-    //Used to validate a payment
+    // Used to validate a payment.
     public static function isPaymentValid($totalPrice, $session) {
-        return $totalPrice == $session->getPrice();
+        return $session->getPrice() == $totalPrice;
     }
     
     public static function hasStoreSession($user) {
@@ -89,17 +89,13 @@ class StoreSessionHandler {
     private static function getStoreSessionFromKey($key) {
         $mysql = MySQL::open(Settings::db_name_infected_tickets);
 
-        $result = $mysql->query('SELECT `id` FROM `' . Settings::db_table_infected_tickets_storesessions . '` 
+        $result = $mysql->query('SELECT * FROM `' . Settings::db_table_infected_tickets_storesessions . '` 
                                  WHERE `code` = ' . $mysql->real_escape_string($code) . ' 
                                  AND `datetime` > ' . self::oldestValidTimestamp() . ';');
 
         $mysql->close();
 
-        $row = $result->fetch_array();
-
-        if ($row) {
-            return self::getStoreSession($row['id']);
-        }
+        return $result->fetch_object('StoreSession');
     }
 
     public static function getUserIdFromKey($key) {

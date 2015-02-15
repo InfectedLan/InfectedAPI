@@ -2,7 +2,6 @@
 require_once 'settings.php';
 require_once 'mysql.php';
 require_once 'handlers/seatmaphandler.php';
-require_once 'handlers/seathandler.php';
 require_once 'objects/row.php';
 
 class RowHandler {
@@ -14,21 +13,21 @@ class RowHandler {
         
         $mysql->close();
 		
-		    return $result->fetch_object('Row');
+		return $result->fetch_object('Row');
     }
 
     public static function getSeats($row) {
         $mysql = MySQL::open(Settings::db_name_infected_tickets);
 
-        $result = $mysql->query('SELECT `id` FROM `' . Settings::db_table_infected_tickets_seats . '` 
+        $result = $mysql->query('SELECT * FROM `' . Settings::db_table_infected_tickets_seats . '` 
                                  WHERE `rowId` = \'' . $mysql->real_escape_string($row->getId()) . '\';');
 
         $mysql->close();
 
         $seatList = array();
 
-        while ($row = $result->fetch_array()) {
-            array_push($seatList, SeatHandler::getSeat($row['id']));
+        while ($object = $result->fetch_object('Seat')) {
+            array_push($seatList, $object);
         }
 
         return $seatList;
@@ -56,8 +55,7 @@ class RowHandler {
                                \'' . $mysql->real_escape_string($seatmapId) . '\');');
 
         $result = $mysql->query('SELECT * FROM `' .  Settings::db_table_infected_tickets_rows . '`
-                                 ORDER BY `id` DESC 
-                                 LIMIT 1;');
+                                 WHERE `id` = \'' . $mysql->insert_id . '\';');
 
         $mysql->close();
 
@@ -65,9 +63,9 @@ class RowHandler {
     }
     
     public static function safeToDelete($row) {
-        $seats = self::getSeats($row);
+        $seatList = self::getSeats($row);
         
-        foreach($seats as $seat) {
+        foreach($seatList as $seat) {
             if (SeatHandler::hasOwner($seat)) {
                 return false;
             }
@@ -84,9 +82,7 @@ class RowHandler {
 
         $mysql->close();
 
-        $seatList = self::getSeats($row);
-        
-        foreach($seatList as $seat) {
+        foreach (self::getSeats($row) as $seat) {
             SeatHandler::deleteSeat($seat);
         }
     }
@@ -94,7 +90,7 @@ class RowHandler {
     public static function addSeat($row) {
         $mysql = MySQL::open(Settings::db_name_infected_tickets);
 
-        //Find out what seat number we are at
+        // Find out what seat number we are at.
         $highestSeatNum = $mysql->query('SELECT `number` FROM `' . Settings::db_table_infected_tickets_seats . '` 
                                          WHERE `rowId` = ' . $mysql->real_escape_string($row->getId()) . ' 
                                          ORDER BY `number` DESC
@@ -102,7 +98,7 @@ class RowHandler {
 
         $seatRow = mysqli_fetch_array($highestSeatNum);
 
-        $newSeatNumber = $seatRow['number']+1;
+        $newSeatNumber = $seatRow['number'] + 1;
 
         $mysql->query('INSERT INTO `seats` (`rowId`, `number`) 
                        VALUES (\'' . $mysql->real_escape_string($row->getId()) . '\', 

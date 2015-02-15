@@ -34,7 +34,7 @@ class CompoHandler {
 
         $row = $result->fetch_array();
 
-        return null ==! $row;
+        return $row ? true : false;
     }
 
     /*
@@ -63,40 +63,32 @@ class CompoHandler {
     public static function getClans($compo) {
         $mysql = MySQL::open(Settings::db_name_infected_compo);
 
-        $result = $mysql->query('SELECT `clanId` FROM `' . Settings::db_table_infected_compo_participantof . '` 
-                                 WHERE `compoId` = \'' . $mysql->real_escape_string($compo->getId()) . '\';');
+        $result = $mysql->query('SELECT * FROM `' . Settings::db_table_infected_compo_clans . '` 
+                                 WHERE `id` = (SELECT `clanId` FROM `' . Settings::db_table_infected_compo_participantof . '` 
+                                               WHERE `compoId` = \'' . $mysql->real_escape_string($compo->getId()) . '\');');
 
         $mysql->close();
 
         $clanList = array();
 
-        while ($row = $result->fetch_array()) {
-            array_push($clanList, ClanHandler::getClan($row['clanId']));
+        while ($object = $result->fetch_object('Clan')) {
+            array_push($clanList, $object);
         }
         
         return $clanList;
     }
 
     public static function getCompleteClans($compo) {
-        $mysql = MySQL::open(Settings::db_name_infected_compo);
-
-        $result = $mysql->query('SELECT `clanId` FROM `' . Settings::db_table_infected_compo_participantof . '` 
-                                 WHERE `compoId` = \'' . $mysql->real_escape_string($compo->getId()) . '\';');
-
-        $mysql->close();
-
         $clanList = array();
 
-        while ($row = $result->fetch_array()) {
-            $clan = ClanHandler::getClan($row['clanId']);
+        foreach (self::getClans($compo) as $clan) {
             $playing = ClanHandler::getPlayingMembers($clan);
             
-            if(count($playing) == $compo->getTeamSize()) {
+            if (count($playing) == $compo->getTeamSize()) {
                 array_push($clanList, $clan);
             }
-            
         }
-        
+
         return $clanList;
     }
 
@@ -214,8 +206,7 @@ class CompoHandler {
             }
         }
 
-        while($looserCount > 0)
-        {
+        while($looserCount > 0) {
             $chat = ChatHandler::createChat("match chat");
             $match = MatchHandler::createMatch($time + $looserOffsetTime, "", $compo, $iteration, $chat->getId(), Match::BRACKET_LOOSER); //TODO connectData
 

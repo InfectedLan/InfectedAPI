@@ -53,16 +53,13 @@ class PasswordResetCodeHandler {
     public static function getUserFromPasswordResetCode($code) {
         $mysql = MySQL::open(Settings::db_name_infected);
         
-        $result = $mysql->query('SELECT `userId` FROM `' . Settings::db_table_infected_passwordresetcodes . '` 
-                                 WHERE `code` = \'' . $mysql->real_escape_string($code) . '\';');
+        $result = $mysql->query('SELECT * FROM `' . Settings::db_table_infected_users . '`
+                                 WHERE `id` = (SELECT `userId` FROM `' . Settings::db_table_infected_passwordresetcodes . '` 
+                                               WHERE `code` = \'' . $mysql->real_escape_string($code) . '\');');
         
         $mysql->close();
 
-        $row = $result->fetch_array();
-
-        if ($row) {
-            return UserHandler::getUser($row['userId']);
-        }
+        return $result->fetch_object('User');
     }
     
     public static function removePasswordResetCode($code) {

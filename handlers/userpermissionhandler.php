@@ -55,17 +55,18 @@ class UserPermissionHandler {
     public static function getUserPermissions($user) {
         $mysql = MySQL::open(Settings::db_name_infected);
         
-        $result = $mysql->query('SELECT `permissionId` FROM `' . Settings::db_table_infected_userpermissions . '`
-                                 WHERE `userId` = \'' . $mysql->real_escape_string($user->getId()) . '\';');
+        $result = $mysql->query('SELECT * FROM `' . Settings::db_table_infected_permissions . '`
+                                 WHERE `id` = (SELECT `permissionId` FROM `' . Settings::db_table_infected_userpermissions . '`
+                                               WHERE `userId` = \'' . $mysql->real_escape_string($user->getId()) . '\');');
         
         $mysql->close();
         
         $permissionList = array();
         
-        while ($row = $result->fetch_array()) {
-            array_push($permissionList, PermissionHandler::getPermission($row['permissionId']));
+        while ($object = $result->fetch_object('Permission')) {
+            array_push($permissionList, $object);
         }
-
+        
         return $permissionList;
     }
     

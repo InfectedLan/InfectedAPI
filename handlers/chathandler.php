@@ -23,9 +23,8 @@ class ChatHandler {
  	 * Adds entire clan to chat
  	 */
 	public static function addClanMembersToChat($chat, $clan) {
-		//Let all chat members chat, just because
-		$members = $clan->getMembers();
-		foreach($members as $member) {
+		// Let all chat members chat, just because.
+		foreach ($clan->getMembers() as $member) {
 			self::addChatMember($member, $chat);
 		}
     }
@@ -128,12 +127,10 @@ class ChatHandler {
 		
 		$mysql->query('INSERT INTO `' . Settings::db_table_infected_compo_chats . '` (`name`) 
                        VALUES (\'' . $mysql->real_escape_string($name) . '\');');
-						
-		$chat = self::getChat($mysql->insert_id);
-						
+			
 		$mysql->close();
 		
-		return $chat;
+		return self::getChat($mysql->insert_id);
 	}
 	
 	/*
@@ -188,17 +185,18 @@ class ChatHandler {
 	 * Returns an array of all members in the specificed chat.
 	 */
 	public static function getChatMembers($chat) {
-		$mysql = MySQL::open(Settings::db_name_infected_compo);
+		$mysql = MySQL::open(Settings::db_name_infected);
 		
-		$result = $mysql->query('SELECT `userId` FROM `' . Settings::db_table_infected_compo_memberofchat . '`
-                                 WHERE `chatId` = \'' . $mysql->real_escape_string($chat->getId()) . '\';');
-        
+        $result = $mysql->query('SELECT * FROM `' . Settings::db_table_infected_users . '`
+                                 WHERE `id` = (SELECT `userId` FROM `' . Settings::db_name_infected_compo . '`.`' . Settings::db_table_infected_compo_memberofchat . '`
+                                 			   WHERE `chatId` = \'' . $mysql->real_escape_string($chat->getId()) . '\');');
+
 		$mysql->close();
 		
 		$chatMemberList = array();
-		
-        while ($row = $result->fetch_array()) {
-            array_push($chatMemberList, UserHandler::getUser($row['userId']));
+
+        while ($object = $result->fetch_object('User')) {
+            array_push($chatMemberList, $object);
         }
 
         return $chatMemberList;

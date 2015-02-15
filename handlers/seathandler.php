@@ -60,7 +60,7 @@ class SeatHandler {
 
         if ($row) {
             return UserHandler::getUser($row['userId']);
-        }        
+        }
     }
 
     public static function getTicket($seat) {

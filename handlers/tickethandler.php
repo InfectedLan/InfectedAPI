@@ -149,7 +149,8 @@ class TicketHandler {
     public static function setSeater($ticket, $newSeater) {
         $mysql = MySQL::open(Settings::db_name_infected_tickets);
 
-        if (!isset($newSeater) || empty($newSeater)) {
+        if (!isset($newSeater) || 
+            empty($newSeater)) {
             $result = $mysql->query('UPDATE `' . Settings::db_table_infected_tickets_tickets . '` 
                                      SET `seaterId` = \'0\' 
                                      WHERE `id` = \'' . $mysql->real_escape_string($ticket->getId()) . '\';');

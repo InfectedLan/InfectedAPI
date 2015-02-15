@@ -232,7 +232,7 @@ class ApplicationHandler {
      */
     public static function acceptApplication($user, $application, $comment, $notify) {
 		// Only allow application for current event to be accepted.
-		if ($application->getEvent()->getId() == EventHandler::getCurrentEvent()->getId()) {
+		if ($applicatin->getEvent()->equals(EventHandler::getCurrentEvent())) {
 			$mysql = MySQL::open(Settings::db_name_infected_crew);
 			
 			$mysql->query('UPDATE `' . Settings::db_table_infected_crew_applications . '` 
@@ -254,7 +254,7 @@ class ApplicationHandler {
 			$applicationList = self::getUserApplications($applicationUser);
 			
 			foreach ($applicationList as $value) {
-				if ($group->getId() != $value->getGroup()->getId()) {
+                if ($group->equals($value->getGroup())) {
 					self::closeApplication($user, $value);
 				}
 			}
@@ -275,7 +275,7 @@ class ApplicationHandler {
      */
     public static function rejectApplication($user, $application, $comment, $notify) {
 		// Only allow application for current event to be rejected.
-		if ($application->getEvent()->getId() == EventHandler::getCurrentEvent()->getId()) {
+        if ($application->getEvent()->equals(EventHandler::getCurrentEvent())) {
 			$mysql = MySQL::open(Settings::db_name_infected_crew);
 			
 			$mysql->query('UPDATE `' . Settings::db_table_infected_crew_applications . '` 
@@ -338,7 +338,7 @@ class ApplicationHandler {
      */
     public static function queueApplication($user, $application, $notify) {
 		// Only allow application for current event to be queued.
-		if ($application->getEvent()->getId() == EventHandler::getCurrentEvent()->getId()) {
+        if ($application->getEvent()->equals(EventHandler::getCurrentEvent())) {
 			if (!self::isQueued($application)) {
 				$mysql = MySQL::open(Settings::db_name_infected_crew);
 				
@@ -364,7 +364,7 @@ class ApplicationHandler {
      */
     public static function unqueueApplication($user, $application) {
 		// Only allow application for current event to be unqueued.
-		if ($application->getEvent()->getId() == EventHandler::getCurrentEvent()->getId()) {
+        if ($application->getEvent()->equals(EventHandler::getCurrentEvent())) {
 			$mysql = MySQL::open(Settings::db_name_infected_crew);
 			
 			$mysql->query('DELETE FROM `' . Settings::db_table_infected_crew_applicationqueue . '` 

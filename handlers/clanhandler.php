@@ -32,18 +32,17 @@ class ClanHandler {
     public static function getClansForUser($user, $event) {
         $mysql = MySQL::open(Settings::db_name_infected_compo);
 
-        $result = $mysql->query('SELECT `clanId` FROM `' . Settings::db_table_infected_compo_memberof . '` 
-                                 WHERE `userId` = \'' . $mysql->real_escape_string($user->getId()) . '\';');
+        $result = $mysql->query('SELECT * FROM `' . Settings::db_table_infected_compo_clans . '` 
+                                 WHERE `id` = (SELECT `clanId` FROM `' . Settings::db_table_infected_compo_memberof . '` 
+                                               WHERE `userId` = \'' . $mysql->real_escape_string($user->getId()) . '\');');
 
         $mysql->close();
 
         $clanList = array();
 
-        while ($row = $result->fetch_array()) {
-            $clan = self::getClan($row['clanId']);
-            
-            if ($event->getId() == $clan->getEvent()) {
-                array_push($clanList, $clan);
+        while ($object = $result->fetch_object('Clan')) {
+            if ($event->equals($object->getEvent())) {
+                array_push($clanList, $object);
             }
         }
 
@@ -56,16 +55,13 @@ class ClanHandler {
     public static function getCompo($clan) {
         $mysql = MySQL::open(Settings::db_name_infected_compo);
 
-        $result = $mysql->query('SELECT `compoId` FROM `' . Settings::db_table_infected_compo_participantof . '` 
-                                 WHERE `clanId` = \'' . $mysql->real_escape_string( $clan->getId() ) . '\';');
+        $result = $mysql->query('SELECT * FROM `' . Settings::db_table_infected_compo_compo . '`
+                                 WHERE `id` = (SELECT `compoId` FROM `' . Settings::db_table_infected_compo_participantof . '` 
+                                               WHERE `clanId` = \'' . $mysql->real_escape_string( $clan->getId() ) . '\');');
 
         $mysql->close();
 
-        $row = $result->fetch_array();
-
-        if ($row) {
-            return CompoHandler::getCompo($row['compoId']);
-        }
+        return $result->fetch_object('Compo');
     }
 
     /*
@@ -74,35 +70,36 @@ class ClanHandler {
     public static function getInvites($clan) {
         $mysql = MySQL::open(Settings::db_name_infected_compo);
 
-        $result = $mysql->query('SELECT `id` FROM `' . Settings::db_table_infected_compo_invites . '` 
+        $result = $mysql->query('SELECT * FROM `' . Settings::db_table_infected_compo_invites . '` 
                                  WHERE `clanId` = \'' . $mysql->real_escape_string($clan->getId()) . '\';');
 
         $mysql->close();
 
-        $peopleList = array();
+        $inviteList = array();
 
-        while ($row = $result->fetch_array()) {
-            array_push($peopleList, InviteHandler::getInvite($row['id']));
+        while ($object = $result->fetch_object('Invite')) {
+            array_push($inviteList, $object);
         }
 
-        return $peopleList;
+        return $inviteList;
     }
 
     /*
      * Get members for specified clan.
      */
     public static function getMembers($clan) {
-        $mysql = MySQL::open(Settings::db_name_infected_compo);
+        $mysql = MySQL::open(Settings::db_name_infected);
 
-        $result = $mysql->query('SELECT `userId` FROM `' . Settings::db_table_infected_compo_memberof . '` 
-                                 WHERE `clanId` = \'' . $mysql->real_escape_string($clan->getId()) . '\';');
+        $result = $mysql->query('SELECT * FROM `' . Settings::db_table_infected_users . '` 
+                                 WHERE `id` = (SELECT `userId` FROM `' . Settings::db_name_infected_compo . '`.`' . Settings::db_table_infected_compo_memberof . '` 
+                                               WHERE `clanId` = \'' . $mysql->real_escape_string($clan->getId()) . '\');');
 
         $mysql->close();
 
         $memberList = array();
 
-        while ($row = $result->fetch_array()) {
-            array_push($memberList, UserHandler::getUser($row['userId']));
+        while ($object = $result->fetch_object('User')) {
+            array_push($memberList, $object);
         }
 
         return $memberList;
@@ -112,18 +109,19 @@ class ClanHandler {
      * Get playing members for specified clan.
      */
     public static function getPlayingMembers($clan) {
-        $mysql = MySQL::open(Settings::db_name_infected_compo);
+        $mysql = MySQL::open(Settings::db_name_infected);
 
-        $result = $mysql->query('SELECT `userId` FROM `' . Settings::db_table_infected_compo_memberof . '` 
-                                 WHERE `clanId` = \'' . $mysql->real_escape_string($clan->getId()) . '\'
-                                 AND `stepin` = 0;');
+        $result = $mysql->query('SELECT * FROM `' . Settings::db_table_infected_users . '` 
+                                 WHERE `id` = (SELECT `userId` FROM `' . Settings::db_name_infected_compo . '`.`' . Settings::db_table_infected_compo_memberof . '` 
+                                               WHERE `clanId` = \'' . $mysql->real_escape_string($clan->getId()) . '\'
+                                               AND `stepin` = \'0\');');
 
         $mysql->close();
 
         $memberList = array();
 
-        while ($row = $result->fetch_array()) {
-            array_push($memberList, UserHandler::getUser($row['userId']));
+        while ($object = $result->fetch_object('User')) {
+            array_push($memberList, $object);
         }
 
         return $memberList;
@@ -133,18 +131,18 @@ class ClanHandler {
      * Get step in members for specified clan.
      */
     public static function getStepinMembers($clan) {
-        $mysql = MySQL::open(Settings::db_name_infected_compo);
+        $mysql = MySQL::open(Settings::db_name_infected);
 
-        $result = $mysql->query('SELECT `userId` FROM `' . Settings::db_table_infected_compo_memberof . '` 
-                                 WHERE `clanId` = \'' . $mysql->real_escape_string($clan->getId()) . '\'
-                                 AND `stepin` = \'1\';');
-
+        $result = $mysql->query('SELECT * FROM `' . Settings::db_table_infected_users . '` 
+                                 WHERE `id` = (SELECT `userId` FROM `' . Settings::db_name_infected_compo . '`.`' . Settings::db_table_infected_compo_memberof . '` 
+                                               WHERE `clanId` = \'' . $mysql->real_escape_string($clan->getId()) . '\'
+                                               AND `stepin` = \'1\');');
         $mysql->close();
 
         $memberList = array();
 
-        while ($row = $result->fetch_array()) {
-            array_push($memberList, UserHandler::getUser($row['userId']));
+        while ($object = $result->fetch_object('User')) {
+            array_push($memberList, $object);
         }
 
         return $memberList;
@@ -164,7 +162,7 @@ class ClanHandler {
 
         $row = $result->fetch_array();
 
-        return null ==! $row;
+        return $row ? true : false;
     }
 
     /*
@@ -182,7 +180,7 @@ class ClanHandler {
 
         $row = $result->fetch_array();
 
-        return null ==! $row;
+        return $row ? true : false;
     }
 
     /*
@@ -197,7 +195,6 @@ class ClanHandler {
                                  AND `userId` = \'' . $mysql->real_escape_string($user->getId()) . '\';');
 
         $mysql->close();
-
     }
 
     /*
@@ -231,16 +228,15 @@ class ClanHandler {
      */
     public static function registerClan($name, $tag, $compo, $user) {
         $mysql = MySQL::open(Settings::db_name_infected_compo);
-        $event = EventHandler::getCurrentEvent();
 
         $mysql->query('INSERT INTO `' . Settings::db_table_infected_compo_clans . '` (`chief`, `name`, `tag`, `event`) 
                        VALUES (\'' . $mysql->real_escape_string($user->getId()) . '\', 
                                \'' . $mysql->real_escape_string(htmlentities($name, ENT_QUOTES, 'UTF-8')) . '\', 
                                \'' . $mysql->real_escape_string(htmlentities($tag, ENT_QUOTES, 'UTF-8')) . '\', 
-                               \'' . $mysql->real_escape_string($event->getId()) . '\');');
+                               \'' . $mysql->real_escape_string(EventHandler::getCurrentEvent()->getId()) . '\');');
         
         // Fetch the id of the clan we just added
-        $fetchedId = mysqli_insert_id($mysql);
+        $fetchedId = $mysql->insert_id;
 
         $mysql->query('INSERT INTO `' . Settings::db_table_infected_compo_participantof . '` (`clanId`, `compoId`) 
                        VALUES (\'' . $mysql->real_escape_string($fetchedId) . '\', 

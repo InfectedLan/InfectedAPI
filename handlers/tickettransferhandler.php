@@ -128,23 +128,11 @@ class TicketTransferHandler {
 								
 								// Actually change the user of the ticket.
 								TicketHandler::updateTicketUser($ticket, $user);
-							} else {
-								return 'Det er for sent å overføre denne billetten!';
 							}
-						} else {
-							return 'Billeten kan ikke angres.';
 						}
-					} else {
-						return 'Du er ikke den gamle eieren av billetten!';
 					}
-				} else {
-					return 'Billetten er sjekket inn!';
 				}
-			} else {
-				return 'Brukeren er ikke aktivert, be personen om å aktivere sin bruker.';
 			}
-        } else {
-            return 'Billetten er for et gammelt arrangement!';
         }
     }
 }

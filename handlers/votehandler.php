@@ -38,7 +38,7 @@ class VoteHandler {
         $result = $mysql->query('INSERT INTO `' . Settings::db_table_infected_compo_votes . '` (`consumerId`, `voteOptionId`) 
                                  VALUES (\'' . $mysql->real_escape_string($mysqlsumerId) . '\', 
                                          \'' . $mysql->real_escape_string($voteOption->getId()) . '\');');
-    
+        
         $mysql->close();
     }
 }
