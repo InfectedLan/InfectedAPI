@@ -69,9 +69,9 @@ function updateChats() {
 										$("#" + chatList[chatListIndex].divId).find(".chatArea").html("");
 										for(var x = chatData.result.length-1; x >= 0; x--) {
 											if(chatData.result[x].admin) {
-												$("#" + chatList[chatListIndex].divId).find(".chatArea").append("<span><b>[Admin]" + chatData.result[x].user + "</b>: " + chatData.result[x].message + "<br /></span>");
+												$("#" + chatList[chatListIndex].divId).find(".chatArea").append("<span>[" + chatData.result[x].time + "]<b>[Admin]" + chatData.result[x].user + "</b>: " + chatData.result[x].message + "<br></span>");
 											} else {
-												$("#" + chatList[chatListIndex].divId).find(".chatArea").append("<span>" + chatData.result[x].user + ": " + chatData.result[x].message + "<br /></span>");
+												$("#" + chatList[chatListIndex].divId).find(".chatArea").append("<span>[" + chatData.result[x].time + "]" + chatData.result[x].user + ": " + chatData.result[x].message + "<br></span>");
 											}
 										}
 										//Tell the array that we have the newest content
@@ -80,7 +80,7 @@ function updateChats() {
 										$("#" + chatList[chatListIndex].divId).find(".chatArea").scrollTop($("#" + chatList[chatListIndex].divId).find(".chatArea")[0].scrollHeight);
 									} else {
 										console.log("Something went wrong during fetching the chat data: " + chatData.message);
-										error("Det skjedde en feil under hentingen av chat-data: <br />" + chatData.message);
+										error("Det skjedde en feil under hentingen av chat-data: <br>" + chatData.message);
 									}
 								};
 							}) ());

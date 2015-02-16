@@ -18,12 +18,12 @@ if (Session::isAuthenticated()) {
 				$chat->getId() == 1) {
 				$message = ChatHandler::getLastChatMessage($chat);
 				
-				if ($messag != null) {
+				if ($message != null) {
 					$subject = $message->getUser();
 
 					$result = array('id' => $message->getId(), 
 									'user' => $subject->getNickname(),
-									'time' => date('Y-m-d H:i:s', $message->getTime()),
+									'time' => date('H:i:s', $message->getTime()),
 									'message' => $message->getMessage());
 
 					//Tell chat if admin or not
