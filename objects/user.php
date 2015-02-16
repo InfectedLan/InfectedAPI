@@ -171,21 +171,26 @@ class User extends Object {
 	public function hasPermission($value) {
 		// Match wildcard permissions, if value is admin.permissions and user has permission "admin.*" this would return true.
 		$wildcardValue = preg_replace('/[^\.]([^.]*)$/', '*', $value);
+		$parentValue = preg_replace('/[\.*](.*)/', '', $value);
 
 		if (UserPermissionHandler::hasUserPermissionByValue($this, $wildcardValue)) {
 			return true;
 		}
 
+		// Check if user has parent of value.
+		if (!empty($parentValue)) {
+			foreach ($this->getPermissions() as $permission) {
+				return preg_match('/^' . $parentValue . '/', $permission->getValue());
+			}
+		}
+
 		// If the user is a leader or co leader return true on chief permissions.
 		if ($this->isGroupMember() &&
 			($this->isGroupLeader() || $this->isGroupCoLeader())) {
-
 			$allowedList = array('chief');
 
 			foreach ($allowedList as $allowed) {
-				if (preg_match('/^' . $allowed . '\./', $value)) {
-					return true;
-				}
+				return preg_match('/^' . $allowed . '\./', $value);
 			}
 		}
 		
