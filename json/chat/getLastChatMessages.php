@@ -13,18 +13,24 @@ if (Session::isAuthenticated()) {
 		$chat = ChatHandler::getChat($_GET['id']);
 
 		if ($chat != null) {
-			if (ChatHandler::isChatMember($user, $chat) || $user->hasPermission('*') || $user->hasPermission('compo.chat') || $chat->getId() == 1) {
-				$messages = ChatHandler::getLastMessages($chat, $_GET['count']);
+			if ($user->hasPermission('*') || 
+			    $user->hasPermission('compo.chat') || 
+			    ChatHandler::isChatMember($user, $chat) ||
+				$chat->getId() == 1) {
+				$messageList = ChatHandler::getLastMessages($chat, $_GET['count']);
 				$result = array();
 
-				foreach ($messages as $message) {
-					$toPush = array('id' => $message->getId(), 
-									'message' => $message->getMessage(), 
-									'user' => $message->getUser()->getNickname());
-
+				foreach ($messageList as $message) {
 					$subject = $message->getUser();
+
+					$toPush = array('id' => $message->getId(), 
+									'user' => $subject->getNickname(),
+									'time' => date('Y-m-d H:i:s', $message->getTime()),
+									'message' => $message->getMessage());
+
 					//Tell chat if admin or not
-					if ($subject->hasPermission('*') || $subject->hasPermission('compo.chat')) {
+					if ($subject->hasPermission('*') || 
+						$subject->hasPermission('compo.chat')) {
 						$toPush['admin'] = true;
 					} else {
 						$toPush['admin'] = false;

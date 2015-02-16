@@ -1,6 +1,5 @@
 <?php
 require_once 'session.php';
-require_once 'handlers/userhandler.php';
 require_once 'handlers/chathandler.php';
 
 $result = false;
@@ -13,14 +12,20 @@ if (Session::isAuthenticated()) {
 		$chat = ChatHandler::getChat($_GET['id']);
 
 		if ($chat != null) {
-			if (ChatHandler::isChatMember($user, $chat) || $user->hasPermission('*') || $user->hasPermission('compo.chat') || $chat->getId() == 1) {
+			if ($user->hasPermission('*') || 
+				$user->hasPermission('compo.chat') || 
+				ChatHandler::isChatMember($user, $chat) || 
+				$chat->getId() == 1) {
 				$message = ChatHandler::getLastChatMessage($chat);
 				
-				if (isset($message)) {
-					$result = array('id' => $message->getId(), 
-									'message' => $message->getMessage(), 
-									'user' => $message->getUser()->getNickname());
+				if ($messag != null) {
 					$subject = $message->getUser();
+
+					$result = array('id' => $message->getId(), 
+									'user' => $subject->getNickname(),
+									'time' => date('Y-m-d H:i:s', $message->getTime()),
+									'message' => $message->getMessage());
+
 					//Tell chat if admin or not
 					if ($subject->hasPermission('*') || 
 						$subject->hasPermission('compo.chat')) {
