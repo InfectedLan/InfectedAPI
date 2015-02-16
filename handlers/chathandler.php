@@ -183,7 +183,6 @@ class ChatHandler {
         return $row ? true : false;
 	}
 	
-		
 	/*
 	 * Returns an array of all members in the specificed chat.
 	 */
