@@ -18,7 +18,7 @@ class Session {
 	 * Returns true if the current user is a member (To clarify, is a crew member).
 	 */
 	public static function isMember() {
-		return self::getCurrentUser()->isGroupMember();
+		return self::isAuthenticated() && self::getCurrentUser()->isGroupMember();
 	}
 	
 	/*
@@ -36,10 +36,9 @@ class Session {
 	public static function reload() {
 		if (self::isAuthenticated()) {
 			$user = self::getCurrentUser();
-			$newUser = UserHandler::getUser($user->getId());
-		
+			
 			unset($_SESSION['user']);
-			$_SESSION['user'] = $newUser;
+			$_SESSION['user'] = UserHandler::getUser($user->getId());;
 		}
 	}
 }

@@ -15,44 +15,30 @@ class TicketTransferHandler {
                                  LIMIT 1;');
 
         $mysql->close();
-                                         
-        $row = $result->fetch_array();
-
-        if ($row) {
-            return new TicketTransfer($row['id'],
-                                      $row['ticketId'], 
-                                      $row['fromId'],
-                                      $row['toId'],
-                                      $row['datetime'],                              
-                                      $row['revertable']);
-        }
+		
+		return $result->fetch_object('TicketTransfer');
     }
 
     // Returns list of transfers that are eligible for reverting
     public static function getRevertableTransfers($user) {
-        $mysql = MySQL::open(Settings::db_name_infected_tickets);
+ 		$wantedTimeLimit = time() - Settings::ticketTransferTime;
 
-        $wantedTimeLimit = time() - Settings::ticketTransferTime;
+        $mysql = MySQL::open(Settings::db_name_infected_tickets);
 
         $result = $mysql->query('SELECT * FROM `' . Settings::db_table_infected_tickets_tickettransfers . '` 
                                  WHERE `fromId` = \'' . $mysql->real_escape_string($user->getId()) . '\'
                                  AND `revertable` = \'1\'
                                  AND `datetime` > \'' . date('Y-m-d H:i:s', $wantedTimeLimit) . '\';');
 
-        $transferrableList = array();
+        $mysql->close();
 
-        while($row = $result->fetch_array()) {
-            $transferrableTicket = new TicketTransfer($row['id'],
-                                                      $row['ticketId'], 
-                                                      $row['fromId'],
-                                                      $row['toId'],
-                                                      $row['datetime'],                              
-                                                      $row['revertable']);
-                                      
-            array_push($transferrableList, $transferrableTicket);
+        $transferList = array();
+
+        while ($object = $result->fetch_object('TicketTransfer')) {
+            array_push($transferList, $object);
         }
 
-        return $transferrableList;
+        return $transferList;
     }
     
     public static function createTransfer($ticket, $user, $revertable) {
@@ -85,8 +71,7 @@ class TicketTransferHandler {
 		$transfer = self::getTransferFromTicket($ticket);
 	
         // Check that the ticket is for current event, we don't allow transfers of old tickets.
-        if ($ticket->getEvent()->getId() == EventHandler::getCurrentEvent()->getId()) {
-        
+		if ($ticket->getEvent()->equals(EventHandler::getCurrentEvent())) {
 			// Check that the recipient user is activated.
 			if ($user->isActivated()) {
 		
@@ -94,7 +79,7 @@ class TicketTransferHandler {
 				if (!$ticket->isCheckedIn()) {
 				
 					// Check that the new user isn't the same as the old one.
-					if ($ticket->getUser()->getId() != $user->getId()) {
+					if (!$user->equals($ticket->getUser())) {
 						// Prevent the original transfer from being reverted.
 						if ($transfer != null) {
 							self::freezeTransfer($transfer);
@@ -119,7 +104,7 @@ class TicketTransferHandler {
         $timeLimit = Settings::ticketTransferTime;
 		
         // Check that the ticket is for current event, we don't allow reverting transfers for old tickets.
-        if ($ticket->getEvent()->getId() == EventHandler::getCurrentEvent()->getId()) {
+        if ($ticket->getEvent()->equals(EventHandler::getCurrentEvent())) {
         
 			// Check that the recipient user is activated.
 			if ($user->isActivated()) {
@@ -127,8 +112,8 @@ class TicketTransferHandler {
 				// If the ticket is checked in, we don't allow transfers.
 				if (!$ticket->isCheckedIn()) {
 				
-					// Check if the user specified matches the former user of the ticket.            
-					if ($transfer->getFrom()->getId() == $user->getId()) {
+					// Check if the user specified matches the former user of the ticket.     
+					if ($user->equals($transfer->getFrom())) {
 		
 						// Check if the ticket is revertable.
 						if ($transfer->isRevertable()) {

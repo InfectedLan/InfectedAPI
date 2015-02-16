@@ -14,8 +14,12 @@ if (Session::isAuthenticated()) {
 			is_numeric($_GET['id'])) {
 			$application = ApplicationHandler::getApplication($_GET['id']);
 			
-			ApplicationHandler::removeApplication($application);
-			$result = true;
+			if ($application != null) {
+				ApplicationHandler::removeApplication($application);
+				$result = true;
+			} else {
+				$message = 'Søknaden finnes ikke.';
+			}
 		} else {
 			$message = 'Ingen søknad spesifisert.';
 		}

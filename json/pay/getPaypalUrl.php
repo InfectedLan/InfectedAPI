@@ -1,7 +1,7 @@
 <?php
 require_once 'session.php';
 require_once 'handlers/storesessionhandler.php';
-require_once 'handlers/userhandler.php';
+require_once 'handlers/tickettypehandler.php';
 require_once 'handlers/eventhandler.php';
 require_once 'paypal/paypal.php';
 

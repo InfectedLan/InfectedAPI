@@ -11,6 +11,7 @@ if (Session::isAuthenticated()) {
 	
 	if ($user->hasPermission('*') ||
 		$user->hasPermission('chief.groups')) {
+		
 		if (isset($_GET['userId']) &&
 			isset($_GET['groupId']) &&
 			is_numeric($_GET['userId']) &&
@@ -18,10 +19,15 @@ if (Session::isAuthenticated()) {
 			$groupUser = UserHandler::getUser($_GET['userId']);
 			$group = GroupHandler::getGroup($_GET['groupId']);
 			
-			GroupHandler::changeGroupForUser($groupUser, $group);
-			$result = true;
+			if ($group != null && 
+				$groupUser != null) {
+				GroupHandler::changeGroupForUser($groupUser, $group);
+				$result = true;
+			} else {
+				$message = 'Noe gikk galt, mangler bruker eller gruppe.';
+			}
 		} else {
-			$message = 'Ingen gruppe spesifisert.';
+			$message = 'Du har ikke fyllt ut alle feltene.';
 		}
 	} else {
 		$message = 'Du har ikke tillatelse til dette.';

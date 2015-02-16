@@ -6,13 +6,6 @@ class EmergencyContact extends Object {
 	private $userId;
 	private $phone;
 	
-	public function __construct($id, $userId, $phone) {
-		parent::__construct($id);
-	
-		$this->userId = $userId;
-		$this->phone = $phone;
-	}
-	
 	/* 
 	 * Returns associated user.
 	 */
@@ -30,7 +23,7 @@ class EmergencyContact extends Object {
 	/* 
 	 * Returns the phone number formatted as a string.
 	 */
-	public function getPhoneString() {
+	public function getPhoneString() { // TODO: Rename this to getPhoneAsString().
 		return !empty($this->phone) ? chunk_split($this->phone, 2, ' ') : 'Ikke oppgitt';
 	}
 }

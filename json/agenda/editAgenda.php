@@ -10,6 +10,7 @@ if (Session::isAuthenticated()) {
 	
 	if ($user->hasPermission('*') ||
 		$user->hasPermission('event.agenda')) {
+		
 		if (isset($_GET['id']) &&
 			isset($_GET['title']) &&
 			isset($_GET['description']) &&

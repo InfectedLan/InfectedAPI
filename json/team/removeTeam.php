@@ -11,6 +11,7 @@ if (Session::isAuthenticated()) {
 	
 	if ($user->hasPermission('*') ||
 		$user->hasPermission('chief.teams')) {
+		
 		if (isset($_GET['groupId']) &&
 			isset($_GET['teamId']) &&
 			is_numeric($_GET['groupId']) &&

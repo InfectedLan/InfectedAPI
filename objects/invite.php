@@ -4,21 +4,16 @@ require_once 'settings.php';
 require_once 'objects/object.php';
 require_once 'handlers/clanhandler.php';
 
-class Invite extends Object{
+class Invite extends Object {
 	private $userId;
 	private $clanId;
 
-	public function __construct($id, $userId, $clanId) {
-		parent::__construct($id);
-		
-		$this->userId = $userId;
-		$this->clanId = $clanId;
-	}
-
+	// TODO: Just return User object here, getUser().
 	public function getUserId() {
 		return $this->userId;
 	}
 
+	// TODO: Just return Clan object here, getChat().
 	public function getClanId() {
 		return $this->clanId;
 	}
@@ -26,7 +21,8 @@ class Invite extends Object{
 	public function decline() {
 		$con = MySQL::open(Settings::db_name_infected_compo);
 
-		mysqli_query($con, 'DELETE FROM `' . Settings::db_table_infected_compo_invites . '` WHERE `id` = ' . $this->getId() . ';');
+		mysqli_query($con, 'DELETE FROM `' . Settings::db_table_infected_compo_invites . '`
+							WHERE `id` = \'' . $this->getId() . '\';');
 	
 		MySQL::close($con);
 	}
@@ -34,14 +30,15 @@ class Invite extends Object{
 	public function accept() {
 		$con = MySQL::open(Settings::db_name_infected_compo);
 
-		mysqli_query($con, 'DELETE FROM `' . Settings::db_table_infected_compo_invites . '` WHERE `id` = ' . $this->getId() . ';');
+		mysqli_query($con, 'DELETE FROM `' . Settings::db_table_infected_compo_invites . '`
+							WHERE `id` = \'' . $this->getId() . '\';');
 
 		$clan = ClanHandler::getClan($this->getClanId());
 
 		$memberList = ClanHandler::getPlayingMembers($clan);
 		$compo = ClanHandler::getCompo($clan);
 
-		if(count($memberList) < $compo->getTeamSize()) {
+		if (count($memberList) < $compo->getTeamSize()) {
 			mysqli_query($con, 'INSERT INTO `' . Settings::db_table_infected_compo_memberof . '` (`userId`, `clanId`, `stepin`) VALUES (' . $this->userId . ', ' . $this->clanId . ', 0);');
 		} else {
 			mysqli_query($con, 'INSERT INTO `' . Settings::db_table_infected_compo_memberof . '` (`userId`, `clanId`, `stepin`) VALUES (' . $this->userId . ', ' . $this->clanId . ', 1);');

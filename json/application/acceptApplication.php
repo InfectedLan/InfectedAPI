@@ -11,17 +11,21 @@ if (Session::isAuthenticated()) {
 	
 	if ($user->hasPermission('*') ||
 		$user->hasPermission('chief.applications')) {
+		
 		if (isset($_GET['id']) &&
 			is_numeric($_GET['id'])) {
 			$application = ApplicationHandler::getApplication($_GET['id']);
 			$comment = isset($_GET['comment']) ? $_GET['comment'] : null;
 			
-			// Only allow application for current event to be accepted.
-			if ($application->getEvent()->getId() == EventHandler::getCurrentEvent()->getId()) {
-				ApplicationHandler::acceptApplication($user, $application, $comment, true);
-				$result = true;
+			if ($application != null) {
+				if ($application->getEvent()->equals(EventHandler::getCurrentEvent())) {
+					ApplicationHandler::acceptApplication($user, $application, $comment, true);
+					$result = true;
+				} else {
+					$message = 'Kan ikke godkjenne søknader for tidligere arrangementer.';
+				}
 			} else {
-				$message = 'Kan ikke godkjenne søknader for tidligere arrangementer.';
+				$message = 'Søknaden finnes ikke.';
 			}
 		} else {
 			$message = 'Ingen søknad spesifisert.';

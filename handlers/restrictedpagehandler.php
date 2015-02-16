@@ -3,11 +3,10 @@ require_once 'session.php';
 require_once 'settings.php';
 require_once 'mysql.php';
 require_once 'objects/restrictedpage.php';
-require_once 'objects/user.php';
 
 class RestrictedPageHandler {
     /*
-     * Get page by id.
+     * Get page by the internal id.
      */
     public static function getPage($id) {
 		$mysql = MySQL::open(Settings::db_name_infected_crew);
@@ -15,19 +14,9 @@ class RestrictedPageHandler {
 		$result = $mysql->query('SELECT * FROM `' . Settings::db_table_infected_crew_pages . '`
 								 WHERE `id` = \'' . $mysql->real_escape_string($id) . '\';');
 		
-		
-		$row = $result->fetch_array();
-			
 		$mysql->close();
             
-		if ($row) {
-			return new RestrictedPage($row['id'], 
-									  $row['name'], 
-									  $row['title'], 
-									  $row['content'], 
-									  $row['groupId'], 
-									  $row['teamId']);
-        }
+		return $result->fetch_object('RestrictedPage');
     }
     
     /* 
@@ -55,18 +44,14 @@ class RestrictedPageHandler {
                                              AND (`teamId` = \'0\' OR `teamId` = \'' . $mysql->real_escape_string($user->getTeam()->getId()) . '\');');
                 } else {
                     $result = $mysql->query('SELECT * FROM `' . Settings::db_table_infected_crew_pages . '`
-                                             WHERE `name` = \'' . $mysql->real_escape_string($id) . '\' 
+                                             WHERE `name` = \'' . $mysql->real_escape_string($name) . '\' 
                                              AND (`groupId` = \'0\' OR `groupId` = \'' . $mysql->real_escape_string($user->getGroup()->getId()) . '\') 
                                              AND `teamId` = \'0\';');
                 }
 				
 				$mysql->close();
-            }
-			
-            $row = $result->fetch_array();
-            
-            if ($row) {
-                return self::getPage($row['id']);
+				
+				return $result->fetch_object('RestrictedPage');
             }
         }
     }
@@ -77,17 +62,17 @@ class RestrictedPageHandler {
     public static function getPages() {
         $mysql = MySQL::open(Settings::db_name_infected_crew);
         
-        $result = $mysql->query('SELECT `id` FROM `' . Settings::db_table_infected_crew_pages . '`;');
-        
-        $pageList = array();
-        
-        while ($row = $result->fetch_array()) {
-            array_push($pageList, self::getPage($row['id']));
-        }
+        $result = $mysql->query('SELECT * FROM `' . Settings::db_table_infected_crew_pages . '`;');
         
         $mysql->close();
 
-        return $pageList;
+        $restrictedPageList = array();
+        
+        while ($object = $result->fetch_object('RestrictedPage')) {
+            array_push($restrictedPageList, $object);
+        }
+
+        return $restrictedPageList;
     }
     
     /* 
@@ -96,19 +81,19 @@ class RestrictedPageHandler {
     public static function getPagesForGroup($group) {
         $mysql = MySQL::open(Settings::db_name_infected_crew);
         
-        $result = $mysql->query('SELECT `id` FROM `' . Settings::db_table_infected_crew_pages . '`
+        $result = $mysql->query('SELECT * FROM `' . Settings::db_table_infected_crew_pages . '`
                                  WHERE `groupId` = \'' . $mysql->real_escape_string($group->getId()) . '\'
                                  AND `teamId` = \'0\';');
         
 		$mysql->close();
 		
-        $pageList = array();
+        $restrictedPageList = array();
         
-        while ($row = $result->fetch_array()) {
-            array_push($pageList, self::getPage($row['id']));
+        while ($object = $result->fetch_object('RestrictedPage')) {
+            array_push($restrictedPageList, $object);
         }
-        
-        return $pageList;
+
+        return $restrictedPageList;
     }
     
 	/* 
@@ -117,18 +102,18 @@ class RestrictedPageHandler {
     public static function getAllPagesForGroup($group) {
         $mysql = MySQL::open(Settings::db_name_infected_crew);
         
-        $result = $mysql->query('SELECT `id` FROM `' . Settings::db_table_infected_crew_pages . '`
+        $result = $mysql->query('SELECT * FROM `' . Settings::db_table_infected_crew_pages . '`
                                  WHERE `groupId` = \'' . $mysql->real_escape_string($group->getId()) . '\';');
         
 		$mysql->close();
 		
-        $pageList = array();
+        $restrictedPageList = array();
         
-        while ($row = $result->fetch_array()) {
-            array_push($pageList, self::getPage($row['id']));
+        while ($object = $result->fetch_object('RestrictedPage')) {
+            array_push($restrictedPageList, $object);
         }
-        
-        return $pageList;
+
+        return $restrictedPageList;
     }
 	
     /*
@@ -137,19 +122,19 @@ class RestrictedPageHandler {
     public static function getPagesForGroupAndTeam($group, $team) {
         $mysql = MySQL::open(Settings::db_name_infected_crew);
         
-        $result = $mysql->query('SELECT `id` FROM `' . Settings::db_table_infected_crew_pages . '`
+        $result = $mysql->query('SELECT * FROM `' . Settings::db_table_infected_crew_pages . '`
                                  WHERE `groupId` = \'' . $mysql->real_escape_string($group->getId()) . '\'
                                  AND (`teamId` = \'' . $mysql->real_escape_string($team->getId()) . '\' OR `teamId` = \'0\');');
         
 		$mysql->close();
 		
-        $pageList = array();
+        $restrictedPageList = array();
         
-        while ($row = $result->fetch_array()) {
-            array_push($pageList, self::getPage($row['id']));
+        while ($object = $result->fetch_object('RestrictedPage')) {
+            array_push($restrictedPageList, $object);
         }
-        
-        return $pageList;
+
+        return $restrictedPageList;
     }
     
     /* 
@@ -191,7 +176,7 @@ class RestrictedPageHandler {
         $mysql = MySQL::open(Settings::db_name_infected_crew);
         
         $mysql->query('DELETE FROM `' . Settings::db_table_infected_crew_pages . '` 
-                            WHERE `id` = \'' . $mysql->real_escape_string($id) . '\';');
+                       WHERE `id` = \'' . $mysql->real_escape_string($id) . '\';');
         
         $mysql->close();
     }

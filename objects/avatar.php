@@ -7,14 +7,6 @@ class Avatar extends Object {
 	private $userId;
 	private $file;
 	private $state;
-
-	public function __construct($id, $userId, $file, $state) {
-		parent::__construct($id);
-	
-		$this->userId = $userId;
-		$this->file = $file;
-		$this->state = $state;
-	}
 	
 	public function getUser() {
 		return UserHandler::getUser($this->userId);

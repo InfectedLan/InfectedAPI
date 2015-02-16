@@ -10,10 +10,17 @@ if (Session::isAuthenticated()) {
 	
 	if ($user->hasPermission('*') ||
 		$user->hasPermission('chief.avatars')) {
+		
 		if (isset($_GET['id']) &&
 			is_numeric($_GET['id'])) {
-			AvatarHandler::rejectAvatar($_GET['id']);
-			$result = true;
+			$avatar = AvatarHandler::getAvatar($_GET['id']);
+
+			if ($avatar != null) {
+				AvatarHandler::rejectAvatar($avatar);
+				$result = true;
+			} else {
+				$message = 'Avataren finnes ikke.';
+			}
 		} else {
 			$message = 'Ingen avatar spesifisert.';
 		}

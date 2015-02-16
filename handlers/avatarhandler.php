@@ -4,157 +4,182 @@ require_once 'mysql.php';
 require_once 'objects/avatar.php';
 
 class AvatarHandler {
-    /* Get a avatar by id */
+    /* 
+     * Get an avatar by the internal id.
+     */
     public static function getAvatar($id) {
         $mysql = MySQL::open(Settings::db_name_infected_crew);
         
         $result = $mysql->query('SELECT * FROM `' . Settings::db_table_infected_crew_avatars . '` 
-                                      WHERE `id` = \'' . $mysql->real_escape_string($id) . '\';');
-                                      
-        $row = $result->fetch_array();
+                                 WHERE `id` = \'' . $mysql->real_escape_string($id) . '\';');
         
         $mysql->close();
-
-        if ($row) {
-            return new Avatar($row['id'], 
-                              $row['userId'], 
-                              $row['file'], 
-                              $row['state']);
-        }
+		
+		return $result->fetch_object('Avatar');
     }
     
+    /*
+     * Get an avatar for a specified user.
+     */
     public static function getAvatarForUser($user) {
         $mysql = MySQL::open(Settings::db_name_infected_crew);
         
-        $result = $mysql->query('SELECT `id` FROM `' . Settings::db_table_infected_crew_avatars . '` 
-                                      WHERE `userId` = \'' . $mysql->real_escape_string($user->getId()) . '\';');
-        
-        $row = $result->fetch_array();
+        $result = $mysql->query('SELECT * FROM `' . Settings::db_table_infected_crew_avatars . '` 
+                                 WHERE `userId` = \'' . $mysql->real_escape_string($user->getId()) . '\';');
         
         $mysql->close();
-        
-        if ($row) {
-            return self::getAvatar($row['id']);
-        }
+
+        return $result->fetch_object('Avatar');
     }
     
+    /*
+     * Returns a list of all avatars.
+     */
     public static function getAvatars() {
         $mysql = MySQL::open(Settings::db_name_infected_crew);
         
-        $result = $mysql->query('SELECT `id` FROM `' . Settings::db_table_infected_crew_avatars . '`;');
-        
-        $avatarList = array();
-        
-        while ($row = $result->fetch_array()) {
-            array_push($avatarList, self::getAvatar($row['id']));
-        }
+        $result = $mysql->query('SELECT * FROM `' . Settings::db_table_infected_crew_avatars . '`;');
         
         $mysql->close();
+
+        $avatarList = array();
+        
+        while ($object = $result->fetch_object('Avatar')) {
+            array_push($avatarList, $object);
+        }
         
         return $avatarList;
     }
     
+    /*
+     * Returns a list of all pending avatars.
+     */
     public static function getPendingAvatars() {
         $mysql = MySQL::open(Settings::db_name_infected_crew);
         
-        $result = $mysql->query('SELECT `id` FROM `' . Settings::db_table_infected_crew_avatars . '` 
-                                      WHERE `state` = \'1\';');
-        
-        $pendingAvatarList = array();
-        
-        while ($row = $result->fetch_array()) {
-            array_push($pendingAvatarList, self::getAvatar($row['id']));
-        }
+        $result = $mysql->query('SELECT * FROM `' . Settings::db_table_infected_crew_avatars . '` 
+                                 WHERE `state` = \'1\';');
         
         $mysql->close();
+
+        $avatarList = array();
         
-        return $pendingAvatarList;
+        while ($object = $result->fetch_object('Avatar')) {
+            array_push($avatarList, $object);
+        }
+        
+        return $avatarList;
     }
     
+    /*
+     * Returns true if the specificed user have an avatar.
+     */
     public static function hasAvatar($user) {
         $mysql = MySQL::open(Settings::db_name_infected_crew);
         
         $result = $mysql->query('SELECT `id` FROM `' . Settings::db_table_infected_crew_avatars . '` 
-                                      WHERE `userId` = \'' . $mysql->real_escape_string($user->getId()) . '\';');
-        
-        $row = $result->fetch_array();
+                                 WHERE `userId` = \'' . $mysql->real_escape_string($user->getId()) . '\';');
         
         $mysql->close();
+
+        $row = $result->fetch_array();
         
         return $row ? true : false;
     }
     
+    /*
+     * Returns true if the specificed user have a cropped avatar.
+     */
     public static function hasCroppedAvatar($user) {
         $mysql = MySQL::open(Settings::db_name_infected_crew);
         
         $result = $mysql->query('SELECT `id` FROM `' . Settings::db_table_infected_crew_avatars . '` 
-                                      WHERE `userId` = \'' . $mysql->real_escape_string($user->getId()) . '\'
-                                      AND (`state` = 1 OR `state` = 2);');
-        
-        $row = $result->fetch_array();
+                                 WHERE `userId` = \'' . $mysql->real_escape_string($user->getId()) . '\'
+                                 AND (`state` = 1 OR `state` = 2);');
         
         $mysql->close();
+
+        $row = $result->fetch_array();
         
         return $row ? true : false;
     }
     
+    /*
+     * Returns true if the specificed user have a valid vatar.
+     */
     public static function hasValidAvatar($user) {
         $mysql = MySQL::open(Settings::db_name_infected_crew);
         
         $result = $mysql->query('SELECT `id` FROM `' . Settings::db_table_infected_crew_avatars . '` 
-                                      WHERE `userId` = \'' . $mysql->real_escape_string($user->getId()) . '\'
-                                      AND `state` = 2;');
-        
-        $row = $result->fetch_array();
+                                 WHERE `userId` = \'' . $mysql->real_escape_string($user->getId()) . '\'
+                                 AND `state` = 2;');
         
         $mysql->close();
+
+        $row = $result->fetch_array();
         
         return $row ? true : false;
     }
     
+    /*
+     * Creates an new avatar.
+     */
     public static function createAvatar($fileName, $user) {
         $mysql = MySQL::open(Settings::db_name_infected_crew);
 
-        $result = $mysql->query('INSERT INTO `' . Settings::db_table_infected_crew_avatars . '` (`userId`, `file`, `state`) 
-                                      VALUES (\'' . $user->getId() . '\',
-                                              \'' . $fileName . '\',
-                                              \'0\');');
-    
+        $result = $mysql->query('INSERT INTO `' . Settings::db_table_infected_crew_avatars . '` (`userId`, `file`) 
+                                 VALUES (\'' . $user->getId() . '\',
+                                         \'' . $fileName . '\');');
+        
+        $mysql->close();
+
         return Settings::api_path . Settings::avatar_path . 'temp/' . $fileName;
     }
     
+    /*
+     * Deletes an avatar.
+     */
     public static function deleteAvatar($avatar) {
         $mysql = MySQL::open(Settings::db_name_infected_crew);
 
         $result = $mysql->query('DELETE FROM `' . Settings::db_table_infected_crew_avatars . '` 
-                                      WHERE `id` = \'' . $mysql->real_escape_string($avatar->getId()) . '\';');
+                                 WHERE `id` = \'' . $mysql->real_escape_string($avatar->getId()) . '\';');
         
+        $mysql->close();
+
         // Delete all avatars.
         $avatar->deleteFiles();
-
-        $mysql->close();
     }
     
-    public static function acceptAvatar($id) {
+    /*
+     * Accept the specificed avatar.
+     */
+    public static function acceptAvatar($avatar) {
         $mysql = MySQL::open(Settings::db_name_infected_crew);
         
         $mysql->query('UPDATE `' . Settings::db_table_infected_crew_avatars . '` 
-                            SET `state` = \'2\'
-                            WHERE `id` = \'' . $mysql->real_escape_string($id) . '\';');
+                       SET `state` = \'2\'
+                       WHERE `id` = \'' . $mysql->real_escape_string($avatar->getId()) . '\';');
         
         $mysql->close();
     }
     
-    public static function rejectAvatar($id) {
+    /*
+     * Reject the specified avatar.
+     */
+    public static function rejectAvatar($avatar) {
         $mysql = MySQL::open(Settings::db_name_infected_crew);
         
         $mysql->query('UPDATE `' . Settings::db_table_infected_crew_avatars . '` 
-                            SET `state` =  \'3\'
-                            WHERE `id` = \'' . $mysql->real_escape_string($id) . '\';');
+                       SET `state` =  \'3\'
+                       WHERE `id` = \'' . $mysql->real_escape_string($avatar->getId()) . '\';');
         
         $mysql->close();
     }
     
+    /*
+     * Get the default avatar for the specified user.
+     */
     public static function getDefaultAvatar($user) {
         $file = null;
         

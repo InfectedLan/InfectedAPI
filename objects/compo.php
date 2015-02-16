@@ -10,18 +10,6 @@ class Compo extends Object {
 	private $teamSize;
 	private $tag;
 
-	public function __construct($id, $startTime, $registrationDeadline, $name, $desc, $event, $teamSize, $tag) {
-		parent::__construct($id);
-	
-		$this->startTime = $startTime;
-		$this->registrationDeadline = $registrationDeadline;
-		$this->name = $name;
-		$this->desc = $desc;
-		$this->event = $event;
-		$this->teamSize = $teamSize;
-		$this->tag = $tag;
-	}
-
 	public function getStartTime() {
 		return $this->startTime;
 	}
@@ -48,6 +36,13 @@ class Compo extends Object {
 
 	public function getTag() {
 		return $this->tag;
+	}
+
+	/*
+	 * Return a list of all matches for this compo.
+	 */ 
+	public function getMatches() {
+		return MatchHandler::getMatchesForCompo($this);
 	}
 }
 ?>

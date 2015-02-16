@@ -103,7 +103,7 @@ if (isset($_GET['firstname']) &&
 		$message = 'Din bruker har blitt registrert! Du har nå fått en aktiveringslink på e-post. Husk å sjekk søppelpost/spam hvis du ikke finner den.';
 	}
 } else {
-	$message = "Du har ikke fylt inn alle feltene!";
+	$message = 'Du har ikke fylt inn alle feltene!';
 }
 
 echo json_encode(array('result' => $result, 'message' => $message));

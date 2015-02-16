@@ -10,6 +10,7 @@ if (Session::isAuthenticated()) {
 	
 	if ($user->hasPermission('*') ||
 		$$user->hasPermission('admin.website')) {
+		
 		if (isset($_GET['id']) &&
 			is_numeric($_GET['id'])) {
 			PageHandler::removePage($_GET['id']);

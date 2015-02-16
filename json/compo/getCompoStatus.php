@@ -16,12 +16,18 @@ if (Session::isAuthenticated()) {
 
 	//List clans
 	$clanArray = array();
-	$clans = ClanHandler::getClansForUser($user, $event);
+	$clanList = ClanHandler::getClansForUser($user, $event);
 
-	foreach($clans as $clan) {
+	foreach ($clanList as $clan) {
 		$compo = ClanHandler::getCompo($clan);
-		$compoData = array("name" => $compo->getName(), "tag" => $compo->getTag());
-		$clanData = array("id" => $clan->getId(), "name" => $clan->getName(), "tag" => $clan->getTag(), "compo" => $compoData);
+		$compoData = array('name' => $compo->getName(), 
+						   'tag' => $compo->getTag());
+
+		$clanData = array('id' => $clan->getId(), 
+						  'name' => $clan->getName(), 
+						  'tag' => $clan->getTag(), 
+						  'compo' => $compoData);
+
 		array_push($clanArray, $clanData);
 	}
 
@@ -32,21 +38,28 @@ if (Session::isAuthenticated()) {
 	foreach($invites as $invite) {
 		$clan = ClanHandler::getClan($invite->getClanId());
 		$compo = ClanHandler::getCompo($clan);
-		$compoData = array("name" => $compo->getName(), "tag" => $compo->getTag());
-		$invitedClanData = array("name" => $clan->getName(), "tag" => $clan->getTag(), "id" => $clan->getId());
+		$compoData = array('name' => $compo->getName(), 
+						   'tag' => $compo->getTag());
 
-		$inviteData = array('id' => $invite->getId(), 'compo' => $compoData, 'clanData' => $invitedClanData);
+		$invitedClanData = array('name' => $clan->getName(), 
+								 'tag' => $clan->getTag(), 
+								 'id' => $clan->getId());
+
+		$inviteData = array('id' => $invite->getId(), 
+						    'compo' => $compoData, 
+						    'clanData' => $invitedClanData);
+
 		array_push($inviteArray, $inviteData);
 	}
 
-	$compoStatusArray = array('clans' => $clanArray, 'invites' => $inviteArray);
+	$compoStatusArray = array('clans' => $clanArray, 
+							  'invites' => $inviteArray);
 
 	//Match
 	$match = MatchHandler::getMatchForUser($user, $event);
 
-	if(isset($match))
-	{
-		$compoStatusArray["match"] = array('id' => $match->getId() );
+	if ($match != null) {
+		$compoStatusArray['match'] = array('id' => $match->getId());
 	}
 
 	$result = true;
@@ -55,7 +68,7 @@ if (Session::isAuthenticated()) {
 	$message = 'Du er ikke logget inn.';
 }
 
-if($result) {
+if ($result) {
 	echo json_encode(array('result' => $result, 'data' => $compoStatusArray));
 } else {
 	echo json_encode(array('result' => $result, 'message' => $message));

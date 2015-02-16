@@ -27,6 +27,7 @@ class Settings {
 	const db_table_infected_users = 'users';
 	
 	// InfectedCompo
+	const db_table_infected_compo_matchrelationships = 'matchrelationships';
 	const db_table_infected_compo_chatmessages =  'chatmessages';
 	const db_table_infected_compo_chats =  'chats';
 	const db_table_infected_compo_clans = 'clans';
@@ -35,10 +36,10 @@ class Settings {
 	const db_table_infected_compo_memberof = 'memberof';
 	const db_table_infected_compo_memberofchat =  'memberofchat';
 	const db_table_infected_compo_participantof = 'participantof';
-	const db_table_infected_compo_voteoptions = 'voteOptions';
+	const db_table_infected_compo_voteoptions = 'voteoptions';
 	const db_table_infected_compo_participantOfMatch = 'participantofmatch';
 	const db_table_infected_compo_matches = 'matches';
-	const db_table_infected_compo_readyusers = 'readyUsers';
+	const db_table_infected_compo_readyusers = 'readyusers';
 	const db_table_infected_compo_votes =  'votes';
 	
 	// InfectedCrew

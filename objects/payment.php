@@ -11,17 +11,6 @@ class Payment extends Object{
 	private $transactionId;
 	private $datetime;
 
-	public function __construct($id, $userId, $ticketType, $price, $totalPrice, $transactionId, $datetime) {
-		parent::__construct($id);
-		
-		$this->userId = $userId;
-		$this->ticketType = $ticketType;
-		$this->price = $price;
-		$this->totalPrice = $totalPrice;
-		$this->transactionId = $transactionId;
-		$this->datetime = $datetime;
-	}
-
 	public function getUser() {
 		return UserHandler::getUser($this->userId);
 	}

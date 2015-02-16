@@ -15,7 +15,7 @@ if (Session::isAuthenticated()) {
 		
 		if ($editUser != null) {
 			if ($user->hasPermission('*') ||
-				$user->getId() == $editUser->getId()) {
+				$user->equals($editUser)) {
 				if (isset($_GET['firstname']) &&
 					isset($_GET['lastname']) &&
 					isset($_GET['username']) &&
@@ -116,7 +116,7 @@ if (Session::isAuthenticated()) {
 		$message = 'Bruker ikke spessifisert.';
 	}
 } else {
-	$message = "Du er allerede logget inn!";
+	$message = 'Du er allerede logget inn!';
 } 
 
 echo json_encode(array('result' => $result, 'message' => $message));

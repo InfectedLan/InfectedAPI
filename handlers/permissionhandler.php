@@ -9,46 +9,36 @@ class PermissionHandler {
         
         $result = $mysql->query('SELECT * FROM `' . Settings::db_table_infected_permissions . '`
                                  WHERE `id` = \'' . $mysql->real_escape_string($id) . '\';');
-                                
-        $row = $result->fetch_array();
         
         $mysql->close();
         
-        if ($row) {
-            return new Permission($row['id'],
-                                  $row['value'],
-                                  $row['description']);
-        }
+		return $result->fetch_object('Permission');
     }
     
     public static function getPermissionByValue($value) {
         $mysql = MySQL::open(Settings::db_name_infected);
         
-        $result = $mysql->query('SELECT `id` FROM `' . Settings::db_table_infected_permissions . '`
+        $result = $mysql->query('SELECT * FROM `' . Settings::db_table_infected_permissions . '`
                                  WHERE `value` = \'' . $mysql->real_escape_string($value) . '\';');
-                                
-        $row = $result->fetch_array();
         
         $mysql->close();
         
-        if ($row) {
-            return self::getPermission($row['id']);
-        }
+        return $result->fetch_object('Permission');
     }
     
     public static function getPermissions() {
         $mysql = MySQL::open(Settings::db_name_infected);
         
-        $result = $mysql->query('SELECT `id` FROM `' . Settings::db_table_infected_permissions . '`
+        $result = $mysql->query('SELECT * FROM `' . Settings::db_table_infected_permissions . '`
 								 ORDER BY `value` ASC;');
         
+        $mysql->close();
+
         $permissionList = array();
         
-        while ($row = $result->fetch_array()) {
-            array_push($permissionList, self::getPermission($row['id']));
+        while ($object = $result->fetch_object('Permission')) {
+            array_push($permissionList, $object);
         }
-        
-        $mysql->close();
 
         return $permissionList;
     }

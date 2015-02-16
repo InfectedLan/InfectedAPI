@@ -1,7 +1,6 @@
 <?php
 require_once 'session.php';
 require_once 'handlers/userhandler.php';
-require_once 'handlers/grouphandler.php';
 require_once 'handlers/teamhandler.php';
 
 $result = false;
@@ -12,6 +11,7 @@ if (Session::isAuthenticated()) {
 	
 	if ($user->hasPermission('*') ||
 		$user->hasPermission('chief..teams')) {
+		
 		if (isset($_GET['userId']) &&
 			isset($_GET['teamId']) &&
 			is_numeric($_GET['userId']) &&

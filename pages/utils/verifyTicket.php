@@ -6,7 +6,7 @@ require_once 'handlers/checkinstatehandler.php';
 
 echo '<html>';
 	echo '<head>';
-		echo '<script src="../scripts/jquery-1.11.1.min.js"></script>';
+		echo '<script src="../../scripts/jquery-1.11.1.min.js"></script>';
 	echo '</head>';
 	echo '<body>';
 		echo '<script>';
@@ -14,16 +14,17 @@ echo '<html>';
 				$user = Session::getCurrentUser();
 				
 				if ($user->hasPermission('*') || 
-					$user->hasPermission('functions.checkin')) {
+					$user->hasPermission('event.checkin')) {
 					
 					if (isset($_GET['id'])) {
 						$ticket = TicketHandler::getTicket($_GET['id']);
 
 						if(!$ticket->isCheckedIn()) {
-							echo '$.getJSON(\'../json/ticket/getTicketData.php?id=' . htmlentities($_GET['id'], ENT_QUOTES, 'UTF-8') . '\', function(data) {';
+							echo '$.getJSON(\'../../json/ticket/getTicketData.php?id=' . htmlentities($_GET['id'], ENT_QUOTES, 'UTF-8') . '\', function(data) {';
 								echo 'if (data.result) {';
-									echo 'if (confirm(\'Sjekk at disse detaljene er riktige:\\nNavn: \' + data.userData.fullName + \'\\nKjønn: \' + data.userData.gender + \'\\nFødt: \' + data.userData.birthDate + \'\\nAlder: \' + data.userData.age)) {';
-										echo '$.getJSON(\'../json/ticket/checkInTicket.php?id=' . htmlentities($_GET['id'], ENT_QUOTES, 'UTF-8') . '\', function(data) {';
+									echo 'var user = data.userData[0];';
+									echo 'if (confirm(\'Sjekk at disse detaljene er riktige:\\nNavn: \' + user.firstname + \' \' + user.lastname + \'\\nKjønn: \' + user.gender + \'\\nFødt: \' + user.birthdate + \'\\nAlder: \' + user.age + \'\\nAddresse: \' + user.address)) {';
+										echo '$.getJSON(\'../../json/ticket/checkInTicket.php?id=' . htmlentities($_GET['id'], ENT_QUOTES, 'UTF-8') . '\', function(data) {';
 											echo 'if(data.result) {';
 												echo 'alert(\'Brukeren har blitt sjekket inn!\');';
 												echo 'close()';

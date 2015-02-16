@@ -11,19 +11,6 @@ class Game extends Object {
 	private $endTime;
 	private $published;
 	
-	public function __construct($id, $name, $title, $price, $mode, $description, $startTime, $endTime, $published) {
-		parent::__construct($id);
-	
-		$this->name = $name;
-		$this->title = $title;
-		$this->price = $price;
-		$this->mode = $mode;
-		$this->description = $description;
-		$this->startTime = $startTime;
-		$this->endTime = $endTime;
-		$this->published = $published;
-	}
-	
 	public function getName() {
 		return $this->name;
 	}
@@ -52,10 +39,8 @@ class Game extends Object {
 		return strtotime($this->endTime);
 	}
 	
-	public function isBookingTime() {
-		$now = strtotime(date('Y-m-d H:i:s'));
-				
-		return $now >= $this->getStartTime() && $now <= $this->getEndTime();
+	public function isBookingTime() {	
+		return time() >= $this->getStartTime() && time() <= $this->getEndTime();
 	}
 	
 	public function isPublished() {

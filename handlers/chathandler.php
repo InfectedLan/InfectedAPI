@@ -6,7 +6,7 @@ require_once 'objects/chatmessage.php';
 
 class ChatHandler {	
 	/*
-	 * Return the chat with the given id.
+	 * Get a chat by the internal id.
 	 */
 	public static function getChat($id) {
 		$mysql = MySQL::open(Settings::db_name_infected_compo);
@@ -15,15 +15,20 @@ class ChatHandler {
                                  WHERE `id` = \'' . $mysql->real_escape_string($id) . '\';');
                                       
         $mysql->close();
-        
-		$row = $result->fetch_array();
 		
-        if ($row) {
-            return new Chat($row['id'], 
-							$row['name'],
-							$row['title']);
-        }
+		return $result->fetch_object('Chat');
 	}
+
+	/*
+ 	 * Adds entire clan to chat
+ 	 */
+	public static function addClanMembersToChat($chat, $clan) {
+		//Let all chat members chat, just because
+		$members = $clan->getMembers();
+		foreach($members as $member) {
+			self::addChatMember($member, $chat);
+		}
+    }
 	
 	/*
 	 * Return all chats.
@@ -31,14 +36,14 @@ class ChatHandler {
 	public static function getChats() {
 		$mysql = MySQL::open(Settings::db_name_infected_compo);
         
-        $result = $mysql->query('SELECT `id` FROM `' . Settings::db_table_infected_compo_chats . '`;');
+        $result = $mysql->query('SELECT * FROM `' . Settings::db_table_infected_compo_chats . '`;');
                                       
         $mysql->close();
         
 		$chatList = array();
 		
-        while ($row = $result->fetch_array()) {
-            array_push($chatList, self::getChat($row['id']));
+        while ($object = $result->fetch_object('Chat')) {
+            array_push($chatList, $object);
         }
 
         return $chatList;
@@ -55,11 +60,7 @@ class ChatHandler {
                                       
         $mysql->close();
         
-		$row = $result->fetch_array();
-		
-        if ($row) {
-            return new ChatMessage($row['id']);
-        }
+		return $result->fetch_object('ChatMessage');
 	}
 	
 	/*
@@ -74,8 +75,8 @@ class ChatHandler {
         
 		$chatMessageList = array();
 		
-        while ($row = $result->fetch_array()) {
-            array_push($chatMessageList, self::getChatMessage($row['id']));
+        while ($object = $result->fetch_object('ChatMessage')) {
+            array_push($chatMessageList, $object);
         }
 
         return $chatMessageList;
@@ -87,18 +88,14 @@ class ChatHandler {
 	public static function getLastChatMessage($chat) {
 		$mysql = MySQL::open(Settings::db_name_infected_compo);
 		
-		$result = $mysql->query('SELECT `id` FROM `' . Settings::db_table_infected_compo_chatmessages . '`
+		$result = $mysql->query('SELECT * FROM `' . Settings::db_table_infected_compo_chatmessages . '`
                                  WHERE `chatId` = \'' . $mysql->real_escape_string($chat->getId()) . '\'
-                                 ORDER BY `id` ASC
-								 LIMIT ' . $count . ';');
+                                 ORDER BY `id` DESC
+								 LIMIT 1;');
         
 		$mysql->close();
 		
-		$row = $result->fetch_array();
-		
-		if ($row) {
-			return self::getChatMessage($row['id']);
-		}
+		return $result->fetch_object('ChatMessage');
 	}
 	
 	/*
@@ -107,17 +104,17 @@ class ChatHandler {
 	public static function getLastMessages($chat, $count) {
 		$mysql = MySQL::open(Settings::db_name_infected_compo);
 		
-		$result = $mysql->query('SELECT `id` FROM `' . Settings::db_table_infected_compo_chatmessages . '`
+		$result = $mysql->query('SELECT * FROM `' . Settings::db_table_infected_compo_chatmessages . '`
                                  WHERE `chatId` = \'' . $mysql->real_escape_string($chat->getId()) . '\'
-                                 ORDER BY `id` ASC
-								 LIMIT ' . $count . ';');
+                                 ORDER BY `id` DESC
+								 LIMIT ' . $mysql->real_escape_string($count) . ';');
         
 		$mysql->close();
 		
 		$chatMessageList = array();
 		
-        while ($row = $result->fetch_array()) {
-            array_push($chatMessageList, self::getChatMessage($row['id']));
+        while ($object = $result->fetch_object('ChatMessage')) {
+            array_push($chatMessageList, $object);
         }
 
         return $chatMessageList;
@@ -186,7 +183,6 @@ class ChatHandler {
         return $row ? true : false;
 	}
 	
-		
 	/*
 	 * Returns an array of all members in the specificed chat.
 	 */
@@ -201,7 +197,7 @@ class ChatHandler {
 		$chatMemberList = array();
 		
         while ($row = $result->fetch_array()) {
-            array_push($chatMemberList, UserHandler::getUser($row['id']));
+            array_push($chatMemberList, UserHandler::getUser($row['userId']));
         }
 
         return $chatMemberList;
@@ -251,10 +247,11 @@ class ChatHandler {
 	public static function sendChatMessage($user, $chat, $message) {
 		$mysql = MySQL::open(Settings::db_name_infected_compo);
 		
-		$mysql->query('INSERT INTO `' . Settings::db_table_infected_compo_chatmessages . '` (`userId`, `chatId`, `message`) 
+		$mysql->query('INSERT INTO `' . Settings::db_table_infected_compo_chatmessages . '` (`userId`, `chatId`, `time`, `message`) 
                        VALUES (\'' . $mysql->real_escape_string($user->getId()) . '\',
 							   \'' . $mysql->real_escape_string($chat->getId()) . '\',
-							   \'' . $mysql->real_escape_string($message) . '\');');
+							   \'' . date('Y-m-d H:i:s') . '\',
+							   \'' . htmlspecialchars($mysql->real_escape_string($message), ENT_QUOTES | ENT_HTML401 ) . '\');');
 						
 		$mysql->close();
 	}

@@ -10,6 +10,7 @@ if (Session::isAuthenticated()) {
 	
 	if ($user->hasPermission('*') ||
 		$user->hasPermission('admin-events')) {
+		
 		if (isset($_GET['id']) &&
 			isset($_GET['theme']) &&
 			isset($_GET['location']) &&

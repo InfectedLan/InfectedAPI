@@ -6,14 +6,8 @@ require_once 'objects/object.php';
 class ChatMessage extends Object {
 	private $userId;
 	private $chatId;
+	private $time;
 	private $message;
-	
-	public function __construct($id, $userId, $chatId, $message) {
-		parent::__construct($id);
-		$this->userId = $userId;
-		$this->chatId = $chatId;
-		$this->message = $message;
-	}
 	
 	/*
 	 * Returns the user who sent this chat message.
@@ -27,6 +21,13 @@ class ChatMessage extends Object {
 	 */
 	public function getChat() {
 		return ChatHandler::getChat($this->chatId);
+	}
+
+	/*
+	 * Returns the time this message was sent.
+	 */
+	public function getTime() {
+		return strtotime($this->time);
 	}
 
 	/*

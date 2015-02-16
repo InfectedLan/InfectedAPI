@@ -20,49 +20,47 @@ class MatchHandler {
         $mysql = MySQL::open(Settings::db_name_infected_compo);
         
         $result = $mysql->query('SELECT * FROM `' . Settings::db_table_infected_compo_matches . '` 
-                                      WHERE `id` = \'' . $id . '\';');
-        
-        $row = $result->fetch_array();
+                                 WHERE `id` = \'' . $id . '\';');
         
         $mysql->close();
-        
-        if ($row) {
-            return new Match($row['id'], 
-                             $row['scheduledTime'], 
-                             $row['connectDetails'], 
-                             $row['winner'], 
-                             $row['state'], 
-                             $row['compoId'],
-                             $row['bracketOffset']);
-        }
+
+        return $result->fetch_object('Match');
     }
 
-    public static function createMatch($scheduledTime, $connectData, $compo, $bracketOffset) {
+    public static function createMatch($scheduledTime, $connectData, $compo, $bracketOffset, $chatId, $bracket) {
         $mysql = MySQL::open(Settings::db_name_infected_compo);
 
-        $mysql->query('INSERT INTO `' . Settings::db_table_infected_compo_matches . '` (`scheduledTime`, `connectDetails`, `state`, `winner`, `compoId`, `bracketOffset`) 
+        $mysql->query('INSERT INTO `' . Settings::db_table_infected_compo_matches . '` (`scheduledTime`, `connectDetails`, `state`, `winner`, `compoId`, `bracketOffset`, `chat`, `bracket`) 
             VALUES (\'' . $mysql->real_escape_string($scheduledTime) . '\', 
                     \'' . $mysql->real_escape_string($connectData) . '\', 
                     \'' . Match::STATE_READYCHECK . '\',
                     \'0\', 
                     \'' . $mysql->real_escape_string($compo->getId()) . '\',
-                    \'' . $mysql->real_escape_string($bracketOffset) . '\');');
+                    \'' . $mysql->real_escape_string($bracketOffset) . '\',
+                    \'' . $mysql->real_escape_string($chatId) . '\',
+                    \'' . $mysql->real_escape_string($bracket) . '\');');
 
-        $fetchNewestResultId = $mysql->query('SELECT `id` FROM `' . Settings::db_table_infected_compo_matches . '` ORDER BY `id` DESC LIMIT 1;');
+        $result = $mysql->query('SELECT * FROM `' . Settings::db_table_infected_compo_matches . '` 
+                                 ORDER BY `id` 
+                                 DESC LIMIT 1;');
 
-        $row = $fetchNewestResultId->fetch_array();
+        $mysql->close();
 
-        $newId = $row['id'];
-
-        return self::getMatch($newId);
+        return $result->fetch_object('Match');
     }
+
     public static function addMatchParticipant($type, $participantId, $match) {
         $mysql = MySQL::open(Settings::db_name_infected_compo);
 
         $mysql->query('INSERT INTO `' . Settings::db_table_infected_compo_participantOfMatch . '` (`type`, `participantId`, `matchId`) 
-                        VALUES (\'' . $mysql->real_escape_string($type) . '\', 
-                                \'' . $mysql->real_escape_string($participantId) . '\', 
-                                \'' . $mysql->real_escape_string($match->getId()) . '\');');
+                       VALUES (\'' . $mysql->real_escape_string($type) . '\', 
+                               \'' . $mysql->real_escape_string($participantId) . '\', 
+                               \'' . $mysql->real_escape_string($match->getId()) . '\');');
+
+        if ($type != self::participantof_state_clan && $type != self::participantof_state_looser) {
+            $mysql->query('INSERT INTO `' . Settings::db_table_infected_compo_matchrelationships . '` (`fromCompo`, `toCompo`) 
+                VALUES (\'' . $mysql->real_escape_string($participantId) . '\', \'' . $mysql->real_escape_string($match->getId()) . '\');');
+        }
 
         $mysql->close();
     }
@@ -71,21 +69,19 @@ class MatchHandler {
         $mysql = MySQL::open(Settings::db_name_infected_compo);
 
         $result = $mysql->query('SELECT * FROM `' . Settings::db_table_infected_compo_matches . '` 
-                                      WHERE `compoId` = ' . $mysql->real_escape_string( $compo->getId() ) . ';');
+                                 WHERE `compoId` = ' . $mysql->real_escape_string( $compo->getId() ) . ';');
+
+        $mysql->close();
 
         $matchList = array();
 
-        while ($row = $result->fetch_array()) {
-            $match = self::getMatch($row['id']);
-            
-            if ($match->getScheduledTime() > time()) {
-                array_push($matchList, $match);
-            } else if(!self::isReady($match)) {
-                array_push($matchList, $match);
+        while ($object = $result->fetch_object('Match')) {
+            if ($object->getScheduledTime() > time()) {
+                array_push($matchList, $object);
+            } else if(!self::isReady($object)) {
+                array_push($matchList, $object);
             }
         }
-
-        $mysql->close();
 
         return $matchList;
     }
@@ -95,20 +91,19 @@ class MatchHandler {
 
         //Picks matches that "should" be running.
         $result = $mysql->query('SELECT * FROM `' . Settings::db_table_infected_compo_matches . '` 
-                                      WHERE `compoId` = ' . $mysql->real_escape_string( $compo->getId() ) . ' 
-                                      AND `winner` = 0 AND `scheduledTime` < ' . time() . ';');
+                                 WHERE `compoId` = \'' . $mysql->real_escape_string( $compo->getId() ) . '\'
+                                 AND `winner` = \'0\' 
+                                 AND `scheduledTime` < \'' . time() . '\';');
+
+        $mysql->close();
 
         $matchList = array();
 
-        while ($row = $result->fetch_array()) {
-            $match = self::getMatch($row['id']);
-            
-            if (self::isReady($match)) {
-                array_push($matchList, $match);
+        while ($object = $result->fetch_object('Match')) {
+            if (self::isReady($object)) {
+                array_push($matchList, $object);
             }
         }
-
-        $mysql->close();
 
         return $matchList;
     }
@@ -118,16 +113,16 @@ class MatchHandler {
 
         //Picks matches that "should" be running.
         $result = $mysql->query('SELECT * FROM `' . Settings::db_table_infected_compo_matches . '` 
-                                      WHERE `compoId` = ' . $mysql->real_escape_string( $compo->getId() ) . ' 
-                                      AND `winner` != 0;');
+                                 WHERE `compoId` = ' . $mysql->real_escape_string( $compo->getId() ) . ' 
+                                 AND `winner` != 0;');
+
+        $mysql->close();
 
         $matchList = array();
 
-        while ($row = $result->fetch_array()) {
-            array_push($matchList, self::getMatch($row['id']));
+        while ($object = $result->fetch_object('Match')) {
+            array_push($matchList, $object);
         }
-
-        $mysql->close();
 
         return $matchList;
     }
@@ -172,15 +167,25 @@ class MatchHandler {
 
         // Set winner of match
         $mysql->query('UPDATE `' . Settings::db_table_infected_compo_matches . '` 
-                            SET `winner` = ' . $mysql->real_escape_string($clan->getId()) . ' 
-                            WHERE `id` = ' . $mysql->real_escape_string($match->getId()) . ';');
+                       SET `winner` = \'' . $mysql->real_escape_string($clan->getId()) . '\'
+                       WHERE `id` = \'' . $mysql->real_escape_string($match->getId()) . '\';');
 
         // Update match results
+        //First, get list of matches we want to change
+        $toWinList = $mysql->query('SELECT * FROM `' . Settings::db_table_infected_compo_participantOfMatch . '` WHERE `type` = 1 AND `participantId` = ' . $mysql->real_escape_string($match->getId()) . ';');
+
+        while($row = $toWinList->fetch_array()) {
+            $mysql->query('UPDATE `' . Settings::db_table_infected_compo_participantOfMatch . '` SET `type` = 0, `participantId` = ' . $mysql->real_escape_string($clan->getId()) . ' WHERE `id` = ' . $row['id'] . ';');
+
+            $checkingMatchId = MatchHandler::getMatch($row['matchId']);
+            ChatHandler::addClanMembersToChat(ChatHandler::getChat($checkingMatchId->getChat()), $clan);
+        }
+        /*
         $mysql->query('UPDATE `' . Settings::db_table_infected_compo_participantOfMatch . '` 
                             SET `type` = 0, `participantId` = ' . $mysql->real_escape_string($clan->getId()) . ' 
                             WHERE `type` = 1 
                             AND `participantId` = ' . $mysql->real_escape_string($match->getId()) . ';');
-
+        */
         $looser = null;
 
         $participants = self::getParticipants($match);
@@ -191,36 +196,47 @@ class MatchHandler {
             }
         }
 
-        $mysql->query('UPDATE `' . Settings::db_table_infected_compo_participantOfMatch . '` 
+        $toLooseList = $mysql->query('SELECT * FROM `' . Settings::db_table_infected_compo_participantOfMatch . '` WHERE `type` = 2 AND `participantId` = ' . $mysql->real_escape_string($match->getId()) . ';');
+
+        while ($row = $toLooseList->fetch_array()) {
+            $mysql->query('UPDATE `' . Settings::db_table_infected_compo_participantOfMatch . '` SET `type` = 0, `participantId` = ' . $mysql->real_escape_string($clan->getId()) . ' WHERE `id` = ' . $row['id'] . ';');
+
+            $checkingMatchId = MatchHandler::getMatch($row['matchId']);
+            ChatHandler::addClanMembersToChat(ChatHandler::getChat($checkingMatchId->getChat()), $clan);
+        }
+
+        /*$mysql->query('UPDATE `' . Settings::db_table_infected_compo_participantOfMatch . '` 
                             SET `type` = 0, `participantId` = ' . $mysql->real_escape_string($looser->getId()) . ' 
-                            WHERE `type` = 2 AND `participantId` = ' . $mysql->real_escape_string($match->getId()) . ';');
+                            WHERE `type` = 2 AND `participantId` = ' . $mysql->real_escape_string($match->getId()) . ';');*/
     
-        MySQL::open(Settings::db_name_infected_compo);
+        $mysql->close();
     }
 
     public static function getParticipants($match) {
         $mysql = MySQL::open(Settings::db_name_infected_compo);
 
-        $result = $mysql->query('SELECT * FROM `' . Settings::db_table_infected_compo_participantOfMatch . '` 
-                                      WHERE `matchId` = ' . $mysql->real_escape_string($match->getId()) . ' 
-                                      AND `type` = ' . Settings::compo_match_participant_type_clan . ';');
-    
-        $clanArray = array();
-
-        while ($row = $result->fetch_array()) {
-            array_push($clanArray, ClanHandler::getClan($row['participantId']) );
-        }
-
+        $result = $mysql->query('SELECT `participantId` FROM `' . Settings::db_table_infected_compo_participantOfMatch . '` 
+                                 WHERE `matchId` = \'' . $mysql->real_escape_string($match->getId()) . '\' 
+                                 AND `type` = \'' . Settings::compo_match_participant_type_clan . '\';');
+        
         $mysql->close();
 
-        return $clanArray;
+        $clanList = array();
+
+        while ($row = $result->fetch_array()) {
+            array_push($clanList, ClanHandler::getClan($row['participantId']) );
+        }
+
+        return $clanList;
     }
 
     public static function getParticipantString($match) {
         $mysql = MySQL::open(Settings::db_name_infected_compo);
 
         $result = $mysql->query('SELECT * FROM `' . Settings::db_table_infected_compo_participantOfMatch . '` 
-                                      WHERE `matchId` = ' . $mysql->real_escape_string($match->getId()) . ';');
+                                 WHERE `matchId` = \'' . $mysql->real_escape_string($match->getId()) . '\';');
+
+        $mysql->close();
 
         $stringArray = array();
 
@@ -235,23 +251,81 @@ class MatchHandler {
             } 
         }
 
+        return $stringArray;
+    }
+
+    public static function getParticipantTags($match) {
+        $mysql = MySQL::open(Settings::db_name_infected_compo);
+
+        $result = $mysql->query('SELECT * FROM `' . Settings::db_table_infected_compo_participantOfMatch . '` 
+                                 WHERE `matchId` = \'' . $mysql->real_escape_string($match->getId()) . '\';');
+
         $mysql->close();
 
+        $stringArray = array();
+
+        while ($row = $result->fetch_array()) {
+            if ($row['type'] == Settings::compo_match_participant_type_match_winner || $row['type'] == Settings::compo_match_participant_type_match_looser) {
+                array_push($stringArray, "TBA");
+            } else if ($row['type'] == Settings::compo_match_participant_type_clan) {
+                $clan = ClanHandler::getClan($row['participantId']);
+                array_push($stringArray, $clan->getTag());
+            } 
+        }
+
         return $stringArray;
+    }
+
+    public static function getParticipantsJson($match) {
+        $mysql = MySQL::open(Settings::db_name_infected_compo);
+
+        $result = $mysql->query('SELECT * FROM `' . Settings::db_table_infected_compo_participantOfMatch . '` 
+                                 WHERE `matchId` = \'' . $mysql->real_escape_string($match->getId()) . '\';');
+
+        $mysql->close();
+
+        $jsonArray = array();
+
+        while ($row = $result->fetch_array()) {
+            if ($row['type'] == Settings::compo_match_participant_type_clan) {
+                $clan = ClanHandler::getClan($row['participantId']);
+                array_push($jsonArray, array("type" => $row['type'], "value" => $clan->getName() . ' - ' . $clan->getTag() . ""));
+            } else {
+                array_push($jsonArray, array("type" => $row['type'], "value" => $row['participantId']));
+            }
+        }
+
+        return $jsonArray;
+    }
+
+    public static function getParents($match) {
+        $mysql = MySQL::open(Settings::db_name_infected_compo);
+
+        $result = $mysql->query('SELECT `fromCompo` FROM `' . Settings::db_table_infected_compo_matchrelationships . '` WHERE `toCompo` = \'' . $mysql->real_escape_string($match->getId()) . '\';');
+
+        $mysql->close();
+
+        $parentArray = array();
+
+        while($row = $result->fetch_array()) {
+            array_push($parentArray, self::getMatch($row['fromCompo']));
+        }
+
+        return $parentArray;
     }
 
     //Checks if the match can run(If we have enough participants. Returns false if we have to wait for earlier matches to complete)
     public static function isReady($match) {
         $mysql = MySQL::open(Settings::db_name_infected_compo);
 
-        $result = $mysql->query('SELECT * FROM `' . Settings::db_table_infected_compo_participantOfMatch . '` 
-                                      WHERE `matchId` = ' . $mysql->real_escape_string($match->getId()) . ';');
-
-        $hasParticipants = false;
+        $result = $mysql->query('SELECT `type` FROM `' . Settings::db_table_infected_compo_participantOfMatch . '` 
+                                 WHERE `matchId` = \'' . $mysql->real_escape_string($match->getId()) . '\';');
 
         $mysql->close();
 
-        while($row = $result->fetch_array()) {
+        $hasParticipants = false;
+
+        while ($row = $result->fetch_array()) {
             $hasParticipants = true;
             
             if ($row['type'] == Settings::compo_match_participant_type_match_winner || 
@@ -267,10 +341,12 @@ class MatchHandler {
     public static function isUserReady($user, $match) {
         $mysql = MySQL::open(Settings::db_name_infected_compo);
 
-        $result = $mysql->query('SELECT * FROM `' . Settings::db_table_infected_compo_readyusers . '` 
-                                      WHERE `userId` = ' . $mysql->real_escape_string($user->getId()) . ' 
-                                      AND `matchId` = ' . $mysql->real_escape_string($match->getId()) . ';');
+        $result = $mysql->query('SELECT `id` FROM `' . Settings::db_table_infected_compo_readyusers . '` 
+                                 WHERE `userId` = \'' . $mysql->real_escape_string($user->getId()) . '\'
+                                 AND `matchId` = \'' . $mysql->real_escape_string($match->getId()) . '\';');
     
+        $mysql->close();
+
         $row = $result->fetch_array();
         
         return $row ? true : false;
@@ -280,8 +356,8 @@ class MatchHandler {
         $mysql = MySQL::open(Settings::db_name_infected_compo);
 
         $result = $mysql->query('INSERT INTO `' . Settings::db_table_infected_compo_readyusers . '` (`userId`, `matchId`) 
-                                      VALUES (\'' . $mysql->real_escape_string($user->getId()) . '\', 
-                                              \'' . $mysql->real_escape_string($match->getId()) . '\');');
+                                 VALUES (\'' . $mysql->real_escape_string($user->getId()) . '\', 
+                                         \'' . $mysql->real_escape_string($match->getId()) . '\');');
 
         $mysql->close();
     }
@@ -290,16 +366,18 @@ class MatchHandler {
         $mysql = MySQL::open(Settings::db_name_infected_compo);
 
         $result = $mysql->query('SELECT * FROM `' . Settings::db_table_infected_compo_participantOfMatch . '` 
-                                      WHERE `type` = 0 AND `matchId` = ' . $mysql->real_escape_string($match->getId()) . ';');
+                                 WHERE `type` = \'0\'
+                                 AND `matchId` = \'' . $mysql->real_escape_string($match->getId()) . '\';');
 
-        //Iterate through clans
-        while($row = $result->fetch_array()) {
+        // Iterate through clans
+        while ($row = $result->fetch_array()) {
             $users = $mysql->query('SELECT * FROM `' . Settings::db_table_infected_compo_memberof . '` 
-                                         WHERE `clanId` = ' . $row['participantId'] . ';');
+                                    WHERE `clanId` = \'' . $row['participantId'] . '\';');
             
             while($userRow = mysqli_fetch_array($users)) {
                 $userCheck = $mysql->query('SELECT * FROM `' . Settings::db_table_infected_compo_readyusers . '` 
-                                                 WHERE `userId` = ' . $userRow['userId'] . ' AND `matchId` = ' . $mysql->real_escape_string($match->getId()) . ';');
+                                            WHERE `userId` = \'' . $userRow['userId'] . '\'
+                                            AND `matchId` = \'' . $mysql->real_escape_string($match->getId()) . '\';');
                 
                 $row = mysqli_fetch_array($userCheck);
                 
@@ -313,6 +391,23 @@ class MatchHandler {
         $mysql->close();
 
         return true;
+    }
+
+    public static function getMatchesForCompo($compo) {
+        $mysql = MySQL::open(Settings::db_name_infected_compo);
+
+        $result = $mysql->query('SELECT * FROM `' . Settings::db_table_infected_compo_matches . '` 
+                                 WHERE `compoId` = \'' . $compo->getId() . '\';');
+
+        $mysql->close();
+
+        $matchList = array();
+
+        while ($object = $result->fetch_object('Match')) {
+            array_push($matchList, $object);
+        }
+
+        return $matchList;
     }
 }
 ?>

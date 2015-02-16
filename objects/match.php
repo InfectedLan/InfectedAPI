@@ -10,24 +10,25 @@ class Match extends Object {
 	const STATE_CUSTOM_PREGAME = 1;
 	const STATE_JOIN_GAME = 2;
 
+	const BRACKET_WINNER = 1;
+	const BRACKET_LOOSER = 0;
+
 	private $scheduledTime;
 	private $connectDetails;
 	private $winner;
 	private $state;
 	private $compoId;
 	private $bracketOffset;
+	private $chat;
+	private $bracket;
 
-	public function __construct($id, $scheduledTime, $connectDetails, $winner, $state, $compoId, $bracketOffset) {
-		parent::__construct($id);
-	
-		$this->scheduledTime = $scheduledTime;
-		$this->connectDetails = $connectDetails;
-		$this->winner = $winner;
-		$this->state = $state;
-		$this->compoId = $compoId;
-		$this->bracketOffset = $bracketOffset;
+	public function getBracket() {
+		return $this->bracket;
 	}
 
+	public function getChat() {
+		return $this->chat;
+	}
 	public function getScheduledTime() {
 		return $this->scheduledTime;
 	}

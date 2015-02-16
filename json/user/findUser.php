@@ -32,7 +32,7 @@ if (Session::isAuthenticated()) {
 			$message = 'Fant ingen resultater.';
 		}
 	} else {
-		$message = 'Intet søkeord oppgitt.';
+		$message = 'Ikke noe søkeord oppgitt.';
 	}
 }
 

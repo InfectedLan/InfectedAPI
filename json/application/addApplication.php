@@ -10,18 +10,21 @@ $message = null;
 if (Session::isAuthenticated()) {
 	$user = Session::getCurrentUser();
 	
+	// Only allow non-members to apply.
 	if (!$user->isGroupMember()) {
+		
+		// Check that the user has an cropped avatar.
 		if ($user->hasCroppedAvatar()) {
+			
 			if (isset($_GET['groupId']) &&
 				isset($_GET['content']) &&
 				is_numeric($_GET['groupId']) &&
 				!empty($_GET['content'])) {
 				$group = GroupHandler::getGroup($_GET['groupId']);
 				$content = $_GET['content'];
-
+				
 				if (!ApplicationHandler::hasUserApplicationForGroup($user, $group)) {
 					ApplicationHandler::createApplication($group, $user, $content);
-				
 					$result = true;
 					$message = 'Din søknad til crewet "' . $group->getTitle() . '" er nå sendt.';
 				} else {

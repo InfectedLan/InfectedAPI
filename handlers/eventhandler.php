@@ -16,19 +16,7 @@ class EventHandler {
         
         $mysql->close();
 
-		$row = $result->fetch_array();
-		
-        if ($row) {
-            return new Event($row['id'],
-                             $row['theme'], 
-                             $row['location'], 
-                             $row['participants'], 
-                             $row['bookingTime'], 
-                             $row['startTime'], 
-                             $row['endTime'], 
-                             $row['seatmap'],
-                             $row['ticketType']);
-        }
+		return $result->fetch_object('Event');
     }
     
     /*
@@ -37,16 +25,14 @@ class EventHandler {
     public static function getCurrentEvent() {
         $mysql = MySQL::open(Settings::db_name_infected);
         
-        $result = $mysql->query('SELECT `id` FROM `' . Settings::db_table_infected_events . '`
-                                 WHERE `endTime` > NOW()
+        $result = $mysql->query('SELECT * FROM `' . Settings::db_table_infected_events . '`
+                                 WHERE DATE(`endTime`) >= CURDATE()
                                  ORDER BY `startTime` ASC
                                  LIMIT 1;');
 		
 		$mysql->close();
 									  
-        $row = $result->fetch_array();
-        
-        return self::getEvent($row['id']);
+        return $result->fetch_object('Event');
     }
 	
 	/*
@@ -55,7 +41,7 @@ class EventHandler {
     public static function getPreviousEvent() {
         $mysql = MySQL::open(Settings::db_name_infected);
         
-        $result = $mysql->query('SELECT `id` FROM `' . Settings::db_table_infected_events . '`
+        $result = $mysql->query('SELECT * FROM `' . Settings::db_table_infected_events . '`
 								 WHERE `id` < (SELECT `id` FROM `' . Settings::db_table_infected_events . '`
 											   WHERE `endTime` > NOW()
 											   ORDER BY `startTime` ASC
@@ -65,9 +51,7 @@ class EventHandler {
 		
 		$mysql->close();
 		
-        $row = $result->fetch_array();
-        
-        return self::getEvent($row['id']);
+        return $result->fetch_object('Event');
     }
     
     /*
@@ -76,14 +60,14 @@ class EventHandler {
     public static function getEvents() {
         $mysql = MySQL::open(Settings::db_name_infected);
         
-        $result = $mysql->query('SELECT `id` FROM `' . Settings::db_table_infected_events . '`;');
+        $result = $mysql->query('SELECT * FROM `' . Settings::db_table_infected_events . '`;');
         
 		$mysql->close();
 		
         $eventList = array();
         
-        while ($row = $result->fetch_array()) {
-            array_push($eventList, self::getEvent($row['id']));
+        while ($object = $result->fetch_object('Event')) {
+            array_push($eventList, $object);
         }
 
         return $eventList;
@@ -95,15 +79,15 @@ class EventHandler {
     public static function getEventsByYear($year) {
         $mysql = MySQL::open(Settings::db_name_infected);
         
-        $result = $mysql->query('SELECT `id` FROM `' . Settings::db_table_infected_events . '`
+        $result = $mysql->query('SELECT * FROM `' . Settings::db_table_infected_events . '`
 								 WHERE EXTRACT(YEAR FROM `startTime`) = \'' . $year . '\';');
         
 		$mysql->close();
 		
         $eventList = array();
         
-        while ($row = $result->fetch_array()) {
-            array_push($eventList, self::getEvent($row['id']));
+        while ($object = $result->fetch_object('Event')) {
+            array_push($eventList, $object);
         }
 
         return $eventList;
