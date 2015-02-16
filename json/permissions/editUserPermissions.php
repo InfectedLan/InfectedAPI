@@ -17,20 +17,24 @@ if (Session::isAuthenticated()) {
 			is_numeric($_GET['id'])) {
 			$permissionUser = UserHandler::getUser($_GET['id']);
 			
-			foreach (PermissionHandler::getPermissions() as $permission) {
-				// Only allow changes by admin or user with the "admin.permissions" to give permissions that he is assigned to other users.
-				if ($user->hasPermission('*') ||
-					$user->hasPermission('admin.permissions') && 
-					$user->hasPermission($permission->getValue())) {
-					if (isset($_GET['checkbox_' . $permission->getId()])) {
-						UserPermissionHandler::createUserPermission($permissionUser, $permission);
-					} else {
-						UserPermissionHandler::removeUserPermission($permissionUser, $permission);
+			if ($permissionUser != null) {
+				foreach (PermissionHandler::getPermissions() as $permission) {
+					// Only allow changes by admin or user with the "admin.permissions" to give permissions that he is assigned to other users.
+					if ($user->hasPermission('*') ||
+						$user->hasPermission('admin.permissions') && 
+						$user->hasPermission($permission->getValue())) {
+						if (isset($_GET['checkbox_' . $permission->getId()])) {
+							UserPermissionHandler::createUserPermission($permissionUser, $permission);
+						} else {
+							UserPermissionHandler::removeUserPermission($permissionUser, $permission);
+						}
 					}
 				}
-			}
 		
-			$result = true;
+				$result = true;
+			} else  {
+				$message = '<p>Brukeren finnes ikke.</p>';
+			}
 		} else {
 			$message = '<p>Bruker ikke spesifisert.</p>';
 		}
