@@ -1,16 +1,16 @@
 <?php
 require_once 'mailmanager.php';
+require_once 'handlers/useroptionhandler.php';
 require_once 'handlers/citydictionary.php';
-require_once 'handlers/userpermissionhandler.php';
 require_once 'handlers/registrationcodehandler.php';
-require_once 'handlers/passwordresetcodehandler.php';
-require_once 'handlers/tickethandler.php';
+require_once 'handlers/userpermissionhandler.php';
 require_once 'handlers/emergencycontacthandler.php';
+require_once 'handlers/tickethandler.php';
+require_once 'handlers/eventhandler.php';
+require_once 'handlers/passwordresetcodehandler.php';
 require_once 'handlers/avatarhandler.php';
 require_once 'handlers/grouphandler.php';
 require_once 'handlers/teamhandler.php';
-require_once 'handlers/eventhandler.php';
-require_once 'handlers/useroptionhandler.php';
 require_once 'objects/object.php';
 
 /*
@@ -169,26 +169,32 @@ class User extends Object {
 	 * Returns true if user have specified permission, otherwise false.
 	 */
 	public function hasPermission($value) {
-		if ($this->isGroupMember()) {
-			// Returns true if one of the users permissions contains the value. 
-			// Example if user has permissions "admin.permissions", "admin" would also return true.
+		// Match wildcard permissions, if value is admin.permissions and user has permission "admin.*" this would return true.
+		$wildcardValue = preg_replace('/[^\.]([^.]*)$/', '*', $value);
+		$parentValue = preg_replace('/[\.*](.*)/', '', $value);
+
+		if (UserPermissionHandler::hasUserPermissionByValue($this, $wildcardValue)) {
+			return true;
+		}
+
+		// Check if user has parent of value.
+		if (!empty($parentValue)) {
 			foreach ($this->getPermissions() as $permission) {
-				if (strpos($permission->getValue(), $value) === 0) {
-					return true;
-				}
+				return preg_match('/^' . $parentValue . '/', $permission->getValue());
 			}
-			
-			// If the user is a leader or co leader return true on chief permissions.
-			if ($this->isGroupLeader() || $this->isGroupCoLeader()) {
-				if (strpos($value, 'chief') === 0) {
-					return true;
-				}
+		}
+
+		// If the user is a leader or co leader return true on chief permissions.
+		if ($this->isGroupMember() &&
+			($this->isGroupLeader() || $this->isGroupCoLeader())) {
+			$allowedList = array('chief');
+
+			foreach ($allowedList as $allowed) {
+				return preg_match('/^' . $allowed . '\./', $value);
 			}
-			
-			return UserPermissionHandler::hasUserPermissionByValue($this, $value);
 		}
 		
-		return false;
+		return UserPermissionHandler::hasUserPermissionByValue($this, $value);
 	}
 	
 	/* 

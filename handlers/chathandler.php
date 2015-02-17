@@ -180,7 +180,6 @@ class ChatHandler {
         return $row ? true : false;
 	}
 	
-		
 	/*
 	 * Returns an array of all members in the specificed chat.
 	 */
@@ -246,9 +245,10 @@ class ChatHandler {
 	public static function sendChatMessage($user, $chat, $message) {
 		$mysql = MySQL::open(Settings::db_name_infected_compo);
 		
-		$mysql->query('INSERT INTO `' . Settings::db_table_infected_compo_chatmessages . '` (`userId`, `chatId`, `message`) 
+		$mysql->query('INSERT INTO `' . Settings::db_table_infected_compo_chatmessages . '` (`userId`, `chatId`, `time`, `message`) 
                        VALUES (\'' . $mysql->real_escape_string($user->getId()) . '\',
 							   \'' . $mysql->real_escape_string($chat->getId()) . '\',
+							   \'' . date('Y-m-d H:i:s') . '\',
 							   \'' . htmlspecialchars($mysql->real_escape_string($message), ENT_QUOTES | ENT_HTML401 ) . '\');');
 						
 		$mysql->close();

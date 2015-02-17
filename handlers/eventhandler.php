@@ -26,7 +26,7 @@ class EventHandler {
         $mysql = MySQL::open(Settings::db_name_infected);
         
         $result = $mysql->query('SELECT * FROM `' . Settings::db_table_infected_events . '`
-                                 WHERE `endTime` > NOW()
+                                 WHERE DATE(`endTime`) >= CURDATE()
                                  ORDER BY `startTime` ASC
                                  LIMIT 1;');
 		
