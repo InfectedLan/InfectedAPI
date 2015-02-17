@@ -82,7 +82,7 @@ class User extends Object {
 	/* 
 	 * Returns the users gendername.
 	 */
-	public function getGenderName() { // TODO: Rename this to getGenderAsString().
+	public function getGenderAsString() {
 		return $this->getGender() ? 'Kvinne' : 'Mann';
 	}
 	
@@ -221,22 +221,22 @@ class User extends Object {
 	/*
 	 * Returns true if user has an ticket for the current/upcoming event.
 	 */
-	public function hasCurrentTicket() {
-		return TicketHandler::hasTicketForEvent(EventHandler::getCurrentEvent(), $this);
+	public function hasTicket() {
+		return TicketHandler::hasTicket($this);
 	}
 	
 	/*
 	 * Returns the first ticket for the current/upcoming event found for ths user.
 	 */
 	public function getTicket() {
-		return TicketHandler::getTicketForUser(EventHandler::getCurrentEvent(), $this);
+		return TicketHandler::getTicketByUser($this);
 	}
 	
 	/*
 	 * Returns the tickets for the current/upcoming event linked to this account.
 	 */
 	public function getTickets() {
-		return TicketHandler::getTicketsForUser(EventHandler::getCurrentEvent(), $this);
+		return TicketHandler::getTicketsByUser($this);
 	}
 	
 	/*
@@ -414,7 +414,7 @@ class User extends Object {
 	 */
 	public function isEligibleForCompos() {
 		//For now we 
-		return $this->hasCurrentTicket() || $this->isGroupMember();
+		return $this->hasTicket() || $this->isGroupMember();
 	}
 
 	/* 
