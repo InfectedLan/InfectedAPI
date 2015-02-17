@@ -92,7 +92,7 @@ class Team extends EventObject {
 						}
 					
 						echo '<a href="index.php?page=my-profile&id=' . $member->getId() . '"><img src="../api/' . $avatarFile . '" width="146" height="110" style="float: right;"></a>';
-						echo '<p>Navn: ' . $member->getFirstname() . ' "' . $member->getNickname() . '" ' . $member->getLastname() . '<br>';
+						echo '<p>Navn: ' . $member->getDisplayName() . '<br>';
 
 						if ($member->isGroupLeader()) {
 							echo 'Stilling: Chief<br>';

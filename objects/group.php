@@ -71,7 +71,7 @@ class Group extends EventObject {
 	 * Returns an array of all teams connected to this group.
 	 */
 	public function getTeams() {		
-		return TeamHandler::getTeamsForGroup($this);
+		return TeamHandler::getTeamsByGroup($this);
 	}
 	
 	public function displayWithInfo() {
@@ -112,7 +112,7 @@ class Group extends EventObject {
 						}
 					
 						echo '<a href="index.php?page=my-profile&id=' . $member->getId() . '"><img src="../api/' . $avatarFile . '" width="146" height="110" style="float: right;"></a>';
-						echo '<p>Navn: ' . $member->getFirstname() . ' "' . $member->getNickname() . '" ' . $member->getLastname() . '<br>';
+						echo '<p>Navn: ' . $member->getDisplayName() . '<br>';
 						echo 'Stilling: ';
 						
 						if ($member->isGroupLeader()) {

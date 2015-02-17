@@ -95,7 +95,7 @@ class Event extends Object {
 	 * Returns the number of tickets for this event.
 	 */
 	public function getTicketCount() {
-		return TicketHandler::getTicketCount($this);
+		return count(TicketHandler::getTicketsByEvent($this));
 	}
 	
 	/*

@@ -335,14 +335,14 @@ class User extends Object {
 	 * Returns the avatar linked to this user.
 	 */
 	public function getAvatar() {
-		return AvatarHandler::getAvatarForUser($this);
+		return AvatarHandler::getAvatarByUser($this);
 	}
 	
 	/* 
 	 * Returns the users group.
 	 */
 	public function getGroup() {
-		return GroupHandler::getGroupForUser($this);
+		return GroupHandler::getGroupByUser($this);
 	}
 	
 	/* 
@@ -370,7 +370,7 @@ class User extends Object {
 	 * Returns the team.
 	 */
 	public function getTeam() {
-		return TeamHandler::getTeamForUser($this);
+		return TeamHandler::getTeamByUser($this);
 	}
 	
 	/* 

@@ -45,6 +45,23 @@ class TicketHandler {
         return $ticketList;
     }
 
+    public static function getTicketsByEvent(Event $event) {
+        $database = Database::open(Settings::db_name_infected_tickets);
+
+        $result = $database->query('SELECT * FROM `' . Settings::db_table_infected_tickets_tickets . '`
+                                    WHERE `eventId` = \'' . $event->getId() . '\';');
+
+        $database->close();
+        
+        $ticketList = array();
+
+        while ($object = $result->fetch_object('Ticket')) {
+            array_push($ticketList, $object);
+        }
+
+        return $ticketList;
+    }
+
     /*
      * Return the specified user latest ticket.
      */
