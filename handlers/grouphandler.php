@@ -137,7 +137,7 @@ class GroupHandler {
 								                    AND `userId` = \'' . $user->getId() . '\'
                                     AND `groupId` != \'0\';');
         
-		$database->close();
+		    $database->close();
 		
         return $result->num_rows > 0;
     }

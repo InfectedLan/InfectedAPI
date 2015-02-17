@@ -26,17 +26,17 @@ class RestrictedPageHandler {
      */
     public static function getPageByName($name) {
         if (Session::isAuthenticated()) {
-			$user = Session::getCurrentUser();
-			
-			if ($user->hasPermission('*') ||
+      			$user = Session::getCurrentUser();
+      			
+      			if ($user->hasPermission('*') ||
                 $user->isGroupMember()) {
                 $database = Database::open(Settings::db_name_infected_crew);
-				
-				if ($user->hasPermission('*')) {
-					$result = $database->query('SELECT * FROM `' . Settings::db_table_infected_crew_pages . '`
-                                                WHERE `name` = \'' . $database->real_escape_string($name) . '\';');
-				} else if ($user->isGroupLeader()) {
-					$result = $database->query('SELECT * FROM `' . Settings::db_table_infected_crew_pages . '`
+    				
+      				  if ($user->hasPermission('*')) {
+                  $result = $database->query('SELECT * FROM `' . Settings::db_table_infected_crew_pages . '`
+                                                      WHERE `name` = \'' . $database->real_escape_string($name) . '\';');
+      				  } else if ($user->isGroupLeader()) {
+                    $result = $database->query('SELECT * FROM `' . Settings::db_table_infected_crew_pages . '`
                                                 WHERE `name` = \'' . $database->real_escape_string($name) . '\' 
                                                 AND (`groupId` = \'0\' OR `groupId` = \'' . $user->getGroup()->getId() . '\');');
                 } else if ($user->isTeamMember()) {
@@ -51,9 +51,9 @@ class RestrictedPageHandler {
                                                 AND `teamId` = \'0\';');
                 }
 				
-				$database->close();
+				        $database->close();
 				
-				return $result->fetch_object('RestrictedPage');
+				        return $result->fetch_object('RestrictedPage');
             }
         }
     }
@@ -87,7 +87,7 @@ class RestrictedPageHandler {
                                     WHERE `groupId` = \'' . $group->getId() . '\'
                                     AND `teamId` = \'0\';');
         
-		$database->close();
+		    $database->close();
 		
         $restrictedPageList = array();
         
@@ -98,7 +98,7 @@ class RestrictedPageHandler {
         return $restrictedPageList;
     }
     
-	/* 
+	  /* 
      * Get a list of all pages for specified group, ignoring the teamId.
      */
     public static function getAllPagesForGroup(Group $group) {
@@ -107,7 +107,7 @@ class RestrictedPageHandler {
         $result = $database->query('SELECT * FROM `' . Settings::db_table_infected_crew_pages . '`
                                  WHERE `groupId` = \'' . $group->getId() . '\';');
         
-		$database->close();
+		    $database->close();
 		
         $restrictedPageList = array();
         
@@ -128,7 +128,7 @@ class RestrictedPageHandler {
                                     WHERE `groupId` = \'' . $group->getId() . '\'
                                     AND (`teamId` = \'' . $team->getId() . '\' OR `teamId` = \'0\');');
         
-		$database->close();
+		    $database->close();
 		
         $restrictedPageList = array();
         
@@ -155,7 +155,7 @@ class RestrictedPageHandler {
         $database->close();
     }
     
-	/*
+	  /*
      * Update a page.
      */
     public static function updatePage(RestrictedPage $page, $title, $content, Group $group, Team $team) {

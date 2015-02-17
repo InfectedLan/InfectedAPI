@@ -4,6 +4,9 @@ require_once 'database.php';
 require_once 'objects/page.php';
 
 class PageHandler {
+    /*
+     * Return the page bu the internal id.
+     */
     public static function getPage($id) {
         $database = Database::open(Settings::db_name_infected_main);
         
@@ -12,9 +15,12 @@ class PageHandler {
         
         $database->close();
 
-		return $result->fetch_object('Page');
+		    return $result->fetch_object('Page');
     }
     
+    /*
+     * Return the page by name.
+     */
     public static function getPageByName($name) {
         $database = Database::open(Settings::db_name_infected_main);
         
@@ -26,7 +32,9 @@ class PageHandler {
         return $result->fetch_object('Page');
     }
     
-    // Get a list of all pages
+    /*
+     * Returns a list of all pages.
+     */
     public static function getPages() {
         $database = Database::open(Settings::db_name_infected_main);
         

@@ -6,6 +6,9 @@ require_once 'objects/user.php';
 require_once 'objects/tickettype.php';
 
 class PaymentHandler {
+    /*
+     * Returns the payment by the internal id.
+     */
     public static function getPayment($id) {
         $database = Database::open(Settings::db_name_infected_tickets);
         
@@ -17,6 +20,9 @@ class PaymentHandler {
 		    return $result->fetch_object('Payment');
     }
     
+    /*
+     * Create a new payment.
+     */
     public static function createPayment(User $user, TicketType $ticketType, $price, $totalPrice, $transactionId) {
         $database = Database::open(Settings::db_name_infected_tickets);
 

@@ -4,6 +4,9 @@ require_once 'database.php';
 require_once 'objects/permission.php';
 
 class PermissionHandler {
+    /*
+     * Get the permission by the internal id.
+     */
     public static function getPermission($id) {
         $database = Database::open(Settings::db_name_infected);
         
@@ -14,7 +17,10 @@ class PermissionHandler {
         
 		return $result->fetch_object('Permission');
     }
-    
+
+    /*
+     * Returns the permission with the given value.
+     */
     public static function getPermissionByValue($value) {
         $database = Database::open(Settings::db_name_infected);
         
@@ -26,6 +32,9 @@ class PermissionHandler {
         return $result->fetch_object('Permission');
     }
     
+    /*
+     * Returns a list of all permissions.
+     */
     public static function getPermissions() {
         $database = Database::open(Settings::db_name_infected);
         

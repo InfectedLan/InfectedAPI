@@ -15,7 +15,7 @@ class GameHandler {
         
         $database->close();
 		
-		return $result->fetch_object('Game');
+		    return $result->fetch_object('Game');
     }
     
     public static function getGames() {

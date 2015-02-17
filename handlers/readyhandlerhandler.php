@@ -4,6 +4,9 @@ require_once 'database.php';
 require_once 'objects/readyhandler.php';
 
 class ReadyHandlerHandler {
+	/*
+     * Returns the ready handler by the internal id.
+     */
     public static function getReadyHandler($id) {
         $database = Database::open(Settings::db_name_infected_compo);
         

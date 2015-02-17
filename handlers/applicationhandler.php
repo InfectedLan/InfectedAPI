@@ -20,7 +20,7 @@ class ApplicationHandler {
         
         $database->close();
 		
-		return $result->fetch_object('Application');
+		    return $result->fetch_object('Application');
     }
     
     /*
@@ -164,7 +164,7 @@ class ApplicationHandler {
         return $applicationList;
     }
     
-	/*
+    /*
      * Returns a list of all accepted applications.
      */
     public static function getAcceptedApplications() {
@@ -172,7 +172,7 @@ class ApplicationHandler {
         
         $result = $database->query('SELECT * FROM `' . Settings::db_table_infected_crew_applications . '`
                                     WHERE `state` = \'2\'
-								    ORDER BY `openedTime` DESC;');
+								                    ORDER BY `openedTime` DESC;');
         
 		$database->close();
 		
@@ -193,10 +193,10 @@ class ApplicationHandler {
         
         $result = $database->query('SELECT * FROM `' . Settings::db_table_infected_crew_applications . '`
                                     WHERE `groupId` = \'' . $group->getId() .  '\'
-								    AND `state` = \'2\'
+								                    AND `state` = \'2\'
                                     ORDER BY `openedTime` DESC;');
         
-		$database->close();
+		    $database->close();
 		
         $acceptedApplicationList = array();
         
@@ -254,70 +254,70 @@ class ApplicationHandler {
      * Accepts an application, with a optional comment.
      */
     public static function acceptApplication(User $user, Application $application, $comment, $notify) {
-		// Only allow application for current event to be accepted.
-		if ($applicatin->getEvent()->equals(EventHandler::getCurrentEvent())) {
-			$database = Database::open(Settings::db_name_infected_crew);
-			
-			$database->query('UPDATE `' . Settings::db_table_infected_crew_applications . '` 
-						      SET `closedTime` = \'' . date('Y-m-d H:i:s') . '\',
-							      `state` = \'2\',
-							      `updatedByUserId` = \'' . $user->getId() . '\',
-							      `comment` = \'' . $database->real_escape_string($comment) . '\'
-						      WHERE `id` = \'' . $application->getId() . '\';');
-			
-			$database->close();
-			
-			$applicationUser = $application->getUser();
-			$group = $application->getGroup();
-			
-			// Remove the application from the queue, if present.
-			self::unqueueApplication($user, $application);
-			
-			// Reject users application for all other groups.
-			$applicationList = self::getUserApplications($applicationUser);
-			
-			foreach ($applicationList as $applicationValue) {
+    		// Only allow application for current event to be accepted.
+    		if ($applicatin->getEvent()->equals(EventHandler::getCurrentEvent())) {
+      			$database = Database::open(Settings::db_name_infected_crew);
+      			
+      			$database->query('UPDATE `' . Settings::db_table_infected_crew_applications . '` 
+            						      SET `closedTime` = \'' . date('Y-m-d H:i:s') . '\',
+            							        `state` = \'2\',
+            							        `updatedByUserId` = \'' . $user->getId() . '\',
+            							        `comment` = \'' . $database->real_escape_string($comment) . '\'
+            						      WHERE `id` = \'' . $application->getId() . '\';');
+      			
+      			$database->close();
+      			
+      			$applicationUser = $application->getUser();
+      			$group = $application->getGroup();
+      			
+      			// Remove the application from the queue, if present.
+      			self::unqueueApplication($user, $application);
+      			
+      			// Reject users application for all other groups.
+      			$applicationList = self::getUserApplications($applicationUser);
+      			
+      			foreach ($applicationList as $applicationValue) {
                 if ($group->equals($applicationValue->getGroup())) {
-					self::closeApplication($user, $applicationValue);
-				}
-			}
-			
-			// Set the user in the new group
-			GroupHandler::changeGroupForUser($applicationUser, $group);
-			
-			// Notify the user by email, if notify is true.
-			if ($notify) {
-				// Send email notification to the user.
-				NotificationManager::sendApplicationAccpetedNotification($application);
-			}
-		}
+                    self::closeApplication($user, $applicationValue);
+      				  }
+      			}
+      			
+      			// Set the user in the new group
+      			GroupHandler::changeGroupForUser($applicationUser, $group);
+      			
+      			// Notify the user by email, if notify is true.
+      			if ($notify) {
+      				// Send email notification to the user.
+      				NotificationManager::sendApplicationAccpetedNotification($application);
+      			}
+    		}
     }
     
     /*
      * Rejects an application, with a optional comment.
      */
     public static function rejectApplication(User $user, Application $application, $comment, $notify) {
-		// Only allow application for current event to be rejected.
+    		// Only allow application for current event to be rejected.
         if ($application->getEvent()->equals(EventHandler::getCurrentEvent())) {
-			$database = Database::open(Settings::db_name_infected_crew);
-			
-			$database->query('UPDATE `' . Settings::db_table_infected_crew_applications . '` 
-						      SET `closedTime` = \'' . date('Y-m-d H:i:s') . '\',
-							      `state` = \'3\', 
-							      `updatedByUserId` = \'' . $user->getId() . '\',
-							      `comment` = \'' . $database->real_escape_string($comment) . '\'
-						      WHERE `id` = \'' . $application->getId() . '\';');
-			
-			$database->close();
-			
-			// Remove the application from the queue, if present.
-			self::unqueueApplication($user, $application);
-			
-			// Notify the user by email, if notify is true.
-			if ($notify) {
-				NotificationManager::sendApplicationRejectedNotification($application, $comment);
-			}
-		}
+      			$database = Database::open(Settings::db_name_infected_crew);
+      			
+      			$database->query('UPDATE `' . Settings::db_table_infected_crew_applications . '` 
+            						      SET `closedTime` = \'' . date('Y-m-d H:i:s') . '\',
+            							      `state` = \'3\', 
+            							      `updatedByUserId` = \'' . $user->getId() . '\',
+            							      `comment` = \'' . $database->real_escape_string($comment) . '\'
+            						      WHERE `id` = \'' . $application->getId() . '\';');
+      			
+      			$database->close();
+      			
+      			// Remove the application from the queue, if present.
+      			self::unqueueApplication($user, $application);
+      			
+      			// Notify the user by email, if notify is true.
+      			if ($notify) {
+      			    NotificationManager::sendApplicationRejectedNotification($application, $comment);
+      			}
+    		}
     }
     
     /*
@@ -329,7 +329,7 @@ class ApplicationHandler {
         $database->query('UPDATE `' . Settings::db_table_infected_crew_applications . '` 
                           SET `closedTime` = \'' . date('Y-m-d H:i:s') . '\',
                               `state` = \'4\',
-					    	  `updatedByUserId` = \'' . $user->getId() . '\',
+					    	              `updatedByUserId` = \'' . $user->getId() . '\',
                               `comment` = \'Closed by the system.\'
                           WHERE `id` = \'' . $application->getId() . '\';');
         
@@ -358,45 +358,45 @@ class ApplicationHandler {
      * Puts an application in queue.
      */
     public static function queueApplication(User $user, Application $application, $notify) {
-		// Only allow application for current event to be queued.
+    		// Only allow application for current event to be queued.
         if ($application->getEvent()->equals(EventHandler::getCurrentEvent())) {
-			if (!self::isQueued($application)) {
-				$database = Database::open(Settings::db_name_infected_crew);
-				
-				$database->query('INSERT INTO `' . Settings::db_table_infected_crew_applicationqueue . '` (`applicationId`) 
-							      VALUES (\'' . $application->getId() . '\');');
-							   
-				$database->query('UPDATE `' . Settings::db_table_infected_crew_applications . '` 
-							      SET `updatedByUserId` = \'' . $user->getId() . '\'
-							      WHERE `id` = \'' . $application->getId() . '\';');
-							   
-				$database->close();
-			}
-			
-			// Notify the user by email, if notify is true.
-			if ($notify) {
-				NotificationManager::sendApplicationQueuedNotification($application);
-			}
-		}
+      			if (!self::isQueued($application)) {
+        				$database = Database::open(Settings::db_name_infected_crew);
+        				
+        				$database->query('INSERT INTO `' . Settings::db_table_infected_crew_applicationqueue . '` (`applicationId`) 
+                                  VALUES (\'' . $application->getId() . '\');');
+        							   
+        				$database->query('UPDATE `' . Settings::db_table_infected_crew_applications . '` 
+              							      SET `updatedByUserId` = \'' . $user->getId() . '\'
+              							      WHERE `id` = \'' . $application->getId() . '\';');
+        							   
+        				$database->close();
+      			}
+      			
+      			// Notify the user by email, if notify is true.
+      			if ($notify) {
+      				  NotificationManager::sendApplicationQueuedNotification($application);
+      			}
+    		}
     }
     
     /*
      * Removes an application from queue.
      */
     public static function unqueueApplication(User $user, Application $application) {
-		// Only allow application for current event to be unqueued.
+		    // Only allow application for current event to be unqueued.
         if ($application->getEvent()->equals(EventHandler::getCurrentEvent())) {
-			$database = Database::open(Settings::db_name_infected_crew);
-			
-			$database->query('DELETE FROM `' . Settings::db_table_infected_crew_applicationqueue . '` 
-						      WHERE `applicationId` = \'' . $application->getId() . '\';');
-						   
-			$database->query('UPDATE `' . Settings::db_table_infected_crew_applications . '` 
-			                  SET `updatedByUserId` = \'' . $user->getId() . '\'
-			                  WHERE `id` = \'' . $application->getId() . '\';');
-                                    
-			$database->close();
-		}
+      			$database = Database::open(Settings::db_name_infected_crew);
+      			
+      			$database->query('DELETE FROM `' . Settings::db_table_infected_crew_applicationqueue . '` 
+      						      WHERE `applicationId` = \'' . $application->getId() . '\';');
+      						   
+      			$database->query('UPDATE `' . Settings::db_table_infected_crew_applications . '` 
+      			                  SET `updatedByUserId` = \'' . $user->getId() . '\'
+      			                  WHERE `id` = \'' . $application->getId() . '\';');
+                                          
+      			$database->close();
+		    }
     }
     
     /*
