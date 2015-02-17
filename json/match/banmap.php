@@ -22,11 +22,11 @@ if (Session::isAuthenticated()) {
 				$participants = MatchHandler::getParticipants($match);
 				$clan = $participants[$turn];
 				
-				if ($user->getId() == $clan->getChief()) {
+				if ($user->equals($clan->getChief())) {
 					$voteOption = VoteOptionHandler::getVoteOption($_GET['id']);
 					
 					if ($voteOption != null) {
-						if ($voteOption->getCompoId() == $match->getCompoId()) {
+						if ($voteOption->getCompo()->equals($match->getCompo())) {
 							VoteHandler::banMap($voteOption, $match->getId());
 							//Check if state should be switched
 							$numBanned = VoteHandler::getNumBanned($match->getId());

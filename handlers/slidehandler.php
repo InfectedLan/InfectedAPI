@@ -3,6 +3,7 @@ require_once 'settings.php';
 require_once 'mysql.php';
 require_once 'handlers/eventhandler.php';
 require_once 'objects/slide.php';
+require_once 'objects/event.php';
 
 class SlideHandler {
     /*
@@ -67,7 +68,7 @@ class SlideHandler {
 	/* 
      * Create a new slide entry.
      */
-    public static function createSlide($event, $name, $title, $content, $startTime, $endTime, $published) {
+    public static function createSlide(Event $event, $name, $title, $content, $startTime, $endTime, $published) {
         $mysql = MySQL::open(Settings::db_name_infected_info);
         
         $mysql->query('INSERT INTO `' . Settings::db_table_infected_info_slides . '` (`eventId`, `name`, `title`, `content`, `startTime`, `endTime`, `published`) 
@@ -85,7 +86,7 @@ class SlideHandler {
 	/*
      * Update a slide.
      */
-    public static function updateSlide($slide, $title, $content, $startTime, $endTime, $published) {
+    public static function updateSlide(Slide $slide, $title, $content, $startTime, $endTime, $published) {
         $mysql = MySQL::open(Settings::db_name_infected_info);
         
         $mysql->query('UPDATE `' . Settings::db_table_infected_info_slides . '` 
@@ -102,7 +103,7 @@ class SlideHandler {
     /*
      * Remove a slide.
      */
-    public static function removeSlide($slide) {
+    public static function removeSlide(Slide $slide) {
         $mysql = MySQL::open(Settings::db_name_infected_info);
         
         $mysql->query('DELETE FROM `' . Settings::db_table_infected_info_slides . '` 

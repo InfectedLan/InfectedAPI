@@ -1,12 +1,12 @@
 <?php
 require_once 'settings.php';
 require_once 'mysql.php';
-require_once 'objects/clan.php';
-require_once 'handlers/eventhandler.php';
-require_once 'handlers/userhandler.php';
-require_once 'handlers/compohandler.php';
-require_once 'handlers/invitehandler.php';
 require_once 'handlers/chathandler.php';
+require_once 'handlers/eventhandler.php';
+require_once 'objects/clan.php';
+require_once 'objects/user.php';
+require_once 'objects/event.php';
+require_once 'objects/compo.php';
 
 class ClanHandler {
     const STATE_MAIN_PLAYER = 0;
@@ -29,7 +29,7 @@ class ClanHandler {
     /*
      * Get clan for a specified user.
      */
-    public static function getClansForUser($user, $event) {
+    public static function getClansForUser(User $user, Event $event) {
         $mysql = MySQL::open(Settings::db_name_infected_compo);
 
         $result = $mysql->query('SELECT * FROM `' . Settings::db_table_infected_compo_clans . '` 
@@ -52,7 +52,7 @@ class ClanHandler {
     /*
      * Get compo by specified clan.
      */
-    public static function getCompo($clan) {
+    public static function getCompo(Clan $clan) {
         $mysql = MySQL::open(Settings::db_name_infected_compo);
 
         $result = $mysql->query('SELECT * FROM `' . Settings::db_table_infected_compo_compo . '`
@@ -67,7 +67,7 @@ class ClanHandler {
     /*
      * Get invites for specified clan.
      */
-    public static function getInvites($clan) {
+    public static function getInvites(Clan $clan) {
         $mysql = MySQL::open(Settings::db_name_infected_compo);
 
         $result = $mysql->query('SELECT * FROM `' . Settings::db_table_infected_compo_invites . '` 
@@ -87,7 +87,7 @@ class ClanHandler {
     /*
      * Get members for specified clan.
      */
-    public static function getMembers($clan) {
+    public static function getMembers(Clan $clan) {
         $mysql = MySQL::open(Settings::db_name_infected);
 
         $result = $mysql->query('SELECT * FROM `' . Settings::db_table_infected_users . '` 
@@ -108,7 +108,7 @@ class ClanHandler {
     /*
      * Get playing members for specified clan.
      */
-    public static function getPlayingMembers($clan) {
+    public static function getPlayingMembers(Clan $clan) {
         $mysql = MySQL::open(Settings::db_name_infected);
 
         $result = $mysql->query('SELECT * FROM `' . Settings::db_table_infected_users . '` 
@@ -130,7 +130,7 @@ class ClanHandler {
     /*
      * Get step in members for specified clan.
      */
-    public static function getStepinMembers($clan) {
+    public static function getStepinMembers(Clan $clan) {
         $mysql = MySQL::open(Settings::db_name_infected);
 
         $result = $mysql->query('SELECT * FROM `' . Settings::db_table_infected_users . '` 
@@ -151,7 +151,7 @@ class ClanHandler {
     /*
      * Returns true of the specified user is member of the specified clan.
      */
-    public static function isMember($user, $clan) {
+    public static function isMember(User $user, Clan $clan) {
         $mysql = MySQL::open(Settings::db_name_infected_compo);
 
         $result = $mysql->query('SELECT `id` FROM `' . Settings::db_table_infected_compo_memberof . '` 
@@ -166,7 +166,7 @@ class ClanHandler {
     /*
      * Return true if the specified user is a stepin member.
      */
-    public static function isMemberStepin($user, $clan) {
+    public static function isMemberStepin(User $user, Clan $clan) {
         $mysql = MySQL::open(Settings::db_name_infected_compo);
 
         $result = $mysql->query('SELECT `id` FROM `' . Settings::db_table_infected_compo_memberof . '` 
@@ -182,7 +182,7 @@ class ClanHandler {
     /*
      * Set the step in state of a member.
      */
-    public static function setMemberStepinState($clan, $user, $state) {
+    public static function setMemberStepinState(Clan $clan, User $user, $state) {
         $mysql = MySQL::open(Settings::db_name_infected_compo);
 
         $result = $mysql->query('UPDATE `' . Settings::db_table_infected_compo_memberof . '` 
@@ -196,7 +196,7 @@ class ClanHandler {
     /*
      * Invite the specified user to the specifed clan.
      */
-    public static function inviteUser($clan, $user) {
+    public static function inviteUser(Clan $clan, User $user) {
         $mysql = MySQL::open(Settings::db_name_infected_compo);
 
         $mysql->query('INSERT INTO `' . Settings::db_table_infected_compo_invites . '` (`userId`, `clanId`) 
@@ -209,7 +209,7 @@ class ClanHandler {
     /*
      * Kick a specified member from specified clan.
      */
-    public static function kickFromClan($user, $clan) {
+    public static function kickFromClan(User $user, Clan $clan) {
         $mysql = MySQL::open(Settings::db_name_infected_compo);
 
         $result = $mysql->query('DELETE FROM `' . Settings::db_table_infected_compo_memberof . '` 
@@ -222,7 +222,7 @@ class ClanHandler {
     /*
      * Register a new clan.
      */
-    public static function registerClan($name, $tag, $compo, $user) {
+    public static function registerClan($name, $tag, Compo $compo, User $user) {
         $mysql = MySQL::open(Settings::db_name_infected_compo);
 
         $mysql->query('INSERT INTO `' . Settings::db_table_infected_compo_clans . '` (`chief`, `name`, `tag`, `event`) 
@@ -236,7 +236,7 @@ class ClanHandler {
 
         $mysql->query('INSERT INTO `' . Settings::db_table_infected_compo_participantof . '` (`clanId`, `compoId`) 
                        VALUES (\'' . $mysql->real_escape_string($fetchedId) . '\', 
-                               \'' . $mysql->real_escape_string($compo) . '\');');
+                               \'' . $mysql->real_escape_string($compo->getId()) . '\');');
         
         $mysql->query('INSERT INTO `' . Settings::db_table_infected_compo_memberof . '` (`clanId`, `userId`) 
                        VALUES (\'' . $mysql->real_escape_string($fetchedId) . '\', 

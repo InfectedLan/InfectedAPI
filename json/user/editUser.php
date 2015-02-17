@@ -51,57 +51,61 @@ if (Session::isAuthenticated()) {
 					$nickname = !empty($_GET['nickname']) ? $_GET['nickname'] : $editUser->getUsername();
 					$emergencycontactphone = isset($_GET['emergencycontactphone']) ? $_GET['emergencycontactphone'] : 0;
 					
-					if ($username != $editUser->getUsername() && UserHandler::userExists($username)) {
-						$message = 'Brukernavnet du skrev inn er allerede i bruk.';
-					} else if ($email != $editUser->getEmail() && UserHandler::userExists($email)) {
-						$message = 'E-post adressen du skrev inn er allerede i bruk.';
-					} else if ($phone != $editUser->getPhone() && UserHandler::userExists($phone)) {
-						$message = 'Telefon nummeret du skrev inn er allerede i bruk.';
-					} else if (empty($firstname) || strlen($firstname) > 32) {
-						$message = 'Du har ikke skrevet inn noe fornavn.';
-					} else if (empty($lastname) || strlen($lastname) > 32) {
-						$message = 'Du har ikke skrevet inn noe etternavn.';
-					} else if (empty($email) || !preg_match('/^([a-zæøåA-ZÆØÅ0-9_\.-]+)@([\da-z\.-]+)\.([a-z\.]{2,6})$/', $email) || !filter_var($email, FILTER_VALIDATE_EMAIL)) {
-						$message = 'E-post adressen du skrev inn er ikke gyldig.';
-					} else if (!is_numeric($gender)) {
-						$message = 'Du har oppgitt et ugyldig kjønn.';
-					} else if (!is_numeric($phone) || $phone <= 0 || strlen($phone) < 8 || strlen($phone) > 8) {
-						$message = 'Du har ikke skrevet inn et gyldig telefonnummer.';
-					} else if (empty($address) && strlen($address) > 32) {
-						$message = 'Du må skrive inn en adresse.';
-					} else if (!is_numeric($postalcode) || strlen($postalcode) > 4 || !CityDictionary::hasPostalCode($postalcode)) {
-						$message = 'Du må skrive inn et gyldig postnummer.';
-					} else if (!preg_match('/^[a-zæøåA-ZÆØÅ0-9_-]{2,16}$/', $nickname)) {
-						$message = 'Kallenavnet du skrev inn er ikke gyldig, det må bestå av minst 2 tegn og max 16 tegn.';
-					} else if (date_diff(date_create($birthdate), date_create('now'))->y < 18 && (!isset($_GET['emergencycontactphone']) || !is_numeric($emergencycontactphone) || strlen($emergencycontactphone) != 8)) {
-						if (!is_numeric($emergencycontactphone)) {
-							$message = 'Foresattes telefonnummer må være et tall!';
-						} else if (strlen($emergencycontactphone) != 8) {
-							$message = 'Foresattes telefonnummer er ikke 8 siffer langt!';
+					if ($editUser != null) {
+						if ($username != $editUser->getUsername() && UserHandler::userExists($username)) {
+							$message = 'Brukernavnet du skrev inn er allerede i bruk.';
+						} else if ($email != $editUser->getEmail() && UserHandler::userExists($email)) {
+							$message = 'E-post adressen du skrev inn er allerede i bruk.';
+						} else if ($phone != $editUser->getPhone() && UserHandler::userExists($phone)) {
+							$message = 'Telefon nummeret du skrev inn er allerede i bruk.';
+						} else if (empty($firstname) || strlen($firstname) > 32) {
+							$message = 'Du har ikke skrevet inn noe fornavn.';
+						} else if (empty($lastname) || strlen($lastname) > 32) {
+							$message = 'Du har ikke skrevet inn noe etternavn.';
+						} else if (empty($email) || !preg_match('/^([a-zæøåA-ZÆØÅ0-9_\.-]+)@([\da-z\.-]+)\.([a-z\.]{2,6})$/', $email) || !filter_var($email, FILTER_VALIDATE_EMAIL)) {
+							$message = 'E-post adressen du skrev inn er ikke gyldig.';
+						} else if (!is_numeric($gender)) {
+							$message = 'Du har oppgitt et ugyldig kjønn.';
+						} else if (!is_numeric($phone) || $phone <= 0 || strlen($phone) < 8 || strlen($phone) > 8) {
+							$message = 'Du har ikke skrevet inn et gyldig telefonnummer.';
+						} else if (empty($address) && strlen($address) > 32) {
+							$message = 'Du må skrive inn en adresse.';
+						} else if (!is_numeric($postalcode) || strlen($postalcode) > 4 || !CityDictionary::hasPostalCode($postalcode)) {
+							$message = 'Du må skrive inn et gyldig postnummer.';
+						} else if (!preg_match('/^[a-zæøåA-ZÆØÅ0-9_-]{2,16}$/', $nickname)) {
+							$message = 'Kallenavnet du skrev inn er ikke gyldig, det må bestå av minst 2 tegn og max 16 tegn.';
+						} else if (date_diff(date_create($birthdate), date_create('now'))->y < 18 && (!isset($_GET['emergencycontactphone']) || !is_numeric($emergencycontactphone) || strlen($emergencycontactphone) != 8)) {
+							if (!is_numeric($emergencycontactphone)) {
+								$message = 'Foresattes telefonnummer må være et tall!';
+							} else if (strlen($emergencycontactphone) != 8) {
+								$message = 'Foresattes telefonnummer er ikke 8 siffer langt!';
+							}
+							
+							$message = 'Du er under 18 år, og må derfor oppgi et telefonnummer til en forelder.';
+						} else {
+							UserHandler::updateUser($editUser,
+													$firstname, 
+													$lastname, 
+													$username, 
+													$email, 
+													$birthdate, 
+													$gender, 
+													$phone, 
+													$address, 
+													$postalcode, 
+													$nickname);
+							
+							if (EmergencyContactHandler::hasEmergencyContact($editUser) || 
+								isset($_GET['emergencycontactphone']) && is_numeric($emergencycontactphone)) {
+								EmergencyContactHandler::createEmergencyContact($editUser, $emergencycontactphone);
+							}
+							
+							// Update the user instance form database.
+							Session::reload();
+							$result = true;
 						}
-						
-						$message = 'Du er under 18 år, og må derfor oppgi et telefonnummer til en forelder.';
 					} else {
-						UserHandler::updateUser($editUser->getId(),
-												$firstname, 
-												$lastname, 
-												$username, 
-												$email, 
-												$birthdate, 
-												$gender, 
-												$phone, 
-												$address, 
-												$postalcode, 
-												$nickname);
-						
-						if (EmergencyContactHandler::hasEmergencyContact($editUser) || 
-							isset($_GET['emergencycontactphone']) && is_numeric($emergencycontactphone)) {
-							EmergencyContactHandler::createEmergencyContact($editUser, $emergencycontactphone);
-						}
-						
-						// Update the user instance form database.
-						Session::reload();
-						$result = true;
+						$message = 'Brukeren finnes ikke.';
 					}
 				} else {
 					$message = 'Du har ikke fyllt ut alle feltene.';

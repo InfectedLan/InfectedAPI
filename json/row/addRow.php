@@ -13,13 +13,13 @@ if (Session::isAuthenticated()) {
 	if ($user->hasPermission('*') ||
 		$user->hasPermission('admin.seatmap')) {
 		
-		if (isset($_GET["seatmap"])) {
-			$seatmap = SeatmapHandler::getSeatmap($_GET["seatmap"]);
+		if (isset($_GET['seatmap'])) {
+			$seatmap = SeatmapHandler::getSeatmap($_GET['seatmap']);
 			
 			if ($seatmap != null) {
-				if (isset($_GET["x"]) && 
-					isset($_GET["y"])) {
-					$row = RowHandler::createNewRow($_GET["seatmap"], $_GET["x"], $_GET["y"]);
+				if (isset($_GET['x']) && 
+					isset($_GET['y'])) {
+					$row = RowHandler::createNewRow($seatmap, $_GET['x'], $_GET['y']);
 					$result = true;
 					$id = $row->getId();
 				} else {

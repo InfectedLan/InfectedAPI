@@ -9,16 +9,16 @@ $message = null;
 $seatmapData = null; //Array of rows
 $backgroundImage = null; //File name of background image. Didnt know how else to do this.
 
-if (!isset($_GET["id"])) {
-	$message = "ID er ikke satt!";
+if (!isset($_GET['id'])) {
+	$message = 'ID er ikke satt!';
 } else {
 	if (!Session::isAuthenticated()) {
-		$message = "Du er ikke logget inn!";
+		$message = 'Du er ikke logget inn!';
 	} else {
-		$seatmap = SeatmapHandler::getSeatmap($_GET["id"]);
+		$seatmap = SeatmapHandler::getSeatmap($_GET['id']);
 		
 		if (!isset($seatmap)) {
-			$message = "Seatmappet eksisterer ikke!";
+			$message = 'Seatmappet eksisterer ikke!';
 		} else {
 			$result = true;
 			$rows = SeatmapHandler::getRows($seatmap);

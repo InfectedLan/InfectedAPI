@@ -1,7 +1,6 @@
 <?php
 require_once 'settings.php';
 require_once 'mysql.php';
-require_once 'handlers/rowhandler.php';
 require_once 'handlers/eventhandler.php';
 require_once 'objects/seatmap.php';
 
@@ -33,7 +32,7 @@ class SeatmapHandler {
         return $seatmapList;
     }
     
-    public static function getRows($seatmap) {
+    public static function getRows(Seatmap $seatmap) {
         $mysql = MySQL::open(Settings::db_name_infected_tickets);
 
         $result = $mysql->query('SELECT * FROM `' . Settings::db_table_infected_tickets_rows . '` 
@@ -50,7 +49,7 @@ class SeatmapHandler {
         return $rowList;
     }
 
-    public static function getEvent($seatmap) {
+    public static function getEvent(Seatmap $seatmap) {
         $mysql = MySQL::open(Settings::db_name_infected);
 
         $result = $mysql->query('SELECT `id` FROM `' . Settings::db_table_infected_events . '` 
@@ -65,7 +64,7 @@ class SeatmapHandler {
         }
     }
     
-    public static function setBackground($seatmap, $filename) {
+    public static function setBackground(Seatmap $seatmap, $filename) {
         $mysql = MySQL::open(Settings::db_name_infected_tickets);
 
         $mysql->query('UPDATE `' . Settings::db_table_infected_tickets_seatmaps . '` 
@@ -91,7 +90,7 @@ class SeatmapHandler {
 
     }
 
-    public static function duplicateSeatmap($seatmap) {
+    public static function duplicateSeatmap(Seatmap $seatmap) {
         $mysql = MySQL::open(Settings::db_name_infected_tickets);
 
         // Create the seatmap object.

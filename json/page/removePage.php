@@ -13,8 +13,14 @@ if (Session::isAuthenticated()) {
 		
 		if (isset($_GET['id']) &&
 			is_numeric($_GET['id'])) {
-			PageHandler::removePage($_GET['id']);
-			$result = true;
+			$page = PageHandler::getPage($_GET['id']);
+
+			if ($page != null) {
+				PageHandler::removePage($_GET['id']);
+				$result = true;
+			} else {
+				$message = 'Siden finnes ikke.';
+			}
 		} else {
 			$message = 'Ikke noen side spesifisert.';
 		}

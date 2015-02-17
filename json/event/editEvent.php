@@ -30,7 +30,7 @@ if (Session::isAuthenticated()) {
 			!empty($_GET['startTime']) &&
 			!empty($_GET['endDate']) &&
 			!empty($_GET['endTime']) &&
-			$id = $_GET['id'];
+			$event = EventHandler::getEvent($_GET['id']);
 			$theme = $_GET['theme'];
 			$location = $_GET['location'];
 			$participants = $_GET['participants'];
@@ -38,8 +38,12 @@ if (Session::isAuthenticated()) {
 			$startTime = $_GET['startDate'] . ' ' . $_GET['startTime'];
 			$endTime = $_GET['endDate'] . ' ' . $_GET['endTime'];
 			
-			EventHandler::updateEvent($id, $theme, $location, $participants, $bookingTime, $startTime, $endTime);
-			$result = true;
+			if ($event != null) {
+				EventHandler::updateEvent($event, $theme, $location, $participants, $bookingTime, $startTime, $endTime);
+				$result = true;
+			} else {
+				$message = 'Arrangementet finnes ikke.';
+			}
 		} else {
 			$message = 'Du har ikke fyllt ut alle feltene!';
 		}

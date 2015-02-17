@@ -73,7 +73,8 @@ if (Session::isAuthenticated()) {
 
 
 
-					$compo = CompoHandler::getCompo($match->getCompoId());
+					$compo = $match->getCompo();
+					
 					if($compo->getId() == 3) {
 						$hasVotedMaps = false;
 

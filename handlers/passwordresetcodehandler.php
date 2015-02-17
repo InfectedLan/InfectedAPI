@@ -1,10 +1,10 @@
 <?php
 require_once 'settings.php';
 require_once 'mysql.php';
-require_once 'handlers/userhandler.php';
+require_once 'objects/user.php';
 
 class PasswordResetCodeHandler {
-    public static function createPasswordResetCode($user) {
+    public static function createPasswordResetCode(User $user) {
         $code = bin2hex(openssl_random_pseudo_bytes(16));
         
         $mysql = MySQL::open(Settings::db_name_infected);
@@ -24,7 +24,7 @@ class PasswordResetCodeHandler {
         return $code;
     }
     
-    public static function hasPasswordResetCode($user) {
+    public static function hasPasswordResetCode(User $user) {
         $mysql = MySQL::open(Settings::db_name_infected);
         
         $result = $mysql->query('SELECT `id` FROM `' . Settings::db_table_infected_passwordresetcodes . '` 
@@ -67,7 +67,7 @@ class PasswordResetCodeHandler {
         $mysql->close();
     }
     
-    public static function removeUserPasswordResetCode($user) {
+    public static function removeUserPasswordResetCode(User $user) {
         $mysql = MySQL::open(Settings::db_name_infected);
         
         $mysql->query('DELETE FROM `' . Settings::db_table_infected_passwordresetcodes . '` 

@@ -16,7 +16,7 @@ if (Session::isAuthenticated()) {
 		if ($invite != null) {
 			$clan = ClanHandler::getClan($invite->getClanId());
 
-			if ($invite->getUserId() == $user->getId() || 
+			if ($user->equals($invite->getUser()) || 
 				$user->equals($clan->getChief())) {
 				$invite->decline();
 				$result = true;

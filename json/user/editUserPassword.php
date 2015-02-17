@@ -20,7 +20,7 @@ if (Session::isAuthenticated()) {
 		
 		if ($oldPassword == $user->getPassword()) {
 			if ($newPassword == $confirmNewPassword) {
-				UserHandler::updateUserPassword($user->getId(), hash('sha256', $newPassword));
+				UserHandler::updateUserPassword($user, hash('sha256', $newPassword));
 				
 				// Update the user instance form database.
 				Session::reload();

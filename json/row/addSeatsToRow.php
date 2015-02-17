@@ -11,12 +11,12 @@ if (Session::isAuthenticated()) {
 	if ($user->hasPermission('*') ||
 		$user->hasPermission('admin.seatmap')) {
 		
-		if(isset($_GET["row"])) {
-			$row = RowHandler::getRow($_GET["row"]);
+		if(isset($_GET['row'])) {
+			$row = RowHandler::getRow($_GET['row']);
 			
 			if ($row != null) {
-				if (isset($_GET["numSeats"])) {
-					$seats = $_GET["numSeats"];
+				if (isset($_GET['numSeats'])) {
+					$seats = $_GET['numSeats'];
 					
 					if (is_numeric($seats)) {
 						for ($i = 0; $i < $seats; $i++) {

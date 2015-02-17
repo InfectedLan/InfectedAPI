@@ -2,6 +2,7 @@
 require_once 'settings.php';
 require_once 'mysql.php';
 require_once 'objects/emergencycontact.php';
+require_once 'objects/user.php';
 
 class EmergencyContactHandler {
     /*
@@ -21,7 +22,7 @@ class EmergencyContactHandler {
     /*
      * Get the emergency contact for the given user.
      */
-    public static function getEmergencyContactForUser($user) {
+    public static function getEmergencyContactForUser(User $user) {
         $mysql = MySQL::open(Settings::db_name_infected);
         
         $result = $mysql->query('SELECT * FROM `'. Settings::db_table_infected_emergencycontacts . '`
@@ -54,7 +55,7 @@ class EmergencyContactHandler {
     /*
      * Returns true if the specified user has an emergency contact.
      */
-    public static function hasEmergencyContact($user) {
+    public static function hasEmergencyContact(User $user) {
         $mysql = MySQL::open(Settings::db_name_infected);
         
         $result = $mysql->query('SELECT `id` FROM `'. Settings::db_table_infected_emergencycontacts . '`
@@ -68,7 +69,7 @@ class EmergencyContactHandler {
     /*
      * Create a new emergency contact.
      */
-    public static function createEmergencyContact($user, $phone) {
+    public static function createEmergencyContact(User $user, $phone) {
         if (!self::hasEmergencyContact($user)) {
                 $mysql = MySQL::open(Settings::db_name_infected);
 
@@ -88,7 +89,7 @@ class EmergencyContactHandler {
     /* 
      * Update information about a emergency contact.
      */
-    public static function updateEmergencyContact($user, $phone) {
+    public static function updateEmergencyContact(User $user, $phone) {
         $mysql = MySQL::open(Settings::db_name_infected);
         
         $mysql->query('UPDATE `' . Settings::db_table_infected_emergencycontacts . '` 
@@ -101,7 +102,7 @@ class EmergencyContactHandler {
     /*
      * Remove a emergency contact.
      */
-    public static function removeEmergencyContact($user) {
+    public static function removeEmergencyContact(User $user) {
         $mysql = MySQL::open(Settings::db_name_infected);
         
         $mysql->query('DELETE FROM `' . Settings::db_table_infected_emergencycontacts . '` 

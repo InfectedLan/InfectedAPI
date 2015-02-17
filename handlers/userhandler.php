@@ -11,6 +11,7 @@ require_once 'handlers/avatarhandler.php';
 require_once 'handlers/grouphandler.php';
 require_once 'handlers/eventhandler.php';
 require_once 'objects/user.php';
+require_once 'objects/event.php';
 
 class UserHandler {
     /* 
@@ -136,7 +137,7 @@ class UserHandler {
 	/* 
      * Get a list of all users which is a participant of current event.
      */
-    public static function getParticipantUsers($event) {
+    public static function getParticipantUsers(Event $event) {
         $mysql = MySQL::open(Settings::db_name_infected);
         
 		$result = $mysql->query('SELECT DISTINCT `' . Settings::db_table_infected_users . '`.* FROM `' . Settings::db_table_infected_users . '`
@@ -209,18 +210,18 @@ class UserHandler {
         $mysql = MySQL::open(Settings::db_name_infected);
         
         $mysql->query('INSERT INTO `' . Settings::db_table_infected_users . '` (`firstname`, `lastname`, `username`, `password`, `email`, `birthdate`, `gender`, `phone`, `address`, `postalcode`, `nickname`, `registereddate`) 
-                            VALUES (\'' . $mysql->real_escape_string($firstname) . '\', 
-                                    \'' . $mysql->real_escape_string($lastname) . '\', 
-                                    \'' . $mysql->real_escape_string($username) . '\', 
-                                    \'' . $mysql->real_escape_string($password) . '\', 
-                                    \'' . $mysql->real_escape_string($email) . '\', 
-                                    \'' . $mysql->real_escape_string($birthDate) . '\', 
-                                    \'' . $mysql->real_escape_string($gender) . '\', 
-                                    \'' . $mysql->real_escape_string($phone) . '\', 
-                                    \'' . $mysql->real_escape_string($address) . '\', 
-                                    \'' . $mysql->real_escape_string($postalCode) . '\',
-									\'' . $mysql->real_escape_string($nickname) . '\',
-                                    \'' . date('Y-m-d H:i:s') . '\');');
+                       VALUES (\'' . $mysql->real_escape_string($firstname) . '\', 
+                               \'' . $mysql->real_escape_string($lastname) . '\', 
+                               \'' . $mysql->real_escape_string($username) . '\', 
+                               \'' . $mysql->real_escape_string($password) . '\', 
+                               \'' . $mysql->real_escape_string($email) . '\', 
+                               \'' . $mysql->real_escape_string($birthDate) . '\', 
+                               \'' . $mysql->real_escape_string($gender) . '\', 
+                               \'' . $mysql->real_escape_string($phone) . '\', 
+                               \'' . $mysql->real_escape_string($address) . '\', 
+                               \'' . $mysql->real_escape_string($postalCode) . '\',
+							   \'' . $mysql->real_escape_string($nickname) . '\',
+                               \'' . date('Y-m-d H:i:s') . '\');');
          
         $mysql->close();
 		
@@ -230,21 +231,21 @@ class UserHandler {
     /* 
      * Update a user
      */
-    public static function updateUser($id, $firstname, $lastname, $username, $email, $birthDate, $gender, $phone, $address, $postalCode, $nickname) {
+    public static function updateUser(User $user, $firstname, $lastname, $username, $email, $birthDate, $gender, $phone, $address, $postalCode, $nickname) {
         $mysql = MySQL::open(Settings::db_name_infected);
         
         $mysql->query('UPDATE `' . Settings::db_table_infected_users . '` 
-                            SET `firstname` = \'' . $mysql->real_escape_string($firstname) . '\', 
-                                `lastname` = \'' . $mysql->real_escape_string($lastname) . '\', 
-                                `username` = \'' . $mysql->real_escape_string($username) . '\', 
-                                `email` = \'' . $mysql->real_escape_string($email) . '\', 
-                                `birthdate` = \'' . $mysql->real_escape_string($birthDate) . '\', 
-                                `gender` = \'' . $mysql->real_escape_string($gender) . '\', 
-                                `phone` = \'' . $mysql->real_escape_string($phone) . '\', 
-                                `address` = \'' . $mysql->real_escape_string($address) . '\', 
-                                `postalcode` = \'' . $mysql->real_escape_string($postalCode) . '\', 
-                                `nickname` = \'' . $mysql->real_escape_string($nickname) . '\' 
-                            WHERE `id` = \'' . $mysql->real_escape_string($id) . '\';');
+                       SET `firstname` = \'' . $mysql->real_escape_string($firstname) . '\', 
+                           `lastname` = \'' . $mysql->real_escape_string($lastname) . '\', 
+                           `username` = \'' . $mysql->real_escape_string($username) . '\', 
+                           `email` = \'' . $mysql->real_escape_string($email) . '\', 
+                           `birthdate` = \'' . $mysql->real_escape_string($birthDate) . '\', 
+                           `gender` = \'' . $mysql->real_escape_string($gender) . '\', 
+                           `phone` = \'' . $mysql->real_escape_string($phone) . '\', 
+                           `address` = \'' . $mysql->real_escape_string($address) . '\', 
+                           `postalcode` = \'' . $mysql->real_escape_string($postalCode) . '\', 
+                           `nickname` = \'' . $mysql->real_escape_string($nickname) . '\' 
+                       WHERE `id` = \'' . $mysql->real_escape_string($user->getId()) . '\';');
         
         $mysql->close();
     }
@@ -252,7 +253,7 @@ class UserHandler {
     /* 
      * Remove a user
      */
-    public static function removeUser($user) {
+    public static function removeUser(User $user) {
         // Only remove users without a ticket, for now...
         if (!TicketHandler::hasUserAnyTicket($user)) {
             $mysql = MySQL::open(Settings::db_name_infected);
@@ -293,7 +294,7 @@ class UserHandler {
             }
             
             // Remove users memberof entry.
-            if (GroupHandler::isGroupMember($user->getId())) {
+            if (GroupHandler::isGroupMember($user)) {
                 GroupHandler::removeUserFromGroup($user);
             }
         }
@@ -302,12 +303,12 @@ class UserHandler {
     /* 
      * Update a users password
      */
-    public static function updateUserPassword($userId, $password) {
+    public static function updateUserPassword(User $user, $password) {
         $mysql = MySQL::open(Settings::db_name_infected);
         
         $mysql->query('UPDATE `' . Settings::db_table_infected_users . '` 
                        SET `password` = \'' . $mysql->real_escape_string($password) . '\'
-                       WHERE `id` = \'' . $mysql->real_escape_string($userId) . '\';');
+                       WHERE `id` = \'' . $mysql->real_escape_string($user->getId()) . '\';');
         
         $mysql->close();
     }
@@ -319,7 +320,7 @@ class UserHandler {
         $mysql = MySQL::open(Settings::db_name_infected);
 		
 		// Sanitize the input and split the query string into an array.
-		$queryList = explode(' ', $mysql->real_escape_string($query));
+		$queryList = explode(' ', $query);
 		$wordList = array();
 		
 		// Build the word list, and add "+" and "*" to the start and end of every word.
@@ -330,7 +331,7 @@ class UserHandler {
 		// Query the database using a Full-Text Search.
 		$result = $mysql->query('SELECT * FROM `' . Settings::db_table_infected_users . '` 
 								 WHERE MATCH (`firstname`, `lastname`, `username`, `email`, `nickname`)
-								 AGAINST (\'' . implode(' ', $wordList) . '\' IN BOOLEAN MODE)
+								 AGAINST (\'' . implode(' ', $mysql->real_escape_string($wordList)) . '\' IN BOOLEAN MODE)
 								 LIMIT 15;');
         
         $mysql->close();

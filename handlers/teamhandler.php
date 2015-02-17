@@ -3,6 +3,8 @@ require_once 'settings.php';
 require_once 'mysql.php';
 require_once 'handlers/eventhandler.php';
 require_once 'objects/team.php';
+require_once 'objects/user.php';
+require_once 'objects/group.php';
 
 class TeamHandler {
     /* Get a team by id */
@@ -18,7 +20,7 @@ class TeamHandler {
     }
     
     /* Get a group by userId */
-    public static function getTeamForUser($user) {
+    public static function getTeamForUser(User $user) {
         $mysql = MySQL::open(Settings::db_name_infected_crew);
         
         $result = $mysql->query('SELECT `teamId` FROM `' . Settings::db_table_infected_crew_memberof . '` 
@@ -52,7 +54,7 @@ class TeamHandler {
     }
     
     /* Get an array of all teams */
-    public static function getTeamsForGroup($group) {
+    public static function getTeamsForGroup(Group $group) {
         $mysql = MySQL::open(Settings::db_name_infected_crew);
 
         $result = $mysql->query('SELECT * FROM `' . Settings::db_table_infected_crew_teams . '`
@@ -70,7 +72,7 @@ class TeamHandler {
     }
     
     /* Create a new team */
-    public static function createTeam($group, $name, $title, $description, $leader) {
+    public static function createTeam(Group $group, $name, $title, $description, $leader) {
         $mysql = MySQL::open(Settings::db_name_infected_crew);
         
         $mysql->query('INSERT INTO `' . Settings::db_table_infected_crew_teams . '` (`groupId`, `name`, `title`, `description`, `leader`) 
@@ -86,7 +88,7 @@ class TeamHandler {
     /* 
      * Update a team.
      */
-    public static function updateTeam($team, $group, $name, $title, $description, $leader) {
+    public static function updateTeam(Team $team, Group $group, $name, $title, $description, $leader) {
         $mysql = MySQL::open(Settings::db_name_infected_crew);
         
         $mysql->query('UPDATE `' . Settings::db_table_infected_crew_teams . '` 
@@ -103,7 +105,7 @@ class TeamHandler {
     /*
      * Remove a team.
      */
-    public static function removeTeam($group, $team) {
+    public static function removeTeam(Group $group, Team $team) {
         $mysql = MySQL::open(Settings::db_name_infected_crew);
         
         $mysql->query('DELETE FROM `' . Settings::db_table_infected_crew_teams . '` 
@@ -116,7 +118,7 @@ class TeamHandler {
     /*
      * Returns an array of users that are members of this team.
      */
-    public static function getMembers($group, $team) {
+    public static function getMembers(Group $group, Team $team) {
         $mysql = MySQL::open(Settings::db_name_infected);
         
         $result = $mysql->query('SELECT `' . Settings::db_table_infected_users . '`.* FROM `' . Settings::db_table_infected_users . '`
@@ -141,7 +143,7 @@ class TeamHandler {
     /*
      * Is member of a team which means it's not a plain user.
      */
-    public static function isTeamMember($user) {
+    public static function isTeamMember(User $user) {
         $mysql = MySQL::open(Settings::db_name_infected_crew);
         
         $result = $mysql->query('SELECT `id` FROM `' . Settings::db_table_infected_crew_memberof. '` 
@@ -157,7 +159,7 @@ class TeamHandler {
     /*
      * Return true if user is leader for a team.
      */
-    public static function isTeamLeader($user) {
+    public static function isTeamLeader(User $user) {
         $mysql = MySQL::open(Settings::db_name_infected_crew);
         
         $result = $mysql->query('SELECT `id` FROM `' . Settings::db_table_infected_crew_teams . '` 
@@ -171,7 +173,7 @@ class TeamHandler {
     /*
      * Sets the users team.
      */
-    public static function changeTeamForUser($user, $group, $team) {
+    public static function changeTeamForUser(User $user, Group $group, Team $team) {
         $mysql = MySQL::open(Settings::db_name_infected_crew);
         
         if ($user->isGroupMember()) {    
@@ -188,7 +190,7 @@ class TeamHandler {
     /*
      * Removes a user from a team.
      */
-    public static function removeUserFromTeam($user) {
+    public static function removeUserFromTeam(User $user) {
         $mysql = MySQL::open(Settings::db_name_infected_crew);
         
         $mysql->query('UPDATE `' . Settings::db_table_infected_crew_memberof . '` 

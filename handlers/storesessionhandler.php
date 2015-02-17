@@ -3,6 +3,8 @@ require_once 'settings.php';
 require_once 'mysql.php';
 require_once 'handlers/tickethandler.php';
 require_once 'objects/storesession.php';
+require_once 'objects/user.php';
+require_once 'objects/tickettype.php';
 
 class StoreSessionHandler {
     public static function getStoreSession($id) {
@@ -16,7 +18,7 @@ class StoreSessionHandler {
 		return $result->fetch_object('StoreSession');
     }
     
-    public static function getStoreSessionForUser($user) {
+    public static function getStoreSessionForUser(User $user) {
         $mysql = MySQL::open(Settings::db_name_infected_tickets);
 
         $result = $mysql->query('SELECT * FROM `' . Settings::db_table_infected_tickets_storesessions . '` 
@@ -28,7 +30,7 @@ class StoreSessionHandler {
         return $result->fetch_object('StoreSession');
     }
 
-    public static function registerStoreSession($user, $type, $amount, $price) {
+    public static function registerStoreSession(User $user, TicketType $ticketType, $amount, $price) {
         $code = bin2hex(openssl_random_pseudo_bytes(16));
     
         $mysql = MySQL::open(Settings::db_name_infected_tickets);
@@ -46,7 +48,7 @@ class StoreSessionHandler {
         return $code;
     }
 
-    public static function deleteStoreSession($storeSession) {
+    public static function deleteStoreSession(StoreSession $storeSession) {
         $mysql = MySQL::open(Settings::db_name_infected_tickets);
 
         $result = $mysql->query('DELETE FROM `' . Settings::db_table_infected_tickets_storesessions . '` 
@@ -56,11 +58,11 @@ class StoreSessionHandler {
     }
 
     // Used to validate a payment.
-    public static function isPaymentValid($totalPrice, $session) {
-        return $session->getPrice() == $totalPrice;
+    public static function isPaymentValid($totalPrice, StoreSession $storeSession) {
+        return $storeSession->getPrice() == $totalPrice;
     }
     
-    public static function hasStoreSession($user) {
+    public static function hasStoreSession(User $user) {
         $mysql = MySQL::open(Settings::db_name_infected_tickets);
 
         $result = $mysql->query('SELECT `id` FROM `' . Settings::db_table_infected_tickets_storesessions . '` 
@@ -72,7 +74,7 @@ class StoreSessionHandler {
         return $result->num_rows > 0;
     }
 
-    public static function getReservedTicketCount($ticketType) {
+    public static function getReservedTicketCount(TicketType $ticketType) {
         $mysql = MySQL::open(Settings::db_name_infected_tickets);
 
         $result = $mysql->query('SELECT `amount` FROM `' . Settings::db_table_infected_tickets_storesessions . '` 
@@ -122,7 +124,7 @@ class StoreSessionHandler {
         }
     }
 
-    public static function purchaseComplete($storeSession, $payment) {
+    public static function purchaseComplete(StoreSession $storeSession, $payment) {
         if ($storesession != null) {
             // Checks are ok, lets buy!
             for ($i = 0; $i < $storeSession->getAmount(); $i++) {

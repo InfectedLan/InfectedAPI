@@ -18,7 +18,7 @@ if (Session::isAuthenticated()) {
 				if ($user->hasPermission('*') ||
 					$user->hasPermission('chief.my-crew') &&
 					$user->getGroup()->equals($page->getGroup())) {
-					RestrictedPageHandler::removePage($_GET['id']);
+					RestrictedPageHandler::removePage($page);
 					$result = true;
 				} else {
 					$message = 'Du har ikke rettigheter til dette.';

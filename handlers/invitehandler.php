@@ -2,6 +2,8 @@
 require_once 'settings.php';
 require_once 'mysql.php';
 require_once 'objects/invite.php';
+require_once 'objects/user.php';
+require_once 'objects/clan.php';
 
 class InviteHandler {
     /*
@@ -21,7 +23,7 @@ class InviteHandler {
     /*
      * Get all invites for the specified user.
      */
-    public static function getInvitesForUser($user) {
+    public static function getInvitesForUser(User $user) {
         $mysql = MySQL::open(Settings::db_name_infected_compo);
 
         $result = $mysql->query('SELECT * FROM `'  . Settings::db_table_infected_compo_invites . '` 
@@ -41,7 +43,7 @@ class InviteHandler {
     /*
      * Get all invites that is to a clan.
      */
-    public function getInvitedInClan($clan) {
+    public function getInvitedInClan(Clan $clan) {
         $mysql = MySQL::open(Settings::db_name_infected_compo);
 
         $result = $mysql->query('SELECT * FROM `' . Settings::db_table_infected_compo_invites . '` 

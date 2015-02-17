@@ -2,7 +2,7 @@
 require_once 'settings.php';
 require_once 'mysql.php';
 require_once 'objects/event.php';
-require_once 'handlers/userhandler.php';
+require_once 'objects/user.php';
 
 class EventHandler {
     /*
@@ -113,7 +113,7 @@ class EventHandler {
     /* 
      * Update an event 
      */
-    public static function updateEvent($id, $theme, $location, $participants, $bookingTime, $startTime, $endTime) {
+    public static function updateEvent(Event $event, $theme, $location, $participants, $bookingTime, $startTime, $endTime) {
         $mysql = MySQL::open(Settings::db_name_infected);
         
         $mysql->query('UPDATE `' . Settings::db_table_infected_events . '` 
@@ -123,7 +123,7 @@ class EventHandler {
 						   `bookingTime` = \'' . $mysql->real_escape_string($bookingTime) . '\', 
 						   `startTime` = \'' . $mysql->real_escape_string($startTime) . '\', 
 						   `endTime` = \'' . $mysql->real_escape_string($endTime) . '\'
-					   WHERE `id` = \'' . $mysql->real_escape_string($id) . '\';');
+					   WHERE `id` = \'' . $mysql->real_escape_string($event->getId()) . '\';');
         
         $mysql->close();
     }
@@ -131,11 +131,11 @@ class EventHandler {
     /* 
      * Remove an event
      */
-    public static function removeEvent($id) {
+    public static function removeEvent(Event $event) {
         $mysql = MySQL::open(Settings::db_name_infected);
         
         $mysql->query('DELETE FROM `' . Settings::db_table_infected_events . '` 
-                       WHERE `id` = \'' . $mysql->real_escape_string($id) . '\';');
+                       WHERE `id` = \'' . $mysql->real_escape_string($event->getId()) . '\';');
         
         $mysql->close();
     }
@@ -143,7 +143,7 @@ class EventHandler {
 	/*
 	 * Returns members and participants for given events.
 	 */
-	public static function getMembersAndParticipantsForEvents($eventList, $ageLimit) {
+	public static function getMembersAndParticipantsForEvents(array $eventList, $ageLimit) {
 		$mysql = MySQL::open(Settings::db_name_infected);
 		
 		// Extract event id's from the event list.
@@ -182,14 +182,14 @@ class EventHandler {
 	/*
 	 * Clones members from fromEvent to toEvent, but only if toEvent don't have any members yet (Maybe improve in the future).
 	 */
-    public static function cloneMembers($fromEvent, $toEvent) {
+    public static function cloneMembers(Event $from, Event $to) {
         $mysql = MySQL::open(Settings::db_name_infected_crew);
         
         $mysql->query('INSERT INTO `' . Settings::db_table_infected_crew_memberof . '` (`eventId`, `userId`, `groupId`, `teamId`)
-					   SELECT \'' . $toEvent->getId() . '\', `userId`, `groupId`, `teamId` FROM `' . Settings::db_table_infected_crew_memberof . '`
-					   WHERE `eventId` = \'' . $fromEvent->getId() . '\'
+					   SELECT \'' . $to->getId() . '\', `userId`, `groupId`, `teamId` FROM `' . Settings::db_table_infected_crew_memberof . '`
+					   WHERE `eventId` = \'' . $from->getId() . '\'
 					   AND NOT EXISTS (SELECT `id` FROM `' . Settings::db_table_infected_crew_memberof . '`
-									   WHERE `eventId` = \'' . $toEvent->getId() . '\');');
+									   WHERE `eventId` = \'' . $to->getId() . '\');');
         
         $mysql->close();
     }

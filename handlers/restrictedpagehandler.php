@@ -3,6 +3,8 @@ require_once 'session.php';
 require_once 'settings.php';
 require_once 'mysql.php';
 require_once 'objects/restrictedpage.php';
+require_once 'objects/group.php';
+require_once 'objects/team.php';
 
 class RestrictedPageHandler {
     /*
@@ -78,7 +80,7 @@ class RestrictedPageHandler {
     /* 
      * Get a list of pages for specified group.
      */
-    public static function getPagesForGroup($group) {
+    public static function getPagesForGroup(Group $group) {
         $mysql = MySQL::open(Settings::db_name_infected_crew);
         
         $result = $mysql->query('SELECT * FROM `' . Settings::db_table_infected_crew_pages . '`
@@ -99,7 +101,7 @@ class RestrictedPageHandler {
 	/* 
      * Get a list of all pages for specified group, ignoring the teamId.
      */
-    public static function getAllPagesForGroup($group) {
+    public static function getAllPagesForGroup(Group $group) {
         $mysql = MySQL::open(Settings::db_name_infected_crew);
         
         $result = $mysql->query('SELECT * FROM `' . Settings::db_table_infected_crew_pages . '`
@@ -119,7 +121,7 @@ class RestrictedPageHandler {
     /*
      * Get a list of pages for specified team.
      */
-    public static function getPagesForGroupAndTeam($group, $team) {
+    public static function getPagesForGroupAndTeam(Group $group, Team $team) {
         $mysql = MySQL::open(Settings::db_name_infected_crew);
         
         $result = $mysql->query('SELECT * FROM `' . Settings::db_table_infected_crew_pages . '`
@@ -140,7 +142,7 @@ class RestrictedPageHandler {
     /* 
      * Create a new page.
      */
-    public static function createPage($name, $title, $content, $group, $team) {
+    public static function createPage($name, $title, $content, Group $group, Team $team) {
         $mysql = MySQL::open(Settings::db_name_infected_crew);
         
         $mysql->query('INSERT INTO `' . Settings::db_table_infected_crew_pages . '` (`name`, `title`, `content`, `groupId`, `teamId`) 
@@ -156,7 +158,7 @@ class RestrictedPageHandler {
 	/*
      * Update a page.
      */
-    public static function updatePage($page, $title, $content, $group, $team) {
+    public static function updatePage(RestrictedPage $page, $title, $content, Group $group, Team $team) {
         $mysql = MySQL::open(Settings::db_name_infected_crew);
         
         $mysql->query('UPDATE `' . Settings::db_table_infected_crew_pages . '` 
@@ -172,11 +174,11 @@ class RestrictedPageHandler {
     /*
      * Remove a page.
      */
-    public static function removePage($id) {
+    public static function removePage(RestrictedPage $page) {
         $mysql = MySQL::open(Settings::db_name_infected_crew);
         
         $mysql->query('DELETE FROM `' . Settings::db_table_infected_crew_pages . '` 
-                       WHERE `id` = \'' . $mysql->real_escape_string($id) . '\';');
+                       WHERE `id` = \'' . $mysql->real_escape_string($page->getId()) . '\';');
         
         $mysql->close();
     }

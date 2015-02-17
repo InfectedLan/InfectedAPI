@@ -73,7 +73,7 @@ class GameHandler {
     /* 
      * Update information about a game.
      */
-    public static function updateGame($id, $name, $title, $price, $mode, $description, $startTime, $endTime, $published) {
+    public static function updateGame(Game $game, $name, $title, $price, $mode, $description, $startTime, $endTime, $published) {
         $mysql = MySQL::open(Settings::db_name_infected_main);
         
         $mysql->query('UPDATE `' . Settings::db_table_infected_main_games . '` 
@@ -85,7 +85,7 @@ class GameHandler {
                            `startTime` = \'' . $mysql->real_escape_string($startTime) . '\', 
                            `endTime` = \'' . $mysql->real_escape_string($endTime) . '\', 
                            `published` = \'' . $mysql->real_escape_string($published) . '\'
-                       WHERE `id` = \'' . $mysql->real_escape_string($id) . '\';');
+                       WHERE `id` = \'' . $mysql->real_escape_string($game->getId()) . '\';');
         
         $mysql->close();
     }
@@ -93,11 +93,11 @@ class GameHandler {
     /*
      * Remove a game from the database.
      */
-    public static function removeGame($id) {
+    public static function removeGame(Game $game) {
         $mysql = MySQL::open(Settings::db_name_infected_main);
         
         $mysql->query('DELETE FROM `' . Settings::db_table_infected_main_games . '` 
-                       WHERE `id` = \'' . $mysql->real_escape_string($id) . '\';');
+                       WHERE `id` = \'' . $mysql->real_escape_string($game->getId()) . '\';');
         
         $mysql->close();
     }

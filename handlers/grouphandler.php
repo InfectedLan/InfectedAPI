@@ -23,7 +23,7 @@ class GroupHandler {
     /* 
      * Get a group for the specified user.
      */
-    public static function getGroupForUser($user) {
+    public static function getGroupForUser(User $user) {
         $mysql = MySQL::open(Settings::db_name_infected_crew);
         
         $result = $mysql->query('SELECT * FROM `' . Settings::db_table_infected_crew_groups . '` 
@@ -75,7 +75,7 @@ class GroupHandler {
     /*
      * Update the specified group.
      */
-    public static function updateGroup($id, $name, $title, $description, $leader, $coleader) {
+    public static function updateGroup(Group $group, $name, $title, $description, $leader, $coleader) {
         $mysql = MySQL::open(Settings::db_name_infected_crew);
         
         $mysql->query('UPDATE `' . Settings::db_table_infected_crew_groups . '` 
@@ -84,7 +84,7 @@ class GroupHandler {
 						   `description` = \'' . $mysql->real_escape_string($description) . '\', 
 						   `leader` = \'' . $mysql->real_escape_string($leader) . '\',
 						   `coleader` = \'' . $mysql->real_escape_string($coleader) . '\'
-					   WHERE `id` = \'' . $mysql->real_escape_string($id) . '\';');
+					   WHERE `id` = \'' . $mysql->real_escape_string($group->getId()) . '\';');
         
         $mysql->close();
     }
@@ -92,7 +92,7 @@ class GroupHandler {
     /*
      * Remove the specified group
      */
-    public static function removeGroup($group) {
+    public static function removeGroup(Group $group) {
         $mysql = MySQL::open(Settings::db_name_infected_crew);
         
         $mysql->query('DELETE FROM `' . Settings::db_table_infected_crew_groups . '` 
@@ -104,7 +104,7 @@ class GroupHandler {
     /* 
 	 * Returns an list of users that are members of this group.
 	 */
-    public static function getMembers($group) {
+    public static function getMembers(Group $group) {
         $mysql = MySQL::open(Settings::db_name_infected);
         
         $result = $mysql->query('SELECT `' . Settings::db_table_infected_users . '`.* FROM `' . Settings::db_table_infected_users . '`
@@ -128,7 +128,7 @@ class GroupHandler {
     /* 
      * Returns true of the specified user is member of a group.
      */
-    public static function isGroupMember($user) {
+    public static function isGroupMember(User $user) {
         $mysql = MySQL::open(Settings::db_name_infected_crew);
         
         $result = $mysql->query('SELECT `id` FROM `' . Settings::db_table_infected_crew_memberof . '`
@@ -144,7 +144,7 @@ class GroupHandler {
     /* 
      * Return true if the specified user is leader of a group.
      */
-    public static function isGroupLeader($user) {
+    public static function isGroupLeader(User $user) {
         $mysql = MySQL::open(Settings::db_name_infected_crew);
         
         $result = $mysql->query('SELECT `id` FROM `' . Settings::db_table_infected_crew_groups . '` 
@@ -157,7 +157,7 @@ class GroupHandler {
 	/* 
      * Return true if user is co-leader for a group.
      */
-    public static function isGroupCoLeader($user) {
+    public static function isGroupCoLeader(User $user) {
         $mysql = MySQL::open(Settings::db_name_infected_crew);
         
         $result = $mysql->query('SELECT `id` FROM `' . Settings::db_table_infected_crew_groups . '` 
@@ -171,7 +171,7 @@ class GroupHandler {
     /*
      * Change the specifised users grooup to the one specified.
      */
-    public static function changeGroupForUser($user, $group) {
+    public static function changeGroupForUser(User $user, Group $group) {
         $mysql = MySQL::open(Settings::db_name_infected_crew);
         
         if ($user->isGroupMember()) {    
@@ -194,7 +194,7 @@ class GroupHandler {
     /*
      * Remove a specified user from all groups.
      */
-    public static function removeUserFromGroup($user) {
+    public static function removeUserFromGroup(User $user) {
         $mysql = MySQL::open(Settings::db_name_infected_crew);
         
         $mysql->query('DELETE FROM `' . Settings::db_table_infected_crew_memberof . '` 

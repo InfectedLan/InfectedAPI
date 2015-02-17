@@ -2,6 +2,8 @@
 require_once 'settings.php';
 require_once 'mysql.php';
 require_once 'objects/payment.php';
+require_once 'objects/user.php';
+require_once 'objects/tickettype.php';
 
 class PaymentHandler {
     public static function getPayment($id) {
@@ -15,7 +17,7 @@ class PaymentHandler {
 		    return $result->fetch_object('Payment');
     }
     
-    public static function createPayment($user, $ticketType, $price, $totalPrice, $transactionId) {
+    public static function createPayment(User $user, TicketType $ticketType, $price, $totalPrice, $transactionId) {
         $mysql = MySQL::open(Settings::db_name_infected_tickets);
 
         $mysql->query('INSERT INTO `' . Settings::db_table_infected_tickets_paymentlog . '` (`userId`, `ticketType`, `price`, `totalPrice`, `transactionId`, `datetime`) 
