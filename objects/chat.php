@@ -7,19 +7,18 @@ class Chat extends Object {
 	private $title;
 	
 	/*
-	 * Returns the name of this chat.
+	 * Returns the name of this object.
 	 */
 	public function getName() {
 		return $this->name;
 	}
 	
 	/*
-	 * Returns the name of this chat.
+	 * Returns the name of this object.
 	 */
 	public function getTitle() {
 		return $this->title;
 	}
-	
 	/*
 	 * Returns a list of all members in this chat.
 	 */

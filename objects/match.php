@@ -1,6 +1,8 @@
 <?php
 require_once 'settings.php';
 require_once 'mysql.php';
+require_once 'handlers/compohandler.php';
+require_once 'handlers/chathandler.php';
 require_once 'handlers/matchhandler.php';
 require_once 'handlers/clanhandler.php';
 require_once 'objects/object.php';
@@ -27,7 +29,7 @@ class Match extends Object {
 	}
 
 	public function getChat() {
-		return $this->chat;
+		return ChatHandler::getChat($this->chat);
 	}
 	public function getScheduledTime() {
 		return $this->scheduledTime;
@@ -73,8 +75,8 @@ class Match extends Object {
 		MySQL::close($con);
 	}
 
-	public function getCompoId() {
-		return $this->compoId;
+	public function getCompo() {
+		return CompoHandler::getCompo($this->compo);
 	}
 }
 ?>

@@ -1,14 +1,25 @@
 <?php
-require_once 'objects/object.php';
+require_once 'objects/eventobject.php';
 
-class Compo extends Object {
+class Compo extends EventObject {
+	private $name;
+	private $tag;
+	private $descscription;
 	private $startTime;
 	private $registrationDeadline;
-	private $name;
-	private $desc;
-	private $event;
 	private $teamSize;
-	private $tag;
+
+	public function getName() {
+		return $this->name;
+	}
+
+	public function getTag() {
+		return $this->tag;
+	}
+
+	public function getDescription() {
+		return $this->description;
+	}
 
 	public function getStartTime() {
 		return $this->startTime;
@@ -18,24 +29,8 @@ class Compo extends Object {
 		return $this->registrationDeadline;
 	}
 
-	public function getName() {
-		return $this->name;
-	}
-
-	public function getDesc() {
-		return $this->desc;
-	}
-
-	public function getEvent() {
-		return $this->event;
-	}
-
 	public function getTeamSize() {
 		return $this->teamSize;
-	}
-
-	public function getTag() {
-		return $this->tag;
 	}
 
 	/*

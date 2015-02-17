@@ -1,23 +1,23 @@
 <?php
-require_once 'handlers/eventhandler.php';
-require_once 'objects/object.php';
+require_once 'objects/eventobject.php';
 
-class Agenda extends Object {
-	private $eventId;
+class Agenda extends EventObject {
 	private $name;
 	private $title;
 	private $description;
 	private $startTime;
 	private $published;
 	
-	public function getEvent() {
-		return EventHandler::getEvent($this->eventId);
-	}
-	
+	/*
+	 * Returns the name of this object.
+	 */
 	public function getName() {
 		return $this->name;
 	}
 	
+	/*
+	 * Returns the name of this object.
+	 */
 	public function getTitle() {
 		return $this->title;
 	}
@@ -35,7 +35,8 @@ class Agenda extends Object {
 	}
 	
 	public function isHappening() {
-		return $this->getStartTime() - 5 * 60 >= time() || $this->getStartTime() + 1 * 60 * 60 >= time();
+		return $this->getStartTime() - 5 * 60 >= time() || 
+			   $this->getStartTime() + 1 * 60 * 60 >= time();
 	}
 }
 ?>

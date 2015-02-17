@@ -23,7 +23,7 @@ class EmergencyContact extends Object {
 	/* 
 	 * Returns the phone number formatted as a string.
 	 */
-	public function getPhoneString() { // TODO: Rename this to getPhoneAsString().
+	public function getPhoneAsString() {
 		return !empty($this->phone) ? chunk_split($this->phone, 2, ' ') : 'Ikke oppgitt';
 	}
 }

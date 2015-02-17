@@ -1,11 +1,9 @@
 <?php
-require_once 'handlers/eventhandler.php';
 require_once 'handlers/grouphandler.php';
 require_once 'handlers/userhandler.php';
-require_once 'objects/object.php';
+require_once 'objects/eventobject.php';
 
-class Application extends Object {
-	private $eventId;
+class Application extends EventObject {
 	private $groupId;
 	private $userId;
 	private $openedTime;
@@ -14,13 +12,6 @@ class Application extends Object {
 	private $content;
 	private $updatedByUserId;
 	private $comment;
-	
-	/*
-	 * Returns the event this application was submitted to.
-	 */
-	public function getEvent() {
-		return EventHandler::getEvent($this->eventId);
-	}
 	
 	/*
 	 * Returns the group that this application is for.
