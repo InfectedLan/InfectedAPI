@@ -1,6 +1,6 @@
 <?php
 require_once 'settings.php';
-require_once 'mysql.php';
+require_once 'database.php';
 require_once 'handlers/eventhandler.php';
 require_once 'objects/team.php';
 require_once 'objects/user.php';
@@ -9,25 +9,25 @@ require_once 'objects/group.php';
 class TeamHandler {
     /* Get a team by id */
     public static function getTeam($id) {
-        $mysql = MySQL::open(Settings::db_name_infected_crew);
+        $database = Database::open(Settings::db_name_infected_crew);
         
-        $result = $mysql->query('SELECT * FROM `' . Settings::db_table_infected_crew_teams . '` 
-                                 WHERE `id` = \'' . $mysql->real_escape_string($id) . '\';');
+        $result = $database->query('SELECT * FROM `' . Settings::db_table_infected_crew_teams . '` 
+                                    WHERE `id` = \'' . $database->real_escape_string($id) . '\';');
         
-        $mysql->close();
+        $database->close();
 		
 		return $result->fetch_object('Team');
     }
     
     /* Get a group by userId */
     public static function getTeamForUser(User $user) {
-        $mysql = MySQL::open(Settings::db_name_infected_crew);
+        $database = Database::open(Settings::db_name_infected_crew);
         
-        $result = $mysql->query('SELECT `teamId` FROM `' . Settings::db_table_infected_crew_memberof . '` 
-                                 WHERE `eventId` = \'' . EventHandler::getCurrentEvent()->getId() . '\'
-								 AND `userId` = \'' . $user->getId() . '\';');
+        $result = $database->query('SELECT `teamId` FROM `' . Settings::db_table_infected_crew_memberof . '` 
+                                    WHERE `eventId` = \'' . EventHandler::getCurrentEvent()->getId() . '\'
+								    AND `userId` = \'' . $user->getId() . '\';');
          
-        $mysql->close();
+        $database->close();
 
         $row = $result->fetch_array();
         
@@ -38,11 +38,11 @@ class TeamHandler {
     
     /* Get an array of all teams */
     public static function getTeams() {
-        $mysql = MySQL::open(Settings::db_name_infected_crew);
+        $database = Database::open(Settings::db_name_infected_crew);
         
-        $result = $mysql->query('SELECT * FROM `' . Settings::db_table_infected_crew_teams . '`;');
+        $result = $database->query('SELECT * FROM `' . Settings::db_table_infected_crew_teams . '`;');
         
-        $mysql->close();
+        $database->close();
 
         $teamList = array();
 
@@ -55,12 +55,12 @@ class TeamHandler {
     
     /* Get an array of all teams */
     public static function getTeamsForGroup(Group $group) {
-        $mysql = MySQL::open(Settings::db_name_infected_crew);
+        $database = Database::open(Settings::db_name_infected_crew);
 
-        $result = $mysql->query('SELECT * FROM `' . Settings::db_table_infected_crew_teams . '`
-                                 WHERE `groupId` = \'' . $group->getId() . '\';');
+        $result = $database->query('SELECT * FROM `' . Settings::db_table_infected_crew_teams . '`
+                                    WHERE `groupId` = \'' . $group->getId() . '\';');
         
-        $mysql->close();
+        $database->close();
 
         $teamList = array();
         
@@ -73,64 +73,64 @@ class TeamHandler {
     
     /* Create a new team */
     public static function createTeam(Event $event, Group $group, $name, $title, $description, $leader) {
-        $mysql = MySQL::open(Settings::db_name_infected_crew);
+        $database = Database::open(Settings::db_name_infected_crew);
         
-        $mysql->query('INSERT INTO `' . Settings::db_table_infected_crew_teams . '` (`eventId`, `groupId`, `name`, `title`, `description`, `leaderId`) 
-                       VALUES (\'' . $event->getId() . '\', 
-                               \'' . $group->getId() . '\', 
-                               \'' . $mysql->real_escape_string($name) . '\', 
-                               \'' . $mysql->real_escape_string($title) . '\', 
-                               \'' . $mysql->real_escape_string($description) . '\', 
-                               \'' . $leader->getId() . '\')');
+        $database->query('INSERT INTO `' . Settings::db_table_infected_crew_teams . '` (`eventId`, `groupId`, `name`, `title`, `description`, `leaderId`) 
+                          VALUES (\'' . $event->getId() . '\', 
+                                  \'' . $group->getId() . '\', 
+                                  \'' . $database->real_escape_string($name) . '\', 
+                                  \'' . $database->real_escape_string($title) . '\', 
+                                  \'' . $database->real_escape_string($description) . '\', 
+                                  \'' . $leader->getId() . '\')');
         
-        $mysql->close();
+        $database->close();
     }
 
     /* 
      * Update a team.
      */
     public static function updateTeam(Team $team, Group $group, $name, $title, $description, $leader) {
-        $mysql = MySQL::open(Settings::db_name_infected_crew);
+        $database = Database::open(Settings::db_name_infected_crew);
         
-        $mysql->query('UPDATE `' . Settings::db_table_infected_crew_teams . '` 
-                            SET `groupId` = \'' . $group->getId() . '\', 
-                                `name` = \'' . $mysql->real_escape_string($name) . '\', 
-                                `title` = \'' . $mysql->real_escape_string($title) . '\', 
-                                `description` = \'' . $mysql->real_escape_string($description) . '\', 
-                                `leader` = \'' . $leader->getId() . '\' 
-                            WHERE `id` = \'' . $team->getId() . '\';');
+        $database->query('UPDATE `' . Settings::db_table_infected_crew_teams . '` 
+                          SET `groupId` = \'' . $group->getId() . '\', 
+                              `name` = \'' . $database->real_escape_string($name) . '\', 
+                              `title` = \'' . $database->real_escape_string($title) . '\', 
+                              `description` = \'' . $database->real_escape_string($description) . '\', 
+                              `leaderId` = \'' . $leader->getId() . '\' 
+                          WHERE `id` = \'' . $team->getId() . '\';');
         
-        $mysql->close();
+        $database->close();
     }
     
     /*
      * Remove a team.
      */
     public static function removeTeam(Group $group, Team $team) {
-        $mysql = MySQL::open(Settings::db_name_infected_crew);
+        $database = Database::open(Settings::db_name_infected_crew);
         
-        $mysql->query('DELETE FROM `' . Settings::db_table_infected_crew_teams . '` 
-                       WHERE `id` = \'' . $team->getId() . '\'
-                       AND `groupId` = \'' . $group->getId() . '\';');
+        $database->query('DELETE FROM `' . Settings::db_table_infected_crew_teams . '` 
+                          WHERE `id` = \'' . $team->getId() . '\'
+                          AND `groupId` = \'' . $group->getId() . '\';');
         
-        $mysql->close();
+        $database->close();
     }
     
     /*
      * Returns an array of users that are members of this team.
      */
     public static function getMembers(Group $group, Team $team) {
-        $mysql = MySQL::open(Settings::db_name_infected);
+        $database = Database::open(Settings::db_name_infected);
         
-        $result = $mysql->query('SELECT `' . Settings::db_table_infected_users . '`.* FROM `' . Settings::db_table_infected_users . '`
-                                 LEFT JOIN `' . Settings::db_name_infected_crew . '`.`' . Settings::db_table_infected_crew_memberof . '`
-                                 ON `' . Settings::db_table_infected_users . '`.`id` = `userId` 
-                                 WHERE `eventId` = \'' . EventHandler::getCurrentEvent()->getId() . '\'
-								 AND `groupId` = \'' . $group->getId() . '\'
-                                 AND `teamId` = \'' . $team->getId() . '\' 
-                                 ORDER BY `firstname` ASC;');
+        $result = $database->query('SELECT `' . Settings::db_table_infected_users . '`.* FROM `' . Settings::db_table_infected_users . '`
+                                    LEFT JOIN `' . Settings::db_name_infected_crew . '`.`' . Settings::db_table_infected_crew_memberof . '`
+                                    ON `' . Settings::db_table_infected_users . '`.`id` = `userId` 
+                                    WHERE `eventId` = \'' . EventHandler::getCurrentEvent()->getId() . '\'
+								    AND `groupId` = \'' . $group->getId() . '\'
+                                    AND `teamId` = \'' . $team->getId() . '\' 
+                                    ORDER BY `firstname` ASC;');
         
-        $mysql->close();
+        $database->close();
 
         $memberList = array();
 
@@ -145,14 +145,14 @@ class TeamHandler {
      * Is member of a team which means it's not a plain user.
      */
     public static function isTeamMember(User $user) {
-        $mysql = MySQL::open(Settings::db_name_infected_crew);
+        $database = Database::open(Settings::db_name_infected_crew);
         
-        $result = $mysql->query('SELECT `id` FROM `' . Settings::db_table_infected_crew_memberof. '` 
-                                 WHERE `eventId` = \'' . EventHandler::getCurrentEvent()->getId() . '\'
-								 AND `userId` = \'' . $user->getId() . '\' 
-                                 AND `teamId` != \'0\';');
+        $result = $database->query('SELECT `id` FROM `' . Settings::db_table_infected_crew_memberof. '` 
+                                    WHERE `eventId` = \'' . EventHandler::getCurrentEvent()->getId() . '\'
+								    AND `userId` = \'' . $user->getId() . '\' 
+                                    AND `teamId` != \'0\';');
         
-        $mysql->close();
+        $database->close();
 
         return $result->num_rows > 0;
     }
@@ -161,12 +161,12 @@ class TeamHandler {
      * Return true if user is leader for a team.
      */
     public static function isTeamLeader(User $user) {
-        $mysql = MySQL::open(Settings::db_name_infected_crew);
+        $database = Database::open(Settings::db_name_infected_crew);
         
-        $result = $mysql->query('SELECT `id` FROM `' . Settings::db_table_infected_crew_teams . '` 
-                                 WHERE `leader` = \'' . $user->getId() . '\';');
+        $result = $database->query('SELECT `id` FROM `' . Settings::db_table_infected_crew_teams . '` 
+                                    WHERE `leaderId` = \'' . $user->getId() . '\';');
             
-        $mysql->close();
+        $database->close();
 
         return $result->num_rows > 0;
     }
@@ -175,31 +175,31 @@ class TeamHandler {
      * Sets the users team.
      */
     public static function changeTeamForUser(User $user, Group $group, Team $team) {
-        $mysql = MySQL::open(Settings::db_name_infected_crew);
+        $database = Database::open(Settings::db_name_infected_crew);
         
         if ($user->isGroupMember()) {    
-            $mysql->query('UPDATE `' . Settings::db_table_infected_crew_memberof . '` 
-                           SET `teamId` = \'' . $team->getId() . '\' 
-						   WHERE `eventId` = \'' . EventHandler::getCurrentEvent()->getId() . '\'
-                           AND `userId` = \'' . $user->getId() . '\' 
-                           AND `groupId` = \'' . $group->getId() . '\';');    
+            $database->query('UPDATE `' . Settings::db_table_infected_crew_memberof . '` 
+                              SET `teamId` = \'' . $team->getId() . '\' 
+						      WHERE `eventId` = \'' . EventHandler::getCurrentEvent()->getId() . '\'
+                              AND `userId` = \'' . $user->getId() . '\' 
+                              AND `groupId` = \'' . $group->getId() . '\';');    
         }
         
-        $mysql->close();
+        $database->close();
     }
     
     /*
      * Removes a user from a team.
      */
     public static function removeUserFromTeam(User $user) {
-        $mysql = MySQL::open(Settings::db_name_infected_crew);
+        $database = Database::open(Settings::db_name_infected_crew);
         
-        $mysql->query('UPDATE `' . Settings::db_table_infected_crew_memberof . '` 
-                       SET `teamId` = \'0\'
-                       WHERE `eventId` = \'' . EventHandler::getCurrentEvent()->getId() . '\'
-					   AND `userId` = \'' . $user->getId() . '\';');    
+        $database->query('UPDATE `' . Settings::db_table_infected_crew_memberof . '` 
+                          SET `teamId` = \'0\'
+                          WHERE `eventId` = \'' . EventHandler::getCurrentEvent()->getId() . '\'
+					      AND `userId` = \'' . $user->getId() . '\';');    
         
-        $mysql->close();
+        $database->close();
     }
 }
 ?>

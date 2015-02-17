@@ -1,13 +1,12 @@
 <?php
 require_once 'settings.php';
 require_once 'qr.php';
-require_once 'handlers/eventhandler.php';
 require_once 'handlers/paymenthandler.php';
-require_once 'handlers/userhandler.php';
 require_once 'handlers/tickettypehandler.php';
+require_once 'handlers/userhandler.php';
 require_once 'handlers/seathandler.php';
-require_once 'handlers/checkinstatehandler.php';
-require_once 'objects/object.php';
+require_once 'objects/eventobject.php';
+require_once 'objects/user.php';
 
 class Ticket extends EventObject {
 	private $paymentId;
@@ -75,15 +74,15 @@ class Ticket extends EventObject {
 	 * Returns true if this ticket is checked in.
 	 */
 	public function isCheckedIn() {
-		return CheckInStateHandler::isCheckedIn($this);
+		return TicketHandler::isTicketCheckedIn($this);
 	}
 	
 	/*
 	 * Returns true if given user is allowed to seat this ticket.
 	 */
-	public function canSeat($user) {
-		return ($this->userId == $user->getId() && $this->seaterId == 0) || 
-				$this->seaterId == $user->getId();
+	public function canSeat(User $user) {
+		return $user->equals($this->getUser()) && $this->getSeater() == null ||
+			   $user->equals($this->getSeater());
 	}
 	
 	/*
@@ -98,6 +97,7 @@ class Ticket extends EventObject {
 		return strtoupper(Settings::name . '_' . $eventName . '_' . $this->getId());
 	}
 	
+	// TODO: Implement this in a more generic way?
 	public function getQrImagePath() {
 		return QR::getCode('https://crew.infected.no/api/pages/utils/verifyTicket.php?id=' . $this->getId());
 	}

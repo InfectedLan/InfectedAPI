@@ -1,6 +1,6 @@
 <?php
 require_once 'settings.php';
-require_once 'mysql.php';
+require_once 'database.php';
 require_once 'objects/voteoption.php';
 require_once 'objects/compo.php';
 require_once 'objects/match.php';
@@ -10,12 +10,12 @@ class VoteOptionHandler {
      * Get a vote option by the internal id.
      */
     public static function getVoteOption($id) {
-        $mysql = MySQL::open(Settings::db_name_infected_compo);
+        $database = Database::open(Settings::db_name_infected_compo);
         
-        $result = $mysql->query('SELECT * FROM `' . Settings::db_table_infected_compo_voteoptions . '` 
-		                         WHERE `id` = \'' . $id . '\';');
+        $result = $database->query('SELECT * FROM `' . Settings::db_table_infected_compo_voteoptions . '` 
+		                            WHERE `id` = \'' . $id . '\';');
         
-        $mysql->close();
+        $database->close();
 		
 		return $result->fetch_object('VoteOption');
     }
@@ -24,12 +24,12 @@ class VoteOptionHandler {
      * Get a vote option for a specified compo.
      */
     public static function getVoteOptionsForCompo(Compo $compo) {
-        $mysql = MySQL::open(Settings::db_name_infected_compo);
+        $database = Database::open(Settings::db_name_infected_compo);
         
-        $result = $mysql->query('SELECT * FROM `' . Settings::db_table_infected_compo_voteoptions . '` 
-                                 WHERE `compoId` = '. $compo->getId() . ';');
+        $result = $database->query('SELECT * FROM `' . Settings::db_table_infected_compo_voteoptions . '` 
+                                    WHERE `compoId` = '. $compo->getId() . ';');
         
-        $mysql->close();
+        $database->close();
 
         $voteOptionList = array();
 
@@ -44,13 +44,13 @@ class VoteOptionHandler {
      * Returns true if specified vote option is voted for the specified match.
      */
     public static function isVoted(VoteOption $voteOption, Match $match) {
-        $mysql = MySQL::open(Settings::db_name_infected_compo);
+        $database = Database::open(Settings::db_name_infected_compo);
 
-        $result = $mysql->query('SELECT `id` FROM `' . Settings::db_table_infected_compo_votes . '` 
-                                 WHERE `voteOptionId` = '. $voteOption->getId() . '
-								 AND `consumerId` = ' . $match->getId() . ';');
+        $result = $database->query('SELECT `id` FROM `' . Settings::db_table_infected_compo_votes . '` 
+                                    WHERE `voteOptionId` = '. $voteOption->getId() . '
+								    AND `consumerId` = ' . $match->getId() . ';');
         
-        $mysql->close();                         
+        $database->close();                         
         
         return $result->num_rows > 0;
     }

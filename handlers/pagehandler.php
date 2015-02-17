@@ -1,38 +1,38 @@
 <?php
 require_once 'settings.php';
-require_once 'mysql.php';
+require_once 'database.php';
 require_once 'objects/page.php';
 
 class PageHandler {
     public static function getPage($id) {
-        $mysql = MySQL::open(Settings::db_name_infected_main);
+        $database = Database::open(Settings::db_name_infected_main);
         
-        $result = $mysql->query('SELECT * FROM `' . Settings::db_table_infected_main_pages . '` 
-                                 WHERE id=\'' . $mysql->real_escape_string($id) . '\';');
+        $result = $database->query('SELECT * FROM `' . Settings::db_table_infected_main_pages . '` 
+                                    WHERE id=\'' . $database->real_escape_string($id) . '\';');
         
-        $mysql->close();
+        $database->close();
 
 		return $result->fetch_object('Page');
     }
     
     public static function getPageByName($name) {
-        $mysql = MySQL::open(Settings::db_name_infected_main);
+        $database = Database::open(Settings::db_name_infected_main);
         
-        $result = $mysql->query('SELECT * FROM `' . Settings::db_table_infected_main_pages . '`
-                                 WHERE `name` = \'' . $mysql->real_escape_string($name) . '\';');
+        $result = $database->query('SELECT * FROM `' . Settings::db_table_infected_main_pages . '`
+                                    WHERE `name` = \'' . $database->real_escape_string($name) . '\';');
         
-        $mysql->close();
+        $database->close();
 
         return $result->fetch_object('Page');
     }
     
     // Get a list of all pages
     public static function getPages() {
-        $mysql = MySQL::open(Settings::db_name_infected_main);
+        $database = Database::open(Settings::db_name_infected_main);
         
-        $result = $mysql->query('SELECT * FROM `' . Settings::db_table_infected_main_pages . '`;');
+        $result = $database->query('SELECT * FROM `' . Settings::db_table_infected_main_pages . '`;');
               
-        $mysql->close();
+        $database->close();
 
         $pageList = array();
         
@@ -47,40 +47,40 @@ class PageHandler {
      * Create a new page.
      */
     public static function createPage($name, $title, $content) {
-        $mysql = MySQL::open(Settings::db_name_infected_main);
+        $database = Database::open(Settings::db_name_infected_main);
         
-        $mysql->query('INSERT INTO `' . Settings::db_table_infected_main_pages . '` (`name`, `title`, `content`) 
-                       VALUES (\'' . $mysql->real_escape_string($name) . '\', 
-                               \'' . $mysql->real_escape_string($title) . '\', 
-                               \'' . $mysql->real_escape_string($content) . '\')');
+        $database->query('INSERT INTO `' . Settings::db_table_infected_main_pages . '` (`name`, `title`, `content`) 
+                          VALUES (\'' . $database->real_escape_string($name) . '\', 
+                                  \'' . $database->real_escape_string($title) . '\', 
+                                  \'' . $database->real_escape_string($content) . '\')');
         
-        $mysql->close();
+        $database->close();
     }
     
     /*
      * Update a page.
      */
     public static function updatePage(Page $page, $title, $content) {
-        $mysql = MySQL::open(Settings::db_name_infected_main);
+        $database = Database::open(Settings::db_name_infected_main);
         
-        $mysql->query('UPDATE `' . Settings::db_table_infected_main_pages . '` 
-                       SET `title` = \'' . $mysql->real_escape_string($title) . '\', 
-                           `content` = \'' . $mysql->real_escape_string($content) . '\' 
-                       WHERE `id` = \'' . $page->getId() . '\';');
+        $database->query('UPDATE `' . Settings::db_table_infected_main_pages . '` 
+                          SET `title` = \'' . $database->real_escape_string($title) . '\', 
+                              `content` = \'' . $database->real_escape_string($content) . '\' 
+                          WHERE `id` = \'' . $page->getId() . '\';');
         
-        $mysql->close();
+        $database->close();
     }
     
     /*
      * Remove a page.
      */
     public static function removePage(Page $page) {
-        $mysql = MySQL::open(Settings::db_name_infected_main);
+        $database = Database::open(Settings::db_name_infected_main);
         
-        $mysql->query('DELETE FROM `' . Settings::db_table_infected_main_pages . '` 
-                       WHERE `id` = \'' . $page->getId() . '\';');
+        $database->query('DELETE FROM `' . Settings::db_table_infected_main_pages . '` 
+                          WHERE `id` = \'' . $page->getId() . '\';');
         
-        $mysql->close();
+        $database->close();
     }
 }
 ?>

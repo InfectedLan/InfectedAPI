@@ -1,38 +1,38 @@
 <?php
 require_once 'settings.php';
-require_once 'mysql.php';
+require_once 'database.php';
 require_once 'objects/permission.php';
 
 class PermissionHandler {
     public static function getPermission($id) {
-        $mysql = MySQL::open(Settings::db_name_infected);
+        $database = Database::open(Settings::db_name_infected);
         
-        $result = $mysql->query('SELECT * FROM `' . Settings::db_table_infected_permissions . '`
-                                 WHERE `id` = \'' . $mysql->real_escape_string($id) . '\';');
+        $result = $database->query('SELECT * FROM `' . Settings::db_table_infected_permissions . '`
+                                    WHERE `id` = \'' . $database->real_escape_string($id) . '\';');
         
-        $mysql->close();
+        $database->close();
         
 		return $result->fetch_object('Permission');
     }
     
     public static function getPermissionByValue($value) {
-        $mysql = MySQL::open(Settings::db_name_infected);
+        $database = Database::open(Settings::db_name_infected);
         
-        $result = $mysql->query('SELECT * FROM `' . Settings::db_table_infected_permissions . '`
-                                 WHERE `value` = \'' . $mysql->real_escape_string($value) . '\';');
+        $result = $database->query('SELECT * FROM `' . Settings::db_table_infected_permissions . '`
+                                    WHERE `value` = \'' . $database->real_escape_string($value) . '\';');
         
-        $mysql->close();
+        $database->close();
         
         return $result->fetch_object('Permission');
     }
     
     public static function getPermissions() {
-        $mysql = MySQL::open(Settings::db_name_infected);
+        $database = Database::open(Settings::db_name_infected);
         
-        $result = $mysql->query('SELECT * FROM `' . Settings::db_table_infected_permissions . '`
-								 ORDER BY `value` ASC;');
+        $result = $database->query('SELECT * FROM `' . Settings::db_table_infected_permissions . '`
+								    ORDER BY `value` ASC;');
         
-        $mysql->close();
+        $database->close();
 
         $permissionList = array();
         

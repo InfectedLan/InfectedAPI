@@ -1,6 +1,6 @@
 <?php
 require_once 'settings.php';
-require_once 'mysql.php';
+require_once 'database.php';
 require_once 'handlers/eventhandler.php';
 require_once 'objects/slide.php';
 require_once 'objects/event.php';
@@ -10,12 +10,12 @@ class SlideHandler {
      * Get a slide by the internal id.
      */
     public static function getSlide($id) {
-        $mysql = MySQL::open(Settings::db_name_infected_info);
+        $database = Database::open(Settings::db_name_infected_info);
         
-        $result = $mysql->query('SELECT * FROM `' . Settings::db_table_infected_info_slides . '` 
-                                 WHERE `id` = \'' . $mysql->real_escape_string($id) . '\';');
+        $result = $database->query('SELECT * FROM `' . Settings::db_table_infected_info_slides . '` 
+                                    WHERE `id` = \'' . $database->real_escape_string($id) . '\';');
         
-		$mysql->close();
+		$database->close();
 		
 		return $result->fetch_object('Slide');
     }
@@ -24,13 +24,13 @@ class SlideHandler {
      * Get a list of all slides.
      */
     public static function getSlides() {
-        $mysql = MySQL::open(Settings::db_name_infected_info);
+        $database = Database::open(Settings::db_name_infected_info);
         
-        $result = $mysql->query('SELECT * FROM `' . Settings::db_table_infected_info_slides . '`
-								 WHERE `eventId` = \'' . EventHandler::getCurrentEvent()->getId() . '\'
-                                 ORDER BY `startTime`;');
+        $result = $database->query('SELECT * FROM `' . Settings::db_table_infected_info_slides . '`
+								    WHERE `eventId` = \'' . EventHandler::getCurrentEvent()->getId() . '\'
+                                    ORDER BY `startTime`;');
 		
-		$mysql->close();
+		$database->close();
 		
         $slideList = array();
         
@@ -45,16 +45,16 @@ class SlideHandler {
      * Get a list of all published slides.
      */
 	public static function getPublishedSlides() {
-        $mysql = MySQL::open(Settings::db_name_infected_info);
+        $database = Database::open(Settings::db_name_infected_info);
         
-        $result = $mysql->query('SELECT * FROM `' . Settings::db_table_infected_info_slides . '`
-                                 WHERE `eventId` = \'' . EventHandler::getCurrentEvent()->getId() . '\'
-								 AND `startTime` <= NOW()
-                                 AND `endTime` >= NOW()
-                                 AND `published` = \'1\'
-                                 ORDER BY `startTime`;');
+        $result = $database->query('SELECT * FROM `' . Settings::db_table_infected_info_slides . '`
+                                    WHERE `eventId` = \'' . EventHandler::getCurrentEvent()->getId() . '\'
+								    AND `startTime` <= NOW()
+                                    AND `endTime` >= NOW()
+                                    AND `published` = \'1\'
+                                    ORDER BY `startTime`;');
         
-		$mysql->close();
+		$database->close();
 		
         $slideList = array();
         
@@ -69,47 +69,47 @@ class SlideHandler {
      * Create a new slide entry.
      */
     public static function createSlide(Event $event, $name, $title, $content, $startTime, $endTime, $published) {
-        $mysql = MySQL::open(Settings::db_name_infected_info);
+        $database = Database::open(Settings::db_name_infected_info);
         
-        $mysql->query('INSERT INTO `' . Settings::db_table_infected_info_slides . '` (`eventId`, `name`, `title`, `content`, `startTime`, `endTime`, `published`) 
-					   VALUES (\'' . $event->getId() . '\', 
-							   \'' . $mysql->real_escape_string($name) . '\', 
-							   \'' . $mysql->real_escape_string($title) . '\', 
-							   \'' . $mysql->real_escape_string($content) . '\', 
-							   \'' . $mysql->real_escape_string($startTime) . '\',
-							   \'' . $mysql->real_escape_string($endTime) . '\',
-							   \'' . $mysql->real_escape_string($published) . '\');');
+        $database->query('INSERT INTO `' . Settings::db_table_infected_info_slides . '` (`eventId`, `name`, `title`, `content`, `startTime`, `endTime`, `published`) 
+					      VALUES (\'' . $event->getId() . '\', 
+							      \'' . $database->real_escape_string($name) . '\', 
+							      \'' . $database->real_escape_string($title) . '\', 
+							      \'' . $database->real_escape_string($content) . '\', 
+							      \'' . $database->real_escape_string($startTime) . '\',
+							      \'' . $database->real_escape_string($endTime) . '\',
+							      \'' . $database->real_escape_string($published) . '\');');
         
-        $mysql->close();
+        $database->close();
     }
     
 	/*
      * Update a slide.
      */
     public static function updateSlide(Slide $slide, $title, $content, $startTime, $endTime, $published) {
-        $mysql = MySQL::open(Settings::db_name_infected_info);
+        $database = Database::open(Settings::db_name_infected_info);
         
-        $mysql->query('UPDATE `' . Settings::db_table_infected_info_slides . '` 
-					   SET `title` = \'' . $mysql->real_escape_string($title) . '\', 
-					       `content` = \'' . $mysql->real_escape_string($content) . '\', 
-						   `startTime` = \'' . $mysql->real_escape_string($startTime) . '\',
-						   `endTime` = \'' . $mysql->real_escape_string($endTime) . '\',
-					       `published` = \'' . $mysql->real_escape_string($published) . '\'
-					   WHERE `id` = \'' . $slide->getId() . '\';');
+        $database->query('UPDATE `' . Settings::db_table_infected_info_slides . '` 
+					      SET `title` = \'' . $database->real_escape_string($title) . '\', 
+					          `content` = \'' . $database->real_escape_string($content) . '\', 
+						      `startTime` = \'' . $database->real_escape_string($startTime) . '\',
+						      `endTime` = \'' . $database->real_escape_string($endTime) . '\',
+					          `published` = \'' . $database->real_escape_string($published) . '\'
+					      WHERE `id` = \'' . $slide->getId() . '\';');
         
-        $mysql->close();
+        $database->close();
     }
 	
     /*
      * Remove a slide.
      */
     public static function removeSlide(Slide $slide) {
-        $mysql = MySQL::open(Settings::db_name_infected_info);
+        $database = Database::open(Settings::db_name_infected_info);
         
-        $mysql->query('DELETE FROM `' . Settings::db_table_infected_info_slides . '` 
-                       WHERE `id` = \'' . $slide->getId() . '\';');
+        $database->query('DELETE FROM `' . Settings::db_table_infected_info_slides . '` 
+                          WHERE `id` = \'' . $slide->getId() . '\';');
         
-        $mysql->close();
+        $database->close();
     }
 }
 ?>

@@ -61,9 +61,9 @@ class Settings {
 	const db_table_infected_main_pages = 'pages';
 	
 	// InfectedTickets
-	const db_table_infected_tickets_checkinstate = 'checkinstates';
+	const db_table_infected_tickets_checkedintickets = 'checkedintickets';
 	const db_table_infected_tickets_entrances = 'entrances';
-	const db_table_infected_tickets_paymentlog = 'payments';
+	const db_table_infected_tickets_payments = 'payments';
 	const db_table_infected_tickets_rows = 'rows';
 	const db_table_infected_tickets_seatmaps = 'seatmaps';
 	const db_table_infected_tickets_seats = 'seats';

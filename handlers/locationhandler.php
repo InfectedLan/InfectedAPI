@@ -1,6 +1,6 @@
 <?php
 require_once 'settings.php';
-require_once 'mysql.php';
+require_once 'database.php';
 require_once 'objects/location.php';
 
 class LocationHandler {
@@ -8,12 +8,12 @@ class LocationHandler {
      * Returns the location with the given id.
      */
     public static function getLocation($id) {
-        $mysql = MySQL::open(Settings::db_name_infected);
+        $database = Database::open(Settings::db_name_infected);
         
-        $result = $mysql->query('SELECT * FROM `'. Settings::db_table_infected_locations . '`
-                                 WHERE `id` = \'' . $mysql->real_escape_string($id) . '\';');
+        $result = $database->query('SELECT * FROM `'. Settings::db_table_infected_locations . '`
+                                    WHERE `id` = \'' . $database->real_escape_string($id) . '\';');
 		
-        $mysql->close();
+        $database->close();
 		
 		return $result->fetch_object('Location');
     }
@@ -22,11 +22,11 @@ class LocationHandler {
      * Returns a list of all locations.
      */
     public static function getLocations() {
-        $mysql = MySQL::open(Settings::db_name_infected);
+        $database = Database::open(Settings::db_name_infected);
         
-        $result = $mysql->query('SELECT * FROM `' . Settings::db_table_infected_locations . '`;');
+        $result = $database->query('SELECT * FROM `' . Settings::db_table_infected_locations . '`;');
         
-        $mysql->close();
+        $database->close();
 
         $locationList = array();
         

@@ -1,6 +1,6 @@
 <?php
 require_once 'settings.php';
-require_once 'mysql.php';
+require_once 'database.php';
 require_once 'objects/invite.php';
 require_once 'objects/user.php';
 require_once 'objects/clan.php';
@@ -10,12 +10,12 @@ class InviteHandler {
      * Get a invite by the internal id.
      */
     public static function getInvite($id) {
-        $mysql = MySQL::open(Settings::db_name_infected_compo);
+        $database = Database::open(Settings::db_name_infected_compo);
         
-        $result = $mysql->query('SELECT * FROM `' . Settings::db_table_infected_compo_invites . '` 
-                                 WHERE `id` = \'' . $id . '\';');
+        $result = $database->query('SELECT * FROM `' . Settings::db_table_infected_compo_invites . '` 
+                                    WHERE `id` = \'' . $id . '\';');
         
-        $mysql->close();
+        $database->close();
 		
 		return $result->fetch_object('Invite');
     }
@@ -24,12 +24,12 @@ class InviteHandler {
      * Get all invites for the specified user.
      */
     public static function getInvitesForUser(User $user) {
-        $mysql = MySQL::open(Settings::db_name_infected_compo);
+        $database = Database::open(Settings::db_name_infected_compo);
 
-        $result = $mysql->query('SELECT * FROM `'  . Settings::db_table_infected_compo_invites . '` 
-                                 WHERE `userId` = \'' . $user->getId() . '\';');
+        $result = $database->query('SELECT * FROM `'  . Settings::db_table_infected_compo_invites . '` 
+                                    WHERE `userId` = \'' . $user->getId() . '\';');
         
-        $mysql->close();
+        $database->close();
 
         $inviteList = array();
 
@@ -44,12 +44,12 @@ class InviteHandler {
      * Get all invites that is to a clan.
      */
     public function getInvitedInClan(Clan $clan) {
-        $mysql = MySQL::open(Settings::db_name_infected_compo);
+        $database = Database::open(Settings::db_name_infected_compo);
 
-        $result = $mysql->query('SELECT * FROM `' . Settings::db_table_infected_compo_invites . '` 
-                                 WHERE `clanId` = \'' . $clan->getId() . '\';');
+        $result = $database->query('SELECT * FROM `' . Settings::db_table_infected_compo_invites . '` 
+                                    WHERE `clanId` = \'' . $clan->getId() . '\';');
         
-        $mysql->close();
+        $database->close();
 
         $inviteList = array();
 

@@ -1,18 +1,18 @@
 <?php
 require_once 'settings.php';
-require_once 'mysql.php';
+require_once 'database.php';
 
 class CityDictionary {
     /* 
      * Returns the city from given postalcode.
      */
     public static function getCity($postalCode) {
-        $mysql = MySQL::open(Settings::db_name_infected);
+        $database = Database::open(Settings::db_name_infected);
         
-        $result = $mysql->query('SELECT `city` FROM `' . Settings::db_table_infected_postalcodes . '`
-                                 WHERE `code` = \'' . $mysql->real_escape_string($postalCode) . '\';');
+        $result = $database->query('SELECT `city` FROM `' . Settings::db_table_infected_postalcodes . '`
+                                    WHERE `code` = \'' . $database->real_escape_string($postalCode) . '\';');
         
-        $mysql->close();
+        $database->close();
 
         $row = $result->fetch_array();
         
@@ -25,12 +25,12 @@ class CityDictionary {
      * Returns the postalcode for given city.
      */
     public static function getPostalCode($city) {
-        $mysql = MySQL::open(Settings::db_name_infected);
+        $database = Database::open(Settings::db_name_infected);
         
-        $result = $mysql->query('SELECT `code` FROM `' . Settings::db_table_infected_postalcodes . '` 
-                                 WHERE `city` = \'' . $mysql->real_escape_string($city) . '\';');
+        $result = $database->query('SELECT `code` FROM `' . Settings::db_table_infected_postalcodes . '` 
+                                    WHERE `city` = \'' . $database->real_escape_string($city) . '\';');
         
-        $mysql->close();
+        $database->close();
 
         $row = $result->fetch_array();
         
@@ -43,12 +43,12 @@ class CityDictionary {
      * Return true if the specified postal code exists.
      */
     public static function hasPostalCode($postalCode) {
-        $mysql = MySQL::open(Settings::db_name_infected);
+        $database = Database::open(Settings::db_name_infected);
         
-        $result = $mysql->query('SELECT `id` FROM `' . Settings::db_table_infected_postalcodes . '` 
-                                 WHERE `code` = \'' . $mysql->real_escape_string($postalCode) . '\';');
+        $result = $database->query('SELECT `id` FROM `' . Settings::db_table_infected_postalcodes . '` 
+                                    WHERE `code` = \'' . $database->real_escape_string($postalCode) . '\';');
         
-        $mysql->close();
+        $database->close();
 
         return $result->num_rows > 0;
     }

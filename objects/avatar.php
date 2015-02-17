@@ -35,12 +35,12 @@ class Avatar extends Object {
 	
 	// TODO: We don't make SQL queries in object files.
 	public function setState($newstatus) {
-		$con = MySQL::open(Settings::db_name_infected_crew);
+		$con = Database::open(Settings::db_name_infected_crew);
 		
 		mysqli_query($con, 'UPDATE `' . Settings::db_table_infected_crew_avatars . '` SET `state` = ' . $con->real_escape_string($newstatus) . ' WHERE id = \'' . $this->getId() . '\'');
 		$this->state = $newstatus;
 		
-		MySQL::close($con);
+		Database::close($con);
 	}
 
 	public function getFileName() {
@@ -49,12 +49,12 @@ class Avatar extends Object {
 	
 	// TODO: We don't make SQL queries in object files.
  	public function setFileName($newName) {
- 		$con = MySQL::open(Settings::db_name_infected_crew);
+ 		$con = Database::open(Settings::db_name_infected_crew);
 
  		mysqli_query($con, 'UPDATE `' . Settings::db_table_infected_crew_avatars . '` SET `file` = \'' . $con->real_escape_string($newName) . '\' WHERE `id`=' . $this->getId() . ';');
 		$this->file  = $newName;
 
-		MySQL::close($con);
+		Database::close($con);
 	}
 
 	//Do not use

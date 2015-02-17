@@ -1,6 +1,6 @@
 <?php
 require_once 'settings.php';
-require_once 'mysql.php';
+require_once 'database.php';
 require_once 'handlers/userhandler.php';
 require_once 'handlers/clanhandler.php';
 require_once 'objects/eventobject.php';
@@ -48,13 +48,13 @@ class Clan extends EventObject {
 			return false;
 		}
 
-		$mysql = MySQL::open(Settings::db_name_infected_compo);
+		$database = Database::open(Settings::db_name_infected_compo);
 
-		$result = $mysql->query('SELECT `id` FROM `' . Settings::db_table_infected_compo_participantof . '` 
+		$result = $database->query('SELECT `id` FROM `' . Settings::db_table_infected_compo_participantof . '` 
 								 WHERE `clanId` = \'' . $this->getId() . '\' 
-								 AND `compoId` = \'' . $mysql->real_escape_string($compo->getId()) . '\';');
+								 AND `compoId` = \'' . $database->real_escape_string($compo->getId()) . '\';');
 
-		$mysql->close();
+		$database->close();
 
 		return $result->num_rows > 0;
 	}

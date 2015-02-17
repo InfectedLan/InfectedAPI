@@ -1,6 +1,6 @@
 <?php
 require_once 'settings.php';
-require_once 'mysql.php';
+require_once 'database.php';
 require_once 'objects/agenda.php';
 require_once 'objects/event.php';
 
@@ -9,12 +9,12 @@ class AgendaHandler {
      * Get an agenda by the internal id.
      */
     public static function getAgenda($id) {
-        $mysql = MySQL::open(Settings::db_name_infected_main);
+        $database = Database::open(Settings::db_name_infected_main);
         
-        $result = $mysql->query('SELECT * FROM `' . Settings::db_table_infected_main_agenda . '` 
-                                 WHERE `id` = \'' . $mysql->real_escape_string($id) . '\';');
+        $result = $database->query('SELECT * FROM `' . Settings::db_table_infected_main_agenda . '` 
+                                    WHERE `id` = \'' . $database->real_escape_string($id) . '\';');
         
-  		$mysql->close();
+  		$database->close();
   		  
   		return $result->fetch_object('Agenda');
     }
@@ -23,13 +23,13 @@ class AgendaHandler {
 	   * Returns agendas.
 	   */
     public static function getAgendas() {
-        $mysql = MySQL::open(Settings::db_name_infected_main);
+        $database = Database::open(Settings::db_name_infected_main);
         
-        $result = $mysql->query('SELECT * FROM `' . Settings::db_table_infected_main_agenda . '`
-                                 WHERE `eventId` = \'' . EventHandler::getCurrentEvent()->getId() . '\'
-                                 ORDER BY `startTime`;');
+        $result = $database->query('SELECT * FROM `' . Settings::db_table_infected_main_agenda . '`
+                                    WHERE `eventId` = \'' . EventHandler::getCurrentEvent()->getId() . '\'
+                                    ORDER BY `startTime`;');
 		
-        $mysql->close();
+        $database->close();
 		
         $agendaList = array();
         
@@ -44,14 +44,14 @@ class AgendaHandler {
    * Returns published agendas.
 	 */
 	public static function getPublishedAgendas() {
-        $mysql = MySQL::open(Settings::db_name_infected_main);
+        $database = Database::open(Settings::db_name_infected_main);
         
-        $result = $mysql->query('SELECT * FROM `' . Settings::db_table_infected_main_agenda . '`
-								 WHERE `eventId` = \'' . EventHandler::getCurrentEvent()->getId() . '\'
-								 AND `published` = \'1\'
-								 ORDER BY `startTime`;');
+        $result = $database->query('SELECT * FROM `' . Settings::db_table_infected_main_agenda . '`
+								    WHERE `eventId` = \'' . EventHandler::getCurrentEvent()->getId() . '\'
+								    AND `published` = \'1\'
+								    ORDER BY `startTime`;');
 				
-		$mysql->close();	
+		$database->close();	
 
         $agendaList = array();
         
@@ -66,15 +66,15 @@ class AgendaHandler {
 	 * Returns only published agendas that have not happend yet.
 	 */
 	public static function getPublishedNotHappendAgendas() {
-        $mysql = MySQL::open(Settings::db_name_infected_main);
+        $database = Database::open(Settings::db_name_infected_main);
         
-        $result = $mysql->query('SELECT * FROM `' . Settings::db_table_infected_main_agenda . '`
-								 WHERE `eventId` = \'' . EventHandler::getCurrentEvent()->getId() . '\'
-								 AND DATE_ADD(`startTime`, INTERVAL 1 HOUR) >= NOW()
-								 AND `published` = \'1\'
-								 ORDER BY `startTime`;');
+        $result = $database->query('SELECT * FROM `' . Settings::db_table_infected_main_agenda . '`
+								    WHERE `eventId` = \'' . EventHandler::getCurrentEvent()->getId() . '\'
+								    AND DATE_ADD(`startTime`, INTERVAL 1 HOUR) >= NOW()
+								    AND `published` = \'1\'
+								    ORDER BY `startTime`;');
 								 
-        $mysql->close();	
+        $database->close();	
 	   
         $agendaList = array();
         
@@ -86,15 +86,15 @@ class AgendaHandler {
     }
     
     public static function getAgendaSelection($first, $last) {    
-        $mysql = MySQL::open(Settings::db_name_infected_main);
+        $database = Database::open(Settings::db_name_infected_main);
         
-        $result = $mysql->query('SELECT * FROM `' . Settings::db_table_infected_main_agenda . '`
-                                 WHERE `startTime` 
-                                 BETWEEN ' . $mysql->real_escape_string($first) . ' 
-                                 AND ' . $mysql->real_escape_string($last) . '
-                                 ORDER BY `startTime`;');
+        $result = $database->query('SELECT * FROM `' . Settings::db_table_infected_main_agenda . '`
+                                    WHERE `startTime` 
+                                    BETWEEN ' . $database->real_escape_string($first) . ' 
+                                    AND ' . $database->real_escape_string($last) . '
+                                    ORDER BY `startTime`;');
 		    
-        $mysql->close();
+        $database->close();
 		    
         $agendaList = array();
         
@@ -109,44 +109,44 @@ class AgendaHandler {
      * Create a new agenda entry.
      */
     public static function createAgenda(Event $event, $name, $title, $description, $startTime) {
-        $mysql = MySQL::open(Settings::db_name_infected_main);
+        $database = Database::open(Settings::db_name_infected_main);
         
-        $mysql->query('INSERT INTO `' . Settings::db_table_infected_main_agenda . '` (`eventId`, `name`, `title`, `description`, `startTime`) 
-                       VALUES (\'' . $event->getId() . '\', 
-							   \'' . $mysql->real_escape_string($name) . '\', 
-                               \'' . $mysql->real_escape_string($title) . '\', 
-                               \'' . $mysql->real_escape_string($description) . '\', 
-                               \'' . $mysql->real_escape_string($startTime) . '\');');
+        $database->query('INSERT INTO `' . Settings::db_table_infected_main_agenda . '` (`eventId`, `name`, `title`, `description`, `startTime`) 
+                          VALUES (\'' . $event->getId() . '\', 
+    							  \'' . $database->real_escape_string($name) . '\', 
+                                  \'' . $database->real_escape_string($title) . '\', 
+                                  \'' . $database->real_escape_string($description) . '\', 
+                                  \'' . $database->real_escape_string($startTime) . '\');');
         
-        $mysql->close();
+        $database->close();
     }
     
     /*
      * Update an agenda.
      */
     public static function updateAgenda(Agenda $agenda, $title, $description, $startTime, $published) {
-        $mysql = MySQL::open(Settings::db_name_infected_main);
+        $database = Database::open(Settings::db_name_infected_main);
         
-        $mysql->query('UPDATE `' . Settings::db_table_infected_main_agenda . '` 
-                       SET `title` = \'' . $mysql->real_escape_string($title) . '\', 
-                           `description` = \'' . $mysql->real_escape_string($description) . '\', 
-                           `startTime` = \'' . $mysql->real_escape_string($startTime) . '\',
-								           `published` = \'' . $mysql->real_escape_string($published) . '\'
-                       WHERE `id` = \'' . $agenda->getId() . '\';');
+        $database->query('UPDATE `' . Settings::db_table_infected_main_agenda . '` 
+                          SET `title` = \'' . $database->real_escape_string($title) . '\', 
+                              `description` = \'' . $database->real_escape_string($description) . '\', 
+                              `startTime` = \'' . $database->real_escape_string($startTime) . '\',
+    						  `published` = \'' . $database->real_escape_string($published) . '\'
+                          WHERE `id` = \'' . $agenda->getId() . '\';');
         
-        $mysql->close();
+        $database->close();
     }
 	
     /*
      * Remove an agenda entry.
      */
     public static function removeAgenda(Agenda $agenda) {
-        $mysql = MySQL::open(Settings::db_name_infected_main);
+        $database = Database::open(Settings::db_name_infected_main);
         
-        $mysql->query('DELETE FROM `' . Settings::db_table_infected_main_agenda . '` 
-                       WHERE `id` = \'' . $agenda->getId() . '\';');
+        $database->query('DELETE FROM `' . Settings::db_table_infected_main_agenda . '` 
+                          WHERE `id` = \'' . $agenda->getId() . '\';');
         
-        $mysql->close();
+        $database->close();
     }
 }
 ?>

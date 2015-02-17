@@ -38,7 +38,7 @@
 <h2><a href="pop_before_smtp.phps">pop_before_smtp.phps</a></h2>
 <p>Before effective SMTP authentication mechanisms were available, it was common for ISPs to use POP-before-SMTP authentication. As it implies, you authenticate using the POP3 protocol (an older protocol now mostly replaced by the far superior IMAP), and then the SMTP server will allow send access from your IP address for a short while, usually 5-15 minutes. PHPMailer includes a POP3 protocol client, so it can carry out this sequence - it's just like a normal SMTP conversation (without authentication), but connects via POP first.</p>
 <h2><a href="mailing_list.phps">mailing_list.phps</a></h2>
-<p>This is a somewhat naïve example of sending similar emails to a list of different addresses. It sets up a PHPMailer instance using SMTP, then connects to a MySQL database to retrieve a list of recipients. The code loops over this list, sending email to each person using their info and marks them as sent in the database. It makes use of SMTP keepalive which saves reconnecting and re-authenticating between each message.</p>
+<p>This is a somewhat naïve example of sending similar emails to a list of different addresses. It sets up a PHPMailer instance using SMTP, then connects to a Database database to retrieve a list of recipients. The code loops over this list, sending email to each person using their info and marks them as sent in the database. It makes use of SMTP keepalive which saves reconnecting and re-authenticating between each message.</p>
 <hr>
 <h2><a href="smtp_check.phps">smtp_check.phps</a></h2>
 <p>This is an example showing how to use the SMTP class by itself (without PHPMailer) to check an SMTP connection.</p>

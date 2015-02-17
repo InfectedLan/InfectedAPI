@@ -1,6 +1,6 @@
 <?php
 require_once 'settings.php';
-require_once 'mysql.php';
+require_once 'database.php';
 require_once 'handlers/compohandler.php';
 require_once 'handlers/chathandler.php';
 require_once 'handlers/matchhandler.php';
@@ -68,11 +68,11 @@ class Match extends Object {
 	}
 
 	public function setState($newState) {
-		$con = MySQL::open(Settings::db_name_infected_compo);
+		$con = Database::open(Settings::db_name_infected_compo);
 
 		$result = mysqli_query($con, 'UPDATE `' . Settings::db_table_infected_compo_matches . '` SET `state` = ' . $con->real_escape_string($newState) . ' WHERE `id` = ' . $this->id . ';');
 
-		MySQL::close($con);
+		Database::close($con);
 	}
 
 	public function getCompo() {

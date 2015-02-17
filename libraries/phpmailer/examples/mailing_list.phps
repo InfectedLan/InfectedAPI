@@ -31,9 +31,9 @@ $mail->AltBody = 'To view the message, please use an HTML compatible email viewe
 
 //Connect to the database and select the recipients from your mailing list that have not yet been sent to
 //You'll need to alter this to match your database
-$mysql = mysqli_connect('localhost', 'username', 'password');
-mysqli_select_db($mysql, 'mydb');
-$result = mysqli_query($mysql, 'SELECT full_name, email, photo FROM mailinglist WHERE sent = false');
+$database = mysqli_connect('localhost', 'username', 'password');
+mysqli_select_db($database, 'mydb');
+$result = mysqli_query($database, 'SELECT full_name, email, photo FROM mailinglist WHERE sent = false');
 
 foreach ($result as $row) { //This iterator syntax only works in PHP 5.4+
     $mail->addAddress($row['email'], $row['full_name']);
@@ -48,9 +48,9 @@ foreach ($result as $row) { //This iterator syntax only works in PHP 5.4+
         echo "Message sent to :" . $row['full_name'] . ' (' . str_replace("@", "&#64;", $row['email']) . ')<br />';
         //Mark it as sent in the DB
         mysqli_query(
-            $mysql,
+            $database,
             "UPDATE mailinglist SET sent = true WHERE email = '" .
-            mysqli_real_escape_string($mysql, $row['email']) . "'"
+            mysqli_real_escape_string($database, $row['email']) . "'"
         );
     }
     // Clear all addresses and attachments for next loop

@@ -1,6 +1,6 @@
 <?php
 require_once 'settings.php';
-require_once 'mysql.php';
+require_once 'database.php';
 require_once 'handlers/tickethandler.php';
 require_once 'handlers/eventhandler.php';
 require_once 'objects/tickettransfer.php';
@@ -9,14 +9,14 @@ require_once 'objects/user.php';
 
 class TicketTransferHandler {
     public static function getTransferFromTicket(Ticket $ticket) {
-        $mysql = MySQL::open(Settings::db_name_infected_tickets);
+        $database = Database::open(Settings::db_name_infected_tickets);
 
-        $result = $mysql->query('SELECT * FROM `' . Settings::db_table_infected_tickets_tickettransfers . '` 
-                                 WHERE `ticketId` = \'' . $ticket->getId() . '\'
-                                 ORDER BY `datetime` DESC
-                                 LIMIT 1;');
+        $result = $database->query('SELECT * FROM `' . Settings::db_table_infected_tickets_tickettransfers . '` 
+                                    WHERE `ticketId` = \'' . $ticket->getId() . '\'
+                                    ORDER BY `datetime` DESC
+                                    LIMIT 1;');
 
-        $mysql->close();
+        $database->close();
 		
 		return $result->fetch_object('TicketTransfer');
     }
@@ -25,14 +25,14 @@ class TicketTransferHandler {
     public static function getRevertableTransfers(User $user) {
  		$wantedTimeLimit = time() - Settings::ticketTransferTime;
 
-        $mysql = MySQL::open(Settings::db_name_infected_tickets);
+        $database = Database::open(Settings::db_name_infected_tickets);
 
-        $result = $mysql->query('SELECT * FROM `' . Settings::db_table_infected_tickets_tickettransfers . '` 
-                                 WHERE `fromId` = \'' . $user->getId() . '\'
-                                 AND `revertable` = \'1\'
-                                 AND `datetime` > \'' . date('Y-m-d H:i:s', $wantedTimeLimit) . '\';');
+        $result = $database->query('SELECT * FROM `' . Settings::db_table_infected_tickets_tickettransfers . '` 
+                                    WHERE `fromId` = \'' . $user->getId() . '\'
+                                    AND `revertable` = \'1\'
+                                    AND `datetime` > \'' . date('Y-m-d H:i:s', $wantedTimeLimit) . '\';');
 
-        $mysql->close();
+        $database->close();
 
         $transferList = array();
 
@@ -44,26 +44,26 @@ class TicketTransferHandler {
     }
     
     public static function createTransfer(Ticket $ticket, User $user, $revertable) {
-        $mysql = MySQL::open(Settings::db_name_infected_tickets);
+        $database = Database::open(Settings::db_name_infected_tickets);
 
-        $mysql->query('INSERT INTO `' . Settings::db_table_infected_tickets_tickettransfers . '` (`ticketId`, `fromId`, `toId`, `datetime`, `revertable`)
-                       VALUES (\'' . $ticket->getId() . '\', 
-                               \'' . $ticket->getUser()->getId() . '\', 
-                               \'' . $user->getId() . '\',
-                               \'' . date('Y-m-d H:i:s') . '\',
-                               \'' . $revertable . '\');');
+        $database->query('INSERT INTO `' . Settings::db_table_infected_tickets_tickettransfers . '` (`ticketId`, `fromId`, `toId`, `datetime`, `revertable`)
+                          VALUES (\'' . $ticket->getId() . '\', 
+                                  \'' . $ticket->getUser()->getId() . '\', 
+                                  \'' . $user->getId() . '\',
+                                  \'' . date('Y-m-d H:i:s') . '\',
+                                  \'' . $revertable . '\');');
 
-        $mysql->close();
+        $database->close();
     }
     
     public static function freezeTransfer(TicketTransfer $ticketTransfer) {
-        $mysql = MySQL::open(Settings::db_name_infected_tickets);
+        $database = Database::open(Settings::db_name_infected_tickets);
 
-        $result = $mysql->query('UPDATE `' . Settings::db_table_infected_tickets_tickettransfers .  '` 
-                                 SET `revertable` = \'0\'
-                                 WHERE `id` = \'' . $ticketTransfer->getId() . '\';');
+        $result = $database->query('UPDATE `' . Settings::db_table_infected_tickets_tickettransfers .  '` 
+                                    SET `revertable` = \'0\'
+                                    WHERE `id` = \'' . $ticketTransfer->getId() . '\';');
 								 
-		$mysql->close();
+		$database->close();
     }
     
     /*

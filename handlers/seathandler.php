@@ -1,18 +1,18 @@
 <?php
 require_once 'settings.php';
-require_once 'mysql.php';
+require_once 'database.php';
 require_once 'handlers/tickethandler.php';
 require_once 'handlers/rowhandler.php';
 require_once 'objects/seat.php';
 
 class SeatHandler {
     public static function getSeat($id) {
-        $mysql = MySQL::open(Settings::db_name_infected_tickets);
+        $database = Database::open(Settings::db_name_infected_tickets);
 
-        $result = $mysql->query('SELECT * FROM `' . Settings::db_table_infected_tickets_seats . '` 
-                                 WHERE `id` = \'' . $mysql->real_escape_string($id) . '\';');
-        
-        $mysql->close();
+        $result = $database->query('SELECT * FROM `' . Settings::db_table_infected_tickets_seats . '` 
+                                    WHERE `id` = \'' . $database->real_escape_string($id) . '\';');
+         
+        $database->close();
 		
 		return $result->fetch_object('Seat');
     }
@@ -27,19 +27,19 @@ class SeatHandler {
     }
 
     public static function deleteSeat(Seat $seat) {
-        $mysql = MySQL::open(Settings::db_name_infected_tickets);
+        $database = Database::open(Settings::db_name_infected_tickets);
 
-        $result = $mysql->query('DELETE FROM `' . Settings::db_table_infected_tickets_seats . '` 
-                                 WHERE `id` = ' . $seat->getId() . ';');
+        $result = $database->query('DELETE FROM `' . Settings::db_table_infected_tickets_seats . '` 
+                                    WHERE `id` = ' . $seat->getId() . ';');
 
-        $mysql->close();
+        $database->close();
     }
 
     public static function hasOwner(Seat $seat) {
-        $mysql = MySQL::open(Settings::db_name_infected_tickets);
+        $database = Database::open(Settings::db_name_infected_tickets);
 
-        $result = $mysql->query('SELECT `id` FROM `' . Settings::db_table_infected_tickets_tickets . '` 
-                                 WHERE `seatId` = ' . $seat->getId() . ';');
+        $result = $database->query('SELECT `id` FROM `' . Settings::db_table_infected_tickets_tickets . '` 
+                                    WHERE `seatId` = ' . $seat->getId() . ';');
 
         $row = $result->fetch_array();
 
@@ -47,12 +47,12 @@ class SeatHandler {
     }
 
     public static function getOwner(Seat $seat) {
-        $mysql = MySQL::open(Settings::db_name_infected_tickets);
+        $database = Database::open(Settings::db_name_infected_tickets);
 
-        $result = $mysql->query('SELECT `userId` FROM `' . Settings::db_table_infected_tickets_tickets . '` 
-                                 WHERE `seatId` = ' . $seat->getId() . ';');
+        $result = $database->query('SELECT `userId` FROM `' . Settings::db_table_infected_tickets_tickets . '` 
+                                    WHERE `seatId` = ' . $seat->getId() . ';');
         
-        $mysql->close();
+        $database->close();
 
         $row = $result->fetch_array();
 
@@ -62,12 +62,12 @@ class SeatHandler {
     }
 
     public static function getTicket(Seat $seat) {
-        $mysql = MySQL::open(Settings::db_name_infected_tickets);
+        $database = Database::open(Settings::db_name_infected_tickets);
 
-        $result = $mysql->query('SELECT * FROM `' . Settings::db_table_infected_tickets_tickets . '` 
-                                 WHERE `seatId` = ' . $seat->getId() . ';');
+        $result = $database->query('SELECT * FROM `' . Settings::db_table_infected_tickets_tickets . '` 
+                                    WHERE `seatId` = ' . $seat->getId() . ';');
         
-        $mysql->close();
+        $database->close();
 
         return $result->fetch_object('Ticket');
     }

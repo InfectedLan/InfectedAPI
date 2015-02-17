@@ -1,16 +1,16 @@
 <?php
 require_once 'settings.php';
-require_once 'mysql.php';
+require_once 'database.php';
 require_once 'objects/readyhandler.php';
 
 class ReadyHandlerHandler {
     public static function getReadyHandler($id) {
-        $mysql = MySQL::open(Settings::db_name_infected_compo);
+        $database = Database::open(Settings::db_name_infected_compo);
         
-        $result = $mysql->query('SELECT * FROM `' . Settings::db_table_infected_compo_readyInstances . '` 
-                                 WHERE `id` = \'' . $mysql->real_escape_string($id) . '\';');
+        $result = $database->query('SELECT * FROM `' . Settings::db_table_infected_compo_readyInstances . '` 
+                                    WHERE `id` = \'' . $database->real_escape_string($id) . '\';');
         
-        $mysql->close();
+        $database->close();
 		
 		return $result->fetch_object('ReadyHandler');
     }

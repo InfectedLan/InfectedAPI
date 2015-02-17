@@ -1,6 +1,6 @@
 <?php
 require_once 'settings.php';
-require_once 'mysql.php';
+require_once 'database.php';
 require_once 'handlers/matchhandler.php';
 require_once 'handlers/chathandler.php';
 require_once 'objects/compo.php';
@@ -11,12 +11,12 @@ class CompoHandler {
      * Get a compo by the internal id.
      */
     public static function getCompo($id) {
-        $mysql = MySQL::open(Settings::db_name_infected_compo);
+        $database = Database::open(Settings::db_name_infected_compo);
         
-        $result = $mysql->query('SELECT * FROM `' . Settings::db_table_infected_compo_compos . '` 
-                                 WHERE `id` = \'' . $mysql->real_escape_string($id) . '\';');
+        $result = $database->query('SELECT * FROM `' . Settings::db_table_infected_compo_compos . '` 
+                                    WHERE `id` = \'' . $database->real_escape_string($id) . '\';');
         
-        $mysql->close();
+        $database->close();
 
         return $result->fetch_object('Compo');
     }
@@ -25,12 +25,12 @@ class CompoHandler {
      * Returns true if the given compo has generated matches.
      */
     public static function hasGeneratedMatches(Compo $compo) {
-        $mysql = MySQL::open(Settings::db_name_infected_compo);
+        $database = Database::open(Settings::db_name_infected_compo);
 
-        $result = $mysql->query('SELECT `id` FROM `' . Settings::db_table_infected_compo_matches . '` 
-                                 WHERE `compoId` = \'' . $compo->getId() . '\';');
+        $result = $database->query('SELECT `id` FROM `' . Settings::db_table_infected_compo_matches . '` 
+                                    WHERE `compoId` = \'' . $compo->getId() . '\';');
         
-        $mysql->close();
+        $database->close();
 
         return $result->num_rows > 0;
     }
@@ -39,12 +39,12 @@ class CompoHandler {
      * Get compos for the specified event.
      */
     public static function getComposForEvent(Event $event) {
-        $mysql = MySQL::open(Settings::db_name_infected_compo);
+        $database = Database::open(Settings::db_name_infected_compo);
 
-        $result = $mysql->query('SELECT * FROM `' . Settings::db_table_infected_compo_compos . '` 
-                                 WHERE `event` = \'' . $event->getId() . '\';');
+        $result = $database->query('SELECT * FROM `' . Settings::db_table_infected_compo_compos . '` 
+                                    WHERE `event` = \'' . $event->getId() . '\';');
 
-        $mysql->close();
+        $database->close();
 
         $compoList = array();
 
@@ -59,13 +59,13 @@ class CompoHandler {
      * Get clans for specified compo.
      */
     public static function getClans(Compo $compo) {
-        $mysql = MySQL::open(Settings::db_name_infected_compo);
+        $database = Database::open(Settings::db_name_infected_compo);
 
-        $result = $mysql->query('SELECT * FROM `' . Settings::db_table_infected_compo_clans . '` 
-                                 WHERE `id` = (SELECT `clanId` FROM `' . Settings::db_table_infected_compo_participantof . '` 
-                                               WHERE `compoId` = \'' . $compo->getId() . '\');');
+        $result = $database->query('SELECT * FROM `' . Settings::db_table_infected_compo_clans . '` 
+                                    WHERE `id` = (SELECT `clanId` FROM `' . Settings::db_table_infected_compo_participantof . '` 
+                                                  WHERE `compoId` = \'' . $compo->getId() . '\');');
 
-        $mysql->close();
+        $database->close();
 
         $clanList = array();
 

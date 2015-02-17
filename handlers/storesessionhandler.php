@@ -1,6 +1,6 @@
 <?php
 require_once 'settings.php';
-require_once 'mysql.php';
+require_once 'database.php';
 require_once 'handlers/tickethandler.php';
 require_once 'objects/storesession.php';
 require_once 'objects/user.php';
@@ -9,24 +9,24 @@ require_once 'objects/payment.php';
 
 class StoreSessionHandler {
     public static function getStoreSession($id) {
-        $mysql = MySQL::open(Settings::db_name_infected_tickets);
+        $database = Database::open(Settings::db_name_infected_tickets);
 
-        $result = $mysql->query('SELECT * FROM `' . Settings::db_table_infected_tickets_storesessions . '` 
-                                 WHERE `id` = ' . $mysql->real_escape_string($id) . ';');
+        $result = $database->query('SELECT * FROM `' . Settings::db_table_infected_tickets_storesessions . '` 
+                                    WHERE `id` = ' . $database->real_escape_string($id) . ';');
         
-        $mysql->close();
+        $database->close();
 		
 		return $result->fetch_object('StoreSession');
     }
     
     public static function getStoreSessionForUser(User $user) {
-        $mysql = MySQL::open(Settings::db_name_infected_tickets);
+        $database = Database::open(Settings::db_name_infected_tickets);
 
-        $result = $mysql->query('SELECT * FROM `' . Settings::db_table_infected_tickets_storesessions . '` 
-                                 WHERE `userId` = \'' . $user->getId() . '\' 
-                                 AND `datetime` > \'' . self::oldestValidTimestamp() . '\';');
+        $result = $database->query('SELECT * FROM `' . Settings::db_table_infected_tickets_storesessions . '` 
+                                    WHERE `userId` = \'' . $user->getId() . '\' 
+                                    AND `datetime` > \'' . self::oldestValidTimestamp() . '\';');
 
-        $mysql->close();
+        $database->close();
 
         return $result->fetch_object('StoreSession');
     }
@@ -34,28 +34,28 @@ class StoreSessionHandler {
     public static function registerStoreSession(User $user, TicketType $ticketType, $amount, $price) {
         $code = bin2hex(openssl_random_pseudo_bytes(16));
     
-        $mysql = MySQL::open(Settings::db_name_infected_tickets);
+        $database = Database::open(Settings::db_name_infected_tickets);
 
-        $result = $mysql->query('INSERT INTO `' . Settings::db_table_infected_tickets_storesessions . '` (`userId`, `ticketType`, `amount`, `code`, `price`, `datetime`) 
-                                 VALUES (\'' . $user->getId() . '\', 
-                                         \'' . $ticketType->getId() . '\', 
-                                         \'' . $mysql->real_escape_string($amount) . '\', 
-                                         \'' . $code . '\',
-                                         \'' . $mysql->real_escape_string($price) . '\',
-                                         \'' . $mysql->real_escape_string(date('Y-m-d H:i:s')) . '\');');
+        $result = $database->query('INSERT INTO `' . Settings::db_table_infected_tickets_storesessions . '` (`userId`, `ticketTypeId`, `amount`, `code`, `price`, `datetime`) 
+                                    VALUES (\'' . $user->getId() . '\', 
+                                            \'' . $ticketType->getId() . '\', 
+                                            \'' . $database->real_escape_string($amount) . '\', 
+                                            \'' . $code . '\',
+                                            \'' . $database->real_escape_string($price) . '\',
+                                            \'' . date('Y-m-d H:i:s') . '\');');
 
-        $mysql->close();
+        $database->close();
 
         return $code;
     }
 
     public static function deleteStoreSession(StoreSession $storeSession) {
-        $mysql = MySQL::open(Settings::db_name_infected_tickets);
+        $database = Database::open(Settings::db_name_infected_tickets);
 
-        $result = $mysql->query('DELETE FROM `' . Settings::db_table_infected_tickets_storesessions . '` 
-                                 WHERE `id` = ' . $storeSession->getId() . ';');
+        $result = $database->query('DELETE FROM `' . Settings::db_table_infected_tickets_storesessions . '` 
+                                    WHERE `id` = ' . $storeSession->getId() . ';');
 
-        $mysql->close();
+        $database->close();
     }
 
     // Used to validate a payment.
@@ -64,25 +64,25 @@ class StoreSessionHandler {
     }
     
     public static function hasStoreSession(User $user) {
-        $mysql = MySQL::open(Settings::db_name_infected_tickets);
+        $database = Database::open(Settings::db_name_infected_tickets);
 
-        $result = $mysql->query('SELECT `id` FROM `' . Settings::db_table_infected_tickets_storesessions . '` 
-                                 WHERE `userId` = \'' . $user->getId() . '\' 
-                                 AND `datetime` > \'' . self::oldestValidTimestamp() . '\';');
+        $result = $database->query('SELECT `id` FROM `' . Settings::db_table_infected_tickets_storesessions . '` 
+                                    WHERE `userId` = \'' . $user->getId() . '\' 
+                                    AND `datetime` > \'' . self::oldestValidTimestamp() . '\';');
 
-        $mysql->close();
+        $database->close();
 
         return $result->num_rows > 0;
     }
 
     public static function getReservedTicketCount(TicketType $ticketType) {
-        $mysql = MySQL::open(Settings::db_name_infected_tickets);
+        $database = Database::open(Settings::db_name_infected_tickets);
 
-        $result = $mysql->query('SELECT `amount` FROM `' . Settings::db_table_infected_tickets_storesessions . '` 
-                                 WHERE `ticketType` = \'' . $ticketType->getId() . '\' 
-                                 AND `datetime` > \'' . self::oldestValidTimestamp() . '\';');
+        $result = $database->query('SELECT `amount` FROM `' . Settings::db_table_infected_tickets_storesessions . '` 
+                                    WHERE `ticketTypeId` = \'' . $ticketType->getId() . '\' 
+                                    AND `datetime` > \'' . self::oldestValidTimestamp() . '\';');
 
-        $mysql->close();
+        $database->close();
 
         $reservedCount = 0;
 
@@ -98,25 +98,25 @@ class StoreSessionHandler {
     }
 
     private static function getStoreSessionFromKey($key) {
-        $mysql = MySQL::open(Settings::db_name_infected_tickets);
+        $database = Database::open(Settings::db_name_infected_tickets);
 
-        $result = $mysql->query('SELECT * FROM `' . Settings::db_table_infected_tickets_storesessions . '` 
-                                 WHERE `code` = ' . $mysql->real_escape_string($code) . ' 
-                                 AND `datetime` > ' . self::oldestValidTimestamp() . ';');
+        $result = $database->query('SELECT * FROM `' . Settings::db_table_infected_tickets_storesessions . '` 
+                                    WHERE `code` = ' . $database->real_escape_string($code) . ' 
+                                    AND `datetime` > ' . self::oldestValidTimestamp() . ';');
 
-        $mysql->close();
+        $database->close();
 
         return $result->fetch_object('StoreSession');
     }
 
     public static function getUserIdFromKey($key) {
-        $mysql = MySQL::open(Settings::db_name_infected_tickets);
+        $database = Database::open(Settings::db_name_infected_tickets);
 
-        $result = $mysql->query('SELECT `userId` FROM `' . Settings::db_table_infected_tickets_storesessions . '` 
-                                 WHERE `code`=' . $mysql->real_escape_string($code) . ' 
-                                 AND `datetime` > ' . self::oldestValidTimestamp() . ';');
+        $result = $database->query('SELECT `userId` FROM `' . Settings::db_table_infected_tickets_storesessions . '` 
+                                    WHERE `code`=' . $database->real_escape_string($code) . ' 
+                                    AND `datetime` > ' . self::oldestValidTimestamp() . ';');
 
-        $mysql->close();
+        $database->close();
 
         $row = $result->fetch_array();
 

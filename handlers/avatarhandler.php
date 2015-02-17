@@ -1,6 +1,6 @@
 <?php
 require_once 'settings.php';
-require_once 'mysql.php';
+require_once 'database.php';
 require_once 'objects/avatar.php';
 require_once 'objects/user.php';
 
@@ -9,12 +9,12 @@ class AvatarHandler {
      * Get an avatar by the internal id.
      */
     public static function getAvatar($id) {
-        $mysql = MySQL::open(Settings::db_name_infected_crew);
+        $database = Database::open(Settings::db_name_infected_crew);
         
-        $result = $mysql->query('SELECT * FROM `' . Settings::db_table_infected_crew_avatars . '` 
-                                 WHERE `id` = \'' . $mysql->real_escape_string($id) . '\';');
+        $result = $database->query('SELECT * FROM `' . Settings::db_table_infected_crew_avatars . '` 
+                                    WHERE `id` = \'' . $database->real_escape_string($id) . '\';');
         
-        $mysql->close();
+        $database->close();
 		
 		return $result->fetch_object('Avatar');
     }
@@ -23,12 +23,12 @@ class AvatarHandler {
      * Get an avatar for a specified user.
      */
     public static function getAvatarForUser(User $user) {
-        $mysql = MySQL::open(Settings::db_name_infected_crew);
+        $database = Database::open(Settings::db_name_infected_crew);
         
-        $result = $mysql->query('SELECT * FROM `' . Settings::db_table_infected_crew_avatars . '` 
-                                 WHERE `userId` = \'' . $user->getId() . '\';');
+        $result = $database->query('SELECT * FROM `' . Settings::db_table_infected_crew_avatars . '` 
+                                    WHERE `userId` = \'' . $user->getId() . '\';');
         
-        $mysql->close();
+        $database->close();
 
         return $result->fetch_object('Avatar');
     }
@@ -37,11 +37,11 @@ class AvatarHandler {
      * Returns a list of all avatars.
      */
     public static function getAvatars() {
-        $mysql = MySQL::open(Settings::db_name_infected_crew);
+        $database = Database::open(Settings::db_name_infected_crew);
         
-        $result = $mysql->query('SELECT * FROM `' . Settings::db_table_infected_crew_avatars . '`;');
+        $result = $database->query('SELECT * FROM `' . Settings::db_table_infected_crew_avatars . '`;');
         
-        $mysql->close();
+        $database->close();
 
         $avatarList = array();
         
@@ -56,12 +56,12 @@ class AvatarHandler {
      * Returns a list of all pending avatars.
      */
     public static function getPendingAvatars() {
-        $mysql = MySQL::open(Settings::db_name_infected_crew);
+        $database = Database::open(Settings::db_name_infected_crew);
         
-        $result = $mysql->query('SELECT * FROM `' . Settings::db_table_infected_crew_avatars . '` 
-                                 WHERE `state` = \'1\';');
+        $result = $database->query('SELECT * FROM `' . Settings::db_table_infected_crew_avatars . '` 
+                                    WHERE `state` = \'1\';');
         
-        $mysql->close();
+        $database->close();
 
         $avatarList = array();
         
@@ -76,12 +76,12 @@ class AvatarHandler {
      * Returns true if the specificed user have an avatar.
      */
     public static function hasAvatar(User $user) {
-        $mysql = MySQL::open(Settings::db_name_infected_crew);
+        $database = Database::open(Settings::db_name_infected_crew);
         
-        $result = $mysql->query('SELECT `id` FROM `' . Settings::db_table_infected_crew_avatars . '` 
-                                 WHERE `userId` = \'' . $user->getId() . '\';');
+        $result = $database->query('SELECT `id` FROM `' . Settings::db_table_infected_crew_avatars . '` 
+                                    WHERE `userId` = \'' . $user->getId() . '\';');
         
-        $mysql->close();
+        $database->close();
 
         return $result->num_rows > 0;
     }
@@ -90,13 +90,13 @@ class AvatarHandler {
      * Returns true if the specificed user have a cropped avatar.
      */
     public static function hasCroppedAvatar(User $user) {
-        $mysql = MySQL::open(Settings::db_name_infected_crew);
+        $database = Database::open(Settings::db_name_infected_crew);
         
-        $result = $mysql->query('SELECT `id` FROM `' . Settings::db_table_infected_crew_avatars . '` 
-                                 WHERE `userId` = \'' . $user->getId() . '\'
-                                 AND (`state` = 1 OR `state` = 2);');
+        $result = $database->query('SELECT `id` FROM `' . Settings::db_table_infected_crew_avatars . '` 
+                                    WHERE `userId` = \'' . $user->getId() . '\'
+                                    AND (`state` = 1 OR `state` = 2);');
         
-        $mysql->close();
+        $database->close();
 
         return $result->num_rows > 0;
     }
@@ -105,13 +105,13 @@ class AvatarHandler {
      * Returns true if the specificed user have a valid vatar.
      */
     public static function hasValidAvatar(User $user) {
-        $mysql = MySQL::open(Settings::db_name_infected_crew);
+        $database = Database::open(Settings::db_name_infected_crew);
         
-        $result = $mysql->query('SELECT `id` FROM `' . Settings::db_table_infected_crew_avatars . '` 
-                                 WHERE `userId` = \'' . $user->getId() . '\'
-                                 AND `state` = 2;');
+        $result = $database->query('SELECT `id` FROM `' . Settings::db_table_infected_crew_avatars . '` 
+                                    WHERE `userId` = \'' . $user->getId() . '\'
+                                    AND `state` = \'2\';');
         
-        $mysql->close();
+        $database->close();
 
         return $result->num_rows > 0;
     }
@@ -120,13 +120,13 @@ class AvatarHandler {
      * Creates an new avatar.
      */
     public static function createAvatar($fileName, User $user) {
-        $mysql = MySQL::open(Settings::db_name_infected_crew);
+        $database = Database::open(Settings::db_name_infected_crew);
 
-        $result = $mysql->query('INSERT INTO `' . Settings::db_table_infected_crew_avatars . '` (`userId`, `file`) 
-                                 VALUES (\'' . $user->getId() . '\',
-                                         \'' . $fileName . '\');');
+        $result = $database->query('INSERT INTO `' . Settings::db_table_infected_crew_avatars . '` (`userId`, `file`) 
+                                    VALUES (\'' . $user->getId() . '\',
+                                            \'' . $fileName . '\');');
         
-        $mysql->close();
+        $database->close();
 
         return Settings::api_path . Settings::avatar_path . 'temp/' . $fileName;
     }
@@ -135,12 +135,12 @@ class AvatarHandler {
      * Deletes an avatar.
      */
     public static function deleteAvatar(Avatar $avatar) {
-        $mysql = MySQL::open(Settings::db_name_infected_crew);
+        $database = Database::open(Settings::db_name_infected_crew);
 
-        $result = $mysql->query('DELETE FROM `' . Settings::db_table_infected_crew_avatars . '` 
-                                 WHERE `id` = \'' . $avatar->getId() . '\';');
+        $result = $database->query('DELETE FROM `' . Settings::db_table_infected_crew_avatars . '` 
+                                    WHERE `id` = \'' . $avatar->getId() . '\';');
         
-        $mysql->close();
+        $database->close();
 
         // Delete all avatars.
         $avatar->deleteFiles();
@@ -150,26 +150,26 @@ class AvatarHandler {
      * Accept the specificed avatar.
      */
     public static function acceptAvatar(Avatar $avatar) {
-        $mysql = MySQL::open(Settings::db_name_infected_crew);
+        $database = Database::open(Settings::db_name_infected_crew);
         
-        $mysql->query('UPDATE `' . Settings::db_table_infected_crew_avatars . '` 
-                       SET `state` = \'2\'
-                       WHERE `id` = \'' . $avatar->getId() . '\';');
+        $database->query('UPDATE `' . Settings::db_table_infected_crew_avatars . '` 
+                          SET `state` = \'2\'
+                          WHERE `id` = \'' . $avatar->getId() . '\';');
         
-        $mysql->close();
+        $database->close();
     }
     
     /*
      * Reject the specified avatar.
      */
     public static function rejectAvatar(Avatar $avatar) {
-        $mysql = MySQL::open(Settings::db_name_infected_crew);
+        $database = Database::open(Settings::db_name_infected_crew);
         
-        $mysql->query('UPDATE `' . Settings::db_table_infected_crew_avatars . '` 
-                       SET `state` =  \'3\'
-                       WHERE `id` = \'' . $avatar->getId() . '\';');
+        $database->query('UPDATE `' . Settings::db_table_infected_crew_avatars . '` 
+                          SET `state` =  \'3\'
+                          WHERE `id` = \'' . $avatar->getId() . '\';');
         
-        $mysql->close();
+        $database->close();
     }
     
     /*

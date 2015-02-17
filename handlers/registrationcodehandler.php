@@ -1,6 +1,6 @@
 <?php
 require_once 'settings.php';
-require_once 'mysql.php';
+require_once 'database.php';
 require_once 'objects/user.php';
 
 class RegistrationCodeHandler {
@@ -8,14 +8,14 @@ class RegistrationCodeHandler {
      * Get the registration code for a given user, if one exists.
      */
     public static function getRegistrationCode(User $user) {
-        $mysql = MySQL::open(Settings::db_name_infected);
+        $database = Database::open(Settings::db_name_infected);
         
-        $result = $mysql->query('SELECT `code` FROM `' . Settings::db_table_infected_registrationcodes . '` 
-                                 WHERE `userId` = \'' . $user->getId() . '\';');
+        $result = $database->query('SELECT `code` FROM `' . Settings::db_table_infected_registrationcodes . '` 
+                                    WHERE `userId` = \'' . $user->getId() . '\';');
                             
         $row = $result->fetch_array();
         
-        $mysql->close();
+        $database->close();
 
         if ($row) {
             return $row['code'];
@@ -23,23 +23,23 @@ class RegistrationCodeHandler {
     }
     
     public static function hasRegistrationCode($code) {
-        $mysql = MySQL::open(Settings::db_name_infected);
+        $database = Database::open(Settings::db_name_infected);
         
-        $result = $mysql->query('SELECT `id` FROM `' . Settings::db_table_infected_registrationcodes . '` 
-                                 WHERE `code` = \'' . $mysql->real_escape_string($code) . '\';');
+        $result = $database->query('SELECT `id` FROM `' . Settings::db_table_infected_registrationcodes . '` 
+                                    WHERE `code` = \'' . $database->real_escape_string($code) . '\';');
         
-        $mysql->close();
+        $database->close();
 
         return $result->num_rows > 0;
     }
     
     public static function hasUserRegistrationCode(User $user) {
-        $mysql = MySQL::open(Settings::db_name_infected);
+        $database = Database::open(Settings::db_name_infected);
         
-        $result = $mysql->query('SELECT `id` FROM `' . Settings::db_table_infected_registrationcodes . '` 
-                                      WHERE `userId` = \'' . $user->getId() . '\';');
+        $result = $database->query('SELECT `id` FROM `' . Settings::db_table_infected_registrationcodes . '` 
+                                    WHERE `userId` = \'' . $user->getId() . '\';');
         
-        $mysql->close();
+        $database->close();
 
         return $result->num_rows > 0;
     }
@@ -50,13 +50,13 @@ class RegistrationCodeHandler {
     public static function createRegistrationCode(User $user) {
         $code = bin2hex(openssl_random_pseudo_bytes(16));
         
-        $mysql = MySQL::open(Settings::db_name_infected);
+        $database = Database::open(Settings::db_name_infected);
         
-        $mysql->query('INSERT INTO `' . Settings::db_table_infected_registrationcodes . '` (`userId`, `code`) 
-                       VALUES (\'' . $user->getId() . '\', 
-                               \'' . $code . '\');');
+        $database->query('INSERT INTO `' . Settings::db_table_infected_registrationcodes . '` (`userId`, `code`) 
+                          VALUES (\'' . $user->getId() . '\', 
+                                  \'' . $code . '\');');
                                     
-        $mysql->close();
+        $database->close();
         
         return $code;
     }
@@ -65,24 +65,24 @@ class RegistrationCodeHandler {
      * Remove registration code for current user, if one exists.
      */
     public static function removeRegistrationCode($code) {
-        $mysql = MySQL::open(Settings::db_name_infected);
+        $database = Database::open(Settings::db_name_infected);
         
-        $mysql->query('DELETE FROM `' . Settings::db_table_infected_registrationcodes . '` 
-                       WHERE `code` = \'' . $mysql->real_escape_string($code) . '\';');
+        $database->query('DELETE FROM `' . Settings::db_table_infected_registrationcodes . '` 
+                          WHERE `code` = \'' . $database->real_escape_string($code) . '\';');
         
-        $mysql->close();
+        $database->close();
     }
     
     /*
      * Remove registration code for current user, if one exists.
      */
     public static function removeUserRegistrationCode(User $user) {
-        $mysql = MySQL::open(Settings::db_name_infected);
+        $database = Database::open(Settings::db_name_infected);
         
-        $mysql->query('DELETE FROM `' . Settings::db_table_infected_registrationcodes . '` 
-                       WHERE `userId` = \'' . $user->getId() . '\';');
+        $database->query('DELETE FROM `' . Settings::db_table_infected_registrationcodes . '` 
+                          WHERE `userId` = \'' . $user->getId() . '\';');
         
-        $mysql->close();
+        $database->close();
     }
 }
 ?>
