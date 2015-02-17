@@ -14,8 +14,8 @@ class Event extends Object {
 	private $bookingTime;
 	private $startTime;
 	private $endTime;
-	private $seatmap;
-	private $ticketType;
+	private $seatmapId;
+	private $ticketTypeId;
 	
 	/*
 	 * Returns theme of this event.
@@ -63,14 +63,14 @@ class Event extends Object {
 	 * Returns the seatmap for this event.
 	 */
 	public function getSeatmap() {
-		return SeatmapHandler::getSeatmap($this->seatmap);
+		return SeatmapHandler::getSeatmap($this->seatmapId);
 	}
 
 	/*
 	 * Returns the ticket type for this event.
 	 */
 	public function getTicketType() {
-		return TicketTypeHandler::getTicketType($this->ticketType);
+		return TicketTypeHandler::getTicketType($this->ticketTypeId);
 	}
 	
 	/*

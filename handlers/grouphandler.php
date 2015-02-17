@@ -59,7 +59,7 @@ class GroupHandler {
     /*
      * Create a new group
      */
-    public static function createGroup($name, $title, $description, $leader, $coleader) {
+    public static function createGroup(Event $event, $name, $title, $description, $leader, $coleader) {
         $mysql = MySQL::open(Settings::db_name_infected_crew);
         
         $mysql->query('INSERT INTO `' . Settings::db_table_infected_crew_groups . '` (`name`, `title`, `description`, `leader`, `coleader`) 
@@ -75,7 +75,7 @@ class GroupHandler {
     /*
      * Update the specified group.
      */
-    public static function updateGroup($id, $name, $title, $description, $leader, $coleader) {
+    public static function updateGroup($group, $name, $title, $description, $leader, $coleader) {
         $mysql = MySQL::open(Settings::db_name_infected_crew);
         
         $mysql->query('UPDATE `' . Settings::db_table_infected_crew_groups . '` 

@@ -5,17 +5,17 @@ require_once 'mysql.php';
 require_once 'handlers/userhandler.php';
 require_once 'handlers/grouphandler.php';
 require_once 'handlers/teamhandler.php';
-require_once 'objects/object.php';
+require_once 'objects/eventobject.php';
 
 /*
  * Used to store information about a group.
  */
-class Group extends Object {
+class Group extends EventObject {
 	private $name;
 	private $title;
 	private $description;
-	private $leader;
-	private $coleader;
+	private $leaderId;
+	private $coleaderId;
 	private $queuing;
 	
 	/* 
@@ -43,14 +43,14 @@ class Group extends Object {
 	 * Returns the user which is the leader of this group. 
 	 */
 	public function getLeader() {
-		return UserHandler::getUser($this->leader);
+		return UserHandler::getUser($this->leaderId);
 	}
 	
 	/* 
 	 * Returns the user which is the co-leader of this group. 
 	 */
 	public function getCoLeader() {
-		return UserHandler::getUser($this->coleader);
+		return UserHandler::getUser($this->coleaderId);
 	}
 	
 	/*
