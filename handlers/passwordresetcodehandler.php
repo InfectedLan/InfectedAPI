@@ -1,10 +1,10 @@
 <?php
 require_once 'settings.php';
 require_once 'mysql.php';
-require_once 'handlers/userhandler.php';
+require_once 'objects/user.php';
 
 class PasswordResetCodeHandler {
-    public static function createPasswordResetCode($user) {
+    public static function createPasswordResetCode(User $user) {
         $code = bin2hex(openssl_random_pseudo_bytes(16));
         
         $mysql = MySQL::open(Settings::db_name_infected);
@@ -24,7 +24,7 @@ class PasswordResetCodeHandler {
         return $code;
     }
     
-    public static function hasPasswordResetCode($user) {
+    public static function hasPasswordResetCode(User $user) {
         $mysql = MySQL::open(Settings::db_name_infected);
         
         $result = $mysql->query('SELECT `id` FROM `' . Settings::db_table_infected_passwordresetcodes . '` 
@@ -32,9 +32,7 @@ class PasswordResetCodeHandler {
                             
         $mysql->close();
 
-        $row = $result->fetch_array();
-
-        return $row ? true : false;
+        return $result->num_rows > 0;
     }
     
     public static function existsPasswordResetCode($code) {
@@ -45,24 +43,19 @@ class PasswordResetCodeHandler {
                       
         $mysql->close();
 
-        $row = $result->fetch_array();
-
-        return $row ? true : false;
+        return $result->num_rows > 0;
     }
     
     public static function getUserFromPasswordResetCode($code) {
         $mysql = MySQL::open(Settings::db_name_infected);
         
-        $result = $mysql->query('SELECT `userId` FROM `' . Settings::db_table_infected_passwordresetcodes . '` 
-                                 WHERE `code` = \'' . $mysql->real_escape_string($code) . '\';');
+        $result = $mysql->query('SELECT * FROM `' . Settings::db_table_infected_users . '`
+                                 WHERE `id` = (SELECT `userId` FROM `' . Settings::db_table_infected_passwordresetcodes . '` 
+                                               WHERE `code` = \'' . $mysql->real_escape_string($code) . '\');');
         
         $mysql->close();
 
-        $row = $result->fetch_array();
-
-        if ($row) {
-            return UserHandler::getUser($row['userId']);
-        }
+        return $result->fetch_object('User');
     }
     
     public static function removePasswordResetCode($code) {
@@ -74,7 +67,7 @@ class PasswordResetCodeHandler {
         $mysql->close();
     }
     
-    public static function removeUserPasswordResetCode($user) {
+    public static function removeUserPasswordResetCode(User $user) {
         $mysql = MySQL::open(Settings::db_name_infected);
         
         $mysql->query('DELETE FROM `' . Settings::db_table_infected_passwordresetcodes . '` 

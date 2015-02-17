@@ -17,12 +17,16 @@ if (Session::isAuthenticated()) {
 			is_numeric($_GET['id']) &&
 			!empty($_GET['title']) &&
 			!empty($_GET['content'])) {
-			$id = $_GET['id'];
+			$page = PageHandler::getPage($_GET['id']);
 			$title = $_GET['title'];
 			$content = $_GET['content'];
 			
-			PageHandler::updatePage($id, $title, $content);
-			$result = true;
+			if ($page != null) {
+				PageHandler::updatePage($id, $title, $content);
+				$result = true;
+			} else {
+				$message = 'Siden finnes ikke.';
+			}
 		} else {
 			$message = 'Du har ikke fyllt ut alle feltene.';
 		}

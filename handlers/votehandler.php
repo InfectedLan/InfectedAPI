@@ -2,6 +2,8 @@
 require_once 'settings.php';
 require_once 'mysql.php';
 require_once 'objects/vote.php';
+require_once 'objects/voteoption.php';
+require_once 'objects/user.php';
 
 class VoteHandler {
     public static function getVote($id) {
@@ -15,11 +17,11 @@ class VoteHandler {
 		return $result->fetch_object('Vote');
     }
     
-    public static function getNumBanned($mysqlsumerId) {
+    public static function getNumBanned(User $consumer) {
         $mysql = MySQL::open(Settings::db_name_infected_compo);
 
         $result = $mysql->query('SELECT `id` FROM `' . Settings::db_table_infected_compo_votes . '` 
-                                 WHERE `consumerId` = ' . $mysql->real_escape_string($mysqlsumerId) . ';');
+                                 WHERE `consumerId` = ' . $mysql->real_escape_string($consumer->getId()) . ';');
         
         $mysql->close();
 
@@ -32,13 +34,13 @@ class VoteHandler {
         return $turnArray[$numBanned];
     }
     
-    public static function banMap($voteOption, $mysqlsumerId) {
+    public static function banMap(VoteOption $voteOption, User $consumer) {
         $mysql = MySQL::open(Settings::db_name_infected_compo);
 
         $result = $mysql->query('INSERT INTO `' . Settings::db_table_infected_compo_votes . '` (`consumerId`, `voteOptionId`) 
-                                 VALUES (\'' . $mysql->real_escape_string($mysqlsumerId) . '\', 
+                                 VALUES (\'' . $mysql->real_escape_string($consumer->getId()) . '\', 
                                          \'' . $mysql->real_escape_string($voteOption->getId()) . '\');');
-    
+        
         $mysql->close();
     }
 }

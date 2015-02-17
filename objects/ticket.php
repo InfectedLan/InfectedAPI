@@ -9,21 +9,13 @@ require_once 'handlers/seathandler.php';
 require_once 'handlers/checkinstatehandler.php';
 require_once 'objects/object.php';
 
-class Ticket extends Object {
-	private $eventId;
+class Ticket extends EventObject {
 	private $paymentId;
 	private $typeId;
 	private $buyerId;
 	private $userId;
 	private $seatId;
 	private $seaterId;
-
-	/*
-	 * Returns the event this ticket is for
-	 */
-	public function getEvent() {
-		return EventHandler::getEvent($this->eventId);
-	}
 	
 	/*
 	 * Returns the payment that this ticket is linked to, if any.

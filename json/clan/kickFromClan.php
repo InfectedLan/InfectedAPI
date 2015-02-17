@@ -17,7 +17,7 @@ if (Session::isAuthenticated()) {
 			$clan = ClanHandler::getClan($_GET['clan']);
 		
 			if ($clan != null) {
-				if ($user->getId() == $clan->getChief()) {
+				if ($user->equals($clan->getChief())) {
 					ClanHandler::kickFromClan($victim, $clan);
 					$result = true;
 				} else {

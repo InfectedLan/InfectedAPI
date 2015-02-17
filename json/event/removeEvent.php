@@ -11,8 +11,14 @@ if (Session::isAuthenticated()) {
 	if ($user->hasPermission('*')) {
 		if (isset($_GET['id']) &&
 			is_numeric($_GET['id'])) {
-			EventHandler::removeEvent($_GET['id']);
-			$result = true;
+			$event = EventHandler::getEvent($_GET['id']);
+
+			if ($event != null) {
+				EventHandler::removeEvent($event);
+				$result = true;
+			} else {
+				$message = 'Arrangementet finnes ikke.';
+			}
 		} else {
 			$message = 'Ikke noe arrangement spesifisert.';
 		}

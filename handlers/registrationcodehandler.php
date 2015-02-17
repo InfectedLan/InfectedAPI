@@ -1,12 +1,13 @@
 <?php
 require_once 'settings.php';
 require_once 'mysql.php';
+require_once 'objects/user.php';
 
 class RegistrationCodeHandler {
     /* 
      * Get the registration code for a given user, if one exists.
      */
-    public static function getRegistrationCode($user) {
+    public static function getRegistrationCode(User $user) {
         $mysql = MySQL::open(Settings::db_name_infected);
         
         $result = $mysql->query('SELECT `code` FROM `' . Settings::db_table_infected_registrationcodes . '` 
@@ -29,12 +30,10 @@ class RegistrationCodeHandler {
         
         $mysql->close();
 
-        $row = $result->fetch_array();
-
-        return $row ? true : false;
+        return $result->num_rows > 0;
     }
     
-    public static function hasUserRegistrationCode($user) {
+    public static function hasUserRegistrationCode(User $user) {
         $mysql = MySQL::open(Settings::db_name_infected);
         
         $result = $mysql->query('SELECT `id` FROM `' . Settings::db_table_infected_registrationcodes . '` 
@@ -42,15 +41,13 @@ class RegistrationCodeHandler {
         
         $mysql->close();
 
-        $row = $result->fetch_array();
-
-        return $row ? true : false;
+        return $result->num_rows > 0;
     }
     
     /*
      * Create a registration code for given user.
      */
-    public static function createRegistrationCode($user) {
+    public static function createRegistrationCode(User $user) {
         $code = bin2hex(openssl_random_pseudo_bytes(16));
         
         $mysql = MySQL::open(Settings::db_name_infected);
@@ -79,7 +76,7 @@ class RegistrationCodeHandler {
     /*
      * Remove registration code for current user, if one exists.
      */
-    public static function removeUserRegistrationCode($user) {
+    public static function removeUserRegistrationCode(User $user) {
         $mysql = MySQL::open(Settings::db_name_infected);
         
         $mysql->query('DELETE FROM `' . Settings::db_table_infected_registrationcodes . '` 

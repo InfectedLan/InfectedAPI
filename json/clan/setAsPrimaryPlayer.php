@@ -17,7 +17,7 @@ if (Session::isAuthenticated()) {
 			$clan = ClanHandler::getClan($_GET['clan']);
 			
 			if ($clan != null) {
-				if ($user->getId()  == $clan->getChief() ) {
+				if ($user->equals($clan->getChief())) {
 					$compo = ClanHandler::getCompo($clan);
 					$currentMainPlayers = ClanHandler::getPlayingMembers($clan);
 

@@ -23,10 +23,7 @@ if (Session::isAuthenticated()) {
 					!empty($_GET['compoSpacing'])) {
 
 					if (!CompoHandler::hasGeneratedMatches($compo)) {
-						CompoHandler::generateDoubleElimination($compo, 
-																$_GET['startTime'], 
-																$_GET['compoSpacing']);
-						
+						CompoHandler::generateDoubleElimination($compo, $_GET['startTime'], $_GET['compoSpacing']);
 						$result = true;
 					} else {
 						$message = 'Compoen har allerede genererte matcher.';

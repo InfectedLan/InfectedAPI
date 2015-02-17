@@ -3,6 +3,8 @@ require_once 'settings.php';
 require_once 'mysql.php';
 require_once 'objects/chat.php';
 require_once 'objects/chatmessage.php';
+require_once 'objects/clan.php';
+require_once 'objects/user.php';
 
 class ChatHandler {	
 	/*
@@ -22,10 +24,9 @@ class ChatHandler {
 	/*
  	 * Adds entire clan to chat
  	 */
-	public static function addClanMembersToChat($chat, $clan) {
-		//Let all chat members chat, just because
-		$members = $clan->getMembers();
-		foreach($members as $member) {
+	public static function addClanMembersToChat(Chat $chat, Clan $clan) {
+		// Let all chat members chat, just because.
+		foreach ($clan->getMembers() as $member) {
 			self::addChatMember($member, $chat);
 		}
     }
@@ -85,7 +86,7 @@ class ChatHandler {
 	/*
 	 * Returns the last chat messages for the given chat.
 	 */
-	public static function getLastChatMessage($chat) {
+	public static function getLastChatMessage(Chat $chat) {
 		$mysql = MySQL::open(Settings::db_name_infected_compo);
 		
 		$result = $mysql->query('SELECT * FROM `' . Settings::db_table_infected_compo_chatmessages . '`
@@ -101,7 +102,7 @@ class ChatHandler {
 	/*
 	 * Returns an array of the last given number of chat messages for given chat.
 	 */
-	public static function getLastMessages($chat, $count) {
+	public static function getLastMessages(Chat $chat, $count) {
 		$mysql = MySQL::open(Settings::db_name_infected_compo);
 		
 		$result = $mysql->query('SELECT * FROM `' . Settings::db_table_infected_compo_chatmessages . '`
@@ -128,18 +129,16 @@ class ChatHandler {
 		
 		$mysql->query('INSERT INTO `' . Settings::db_table_infected_compo_chats . '` (`name`) 
                        VALUES (\'' . $mysql->real_escape_string($name) . '\');');
-						
-		$chat = self::getChat($mysql->insert_id);
-						
+			
 		$mysql->close();
 		
-		return $chat;
+		return self::getChat($mysql->insert_id);
 	}
 	
 	/*
 	 * Remove a chat.
 	 */
-	public static function removeChat($chat) {
+	public static function removeChat(Chat $chat) {
 		$mysql = MySQL::open(Settings::db_name_infected_compo);
 		
 		$mysql->query('DELETE FROM `' . Settings::db_table_infected_compo_chats . '` 
@@ -157,7 +156,7 @@ class ChatHandler {
 	/*
 	 * Remove chat messages for given chat.
 	 */
-	public static function removeChatMessages($chat) {
+	public static function removeChatMessages(Chat $chat) {
 		$mysql = MySQL::open(Settings::db_name_infected_compo);
 		
 		$mysql->query('DELETE FROM `' . Settings::db_table_infected_compo_chatmessages . '` 
@@ -169,7 +168,7 @@ class ChatHandler {
 	/*
 	 * Returns true if the given user is member of the given chat.
 	 */
-	public static function isChatMember($user, $chat) {
+	public static function isChatMember(User $user, Chat $chat) {
 		$mysql = MySQL::open(Settings::db_name_infected_compo);
 		
 		$result = $mysql->query('SELECT `id` FROM `' . Settings::db_table_infected_compo_memberofchat . '`
@@ -178,26 +177,25 @@ class ChatHandler {
         
 		$mysql->close();
 		
-        $row = $result->fetch_array();
-
-        return $row ? true : false;
+        return $result->num_rows > 0;
 	}
 	
 	/*
 	 * Returns an array of all members in the specificed chat.
 	 */
-	public static function getChatMembers($chat) {
-		$mysql = MySQL::open(Settings::db_name_infected_compo);
+	public static function getChatMembers(Chat $chat) {
+		$mysql = MySQL::open(Settings::db_name_infected);
 		
-		$result = $mysql->query('SELECT `userId` FROM `' . Settings::db_table_infected_compo_memberofchat . '`
-                                 WHERE `chatId` = \'' . $mysql->real_escape_string($chat->getId()) . '\';');
-        
+        $result = $mysql->query('SELECT * FROM `' . Settings::db_table_infected_users . '`
+                                 WHERE `id` = (SELECT `userId` FROM `' . Settings::db_name_infected_compo . '`.`' . Settings::db_table_infected_compo_memberofchat . '`
+                                 			   WHERE `chatId` = \'' . $mysql->real_escape_string($chat->getId()) . '\');');
+
 		$mysql->close();
 		
 		$chatMemberList = array();
-		
-        while ($row = $result->fetch_array()) {
-            array_push($chatMemberList, UserHandler::getUser($row['userId']));
+
+        while ($object = $result->fetch_object('User')) {
+            array_push($chatMemberList, $object);
         }
 
         return $chatMemberList;
@@ -206,7 +204,7 @@ class ChatHandler {
 	/*
 	 * Add the given user to the specified chat.
 	 */
-	public static function addChatMember($user, $chat) {
+	public static function addChatMember(User $user, Chat $chat) {
 		$mysql = MySQL::open(Settings::db_name_infected_compo);
 		
 		$mysql->query('INSERT INTO `' . Settings::db_table_infected_compo_memberofchat . '` (`userId`, `chatId`) 
@@ -219,7 +217,7 @@ class ChatHandler {
 	/*
 	 * Remove the given user from the specified chat.
 	 */
-	public static function removeChatMember($user, $chat) {
+	public static function removeChatMember(User $user, Chat $chat) {
 		$mysql = MySQL::open(Settings::db_name_infected_compo);
 		
 		$mysql->query('DELETE FROM `' . Settings::db_table_infected_compo_memberofchat . '` 
@@ -232,7 +230,7 @@ class ChatHandler {
 	/*
 	 * Remove members from the given chat.
 	 */
-	public static function removeChatMembers($chat) {
+	public static function removeChatMembers(Chat $chat) {
 		$mysql = MySQL::open(Settings::db_name_infected_compo);
 		
 		$mysql->query('DELETE FROM `' . Settings::db_table_infected_compo_memberofchat . '` 
@@ -244,7 +242,7 @@ class ChatHandler {
 	/*
 	 * Send a massage to this chat from the given user.
 	 */
-	public static function sendChatMessage($user, $chat, $message) {
+	public static function sendChatMessage(User $user, Chat $chat, $message) {
 		$mysql = MySQL::open(Settings::db_name_infected_compo);
 		
 		$mysql->query('INSERT INTO `' . Settings::db_table_infected_compo_chatmessages . '` (`userId`, `chatId`, `time`, `message`) 

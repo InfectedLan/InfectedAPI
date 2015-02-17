@@ -18,15 +18,19 @@ if (Session::isAuthenticated()) {
 			isset($_GET['coleader']) &&
 			!empty($_GET['title']) &&
 			!empty($_GET['description'])) {
-			$id = $_GET['id'];
+			$group = GroupHandler::getGroup($_GET['id']);
 			$name = strtolower(str_replace(' ', '-', $_GET['title']));
 			$title = $_GET['title'];
 			$description = $_GET['description'];
 			$leader = $_GET['leader'];
 			$coleader = $_GET['coleader'];
 
-			GroupHandler::updateGroup($id, $name, $title, $description, $leader, $coleader);
-			$result = true;
+			if ($group != null) {
+				GroupHandler::updateGroup($group, $name, $title, $description, $leader, $coleader);
+				$result = true;
+			} else {
+				$message = 'Gruppen finnes ikke.';
+			}
 		} else {
 			$message = 'Du har ikke fylt ut alle feltene.';
 		}

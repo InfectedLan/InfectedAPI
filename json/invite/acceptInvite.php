@@ -14,7 +14,7 @@ if (Session::isAuthenticated()) {
 		$invite = InviteHandler::getInvite($_GET['id']);
 		
 		if ($invite != null) {
-			if ($invite->getUserId() == $user->getId()) {
+			if ($user->equals($invite->getUser())) {
 				$invite->accept();
 				$result = true;
 			} else {

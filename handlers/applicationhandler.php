@@ -4,6 +4,9 @@ require_once 'mysql.php';
 require_once 'notificationmanager.php';
 require_once 'handlers/eventhandler.php';
 require_once 'objects/application.php';
+require_once 'objects/group.php';
+require_once 'objects/user.php';
+require_once 'objects/event.php';
 
 class ApplicationHandler {
     /* 
@@ -67,7 +70,7 @@ class ApplicationHandler {
     /* 
      * Returns a list of pending applications.
      */
-    public static function getPendingApplicationsForGroup($group) {
+    public static function getPendingApplicationsForGroup(Group $group) {
         $mysql = MySQL::open(Settings::db_name_infected_crew);
         
         $result = $mysql->query('SELECT `' . Settings::db_table_infected_crew_applications . '`.* FROM `' . Settings::db_table_infected_crew_applications . '`
@@ -118,7 +121,7 @@ class ApplicationHandler {
     /*
      * Returns a list of all queued applications for a given group.
      */
-    public static function getQueuedApplicationsForGroup($group) {
+    public static function getQueuedApplicationsForGroup(Group $group) {
         $mysql = MySQL::open(Settings::db_name_infected_crew);
         
         $result = $mysql->query('SELECT `' . Settings::db_table_infected_crew_applications . '`.* FROM `' . Settings::db_table_infected_crew_applications . '`
@@ -165,7 +168,7 @@ class ApplicationHandler {
     /*
      * Returns a list of all accepted applications for a given group.
      */
-    public static function getAcceptedApplicationsForGroup($group) {
+    public static function getAcceptedApplicationsForGroup(Group $group) {
         $mysql = MySQL::open(Settings::db_name_infected_crew);
         
         $result = $mysql->query('SELECT * FROM `' . Settings::db_table_infected_crew_applications . '`
@@ -187,7 +190,7 @@ class ApplicationHandler {
     /* 
      * Create a new application. 
      */
-    public static function createApplication($group, $user, $content) {
+    public static function createApplication(Group $group, User $user, $content) {
         $mysql = MySQL::open(Settings::db_name_infected_crew);
         
         $mysql->query('INSERT INTO `' . Settings::db_table_infected_crew_applications . '` (`eventId`, `groupId`, `userId`, `openedTime`, `state`, `content`) 
@@ -214,7 +217,7 @@ class ApplicationHandler {
     /* 
      * Remove an application.
      */
-    public static function removeApplication($application) {
+    public static function removeApplication(Application $application) {
         $mysql = MySQL::open(Settings::db_name_infected_crew);
         
         // Remove the application.
@@ -230,9 +233,9 @@ class ApplicationHandler {
     /*
      * Accepts an application, with a optional comment.
      */
-    public static function acceptApplication($user, $application, $comment, $notify) {
+    public static function acceptApplication(User $user, Application $application, $comment, $notify) {
 		// Only allow application for current event to be accepted.
-		if ($application->getEvent()->getId() == EventHandler::getCurrentEvent()->getId()) {
+		if ($applicatin->getEvent()->equals(EventHandler::getCurrentEvent())) {
 			$mysql = MySQL::open(Settings::db_name_infected_crew);
 			
 			$mysql->query('UPDATE `' . Settings::db_table_infected_crew_applications . '` 
@@ -253,9 +256,9 @@ class ApplicationHandler {
 			// Reject users application for all other groups.
 			$applicationList = self::getUserApplications($applicationUser);
 			
-			foreach ($applicationList as $value) {
-				if ($group->getId() != $value->getGroup()->getId()) {
-					self::closeApplication($user, $value);
+			foreach ($applicationList as $applicationValue) {
+                if ($group->equals($applicationValue->getGroup())) {
+					self::closeApplication($user, $applicationValue);
 				}
 			}
 			
@@ -273,9 +276,9 @@ class ApplicationHandler {
     /*
      * Rejects an application, with a optional comment.
      */
-    public static function rejectApplication($user, $application, $comment, $notify) {
+    public static function rejectApplication(User $user, Application $application, $comment, $notify) {
 		// Only allow application for current event to be rejected.
-		if ($application->getEvent()->getId() == EventHandler::getCurrentEvent()->getId()) {
+        if ($application->getEvent()->equals(EventHandler::getCurrentEvent())) {
 			$mysql = MySQL::open(Settings::db_name_infected_crew);
 			
 			$mysql->query('UPDATE `' . Settings::db_table_infected_crew_applications . '` 
@@ -300,7 +303,7 @@ class ApplicationHandler {
     /*
      * Rejects an application, with a optional comment.
      */
-    public static function closeApplication($user, $application) {
+    public static function closeApplication(User $user, Application $application) {
         $mysql = MySQL::open(Settings::db_name_infected_crew);
         
         $mysql->query('UPDATE `' . Settings::db_table_infected_crew_applications . '` 
@@ -319,7 +322,7 @@ class ApplicationHandler {
     /*
      * Checks if an application is queued.
      */
-    public static function isQueued($application) {
+    public static function isQueued(Application $application) {
         $mysql = MySQL::open(Settings::db_name_infected_crew);
         
         $result = $mysql->query('SELECT `id` FROM `' . Settings::db_table_infected_crew_applicationqueue . '` 
@@ -328,17 +331,15 @@ class ApplicationHandler {
 
         $mysql->close();
 
-        $row = $result->fetch_array();
-                
-        return $row ? true : false;
+        return $result->num_rows > 0;
     }
     
     /*
      * Puts an application in queue.
      */
-    public static function queueApplication($user, $application, $notify) {
+    public static function queueApplication(User $user, Application $application, $notify) {
 		// Only allow application for current event to be queued.
-		if ($application->getEvent()->getId() == EventHandler::getCurrentEvent()->getId()) {
+        if ($application->getEvent()->equals(EventHandler::getCurrentEvent())) {
 			if (!self::isQueued($application)) {
 				$mysql = MySQL::open(Settings::db_name_infected_crew);
 				
@@ -362,9 +363,9 @@ class ApplicationHandler {
     /*
      * Removes an application from queue.
      */
-    public static function unqueueApplication($user, $application) {
+    public static function unqueueApplication(User $user, Application $application) {
 		// Only allow application for current event to be unqueued.
-		if ($application->getEvent()->getId() == EventHandler::getCurrentEvent()->getId()) {
+        if ($application->getEvent()->equals(EventHandler::getCurrentEvent())) {
 			$mysql = MySQL::open(Settings::db_name_infected_crew);
 			
 			$mysql->query('DELETE FROM `' . Settings::db_table_infected_crew_applicationqueue . '` 
@@ -381,7 +382,7 @@ class ApplicationHandler {
     /*
      * Returns a true if user has application for group.
      */
-    public static function hasUserApplicationForGroup($user, $group) {
+    public static function hasUserApplicationForGroup(User $user, Group $group) {
         $mysql = MySQL::open(Settings::db_name_infected_crew);
         
         $result = $mysql->query('SELECT `id` FROM `' . Settings::db_table_infected_crew_applications . '`
@@ -392,15 +393,13 @@ class ApplicationHandler {
         
         $mysql->close();
 
-        $row = $result->fetch_array();
-		
-        return $row ? true : false;
+        return $result->num_rows > 0;
     }
     
     /*
      * Returns the application for group and user.
      */
-    public static function getUserApplicationForGroup($user, $group) {
+    public static function getUserApplicationForGroup(User $user, Group $group) {
         $mysql = MySQL::open(Settings::db_name_infected_crew);
         
         $result = $mysql->query('SELECT * FROM `' . Settings::db_table_infected_crew_applications . '`
@@ -417,7 +416,7 @@ class ApplicationHandler {
     /*
      * Returns a list of all applications for given user.
      */
-    public static function getUserApplications($user) {
+    public static function getUserApplications(User $user) {
         $mysql = MySQL::open(Settings::db_name_infected_crew);
         
         $result = $mysql->query('SELECT * FROM `' . Settings::db_table_infected_crew_applications . '`
@@ -438,7 +437,7 @@ class ApplicationHandler {
     /*
      * Returns a list of all applications for that event.
      */
-    public static function getApplicationsForEvent($event) {
+    public static function getApplicationsForEvent(Event $event) {
         $mysql = MySQL::open(Settings::db_name_infected_crew);
         
         $result = $mysql->query('SELECT * FROM `' . Settings::db_table_infected_crew_applications . '`

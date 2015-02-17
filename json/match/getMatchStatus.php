@@ -71,7 +71,7 @@ if (Session::isAuthenticated()) {
 			} else if ($match->getState() == Match::STATE_CUSTOM_PREGAME && 
 					   $match->isReady()) {
 				//As of now, it is safe to assume only CS:GO sees this.
-				$voteOptions = VoteOptionHandler::getVoteOptionsForCompo(CompoHandler::getCompo($match->getCompoId()));
+				$voteOptions = VoteOptionHandler::getVoteOptionsForCompo(CompoHandler::getCompo($match->getCompo()));
 				$participants = MatchHandler::getParticipants($match);
 
 				$banData = array();

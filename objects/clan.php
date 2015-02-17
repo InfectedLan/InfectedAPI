@@ -3,34 +3,44 @@ require_once 'settings.php';
 require_once 'mysql.php';
 require_once 'handlers/userhandler.php';
 require_once 'handlers/clanhandler.php';
-require_once 'objects/object.php';
+require_once 'objects/eventobject.php';
 
-class Clan extends Object {
-	private $chief;
+class Clan extends EventObject {
 	private $name;
-	private $event;
 	private $tag;
+	private $chiefId;
 
-	public function getChief() {
-		return $this->chief;
-	}
-
+	/*
+	 * Return the name of this clan.
+	 */
 	public function getName() {
 		return $this->name;
 	}
 
+	/*
+	 * Return the tag of this clan.
+	 */
 	public function getTag() {
 		return $this->tag;
 	}
 
-	public function getEvent() {
-		return $this->event;
+	/*
+	 * Return the chief of this clan.
+	 */
+	public function getChief() {
+		return UserHandler::getUser($this->chiefId);
 	}
 
+	/*
+	 * Returns a list of all the clan members.
+	 */
 	public function getMembers() {
 		return ClanHandler::getMembers($this);
 	}
 
+	/*
+	 * Returns true if this clan is qualified for specified compo.
+	 */
 	public function isQualified($compo) {
 		$primaryPlayers = ClanHandler::getPlayingMembers($this);
 
@@ -40,11 +50,13 @@ class Clan extends Object {
 
 		$mysql = MySQL::open(Settings::db_name_infected_compo);
 
-		$result = $mysql->query('SELECT * FROM `' . Settings::db_table_infected_compo_participantof . '` WHERE `clanId` = ' . $this->getId() . ' AND `compoId` = ' . $mysql->real_escape_string($compo->getId()) . ';');
+		$result = $mysql->query('SELECT `id` FROM `' . Settings::db_table_infected_compo_participantof . '` 
+								 WHERE `clanId` = \'' . $this->getId() . '\' 
+								 AND `compoId` = \'' . $mysql->real_escape_string($compo->getId()) . '\';');
 
 		$mysql->close();
 
-		return $row = mysqli_fetch_array($result);
+		return $result->num_rows > 0;
 	}
 }
 ?>

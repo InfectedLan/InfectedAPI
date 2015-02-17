@@ -13,13 +13,12 @@ if (Session::isAuthenticated()) {
 		isset($_GET['user'])) {
 		$clan = ClanHandler::getClan($_GET['id']);
 
-		if ($user->getId() == $clan->getChief()) {
+		if ($user->equals($clan->getChief())) {
 			$invite = UserHandler::getUser($_GET['user']);
 
 			if ($invite != null) {
 				if ($invite->isEligibleForCompos()) {
 					$compo = ClanHandler::getCompo($clan);
-
 					$inClan = count(ClanHandler::getInvites($clan)) + count(ClanHandler::getMembers($clan));
 
 					ClanHandler::inviteUser($clan, $invite);

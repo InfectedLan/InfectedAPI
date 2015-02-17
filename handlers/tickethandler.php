@@ -1,14 +1,12 @@
 <?php
 require_once 'settings.php';
 require_once 'mysql.php';
-require_once 'handlers/userhandler.php';
 require_once 'handlers/eventhandler.php';
-require_once 'handlers/tickettypehandler.php';
-require_once 'handlers/seathandler.php';
-require_once 'handlers/storesessionhandler.php';
-require_once 'handlers/tickettransferhandler.php';
 require_once 'objects/ticket.php';
-require_once 'objects/tickettransfer.php';
+require_once 'objects/event.php';
+require_once 'objects/user.php';
+require_once 'objects/tickettype.php';
+require_once 'objects/seat.php';
 
 class TicketHandler {
     public static function getTicket($id) {
@@ -22,7 +20,7 @@ class TicketHandler {
 		return $result->fetch_object('Ticket');
     }
     
-    public static function getTicketForUser($event, $user) {
+    public static function getTicketForUser(Event $event, User $user) {
         $mysql = MySQL::open(Settings::db_name_infected_tickets);
 
         $result = $mysql->query('SELECT * FROM `' . Settings::db_table_infected_tickets_tickets . '` 
@@ -35,7 +33,7 @@ class TicketHandler {
         return $result->fetch_object('Ticket');
     }
     
-    public static function getTicketsForUser($event, $user) {
+    public static function getTicketsForUser(Event $event, User $user) {
         $mysql = MySQL::open(Settings::db_name_infected_tickets);
 
         $result = $mysql->query('SELECT * FROM `' . Settings::db_table_infected_tickets_tickets . '` 
@@ -54,7 +52,7 @@ class TicketHandler {
     }
 
     //Renamed from hasUserTicket to make function behaviour more obvious
-    public static function hasUserAnyTicket($user) {
+    public static function hasUserAnyTicket(User $user) {
         $mysql = MySQL::open(Settings::db_name_infected_tickets);
 
         $result = $mysql->query('SELECT `id` FROM `' . Settings::db_table_infected_tickets_tickets . '` 
@@ -62,13 +60,11 @@ class TicketHandler {
 
 		$mysql->close();
 									  
-        $row = $result->fetch_array();
-        
-        return $row ? true : false;    
+        return $result->num_rows > 0;
     }
 
     // Renamed from hasTicket to make function behaviour more obvious
-    public static function hasTicketForEvent($event, $user) {
+    public static function hasTicketForEvent(Event $event, User $user) {
         $mysql = MySQL::open(Settings::db_name_infected_tickets);
 
         $result = $mysql->query('SELECT `id` FROM `' . Settings::db_table_infected_tickets_tickets . '` 
@@ -78,12 +74,10 @@ class TicketHandler {
 
 		$mysql->close();
 
-        $row = $result->fetch_array();
-        
-        return $row ? true : false;
+        return $result->num_rows > 0;
     }
     
-    public static function getTicketsForOwner($user) {
+    public static function getTicketsForOwner(User $user) {
         $mysql = MySQL::open(Settings::db_name_infected_tickets);
 
         $result = $mysql->query('SELECT * FROM `' . Settings::db_table_infected_tickets_tickets . '` 
@@ -100,7 +94,7 @@ class TicketHandler {
         return $ticketList;
     }
     
-    public static function getTicketsForOwnerAndEvent($user, $event) {
+    public static function getTicketsForOwnerAndEvent(User $user, Event $event) {
         $mysql = MySQL::open(Settings::db_name_infected_tickets);
 
         $result = $mysql->query('SELECT * FROM `' . Settings::db_table_infected_tickets_tickets . '` 
@@ -119,7 +113,7 @@ class TicketHandler {
         return $ticketList;
     }
     
-    public static function getTicketList($event) {
+    public static function getTicketList(Event $event) {
         $mysql = MySQL::open(Settings::db_name_infected_tickets);
 
         $result = $mysql->query('SELECT * FROM `' . Settings::db_table_infected_tickets_tickets . '` 
@@ -136,7 +130,7 @@ class TicketHandler {
         return $ticketList;
     }
 
-    public static function getTicketCount($event) {
+    public static function getTicketCount(Event $event) {
         $mysql = MySQL::open(Settings::db_name_infected_tickets);
 
         $result = $mysql->query('SELECT `id` FROM `' . Settings::db_table_infected_tickets_tickets . '` 
@@ -146,10 +140,11 @@ class TicketHandler {
         return $result->num_rows;
     }
 
-    public static function setSeater($ticket, $newSeater) {
+    public static function setSeater(Ticket $ticket, User $newSeater) {
         $mysql = MySQL::open(Settings::db_name_infected_tickets);
 
-        if (!isset($newSeater) || empty($newSeater)) {
+        if (!isset($newSeater) || 
+            empty($newSeater)) {
             $result = $mysql->query('UPDATE `' . Settings::db_table_infected_tickets_tickets . '` 
                                      SET `seaterId` = \'0\' 
                                      WHERE `id` = \'' . $mysql->real_escape_string($ticket->getId()) . '\';');
@@ -162,7 +157,7 @@ class TicketHandler {
         $mysql->close();
     }
 
-    public static function createTicket($user, $ticketType, $payment) {
+    public static function createTicket(User $user, TicketType $ticketType, $payment) {
         $mysql = MySQL::open(Settings::db_name_infected_tickets);
 
         $result = $mysql->query('INSERT INTO `' . Settings::db_table_infected_tickets_tickets . '` (`eventId`, `paymentId`, `typeId`, `buyerId`, `userId`) 
@@ -175,7 +170,7 @@ class TicketHandler {
         $mysql->close();
     }    
     
-    public static function getTicketsSeatableByUser($user, $event) {
+    public static function getTicketsSeatableByUser(User $user, Event $event) {
         $mysql = MySQL::open(Settings::db_name_infected_tickets);
 
         $result = $mysql->query('SELECT * FROM `' . Settings::db_table_infected_tickets_tickets . '` 
@@ -195,7 +190,7 @@ class TicketHandler {
         return $ticketList;
     }
     
-    public static function changeSeat($ticket, $seat) {
+    public static function changeSeat(Ticket $ticket, Seat $seat) {
         // Check that the current event matches tickets, we don't allow seating of old tickets.
         if ($ticket->getEvent()->equals(EventHandler::getCurrentEvent())) {
             $mysql = MySQL::open(Settings::db_name_infected_tickets);
@@ -208,7 +203,7 @@ class TicketHandler {
         }
     }
     
-    public static function updateTicketUser($ticket, $user) {
+    public static function updateTicketUser(Ticket $ticket, User $user) {
         if (!$user->equals($ticket->getUser())) {
             $mysql = MySQL::open(Settings::db_name_infected_tickets);
             

@@ -1,11 +1,14 @@
 <?php
 require_once 'mailmanager.php';
+require_once 'objects/user.php';
+require_once 'objects/group.php';
+require_once 'objects/application.php';
 
 class NotificationManager {
 	/*
 	 * Sends an mail to the users e-mail address with status information.
 	 */
-	public function sendApplicationCreatedNotification($user, $group) {
+	public function sendApplicationCreatedNotification(User $user, Group $group) {
 		if ($group->getLeader() != null) {
 			$message = array();
 			$message[] = '<!DOCTYPE html>';
@@ -25,7 +28,7 @@ class NotificationManager {
 	/*
 	 * Sends an mail to the users e-mail address with status information.
 	 */
-	public function sendApplicationAccpetedNotification($application) {
+	public function sendApplicationAccpetedNotification(Application $application) {
 		$message = array();
 		$message[] = '<!DOCTYPE html>';
 		$message[] = '<html>';
@@ -44,7 +47,7 @@ class NotificationManager {
 	/*
 	 * Sends an mail to the users e-mail address with status information.
 	 */
-	public function sendApplicationRejectedNotification($application, $comment) {
+	public function sendApplicationRejectedNotification(Application $application, $comment) {
 		$message = array();
 		$message[] = '<!DOCTYPE html>';
 		$message[] = '<html>';
@@ -63,7 +66,7 @@ class NotificationManager {
 	/*
 	 * Sends an mail to the users e-mail address with status information.
 	 */
-	public function sendApplicationQueuedNotification($application) {
+	public function sendApplicationQueuedNotification(Application $application) {
 		$message = array();
 		$message[] = '<!DOCTYPE html>';
 		$message[] = '<html>';
@@ -83,7 +86,7 @@ class NotificationManager {
 	/*
 	 * Sends a notification to the users e-mail address with purchase information.
 	 */
-	public function sendPurchaseCompleteNotification($user, $reference) {
+	public function sendPurchaseCompleteNotification(User $user, $reference) {
 		$message = array();
 		$message[] = '<!DOCTYPE html>';
 		$message[] = '<html>';

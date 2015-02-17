@@ -24,7 +24,7 @@ if (Session::isAuthenticated()) {
 			if ($page != null) {
 				if ($user->hasPermission('*') ||
 					$user->hasPermission('chief.my-crew') &&
-					($page->getGroup()->getId() == $user->getGroup()->getId())) {
+					($page->getGroup()->equals($user->getGroup()))) {
 					$title = $_GET['title'];
 					$content = $_GET['content'];
 					$group = isset($_GET['groupId']) ? GroupHandler::getGroup($_GET['groupId']) : $page->getGroup();

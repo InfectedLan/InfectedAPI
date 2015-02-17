@@ -33,9 +33,9 @@ if (Session::isAuthenticated()) {
 
 	//List invites
 	$inviteArray = array();
-	$invites = InviteHandler::getInvitesForUser($user);
+	$inviteList = InviteHandler::getInvitesForUser($user);
 
-	foreach($invites as $invite) {
+	foreach ($inviteList as $invite) {
 		$clan = ClanHandler::getClan($invite->getClanId());
 		$compo = ClanHandler::getCompo($clan);
 		$compoData = array('name' => $compo->getName(), 

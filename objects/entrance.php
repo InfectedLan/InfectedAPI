@@ -1,7 +1,7 @@
 <?php
 require_once 'objects/object.php';
 
-class Entrance extends Object{
+class Entrance extends Object {
 	private $name;
 	private $title;
 	

@@ -46,13 +46,13 @@ class PageHandler {
     /* 
      * Create a new page.
      */
-    public static function createPage($name, $title, $mysqltent) {
+    public static function createPage($name, $title, $content) {
         $mysql = MySQL::open(Settings::db_name_infected_main);
         
         $mysql->query('INSERT INTO `' . Settings::db_table_infected_main_pages . '` (`name`, `title`, `content`) 
                        VALUES (\'' . $mysql->real_escape_string($name) . '\', 
                                \'' . $mysql->real_escape_string($title) . '\', 
-                               \'' . $mysql->real_escape_string($mysqltent) . '\')');
+                               \'' . $mysql->real_escape_string($content) . '\')');
         
         $mysql->close();
     }
@@ -60,13 +60,13 @@ class PageHandler {
     /*
      * Update a page.
      */
-    public static function updatePage($id, $title, $content) {
+    public static function updatePage(Page $page, $title, $content) {
         $mysql = MySQL::open(Settings::db_name_infected_main);
         
         $mysql->query('UPDATE `' . Settings::db_table_infected_main_pages . '` 
                        SET `title` = \'' . $mysql->real_escape_string($title) . '\', 
                            `content` = \'' . $mysql->real_escape_string($content) . '\' 
-                       WHERE `id` = \'' . $mysql->real_escape_string($id) . '\';');
+                       WHERE `id` = \'' . $mysql->real_escape_string($page->getId()) . '\';');
         
         $mysql->close();
     }
@@ -74,11 +74,11 @@ class PageHandler {
     /*
      * Remove a page.
      */
-    public static function removePage($id) {
+    public static function removePage(Page $page) {
         $mysql = MySQL::open(Settings::db_name_infected_main);
         
         $mysql->query('DELETE FROM `' . Settings::db_table_infected_main_pages . '` 
-                       WHERE `id` = \'' . $mysql->real_escape_string($id) . '\';');
+                       WHERE `id` = \'' . $mysql->real_escape_string($page->getId()) . '\';');
         
         $mysql->close();
     }

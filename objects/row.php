@@ -1,13 +1,14 @@
 <?php
 require_once 'handlers/entrancehandler.php';
+require_once 'handlers/seatmaphandler.php';
 require_once 'objects/object.php';
 
 class Row extends Object {
 	private $number;
 	private $x;
 	private $y;
-	private $entrance;
-	private $seatmap;
+	private $entranceId;
+	private $seatmapId;
 
 	/*
 	 * Returns the row of the section
@@ -34,14 +35,14 @@ class Row extends Object {
 	 * Returns the row of the section
 	 */
 	public function getEntrance() {
-		return EntranceHandler::getEntrance($this->entrance);
+		return EntranceHandler::getEntrance($this->entranceId);
 	}
 
 	/*
 	 * Returns the seatmap the section belongs to
 	 */
 	public function getSeatmap() {
-		return $this->seatmap;
+		return SeatmapHandler::getSeatmap($this->seatmapId);
 	}
 }
 ?>

@@ -2,6 +2,7 @@
 require_once 'settings.php';
 require_once 'mysql.php';
 require_once 'objects/agenda.php';
+require_once 'objects/event.php';
 
 class AgendaHandler {
     /*
@@ -107,7 +108,7 @@ class AgendaHandler {
     /* 
      * Create a new agenda entry.
      */
-    public static function createAgenda($event, $name, $title, $description, $startTime) {
+    public static function createAgenda(Event $event, $name, $title, $description, $startTime) {
         $mysql = MySQL::open(Settings::db_name_infected_main);
         
         $mysql->query('INSERT INTO `' . Settings::db_table_infected_main_agenda . '` (`eventId`, `name`, `title`, `description`, `startTime`) 
@@ -123,7 +124,7 @@ class AgendaHandler {
     /*
      * Update an agenda.
      */
-    public static function updateAgenda($agenda, $title, $description, $startTime, $published) {
+    public static function updateAgenda(Agenda $agenda, $title, $description, $startTime, $published) {
         $mysql = MySQL::open(Settings::db_name_infected_main);
         
         $mysql->query('UPDATE `' . Settings::db_table_infected_main_agenda . '` 
@@ -139,7 +140,7 @@ class AgendaHandler {
     /*
      * Remove an agenda entry.
      */
-    public static function removeAgenda($agenda) {
+    public static function removeAgenda(Agenda $agenda) {
         $mysql = MySQL::open(Settings::db_name_infected_main);
         
         $mysql->query('DELETE FROM `' . Settings::db_table_infected_main_agenda . '` 

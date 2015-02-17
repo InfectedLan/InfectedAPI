@@ -1,4 +1,5 @@
 <?php
+require_once 'handlers/compohandler.php';
 require_once 'objects/object.php';
 
 class VoteOption extends Object{
@@ -6,8 +7,8 @@ class VoteOption extends Object{
 	private $thumbnailUrl;
 	private $name;
 
-	public function getCompoId() {
-		return $this->compoId;
+	public function getCompo() {
+		return CompoHandler::getCompo($this->compoId);
 	}
 
 	public function getThumbnailUrl() {

@@ -1,12 +1,13 @@
 <?php
 require_once 'settings.php';
 require_once 'libraries/phpmailer/PHPMailerAutoload.php';
+require_once 'objects/user.php';
 
 class MailManager {
 	/*
 	 * Sends an email to the given user.
 	 */
-	public static function sendMail($user, $subject, $message) {
+	public static function sendMail(User $user, $subject, $message) {
 		// Create PHPMailer object.
 		$mail = new PHPMailer;
 		
@@ -31,7 +32,7 @@ class MailManager {
 	/*
 	 * Sends an email to all given users.
 	 */
-	public static function sendEmails($userList, $subject, $message) {
+	public static function sendEmails(array $userList, $subject, $message) {
 		foreach ($userList as $user) {
 			self::sendMail($user, $subject, $message);
 		}

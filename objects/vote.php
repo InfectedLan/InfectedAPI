@@ -9,8 +9,8 @@ class Vote extends Object {
 		return $this->consumerId;
 	}
 
-	public function getVoteOptionId() {
-		return $this->voteOptionId;
+	public function getVoteOption() {
+		return VoteOptionHandler::getVoteOption($this->voteOptionId);
 	}
 }
 ?>
