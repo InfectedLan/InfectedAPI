@@ -25,7 +25,7 @@ class TeamHandler {
         
         $result = $mysql->query('SELECT `teamId` FROM `' . Settings::db_table_infected_crew_memberof . '` 
                                  WHERE `eventId` = \'' . EventHandler::getCurrentEvent()->getId() . '\'
-								 AND `userId` = \'' . $mysql->real_escape_string($user->getId()) . '\';');
+								 AND `userId` = \'' . $user->getId() . '\';');
          
         $mysql->close();
 
@@ -58,7 +58,7 @@ class TeamHandler {
         $mysql = MySQL::open(Settings::db_name_infected_crew);
 
         $result = $mysql->query('SELECT * FROM `' . Settings::db_table_infected_crew_teams . '`
-                                 WHERE `groupId` = \'' . $mysql->real_escape_string($group->getId()) . '\';');
+                                 WHERE `groupId` = \'' . $group->getId() . '\';');
         
         $mysql->close();
 
@@ -72,15 +72,16 @@ class TeamHandler {
     }
     
     /* Create a new team */
-    public static function createTeam(Group $group, $name, $title, $description, $leader) {
+    public static function createTeam(Event $event, Group $group, $name, $title, $description, $leader) {
         $mysql = MySQL::open(Settings::db_name_infected_crew);
         
-        $mysql->query('INSERT INTO `' . Settings::db_table_infected_crew_teams . '` (`groupId`, `name`, `title`, `description`, `leader`) 
-                       VALUES (\'' . $mysql->real_escape_string($group->getId()) . '\', 
+        $mysql->query('INSERT INTO `' . Settings::db_table_infected_crew_teams . '` (`eventId`, `groupId`, `name`, `title`, `description`, `leaderId`) 
+                       VALUES (\'' . $event->getId() . '\', 
+                               \'' . $group->getId() . '\', 
                                \'' . $mysql->real_escape_string($name) . '\', 
                                \'' . $mysql->real_escape_string($title) . '\', 
                                \'' . $mysql->real_escape_string($description) . '\', 
-                               \'' . $mysql->real_escape_string($leader) . '\')');
+                               \'' . $leader->getId() . '\')');
         
         $mysql->close();
     }
@@ -92,12 +93,12 @@ class TeamHandler {
         $mysql = MySQL::open(Settings::db_name_infected_crew);
         
         $mysql->query('UPDATE `' . Settings::db_table_infected_crew_teams . '` 
-                            SET `groupId` = \'' . $mysql->real_escape_string($group->getId()) . '\', 
+                            SET `groupId` = \'' . $group->getId() . '\', 
                                 `name` = \'' . $mysql->real_escape_string($name) . '\', 
                                 `title` = \'' . $mysql->real_escape_string($title) . '\', 
                                 `description` = \'' . $mysql->real_escape_string($description) . '\', 
-                                `leader` = \'' . $mysql->real_escape_string($leader) . '\' 
-                            WHERE `id` = \'' . $mysql->real_escape_string($team->getId()) . '\';');
+                                `leader` = \'' . $leader->getId() . '\' 
+                            WHERE `id` = \'' . $team->getId() . '\';');
         
         $mysql->close();
     }
@@ -109,8 +110,8 @@ class TeamHandler {
         $mysql = MySQL::open(Settings::db_name_infected_crew);
         
         $mysql->query('DELETE FROM `' . Settings::db_table_infected_crew_teams . '` 
-                       WHERE `id` = \'' . $mysql->real_escape_string($team->getId()) . '\'
-                       AND `groupId` = \'' . $mysql->real_escape_string($group->getId()) . '\';');
+                       WHERE `id` = \'' . $team->getId() . '\'
+                       AND `groupId` = \'' . $group->getId() . '\';');
         
         $mysql->close();
     }
@@ -125,8 +126,8 @@ class TeamHandler {
                                  LEFT JOIN `' . Settings::db_name_infected_crew . '`.`' . Settings::db_table_infected_crew_memberof . '`
                                  ON `' . Settings::db_table_infected_users . '`.`id` = `userId` 
                                  WHERE `eventId` = \'' . EventHandler::getCurrentEvent()->getId() . '\'
-								 AND `groupId` = \'' . $mysql->real_escape_string($group->getId()) . '\'
-                                 AND `teamId` = \'' . $mysql->real_escape_string($team->getId()) . '\' 
+								 AND `groupId` = \'' . $group->getId() . '\'
+                                 AND `teamId` = \'' . $team->getId() . '\' 
                                  ORDER BY `firstname` ASC;');
         
         $mysql->close();
@@ -148,7 +149,7 @@ class TeamHandler {
         
         $result = $mysql->query('SELECT `id` FROM `' . Settings::db_table_infected_crew_memberof. '` 
                                  WHERE `eventId` = \'' . EventHandler::getCurrentEvent()->getId() . '\'
-								 AND `userId` = \'' . $mysql->real_escape_string($user->getId()) . '\' 
+								 AND `userId` = \'' . $user->getId() . '\' 
                                  AND `teamId` != \'0\';');
         
         $mysql->close();
@@ -163,7 +164,7 @@ class TeamHandler {
         $mysql = MySQL::open(Settings::db_name_infected_crew);
         
         $result = $mysql->query('SELECT `id` FROM `' . Settings::db_table_infected_crew_teams . '` 
-                                 WHERE `leader` = \'' . $mysql->real_escape_string($user->getId()) . '\';');
+                                 WHERE `leader` = \'' . $user->getId() . '\';');
             
         $mysql->close();
 
@@ -178,10 +179,10 @@ class TeamHandler {
         
         if ($user->isGroupMember()) {    
             $mysql->query('UPDATE `' . Settings::db_table_infected_crew_memberof . '` 
-                           SET `teamId` = \'' . $mysql->real_escape_string($team->getId()) . '\' 
+                           SET `teamId` = \'' . $team->getId() . '\' 
 						   WHERE `eventId` = \'' . EventHandler::getCurrentEvent()->getId() . '\'
-                           AND `userId` = \'' . $mysql->real_escape_string($user->getId()) . '\' 
-                           AND `groupId` = \'' . $mysql->real_escape_string($group->getId()) . '\';');    
+                           AND `userId` = \'' . $user->getId() . '\' 
+                           AND `groupId` = \'' . $group->getId() . '\';');    
         }
         
         $mysql->close();
@@ -196,7 +197,7 @@ class TeamHandler {
         $mysql->query('UPDATE `' . Settings::db_table_infected_crew_memberof . '` 
                        SET `teamId` = \'0\'
                        WHERE `eventId` = \'' . EventHandler::getCurrentEvent()->getId() . '\'
-					   AND `userId` = \'' . $mysql->real_escape_string($user->getId()) . '\';');    
+					   AND `userId` = \'' . $user->getId() . '\';');    
         
         $mysql->close();
     }

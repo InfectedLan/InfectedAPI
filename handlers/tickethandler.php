@@ -24,8 +24,8 @@ class TicketHandler {
         $mysql = MySQL::open(Settings::db_name_infected_tickets);
 
         $result = $mysql->query('SELECT * FROM `' . Settings::db_table_infected_tickets_tickets . '` 
-                                 WHERE `userId` = \'' . $mysql->real_escape_string($user->getId()) . '\'
-                                 AND `eventId` = \'' . $mysql->real_escape_string($event->getId()) . '\' 
+                                 WHERE `userId` = \'' . $user->getId() . '\'
+                                 AND `eventId` = \'' . $event->getId() . '\' 
                                  LIMIT 1;');
 
 		$mysql->close();
@@ -37,8 +37,8 @@ class TicketHandler {
         $mysql = MySQL::open(Settings::db_name_infected_tickets);
 
         $result = $mysql->query('SELECT * FROM `' . Settings::db_table_infected_tickets_tickets . '` 
-                                 WHERE `userId` = \'' . $mysql->real_escape_string($user->getId()) . '\' 
-                                 AND `eventId`= ' . $mysql->real_escape_string($event->getId()) . ';');
+                                 WHERE `userId` = \'' . $user->getId() . '\' 
+                                 AND `eventId`= ' . $event->getId() . ';');
 
 		$mysql->close();
 								 
@@ -56,7 +56,7 @@ class TicketHandler {
         $mysql = MySQL::open(Settings::db_name_infected_tickets);
 
         $result = $mysql->query('SELECT `id` FROM `' . Settings::db_table_infected_tickets_tickets . '` 
-                                 WHERE `userId` = \'' . $mysql->real_escape_string($user->getId()) . '\';');
+                                 WHERE `userId` = \'' . $user->getId() . '\';');
 
 		$mysql->close();
 									  
@@ -68,8 +68,8 @@ class TicketHandler {
         $mysql = MySQL::open(Settings::db_name_infected_tickets);
 
         $result = $mysql->query('SELECT `id` FROM `' . Settings::db_table_infected_tickets_tickets . '` 
-                                 WHERE `userId` = \'' . $mysql->real_escape_string($user->getId()) . '\'
-                                 AND `eventId` = \'' . $mysql->real_escape_string($event->getId()) . '\' 
+                                 WHERE `userId` = \'' . $user->getId() . '\'
+                                 AND `eventId` = \'' . $event->getId() . '\' 
                                  LIMIT 1;');
 
 		$mysql->close();
@@ -81,7 +81,7 @@ class TicketHandler {
         $mysql = MySQL::open(Settings::db_name_infected_tickets);
 
         $result = $mysql->query('SELECT * FROM `' . Settings::db_table_infected_tickets_tickets . '` 
-                                 WHERE `userId` = \'' . $mysql->real_escape_string($user->getId()) . '\';');
+                                 WHERE `userId` = \'' . $user->getId() . '\';');
 
 		$mysql->close();
 									  
@@ -98,8 +98,8 @@ class TicketHandler {
         $mysql = MySQL::open(Settings::db_name_infected_tickets);
 
         $result = $mysql->query('SELECT * FROM `' . Settings::db_table_infected_tickets_tickets . '` 
-                                 WHERE `userId` = \'' . $mysql->real_escape_string($user->getId()) . '\' 
-                                 AND `eventId`= ' . $mysql->real_escape_string($event->getId()) . '
+                                 WHERE `userId` = \'' . $user->getId() . '\' 
+                                 AND `eventId`= ' . $event->getId() . '
                                  LIMIT 1;');
 
 		$mysql->close();
@@ -117,7 +117,7 @@ class TicketHandler {
         $mysql = MySQL::open(Settings::db_name_infected_tickets);
 
         $result = $mysql->query('SELECT * FROM `' . Settings::db_table_infected_tickets_tickets . '` 
-                                 WHERE `eventId` = \'' . $mysql->real_escape_string($event->getId()) . '\';');
+                                 WHERE `eventId` = \'' . $event->getId() . '\';');
 
 		$mysql->close();
 									  
@@ -134,7 +134,7 @@ class TicketHandler {
         $mysql = MySQL::open(Settings::db_name_infected_tickets);
 
         $result = $mysql->query('SELECT `id` FROM `' . Settings::db_table_infected_tickets_tickets . '` 
-                                 WHERE `eventId` = \'' . $mysql->real_escape_string($event->getId()) . '\';');
+                                 WHERE `eventId` = \'' . $event->getId() . '\';');
         $mysql->close();
 
         return $result->num_rows;
@@ -147,11 +147,11 @@ class TicketHandler {
             empty($newSeater)) {
             $result = $mysql->query('UPDATE `' . Settings::db_table_infected_tickets_tickets . '` 
                                      SET `seaterId` = \'0\' 
-                                     WHERE `id` = \'' . $mysql->real_escape_string($ticket->getId()) . '\';');
+                                     WHERE `id` = \'' . $ticket->getId() . '\';');
         } else {
             $result = $mysql->query('UPDATE `' . Settings::db_table_infected_tickets_tickets . '` 
-                                     SET `seaterId` = \'' . $mysql->real_escape_string($newSeater->getId()) . '\' 
-                                     WHERE `id` = \'' . $mysql->real_escape_string($ticket->getId()) . '\';');
+                                     SET `seaterId` = \'' . $newSeater->getId() . '\' 
+                                     WHERE `id` = \'' . $ticket->getId() . '\';');
         }
         
         $mysql->close();
@@ -162,10 +162,10 @@ class TicketHandler {
 
         $result = $mysql->query('INSERT INTO `' . Settings::db_table_infected_tickets_tickets . '` (`eventId`, `paymentId`, `typeId`, `buyerId`, `userId`) 
                                  VALUES (\'' . EventHandler::getCurrentEvent()->getId() . '\', 
-                                         \'' . $mysql->real_escape_string($payment->getId()) . '\', 
-                                         \'' . $mysql->real_escape_string($ticketType->getId()) . '\', 
-                                         \'' . $mysql->real_escape_string($user->getId()) . '\', 
-                                         \'' . $mysql->real_escape_string($user->getId()) . '\');');
+                                         \'' . $payment->getId() . '\', 
+                                         \'' . $ticketType->getId() . '\', 
+                                         \'' . $user->getId() . '\', 
+                                         \'' . $user->getId() . '\');');
 
         $mysql->close();
     }    
@@ -174,10 +174,10 @@ class TicketHandler {
         $mysql = MySQL::open(Settings::db_name_infected_tickets);
 
         $result = $mysql->query('SELECT * FROM `' . Settings::db_table_infected_tickets_tickets . '` 
-								 WHERE (`seaterId`=\'' . $mysql->real_escape_string($user->getId()) . '\'
-                                        OR (`userId`=\'' . $mysql->real_escape_string($user->getId()) . '\' 
+								 WHERE (`seaterId`=\'' . $user->getId() . '\'
+                                        OR (`userId`=\'' . $user->getId() . '\' 
                                         AND `seaterId` = \'0\'))
-                                 AND `eventId`=\'' . $mysql->real_escape_string($event->getId()) . '\';');
+                                 AND `eventId`=\'' . $event->getId() . '\';');
     
 		$mysql->close();
 	
@@ -196,8 +196,8 @@ class TicketHandler {
             $mysql = MySQL::open(Settings::db_name_infected_tickets);
 
             $result = $mysql->query('UPDATE `' . Settings::db_table_infected_tickets_tickets . '` 
-                                     SET `seatId` = \'' . $mysql->real_escape_string($seat->getId()) . '\' 
-                                     WHERE `id` = \'' . $mysql->real_escape_string($ticket->getId()) . '\';');
+                                     SET `seatId` = \'' . $seat->getId() . '\' 
+                                     WHERE `id` = \'' . $ticket->getId() . '\';');
             
             $mysql->close();
         }
@@ -209,8 +209,8 @@ class TicketHandler {
             
             // Change the user of the ticket.
             $mysql->query('UPDATE `' . Settings::db_table_infected_tickets_tickets . '` 
-                           SET `userId` = ' . $mysql->real_escape_string($user->getId()) . ' 
-                           WHERE `id` = ' . $mysql->real_escape_string($ticket->getId()) . ';');
+                           SET `userId` = ' . $user->getId() . ' 
+                           WHERE `id` = ' . $ticket->getId() . ';');
             
             $mysql->close();
         }

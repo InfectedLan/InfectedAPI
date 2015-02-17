@@ -11,7 +11,7 @@ class RegistrationCodeHandler {
         $mysql = MySQL::open(Settings::db_name_infected);
         
         $result = $mysql->query('SELECT `code` FROM `' . Settings::db_table_infected_registrationcodes . '` 
-                                 WHERE `userId` = \'' . $mysql->real_escape_string($user->getId()) . '\';');
+                                 WHERE `userId` = \'' . $user->getId() . '\';');
                             
         $row = $result->fetch_array();
         
@@ -37,7 +37,7 @@ class RegistrationCodeHandler {
         $mysql = MySQL::open(Settings::db_name_infected);
         
         $result = $mysql->query('SELECT `id` FROM `' . Settings::db_table_infected_registrationcodes . '` 
-                                      WHERE `userId` = \'' . $mysql->real_escape_string($user->getId()) . '\';');
+                                      WHERE `userId` = \'' . $user->getId() . '\';');
         
         $mysql->close();
 
@@ -53,7 +53,7 @@ class RegistrationCodeHandler {
         $mysql = MySQL::open(Settings::db_name_infected);
         
         $mysql->query('INSERT INTO `' . Settings::db_table_infected_registrationcodes . '` (`userId`, `code`) 
-                       VALUES (\'' . $mysql->real_escape_string($user->getId()) . '\', 
+                       VALUES (\'' . $user->getId() . '\', 
                                \'' . $code . '\');');
                                     
         $mysql->close();
@@ -80,7 +80,7 @@ class RegistrationCodeHandler {
         $mysql = MySQL::open(Settings::db_name_infected);
         
         $mysql->query('DELETE FROM `' . Settings::db_table_infected_registrationcodes . '` 
-                       WHERE `userId` = \'' . $mysql->real_escape_string($user->getId()) . '\';');
+                       WHERE `userId` = \'' . $user->getId() . '\';');
         
         $mysql->close();
     }

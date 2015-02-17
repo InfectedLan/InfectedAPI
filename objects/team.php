@@ -3,36 +3,53 @@ require_once 'session.php';
 require_once 'handlers/grouphandler.php';
 require_once 'handlers/teamhandler.php';
 require_once 'handlers/userhandler.php';
-require_once 'objects/object.php';
+require_once 'objects/eventobject.php';
 
-class Team extends Object {
+class Team extends EventObject {
 	private $groupId;
 	private $name;
 	private $title;
 	private $description;
-	private $leader;
+	private $leaderId;
 	
+	/*
+	 * Returns the group for this team.
+	 */
 	public function getGroup() {
 		return GroupHandler::getGroup($this->groupId);
 	}
 	
+	/*
+	 * Returns the name of this team.
+	 */
 	public function getName() {
 		return $this->name;
 	}
 	
+	/*
+	 * Returns the title of this team.
+	 */
 	public function getTitle() {
 		return $this->title;
 	}
 	
+	/*
+	 * Return the description for this team.
+	 */
 	public function getDescription() {
 		return $this->description;
 	}
 	
+	/*
+	 * Returns the leader of this team.
+	 */
 	public function getLeader() {
-		return UserHandler::getUser($this->leader);
+		return UserHandler::getUser($this->leaderId);
 	}
 	
-	/* Returns an array of users that are members of this group */
+	/* 
+	 * Returns an array of users that are members of this group.
+	 */
 	public function getMembers() {
 		return TeamHandler::getMembers($this->getGroup(), $this);
 	}

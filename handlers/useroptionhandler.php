@@ -8,7 +8,7 @@ class UserOptionHandler {
         $mysql = MySQL::open(Settings::db_name_infected);
         
         $result = $mysql->query('SELECT `id` FROM `' . Settings::db_table_infected_useroptions . '` 
-                                 WHERE `userId` = \'' . $mysql->real_escape_string($user->getId()) . '\'
+                                 WHERE `userId` = \'' . $user->getId() . '\'
 								 AND `hidePhone` = \'1\';');
          
         $mysql->close();

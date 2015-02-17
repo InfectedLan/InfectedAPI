@@ -36,7 +36,7 @@ class SeatmapHandler {
         $mysql = MySQL::open(Settings::db_name_infected_tickets);
 
         $result = $mysql->query('SELECT * FROM `' . Settings::db_table_infected_tickets_rows . '` 
-                                 WHERE `seatmap` = \'' . $mysql->real_escape_string($seatmap->getId()) . '\';');
+                                 WHERE `seatmap` = \'' . $seatmap->getId() . '\';');
 
         $mysql->close();
 
@@ -53,7 +53,7 @@ class SeatmapHandler {
         $mysql = MySQL::open(Settings::db_name_infected);
 
         $result = $mysql->query('SELECT `id` FROM `' . Settings::db_table_infected_events . '` 
-                                 WHERE `seatmap`=' . $mysql->real_escape_string($seatmap->getId()) . ';');
+                                 WHERE `seatmap`=' . $seatmap->getId() . ';');
 
         $mysql->close();
 
@@ -69,7 +69,7 @@ class SeatmapHandler {
 
         $mysql->query('UPDATE `' . Settings::db_table_infected_tickets_seatmaps . '` 
                        SET `backgroundImage` = \'' . $mysql->real_escape_string($filename) . '\' 
-                       WHERE `id` = \'' . $mysql->real_escape_string($seatmap->getId()) . '\';');
+                       WHERE `id` = \'' . $seatmap->getId() . '\';');
     
         $mysql->close();
     }
@@ -95,8 +95,8 @@ class SeatmapHandler {
 
         // Create the seatmap object.
         $mysql->query('INSERT INTO `' . Settings::db_table_infected_tickets_seatmaps . '` (`humanName`, `backgroundImage`) 
-                       VALUES (\'Duplicate of ' . $mysql->real_escape_string($seatmap->getHumanName()) . '\', 
-                               \'' . $mysql->real_escape_string($seatmap->getBackgroundImage()) . '\')');
+                       VALUES (\'Duplicate of ' . $seatmap->getHumanName() . '\', 
+                               \'' . $seatmap->getBackgroundImage() . '\')');
         
         $mysql->close();
     }

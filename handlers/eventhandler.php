@@ -123,7 +123,7 @@ class EventHandler {
 						   `bookingTime` = \'' . $mysql->real_escape_string($bookingTime) . '\', 
 						   `startTime` = \'' . $mysql->real_escape_string($startTime) . '\', 
 						   `endTime` = \'' . $mysql->real_escape_string($endTime) . '\'
-					   WHERE `id` = \'' . $mysql->real_escape_string($event->getId()) . '\';');
+					   WHERE `id` = \'' . $event->getId() . '\';');
         
         $mysql->close();
     }
@@ -135,7 +135,7 @@ class EventHandler {
         $mysql = MySQL::open(Settings::db_name_infected);
         
         $mysql->query('DELETE FROM `' . Settings::db_table_infected_events . '` 
-                       WHERE `id` = \'' . $mysql->real_escape_string($event->getId()) . '\';');
+                       WHERE `id` = \'' . $event->getId() . '\';');
         
         $mysql->close();
     }

@@ -21,8 +21,8 @@ class PaymentHandler {
         $mysql = MySQL::open(Settings::db_name_infected_tickets);
 
         $mysql->query('INSERT INTO `' . Settings::db_table_infected_tickets_paymentlog . '` (`userId`, `ticketType`, `price`, `totalPrice`, `transactionId`, `datetime`) 
-                       VALUES (\'' . $mysql->real_escape_string($user->getId()) . '\', 
-                               \'' . $mysql->real_escape_string($ticketType->getId()) . '\', 
+                       VALUES (\'' . $user->getId() . '\', 
+                               \'' . $ticketType->getId() . '\', 
                                \'' . $mysql->real_escape_string($price) . '\', 
                                \'' . $mysql->real_escape_string($totalPrice) . '\', 
                                \'' . $mysql->real_escape_string($transactionId) . '\', 

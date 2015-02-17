@@ -2,6 +2,7 @@
 require_once 'session.php';
 require_once 'handlers/grouphandler.php';
 require_once 'handlers/restrictedpagehandler.php';
+require_once 'handlers/eventhandler.php';
 
 $result = false;
 $message = null;
@@ -24,7 +25,7 @@ if (Session::isAuthenticated()) {
 			$leader = $_GET['leader'];
 			$coleader = $_GET['leader'];
 			
-			GroupHandler::createGroup($name, $title, $description, $leader, $coleader);
+			GroupHandler::createGroup(EventHandler::getCurrentEvent(), $name, $title, $description, $leader, $coleader);
 			$result = true;
 		} else {
 			$message = 'Du har ikke fyllt ut alle feltene!';

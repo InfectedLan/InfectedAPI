@@ -66,7 +66,7 @@ class PageHandler {
         $mysql->query('UPDATE `' . Settings::db_table_infected_main_pages . '` 
                        SET `title` = \'' . $mysql->real_escape_string($title) . '\', 
                            `content` = \'' . $mysql->real_escape_string($content) . '\' 
-                       WHERE `id` = \'' . $mysql->real_escape_string($page->getId()) . '\';');
+                       WHERE `id` = \'' . $page->getId() . '\';');
         
         $mysql->close();
     }
@@ -78,7 +78,7 @@ class PageHandler {
         $mysql = MySQL::open(Settings::db_name_infected_main);
         
         $mysql->query('DELETE FROM `' . Settings::db_table_infected_main_pages . '` 
-                       WHERE `id` = \'' . $mysql->real_escape_string($page->getId()) . '\';');
+                       WHERE `id` = \'' . $page->getId() . '\';');
         
         $mysql->close();
     }

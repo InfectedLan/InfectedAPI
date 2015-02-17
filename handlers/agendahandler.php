@@ -112,7 +112,7 @@ class AgendaHandler {
         $mysql = MySQL::open(Settings::db_name_infected_main);
         
         $mysql->query('INSERT INTO `' . Settings::db_table_infected_main_agenda . '` (`eventId`, `name`, `title`, `description`, `startTime`) 
-                       VALUES (\'' . $mysql->real_escape_string($event->getId()) . '\', 
+                       VALUES (\'' . $event->getId() . '\', 
 							   \'' . $mysql->real_escape_string($name) . '\', 
                                \'' . $mysql->real_escape_string($title) . '\', 
                                \'' . $mysql->real_escape_string($description) . '\', 
@@ -132,7 +132,7 @@ class AgendaHandler {
                            `description` = \'' . $mysql->real_escape_string($description) . '\', 
                            `startTime` = \'' . $mysql->real_escape_string($startTime) . '\',
 								           `published` = \'' . $mysql->real_escape_string($published) . '\'
-                       WHERE `id` = \'' . $mysql->real_escape_string($agenda->getId()) . '\';');
+                       WHERE `id` = \'' . $agenda->getId() . '\';');
         
         $mysql->close();
     }
@@ -144,7 +144,7 @@ class AgendaHandler {
         $mysql = MySQL::open(Settings::db_name_infected_main);
         
         $mysql->query('DELETE FROM `' . Settings::db_table_infected_main_agenda . '` 
-                       WHERE `id` = \'' . $mysql->real_escape_string($agenda->getId()) . '\';');
+                       WHERE `id` = \'' . $agenda->getId() . '\';');
         
         $mysql->close();
     }

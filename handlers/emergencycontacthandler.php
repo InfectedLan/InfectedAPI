@@ -26,7 +26,7 @@ class EmergencyContactHandler {
         $mysql = MySQL::open(Settings::db_name_infected);
         
         $result = $mysql->query('SELECT * FROM `'. Settings::db_table_infected_emergencycontacts . '`
-                                 WHERE `userId` = \'' . $mysql->real_escape_string($user->getId()) . '\';');
+                                 WHERE `userId` = \'' . $user->getId() . '\';');
         
         $mysql->close();
 
@@ -59,7 +59,7 @@ class EmergencyContactHandler {
         $mysql = MySQL::open(Settings::db_name_infected);
         
         $result = $mysql->query('SELECT `id` FROM `'. Settings::db_table_infected_emergencycontacts . '`
-                                 WHERE `userId` = \'' . $mysql->real_escape_string($user->getId()) . '\';');
+                                 WHERE `userId` = \'' . $user->getId() . '\';');
         
         $mysql->close();
 
@@ -74,7 +74,7 @@ class EmergencyContactHandler {
                 $mysql = MySQL::open(Settings::db_name_infected);
 
                 $mysql->query('INSERT INTO `' . Settings::db_table_infected_emergencycontacts . '` (`userId`, `phone`) 
-                               VALUES (\'' . $mysql->real_escape_string($user->getId()) . '\', 
+                               VALUES (\'' . $user->getId() . '\', 
                                        \'' . $mysql->real_escape_string($phone) . '\');');
                 $mysql->close();
         } else {
@@ -94,7 +94,7 @@ class EmergencyContactHandler {
         
         $mysql->query('UPDATE `' . Settings::db_table_infected_emergencycontacts . '` 
                        SET `phone` = \'' . $mysql->real_escape_string($phone) . '\'
-                       WHERE `userId` = \'' . $mysql->real_escape_string($user->getId()) . '\';');
+                       WHERE `userId` = \'' . $user->getId() . '\';');
         
         $mysql->close();
     }
@@ -106,7 +106,7 @@ class EmergencyContactHandler {
         $mysql = MySQL::open(Settings::db_name_infected);
         
         $mysql->query('DELETE FROM `' . Settings::db_table_infected_emergencycontacts . '` 
-                       WHERE `userId` = \'' . $mysql->real_escape_string($user->getId()) . '\';');
+                       WHERE `userId` = \'' . $user->getId() . '\';');
         
         $mysql->close();
     }

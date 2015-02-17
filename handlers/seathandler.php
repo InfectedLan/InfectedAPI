@@ -30,7 +30,7 @@ class SeatHandler {
         $mysql = MySQL::open(Settings::db_name_infected_tickets);
 
         $result = $mysql->query('DELETE FROM `' . Settings::db_table_infected_tickets_seats . '` 
-                                 WHERE `id` = ' . $mysql->real_escape_string($seat->getId()) . ';');
+                                 WHERE `id` = ' . $seat->getId() . ';');
 
         $mysql->close();
     }
@@ -39,7 +39,7 @@ class SeatHandler {
         $mysql = MySQL::open(Settings::db_name_infected_tickets);
 
         $result = $mysql->query('SELECT `id` FROM `' . Settings::db_table_infected_tickets_tickets . '` 
-                                 WHERE `seatId` = ' . $mysql->real_escape_string($seat->getId()) . ';');
+                                 WHERE `seatId` = ' . $seat->getId() . ';');
 
         $row = $result->fetch_array();
 
@@ -50,7 +50,7 @@ class SeatHandler {
         $mysql = MySQL::open(Settings::db_name_infected_tickets);
 
         $result = $mysql->query('SELECT `userId` FROM `' . Settings::db_table_infected_tickets_tickets . '` 
-                                 WHERE `seatId` = ' . $mysql->real_escape_string($seat->getId()) . ';');
+                                 WHERE `seatId` = ' . $seat->getId() . ';');
         
         $mysql->close();
 
@@ -65,7 +65,7 @@ class SeatHandler {
         $mysql = MySQL::open(Settings::db_name_infected_tickets);
 
         $result = $mysql->query('SELECT * FROM `' . Settings::db_table_infected_tickets_tickets . '` 
-                                 WHERE `seatId` = ' . $mysql->real_escape_string($seat->getId()) . ';');
+                                 WHERE `seatId` = ' . $seat->getId() . ';');
         
         $mysql->close();
 

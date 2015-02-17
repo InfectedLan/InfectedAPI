@@ -26,8 +26,8 @@ class CheckInStateHandler {
         $mysql = MySQL::open(Settings::db_name_infected_tickets);
 
         $reuslt = $mysql->query('INSERT INTO `' . Settings::db_table_infected_tickets_checkinstate . '` (`ticketId`, `userId`) 
-                                 VALUES (\'' . $mysql->real_escape_string($ticket->getId()) . '\',
-                                         \'' . $mysql->real_escape_string($ticket->getUser()->getId()) . '\');');
+                                 VALUES (\'' . $ticket->getId() . '\',
+                                         \'' . $ticket->getUser()->getId() . '\');');
 
         $mysql->close();
     }
@@ -39,7 +39,7 @@ class CheckInStateHandler {
         $mysql = MySQL::open(Settings::db_name_infected_tickets);
 
         $result = $mysql->query('SELECT `id` FROM `' . Settings::db_table_infected_tickets_checkinstate . '` 
-                                 WHERE `ticketId` = \'' . $mysql->real_escape_string($ticket->getId()) . '\';');
+                                 WHERE `ticketId` = \'' . $ticket->getId() . '\';');
 
         $mysql->close();
 

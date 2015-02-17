@@ -13,8 +13,8 @@ class UserPermissionHandler {
         $mysql = MySQL::open(Settings::db_name_infected);
 		
         $result = $mysql->query('SELECT `id` FROM `' . Settings::db_table_infected_userpermissions . '` 
-                                 WHERE `userId` = \'' . $mysql->real_escape_string($user->getId()) . '\'
-                                 AND `permissionId` = \'' . $mysql->real_escape_string($permission->getId()) . '\';');
+                                 WHERE `userId` = \'' . $user->getId() . '\'
+                                 AND `permissionId` = \'' . $permission->getId() . '\';');
 		
         $mysql->close();
         
@@ -28,7 +28,7 @@ class UserPermissionHandler {
 		$mysql = MySQL::open(Settings::db_name_infected);
 		
         $result = $mysql->query('SELECT `id` FROM `' . Settings::db_table_infected_userpermissions . '` 
-                                 WHERE `userId` = \'' . $mysql->real_escape_string($user->getId()) . '\'
+                                 WHERE `userId` = \'' . $user->getId() . '\'
                                  AND `permissionId` = (SELECT `id` FROM `' . Settings::db_table_infected_permissions . '` 
 													   WHERE `value` = \'' . $mysql->real_escape_string($value) . '\');');
 		
@@ -41,7 +41,7 @@ class UserPermissionHandler {
         $mysql = MySQL::open(Settings::db_name_infected);
         
         $result = $mysql->query('SELECT `id` FROM `' . Settings::db_table_infected_userpermissions . '` 
-                                 WHERE `userId` = \'' . $mysql->real_escape_string($user->getId()) . '\';');
+                                 WHERE `userId` = \'' . $user->getId() . '\';');
         
         $mysql->close();
         
@@ -53,7 +53,7 @@ class UserPermissionHandler {
         
         $result = $mysql->query('SELECT * FROM `' . Settings::db_table_infected_permissions . '`
                                  WHERE `id` = (SELECT `permissionId` FROM `' . Settings::db_table_infected_userpermissions . '`
-                                               WHERE `userId` = \'' . $mysql->real_escape_string($user->getId()) . '\');');
+                                               WHERE `userId` = \'' . $user->getId() . '\');');
         
         $mysql->close();
         
@@ -71,8 +71,8 @@ class UserPermissionHandler {
             $mysql = MySQL::open(Settings::db_name_infected);
         
             $mysql->query('INSERT INTO `' . Settings::db_table_infected_userpermissions . '` (`userId`, `permissionId`) 
-                           VALUES (\'' . $mysql->real_escape_string($user->getId()) . '\', 
-                                   \'' . $mysql->real_escape_string($permission->getId()) . '\')');
+                           VALUES (\'' . $user->getId() . '\', 
+                                   \'' . $permission->getId() . '\')');
             
             $mysql->close();
         }
@@ -82,8 +82,8 @@ class UserPermissionHandler {
         $mysql = MySQL::open(Settings::db_name_infected);
         
         $mysql->query('DELETE FROM `' . Settings::db_table_infected_userpermissions . '` 
-                       WHERE `userId` = \'' . $mysql->real_escape_string($user->getId()) . '\'
-                       AND `permissionId` = \'' . $mysql->real_escape_string($permission->getId()) . '\';');
+                       WHERE `userId` = \'' . $user->getId() . '\'
+                       AND `permissionId` = \'' . $permission->getId() . '\';');
         
         $mysql->close();
     }
@@ -92,7 +92,7 @@ class UserPermissionHandler {
         $mysql = MySQL::open(Settings::db_name_infected);
         
         $mysql->query('DELETE FROM `' . Settings::db_table_infected_userpermissions . '` 
-                       WHERE `userId` = \'' . $mysql->real_escape_string($user->getId()) . '\';');
+                       WHERE `userId` = \'' . $user->getId() . '\';');
         
         $mysql->close();
     }

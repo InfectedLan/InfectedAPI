@@ -28,7 +28,7 @@ class CompoHandler {
         $mysql = MySQL::open(Settings::db_name_infected_compo);
 
         $result = $mysql->query('SELECT `id` FROM `' . Settings::db_table_infected_compo_matches . '` 
-                                 WHERE `compoId` = \'' . $mysql->real_escape_string($compo->getId()) . '\';');
+                                 WHERE `compoId` = \'' . $compo->getId() . '\';');
         
         $mysql->close();
 
@@ -63,7 +63,7 @@ class CompoHandler {
 
         $result = $mysql->query('SELECT * FROM `' . Settings::db_table_infected_compo_clans . '` 
                                  WHERE `id` = (SELECT `clanId` FROM `' . Settings::db_table_infected_compo_participantof . '` 
-                                               WHERE `compoId` = \'' . $mysql->real_escape_string($compo->getId()) . '\');');
+                                               WHERE `compoId` = \'' . $compo->getId() . '\');');
 
         $mysql->close();
 

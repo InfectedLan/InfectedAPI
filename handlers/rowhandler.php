@@ -1,6 +1,7 @@
 <?php
 require_once 'settings.php';
 require_once 'mysql.php';
+require_once 'handlers/entrancehandler.php';
 require_once 'handlers/seatmaphandler.php';
 require_once 'objects/row.php';
 
@@ -20,7 +21,7 @@ class RowHandler {
         $mysql = MySQL::open(Settings::db_name_infected_tickets);
 
         $result = $mysql->query('SELECT * FROM `' . Settings::db_table_infected_tickets_seats . '` 
-                                 WHERE `rowId` = \'' . $mysql->real_escape_string($row->getId()) . '\';');
+                                 WHERE `rowId` = \'' . $row->getId() . '\';');
 
         $mysql->close();
 
@@ -38,21 +39,21 @@ class RowHandler {
 
         //Find out what row is max row
         $highestRowNum = $mysql->query('SELECT `row` FROM `' . Settings::db_table_infected_tickets_rows . '`
-                                        WHERE `seatmap`=' . $mysql->real_escape_string($seatmap->getId()) . ' 
+                                        WHERE `seatmapId`=' . $seatmap->getId() . ' 
                                         ORDER BY `row` DESC 
                                         LIMIT 1;');
 
         $row = mysqli_fetch_array($highestRowNum);
 
         $newRowNumber = $row['row'] + 1;
-        $entrance = 1; // TODO: Set this somewere else?
+        $entrance = EntranceHandler::getEntrance(1); // TODO: Set this somewere else?
 
-        $mysql->query('INSERT INTO ' . Settings::db_table_infected_tickets_rows . '(`number`, `x`, `y`, `entrance`, `seatmap`) 
+        $mysql->query('INSERT INTO ' . Settings::db_table_infected_tickets_rows . '(`number`, `x`, `y`, `entranceId`, `seatmapId`) 
                        VALUES (\'' . $mysql->real_escape_string($newRowNumber) . '\', 
                                \'' . $mysql->real_escape_string($x) . '\', 
                                \'' . $mysql->real_escape_string($y) . '\', 
-                               \'' . $mysql->real_escape_string($entrance) . '\', 
-                               \'' . $mysql->real_escape_string($seatmapId) . '\');');
+                               \'' . $entrance->getId() . '\', 
+                               \'' . $seatmap->getId() . '\');');
 
         $result = $mysql->query('SELECT * FROM `' .  Settings::db_table_infected_tickets_rows . '`
                                  WHERE `id` = \'' . $mysql->insert_id . '\';');
@@ -78,7 +79,7 @@ class RowHandler {
         $mysql = MySQL::open(Settings::db_name_infected_tickets);
 
         $result = $mysql->query('DELETE FROM `' . Settings::db_table_infected_tickets_rows . '` 
-                                 WHERE `id` = ' . $mysql->real_escape_string($row->getId()) . ';');
+                                 WHERE `id` = ' . $row->getId() . ';');
 
         $mysql->close();
 
@@ -92,7 +93,7 @@ class RowHandler {
 
         // Find out what seat number we are at.
         $highestSeatNum = $mysql->query('SELECT `number` FROM `' . Settings::db_table_infected_tickets_seats . '` 
-                                         WHERE `rowId` = ' . $mysql->real_escape_string($row->getId()) . ' 
+                                         WHERE `rowId` = ' . $row->getId() . ' 
                                          ORDER BY `number` DESC
                                          LIMIT 1;');
 
@@ -101,7 +102,7 @@ class RowHandler {
         $newSeatNumber = $seatRow['number'] + 1;
 
         $mysql->query('INSERT INTO `seats` (`rowId`, `number`) 
-                       VALUES (\'' . $mysql->real_escape_string($row->getId()) . '\', 
+                       VALUES (\'' . $row->getId() . '\', 
                                \'' . $mysql->real_escape_string($newSeatNumber) . '\');');
 
         $mysql->close();
@@ -111,15 +112,15 @@ class RowHandler {
         $mysql = MySQL::open(Settings::db_name_infected_tickets);
 
         $mysql->query('UPDATE `rows` 
-                       SET `x` = \'' . $x . '\',
-                           `y` = \'' . $y . '\'
-                       WHERE `id` = \'' . $mysql->real_escape_string($row->getId()) . '\';');
+                       SET `x` = \'' . $mysql->real_escape_string($x) . '\',
+                           `y` = \'' . $mysql->real_escape_string($y) . '\'
+                       WHERE `id` = \'' . $row->getId() . '\';');
 
         $mysql->close();
     }
 
     public static function getEvent($row) {
-        return SeatmapHandler::getEvent(SeatmapHandler::getSeatmap($row->getSeatmap()));
+        return SeatmapHandler::getEvent($row->getSeatmap());
     }
 }
 ?>

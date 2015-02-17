@@ -72,7 +72,7 @@ class SlideHandler {
         $mysql = MySQL::open(Settings::db_name_infected_info);
         
         $mysql->query('INSERT INTO `' . Settings::db_table_infected_info_slides . '` (`eventId`, `name`, `title`, `content`, `startTime`, `endTime`, `published`) 
-					   VALUES (\'' . $mysql->real_escape_string($event->getId()) . '\', 
+					   VALUES (\'' . $event->getId() . '\', 
 							   \'' . $mysql->real_escape_string($name) . '\', 
 							   \'' . $mysql->real_escape_string($title) . '\', 
 							   \'' . $mysql->real_escape_string($content) . '\', 
@@ -95,7 +95,7 @@ class SlideHandler {
 						   `startTime` = \'' . $mysql->real_escape_string($startTime) . '\',
 						   `endTime` = \'' . $mysql->real_escape_string($endTime) . '\',
 					       `published` = \'' . $mysql->real_escape_string($published) . '\'
-					   WHERE `id` = \'' . $mysql->real_escape_string($slide->getId()) . '\';');
+					   WHERE `id` = \'' . $slide->getId() . '\';');
         
         $mysql->close();
     }
@@ -107,7 +107,7 @@ class SlideHandler {
         $mysql = MySQL::open(Settings::db_name_infected_info);
         
         $mysql->query('DELETE FROM `' . Settings::db_table_infected_info_slides . '` 
-                       WHERE `id` = \'' . $mysql->real_escape_string($slide->getId()) . '\';');
+                       WHERE `id` = \'' . $slide->getId() . '\';');
         
         $mysql->close();
     }

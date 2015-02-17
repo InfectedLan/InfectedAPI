@@ -245,13 +245,13 @@ class UserHandler {
                            `address` = \'' . $mysql->real_escape_string($address) . '\', 
                            `postalcode` = \'' . $mysql->real_escape_string($postalCode) . '\', 
                            `nickname` = \'' . $mysql->real_escape_string($nickname) . '\' 
-                       WHERE `id` = \'' . $mysql->real_escape_string($user->getId()) . '\';');
+                       WHERE `id` = \'' . $user->getId() . '\';');
         
         $mysql->close();
     }
     
     /* 
-     * Remove a user
+     * Remove a user.
      */
     public static function removeUser(User $user) {
         // Only remove users without a ticket, for now...
@@ -259,7 +259,7 @@ class UserHandler {
             $mysql = MySQL::open(Settings::db_name_infected);
             
             $mysql->query('DELETE FROM `' . Settings::db_table_infected_users . '` 
-                           WHERE `id` = \'' . $mysql->real_escape_string($user->getId()) . '\';');
+                           WHERE `id` = \'' . $user->getId() . '\';');
             
             $mysql->close();
             
@@ -308,7 +308,7 @@ class UserHandler {
         
         $mysql->query('UPDATE `' . Settings::db_table_infected_users . '` 
                        SET `password` = \'' . $mysql->real_escape_string($password) . '\'
-                       WHERE `id` = \'' . $mysql->real_escape_string($user->getId()) . '\';');
+                       WHERE `id` = \'' . $user->getId() . '\';');
         
         $mysql->close();
     }

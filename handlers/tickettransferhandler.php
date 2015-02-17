@@ -12,7 +12,7 @@ class TicketTransferHandler {
         $mysql = MySQL::open(Settings::db_name_infected_tickets);
 
         $result = $mysql->query('SELECT * FROM `' . Settings::db_table_infected_tickets_tickettransfers . '` 
-                                 WHERE `ticketId` = \'' . $mysql->real_escape_string($ticket->getId()) . '\'
+                                 WHERE `ticketId` = \'' . $ticket->getId() . '\'
                                  ORDER BY `datetime` DESC
                                  LIMIT 1;');
 
@@ -28,7 +28,7 @@ class TicketTransferHandler {
         $mysql = MySQL::open(Settings::db_name_infected_tickets);
 
         $result = $mysql->query('SELECT * FROM `' . Settings::db_table_infected_tickets_tickettransfers . '` 
-                                 WHERE `fromId` = \'' . $mysql->real_escape_string($user->getId()) . '\'
+                                 WHERE `fromId` = \'' . $user->getId() . '\'
                                  AND `revertable` = \'1\'
                                  AND `datetime` > \'' . date('Y-m-d H:i:s', $wantedTimeLimit) . '\';');
 
@@ -47,9 +47,9 @@ class TicketTransferHandler {
         $mysql = MySQL::open(Settings::db_name_infected_tickets);
 
         $mysql->query('INSERT INTO `' . Settings::db_table_infected_tickets_tickettransfers . '` (`ticketId`, `fromId`, `toId`, `datetime`, `revertable`)
-                       VALUES (\'' . $mysql->real_escape_string($ticket->getId()) . '\', 
-                               \'' . $mysql->real_escape_string($ticket->getUser()->getId()) . '\', 
-                               \'' . $mysql->real_escape_string($user->getId()) . '\',
+                       VALUES (\'' . $ticket->getId() . '\', 
+                               \'' . $ticket->getUser()->getId() . '\', 
+                               \'' . $user->getId() . '\',
                                \'' . date('Y-m-d H:i:s') . '\',
                                \'' . $revertable . '\');');
 
@@ -61,7 +61,7 @@ class TicketTransferHandler {
 
         $result = $mysql->query('UPDATE `' . Settings::db_table_infected_tickets_tickettransfers .  '` 
                                  SET `revertable` = \'0\'
-                                 WHERE `id` = \'' . $mysql->real_escape_string($ticketTransfer->getId()) . '\';');
+                                 WHERE `id` = \'' . $ticketTransfer->getId() . '\';');
 								 
 		$mysql->close();
     }

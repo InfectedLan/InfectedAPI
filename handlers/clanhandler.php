@@ -34,7 +34,7 @@ class ClanHandler {
 
         $result = $mysql->query('SELECT * FROM `' . Settings::db_table_infected_compo_clans . '` 
                                  WHERE `id` = (SELECT `clanId` FROM `' . Settings::db_table_infected_compo_memberof . '` 
-                                               WHERE `userId` = \'' . $mysql->real_escape_string($user->getId()) . '\');');
+                                               WHERE `userId` = \'' . $user->getId() . '\');');
 
         $mysql->close();
 
@@ -57,7 +57,7 @@ class ClanHandler {
 
         $result = $mysql->query('SELECT * FROM `' . Settings::db_table_infected_compo_compo . '`
                                  WHERE `id` = (SELECT `compoId` FROM `' . Settings::db_table_infected_compo_participantof . '` 
-                                               WHERE `clanId` = \'' . $mysql->real_escape_string( $clan->getId() ) . '\');');
+                                               WHERE `clanId` = \'' . $clan->getId() . '\');');
 
         $mysql->close();
 
@@ -71,7 +71,7 @@ class ClanHandler {
         $mysql = MySQL::open(Settings::db_name_infected_compo);
 
         $result = $mysql->query('SELECT * FROM `' . Settings::db_table_infected_compo_invites . '` 
-                                 WHERE `clanId` = \'' . $mysql->real_escape_string($clan->getId()) . '\';');
+                                 WHERE `clanId` = \'' . $clan->getId() . '\';');
 
         $mysql->close();
 
@@ -92,7 +92,7 @@ class ClanHandler {
 
         $result = $mysql->query('SELECT * FROM `' . Settings::db_table_infected_users . '` 
                                  WHERE `id` = (SELECT `userId` FROM `' . Settings::db_name_infected_compo . '`.`' . Settings::db_table_infected_compo_memberof . '` 
-                                               WHERE `clanId` = \'' . $mysql->real_escape_string($clan->getId()) . '\');');
+                                               WHERE `clanId` = \'' . $clan->getId() . '\');');
 
         $mysql->close();
 
@@ -113,7 +113,7 @@ class ClanHandler {
 
         $result = $mysql->query('SELECT * FROM `' . Settings::db_table_infected_users . '` 
                                  WHERE `id` = (SELECT `userId` FROM `' . Settings::db_name_infected_compo . '`.`' . Settings::db_table_infected_compo_memberof . '` 
-                                               WHERE `clanId` = \'' . $mysql->real_escape_string($clan->getId()) . '\'
+                                               WHERE `clanId` = \'' . $clan->getId() . '\'
                                                AND `stepin` = \'0\');');
 
         $mysql->close();
@@ -135,7 +135,7 @@ class ClanHandler {
 
         $result = $mysql->query('SELECT * FROM `' . Settings::db_table_infected_users . '` 
                                  WHERE `id` = (SELECT `userId` FROM `' . Settings::db_name_infected_compo . '`.`' . Settings::db_table_infected_compo_memberof . '` 
-                                               WHERE `clanId` = \'' . $mysql->real_escape_string($clan->getId()) . '\'
+                                               WHERE `clanId` = \'' . $clan->getId() . '\'
                                                AND `stepin` = \'1\');');
         $mysql->close();
 
@@ -155,8 +155,8 @@ class ClanHandler {
         $mysql = MySQL::open(Settings::db_name_infected_compo);
 
         $result = $mysql->query('SELECT `id` FROM `' . Settings::db_table_infected_compo_memberof . '` 
-                                 WHERE `clanId` = \'' . $mysql->real_escape_string($clan->getId()) . '\'
-                                 AND `userId` = \'' . $mysql->real_escape_string($user->getId()) . '\';');
+                                 WHERE `clanId` = \'' . $clan->getId() . '\'
+                                 AND `userId` = \'' . $user->getId() . '\';');
 
         $mysql->close();
 
@@ -170,8 +170,8 @@ class ClanHandler {
         $mysql = MySQL::open(Settings::db_name_infected_compo);
 
         $result = $mysql->query('SELECT `id` FROM `' . Settings::db_table_infected_compo_memberof . '` 
-                                 WHERE `clanId` = \'' . $mysql->real_escape_string($clan->getId()) . '\'
-                                 AND `userId` = \'' . $mysql->real_escape_string($user->getId()) . '\'
+                                 WHERE `clanId` = \'' . $clan->getId() . '\'
+                                 AND `userId` = \'' . $user->getId() . '\'
                                  AND `stepin` = \'1\';');
 
         $mysql->close();
@@ -187,8 +187,8 @@ class ClanHandler {
 
         $result = $mysql->query('UPDATE `' . Settings::db_table_infected_compo_memberof . '` 
                                  SET `stepin` = \'' . $mysql->real_escape_string($state) . '\'
-                                 WHERE `clanId` = \'' . $mysql->real_escape_string($clan->getId()) . '\'
-                                 AND `userId` = \'' . $mysql->real_escape_string($user->getId()) . '\';');
+                                 WHERE `clanId` = \'' . $clan->getId() . '\'
+                                 AND `userId` = \'' . $user->getId() . '\';');
 
         $mysql->close();
     }
@@ -200,8 +200,8 @@ class ClanHandler {
         $mysql = MySQL::open(Settings::db_name_infected_compo);
 
         $mysql->query('INSERT INTO `' . Settings::db_table_infected_compo_invites . '` (`userId`, `clanId`) 
-                       VALUES (\'' . $mysql->real_escape_string($user->getId()) . '\', 
-                               \'' . $mysql->real_escape_string($clan->getId()) . '\');');
+                       VALUES (\'' . $user->getId() . '\', 
+                               \'' . $clan->getId() . '\');');
 
         $mysql->close();
     }
@@ -213,8 +213,8 @@ class ClanHandler {
         $mysql = MySQL::open(Settings::db_name_infected_compo);
 
         $result = $mysql->query('DELETE FROM `' . Settings::db_table_infected_compo_memberof . '` 
-                                 WHERE `userId` = \'' . $mysql->real_escape_string($user->getId()) . '\' 
-                                 AND `clanId` = \'' . $mysql->real_escape_string($clan->getId()) . '\';');
+                                 WHERE `userId` = \'' . $user->getId() . '\' 
+                                 AND `clanId` = \'' . $clan->getId() . '\';');
         
         $mysql->close();
     }
@@ -226,7 +226,7 @@ class ClanHandler {
         $mysql = MySQL::open(Settings::db_name_infected_compo);
 
         $mysql->query('INSERT INTO `' . Settings::db_table_infected_compo_clans . '` (`chief`, `name`, `tag`, `event`) 
-                       VALUES (\'' . $mysql->real_escape_string($user->getId()) . '\', 
+                       VALUES (\'' . $user->getId() . '\', 
                                \'' . $mysql->real_escape_string(htmlentities($name, ENT_QUOTES, 'UTF-8')) . '\', 
                                \'' . $mysql->real_escape_string(htmlentities($tag, ENT_QUOTES, 'UTF-8')) . '\', 
                                \'' . $mysql->real_escape_string(EventHandler::getCurrentEvent()->getId()) . '\');');
@@ -236,11 +236,11 @@ class ClanHandler {
 
         $mysql->query('INSERT INTO `' . Settings::db_table_infected_compo_participantof . '` (`clanId`, `compoId`) 
                        VALUES (\'' . $mysql->real_escape_string($fetchedId) . '\', 
-                               \'' . $mysql->real_escape_string($compo->getId()) . '\');');
+                               \'' . $compo->getId() . '\');');
         
         $mysql->query('INSERT INTO `' . Settings::db_table_infected_compo_memberof . '` (`clanId`, `userId`) 
                        VALUES (\'' . $mysql->real_escape_string($fetchedId) . '\', 
-                               \'' . $mysql->real_escape_string($user->getId()) . '\');');
+                               \'' . $user->getId() . '\');');
 
         // Allow user to talk in global chat.
         $mainChat = ChatHandler::getChat(1); // TODO: Change this to the first chat in the array?

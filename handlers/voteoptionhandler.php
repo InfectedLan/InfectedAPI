@@ -27,7 +27,7 @@ class VoteOptionHandler {
         $mysql = MySQL::open(Settings::db_name_infected_compo);
         
         $result = $mysql->query('SELECT * FROM `' . Settings::db_table_infected_compo_voteoptions . '` 
-                                 WHERE `compoId` = '. $mysql->real_escape_string($compo->getId()) . ';');
+                                 WHERE `compoId` = '. $compo->getId() . ';');
         
         $mysql->close();
 
@@ -47,8 +47,8 @@ class VoteOptionHandler {
         $mysql = MySQL::open(Settings::db_name_infected_compo);
 
         $result = $mysql->query('SELECT `id` FROM `' . Settings::db_table_infected_compo_votes . '` 
-                                 WHERE `voteOptionId` = '. $mysql->real_escape_string($voteOption->getId()) . '
-								 AND `consumerId` = ' . $mysql->real_escape_string($match->getId()) . ';');
+                                 WHERE `voteOptionId` = '. $voteOption->getId() . '
+								 AND `consumerId` = ' . $match->getId() . ';');
         
         $mysql->close();                         
         

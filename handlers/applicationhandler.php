@@ -78,7 +78,7 @@ class ApplicationHandler {
                                  ON `' . Settings::db_table_infected_crew_applications . '`.`id` = `applicationId`
                                  WHERE `applicationId` IS NULL
                                  AND `eventId` = \'' . EventHandler::getCurrentEvent()->getId() . '\'
-                                 AND `groupId` = \'' . $mysql->real_escape_string($group->getId()) .  '\'
+                                 AND `groupId` = \'' . $group->getId() .  '\'
                                  AND `state` = \'1\'
                                  ORDER BY `openedTime`;');
         
@@ -129,7 +129,7 @@ class ApplicationHandler {
                                  ON `' . Settings::db_table_infected_crew_applications . '`.`id` = `applicationId`
                                  WHERE `applicationId` IS NOT NULL
                                  AND `eventId` = \'' . EventHandler::getCurrentEvent()->getId() . '\'
-                                 AND `groupId` = \'' . $mysql->real_escape_string($group->getId()) .  '\'
+                                 AND `groupId` = \'' . $group->getId() .  '\'
                                  AND `state` = \'1\'
                                  ORDER BY `' . Settings::db_table_infected_crew_applicationqueue . '`.`id`;');
         
@@ -172,7 +172,7 @@ class ApplicationHandler {
         $mysql = MySQL::open(Settings::db_name_infected_crew);
         
         $result = $mysql->query('SELECT * FROM `' . Settings::db_table_infected_crew_applications . '`
-                                 WHERE `groupId` = \'' . $mysql->real_escape_string($group->getId()) .  '\'
+                                 WHERE `groupId` = \'' . $group->getId() .  '\'
 								 AND `state` = \'2\'
                                  ORDER BY `openedTime` DESC;');
         
@@ -195,8 +195,8 @@ class ApplicationHandler {
         
         $mysql->query('INSERT INTO `' . Settings::db_table_infected_crew_applications . '` (`eventId`, `groupId`, `userId`, `openedTime`, `state`, `content`) 
                        VALUES (\'' . EventHandler::getCurrentEvent()->getId() . '\', 
-                               \'' . $mysql->real_escape_string($group->getId()) . '\', 
-                               \'' . $mysql->real_escape_string($user->getId()) . '\', 
+                               \'' . $group->getId() . '\', 
+                               \'' . $user->getId() . '\', 
                                \'' . date('Y-m-d H:i:s') . '\',
                                \'1\',
                                \'' . $mysql->real_escape_string($content) . '\');');
@@ -222,7 +222,7 @@ class ApplicationHandler {
         
         // Remove the application.
         $mysql->query('DELETE FROM `' . Settings::db_table_infected_crew_applications . '` 
-                       WHERE `id` = \'' . $mysql->real_escape_string($application->getId()) . '\';');
+                       WHERE `id` = \'' . $application->getId() . '\';');
         
         $mysql->close();
         
@@ -241,9 +241,9 @@ class ApplicationHandler {
 			$mysql->query('UPDATE `' . Settings::db_table_infected_crew_applications . '` 
 						   SET `closedTime` = \'' . date('Y-m-d H:i:s') . '\',
 							   `state` = \'2\',
-							   `updatedByUserId` = \'' . $mysql->real_escape_string($user->getId()) . '\',
+							   `updatedByUserId` = \'' . $user->getId() . '\',
 							   `comment` = \'' . $mysql->real_escape_string($comment) . '\'
-						   WHERE `id` = \'' . $mysql->real_escape_string($application->getId()) . '\';');
+						   WHERE `id` = \'' . $application->getId() . '\';');
 			
 			$mysql->close();
 			
@@ -284,9 +284,9 @@ class ApplicationHandler {
 			$mysql->query('UPDATE `' . Settings::db_table_infected_crew_applications . '` 
 						   SET `closedTime` = \'' . date('Y-m-d H:i:s') . '\',
 							   `state` = \'3\', 
-							   `updatedByUserId` = \'' . $mysql->real_escape_string($user->getId()) . '\',
+							   `updatedByUserId` = \'' . $user->getId() . '\',
 							   `comment` = \'' . $mysql->real_escape_string($comment) . '\'
-						   WHERE `id` = \'' . $mysql->real_escape_string($application->getId()) . '\';');
+						   WHERE `id` = \'' . $application->getId() . '\';');
 			
 			$mysql->close();
 			
@@ -309,9 +309,9 @@ class ApplicationHandler {
         $mysql->query('UPDATE `' . Settings::db_table_infected_crew_applications . '` 
                        SET `closedTime` = \'' . date('Y-m-d H:i:s') . '\',
                            `state` = \'4\',
-						   `updatedByUserId` = \'' . $mysql->real_escape_string($user->getId()) . '\',
+						   `updatedByUserId` = \'' . $user->getId() . '\',
                            `comment` = \'Closed by the system.\'
-                       WHERE `id` = \'' . $mysql->real_escape_string($application->getId()) . '\';');
+                       WHERE `id` = \'' . $application->getId() . '\';');
         
         $mysql->close();
         
@@ -326,7 +326,7 @@ class ApplicationHandler {
         $mysql = MySQL::open(Settings::db_name_infected_crew);
         
         $result = $mysql->query('SELECT `id` FROM `' . Settings::db_table_infected_crew_applicationqueue . '` 
-                                 WHERE `applicationId` = \'' . $mysql->real_escape_string($application->getId()) . '\';');
+                                 WHERE `applicationId` = \'' . $application->getId() . '\';');
         
 
         $mysql->close();
@@ -344,11 +344,11 @@ class ApplicationHandler {
 				$mysql = MySQL::open(Settings::db_name_infected_crew);
 				
 				$mysql->query('INSERT INTO `' . Settings::db_table_infected_crew_applicationqueue . '` (`applicationId`) 
-							   VALUES (\'' . $mysql->real_escape_string($application->getId()) . '\');');
+							   VALUES (\'' . $application->getId() . '\');');
 							   
 				$mysql->query('UPDATE `' . Settings::db_table_infected_crew_applications . '` 
-							   SET `updatedByUserId` = \'' . $mysql->real_escape_string($user->getId()) . '\'
-							   WHERE `id` = \'' . $mysql->real_escape_string($application->getId()) . '\';');
+							   SET `updatedByUserId` = \'' . $user->getId() . '\'
+							   WHERE `id` = \'' . $application->getId() . '\';');
 							   
 				$mysql->close();
 			}
@@ -369,11 +369,11 @@ class ApplicationHandler {
 			$mysql = MySQL::open(Settings::db_name_infected_crew);
 			
 			$mysql->query('DELETE FROM `' . Settings::db_table_infected_crew_applicationqueue . '` 
-						   WHERE `applicationId` = \'' . $mysql->real_escape_string($application->getId()) . '\';');
+						   WHERE `applicationId` = \'' . $application->getId() . '\';');
 						   
 			$mysql->query('UPDATE `' . Settings::db_table_infected_crew_applications . '` 
-			               SET `updatedByUserId` = \'' . $mysql->real_escape_string($user->getId()) . '\'
-			               WHERE `id` = \'' . $mysql->real_escape_string($application->getId()) . '\';');
+			               SET `updatedByUserId` = \'' . $user->getId() . '\'
+			               WHERE `id` = \'' . $application->getId() . '\';');
                                     
 			$mysql->close();
 		}
@@ -387,8 +387,8 @@ class ApplicationHandler {
         
         $result = $mysql->query('SELECT `id` FROM `' . Settings::db_table_infected_crew_applications . '`
                                  WHERE `eventId` = \'' . EventHandler::getCurrentEvent()->getId() . '\'
-                                 AND `userId` = \'' . $mysql->real_escape_string($user->getId()) . '\'
-                                 AND `groupId` = \'' . $mysql->real_escape_string($group->getId()) . '\'
+                                 AND `userId` = \'' . $user->getId() . '\'
+                                 AND `groupId` = \'' . $group->getId() . '\'
                                  AND (`state` = \'1\' OR `state` = \'2\');');
         
         $mysql->close();
@@ -404,8 +404,8 @@ class ApplicationHandler {
         
         $result = $mysql->query('SELECT * FROM `' . Settings::db_table_infected_crew_applications . '`
                                  WHERE `eventId` = \'' . EventHandler::getCurrentEvent()->getId() . '\'
-                                 AND `userId` = \'' . $mysql->real_escape_string($user->getId()) . '\'
-                                 AND `groupId` = \'' . $mysql->real_escape_string($group->getId()) . '\'
+                                 AND `userId` = \'' . $user->getId() . '\'
+                                 AND `groupId` = \'' . $group->getId() . '\'
                                  AND (`state` = \'1\' OR `state` = \'2\');');
         
         $mysql->close();

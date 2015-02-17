@@ -85,7 +85,7 @@ class GameHandler {
                            `startTime` = \'' . $mysql->real_escape_string($startTime) . '\', 
                            `endTime` = \'' . $mysql->real_escape_string($endTime) . '\', 
                            `published` = \'' . $mysql->real_escape_string($published) . '\'
-                       WHERE `id` = \'' . $mysql->real_escape_string($game->getId()) . '\';');
+                       WHERE `id` = \'' . $game->getId() . '\';');
         
         $mysql->close();
     }
@@ -97,7 +97,7 @@ class GameHandler {
         $mysql = MySQL::open(Settings::db_name_infected_main);
         
         $mysql->query('DELETE FROM `' . Settings::db_table_infected_main_games . '` 
-                       WHERE `id` = \'' . $mysql->real_escape_string($game->getId()) . '\';');
+                       WHERE `id` = \'' . $game->getId() . '\';');
         
         $mysql->close();
     }

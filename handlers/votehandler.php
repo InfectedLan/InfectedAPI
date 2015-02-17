@@ -21,7 +21,7 @@ class VoteHandler {
         $mysql = MySQL::open(Settings::db_name_infected_compo);
 
         $result = $mysql->query('SELECT `id` FROM `' . Settings::db_table_infected_compo_votes . '` 
-                                 WHERE `consumerId` = ' . $mysql->real_escape_string($consumer->getId()) . ';');
+                                 WHERE `consumerId` = ' . $consumer->getId() . ';');
         
         $mysql->close();
 
@@ -38,8 +38,8 @@ class VoteHandler {
         $mysql = MySQL::open(Settings::db_name_infected_compo);
 
         $result = $mysql->query('INSERT INTO `' . Settings::db_table_infected_compo_votes . '` (`consumerId`, `voteOptionId`) 
-                                 VALUES (\'' . $mysql->real_escape_string($consumer->getId()) . '\', 
-                                         \'' . $mysql->real_escape_string($voteOption->getId()) . '\');');
+                                 VALUES (\'' . $consumer->getId() . '\', 
+                                         \'' . $voteOption->getId() . '\');');
         
         $mysql->close();
     }

@@ -2,6 +2,7 @@
 require_once 'session.php';
 require_once 'handlers/grouphandler.php';
 require_once 'handlers/teamhandler.php';
+require_once 'handlers/eventhandler.php';
 
 $result = false;
 $message = null;
@@ -26,7 +27,7 @@ if (Session::isAuthenticated()) {
 			$description = $_GET['description'];
 			$leader = $_GET['leader'];
 			
-			TeamHandler::createTeam($group, $name, $title, $description, $leader);
+			TeamHandler::createTeam(EventHandler::getCurrentEvent(), $group, $name, $title, $description, $leader);
 			$result = true;
 		} else {
 			$message = 'Du har ikke fyllt ut alle feltene!';

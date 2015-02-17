@@ -90,7 +90,7 @@ class ChatHandler {
 		$mysql = MySQL::open(Settings::db_name_infected_compo);
 		
 		$result = $mysql->query('SELECT * FROM `' . Settings::db_table_infected_compo_chatmessages . '`
-                                 WHERE `chatId` = \'' . $mysql->real_escape_string($chat->getId()) . '\'
+                                 WHERE `chatId` = \'' . $chat->getId() . '\'
                                  ORDER BY `id` DESC
 								 LIMIT 1;');
         
@@ -106,7 +106,7 @@ class ChatHandler {
 		$mysql = MySQL::open(Settings::db_name_infected_compo);
 		
 		$result = $mysql->query('SELECT * FROM `' . Settings::db_table_infected_compo_chatmessages . '`
-                                 WHERE `chatId` = \'' . $mysql->real_escape_string($chat->getId()) . '\'
+                                 WHERE `chatId` = \'' . $chat->getId() . '\'
                                  ORDER BY `id` DESC
 								 LIMIT ' . $mysql->real_escape_string($count) . ';');
         
@@ -142,7 +142,7 @@ class ChatHandler {
 		$mysql = MySQL::open(Settings::db_name_infected_compo);
 		
 		$mysql->query('DELETE FROM `' . Settings::db_table_infected_compo_chats . '` 
-                       WHERE `id` = \'' . $mysql->real_escape_string($chat->getId()) . '\';');
+                       WHERE `id` = \'' . $chat->getId() . '\';');
             
         $mysql->close();
 		
@@ -160,7 +160,7 @@ class ChatHandler {
 		$mysql = MySQL::open(Settings::db_name_infected_compo);
 		
 		$mysql->query('DELETE FROM `' . Settings::db_table_infected_compo_chatmessages . '` 
-                       WHERE `chatId` = \'' . $mysql->real_escape_string($chat->getId()) . '\';');
+                       WHERE `chatId` = \'' . $chat->getId() . '\';');
             
         $mysql->close();
 	}
@@ -172,8 +172,8 @@ class ChatHandler {
 		$mysql = MySQL::open(Settings::db_name_infected_compo);
 		
 		$result = $mysql->query('SELECT `id` FROM `' . Settings::db_table_infected_compo_memberofchat . '`
-                                 WHERE `userId` = \'' . $mysql->real_escape_string($user->getId()) . '\'
-								 AND `chatId` = \'' . $mysql->real_escape_string($chat->getId()) . '\';');
+                                 WHERE `userId` = \'' . $user->getId() . '\'
+								 AND `chatId` = \'' . $chat->getId() . '\';');
         
 		$mysql->close();
 		
@@ -188,7 +188,7 @@ class ChatHandler {
 		
         $result = $mysql->query('SELECT * FROM `' . Settings::db_table_infected_users . '`
                                  WHERE `id` = (SELECT `userId` FROM `' . Settings::db_name_infected_compo . '`.`' . Settings::db_table_infected_compo_memberofchat . '`
-                                 			   WHERE `chatId` = \'' . $mysql->real_escape_string($chat->getId()) . '\');');
+                                 			   WHERE `chatId` = \'' . $chat->getId() . '\');');
 
 		$mysql->close();
 		
@@ -208,8 +208,8 @@ class ChatHandler {
 		$mysql = MySQL::open(Settings::db_name_infected_compo);
 		
 		$mysql->query('INSERT INTO `' . Settings::db_table_infected_compo_memberofchat . '` (`userId`, `chatId`) 
-                       VALUES (\'' . $mysql->real_escape_string($user->getId()) . '\',
-							   \'' . $mysql->real_escape_string($chat->getId()) . '\');');
+                       VALUES (\'' . $user->getId() . '\',
+							   \'' . $chat->getId() . '\');');
 						
 		$mysql->close();
 	}
@@ -221,8 +221,8 @@ class ChatHandler {
 		$mysql = MySQL::open(Settings::db_name_infected_compo);
 		
 		$mysql->query('DELETE FROM `' . Settings::db_table_infected_compo_memberofchat . '` 
-                       WHERE `userId` = \'' . $mysql->real_escape_string($user->getId()) . '\'
-					   AND `chatId` = \'' . $mysql->real_escape_string($chat->getId()) . '\';');
+                       WHERE `userId` = \'' . $user->getId() . '\'
+					   AND `chatId` = \'' . $chat->getId() . '\';');
             
         $mysql->close();
 	}
@@ -234,7 +234,7 @@ class ChatHandler {
 		$mysql = MySQL::open(Settings::db_name_infected_compo);
 		
 		$mysql->query('DELETE FROM `' . Settings::db_table_infected_compo_memberofchat . '` 
-                       WHERE `chatId` = \'' . $mysql->real_escape_string($chat->getId()) . '\';');
+                       WHERE `chatId` = \'' . $chat->getId() . '\';');
             
         $mysql->close();
 	}
@@ -246,8 +246,8 @@ class ChatHandler {
 		$mysql = MySQL::open(Settings::db_name_infected_compo);
 		
 		$mysql->query('INSERT INTO `' . Settings::db_table_infected_compo_chatmessages . '` (`userId`, `chatId`, `time`, `message`) 
-                       VALUES (\'' . $mysql->real_escape_string($user->getId()) . '\',
-							   \'' . $mysql->real_escape_string($chat->getId()) . '\',
+                       VALUES (\'' . $user->getId() . '\',
+							   \'' . $chat->getId() . '\',
 							   \'' . date('Y-m-d H:i:s') . '\',
 							   \'' . htmlspecialchars($mysql->real_escape_string($message), ENT_QUOTES | ENT_HTML401 ) . '\');');
 						
