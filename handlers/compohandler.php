@@ -22,6 +22,47 @@ class CompoHandler {
     }
 
     /*
+     * Get a list of compos.
+     */
+    public static function getCompos() {
+        $event = EventHandler::getCurrentEvent();
+        $database = Database::open(Settings::db_name_infected_compo);
+
+        $result = $database->query('SELECT * FROM `' . Settings::db_table_infected_compo_compos . '` 
+                                    WHERE `eventId` = \'' . $event->getId() . '\';');
+
+        $database->close();
+
+        $compoList = array();
+
+        while ($object = $result->fetch_object('Compo')) {
+            array_push($compoList, $object);
+        }
+
+        return $compoList;
+    }
+
+    /*
+     * Get compos for the specified event.
+     */
+    public static function getComposByEvent(Event $event) {
+        $database = Database::open(Settings::db_name_infected_compo);
+
+        $result = $database->query('SELECT * FROM `' . Settings::db_table_infected_compo_compos . '` 
+                                    WHERE `eventId` = \'' . $event->getId() . '\';');
+
+        $database->close();
+
+        $compoList = array();
+
+        while ($object = $result->fetch_object('Compo')) {
+            array_push($compoList, $object);
+        }
+
+        return $compoList;
+    }
+
+    /*
      * Returns true if the given compo has generated matches.
      */
     public static function hasGeneratedMatches(Compo $compo) {
@@ -33,26 +74,6 @@ class CompoHandler {
         $database->close();
 
         return $result->num_rows > 0;
-    }
-
-    /*
-     * Get compos for the specified event.
-     */
-    public static function getComposForEvent(Event $event) {
-        $database = Database::open(Settings::db_name_infected_compo);
-
-        $result = $database->query('SELECT * FROM `' . Settings::db_table_infected_compo_compos . '` 
-                                    WHERE `event` = \'' . $event->getId() . '\';');
-
-        $database->close();
-
-        $compoList = array();
-
-        while ($object = $result->fetch_object('Compo')) {
-            array_push($compoList, $object);
-        }
-
-        return $compoList;
     }
 
     /*

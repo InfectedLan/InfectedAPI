@@ -42,6 +42,26 @@ class ApplicationHandler {
         return $applicationList;
     }
     
+    /*
+     * Returns a list of all applications for that event.
+     */
+    public static function getApplicationsByEvent(Event $event) {
+        $database = Database::open(Settings::db_name_infected_crew);
+        
+        $result = $database->query('SELECT * FROM `' . Settings::db_table_infected_crew_applications . '`
+                                    WHERE `eventId` = \'' . $event->getId() . '\';');
+        
+        $database->close();
+
+        $applicationList = array();
+        
+        while ($object = $result->fetch_object('Application')) {
+            array_push($applicationList, $object);
+        }
+        
+        return $applicationList;
+    }
+
     /* 
      * Returns a list of pending applications.
      */
@@ -70,7 +90,7 @@ class ApplicationHandler {
     /* 
      * Returns a list of pending applications.
      */
-    public static function getPendingApplicationsForGroup(Group $group) {
+    public static function getPendingApplicationsByGroup(Group $group) {
         $database = Database::open(Settings::db_name_infected_crew);
         
         $result = $database->query('SELECT `' . Settings::db_table_infected_crew_applications . '`.* FROM `' . Settings::db_table_infected_crew_applications . '`
@@ -121,7 +141,7 @@ class ApplicationHandler {
     /*
      * Returns a list of all queued applications for a given group.
      */
-    public static function getQueuedApplicationsForGroup(Group $group) {
+    public static function getQueuedApplicationsByGroup(Group $group) {
         $database = Database::open(Settings::db_name_infected_crew);
         
         $result = $database->query('SELECT `' . Settings::db_table_infected_crew_applications . '`.* FROM `' . Settings::db_table_infected_crew_applications . '`
@@ -168,7 +188,7 @@ class ApplicationHandler {
     /*
      * Returns a list of all accepted applications for a given group.
      */
-    public static function getAcceptedApplicationsForGroup(Group $group) {
+    public static function getAcceptedApplicationsByGroup(Group $group) {
         $database = Database::open(Settings::db_name_infected_crew);
         
         $result = $database->query('SELECT * FROM `' . Settings::db_table_infected_crew_applications . '`
@@ -382,7 +402,7 @@ class ApplicationHandler {
     /*
      * Returns a true if user has application for group.
      */
-    public static function hasUserApplicationForGroup(User $user, Group $group) {
+    public static function hasUserApplicationByGroup(User $user, Group $group) {
         $database = Database::open(Settings::db_name_infected_crew);
         
         $result = $database->query('SELECT `id` FROM `' . Settings::db_table_infected_crew_applications . '`
@@ -399,7 +419,7 @@ class ApplicationHandler {
     /*
      * Returns the application for group and user.
      */
-    public static function getUserApplicationForGroup(User $user, Group $group) {
+    public static function getUserApplicationByGroup(User $user, Group $group) {
         $database = Database::open(Settings::db_name_infected_crew);
         
         $result = $database->query('SELECT * FROM `' . Settings::db_table_infected_crew_applications . '`
@@ -422,26 +442,6 @@ class ApplicationHandler {
         $result = $database->query('SELECT * FROM `' . Settings::db_table_infected_crew_applications . '`
                                     WHERE `eventId` = \'' . EventHandler::getCurrentEvent()->getId() . '\'
                                     AND `userId` = \'' . $user->getId() . '\';');
-        
-        $database->close();
-
-        $applicationList = array();
-        
-        while ($object = $result->fetch_object('Application')) {
-            array_push($applicationList, $object);
-        }
-        
-        return $applicationList;
-    }
-    
-    /*
-     * Returns a list of all applications for that event.
-     */
-    public static function getApplicationsForEvent(Event $event) {
-        $database = Database::open(Settings::db_name_infected_crew);
-        
-        $result = $database->query('SELECT * FROM `' . Settings::db_table_infected_crew_applications . '`
-                                    WHERE `eventId` = \'' . $event->getId() . '\';');
         
         $database->close();
 

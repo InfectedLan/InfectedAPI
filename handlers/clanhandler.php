@@ -29,7 +29,7 @@ class ClanHandler {
     /*
      * Get clan for a specified user.
      */
-    public static function getClansForUser(User $user, Event $event) {
+    public static function getClansByUser(User $user, Event $event) {
         $database = Database::open(Settings::db_name_infected_compo);
 
         $result = $database->query('SELECT * FROM `' . Settings::db_table_infected_compo_clans . '` 
@@ -166,7 +166,7 @@ class ClanHandler {
     /*
      * Return true if the specified user is a stepin member.
      */
-    public static function isMemberStepin(User $user, Clan $clan) {
+    public static function isMemberStepIn(User $user, Clan $clan) {
         $database = Database::open(Settings::db_name_infected_compo);
 
         $result = $database->query('SELECT `id` FROM `' . Settings::db_table_infected_compo_memberof . '` 
@@ -182,7 +182,7 @@ class ClanHandler {
     /*
      * Set the step in state of a member.
      */
-    public static function setMemberStepinState(Clan $clan, User $user, $state) {
+    public static function setMemberStepInState(Clan $clan, User $user, $state) {
         $database = Database::open(Settings::db_name_infected_compo);
 
         $result = $database->query('UPDATE `' . Settings::db_table_infected_compo_memberof . '` 

@@ -17,13 +17,13 @@ class GroupHandler {
         
         $database->close();
 		
-		return $result->fetch_object('Group');
+		    return $result->fetch_object('Group');
     }
     
     /* 
      * Get a group for the specified user.
      */
-    public static function getGroupForUser(User $user) {
+    public static function getGroupByUser(User $user) {
         $database = Database::open(Settings::db_name_infected_crew);
         
         $result = $database->query('SELECT * FROM `' . Settings::db_table_infected_crew_groups . '` 
@@ -184,7 +184,7 @@ class GroupHandler {
         } else {
             $database->query('INSERT INTO `' . Settings::db_table_infected_crew_memberof . '` (`eventId`, `userId`, `groupId`, `teamId`) 
                               VALUES (\'' . EventHandler::getCurrentEvent()->getId() . '\', 
-								      \'' . $user->getId() . '\', 
+								                      \'' . $user->getId() . '\', 
                                       \'' . $group->getId() . '\', 
                                       \'0\');');
         }

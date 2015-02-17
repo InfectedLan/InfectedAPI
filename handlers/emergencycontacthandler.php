@@ -16,13 +16,13 @@ class EmergencyContactHandler {
         
         $database->close();
 		
-		return $result->fetch_object('EmergencyContact');
+		    return $result->fetch_object('EmergencyContact');
     }
     
     /*
      * Get the emergency contact for the given user.
      */
-    public static function getEmergencyContactForUser(User $user) {
+    public static function getEmergencyContactByUser(User $user) {
         $database = Database::open(Settings::db_name_infected);
         
         $result = $database->query('SELECT * FROM `'. Settings::db_table_infected_emergencycontacts . '`
@@ -76,6 +76,7 @@ class EmergencyContactHandler {
                 $database->query('INSERT INTO `' . Settings::db_table_infected_emergencycontacts . '` (`userId`, `phone`) 
                                   VALUES (\'' . $user->getId() . '\', 
                                           \'' . $database->real_escape_string($phone) . '\');');
+                
                 $database->close();
         } else {
             if (!empty($phone) && $phone != 0) {

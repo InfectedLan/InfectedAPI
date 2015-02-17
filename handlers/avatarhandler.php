@@ -22,7 +22,7 @@ class AvatarHandler {
     /*
      * Get an avatar for a specified user.
      */
-    public static function getAvatarForUser(User $user) {
+    public static function getAvatarByUser(User $user) {
         $database = Database::open(Settings::db_name_infected_crew);
         
         $result = $database->query('SELECT * FROM `' . Settings::db_table_infected_crew_avatars . '` 

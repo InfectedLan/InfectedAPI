@@ -9,14 +9,23 @@ class Invite extends Object {
 	private $userId;
 	private $clanId;
 
+	/*
+	 * Returns the user that this invite is for.
+	 */ 
 	public function getUser() {
 		return UserHandler::getUser($this->userId);
 	}
 
+	/*
+	 * Returns the clan this invite is to.
+	 */ 
 	public function getClan() {
 		return ClanHandler::getClan($this->clanId);
 	}
 
+	/*
+	 * Decline this invite.
+	 */ 
 	public function decline() {
 		$con = Database::open(Settings::db_name_infected_compo);
 
@@ -26,6 +35,9 @@ class Invite extends Object {
 		Database::close($con);
 	}
 
+	/*
+	 * Accept this invite.
+	 */ 
 	public function accept() {
 		$con = Database::open(Settings::db_name_infected_compo);
 
@@ -38,13 +50,14 @@ class Invite extends Object {
 		$compo = ClanHandler::getCompo($clan);
 
 		if (count($memberList) < $compo->getTeamSize()) {
-			$database->query($con, 'INSERT INTO `' . Settings::db_table_infected_compo_memberof . '` (`userId`, `clanId`, `stepin`) 
-								 VALUES (' . $this->getUser()->getId() . ', 
-									     ' . $clan->getId() . ', 0);');
+			$database->query('INSERT INTO `' . Settings::db_table_infected_compo_memberof . '` (`userId`, `clanId`, `stepInId`) 
+							  VALUES (' . $this->getUser()->getId() . ', 
+									  ' . $clan->getId() . ', 0);');
 		} else {
-			$database->query($con, 'INSERT INTO `' . Settings::db_table_infected_compo_memberof . '` (`userId`, `clanId`, `stepin`) 
-								 VALUES (' . $this->getUser()->getId() . ', 
-									     ' . $clan->getId() . ', 1);');
+			$database->query('INSERT INTO `' . Settings::db_table_infected_compo_memberof . '` (`userId`, `clanId`, `stepInId`) 
+							  VALUES (\'' . $this->getUser()->getId() . '\', 
+									  \'' . $clan->getId() . '\', 
+									  \'1\');');
 		}
 
 		$database->close();

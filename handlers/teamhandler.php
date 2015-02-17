@@ -7,7 +7,9 @@ require_once 'objects/user.php';
 require_once 'objects/group.php';
 
 class TeamHandler {
-    /* Get a team by id */
+    /* 
+     * Get the team by the internal id.
+     */
     public static function getTeam($id) {
         $database = Database::open(Settings::db_name_infected_crew);
         
@@ -16,16 +18,18 @@ class TeamHandler {
         
         $database->close();
 		
-		return $result->fetch_object('Team');
+		    return $result->fetch_object('Team');
     }
     
-    /* Get a group by userId */
-    public static function getTeamForUser(User $user) {
+    /* 
+     * Get a group by user.
+     */
+    public static function getTeamByUser(User $user) {
         $database = Database::open(Settings::db_name_infected_crew);
         
         $result = $database->query('SELECT `teamId` FROM `' . Settings::db_table_infected_crew_memberof . '` 
                                     WHERE `eventId` = \'' . EventHandler::getCurrentEvent()->getId() . '\'
-								    AND `userId` = \'' . $user->getId() . '\';');
+								                    AND `userId` = \'' . $user->getId() . '\';');
          
         $database->close();
 
@@ -54,7 +58,7 @@ class TeamHandler {
     }
     
     /* Get an array of all teams */
-    public static function getTeamsForGroup(Group $group) {
+    public static function getTeamsByGroup(Group $group) {
         $database = Database::open(Settings::db_name_infected_crew);
 
         $result = $database->query('SELECT * FROM `' . Settings::db_table_infected_crew_teams . '`
@@ -126,7 +130,7 @@ class TeamHandler {
                                     LEFT JOIN `' . Settings::db_name_infected_crew . '`.`' . Settings::db_table_infected_crew_memberof . '`
                                     ON `' . Settings::db_table_infected_users . '`.`id` = `userId` 
                                     WHERE `eventId` = \'' . EventHandler::getCurrentEvent()->getId() . '\'
-								    AND `groupId` = \'' . $group->getId() . '\'
+								                    AND `groupId` = \'' . $group->getId() . '\'
                                     AND `teamId` = \'' . $team->getId() . '\' 
                                     ORDER BY `firstname` ASC;');
         
@@ -149,7 +153,7 @@ class TeamHandler {
         
         $result = $database->query('SELECT `id` FROM `' . Settings::db_table_infected_crew_memberof. '` 
                                     WHERE `eventId` = \'' . EventHandler::getCurrentEvent()->getId() . '\'
-								    AND `userId` = \'' . $user->getId() . '\' 
+								                    AND `userId` = \'' . $user->getId() . '\' 
                                     AND `teamId` != \'0\';');
         
         $database->close();
@@ -180,7 +184,7 @@ class TeamHandler {
         if ($user->isGroupMember()) {    
             $database->query('UPDATE `' . Settings::db_table_infected_crew_memberof . '` 
                               SET `teamId` = \'' . $team->getId() . '\' 
-						      WHERE `eventId` = \'' . EventHandler::getCurrentEvent()->getId() . '\'
+						                  WHERE `eventId` = \'' . EventHandler::getCurrentEvent()->getId() . '\'
                               AND `userId` = \'' . $user->getId() . '\' 
                               AND `groupId` = \'' . $group->getId() . '\';');    
         }
@@ -197,7 +201,7 @@ class TeamHandler {
         $database->query('UPDATE `' . Settings::db_table_infected_crew_memberof . '` 
                           SET `teamId` = \'0\'
                           WHERE `eventId` = \'' . EventHandler::getCurrentEvent()->getId() . '\'
-					      AND `userId` = \'' . $user->getId() . '\';');    
+					                AND `userId` = \'' . $user->getId() . '\';');    
         
         $database->close();
     }

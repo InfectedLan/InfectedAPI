@@ -16,12 +16,12 @@ if (Session::isAuthenticated()) {
 				echo '<link href="../../styles/ticketlabelstyle.css" rel="stylesheet" type="text/css" />';
 			echo '</head>';
 			echo '<body>';
-				$currEvent = EventHandler::getCurrentEvent();
-				$seatmap = SeatmapHandler::getSeatmap($currEvent->getSeatmap()->getId());
-				$rows = SeatmapHandler::getRows($seatmap);
+				$currentEvent = EventHandler::getCurrentEvent();
+				$seatmap = $currentEvent->getSeatmap());
+				$rowList = SeatmapHandler::getRows($seatmap);
 				
-				foreach ($rows as $row) {
-					$seats = RowHandler::getSeats($row);
+				foreach ($rowList as $row) {
+					$seatList = RowHandler::getSeats($row);
 					
 					foreach ($seats as $seat) {
 						echo '<div id="name">';
@@ -44,9 +44,9 @@ if (Session::isAuthenticated()) {
 		echo '</html>';
 
 	} else {
-		echo 'Du har ikke tillatelse til dette!';
+		echo 'Du har ikke tillatelse til dette.';
 	}
 } else {
-	echo 'Du er ikke logget inn! ;(';
+	echo 'Du er ikke logget inn.';
 }
 ?>

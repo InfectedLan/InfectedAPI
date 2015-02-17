@@ -23,7 +23,7 @@ echo '<html>';
 					$eventList = EventHandler::getEventsByYear($_GET['year']);
 					
 					if (!empty($eventList)) {
-						$userList = EventHandler::getMembersAndParticipantsForEvents($eventList, $_GET['ageLimit']);
+						$userList = EventHandler::getMembersAndParticipantsByEvents($eventList, $_GET['ageLimit']);
 						
 						if (!empty($userList)) {
 							echo '<p>Fant ' . count($userList) . ' brukere i databasen.</p>';

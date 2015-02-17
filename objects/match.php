@@ -53,10 +53,10 @@ class Match extends Object {
 
 	public function isParticipant($user) {
 		//Get list of clans
-		$participants = MatchHandler::getParticipants($this);
+		$participantList = MatchHandler::getParticipants($this);
 
-		foreach($participants as $clan) {
-			if(ClanHandler::isMember($user, $clan)) {
+		foreach($participantList as $clan) {
+			if (ClanHandler::isMember($user, $clan)) {
 				return true;
 			}
 		}
@@ -70,9 +70,11 @@ class Match extends Object {
 	public function setState($newState) {
 		$con = Database::open(Settings::db_name_infected_compo);
 
-		$result = mysqli_query($con, 'UPDATE `' . Settings::db_table_infected_compo_matches . '` SET `state` = ' . $con->real_escape_string($newState) . ' WHERE `id` = ' . $this->id . ';');
+		$result = $database->query('UPDATE `' . Settings::db_table_infected_compo_matches . '`
+							        SET `state` = \'' . $con->real_escape_string($newState) . '\'
+							        WHERE `id` = \'' . $this->id . '\';');
 
-		Database::close($con);
+		$database->close();
 	}
 
 	public function getCompo() {

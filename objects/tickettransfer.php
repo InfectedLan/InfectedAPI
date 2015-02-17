@@ -27,10 +27,16 @@ class TicketTransfer extends Object{
 		return UserHandler::getUser($this->toId);
 	}
 
+	/*
+	 * Returns the datetime of this transfer.
+	 */
 	public function getDateTime() {
 		return strtotime($this->datetime);
 	}
 
+	/*
+	 * Returns true if this transfer is revertable.
+	 */
 	public function isRevertable() {
 		return $this->revertable ? true : false;
 	}

@@ -12,7 +12,7 @@ if (Session::isAuthenticated()) {
 	
 	if ($editUser != null) {
 		if ($user->hasPermission('*') ||
-			$user->getId() == $editUser->getId()) {
+			$user->equals($editUser)) {
 			echo '<script src="../api/scripts/edit-profile.js"></script>';
 			echo '<script src="../api/scripts/lookupCity.js"></script>';
 			
@@ -107,9 +107,9 @@ if (Session::isAuthenticated()) {
 					echo '<tr>';
 						echo '<td>Foresatte\'s telefon:</td>';
 							if (EmergencyContactHandler::hasEmergencyContact($editUser)) {
-								$emergencycontactphone = EmergencyContactHandler::getEmergencyContactForUser($editUser)->getPhone();
+								$emergencyContactPhone = EmergencyContactHandler::getEmergencyContactByUser($editUser)->getPhone();
 							
-								echo '<td><input name="emergencycontactphone" type="tel" value="' . $emergencycontactphone . '"></td>';
+								echo '<td><input name="emergencycontactphone" type="tel" value="' . $emergencyContactPhone . '"></td>';
 							} else {
 								echo '<td><input name="emergencycontactphone" type="tel"></td>';
 							}
@@ -120,7 +120,7 @@ if (Session::isAuthenticated()) {
 					echo '</tr>';
 				echo '</form>';
 				
-				if ($user->getId() == $editUser->getId()) {
+				if ($user->equals($editUser)) {
 					echo '<tr>';
 						echo '<td></td>';
 						echo '<td><a href="index.php?page=edit-avatar">Endre/Last opp profilbilde</a></td>';

@@ -12,42 +12,42 @@ class StoreSession extends Object {
 	private $datetime;
 
 	/*
-	 * Returns the user connected to this session
+	 * Returns the user connected to this session.
 	 */
 	public function getUser() {
 		return UserHandler::getUser($this->userId);
 	}
 
 	/*
-	 * Returns the ticket type the user is buying
+	 * Returns the ticket type the user is buying.
 	 */
 	public function getTicketType() {
 		return TicketTypeHandler::getTicketType($this->ticketType);
 	}
 
 	/*
-	 * Returns the amount of tickets the user is buying
+	 * Returns the amount of tickets the user is buying.
 	 */
 	public function getAmount() {
 		return $this->amount;
 	}
 
 	/*
-	 * Returns the key used during purchasing
+	 * Returns the key used during purchasing.
 	 */
 	public function getCode() {
 		return $this->code;
 	}
 
 	/*
-	 * Returns the price the user was supposed to pay
+	 * Returns the price the user was supposed to pay.
 	 */
 	public function getPrice() {
 		return $this->price;
 	}
 	
-		/*
-	 * Returns the time this session was created
+	/*
+	 * Returns the time this session was created.
 	 */
 	public function getTimeCreated() {
 		return strtotime($this->datetime);

@@ -7,14 +7,14 @@ class Seat extends Object {
 	private $number;
 
 	/*
-	 * Returns row this seat belongs to
+	 * Returns row this seat belongs to.
 	 */
 	public function getRow() {
 		return RowHandler::getRow($this->rowId);
 	}
 
 	/*
-	 * Returns seat number relative to row
+	 * Returns seat number relative to row.
 	 */
 	public function getNumber() {
 		return $this->number;

@@ -8,57 +8,89 @@ class Avatar extends Object {
 	private $file;
 	private $state;
 	
+	/*
+	 * Returns the user this avatar belongs to.
+	 */
 	public function getUser() {
 		return UserHandler::getUser($this->userId);
 	}
 
+	/*
+	 * Returns the avatar image in HD.
+	 */
 	public function getHd() {
 		return Settings::avatar_path . 'hd/' . $this->file;
 	}
 	
+	/*
+	 * Returns the avatar image in SD.
+	 */
 	public function getSd() {
 		return Settings::avatar_path . 'sd/' . $this->file;
 	}
 	
+	/*
+	 * Returns the avatar image as thumbnail.
+	 */
 	public function getThumbnail() {
 		return Settings::avatar_path . 'thumbnail/' . $this->file;
 	}
 
-	// Only use if state = 0
+	/*
+	 * Returns the avatar temporarily image.
+	 */
 	public function getTemp() {
 		return Settings::avatar_path . 'temp/' . $this->file;
 	}
 
+	/*
+	 * Returns the state of this avatar.
+	 */
 	public function getState() {
 		return $this->state;
 	}
-	
-	// TODO: We don't make SQL queries in object files.
-	public function setState($newstatus) {
-		$con = Database::open(Settings::db_name_infected_crew);
+
+	/*
+	 * Returns the avatar temporarily image.
+	 */
+	public function setState($newstatus) { // TODO: We don't make SQL queries in object files.
+		$database = Database::open(Settings::db_name_infected_crew);
 		
-		mysqli_query($con, 'UPDATE `' . Settings::db_table_infected_crew_avatars . '` SET `state` = ' . $con->real_escape_string($newstatus) . ' WHERE id = \'' . $this->getId() . '\'');
+		$database->query('UPDATE `' . Settings::db_table_infected_crew_avatars . '` 
+					      SET `state` = ' . $con->real_escape_string($newstatus) . ' 
+					      WHERE id = \'' . $this->getId() . '\'');
+
 		$this->state = $newstatus;
 		
-		Database::close($con);
+		$database->close();
 	}
 
+	/*
+	 * Returns the filename of this avatar.
+	 */
 	public function getFileName() {
 		return $this->file;
 	}
 	
-	// TODO: We don't make SQL queries in object files.
- 	public function setFileName($newName) {
- 		$con = Database::open(Settings::db_name_infected_crew);
+	/*
+	 * Sets the filename of this avatar.
+	 */
+ 	public function setFileName($newName) { // TODO: We don't make SQL queries in object files.
+ 		$database = Database::open(Settings::db_name_infected_crew);
 
- 		mysqli_query($con, 'UPDATE `' . Settings::db_table_infected_crew_avatars . '` SET `file` = \'' . $con->real_escape_string($newName) . '\' WHERE `id`=' . $this->getId() . ';');
+ 		$database->query('UPDATE `' . Settings::db_table_infected_crew_avatars . '` 
+ 						  SET `file` = \'' . $con->real_escape_string($newName) . '\' 
+ 						  WHERE `id` = \'' . $this->getId() . '\';');
+		
 		$this->file  = $newName;
 
-		Database::close($con);
+		$database->close();
 	}
 
-	//Do not use
-	public function deleteFiles() {
+	/*
+	 * Delete all files for this avatar.
+	 */
+	public function deleteFiles() { // Do not use.
 		if ($this->state == 0) {
 			//This picture is not cropped
 			unlink(Settings::api_path . $this->getTemp());

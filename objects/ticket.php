@@ -24,7 +24,7 @@ class Ticket extends EventObject {
 	}
 
 	/*
-	 * Returns the ticket type
+	 * Returns the ticket type.
 	 */
 	public function getType() {
 		return TicketTypeHandler::getTicketType($this->typeId);
@@ -45,7 +45,7 @@ class Ticket extends EventObject {
 	}
 	
 	/*
-	 * Returns the seat that this ticket is seated at
+	 * Returns the seat that this ticket is seated at.
 	 */
 	public function getSeat() {
 		return SeatHandler::getSeat($this->seatId);

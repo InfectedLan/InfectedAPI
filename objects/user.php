@@ -13,9 +13,6 @@ require_once 'handlers/grouphandler.php';
 require_once 'handlers/teamhandler.php';
 require_once 'objects/object.php';
 
-/*
- * Used to store information about a user.
- */
 class User extends Object {
 	private $firstname;
 	private $lastname;
@@ -413,7 +410,6 @@ class User extends Object {
 	 * Returns true if user is eligible to play in a infected compo
 	 */
 	public function isEligibleForCompos() {
-		//For now we 
 		return $this->hasTicket() || $this->isGroupMember();
 	}
 

@@ -143,7 +143,7 @@ class EventHandler {
 	/*
 	 * Returns members and participants for given events.
 	 */
-	public static function getMembersAndParticipantsForEvents(array $eventList, $ageLimit) {
+	public static function getMembersAndParticipantsByEvents(array $eventList, $ageLimit) {
 		$database = Database::open(Settings::db_name_infected);
 		
 		// Extract event id's from the event list.

@@ -19,6 +19,7 @@ class Chat extends Object {
 	public function getTitle() {
 		return $this->title;
 	}
+	
 	/*
 	 * Returns a list of all members in this chat.
 	 */

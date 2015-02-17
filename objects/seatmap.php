@@ -2,15 +2,21 @@
 require_once 'objects/object.php';
 
 class Seatmap extends Object {
-	private $human_name;
-	private $background_image;
+	private $humanName;
+	private $backgroundImage;
 
+	/*
+	 * Returns the name of this seatmap.
+	 */
 	public function getHumanName() {
-		return $this->human_name;
+		return $this->humanName;
 	}
 
+	/*
+	 * Returns the background image for this seatmap.
+	 */
 	public function getBackgroundImage() {
-		return $this->background_image;
+		return $this->backgroundImage;
 	}
 }
 ?>
