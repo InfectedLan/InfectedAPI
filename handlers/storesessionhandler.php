@@ -61,7 +61,15 @@ class StoreSessionHandler {
     }
     
     public static function hasStoreSession($user) {
-        return self::getStoreSessionForUser($user) != null;
+        $mysql = MySQL::open(Settings::db_name_infected_tickets);
+
+        $result = $mysql->query('SELECT `id` FROM `' . Settings::db_table_infected_tickets_storesessions . '` 
+                                 WHERE `userId` = \'' . $mysql->real_escape_string($user->getId()) . '\' 
+                                 AND `datetime` > \'' . self::oldestValidTimestamp() . '\';');
+
+        $mysql->close();
+
+        return $result->num_rows > 0;
     }
 
     public static function getReservedTicketCount($ticketType) {
@@ -115,18 +123,18 @@ class StoreSessionHandler {
     }
 
     public static function purchaseComplete($storeSession, $payment) {
-        if (!isset($storeSession)) {
-            return false;
-        }
-		
-        // Checks are ok, lets buy!
-        for ($i = 0; $i < $storeSession->getAmount(); $i++) {
-            TicketHandler::createTicket($storeSession->getUser(), $storeSession->getTicketType(), $payment);
+        if ($storesession != null) {
+            // Checks are ok, lets buy!
+            for ($i = 0; $i < $storeSession->getAmount(); $i++) {
+                TicketHandler::createTicket($storeSession->getUser(), $storeSession->getTicketType(), $payment);
+            }
+
+            self::deleteStoreSession($storeSession);
+
+            return true;
         }
 
-        self::deleteStoreSession($storeSession);
-
-        return true;
+        return false;
     }
 }
 ?>

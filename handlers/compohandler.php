@@ -32,9 +32,7 @@ class CompoHandler {
         
         $mysql->close();
 
-        $row = $result->fetch_array();
-
-        return $row ? true : false;
+        return $result->num_rows > 0;
     }
 
     /*
@@ -206,7 +204,7 @@ class CompoHandler {
             }
         }
 
-        while($looserCount > 0) {
+        while ($looserCount > 0) {
             $chat = ChatHandler::createChat("match chat");
             $match = MatchHandler::createMatch($time + $looserOffsetTime, "", $compo, $iteration, $chat->getId(), Match::BRACKET_LOOSER); //TODO connectData
 

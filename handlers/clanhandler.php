@@ -160,9 +160,7 @@ class ClanHandler {
 
         $mysql->close();
 
-        $row = $result->fetch_array();
-
-        return $row ? true : false;
+        return $result->num_rows > 0;
     }
 
     /*
@@ -178,9 +176,7 @@ class ClanHandler {
 
         $mysql->close();
 
-        $row = $result->fetch_array();
-
-        return $row ? true : false;
+        return $result->num_rows > 0;
     }
 
     /*

@@ -43,9 +43,7 @@ class SeatHandler {
 
         $row = $result->fetch_array();
 
-        $mysql->close();
-
-        return $row ? true : false;
+        return $result->num_rows > 0;
     }
 
     public static function getOwner($seat) {

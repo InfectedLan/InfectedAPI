@@ -138,9 +138,7 @@ class GroupHandler {
         
 		$mysql->close();
 		
-        $row = $result->fetch_array();
-        
-        return $row ? true : false;
+        return $result->num_rows > 0;
     }
     
     /* 
@@ -153,9 +151,7 @@ class GroupHandler {
                                  WHERE `leader` = \'' . $mysql->real_escape_string($user->getId()) . '\';');
 		$mysql->close();
 
-        $row = $result->fetch_array();
-        
-        return $row ? true : false;
+         return $result->num_rows > 0;
     }
 	
 	/* 
@@ -169,9 +165,7 @@ class GroupHandler {
         
         $mysql->close();
 
-        $row = $result->fetch_array();
-        
-        return $row ? true : false;
+        return $result->num_rows > 0;
     }
 
     /*

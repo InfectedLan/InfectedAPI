@@ -208,7 +208,7 @@ class User extends Object {
 	 * Returns true if user has an emergency contact linked to this account.
 	 */
 	public function hasEmergencyContact() {
-		return EmergencyContactHandler::getEmergencyContactForUser($this) != null;
+		return EmergencyContactHandler::hasEmergencyContact($this);
 	}
 	
 	/*
@@ -390,21 +390,6 @@ class User extends Object {
 		return TeamHandler::isTeamLeader($this);
 	}
 	
-	/*
-	 * Returns true if user is eligible to play in a infected compo
-	 */
-	public function isEligibleForCompos() {
-		//For now we 
-		return $this->hasCurrentTicket() || $this->isGroupMember();
-	}
-
-	/* 
-	 * Returns the full name with nickname instead of username for use in compos.
-	 */
-	public function getCompoDisplayName() {
-		return $this->getFirstname() . ' "' . $this->getNickname() . '" ' . $this->getLastname();
-	}
-	
 	/* 
 	 * Returns the name of the users position.
 	 */
@@ -422,6 +407,21 @@ class User extends Object {
 		} else {
 			return 'Deltaker';
 		}
+	}
+
+	/*
+	 * Returns true if user is eligible to play in a infected compo
+	 */
+	public function isEligibleForCompos() {
+		//For now we 
+		return $this->hasCurrentTicket() || $this->isGroupMember();
+	}
+
+	/* 
+	 * Returns the full name with nickname instead of username for use in compos.
+	 */
+	public function getCompoDisplayName() {
+		return $this->getFirstname() . ' "' . $this->getNickname() . '" ' . $this->getLastname();
 	}
 }
 ?>

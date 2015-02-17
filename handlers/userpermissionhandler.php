@@ -16,9 +16,7 @@ class UserPermissionHandler {
 		
         $mysql->close();
         
-        $row = $result->fetch_array();
-        
-        return $row ? true : false;
+        return $result->num_rows > 0;
     }
 	
 	/*
@@ -34,9 +32,7 @@ class UserPermissionHandler {
 		
         $mysql->close();
         
-        $row = $result->fetch_array();
-        
-        return $row ? true : false;
+        return $result->num_rows > 0;
 	}
     
 	public static function hasUserPermissions($user) {
@@ -47,9 +43,7 @@ class UserPermissionHandler {
         
         $mysql->close();
         
-        $row = $result->fetch_array();
-        
-        return $row ? true : false;
+        return $result->num_rows > 0;
     }
 	
     public static function getUserPermissions($user) {

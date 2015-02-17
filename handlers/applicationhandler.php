@@ -253,9 +253,9 @@ class ApplicationHandler {
 			// Reject users application for all other groups.
 			$applicationList = self::getUserApplications($applicationUser);
 			
-			foreach ($applicationList as $value) {
-                if ($group->equals($value->getGroup())) {
-					self::closeApplication($user, $value);
+			foreach ($applicationList as $applicationValue) {
+                if ($group->equals($applicationValue->getGroup())) {
+					self::closeApplication($user, $applicationValue);
 				}
 			}
 			
@@ -328,9 +328,7 @@ class ApplicationHandler {
 
         $mysql->close();
 
-        $row = $result->fetch_array();
-                
-        return $row ? true : false;
+        return $result->num_rows > 0;
     }
     
     /*
@@ -392,9 +390,7 @@ class ApplicationHandler {
         
         $mysql->close();
 
-        $row = $result->fetch_array();
-		
-        return $row ? true : false;
+        return $result->num_rows > 0;
     }
     
     /*

@@ -32,9 +32,7 @@ class PasswordResetCodeHandler {
                             
         $mysql->close();
 
-        $row = $result->fetch_array();
-
-        return $row ? true : false;
+        return $result->num_rows > 0;
     }
     
     public static function existsPasswordResetCode($code) {
@@ -45,9 +43,7 @@ class PasswordResetCodeHandler {
                       
         $mysql->close();
 
-        $row = $result->fetch_array();
-
-        return $row ? true : false;
+        return $result->num_rows > 0;
     }
     
     public static function getUserFromPasswordResetCode($code) {
