@@ -12,7 +12,6 @@ if (Session::isAuthenticated()) {
 	
 	if ($user->hasPermission('*') ||
 		$user->hasPermission('chief.my-crew')) {
-		
 		if (isset($_GET['id']) &&
 			isset($_GET['title']) &&
 			isset($_GET['content']) &&
@@ -33,19 +32,19 @@ if (Session::isAuthenticated()) {
 					RestrictedPageHandler::updatePage($page, $title, $content, $group, $team);
 					$result = true;
 				} else {
-					$message = 'Du har ikke rettigheter til dette.';
+					$message = '<p>Du har ikke rettigheter til dette.</p>';
 				}
 			} else {
-				$message = 'Siden finnes ikke.';
+				$message = '<p>Siden finnes ikke.</p>';
 			}
 		} else {
-			$message = 'Du har ikke fylt ut alle feltene.';
+			$message = '<p>Du har ikke fylt ut alle feltene.</p>';
 		}
 	} else {
-		$message = 'Du har ikke tillatelse til dette.';
+		$message = '<p>Du har ikke tillatelse til dette.</p>';
 	}
 } else {
-	$message = 'Du er ikke logget inn.';
+	$message = '<p>Du er ikke logget inn.</p>';
 }
 
 echo json_encode(array('result' => $result, 'message' => $message));

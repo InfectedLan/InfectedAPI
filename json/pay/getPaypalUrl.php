@@ -41,25 +41,25 @@ if (Session::isAuthenticated()) {
 						if (isset($url)) {
 							$result = true;
 						} else {
-							$message = 'Noe gikk galt da vi snakket med paypal';
+							$message = '<p>Noe gikk galt da vi snakket med paypal.</p>';
 						}
 					} else {
-						$message = 'Du har allerede en session!';
+						$message = '<p>Du har allerede en session!</p>';
 					}
 				} else {
-					$message = 'Du har enten valgt for mange billetter, eller så er det utsolgt.';
+					$message = '<p>Du har enten valgt for mange billetter, eller så er det utsolgt.</p>';
 				}
 			} else {
-				$message = 'Du har valgt en ugyldig billett type.';
+				$message = '<p>Du har valgt en ugyldig billett type.</p>';
 			}
 		} else {
-			$message = 'Billettsalget har ikke åpnet!';
+			$message = '<p>Billettsalget har ikke åpnet!</p>';
 		}
 	} else {
-		$message = 'Du har ikke fyllt ut alle feltene.';
+		$message = '<p>Du har ikke fyllt ut alle feltene.</p>';
 	}
 } else {
-	$message = 'Du er ikke logget inn!';
+	$message = '<p>Du er ikke logget inn!</p>';
 } 
 
 if ($result) {

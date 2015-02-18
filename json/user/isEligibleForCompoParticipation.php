@@ -14,16 +14,16 @@ if (Session::isAuthenticated()) {
 			if ($user->isEligibleForCompos()) {
 				$result = true;
 			} else {
-				$message = 'Brukeren har ikke lov til å delta i compoer. Har brukeren en gyldig billett?';
+				$message = '<p>Brukeren har ikke lov til å delta i compoer. Har brukeren en gyldig billett?</p>';
 			}
 		} else {
-			$message = 'Brukeren eksisterer ikke!';
+			$message = '<p>Brukeren eksisterer ikke!</p>';
 		}
 	} else {
-		$message = 'Vi mangler felt';
+		$message = '<p>Vi mangler felt.</p>';
 	}
 } else {
-	$message = 'Du er ikke logget inn.';
+	$message = '<p>Du er ikke logget inn.</p>';
 }
 
 echo json_encode(array('result' => $result, 'message' => $message));

@@ -11,7 +11,6 @@ if (Session::isAuthenticated()) {
 	
 	if ($user->hasPermission('*') ||
 		$user->hasPermission('chief.groups')) {
-		
 		if (isset($_GET['id']) &&
 			isset($_GET['title']) &&
 			isset($_GET['description']) &&
@@ -30,16 +29,16 @@ if (Session::isAuthenticated()) {
 				GroupHandler::updateGroup($group, $name, $title, $description, $leader, $coleader);
 				$result = true;
 			} else {
-				$message = 'Gruppen finnes ikke.';
+				$message = '<p>Gruppen finnes ikke.</p>';
 			}
 		} else {
-			$message = 'Du har ikke fylt ut alle feltene.';
+			$message = '<p>Du har ikke fylt ut alle feltene.</p>';
 		}
 	} else {
-		$message = 'Du har ikke tillatelse til dette.';
+		$message = '<p>Du har ikke tillatelse til dette.</p>';
 	}
 } else {
-	$message = 'Du er ikke logget inn.';
+	$message = '<p>Du er ikke logget inn.</p>';
 }
 
 echo json_encode(array('result' => $result, 'message' => $message));

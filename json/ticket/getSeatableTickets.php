@@ -28,13 +28,13 @@ if (Session::isAuthenticated()) {
 
 			$result = true;
 		} else {
-			$message = 'Arrangementet finnes ikke!';
+			$message = '<p>Arrangementet finnes ikke!</p>';
 		}
 	} else {
-		$message = 'Mangler id.';
+		$message = '<p>Ikke noe seatmap spesifisert.</p>';
 	}
 } else {
-	$message = 'Du er ikke logget inn!';
+	$message = '<p>Du er ikke logget inn!</p>';
 }
 
 if ($result) {

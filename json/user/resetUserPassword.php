@@ -17,13 +17,13 @@ if (!isset($_GET['code'])) {
 			if ($user != null) {
 				$user->sendPasswordResetMail();
 				$result = true;
-				$message = 'En link har blitt sendt til din registrerte e-post adresse, klikk på linken for å endre passordet ditt.';
+				$message = '<p>En link har blitt sendt til din registrerte e-post adresse, klikk på linken for å endre passordet ditt.</p>';
 			}
 		} else {
-			$message = 'Kunne ikke finne brukeren i vår database.';
+			$message = '<p>Kunne ikke finne brukeren i vår database.</p>';
 		}
 	} else {
-		$message = 'Du må skrive inn en e-postadresse eller ett brukernavn!';
+		$message = '<p>Du må skrive inn en e-postadresse eller ett brukernavn!</p>';
 	}
 } else {
 	if (isset($_GET['password']) &&
@@ -41,15 +41,15 @@ if (!isset($_GET['code'])) {
 				PasswordResetCodeHandler::removePasswordResetCode($code);
 				UserHandler::updateUserPassword($user->getId(), hash('sha256', $password));
 				$result = true;
-				$message = 'Passordet ditt er nå endret.';
+				$message = '<p>Passordet ditt er nå endret.</p>';
 			} else {
-				$message = 'Passordene du skrev inn var ikke like!';
+				$message = '<p>Passordene du skrev inn var ikke like!</p>';
 			}
 		} else {
-			$message = 'Linken du fikk for å resette passwordet ditt er ikke lengre gyldig.';
+			$message = '<p>Linken du fikk for å resette passwordet ditt er ikke lengre gyldig.</p>';
 		}
 	} else {
-		$message = 'Du har ikke fyllt ut alle feltene.';
+		$message = '<p>Du har ikke fyllt ut alle feltene.</p>';
 	}
 }
 

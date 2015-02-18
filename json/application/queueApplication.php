@@ -10,7 +10,6 @@ if (Session::isAuthenticated()) {
 	
 	if ($user->hasPermission('*') ||
 		$user->hasPermission('chief.applications')) {
-		
 		if (isset($_GET['id']) &&
 			is_numeric($_GET['id'])) {
 			$application = ApplicationHandler::getApplication($_GET['id']);
@@ -21,19 +20,19 @@ if (Session::isAuthenticated()) {
 					ApplicationHandler::queueApplication($user, $application, true);
 					$result = true;
 				} else {
-					$message = 'Kan ikke sette søknader for tidligere arrangementer i kø.';
+					$message = '<p>Kan ikke sette søknader for tidligere arrangementer i kø.</p>';
 				}
 			} else {
-				$message = 'Søknaden finnes ikke.';
+				$message = '<p>Søknaden finnes ikke.</p>';
 			}
 		} else {
-			$message = 'Ingen søknad spesifisert.';
+			$message = '<p>Ingen søknad spesifisert.</p>';
 		}
 	} else {
-		$message = 'Du har ikke tillatelse til dette.';
+		$message = '<p>Du har ikke tillatelse til dette.</p>';
 	}
 } else {
-	$message = 'Du er ikke logget inn.';
+	$message = '<p>Du er ikke logget inn.</p>';
 }
 
 echo json_encode(array('result' => $result, 'message' => $message));

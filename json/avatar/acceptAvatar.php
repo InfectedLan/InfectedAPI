@@ -10,7 +10,6 @@ if (Session::isAuthenticated()) {
 	
 	if ($user->hasPermission('*') ||
 		$user->hasPermission('chief.avatars')) {
-		
 		if (isset($_GET['id']) &&
 			is_numeric($_GET['id'])) {
 			$avatar = AvatarHandler::getAvatar($_GET['id']);
@@ -19,16 +18,16 @@ if (Session::isAuthenticated()) {
 				AvatarHandler::acceptAvatar($avatar);
 				$result = true;
 			} else {
-				$message = 'Avataren finnes ikke.';
+				$message = '<p>Avataren finnes ikke.</p>';
 			}
 		} else {
-			$message = 'Ingen avatar spesifisert.';
+			$message = '<p>Ingen avatar spesifisert.</p>';
 		}
 	} else {
-		$message = 'Du har ikke tillatelse til dette.';
+		$message = '<p>Du har ikke tillatelse til dette.</p>';
 	}
 } else {
-	$message = 'Du er ikke logget inn.';
+	$message = '<p>Du er ikke logget inn.</p>';
 }
 
 echo json_encode(array('result' => $result, 'message' => $message));

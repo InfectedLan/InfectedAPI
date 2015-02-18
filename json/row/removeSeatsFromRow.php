@@ -11,7 +11,6 @@ if (Session::isAuthenticated()) {
 	
 	if ($user->hasPermission('*') ||
 		$user->hasPermission('admin.seatmap')) {
-		
 		if (isset($_GET['row'])) {
 			$row = RowHandler::getRow($_GET['row']);
 			
@@ -40,28 +39,28 @@ if (Session::isAuthenticated()) {
 								
 								$result = true;
 							} else {
-								$message = 'Noen sitter på et av setene du prøver å slette!';
+								$message = '<p>Noen sitter på et av setene du prøver å slette!</p>';
 							}
 						} else {
-							$message = 'Det er færre seter i raden enn det du prøver å slette!';
+							$message = '<p>Det er færre seter i raden enn det du prøver å slette!</p>';
 						}
 					} else {
-						$message = 'Antall seter er ikke et tall!';
+						$message = '<p>Antall seter er ikke et tall!</p>';
 					}
 				} else {
-					$message = 'Antall seter er ikke satt!';
+					$message = '<p>Antall seter er ikke satt!</p>';
 				}
 			} else {
-				$message = 'Raden eksisterer ikke!';
+				$message = '<p>Raden eksisterer ikke!</p>';
 			}
 		} else {
-			$message = 'Raden er ikke satt!';
+			$message = '<p>Raden er ikke satt!</p>';
 		}
 	} else {
-		$message = 'Du har ikke tillatelse til å legge til en rad!';
+		$message = '<p>Du har ikke tillatelse til å legge til en rad!</p>';
 	}
 } else {
-	$message = 'Du må logge inn først!';
+	$message = '<p>Du må logge inn først!</p>';
 }
 
 if ($result) {

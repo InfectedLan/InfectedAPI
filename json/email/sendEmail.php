@@ -11,7 +11,6 @@ if (Session::isAuthenticated()) {
 	
 	if ($user->hasPermission('*') ||
 		$user->hasPermission('chief.email')) {
-		
 		if (isset($_GET['userIdList']) &&
 			isset($_GET['subject']) &&
 			isset($_GET['message']) &&
@@ -70,21 +69,21 @@ if (Session::isAuthenticated()) {
 				
 				// Format message differently when we're just sending email to one user.
 				if (count($userList) <= 1) {
-					$message = 'Din e-post ble sendt til den valgte brukeren.';
+					$message = '<p>Din e-post ble sendt til den valgte brukeren.</p>';
 				} else {
-					$message = 'Din e-post ble sendt til de valgte brukerene.';
+					$message = '<p>Din e-post ble sendt til de valgte brukerene.</p>';
 				}
 				
 				$result = true;
 			}
 		} else {
-			$message = 'Mangler informasjon, sjekk at du har fylt ut alle feltene.';
+			$message = '<p>Mangler informasjon, sjekk at du har fylt ut alle feltene.</p>';
 		}
 	} else {
-		$message = 'Du har ikke tilgang til dette.';
+		$message = '<p>Du har ikke tilgang til dette.</p>';
 	}
 } else {
-	$message = 'Du er ikke logget inn.';
+	$message = '<p>Du er ikke logget inn.</p>';
 } 
 
 echo json_encode(array('result' => $result, 'message' => $message));

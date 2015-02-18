@@ -20,13 +20,13 @@ if (Session::isAuthenticated()) {
 				$result = array('response' => false);
 			}
 		} else {
-			$message = 'Chatten finnes ikke!';
+			$message = '<p>Chatten finnes ikke!</p>';
 		}
 	} else {
-		$message = 'Vi mangler felt';
+		$message = '<p>Vi mangler felt.</p>';
 	}
 } else {
-	$message = 'Du er ikke logget inn.';
+	$message = '<p>Du er ikke logget inn.</p>';
 }
 
 echo json_encode(array('result' => $result, 'message' => $message));

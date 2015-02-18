@@ -7,16 +7,22 @@ $message = null;
 
 if (Session::isAuthenticated()) {
 	$user = Session::getCurrentUser();
-	$avatar = $user->getAvatar();
+	
+	// Sjekk om brukeren har en avatar.
+	if ($user->hasAvatar()) {
+		$avatar = $user->getAvatar();
 
-	if ($avatar != null) {
-		AvatarHandler::deleteAvatar($avatar);
-		$result = true;
+		if ($avatar != null) {
+			AvatarHandler::deleteAvatar($avatar);
+			$result = true;
+		} else {
+			$message = '<p>Avataren finnes ikke.</p>';
+		}
 	} else {
-		$message = 'Du har ingen avatar!';
+		$message = '<p>Du har ingen avatar!</p>';
 	}
 } else {
-	$message = 'Du er allerede logget inn!';
+	$message = '<p>Du er allerede logget inn!</p>';
 } 
 
 echo json_encode(array('result' => $result, 'message' => $message));

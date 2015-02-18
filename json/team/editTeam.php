@@ -11,7 +11,6 @@ if (Session::isAuthenticated()) {
 	
 	if ($user->hasPermission('*') ||
 		$user->hasPermission('chief.teams')) {
-		
 		if (isset($_GET['teamId']) &&
 			isset($_GET['groupId']) &&
 			isset($_GET['title']) &&
@@ -32,13 +31,13 @@ if (Session::isAuthenticated()) {
 			TeamHandler::updateTeam($team, $group, $name, $title, $description, $leader);
 			$result = true;
 		} else {
-			$message = 'Du har ikke fylt ut alle feltene.';
+			$message = '<p>Du har ikke fylt ut alle feltene.</p>';
 		}
 	} else {
-		$message = 'Du har ikke tillatelse til dette.';
+		$message = '<p>Du har ikke tillatelse til dette.</p>';
 	}
 } else {
-	$message = 'Du er ikke logget inn.';
+	$message = '<p>Du er ikke logget inn.</p>';
 }
 
 echo json_encode(array('result' => $result, 'message' => $message));

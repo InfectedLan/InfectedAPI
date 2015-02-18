@@ -18,23 +18,24 @@ if (Session::isAuthenticated()) {
 
 			if ($ticket != null) {
 				if (!$ticket->isCheckedIn()) {
-					CheckInStateHandler::checkIn($ticket);
+					$ticket->checkIn();
+
 					$result = true;
-					$message = 'Billetten til "' . $ticket->getUser()->getFullName() . '" er nå sjekket inn.';
+					$message = '<p>Billetten til "' . $ticket->getUser()->getFullName() . '" er nå sjekket inn.</p>';
 				} else {
-					$message = 'Denne billetten er allerede sjekket inn!';
+					$message = '<p>Denne billetten er allerede sjekket inn!</p>';
 				}
 			} else {
-				$message = 'Denne billetten finnes ikke.';
+				$message = '<p>Denne billetten finnes ikke.</p>';
 			}
 		} else {
-			$message = 'Vi mangler felt.';
+			$message = '<p>Vi mangler felt.</p>';
 		}
 	} else {
-		$message = 'Du har ikke tillatelse til dette!';
+		$message = '<p>Du har ikke tillatelse til dette!</p>';
 	}
 } else {
-	$message = 'Du er ikke logget inn.';
+	$message = '<p>Du er ikke logget inn.</p>';
 }
 
 echo json_encode(array('result' => $result, 'message' => $message));

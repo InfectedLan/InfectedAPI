@@ -34,47 +34,47 @@ if (isset($_GET['firstname']) &&
 	$emergencycontactphone = isset($_GET['emergencycontactphone']) ? $_GET['emergencycontactphone'] : null;
 	
 	if (UserHandler::userExists($username)) {
-		$message = 'Brukernavnet du skrev inn er allerede i bruk.';
+		$message = '<p>Brukernavnet du skrev inn er allerede i bruk.</p>';
 	} else if (UserHandler::userExists($email)) {
-		$message = 'E-post adressen du skrev inn er allerede i bruk.';
+		$message = '<p>E-post adressen du skrev inn er allerede i bruk.</p>';
 	} else if (UserHandler::userExists($phone)) {
-		$message = 'Telefon nummeret du skrev inn er allerede i bruk.';
+		$message = '<p>Telefon nummeret du skrev inn er allerede i bruk.</p>';
 	} else if (empty($firstname) || strlen($firstname) > 32) {
-		$message = 'Du har ikke skrevet inn noe fornavn.';
+		$message = '<p>Du har ikke skrevet inn noe fornavn.</p>';
 	} else if (empty($lastname) || strlen($lastname) > 32) {
-		$message = 'Du har ikke skrevet inn noe etternavn.';	
+		$message = '<p>Du har ikke skrevet inn noe etternavn.</p>';	
 	} else if (!preg_match('/^[a-zæøåA-ZÆØÅ0-9_-]{2,16}$/', $username)) {
-		$message = 'Brukernavnet du skrev inn er ikke gyldig, det må bestå av minst 2 tegn og max 16 tegn.';
+		$message = '<p>Brukernavnet du skrev inn er ikke gyldig, det må bestå av minst 2 tegn og max 16 tegn.</p>';
 	} else if (empty($password)) {
-		$message = 'Du har ikke oppgitt noe passord.';
+		$message = '<p>Du har ikke oppgitt noe passord.</p>';
 	} else if (strlen($_GET['password']) < 8) {
-		$message = 'Passordet du skrev inn er for kort! Det må minst bestå av 8 tegn.';
+		$message = '<p>Passordet du skrev inn er for kort! Det må minst bestå av 8 tegn.</p>';
 	} else if (strlen($_GET['password']) > 32) {
-		$message = 'Passordet du skrev inn er for langt! Det kan maks bestå av 16 tegn.';
+		$message = '<p>Passordet du skrev inn er for langt! Det kan maks bestå av 16 tegn.</p>';
 	} else if ($password != $confirmPassword) {
-		$message = 'Passordene du skrev inn er ikke like.';
+		$message = '<p>Passordene du skrev inn er ikke like.</p>';
 	} else if (empty($email) || !preg_match('/^([a-zæøåA-ZÆØÅ0-9_\.-]+)@([\da-z\.-]+)\.([a-z\.]{2,6})$/', $email) || !filter_var($email, FILTER_VALIDATE_EMAIL)) {
-		$message = 'E-post adressen du skrev inn er ikke gyldig.';
+		$message = '<p>E-post adressen du skrev inn er ikke gyldig.</p>';
 	} else if ($email != $confirmEmail) {
-		$message = 'E-post adressene er ikke like.';
+		$message = '<p>E-post adressene er ikke like.</p>';
 	} else if (!is_numeric($gender)) {
-		$message = 'Du har oppgitt et ugyldig kjønn.';
+		$message = '<p>Du har oppgitt et ugyldig kjønn.</p>';
 	} else if (!is_numeric($phone) || $phone <= 0 || strlen($phone) < 8 || strlen($phone) > 8) {
-		$message = 'Du har ikke skrevet inn et gyldig telefonnummer.';
+		$message = '<p>Du har ikke skrevet inn et gyldig telefonnummer.</p>';
 	} else if (empty($address) && strlen($address) > 32) {
-		$message = 'Du må skrive inn en adresse.';
+		$message = '<p>Du må skrive inn en adresse.</p>';
 	} else if (!is_numeric($postalcode) || strlen($postalcode) != 4 || !CityDictionary::hasPostalCode($postalcode)) {
-		$message = 'Du må skrive inn et gyldig postnummer, postnummeret må være 4 tegn langt.';
+		$message = '<p>Du må skrive inn et gyldig postnummer, postnummeret må være 4 tegn langt.</p>';
 	} else if (!preg_match('/^[a-zæøåA-ZÆØÅ0-9_-]{2,16}$/', $nickname) && !empty($nickname)) {
-		$message = 'Kallenavnet du skrev inn er ikke gyldig, det må bestå av minst 2 tegn og max 16 tegn.';
+		$message = '<p>Kallenavnet du skrev inn er ikke gyldig, det må bestå av minst 2 tegn og max 16 tegn.</p>';
 	} else if (date_diff(date_create($birthdate), date_create('now'))->y < 18 && (!isset($_GET['emergencycontactphone']) || !is_numeric($emergencycontactphone) || strlen($emergencycontactphone) != 8)) {
 		if (!is_numeric($emergencycontactphone)) {
-			$message = 'Foresattes telefonnummer må være et tall!';
+			$message = '<p>Foresattes telefonnummer må være et tall!</p>';
 		} else if (strlen($emergencycontactphone) != 8) {
-			$message = 'Foresattes telefonnummer er ikke 8 siffer langt!';
+			$message = '<p>Foresattes telefonnummer er ikke 8 siffer langt!</p>';
 		}
 		
-		$message = 'Du er under 18 år, og må derfor oppgi et telefonnummer til en forelder.';
+		$message = '<p>Du er under 18 år, og må derfor oppgi et telefonnummer til en forelder.</p>';
 	} else {
 		// Creates the user in database.
 		$user = UserHandler::createUser($firstname, 
@@ -100,10 +100,10 @@ if (isset($_GET['firstname']) &&
 		$user->sendRegistrationMail();
 		
 		$result = true;
-		$message = 'Din bruker har blitt registrert! Du har nå fått en aktiveringslink på e-post. Husk å sjekk søppelpost/spam hvis du ikke finner den.';
+		$message = '<p>Din bruker har blitt registrert! Du har nå fått en aktiveringslink på e-post. Husk å sjekk søppelpost/spam hvis du ikke finner den.</p>';
 	}
 } else {
-	$message = 'Du har ikke fylt inn alle feltene!';
+	$message = '<p>Du har ikke fylt inn alle feltene!</p>';
 }
 
 echo json_encode(array('result' => $result, 'message' => $message));

@@ -12,10 +12,10 @@ if (isset($_GET['postalcode'])) {
 		$message = $city;
 	} else {
 		$result = true;
-		$message = 'Ikke funnet.';
+		$message = '<p>Ikke funnet.</p>';
 	}
 } else {
-	$message = 'Postnummer ikke spesifisert.';
+	$message = '<p>Postnummer ikke spesifisert.</p>';
 }
 
 echo json_encode(array('result' => $result, 'message' => $message));

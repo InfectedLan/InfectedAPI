@@ -3,14 +3,14 @@ require_once 'session.php';
 require_once 'handlers/avatarhandler.php';
 
 $result = false;
-$message = "Ingen feilmelding er tilgjengelig O.o";
+$message = null;
 
 if (Session::isAuthenticated()) {
 	$user = Session::getCurrentUser();
-	$avatar = $user->getAvatar();
-
-	if ($avatar != null) {
-		AvatarHandler::deleteAvatar($avatar);
+	
+	// Remove avatar if the user already have one.
+	if ($user->hasAvatar()) {
+		AvatarHandler::deleteAvatar($user->getAvatar());
 	}
 
 	$temp = explode('.', $_FILES['file']['name']);
@@ -36,26 +36,26 @@ if (Session::isAuthenticated()) {
 					move_uploaded_file($_FILES['file']['tmp_name'], $path);
 					$result = true;
 				} else {
-					$message = 'Bildet er for smått! Det må være minimum ' . Settings::avatar_minimum_width . ' x ' . Settings::avatar_minimum_height . ' piksler stort.';
+					$message = '<p>Bildet er for smått! Det må være minimum ' . Settings::avatar_minimum_width . ' x ' . Settings::avatar_minimum_height . ' piksler stort.';
 				}
 			} else {
 				$error = $_FILES['file']['error'];
 				
 				if ($error == 2 || 
 					$error == 1) {
-					$message = 'Det har skjedd en intern feil: Filen er for stor! Vennligst si ifra til admins.';
+					$message = '<p>Det har skjedd en intern feil: Filen er for stor!</p>';
 				} else {
-					$message = 'Det har skjedd en intern feil da vi behandlet bildet. Vennligst gi oss feilkoden "' . urlencode($_FILES["file"]["error"]) . '"';
+					$message = '<p>Det har skjedd en intern feil da vi behandlet bildet. Vennligst gi oss feilkoden "' . urlencode($_FILES['file']['error']) . '"</p>';
 				}
 			}
 		} else {
-			$message = 'Ugyldig filtype';
+			$message = '<p>Ugyldig filtype.</p>';
 		}
 	} else {
-		$message = 'Filen er for stor!';
+		$message = '<p>Filen er for stor!</p>';
 	}
 } else {
-	$message = 'Du er ikke logget inn!';
+	$message = '<p>Du er ikke logget inn!</p>';
 } 
 
 echo json_encode(array('result' => $result, 'message' => $message));

@@ -17,16 +17,16 @@ if (Session::isAuthenticated()) {
 				EventHandler::removeEvent($event);
 				$result = true;
 			} else {
-				$message = 'Arrangementet finnes ikke.';
+				$message = '<p>Arrangementet finnes ikke.</p>';
 			}
 		} else {
-			$message = 'Ikke noe arrangement spesifisert.';
+			$message = '<p>Ikke noe arrangement spesifisert.</p>';
 		}
 	} else {
-		$message = 'Du har ikke tillatelse til dette.';
+		$message = '<p>Du har ikke tillatelse til dette.</p>';
 	}
 } else {
-	$message = 'Du er ikke logget inn.';
+	$message = '<p>Du er ikke logget inn.</p>';
 }
 
 echo json_encode(array('result' => $result, 'message' => $message));

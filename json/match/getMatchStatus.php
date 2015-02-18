@@ -27,7 +27,8 @@ if (Session::isAuthenticated()) {
 			$matchData['startTime'] = $match->getScheduledTime();
 			$matchData['chatId'] = $match->getChat();
 			
-			if ($match->getState() == Match::STATE_READYCHECK && $match->isReady()) {
+			if ($match->getState() == Match::STATE_READYCHECK && 
+				$match->isReady()) {
 				$readyData = array();
 
 				$participants = MatchHandler::getParticipants($match);
@@ -175,13 +176,13 @@ if (Session::isAuthenticated()) {
 				$result = true;
 			}
 		} else {
-			$message = "Du har ikke lov til å se på denne matchen!";
+			$message = '<p>Du har ikke lov til å se på denne matchen!</p>';
 		}
 	} else {
-		$message = "Mangler felt!";
+		$message = '<p>Mangler felt!</p>';
 	}
 } else {
-	$message = 'Du er ikke logget inn.';
+	$message = '<p>Du er ikke logget inn.</p>';
 }
 
 if ($result) {

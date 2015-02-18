@@ -13,7 +13,6 @@ if (Session::isAuthenticated()) {
 		if (isset($_GET['id']) &&
 			is_numeric($_GET['id'])) {
 			$id = $_GET['id'];
-			
 			if (isset($_GET['comment']) &&
 				!empty($_GET['comment'])) {
 				$application = ApplicationHandler::getApplication($_GET['id']);
@@ -25,22 +24,22 @@ if (Session::isAuthenticated()) {
 						ApplicationHandler::rejectApplication($user, $application, $comment, true);
 						$result = true;
 					} else {
-						$message = 'Kan ikke avslå søknader for tidligere arrangementer.';
+						$message = '<p>Kan ikke avslå søknader for tidligere arrangementer.</p>';
 					}
 				} else {
-					$message = 'Søknaden finnes ikke.';
+					$message = '<p>Søknaden finnes ikke.</p>';
 				}
 			} else {
-				$message = 'Du har ikke oppgitt noen grunn på hvorfor søkneden skal bli avvist.';
+				$message = '<p>Du har ikke oppgitt noen grunn på hvorfor søkneden skal bli avvist.</p>';
 			}
 		} else {
-			$message = 'Ingen søknad spesifisert.';
+			$message = '<p>Ingen søknad spesifisert.</p>';
 		}
 	} else {
-		$message = 'Du har ikke tillatelse til dette.';
+		$message = '<p>Du har ikke tillatelse til dette.</p>';
 	}
 } else {
-	$message = 'Du er ikke logget inn.';
+	$message = '<p>Du er ikke logget inn.</p>';
 }
 
 echo json_encode(array('result' => $result, 'message' => $message));

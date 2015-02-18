@@ -10,7 +10,6 @@ if (Session::isAuthenticated()) {
 	
 	if ($user->hasPermission('*') ||
 		$user->hasPermission('developer.change-user')) {
-		
 		if (isset($_GET['userId']) &&
 			is_numeric($_GET['userId'])) {
 			$changeUser = UserHandler::getUser($_GET['userId']);

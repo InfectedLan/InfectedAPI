@@ -10,7 +10,6 @@ if (Session::isAuthenticated()) {
 	
 	if ($user->hasPermission('*') ||
 		$user->hasPermission('admin-events')) {
-		
 		if (isset($_GET['id']) &&
 			isset($_GET['theme']) &&
 			isset($_GET['location']) &&
@@ -42,16 +41,16 @@ if (Session::isAuthenticated()) {
 				EventHandler::updateEvent($event, $theme, $location, $participants, $bookingTime, $startTime, $endTime);
 				$result = true;
 			} else {
-				$message = 'Arrangementet finnes ikke.';
+				$message = '<p>Arrangementet finnes ikke.</p>';
 			}
 		} else {
-			$message = 'Du har ikke fyllt ut alle feltene!';
+			$message = '<p>Du har ikke fyllt ut alle feltene!</p>';
 		}
 	} else {
-		$message = 'Du har ikke tillatelse til dette.';
+		$message = '<p>Du har ikke tillatelse til dette.</p>';
 	}
 } else {
-	$message = 'Du er ikke logget inn.';
+	$message = '<p>Du er ikke logget inn.</p>';
 }
 
 echo json_encode(array('result' => $result, 'message' => $message));

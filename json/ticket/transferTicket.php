@@ -22,22 +22,21 @@ if (Session::isAuthenticated()) {
 					TicketTransferHandler::transfer($ticket, $target);
 					
 					$result = true;
-					$message = 'Biletten er overført.';
+					$message = '<p>Biletten er overført.</p>';
 				} else {
-					$message = 'Målbrukeren eksisterer ikke!';
+					$message = '<p>Målbrukeren eksisterer ikke!</p>';
 				}
 			} else {
-				$message = 'Felt mangler! Trenger mål!';
+				$message = '<p>Felt mangler! Trenger mål!</p>';
 			}
 		} else {
-			echo '{"result":false, "message":"Du eier ikke biletten!"}';
-			return;
+			$message = '<p>Du eier ikke billetten!</p>';
 		}
 	} else {
-		$message = 'Ugyldig bilett.';
+		$message = '<p>Ugyldig bilett.</p>';
 	}
 } else {
-	$message = 'Du er ikke logget inn!';
+	$message = '<p>Du er ikke logget inn!</p>';
 }
 
 echo json_encode(array('result' => $result, 'message' => $message));

@@ -9,8 +9,7 @@ if (Session::isAuthenticated()) {
 	$user = Session::getCurrentUser();
 	
 	if ($user->hasPermission('*') ||
-		$$user->hasPermission('admin.website')) {
-		
+		$user->hasPermission('admin.website')) {
 		if (isset($_GET['id']) &&
 			is_numeric($_GET['id'])) {
 			$page = PageHandler::getPage($_GET['id']);
@@ -19,16 +18,16 @@ if (Session::isAuthenticated()) {
 				PageHandler::removePage($_GET['id']);
 				$result = true;
 			} else {
-				$message = 'Siden finnes ikke.';
+				$message = '<p>Siden finnes ikke.</p>';
 			}
 		} else {
-			$message = 'Ikke noen side spesifisert.';
+			$message = '<p>Ikke noen side spesifisert.</p>';
 		}
 	} else {
-		$message = 'Du har ikke tillatelse til dette.';
+		$message = '<p>Du har ikke tillatelse til dette.</p>';
 	}
 } else {
-	$message = 'Du er ikke logget inn.';
+	$message = '<p>Du er ikke logget inn.</p>';
 }
 
 echo json_encode(array('result' => $result, 'message' => $message));

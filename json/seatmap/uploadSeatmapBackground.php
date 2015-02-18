@@ -10,7 +10,6 @@ if (Session::isAuthenticated()) {
 	
 	if ($user->hasPermission('*') ||
 		$user->hasPermission('admin.seatmap')) {
-		
 		if (isset($_POST['seatmapId'])) {
 			$seatmap = SeatmapHandler::getSeatmap($_POST['seatmapId']);
 			
@@ -36,28 +35,28 @@ if (Session::isAuthenticated()) {
 
 								$result = true;
 							} else {
-								$message = 'Det skjedde en feil under opplastingen av bildet!';
+								$message = 'Det skjedde en feil under opplastingen av bildet!</p>';
 							}
 						} else {
-							$message = 'Feil filformat!';
+							$message = 'Feil filformat!</p>';
 						}
 					} else {
-						$message = 'Bildet er for stort!';
+						$message = 'Bildet er for stort!</p>';
 					}
 				} else {
-					$message = 'Filformatet er ikke riktig!';
+					$message = 'Filformatet er ikke riktig!</p>';
 				}
 			} else {
-				$message = 'Seatmappet finnes ikke!';
+				$message = 'Seatmappet finnes ikke!</p>';
 			}
 		} else {
-			$message = 'SeatmapId er ikke satt!';
+			$message = 'SeatmapId er ikke satt!</p>';
 		}
 	} else {
-		$message = 'Du har ikke tillatelse til å legge til en rad!';
+		$message = 'Du har ikke tillatelse til å legge til en rad!</p>';
 	}
 } else {
-	$message = 'Du må logge inn først!';
+	$message = 'Du er ikke logget inn.</p>';
 }
 
 if ($result) {

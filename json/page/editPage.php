@@ -10,7 +10,6 @@ if (Session::isAuthenticated()) {
 	
 	if ($user->hasPermission('*') ||
 		$user->hasPermission('admin.website')) {
-		
 		if (isset($_GET['id']) &&
 			isset($_GET['title']) &&
 			isset($_GET['content']) &&
@@ -25,16 +24,16 @@ if (Session::isAuthenticated()) {
 				PageHandler::updatePage($id, $title, $content);
 				$result = true;
 			} else {
-				$message = 'Siden finnes ikke.';
+				$message = '<p>Siden finnes ikke.</p>';
 			}
 		} else {
-			$message = 'Du har ikke fyllt ut alle feltene.';
+			$message = '<p>Du har ikke fyllt ut alle feltene.</p>';
 		}
 	} else {
-		$message = 'Du har ikke tillatelse til dette.';
+		$message = '<p>Du har ikke tillatelse til dette.</p>';
 	}
 } else {
-	$message = 'Du er ikke logget inn.';
+	$message = '<p>Du er ikke logget inn.</p>';
 }
 
 echo json_encode(array('result' => $result, 'message' => $message));

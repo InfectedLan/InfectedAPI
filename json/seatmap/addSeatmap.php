@@ -11,19 +11,18 @@ if (Session::isAuthenticated()) {
 	
 	if ($user->hasPermission('*') ||
 		$user->hasPermission('admin.seatmap')) {
-		
 		if (isset($_GET['name'])) {
 			$seatmap = SeatmapHandler::createNewSeatmap($_GET['name'], 'default.png');
 			$result = true;
 			$id = $seatmap->getId();
 		} else {
-			$message = 'Navn er ikke satt!';
+			$message = '<p>Navn er ikke satt!</p>';
 		}
 	} else {
-		$message = 'Du har ikke tillatelse til å lage et seatmap!';
+		$message = '<p>Du har ikke tillatelse til å lage et seatmap</p>!';
 	}
 } else {
-	$message = 'Du må logge inn først!';
+	$message = '<p>Du må logge inn først!</p>';
 }
 
 if ($result) {

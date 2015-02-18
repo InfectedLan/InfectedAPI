@@ -15,13 +15,11 @@ function str_replace_last( $search , $replace , $str ) {
 
 if (Session::isAuthenticated()) {
 	$user = Session::getCurrentUser();
-	$avatar = $user->getAvatar();
 	
 	if ($user->hasAvatar()) {
-		// Sjekk om avataren skal croppes
-		$state = $avatar->getState();
+		$avatar = $user->getAvatar();
 		
-		if ($state == 0) {
+		if ($avatar->getState() == 0) {
 			if (isset($_GET['x']) && 
 				isset($_GET['y']) && 
 				isset($_GET['w']) && 
@@ -35,7 +33,9 @@ if (Session::isAuthenticated()) {
 				$temp = explode('.', $avatar->getTemp());
 				$extension = strtolower(end($temp));
 
-				if ($extension == 'png' || $extension == 'jpeg' || $extension == 'jpg') {
+				if ($extension == 'png' || 
+					$extension == 'jpeg' || 
+					$extension == 'jpg') {
 					//Load the image
 					$image = 0;
 
@@ -48,10 +48,10 @@ if (Session::isAuthenticated()) {
 
 					if ($image != 0) {
 						//Get scale factor. Image scaler is 800 px wide.
-						$scalefactor = imagesx($image)/800;
+						$scalefactor = imagesx($image) / 800;
 
-						$cropWidth = ceil($w*$scalefactor);
-						$cropHeight = ceil($h*$scalefactor);
+						$cropWidth = ceil($w * $scalefactor);
+						$cropHeight = ceil($h * $scalefactor);
 
 						if ($cropWidth >= Settings::avatar_minimum_width && 
 							$cropHeight >= Settings::avatar_minimum_height) {
@@ -78,27 +78,27 @@ if (Session::isAuthenticated()) {
 							$avatar->setFileName(str_replace_last($extension, 'jpg', $avatar->getFileName()));
 							$avatar->setState(1);
 							$result = true;
-							$message = 'Avataren har blitt skalert!';
+							$message = '<p>Avataren har blitt skalert!</p>';
 						} else {
-							$message = 'Du har valgt et for lite omeråde! Dette er ikke lov, ettersom det kan medføre et pikselert bilde.';
+							$message = '<p>Du har valgt et for lite omeråde! Dette er ikke lov, ettersom det kan medføre et pikselert bilde.</p>';
 						}
 					} else {
-						$message = 'Bildet ble ikke funnet!';
+						$message = '<p>Bildet ble ikke funnet!</p>';
 					}
 				} else {
-					$message = 'Avataren din har et ugyldig filformat!';
+					$message = '<p>Avataren din har et ugyldig filformat!</p>';
 				}
 			} else {
-				$message = 'Felt mangler!';
+				$message = '<p>Felt mangler!</p>';
 			}
 		} else {
-			$message = 'Du har ingen avatar som ikke har blitt beskjært!';
+			$message = '<p>Du har ingen avatar som ikke har blitt beskjært!</p>';
 		}
 	} else {
-		$message = 'Du har ingen avatar!';
+		$message = '<p>Du har ingen avatar!</p>';
 	}
 } else {
-	$message = 'Du er ikke logget inn.';
+	$message = '<p>Du er ikke logget inn.</p>';
 }
 
 echo json_encode(array('result' => $result, 'message' => $message));

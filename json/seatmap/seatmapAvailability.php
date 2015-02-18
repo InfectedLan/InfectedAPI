@@ -9,27 +9,23 @@ $message = null;
 $seatmapData = null; //Array of rows
 $backgroundImage = null; //File name of background image. Didnt know how else to do this.
 
-if (!isset($_GET['id'])) {
-	$message = 'ID er ikke satt!';
-} else {
-	if(!Session::isAuthenticated()) {
-		$message = 'Du er ikke logget inn!';
-	} else {
+
+if (Session::isAuthenticated()) {
+	$user = Session::getCurrentUser();
+
+	if (isset($_GET['id'])) {
 		$seatmap = SeatmapHandler::getSeatmap($_GET['id']);
 		
-		if (!isset($seatmap)) {
-			$message = 'Seatmappet eksisterer ikke!';
-		} else {
-			$result = true;
-			$rows = SeatmapHandler::getRows($seatmap);
+		if ($seatmap != null) {
+			$rowList = SeatmapHandler::getRows($seatmap);
 			$seatmapData = array();
 			$backgroundImage = $seatmap->getBackgroundImage();
 			
-			foreach ($rows as $row) {
-				$seats = RowHandler::getSeats($row);
+			foreach ($rowList as $row) {
+				$seatList = RowHandler::getSeats($row);
 				$seatData = array();
 
-				foreach ($seats as $seat) {
+				foreach ($seatList as $seat) {
 					$data = array();
 
 					$data['id'] = $seat->getId();
@@ -52,9 +48,17 @@ if (!isset($_GET['id'])) {
 
 				$rowData = array('seats' => $seatData, 'id' => $row->getId(), 'x' => $row->getX(), 'y' => $row->getY(), 'number' => $row->getNumber());
 				array_push($seatmapData, $rowData);
+
+				$result = true;
 			}
+		} else {
+			$message = '<p>Seatmappet finnes ikke.</p>';
 		}
+	} else {
+		$message = '<p>Ikke noe seatmap spesifisert.</p>';
 	}
+} else {
+	$message = '<p>Du er ikke logget inn.</p>';
 }
 
 if ($result) {

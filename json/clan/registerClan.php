@@ -19,15 +19,14 @@ if (Session::isAuthenticated()) {
 												$user);
 
 			$result = true;
-
 		} else {
-			$message = 'Mangler felt!';
+			$message = '<p>Mangler felt!</p>';
 		}
 	} else {
-		$message = 'Du kan ikke lage en clan! Har du en billett?';
+		$message = '<p>Du kan ikke lage en clan! Har du en billett?</p>';
 	}
 } else {
-	$message = 'Du er ikke logget inn.';
+	$message = '<p>Du er ikke logget inn.</p>';
 }
 
 if ($result) {

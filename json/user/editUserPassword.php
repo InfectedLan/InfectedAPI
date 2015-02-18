@@ -26,16 +26,16 @@ if (Session::isAuthenticated()) {
 				Session::reload();
 				$result = true;
 			} else {
-				$message = 'Passordene du skrev inn var ikke like!';
+				$message = '<p>Passordene du skrev inn var ikke like!</p>';
 			}
 		} else {
-			$message = 'Det gamle passordet du skrev inn var ikke riktig.';
+			$message = '<p>Det gamle passordet du skrev inn var ikke riktig.</p>';
 		}
 	} else {
-		$message = 'Du har ikke fyllt ut alle feltene.';
+		$message = '<p>Du har ikke fyllt ut alle feltene.</p>';
 	}
 } else {
-	$message = 'Du er allerede logget inn!';
+	$message = '<p>Du er allerede logget inn!</p>';
 } 
 
 echo json_encode(array('result' => $result, 'message' => $message));

@@ -11,7 +11,6 @@ if (Session::isAuthenticated()) {
 	
 	if ($user->hasPermission('*') ||
 		$user->hasPermission('chief.groups')) {
-		
 		if (isset($_GET['id']) &&
 			is_numeric($_GET['id'])) {
 			$groupUser = UserHandler::getUser($_GET['id']);
@@ -19,13 +18,13 @@ if (Session::isAuthenticated()) {
 			GroupHandler::removeUserFromGroup($groupUser);
 			$result = true;
 		} else {
-			$message = 'Ingen bruker spesifisert.';
+			$message = '<p>Ingen bruker spesifisert.</p>';
 		}
 	} else {
-		$message = 'Du har ikke tillatelse til dette.';
+		$message = '<p>Du har ikke tillatelse til dette.</p>';
 	}
 } else {
-	$message = 'Du er ikke logget inn.';
+	$message = '<p>Du er ikke logget inn.</p>';
 }
 
 echo json_encode(array('result' => $result, 'message' => $message));

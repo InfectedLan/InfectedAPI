@@ -22,13 +22,13 @@ if (Session::isAuthenticated()) {
 				$message = $transferResult;
 			}
 		} else {
-			$message = "Billetten finnes ikke!";
+			$message = '<p>Billetten finnes ikke!</p>';
 		}
 	} else {
-		$message = 'Ugyldig bilett.';
+		$message = '<p>Ugyldig bilett.</p>';
 	}
 } else {
-	$message = 'Du er ikke logget inn!';
+	$message = '<p>Du er ikke logget inn!</p>';
 }
 
 echo json_encode(array('result' => $result, 'message' => $message));

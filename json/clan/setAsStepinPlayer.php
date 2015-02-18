@@ -18,24 +18,22 @@ if (Session::isAuthenticated()) {
 			
 			if ($clan != null) {
 				if ($user->equals($clan->getChief())) {
-					ClanHandler::setMemberStepinState($clan, 
-													  $targetUser, 
-													  ClanHandler::STATE_STEPIN_PLAYER);
+					ClanHandler::setMemberStepinState($clan, $targetUser, ClanHandler::STATE_STEPIN_PLAYER);
 					$result = true;
 				} else {
-					$message = 'Du er ikke chief.';
+					$message = '<p>Du er ikke chief.</p>';
 				}
 			} else {
-				$message = 'Clanen finnes ikke!';
+				$message = '<p>Clanen finnes ikke!</p>';
 			}
 		} else {
-			$message = 'Brukeren du prøvde å kicke finnes ikke!';
+			$message = '<p>Brukeren du prøvde å kicke finnes ikke!</p>';
 		}
 	} else {
-		$message = 'Vi mangler felt.';
+		$message = '<p>Vi mangler felt.</p>';
 	}
 } else {
-	$message = 'Du er ikke logget inn.';
+	$message = '<p>Du er ikke logget inn.</p>';
 }
 
 echo json_encode(array('result' => $result, 'message' => $message));

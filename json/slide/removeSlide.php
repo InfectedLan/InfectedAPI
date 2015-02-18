@@ -8,7 +8,8 @@ $message = null;
 if (Session::isAuthenticated()) {
 	$user = Session::getCurrentUser();
 	
-	if ($user->hasPermission('*')) {
+	if ($user->hasPermission('*') ||
+		$user->hasPermission('event.screen')) {
 		if (isset($_GET['id']) &&
 			is_numeric($_GET['id'])) {
 			$slide = SlideHandler::getSlide($_GET['id']);
@@ -17,16 +18,16 @@ if (Session::isAuthenticated()) {
 				SlideHandler::removeSlide($slide);
 				$result = true;
 			} else {
-				$message = 'Sliden du prøvde å slette, finnes ikke.';
+				$message = '<p>Sliden du prøvde å slette, finnes ikke.</p>';
 			}
 		} else {
-			$message = 'Ikke noen agenda spesifisert.';
+			$message = '<p>Ikke noen agenda spesifisert.</p>';
 		}
 	} else {
-		$message = 'Du har ikke tillatelse til dette.';
+		$message = '<p>Du har ikke tillatelse til dette.</p>';
 	}
 } else {
-	$message = 'Du er ikke logget inn.';
+	$message = '<p>Du er ikke logget inn.</p>';
 }
 
 echo json_encode(array('result' => $result, 'message' => $message));

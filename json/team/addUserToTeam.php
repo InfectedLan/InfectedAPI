@@ -11,7 +11,6 @@ if (Session::isAuthenticated()) {
 	
 	if ($user->hasPermission('*') ||
 		$user->hasPermission('chief..teams')) {
-		
 		if (isset($_GET['userId']) &&
 			isset($_GET['teamId']) &&
 			is_numeric($_GET['userId']) &&
@@ -23,13 +22,13 @@ if (Session::isAuthenticated()) {
 			TeamHandler::changeTeamForUser($groupUser, $group, $team);
 			$result = true;
 		} else {
-			$message = 'Ikke noe lag spesifisert.';
+			$message = '<p>Ikke noe lag spesifisert.</p>';
 		}
 	} else {
-		$message = 'Du har ikke tillatelse til dette.';
+		$message = '<p>Du har ikke tillatelse til dette.</p>';
 	}
 } else {
-	$message = 'Du er ikke logget inn.';
+	$message = '<p>Du er ikke logget inn.</p>';
 }
 
 echo json_encode(array('result' => $result, 'message' => $message));

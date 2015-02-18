@@ -29,10 +29,10 @@ if (Session::isAuthenticated()) {
 			
 			$result = true;
 		} else {
-			$message = 'Fant ingen resultater.';
+			$message = '<p>Fant ingen resultater.</p>';
 		}
 	} else {
-		$message = 'Ikke noe søkeord oppgitt.';
+		$message = '<p>Ikke noe søkeord oppgitt.</p>';
 	}
 }
 

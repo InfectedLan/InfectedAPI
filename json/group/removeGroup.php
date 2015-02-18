@@ -17,16 +17,16 @@ if (Session::isAuthenticated()) {
 				GroupHandler::removeGroup($group);
 				$result = true;
 			} else {
-				$message = 'Gruppen finnes ikke.';
+				$message = '<p>Gruppen finnes ikke.</p>';
 			}
 		} else {
-			$message = 'Ingen gruppe spesifisert.';
+			$message = '<p>Ingen gruppe spesifisert.</p>';
 		}
 	} else {
-		$message = 'Du har ikke tillatelse til dette.';
+		$message = '<p>Du har ikke tillatelse til dette.</p>';
 	}
 } else {
-	$message = 'Du er ikke logget inn.';
+	$message = '<p>Du er ikke logget inn.</p>';
 }
 
 echo json_encode(array('result' => $result, 'message' => $message));

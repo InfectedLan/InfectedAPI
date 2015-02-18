@@ -53,35 +53,35 @@ if (Session::isAuthenticated()) {
 					
 					if ($editUser != null) {
 						if ($username != $editUser->getUsername() && UserHandler::userExists($username)) {
-							$message = 'Brukernavnet du skrev inn er allerede i bruk.';
+							$message = '<p>Brukernavnet du skrev inn er allerede i bruk.</p>';
 						} else if ($email != $editUser->getEmail() && UserHandler::userExists($email)) {
-							$message = 'E-post adressen du skrev inn er allerede i bruk.';
+							$message = '<p>E-post adressen du skrev inn er allerede i bruk.</p>';
 						} else if ($phone != $editUser->getPhone() && UserHandler::userExists($phone)) {
-							$message = 'Telefon nummeret du skrev inn er allerede i bruk.';
+							$message = '<p>Telefon nummeret du skrev inn er allerede i bruk.</p>';
 						} else if (empty($firstname) || strlen($firstname) > 32) {
-							$message = 'Du har ikke skrevet inn noe fornavn.';
+							$message = '<p>Du har ikke skrevet inn noe fornavn.</p>';
 						} else if (empty($lastname) || strlen($lastname) > 32) {
-							$message = 'Du har ikke skrevet inn noe etternavn.';
+							$message = '<p>Du har ikke skrevet inn noe etternavn.</p>';
 						} else if (empty($email) || !preg_match('/^([a-zæøåA-ZÆØÅ0-9_\.-]+)@([\da-z\.-]+)\.([a-z\.]{2,6})$/', $email) || !filter_var($email, FILTER_VALIDATE_EMAIL)) {
-							$message = 'E-post adressen du skrev inn er ikke gyldig.';
+							$message = '<p>E-post adressen du skrev inn er ikke gyldig.</p>';
 						} else if (!is_numeric($gender)) {
-							$message = 'Du har oppgitt et ugyldig kjønn.';
+							$message = '<p>Du har oppgitt et ugyldig kjønn.</p>';
 						} else if (!is_numeric($phone) || $phone <= 0 || strlen($phone) < 8 || strlen($phone) > 8) {
-							$message = 'Du har ikke skrevet inn et gyldig telefonnummer.';
+							$message = '<p>Du har ikke skrevet inn et gyldig telefonnummer.</p>';
 						} else if (empty($address) && strlen($address) > 32) {
-							$message = 'Du må skrive inn en adresse.';
+							$message = '<p>Du må skrive inn en adresse.</p>';
 						} else if (!is_numeric($postalcode) || strlen($postalcode) > 4 || !CityDictionary::hasPostalCode($postalcode)) {
-							$message = 'Du må skrive inn et gyldig postnummer.';
+							$message = '<p>Du må skrive inn et gyldig postnummer.</p>';
 						} else if (!preg_match('/^[a-zæøåA-ZÆØÅ0-9_-]{2,16}$/', $nickname)) {
-							$message = 'Kallenavnet du skrev inn er ikke gyldig, det må bestå av minst 2 tegn og max 16 tegn.';
+							$message = '<p>Kallenavnet du skrev inn er ikke gyldig, det må bestå av minst 2 tegn og max 16 tegn.</p>';
 						} else if (date_diff(date_create($birthdate), date_create('now'))->y < 18 && (!isset($_GET['emergencycontactphone']) || !is_numeric($emergencycontactphone) || strlen($emergencycontactphone) != 8)) {
 							if (!is_numeric($emergencycontactphone)) {
-								$message = 'Foresattes telefonnummer må være et tall!';
+								$message = '<p>Foresattes telefonnummer må være et tall!</p>';
 							} else if (strlen($emergencycontactphone) != 8) {
-								$message = 'Foresattes telefonnummer er ikke 8 siffer langt!';
+								$message = '<p>Foresattes telefonnummer er ikke 8 siffer langt!</p>';
 							}
 							
-							$message = 'Du er under 18 år, og må derfor oppgi et telefonnummer til en forelder.';
+							$message = '<p>Du er under 18 år, og må derfor oppgi et telefonnummer til en forelder.</p>';
 						} else {
 							UserHandler::updateUser($editUser,
 													$firstname, 
@@ -105,22 +105,22 @@ if (Session::isAuthenticated()) {
 							$result = true;
 						}
 					} else {
-						$message = 'Brukeren finnes ikke.';
+						$message = '<p>Brukeren finnes ikke.</p>';
 					}
 				} else {
-					$message = 'Du har ikke fyllt ut alle feltene.';
+					$message = '<p>Du har ikke fyllt ut alle feltene.</p>';
 				}
 			} else {
-				$message = 'Du har ikke rettigheter til dette.';
+				$message = '<p>Du har ikke rettigheter til dette.</p>';
 			}
 		} else {
-			$message = 'Brukeren eksisterer ikke.';
+			$message = '<p>Brukeren eksisterer ikke.</p>';
 		}
 	} else {
-		$message = 'Bruker ikke spessifisert.';
+		$message = '<p>Bruker ikke spessifisert.</p>';
 	}
 } else {
-	$message = 'Du er allerede logget inn!';
+	$message = '<p>Du er allerede logget inn!</p>';
 } 
 
 echo json_encode(array('result' => $result, 'message' => $message));

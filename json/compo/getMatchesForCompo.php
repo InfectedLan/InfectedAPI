@@ -33,13 +33,13 @@ if (Session::isAuthenticated()) {
 
 			$result = true;
 		} else {
-			$message = 'Compo\'en du oppga finnes ikke';
+			$message = '<p>Compo\'en du oppga finnes ikke.</p>';
 		}
 	} else {
-		$message = 'Du har ikke fylt ut alle feltene.';
+		$message = '<p>Du har ikke fylt ut alle feltene.</p>';
 	}
 } else {
-	$message = 'Du er ikke logget inn.';
+	$message = '<p>Du er ikke logget inn.</p>';
 }
 
 echo json_encode(array('result' => $result, 'message' => $message, 'data' => $data));

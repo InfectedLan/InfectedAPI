@@ -10,7 +10,6 @@ if (Session::isAuthenticated()) {
 	
 	if ($user->hasPermission('*') ||
 		$user->hasPermission('admin.events')) {
-		
 		if (isset($_GET['theme']) &&
 			isset($_GET['location']) &&
 			isset($_GET['participants']) &&
@@ -38,13 +37,13 @@ if (Session::isAuthenticated()) {
 			EventHandler::createEvent($theme, $location, $participants, $bookingTime, $startTime, $endTime);
 			$result = true;
 		} else {
-			$message = 'Du har ikke fyllt ut alle feltene!';
+			$message = '<p>Du har ikke fyllt ut alle feltene!</p>';
 		}
 	} else {
-		$message = 'Du har ikke tillatelse til dette.';
+		$message = '<p>Du har ikke tillatelse til dette.</p>';
 	}
 } else {
-	$message = 'Du er ikke logget inn.';
+	$message = '<p>Du er ikke logget inn.</p>';
 }
 
 echo json_encode(array('result' => $result, 'message' => $message));

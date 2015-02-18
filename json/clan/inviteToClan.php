@@ -24,19 +24,19 @@ if (Session::isAuthenticated()) {
 					ClanHandler::inviteUser($clan, $invite);
 					$result = true;
 				} else {
-					$message = "Du kan ikke invitere denne brukeren.";
+					$message = '<p>Du kan ikke invitere denne brukeren.</p>';
 				}
 			} else {
-				$message = "Brukeren eksisterer ikke!";
+				$message = '<p>Brukeren eksisterer ikke!</p>';
 			}
 		} else {
-			$message = "Du er ikke sjefen for denne klanen!";
+			$message = '<p>Du er ikke sjefen for denne klanen!</p>';
 		}
 	} else {
-		$message = "Mangler felt!";
+		$message = '<p>Mangler felt.</p>';
 	}
 } else {
-	$message = 'Du er ikke logget inn.';
+	$message = '<p>Du er ikke logget inn.</p>';
 }
 
 echo json_encode(array('result' => $result, 'message' => $message));

@@ -16,23 +16,23 @@ if (Session::isAuthenticated()) {
 			
 			if ($application != null) {
 				// Only allow application for current event to be accepted.
-				if ($application->getEvent()->getId() == EventHandler::getCurrentEvent()->getId()) {
+				if ($application->getEvent()->equals(EventHandler::getCurrentEvent())) {
 					ApplicationHandler::unqueueApplication($user, $application);
 					$result = true;
 				} else {
-					$message = 'Kan ikke ta søknader for tidligere arrangementer ut av kø.';
+					$message = '<p>Kan ikke ta søknader for tidligere arrangementer ut av kø.</p>';
 				}
 			} else {
-				$message = 'Søknaden finnes ikke.';
+				$message = '<p>Søknaden finnes ikke.</p>';
 			}
 		} else {
-			$message = 'Ingen søknad spesifisert.';
+			$message = '<p>Ingen søknad spesifisert.</p>';
 		}
 	} else {
-		$message = 'Du har ikke tillatelse til dette.';
+		$message = '<p>Du har ikke tillatelse til dette.</p>';
 	}
 } else {
-	$message = 'Du er ikke logget inn.';
+	$message = '<p>Du er ikke logget inn.</p>';
 }
 
 echo json_encode(array('result' => $result, 'message' => $message));

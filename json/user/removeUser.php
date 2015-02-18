@@ -15,23 +15,23 @@ if (Session::isAuthenticated()) {
 			$removeUser = UserHandler::getUser($_GET['id']); 
 			
 			if ($removeUser != null) {
-				if (!TicketHandler::hasUserAnyTicket($removeUser)) {
+				if (!TicketHandler::hasTicket($removeUser)) {
 					UserHandler::removeUser($removeUser);
 					$result = true;
 				} else {
-					$message = 'Brukeren har en billett, og kan derfor ikke slettes.';
+					$message = '<p>Brukeren har en billett, og kan derfor ikke slettes.</p>';
 				}
 			} else {
-				$message = 'Brukeren finnes ikke.';
+				$message = '<p>Brukeren finnes ikke.</p>';
 			}
 		} else {
-			$message = 'Det er ikke spessifisert noen bruker.';
+			$message = '<p>Det er ikke spessifisert noen bruker.</p>';
 		}
 	} else {
-		$message = 'Du har ikke tillatelse til dette.';
+		$message = '<p>Du har ikke tillatelse til dette.</p>';
 	}
 } else {
-	$message = 'Du er ikke logget inn.';
+	$message = '<p>Du er ikke logget inn.</p>';
 }
 
 echo json_encode(array('result' => $result, 'message' => $message));

@@ -37,25 +37,25 @@ if (Session::isAuthenticated()) {
 
 							$result = true;
 						} else {
-							$message = 'Dette mappet er ikke for denne compoen!';
+							$message = '<p>Dette mappet er ikke for denne compoen!</p>';
 						}
 					} else {
-						$message = 'Mappet finnes ikke!';
+						$message = '<p>Mappet finnes ikke!</p>';
 					}
 				} else {
-					$message = 'Du har ikke lov til å banne nå!';
+					$message = '<p>Du har ikke lov til å banne nå!</p>';
 				}
 			} else {
-				$message = 'Matchen holder på å starte!';
+				$message = '<p>Matchen holder på å starte!</p>';
 			}
 		} else {
-			$message = 'Matchen finnes ikke.';
+			$message = '<p>Matchen finnes ikke.</p>';
 		}
 	} else {
-		$message = 'Felt mangler!';
+		$message = '<p>Felt mangler!</p>';
 	}
 } else {
-	$message = 'Du er ikke logget inn.';
+	$message = '<p>Du er ikke logget inn.</p>';
 }
 
 if ($result) {

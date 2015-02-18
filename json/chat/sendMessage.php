@@ -8,7 +8,8 @@ $message = null;
 if (Session::isAuthenticated()) {
 	$user = Session::getCurrentUser();
 	
-	if (isset($_GET['id']) && isset($_GET['message'])) {
+	if (isset($_GET['id']) && 
+		isset($_GET['message'])) {
 		$chat = ChatHandler::getChat($_GET['id']);
 
 		if ($chat != null) {
@@ -18,16 +19,16 @@ if (Session::isAuthenticated()) {
 				ChatHandler::sendChatMessage($user, $chat, $_GET['message']);
 				$result = true;
 			} else {
-				$message = 'Du er ikke med i denne chatten!';
+				$message = '<p>Du er ikke med i denne chatten!</p>';
 			}
 		} else {
-			$message = 'Chatten finnes ikke!';
+			$message = '<p>Chatten finnes ikke!</p>';
 		}
 	} else {
-		$message = 'Vi mangler felt';
+		$message = '<p>Vi mangler felt.</p>';
 	}
 } else {
-	$message = 'Du er ikke logget inn.';
+	$message = '<p>Du er ikke logget inn.</p>';
 }
 
 echo json_encode(array('result' => $result, 'message' => $message));

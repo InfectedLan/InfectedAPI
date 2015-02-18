@@ -9,7 +9,6 @@ if (Session::isAuthenticated()) {
 	$user = Session::getCurrentUser();
 	
 	if ($user->hasPermission('*')) {
-		
 		if (isset($_GET['id']) &&
 			is_numeric($_GET['id'])) {
 			$fromEvent = EventHandler::getEvent($_GET['id']);
@@ -19,18 +18,18 @@ if (Session::isAuthenticated()) {
 				$toEvent != null) {
 				EventHandler::cloneMembers($fromEvent, $toEvent);
 				$result = true;
-				$message = 'Alle medlemene fra det tidligere arrangement ble overført til dette.';
+				$message = '<p>Alle medlemene fra det tidligere arrangement ble overført til dette.</p>';
 			} else {
-				$message = 'Arrangementene oppgitt ble ikke funnet.';
+				$message = '<p>Arrangementene oppgitt ble ikke funnet.</p>';
 			}
 		} else {
-			$message = 'Ikke noe arrangement spesifisert.';
+			$message = '<p>Ikke noe arrangement spesifisert.</p>';
 		}
 	} else {
-		$message = 'Du har ikke tillatelse til dette.';
+		$message = '<p>Du har ikke tillatelse til dette.</p>';
 	}
 } else {
-	$message = 'Du er ikke logget inn.';
+	$message = '<p>Du er ikke logget inn.</p>';
 }
 
 echo json_encode(array('result' => $result, 'message' => $message));

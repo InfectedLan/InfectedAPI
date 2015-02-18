@@ -65,7 +65,7 @@ if (Session::isAuthenticated()) {
 	$result = true;
 	
 } else {
-	$message = 'Du er ikke logget inn.';
+	$message = '<p>Du er ikke logget inn.</p>';
 }
 
 if ($result) {

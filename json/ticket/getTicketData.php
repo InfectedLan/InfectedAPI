@@ -33,19 +33,19 @@ if (Session::isAuthenticated()) {
 
 					$result = true;
 				} else {
-					$message = 'Denne billetten er allerede sjekket inn!';
+					$message = '<p>Denne billetten er allerede sjekket inn!</p>';
 				}
 			} else {
-				$message = 'Denne billetten finnes ikke';
+				$message = '<p>Denne billetten finnes ikke.</p>';
 			}
 		} else {
-			$message = 'Vi mangler felt';
+			$message = '<p>Vi mangler felt.</p>';
 		}
 	} else {
-		$message = 'Du har ikke tillatelse til dette!';
+		$message = '<p>Du har ikke tillatelse til dette!</p>';
 	}
 } else {
-	$message = 'Du er ikke logget inn.';
+	$message = '<p>Du er ikke logget inn.</p>';
 }
 
 if ($result) {

@@ -10,7 +10,6 @@ if (Session::isAuthenticated()) {
 	
 	if ($user->hasPermission('*') ||
 		$user->hasPermission('event.screen')) {
-		
 		if (isset($_GET['id']) &&
 			isset($_GET['title']) &&
 			isset($_GET['content']) &&
@@ -36,16 +35,16 @@ if (Session::isAuthenticated()) {
 				SlideHandler::updateSlide($slide, $title, $content, $startTime, $endTime, $published);
 				$result = true;
 			} else {
-				$message = 'Sliden du prøver å endre finnes ikke.';
+				$message = '<p>Sliden du prøver å endre finnes ikke.</p>';
 			}
 		} else {
-			$message = 'Du har ikke fyllt ut alle feltene!';
+			$message = '<p>Du har ikke fyllt ut alle feltene!</p>';
 		}
 	} else {
-		$message = 'Du har ikke tillatelse til dette.';
+		$message = '<p>Du har ikke tillatelse til dette.</p>';
 	}
 } else {
-	$message = 'Du er ikke logget inn.';
+	$message = '<p>Du er ikke logget inn.';
 }
 
 echo json_encode(array('result' => $result, 'message' => $message));

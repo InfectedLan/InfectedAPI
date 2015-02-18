@@ -15,7 +15,6 @@ if (Session::isAuthenticated()) {
 		
 		// Check that the user has an cropped avatar.
 		if ($user->hasCroppedAvatar()) {
-			
 			if (isset($_GET['groupId']) &&
 				isset($_GET['content']) &&
 				is_numeric($_GET['groupId']) &&
@@ -23,24 +22,24 @@ if (Session::isAuthenticated()) {
 				$group = GroupHandler::getGroup($_GET['groupId']);
 				$content = $_GET['content'];
 				
-				if (!ApplicationHandler::hasUserApplicationForGroup($user, $group)) {
+				if (!ApplicationHandler::hasUserApplicationByGroup($user, $group)) {
 					ApplicationHandler::createApplication($group, $user, $content);
 					$result = true;
-					$message = 'Din søknad til crewet "' . $group->getTitle() . '" er nå sendt.';
+					$message = '<p>Din søknad til crewet "' . $group->getTitle() . '" er nå sendt.</p>';
 				} else {
-					$message = 'Du har allerede søkt til ' . $group->getTitle() . ' crew. Du kan søke igjen hvis søknaden din skulle bli avslått.';
+					$message = '<p>Du har allerede søkt til ' . $group->getTitle() . ' crew. Du kan søke igjen hvis søknaden din skulle bli avslått.</p>';
 				}
 			} else {
-				$message = 'Du har ikke fyllt ut alle feltene.';
+				$message = '<p>Du har ikke fyllt ut alle feltene.</p>';
 			}
 		} else {
-			$message = "Du må laste opp en avatar før du kan søke!";
+			$message = '<p>Du må laste opp en avatar før du kan søke!</p>';
 		}
 	} else {
-		$message = 'Du er allerede med i et crew.';
+		$message = '<p>Du er allerede med i et crew.</p>';
 	}
 } else {
-	$message = 'Du er allerede logget inn!';
+	$message = '<p>Du er allerede logget inn!</p>';
 } 
 
 echo json_encode(array('result' => $result, 'message' => $message));

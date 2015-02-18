@@ -18,16 +18,16 @@ if (Session::isAuthenticated()) {
 				$invite->accept();
 				$result = true;
 			} else {
-				$message = 'Denne invitasjonen er ikke din!';
+				$message = '<p>Denne invitasjonen er ikke din!</p>';
 			}
 		} else {
-			$message = 'Invitasjonen finnes ikke!';
+			$message = '<p>Invitasjonen finnes ikke!</p>';
 		}
 	} else {
-		$message = 'Felt mangler!';
+		$message = '<p>Felt mangler!</p>';
 	}
 } else {
-	$message = 'Du er ikke logget inn.';
+	$message = '<p>Du er ikke logget inn.</p>';
 }
 
 if ($result) {

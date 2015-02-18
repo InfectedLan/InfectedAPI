@@ -22,19 +22,19 @@ if (!Session::isAuthenticated()) {
 					$_SESSION['user'] = $user;
 					$result = true;
 				} else {
-					$message = 'Feil brukernavn eller passord.';
+					$message = '<p>Feil brukernavn eller passord.</p>';
 				}
 			} else {
-				$message = 'Du må aktivere brukeren din før du kan logge inn.';
+				$message = '<p>Du må aktivere brukeren din før du kan logge inn.</p>';
 			}
 		} else {
-			$message = 'Feil brukernavn eller passord.';
+			$message = '<p>Feil brukernavn eller passord.</p>';
 		}
 	} else {
-		$message = 'Du har ikke skrevet inn et brukernavn og passord.';
+		$message = '<p>Du har ikke skrevet inn et brukernavn og passord.</p>';
 	}
 } else {
-	$message = 'Du er allerede logget inn!';
+	$message = '<p>Du er allerede logget inn!</p>';
 } 
 
 echo json_encode(array('result' => $result, 'message' => $message));

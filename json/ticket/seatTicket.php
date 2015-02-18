@@ -27,27 +27,27 @@ if(Session::isAuthenticated()) {
 						if ($seatEvent->equals($ticketEvent)) {
 							TicketHandler::changeSeat($ticket, $seat);
 							$result = true;
-							$message = 'Billetten har fått nytt sete ^-^';
+							$message = '<p>Billetten har fått nytt sete.</p>';
 						} else {
-							$message = 'Billetten og setet er ikke fra samme event!';
+							$message = '<p>Billetten og setet er ikke fra samme event!</p>';
 						}
 					} else {
-						$message = 'Det er noen som sitter i det setet! n_n';
+						$message = '<p>Det er noen som sitter i det setet!</p>';
 					}
 				} else {
-					$message = 'Du har ikke tillatelse til å seate den billetten!';
+					$message = '<p>Du har ikke tillatelse til å seate den billetten!</p>';
 				}
 			} else {
-				$message = 'Setet eksisterer ikke!';
+				$message = '<p>Setet eksisterer ikke!</p>';
 			}
 		} else {
-			$message = 'Biletten eksisterer ikke!';
+			$message = '<p>Biletten eksisterer ikke!</p>';
 		}
 	} else {
-		$message = 'Du har ikke fylt inn alle feltene!';
+		$message = '<p>Du har ikke fylt inn alle feltene!</p>';
 	}
 } else {
-	$message = 'Du er ikke logget inn!';
+	$message = '<p>Du er ikke logget inn!</p>';
 }
 
 echo json_encode(array('result' => $result, 'message' => $message));

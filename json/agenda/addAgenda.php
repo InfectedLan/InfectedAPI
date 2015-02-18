@@ -27,13 +27,13 @@ if (Session::isAuthenticated()) {
 			AgendaHandler::createAgenda(EventHandler::getCurrentEvent(), $name, $title, $description, $startTime);
 			$result = true;
 		} else {
-			$message = 'Du har ikke fyllt ut alle feltene!';
+			$message = '<p>Du har ikke fyllt ut alle feltene!</p>';
 		}
 	} else {
-		$message = 'Du har ikke tillatelse til dette.';
+		$message = '<p>Du har ikke tillatelse til dette.</p>';
 	}
 } else {
-	$message = 'Du er ikke logget inn.';
+	$message = '<p>Du er ikke logget inn.</p>';
 }
 
 echo json_encode(array('result' => $result, 'message' => $message));

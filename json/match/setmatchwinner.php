@@ -11,7 +11,6 @@ if (Session::isAuthenticated()) {
 
 	if ($user->hasPermission('*') ||
 		$user->hasPermission('event.compo')) {
-
 		if (isset($_GET['matchId']) && 
 			isset($_GET['winnerId'])) {
 			$match = MatchHandler::getMatch($_GET['matchId']);
@@ -23,19 +22,19 @@ if (Session::isAuthenticated()) {
 					MatchHandler::setWinner($match, $clan);
 					$result = true;
 				} else {
-					$message = "Clanen finnes ikke!";
+					$message = '<p>Clanen finnes ikke!</p>';
 				}
 			} else {
-				$message = "Matchen finnes ikke!";
+				$message = '<p>Matchen finnes ikke!</p>';
 			}
 		} else {
-			$message = 'Vi mangler felt';
+			$message = '<p>Vi mangler felt.</p>';
 		}
 	} else {
-		$message = "Du har ikke tillatelse til dette";
+		$message = '<p>Du har ikke tillatelse til dette.</p>';
 	}
 } else {
-	$message = 'Du er ikke logget inn.';
+	$message = '<p>Du er ikke logget inn.</p>';
 }
 
 echo json_encode(array('result' => $result, 'message' => $message));

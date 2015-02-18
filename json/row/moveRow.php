@@ -7,10 +7,9 @@ $message = null;
 
 if (Session::isAuthenticated()) {
 	$user = Session::getCurrentUser();
-	
+
 	if ($user->hasPermission('*') ||
-		$user->hasPermission('admin.seatmap')) {
-		
+		$user->hasPermission('admin.seatmap')) {		
 		if (isset($_GET['row'])) {
 			$row = RowHandler::getRow($_GET['row']);
 			
@@ -21,19 +20,19 @@ if (Session::isAuthenticated()) {
 
 					$result = true;
 				} else {
-					$message = 'Posisjonen er ikke satt!';
+					$message = '<p>Posisjonen er ikke satt!</p>';
 				}
 			} else {
-				$message = 'Raden eksisterer ikke!';
+				$message = '<p>Raden eksisterer ikke!</p>';
 			}
 		} else {
-			$message = 'Raden er ikke satt!';
+			$message = '<p>Raden er ikke satt!</p>';
 		}
 	} else {
-		$message = 'Du har ikke tillatelse til å flytte en rad!';
+		$message = '<p>Du har ikke tillatelse til å flytte en rad!</p>';
 	}
 } else {
-	$message = 'Du må logge inn først!';
+	$message = '<p>Du må logge inn først!</p>';
 }
 
 if ($result) {

@@ -12,7 +12,6 @@ if (Session::isAuthenticated()) {
 	
 	if ($user->hasPermission('*') ||
 		$user->hasPermission('chief.teams')) {
-		
 		if (isset($_GET['groupId']) &&
 			isset($_GET['title']) &&
 			isset($_GET['description']) &&
@@ -30,13 +29,13 @@ if (Session::isAuthenticated()) {
 			TeamHandler::createTeam(EventHandler::getCurrentEvent(), $group, $name, $title, $description, $leader);
 			$result = true;
 		} else {
-			$message = 'Du har ikke fyllt ut alle feltene!';
+			$message = '<p>Du har ikke fyllt ut alle feltene!</p>';
 		}
 	} else {
-		$message = 'Du har ikke tillatelse til dette.';
+		$message = '<p>Du har ikke tillatelse til dette.</p>';
 	}
 } else {
-	$message = 'Du er ikke logget inn.';
+	$message = '<p>Du er ikke logget inn.</p>';
 }
 
 echo json_encode(array('result' => $result, 'message' => $message));

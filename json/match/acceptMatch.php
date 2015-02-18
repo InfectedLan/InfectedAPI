@@ -26,16 +26,16 @@ if (Session::isAuthenticated()) {
 
 				$result = true;
 			} else {
-				$message = 'Du er ikke med i denne matchen!';
+				$message = '<p>Du er ikke med i denne matchen!</p>';
 			}
 		} else {
-			$message = 'Denne matchen finnes ikke.';
+			$message = '<p>Denne matchen finnes ikke.</p>';
 		}
 	} else {
-		$message = 'Vi mangler felt';
+		$message = '<p>Vi mangler felt.</p>';
 	}
 } else {
-	$message = 'Du er ikke logget inn.';
+	$message = '<p>Du er ikke logget inn.</p>';
 }
 
 echo json_encode(array('result' => $result, 'message' => $message));

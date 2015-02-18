@@ -26,22 +26,22 @@ if (Session::isAuthenticated()) {
 						CompoHandler::generateDoubleElimination($compo, $_GET['startTime'], $_GET['compoSpacing']);
 						$result = true;
 					} else {
-						$message = 'Compoen har allerede genererte matcher.';
+						$message = '<p>Compoen har allerede genererte matcher.</p>';
 					}
 				} else {
-					$message = 'Felt mangler.';
+					$message = '<p>Felt mangler.</p>';
 				}
 			} else {
-				$message = 'Compoen finnes ikke!';
+				$message = '<p>Compoen finnes ikke!</p>';
 			}
 		} else {
-			$message = 'Felt mangler!';
+			$message = '<p>Felt mangler!</p>';
 		}
 	} else {
-		$message = 'Du har ikke tillatelse til å gjøre dette!';
+		$message = '<p>Du har ikke tillatelse til å gjøre dette!</p>';
 	}
 } else {
-	$message = 'Du er ikke logget inn!';
+	$message = '<p>Du er ikke logget inn!</p>';
 }
 
 echo json_encode(array('result' => $result, 'message' => $message));

@@ -14,7 +14,6 @@ if (Session::isAuthenticated()) {
 
 	if ($user->hasPermission('*') ||
 		$user->hasPermission('event.compo')) {
-		
 		if (isset($_GET['id'])) {
 			$compo = CompoHandler::getCompo($_GET['id']);
 
@@ -41,7 +40,6 @@ if (Session::isAuthenticated()) {
 
 				//Get current matches
 				$currentMatches = MatchHandler::getCurrentMatches($compo);
-
 				$currentArray = array();
 
 				foreach ($currentMatches as $match) {
@@ -93,7 +91,7 @@ if (Session::isAuthenticated()) {
 						}
 
 						if(!$hasVotedMaps) {
-							$matchData['mapData'] = array("name" => "pending");
+							$matchData['mapData'] = array('name' => 'pending');
 						}
 					}
 
@@ -149,16 +147,16 @@ if (Session::isAuthenticated()) {
 
 				$result = true;
 			} else {
-				$message = 'Vi mangler felt.';
+				$message = '<p>Vi mangler felt.</p>';
 			}
 		} else {
-			$message = 'Compoen finnes ikke.';
+			$message = '<p>Compoen finnes ikke.</p>';
 		}
 	} else {
-		$message = "Du har ikke tillatelse!";
+		$message = '<p>Du har ikke tillatelse!</p>';
 	}
 } else {
-	$message = 'Du er ikke logget inn.';
+	$message = '<p>Du er ikke logget inn.</p>';
 }
 
 if ($result) {
