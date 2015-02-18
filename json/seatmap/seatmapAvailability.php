@@ -1,8 +1,6 @@
 <?php
 require_once 'session.php';
 require_once 'handlers/seatmaphandler.php';
-require_once 'handlers/seathandler.php';
-require_once 'handlers/rowhandler.php';
 
 $result = false;
 $message = null;
@@ -17,38 +15,38 @@ if (Session::isAuthenticated()) {
 		$seatmap = SeatmapHandler::getSeatmap($_GET['id']);
 		
 		if ($seatmap != null) {
-			$rowList = SeatmapHandler::getRows($seatmap);
 			$seatmapData = array();
 			$backgroundImage = $seatmap->getBackgroundImage();
 			
-			foreach ($rowList as $row) {
-				$seatList = RowHandler::getSeats($row);
+			foreach ($seatmap->getRows() as $row) {
 				$seatData = array();
 
-				foreach ($seatList as $seat) {
+				foreach ($row->getSeats() as $seat) {
 					$data = array();
 
 					$data['id'] = $seat->getId();
 					$data['number'] = $seat->getNumber();
-					$data['humanName'] = SeatHandler::getHumanString($seat);
+					$data['humanName'] = $seat->getString();
 
-					$owner = SeatHandler::getOwner($seat);
+					$ticketUser = $seat->getTicket()->getUser();
 
-					if (!isset($owner)) {
-						$data['occupied'] = false;
-					} else {
+					if ($ticketUser != null) {
 						$data['occupied'] = true;
-						$ticket = SeatHandler::getTicket($seat);
+						$ticket = $seat->getTicket();
 						$data['occupiedTicket'] = array('id' => $ticket->getId(), 
 														'owner' => htmlspecialchars($owner->getDisplayName()) );
+					} else {
+						$data['occupied'] = false;
 					}
 
 					array_push($seatData, $data);
 				}
 
-				$rowData = array('seats' => $seatData, 'id' => $row->getId(), 'x' => $row->getX(), 'y' => $row->getY(), 'number' => $row->getNumber());
-				array_push($seatmapData, $rowData);
-
+				array_push($seatmapData, array('seats' => $seatData, 
+											   'id' => $row->getId(), 
+											   'x' => $row->getX(), 
+											   'y' => $row->getY(), 
+											   'number' => $row->getNumber()));
 				$result = true;
 			}
 		} else {

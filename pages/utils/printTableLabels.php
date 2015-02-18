@@ -16,37 +16,33 @@ if (Session::isAuthenticated()) {
 				echo '<link href="../../styles/ticketlabelstyle.css" rel="stylesheet" type="text/css" />';
 			echo '</head>';
 			echo '<body>';
-				$currentEvent = EventHandler::getCurrentEvent();
-				$seatmap = $currentEvent->getSeatmap());
-				$rowList = SeatmapHandler::getRows($seatmap);
+				$seatmap = EventHandler::getCurrentEvent()->getSeatmap();
 				
-				foreach ($rowList as $row) {
-					$seatList = RowHandler::getSeats($row);
-					
-					foreach ($seats as $seat) {
+				foreach ($seatmap->getRows() as $row) {
+					foreach ($row->getSeats() as $seat) {
 						echo '<div id="name">';
 							echo '<img width="600px" src="../../content/static/infected_logo_print_all.jpg">';
 							echo '<br>';
-							if (SeatHandler::hasOwner($seat)) {
-								$owner = SeatHandler::getOwner($seat);
-								echo $owner->getDisplayName();
+							if ($seat->hasTicket()) {
+								$ticketUser = $seat->getTicket()->getUser();
+								echo $ticketUser->getDisplayName();
 							} else {
 								echo 'Ledig plass!';
 							}
 						echo '</div>';
 						echo '<div id="seat">';
-							echo SeatHandler::getHumanString($seat);
+							echo $seat->getString();
 						echo '</div>';
-						echo '<br />';
+						echo '<br>';
 					}
 				}
 			echo '</body>';
 		echo '</html>';
 
 	} else {
-		echo 'Du har ikke tillatelse til dette.';
+		echo '<p>Du har ikke tillatelse til dette.</p>';
 	}
 } else {
-	echo 'Du er ikke logget inn.';
+	echo '<p>Du er ikke logget inn.</p>';
 }
 ?>

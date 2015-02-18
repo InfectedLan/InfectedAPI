@@ -1,5 +1,5 @@
 <?php
-class Utils {
+class DateUtils {
 	public static function getDayFromInt($day) {
 		$dayList = array('Søndag',
 						 'Mandag', 

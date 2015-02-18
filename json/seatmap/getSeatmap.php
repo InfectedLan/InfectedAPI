@@ -16,22 +16,23 @@ if (Session::isAuthenticated()) {
 		$seatmap = SeatmapHandler::getSeatmap($_GET['id']);
 		
 		if ($seatmap != null) {
-			$rowList = SeatmapHandler::getRows($seatmap);
 			$seatmapData = array();
 			$backgroundImage = $seatmap->getBackgroundImage();
 			
-			foreach ($rowList as $row) {
-				$seatList = RowHandler::getSeats($row);
+			foreach ($seatmap->getRows() as $row) {
 				$seatData = array();
 
-				foreach ($seatList as $seat) {
+				foreach ($row->getSeats() as $seat) {
 					array_push($seatData, array('id' => $seat->getId(), 
 												'number' => $seat->getNumber(), 
-												'humanName' => SeatHandler::getHumanString($seat) ));
+												'humanName' => $seat->getString()));
 				}
 
-				$rowData = array('seats' => $seatData, 'id' => $row->getId(), 'x' => $row->getX(), 'y' => $row->getY(), 'number' => $row->getNumber());
-				array_push($seatmapData, $rowData);
+				array_push($seatmapData, array('seats' => $seatData, 
+											   'id' => $row->getId(), 
+											   'x' => $row->getX(), 
+											   'y' => $row->getY(), 
+											   'number' => $row->getNumber());
 			}
 
 			$result = true;

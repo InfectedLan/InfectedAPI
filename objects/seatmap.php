@@ -35,6 +35,13 @@ class Seatmap extends Object {
 	}
 
 	/*
+	 * Returns the rows for this seatmap.
+	 */
+	public function getRows() {
+		return RowHandler::getRowsBySeatmap($this);
+	}
+
+	/*
 	 * Add an row to this seatmap at the specified coordinates.
 	 */
 	public function addRow($x, $y) {
