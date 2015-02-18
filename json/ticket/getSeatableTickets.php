@@ -12,18 +12,15 @@ if (Session::isAuthenticated()) {
 		$seatmap = SeatmapHandler::getSeatmap($_GET['seatmap']);
 		
 		if ($seatmap != null) {
-			$event = SeatmapHandler::getEvent($seatmap);
 			$user = Session::getCurrentUser();
-			$tickets = TicketHandler::getTicketsSeatableByUser($user, $event);
+			$ticketList = TicketHandler::getTicketsSeatableByUser($user);
 			
-			foreach($tickets as $ticket) {
-				$ticketOwner = $ticket->getUser();
-				$data = array();
-				$data['id'] = $ticket->getId();
-				$data['humanName'] = $ticket->getHumanName();
-				$data['owner'] = $ticketOwner->getDisplayName();
+			foreach ($ticketList as $ticket) {
+				$ticketUser = $ticket->getUser();
 
-				array_push($ticketData, $data);
+				array_push($ticketData, array('id' => $ticket->getId(),
+											  'humanName' => $ticket->getHumanName(),
+											  'owner' => $ticketUser->getDisplayName()));
 			}
 
 			$result = true;

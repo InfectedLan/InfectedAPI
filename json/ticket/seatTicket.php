@@ -20,12 +20,9 @@ if(Session::isAuthenticated()) {
 					$user->hasPermission('chief.tickets') ||
 					$ticket->canSeat($user)) {
 					
-					if (!SeatHandler::hasOwner($seat)) {
-						$seatEvent = SeatHandler::getEvent($seat);
-						$ticketEvent = $ticket->getEvent();
-						
-						if ($seatEvent->equals($ticketEvent)) {
-							TicketHandler::changeSeat($ticket, $seat);
+					if (!SeatHandler::hasTicket($seat)) {
+						if ($seat->getEvent()->equals($ticket->getEvent())) {
+							TicketHandler::updateTicketSeat($ticket, $seat);
 							$result = true;
 							$message = '<p>Billetten har fått nytt sete.</p>';
 						} else {

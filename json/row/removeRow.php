@@ -15,7 +15,7 @@ if (Session::isAuthenticated()) {
 			
 			if ($row != null) {
 				if (RowHandler::safeToDelete($row)) {
-					RowHandler::deleteRow($row);
+					RowHandler::removeRow($row);
 					$result = true;
 				} else {
 					$message = '<p>Noen sitter på raden du prøver å slette!</p>';

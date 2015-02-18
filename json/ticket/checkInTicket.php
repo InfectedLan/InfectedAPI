@@ -19,7 +19,7 @@ if (Session::isAuthenticated()) {
 			if ($ticket != null) {
 				if (!$ticket->isCheckedIn()) {
 					$ticket->checkIn();
-
+					
 					$result = true;
 					$message = '<p>Billetten til "' . $ticket->getUser()->getFullName() . '" er nå sjekket inn.</p>';
 				} else {

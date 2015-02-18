@@ -13,22 +13,17 @@ if (Session::isAuthenticated()) {
 		is_numeric($_GET['id'])) {
 		$ticketToRevert = TicketHandler::getTicket($_GET['id']);
 		
-		if (isset($ticketToRevert)) {
-			$transferResult = TicketTransferHandler::revertTransfer($ticketToRevert, $user);
-			
-			if (!isset($transferResult)) {
-				$result = true;
-			} else {
-				$message = $transferResult;
-			}
+		if ($ticketToRevert != null) {
+			TicketTransferHandler::revertTransfer($ticketToRevert, $user);
+			$result = true;
 		} else {
-			$message = '<p>Billetten finnes ikke!</p>';
+			$message = '<p>Billetten finnes ikke.</p>';
 		}
 	} else {
 		$message = '<p>Ugyldig bilett.</p>';
 	}
 } else {
-	$message = '<p>Du er ikke logget inn!</p>';
+	$message = '<p>Du er ikke logget inn.</p>';
 }
 
 echo json_encode(array('result' => $result, 'message' => $message));

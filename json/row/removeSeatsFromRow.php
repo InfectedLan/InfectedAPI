@@ -27,14 +27,14 @@ if (Session::isAuthenticated()) {
 							$safeToDelete = true;
 							
 							for ($i = $startIndex; $i > $endIndex; $i--) {
-								if (SeatHandler::hasOwner($seats[$i])) {
+								if (SeatHandler::hasTicket($seats[$i])) {
 									$safeToDelete = false;
 								}
 							}
 							
 							if ($safeToDelete) {
 								for ($i = $startIndex; $i > $endIndex; $i--) {
-									SeatHandler::deleteSeat($seats[$i]);
+									SeatHandler::removeSeat($seats[$i]);
 								}
 								
 								$result = true;

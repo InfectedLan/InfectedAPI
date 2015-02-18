@@ -103,6 +103,27 @@ class TicketHandler {
 
         return $ticketList;
     }
+    
+    /*
+     * Returns true if the specified user is able to seat tickets.
+     */
+    public static function getTicketsSeatableByUser(User $user) {
+        $database = Database::open(Settings::db_name_infected_tickets);
+
+        $result = $database->query('SELECT * FROM `' . Settings::db_table_infected_tickets_tickets . '` 
+                                    WHERE (`seaterId` = \'' . $user->getId() . '\' OR (`userId` = \'' . $user->getId() . '\' AND `seaterId` = \'0\'))
+                                    AND `eventId` = \'' . EventHandler::getCurrentEvent()->getId() . '\';');
+    
+        $database->close();
+    
+        $ticketList = array();
+
+        while ($object = $result->fetch_object('Ticket')) {
+            array_push($ticketList, $object);
+        }
+
+        return $ticketList;
+    }
 
     /*
      * Returns true if the specified user has a ticket.
@@ -215,27 +236,6 @@ class TicketHandler {
         $database->close();
 
         return $result->num_rows > 0;
-    }
-    
-    /*
-     * Returns true if the specified user is able to seat tickets.
-     */
-    public static function isTicketsSeatableByUser(User $user) {
-        $database = Database::open(Settings::db_name_infected_tickets);
-
-        $result = $database->query('SELECT * FROM `' . Settings::db_table_infected_tickets_tickets . '` 
-								    WHERE (`seaterId` = \'' . $user->getId() . '\' OR (`userId` = \'' . $user->getId() . '\' AND `seaterId` = \'0\'))
-                                    AND `eventId` = \'' . EventHandler::getCurrentEvent()->getId() . '\';');
-    
-		$database->close();
-	
-        $ticketList = array();
-
-        while ($object = $result->fetch_object('Ticket')) {
-            array_push($ticketList, $object);
-        }
-
-        return $ticketList;
     }
 }
 ?>

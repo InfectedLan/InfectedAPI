@@ -18,9 +18,9 @@ if (Session::isAuthenticated()) {
 			if ($seatmap != null) {
 				if (isset($_GET['x']) && 
 					isset($_GET['y'])) {
-					$row = RowHandler::createNewRow($seatmap, $_GET['x'], $_GET['y']);
-					$result = true;
+					$row = $seatmap->addRow($_GET['x'], $_GET['y']);
 					$id = $row->getId();
+					$result = true;
 				} else {
 					$message = '<p>Posisjonen er ikke satt!</p>';
 				}

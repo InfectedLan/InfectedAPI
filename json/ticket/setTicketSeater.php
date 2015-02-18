@@ -19,7 +19,6 @@ if (Session::isAuthenticated()) {
 					
 					if ($seaterUser != null) {
 						TicketHandler::updateTicketSeater($ticket, $seaterUser);
-
 						$result = true;
 						$message = '<p>Biletten har en ny seater.</p>';
 					} else {

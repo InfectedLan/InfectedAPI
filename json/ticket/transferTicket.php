@@ -16,10 +16,10 @@ if (Session::isAuthenticated()) {
 		
 		if ($user->equals($ticket->getUser())) {
 			if (isset($_GET['target'])) {
-				$target = UserHandler::getUser($_GET['target']);
+				$targetUser = UserHandler::getUser($_GET['target']);
 				
-				if ($target != null) {
-					TicketTransferHandler::transfer($ticket, $target);
+				if ($targetUser != null) {
+					TicketTransferHandler::transfer($ticket, $targetUser);
 					
 					$result = true;
 					$message = '<p>Biletten er overført.</p>';

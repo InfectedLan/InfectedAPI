@@ -19,7 +19,7 @@ if (Session::isAuthenticated()) {
 					
 					if (is_numeric($seats)) {
 						for ($i = 0; $i < $seats; $i++) {
-							RowHandler::addSeat($row);
+							$row->addSeat();
 						}
 						
 						$result = true;

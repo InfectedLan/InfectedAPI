@@ -3,7 +3,7 @@ require_once 'session.php';
 
 $result = false;
 $message = null;
-$userData = array();
+$userData = null;
 
 if (Session::isAuthenticated()) {
 	$user = Session::getCurrentUser();
@@ -19,17 +19,17 @@ if (Session::isAuthenticated()) {
 				if (!$ticket->isCheckedIn()) {
 					$ticketUser = $ticket->getUser();
 
-					array_push($userData, array('id' => $ticketUser->getId(),
-											    'firstname' => $ticketUser->getFirstname(),
-												'lastname' => $ticketUser->getLastname(),
-											 	'username' => $ticketUser->getUsername(),
-											 	'email' => $ticketUser->getEmail(),
-											 	'birthdate' => date('d.m.Y', $ticketUser->getBirthdate()),
-											 	'gender' => $ticketUser->getGenderName(),
-											 	'age' => $ticketUser->getAge(),
-											 	'phone' => $ticketUser->getPhone(),
-											 	'address' => $ticketUser->getAddress(),
-												'city' => $ticketUser->getPostalCode() . ', ' . $ticketUser->getCity()));
+					$userData = array('id' => $ticketUser->getId(),
+								      'firstname' => $ticketUser->getFirstname(),
+									  'lastname' => $ticketUser->getLastname(),
+								 	  'username' => $ticketUser->getUsername(),
+								 	  'email' => $ticketUser->getEmail(),
+								      'birthdate' => date('d.m.Y', $ticketUser->getBirthdate()),
+								 	  'gender' => $ticketUser->getGenderName(),
+								 	  'age' => $ticketUser->getAge(),
+								 	  'phone' => $ticketUser->getPhone(),
+								 	  'address' => $ticketUser->getAddress(),
+									  'city' => $ticketUser->getPostalCode() . ', ' . $ticketUser->getCity());
 
 					$result = true;
 				} else {
