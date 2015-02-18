@@ -16,7 +16,7 @@ if (Session::isAuthenticated()) {
 
 	//List clans
 	$clanArray = array();
-	$clanList = ClanHandler::getClansForUser($user, $event);
+	$clanList = ClanHandler::getClansByUser($user, $event);
 
 	foreach ($clanList as $clan) {
 		$compo = ClanHandler::getCompo($clan);
@@ -33,7 +33,7 @@ if (Session::isAuthenticated()) {
 
 	//List invites
 	$inviteArray = array();
-	$inviteList = InviteHandler::getInvitesForUser($user);
+	$inviteList = InviteHandler::getInvitesByUser($user);
 
 	foreach ($inviteList as $invite) {
 		$clan = ClanHandler::getClan($invite->getClanId());
@@ -56,7 +56,7 @@ if (Session::isAuthenticated()) {
 							  'invites' => $inviteArray);
 
 	//Match
-	$match = MatchHandler::getMatchForUser($user, $event);
+	$match = MatchHandler::getMatchByUser($user, $event);
 
 	if ($match != null) {
 		$compoStatusArray['match'] = array('id' => $match->getId());

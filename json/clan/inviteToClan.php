@@ -19,7 +19,7 @@ if (Session::isAuthenticated()) {
 			if ($invite != null) {
 				if ($invite->isEligibleForCompos()) {
 					$compo = ClanHandler::getCompo($clan);
-					$inClan = count(ClanHandler::getInvites($clan)) + count(ClanHandler::getMembers($clan));
+					$inClan = count(ClanHandler::getInvitesByClan($clan)) + count(ClanHandler::getMembers($clan));
 
 					ClanHandler::inviteUser($clan, $invite);
 					$result = true;

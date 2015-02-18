@@ -6,6 +6,9 @@ require_once 'handlers/rowhandler.php';
 require_once 'objects/seat.php';
 
 class SeatHandler {
+    /*
+     * Get a seat by the internal id.
+     */
     public static function getSeat($id) {
         $database = Database::open(Settings::db_name_infected_tickets);
 
@@ -17,16 +20,72 @@ class SeatHandler {
 		return $result->fetch_object('Seat');
     }
 
-    /*
-     * Returns a string representation of the seat
+    /* 
+     * Returns a list of all seats.
      */
-    public static function getHumanString(Seat $seat) {
-        $row = $seat->getRow();
+    public static function getSeats() {
+        $database = Database::open(Settings::db_name_infected_tickets);
         
-        return 'R' . $row->getNumber() . ' S' . $seat->getNumber();
+        $result = $database->query('SELECT * FROM `' . Settings::db_table_infected_tickets_seats . '`;');
+        
+        $database->close();
+
+        $seatList = array();
+        
+        while ($object = $result->fetch_object('Seat')) {
+            array_push($seatList, $object);
+        }
+
+        return $seatList;
     }
 
-    public static function deleteSeat(Seat $seat) {
+    /*
+     * Return all seats on the specified row.
+     */
+    public static function getSeatsByRow(Row $row) {
+        $database = Database::open(Settings::db_name_infected_tickets);
+
+        $result = $database->query('SELECT * FROM `' . Settings::db_table_infected_tickets_seats . '` 
+                                    WHERE `rowId` = \'' . $row->getId() . '\';');
+
+        $database->close();
+
+        $seatList = array();
+
+        while ($object = $result->fetch_object('Seat')) {
+            array_push($seatList, $object);
+        }
+
+        return $seatList;
+    }
+
+    /*
+     * Add a seat to the specified row.
+     */
+    public static function createSeat(Row $row) {
+        $database = Database::open(Settings::db_name_infected_tickets);
+
+        // Find out what seat number we are at.
+        $highestSeatNum = $database->query('SELECT `number` FROM `' . Settings::db_table_infected_tickets_seats . '` 
+                                            WHERE `rowId` = ' . $row->getId() . ' 
+                                            ORDER BY `number` DESC
+                                            LIMIT 1;');
+
+        $seatRow = $database->fetch_array($highestSeatNum);
+
+        $newSeatNumber = $seatRow['number'] + 1;
+
+        $database->query('INSERT INTO `' . Settings::db_table_infected_tickets_seats . '` (`rowId`, `number`) 
+                          VALUES (\'' . $row->getId() . '\', 
+                                  \'' . $database->real_escape_string($newSeatNumber) . '\');');
+
+        $database->close();
+    }
+
+    /*
+     * Removes the specified seat.
+     */
+    public static function removeSeat(Seat $seat) {
         $database = Database::open(Settings::db_name_infected_tickets);
 
         $result = $database->query('DELETE FROM `' . Settings::db_table_infected_tickets_seats . '` 
@@ -35,7 +94,10 @@ class SeatHandler {
         $database->close();
     }
 
-    public static function hasOwner(Seat $seat) {
+    /*
+     * Returns true if this seat has a ticket seated on it.
+     */
+    public static function hasTicket(Seat $seat) {
         $database = Database::open(Settings::db_name_infected_tickets);
 
         $result = $database->query('SELECT `id` FROM `' . Settings::db_table_infected_tickets_tickets . '` 
@@ -46,21 +108,9 @@ class SeatHandler {
         return $result->num_rows > 0;
     }
 
-    public static function getOwner(Seat $seat) {
-        $database = Database::open(Settings::db_name_infected_tickets);
-
-        $result = $database->query('SELECT `userId` FROM `' . Settings::db_table_infected_tickets_tickets . '` 
-                                    WHERE `seatId` = ' . $seat->getId() . ';');
-        
-        $database->close();
-
-        $row = $result->fetch_array();
-
-        if ($row) {
-            return UserHandler::getUser($row['userId']);
-        }
-    }
-
+    /*
+     * Returns the ticket that is seated on this seat.
+     */
     public static function getTicket(Seat $seat) {
         $database = Database::open(Settings::db_name_infected_tickets);
 
@@ -72,6 +122,9 @@ class SeatHandler {
         return $result->fetch_object('Ticket');
     }
 
+    /*
+     * Returns the event this seat is for.
+     */
     public static function getEvent(Seat $seat) {
         return RowHandler::getEvent($seat->getRow());
     }

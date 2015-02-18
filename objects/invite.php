@@ -3,9 +3,9 @@ require_once 'database.php';
 require_once 'settings.php';
 require_once 'handlers/userhandler.php';
 require_once 'handlers/clanhandler.php';
-require_once 'objects/object.php';
+require_once 'objects/eventobject.php';
 
-class Invite extends Object {
+class Invite extends EventObject {
 	private $userId;
 	private $clanId;
 

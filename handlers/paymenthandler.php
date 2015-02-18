@@ -13,13 +13,32 @@ class PaymentHandler {
         $database = Database::open(Settings::db_name_infected_tickets);
         
         $result = $database->query('SELECT * FROM `' . Settings::db_table_infected_tickets_payments . '` 
-                                 WHERE `id` = \'' . $database->real_escape_string($id) . '\';');
+                                    WHERE `id` = \'' . $database->real_escape_string($id) . '\';');
         
         $database->close();
 
 		    return $result->fetch_object('Payment');
     }
     
+    /*
+     * Returns a list of all payments.
+     */
+    public static function getPayments() {
+        $database = Database::open(Settings::db_name_infected_tickets);
+        
+        $result = $database->query('SELECT * FROM `' . Settings::db_table_infected_tickets_payments . '`;');
+        
+        $database->close();
+
+        $paymentList = array();
+        
+        while ($object = $result->fetch_object('Payment')) {
+            array_push($paymentList, $object);
+        }
+
+        return $paymentList;
+    }
+
     /*
      * Create a new payment.
      */

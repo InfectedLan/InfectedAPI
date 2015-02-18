@@ -11,14 +11,14 @@ class RestrictedPageHandler {
      * Get page by the internal id.
      */
     public static function getPage($id) {
-		$database = Database::open(Settings::db_name_infected_crew);
-		
-		$result = $database->query('SELECT * FROM `' . Settings::db_table_infected_crew_pages . '`
-								    WHERE `id` = \'' . $database->real_escape_string($id) . '\';');
-		
-		$database->close();
-            
-		return $result->fetch_object('RestrictedPage');
+    		$database = Database::open(Settings::db_name_infected_crew);
+    		
+    		$result = $database->query('SELECT * FROM `' . Settings::db_table_infected_crew_pages . '`
+    								    WHERE `id` = \'' . $database->real_escape_string($id) . '\';');
+    		
+    		$database->close();
+                
+    		return $result->festch_object('RestrictedPage');
     }
     
     /* 

@@ -76,7 +76,7 @@ if (Session::isAuthenticated()) {
 					if($compo->getId() == 3) {
 						$hasVotedMaps = false;
 
-						$options = VoteOptionHandler::getVoteOptionsForCompo($compo);
+						$options = VoteOptionHandler::getVoteOptionsByCompo($compo);
 						foreach ($options as $option) {
 							if (!VoteOptionHandler::isVoted($option, $match)) {
 								$mapData = array();

@@ -11,7 +11,7 @@ if (!isset($_GET['code'])) {
 		
 		$identifier = $_GET['identifier'];
 		
-		if (UserHandler::userExists($identifier)) {
+		if (UserHandler::hasUser($identifier)) {
 			$user = UserHandler::getUserByIdentifier($identifier);
 			
 			if ($user != null) {
@@ -34,7 +34,7 @@ if (!isset($_GET['code'])) {
 		$password = $_GET['password'];
 		$confirmPassword = $_GET['confirmpassword'];
 		
-		if (PasswordResetCodeHandler::existsPasswordResetCode($code)) {
+		if (PasswordResetCodeHandler::hasPasswordResetCode($code)) {
 			$user = PasswordResetCodeHandler::getUserFromPasswordResetCode($code);
 			
 			if ($password == $confirmPassword) {

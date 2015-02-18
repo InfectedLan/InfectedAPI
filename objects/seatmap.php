@@ -1,4 +1,5 @@
 <?php
+require_once 'handlers/seatmaphandler.php';
 require_once 'objects/object.php';
 
 class Seatmap extends Object {
@@ -17,6 +18,20 @@ class Seatmap extends Object {
 	 */
 	public function getBackgroundImage() {
 		return $this->backgroundImage;
+	}
+
+	/*
+	 * Sets the background image for this seatmap.
+	 */
+	public function setBackgroundImage($filename) {
+		SeatmapHandler::setBackground($this, $filename);
+	}
+
+	/*
+	 * Returns the event this seatmap is accosiated with.
+	 */
+	public function getEvent() {
+		return SeatmapHandler::getEvent($this);
 	}
 }
 ?>

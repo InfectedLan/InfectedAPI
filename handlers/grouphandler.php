@@ -150,7 +150,7 @@ class GroupHandler {
         
         $result = $database->query('SELECT `id` FROM `' . Settings::db_table_infected_crew_groups . '` 
                                     WHERE `leaderId` = \'' . $user->getId() . '\';');
-		$database->close();
+		    $database->close();
 
          return $result->num_rows > 0;
     }

@@ -14,7 +14,7 @@ if (Session::isAuthenticated()) {
 		$compo = CompoHandler::getCompo($_GET['id']);
 
 		if ($compo != null) {
-			foreach (MatchHandler::getMatchesForCompo($compo) as $match) {				
+			foreach (MatchHandler::getMatchesByCompo($compo) as $match) {				
 				$parentMatches = MatchHandler::getParents($match);
 				$parentMatchIds = array();
 				

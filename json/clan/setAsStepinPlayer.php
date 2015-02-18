@@ -18,7 +18,7 @@ if (Session::isAuthenticated()) {
 			
 			if ($clan != null) {
 				if ($user->equals($clan->getChief())) {
-					ClanHandler::setMemberStepinState($clan, $targetUser, ClanHandler::STATE_STEPIN_PLAYER);
+					ClanHandler::setMemberStepInState($clan, $targetUser, ClanHandler::STATE_STEPIN_PLAYER);
 					$result = true;
 				} else {
 					$message = '<p>Du er ikke chief.</p>';

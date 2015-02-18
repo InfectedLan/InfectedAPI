@@ -45,6 +45,9 @@ class TicketHandler {
         return $ticketList;
     }
 
+    /*
+     * Returns a list of all the tickets for a specified event.
+     */
     public static function getTicketsByEvent(Event $event) {
         $database = Database::open(Settings::db_name_infected_tickets);
 
@@ -213,20 +216,16 @@ class TicketHandler {
 
         return $result->num_rows > 0;
     }
-
-
-
-
-
-
-
     
-    public static function getTicketsSeatableByUser(User $user, Event $event) {
+    /*
+     * Returns true if the specified user is able to seat tickets.
+     */
+    public static function isTicketsSeatableByUser(User $user) {
         $database = Database::open(Settings::db_name_infected_tickets);
 
         $result = $database->query('SELECT * FROM `' . Settings::db_table_infected_tickets_tickets . '` 
 								    WHERE (`seaterId` = \'' . $user->getId() . '\' OR (`userId` = \'' . $user->getId() . '\' AND `seaterId` = \'0\'))
-                                    AND `eventId` = \'' . $event->getId() . '\';');
+                                    AND `eventId` = \'' . EventHandler::getCurrentEvent()->getId() . '\';');
     
 		$database->close();
 	
@@ -238,7 +237,5 @@ class TicketHandler {
 
         return $ticketList;
     }
-    
-    
 }
 ?>

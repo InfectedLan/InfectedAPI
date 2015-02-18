@@ -13,7 +13,7 @@ if (!Session::isAuthenticated()) {
 		$identifier = $_GET['identifier'];
 		$password = hash('sha256', $_GET['password']);
 		
-		if (UserHandler::userExists($identifier)) {
+		if (UserHandler::hasUser($identifier)) {
 			$user = UserHandler::getUserByIdentifier($identifier);
 			$storedPassword = $user->getPassword();
 			

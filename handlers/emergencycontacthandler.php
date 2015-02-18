@@ -55,7 +55,7 @@ class EmergencyContactHandler {
     /*
      * Returns true if the specified user has an emergency contact.
      */
-    public static function hasEmergencyContact(User $user) {
+    public static function hasEmergencyContactByUser(User $user) {
         $database = Database::open(Settings::db_name_infected);
         
         $result = $database->query('SELECT `id` FROM `'. Settings::db_table_infected_emergencycontacts . '`

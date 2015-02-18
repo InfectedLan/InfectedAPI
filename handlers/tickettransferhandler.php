@@ -8,6 +8,9 @@ require_once 'objects/ticket.php';
 require_once 'objects/user.php';
 
 class TicketTransferHandler {
+	/*
+	 * Get a ticket transer by the internal id.
+	 */
     public static function getTransferFromTicket(Ticket $ticket) {
         $database = Database::open(Settings::db_name_infected_tickets);
 
@@ -21,7 +24,9 @@ class TicketTransferHandler {
 		return $result->fetch_object('TicketTransfer');
     }
 
-    // Returns list of transfers that are eligible for reverting
+    /*
+     * Returns list of transfers that are eligible for reverting.
+     */
     public static function getRevertableTransfers(User $user) {
  		$wantedTimeLimit = time() - Settings::ticketTransferTime;
 
@@ -43,6 +48,9 @@ class TicketTransferHandler {
         return $transferList;
     }
     
+    /*
+     * Create a new ticket transfer.
+     */
     public static function createTransfer(Ticket $ticket, User $user, $revertable) {
         $database = Database::open(Settings::db_name_infected_tickets);
 
@@ -56,6 +64,9 @@ class TicketTransferHandler {
         $database->close();
     }
     
+    /*
+     * Freeze a specific ticketransfer.
+     */
     public static function freezeTransfer(TicketTransfer $ticketTransfer) {
         $database = Database::open(Settings::db_name_infected_tickets);
 

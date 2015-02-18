@@ -159,7 +159,7 @@ class User extends Object {
 	 * Returns true if the given users account is activated.
 	 */
 	public function isActivated() {
-		return !RegistrationCodeHandler::hasUserRegistrationCode($this);
+		return !RegistrationCodeHandler::hasRegistrationCodeByUser($this);
 	}
 	
 	/* 
@@ -205,14 +205,14 @@ class User extends Object {
 	 * Returns true if user has an emergency contact linked to this account.
 	 */
 	public function hasEmergencyContact() {
-		return EmergencyContactHandler::hasEmergencyContact($this);
+		return EmergencyContactHandler::hasEmergencyContactByUser($this);
 	}
 	
 	/*
 	 * Returns emergency contact linked to this account.
 	 */
 	public function getEmergencyContact() {
-		return EmergencyContactHandler::getEmergencyContactForUser($this);
+		return EmergencyContactHandler::getEmergencyContactByUser($this);
 	}
 	
 	/*

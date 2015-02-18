@@ -23,7 +23,7 @@ class VoteOptionHandler {
     /*
      * Get a vote option for a specified compo.
      */
-    public static function getVoteOptionsForCompo(Compo $compo) {
+    public static function getVoteOptionsByCompo(Compo $compo) {
         $database = Database::open(Settings::db_name_infected_compo);
         
         $result = $database->query('SELECT * FROM `' . Settings::db_table_infected_compo_voteoptions . '` 

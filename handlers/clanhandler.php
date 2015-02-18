@@ -65,26 +65,6 @@ class ClanHandler {
     }
 
     /*
-     * Get invites for specified clan.
-     */
-    public static function getInvites(Clan $clan) {
-        $database = Database::open(Settings::db_name_infected_compo);
-
-        $result = $database->query('SELECT * FROM `' . Settings::db_table_infected_compo_invites . '` 
-                                    WHERE `clanId` = \'' . $clan->getId() . '\';');
-
-        $database->close();
-
-        $inviteList = array();
-
-        while ($object = $result->fetch_object('Invite')) {
-            array_push($inviteList, $object);
-        }
-
-        return $inviteList;
-    }
-
-    /*
      * Get members for specified clan.
      */
     public static function getMembers(Clan $clan) {
@@ -130,7 +110,7 @@ class ClanHandler {
     /*
      * Get step in members for specified clan.
      */
-    public static function getStepinMembers(Clan $clan) {
+    public static function getStepInMembers(Clan $clan) {
         $database = Database::open(Settings::db_name_infected);
 
         $result = $database->query('SELECT * FROM `' . Settings::db_table_infected_users . '` 
@@ -189,19 +169,6 @@ class ClanHandler {
                                     SET `stepInId` = \'' . $database->real_escape_string($state) . '\'
                                     WHERE `clanId` = \'' . $clan->getId() . '\'
                                     AND `userId` = \'' . $user->getId() . '\';');
-
-        $database->close();
-    }
-
-    /*
-     * Invite the specified user to the specifed clan.
-     */
-    public static function inviteUser(Clan $clan, User $user) {
-        $database = Database::open(Settings::db_name_infected_compo);
-
-        $database->query('INSERT INTO `' . Settings::db_table_infected_compo_invites . '` (`userId`, `clanId`) 
-                          VALUES (\'' . $user->getId() . '\', 
-                                  \'' . $clan->getId() . '\');');
 
         $database->close();
     }

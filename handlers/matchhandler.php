@@ -14,13 +14,15 @@ require_once 'objects/event.php';
  * 
  * participantOfMatch should only have a clan linked if the clan is ready to play that match
  */
-
 class MatchHandler {
     //State of the 'participantOf' table responsible for the participants of a match
     const participantof_state_clan = 0;
     const participantof_state_winner = 1;
     const participantof_state_looser = 2;
 
+    /*
+     * Get a match by the internal id.
+     */
     public static function getMatch($id) {
         $database = Database::open(Settings::db_name_infected_compo);
         
@@ -32,43 +34,55 @@ class MatchHandler {
         return $result->fetch_object('Match');
     }
 
-    public static function createMatch($scheduledTime, $connectData, Compo $compo, $bracketOffset, Chat $chat, $bracket) {
+    /* 
+     * Returns a list of all matches.
+     */
+    public static function getMatches() {
         $database = Database::open(Settings::db_name_infected_compo);
-
-        $database->query('INSERT INTO `' . Settings::db_table_infected_compo_matches . '` (`scheduledTime`, `connectDetails`, `state`, `winner`, `compoId`, `bracketOffset`, `chatId`, `bracket`) 
-                          VALUES (\'' . $database->real_escape_string($scheduledTime) . '\', 
-                                  \'' . $database->real_escape_string($connectData) . '\', 
-                                  \'' . Match::STATE_READYCHECK . '\',
-                                  \'0\', 
-                                  \'' . $compo->getId() . '\',
-                                  \'' . $database->real_escape_string($bracketOffset) . '\',
-                                  \'' . $chat->getId() . '\',
-                                  \'' . $database->real_escape_string($bracket) . '\');');
-
-        $result = $database->query('SELECT * FROM `' . Settings::db_table_infected_compo_matches . '` 
-                                    WHERE `id` = \'' . $database->insert_id . '\';');
-
+        
+        $result = $database->query('SELECT * FROM `' . Settings::db_table_infected_compo_matches . '`;');
+        
         $database->close();
 
-        return $result->fetch_object('Match');
-    }
-
-    public static function addMatchParticipant($type, $participantId, Match $match) {
-        $database = Database::open(Settings::db_name_infected_compo);
-
-        $database->query('INSERT INTO `' . Settings::db_table_infected_compo_participantOfMatch . '` (`type`, `participantId`, `matchId`) 
-                          VALUES (\'' . $database->real_escape_string($type) . '\', 
-                                  \'' . $database->real_escape_string($participantId) . '\', 
-                                  \'' . $match->getId() . '\');');
-
-        if ($type != self::participantof_state_clan && 
-            $type != self::participantof_state_looser) {
-            $database->query('INSERT INTO `' . Settings::db_table_infected_compo_matchrelationships . '` (`fromCompo`, `toCompo`) 
-                              VALUES (\'' . $database->real_escape_string($participantId) . '\', 
-                                      \'' . $match->getId() . '\');');
+        $matchList = array();
+        
+        while ($object = $result->fetch_object('Match')) {
+            array_push($matchList, $object);
         }
 
+        return $matchList;
+    }
+
+    // Unstable if user has multiple matches happening
+    public static function getMatchByUser(User $user, Event $event) {
+        $clanList = ClanHandler::getClansByUser($user, $event);
+        
+        foreach ($clanList as $clan) {
+            $match = self::getMatchByClan($clan);
+            
+            if ($match != null) {
+                return $match;
+            }
+        }
+    }
+
+    public static function getMatchByClan(Clan $clan) {
+        $database = Database::open(Settings::db_name_infected_compo);
+
+        $result = $database->query('SELECT * FROM `' . Settings::db_table_infected_compo_matches . '` 
+                                    WHERE `id` = (SELECT `matchId` FROM `' . Settings::db_table_infected_compo_participantOfMatch . '` 
+                                                  WHERE `type` = \'' . Settings::compo_match_participant_type_clan . '\' 
+                                                  AND `participantId` = \'' . $clan->getId() . '\');');
+        
         $database->close();
+        
+        // TODO: Do this stuff in SQL query instead?
+        while ($object = $result->fetch_object('Match')) {
+            if ($object->getWinner() == 0 && 
+                $object->getScheduledTime() < time()) {
+                return $object;
+            }
+        }
     }
 
     public static function getPendingMatches(Compo $compo) {
@@ -133,40 +147,64 @@ class MatchHandler {
         return $matchList;
     }
 
-    public static function getMatchForClan(Clan $clan) {
+    public static function getMatchesByCompo(Compo $compo) {
         $database = Database::open(Settings::db_name_infected_compo);
 
         $result = $database->query('SELECT * FROM `' . Settings::db_table_infected_compo_matches . '` 
-                                    WHERE `id` = (SELECT `matchId` FROM `' . Settings::db_table_infected_compo_participantOfMatch . '` 
-                                                  WHERE `type` = \'' . Settings::compo_match_participant_type_clan . '\' 
-                                                  AND `participantId` = \'' . $clan->getId() . '\');');
-        
+                                    WHERE `compoId` = \'' . $compo->getId() . '\';');
+
         $database->close();
-        
-        // TODO: Do this stuff in SQL query instead?
+
+        $matchList = array();
+
         while ($object = $result->fetch_object('Match')) {
-            if ($object->getWinner() == 0 && 
-                $object->getScheduledTime() < time()) {
-                return $object;
-            }
+            array_push($matchList, $object);
         }
+
+        return $matchList;
     }
 
-    public static function hasClanMatch(Clan $clan) {
-        return self::getMatchForClan($clan) != null;
+    public static function hasMatch(Clan $clan) {
+        return self::getMatchByClan($clan) != null;
     }
 
-    // Unstable if user has multiple matches happening
-    public static function getMatchForUser(User $user, Event $event) {
-        $clanList = ClanHandler::getClansForUser($user, $event);
-        
-        foreach ($clanList as $clan) {
-            $match = self::getMatchForClan($clan);
-            
-            if ($match != null) {
-                return $match;
-            }
+    public static function createMatch($scheduledTime, $connectData, Compo $compo, $bracketOffset, Chat $chat, $bracket) {
+        $database = Database::open(Settings::db_name_infected_compo);
+
+        $database->query('INSERT INTO `' . Settings::db_table_infected_compo_matches . '` (`scheduledTime`, `connectDetails`, `state`, `winner`, `compoId`, `bracketOffset`, `chatId`, `bracket`) 
+                          VALUES (\'' . $database->real_escape_string($scheduledTime) . '\', 
+                                  \'' . $database->real_escape_string($connectData) . '\', 
+                                  \'' . Match::STATE_READYCHECK . '\',
+                                  \'0\', 
+                                  \'' . $compo->getId() . '\',
+                                  \'' . $database->real_escape_string($bracketOffset) . '\',
+                                  \'' . $chat->getId() . '\',
+                                  \'' . $database->real_escape_string($bracket) . '\');');
+
+        $result = $database->query('SELECT * FROM `' . Settings::db_table_infected_compo_matches . '` 
+                                    WHERE `id` = \'' . $database->insert_id . '\';');
+
+        $database->close();
+
+        return $result->fetch_object('Match');
+    }
+
+    public static function addMatchParticipant($type, $participantId, Match $match) {
+        $database = Database::open(Settings::db_name_infected_compo);
+
+        $database->query('INSERT INTO `' . Settings::db_table_infected_compo_participantOfMatch . '` (`type`, `participantId`, `matchId`) 
+                          VALUES (\'' . $database->real_escape_string($type) . '\', 
+                                  \'' . $database->real_escape_string($participantId) . '\', 
+                                  \'' . $match->getId() . '\');');
+
+        if ($type != self::participantof_state_clan && 
+            $type != self::participantof_state_looser) {
+            $database->query('INSERT INTO `' . Settings::db_table_infected_compo_matchrelationships . '` (`fromCompo`, `toCompo`) 
+                              VALUES (\'' . $database->real_escape_string($participantId) . '\', 
+                                      \'' . $match->getId() . '\');');
         }
+
+        $database->close();
     }
 
     public static function setWinner(Match $match, Clan $clan) {
@@ -335,7 +373,7 @@ class MatchHandler {
         return $matchList;
     }
 
-    //Checks if the match can run(If we have enough participants. Returns false if we have to wait for earlier matches to complete)
+    // Checks if the match can run(If we have enough participants. Returns false if we have to wait for earlier matches to complete)
     public static function isReady(Match $match) {
         $database = Database::open(Settings::db_name_infected_compo);
 
@@ -410,23 +448,6 @@ class MatchHandler {
         $database->close();
 
         return true;
-    }
-
-    public static function getMatchesForCompo(Compo $compo) {
-        $database = Database::open(Settings::db_name_infected_compo);
-
-        $result = $database->query('SELECT * FROM `' . Settings::db_table_infected_compo_matches . '` 
-                                    WHERE `compoId` = \'' . $compo->getId() . '\';');
-
-        $database->close();
-
-        $matchList = array();
-
-        while ($object = $result->fetch_object('Match')) {
-            array_push($matchList, $object);
-        }
-
-        return $matchList;
     }
 }
 ?>

@@ -13,10 +13,7 @@ if (Session::isAuthenticated()) {
 		if (isset($_GET['name']) &&
 			isset($_GET['tag']) &&
 			isset($_GET['compo']) ) {
-			$clanId = ClanHandler::registerClan($_GET['name'], 
-												$_GET['tag'], 
-												$_GET['compo'], 
-												$user);
+			$clanId = ClanHandler::registerClan($_GET['name'], $_GET['tag'], $_GET['compo'], $user);
 
 			$result = true;
 		} else {

@@ -37,6 +37,9 @@ class UserPermissionHandler {
         return $result->num_rows > 0;
 	}
     
+    /* 
+     * Returns true if the specified user has any permissions.
+     */
 	public static function hasUserPermissions(User $user) {
         $database = Database::open(Settings::db_name_infected);
         
@@ -48,6 +51,9 @@ class UserPermissionHandler {
         return $result->num_rows > 0;
     }
 	
+    /* 
+     * Returns a list of permissions for the specified user.
+     */
     public static function getUserPermissions(User $user) {
         $database = Database::open(Settings::db_name_infected);
         
@@ -66,6 +72,9 @@ class UserPermissionHandler {
         return $permissionList;
     }
     
+    /* 
+     * Create a new user permission.
+     */
     public static function createUserPermission(User $user, Permission $permission) {
         if (!self::hasUserPermission($user, $permission)) {
             $database = Database::open(Settings::db_name_infected);
@@ -79,6 +88,9 @@ class UserPermissionHandler {
         }
     }
     
+    /* 
+     * Remove a user permission.
+     */
     public static function removeUserPermission(User $user, Permission $permission) {
         $database = Database::open(Settings::db_name_infected);
         
@@ -89,6 +101,9 @@ class UserPermissionHandler {
         $database->close();
     }
     
+    /* 
+     * Removes all permissions for the specified user.
+     */
     public static function removeUserPermissions(User $user) {
         $database = Database::open(Settings::db_name_infected);
         

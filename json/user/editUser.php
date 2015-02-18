@@ -49,7 +49,7 @@ if (Session::isAuthenticated()) {
 					$address = ucfirst($_GET['address']);
 					$postalcode = $_GET['postalcode'];
 					$nickname = !empty($_GET['nickname']) ? $_GET['nickname'] : $editUser->getUsername();
-					$emergencycontactphone = isset($_GET['emergencycontactphone']) ? $_GET['emergencycontactphone'] : 0;
+					$emergencyContactPhone = isset($_GET['emergencycontactphone']) ? $_GET['emergencycontactphone'] : 0;
 					
 					if ($editUser != null) {
 						if ($username != $editUser->getUsername() && UserHandler::userExists($username)) {
@@ -74,10 +74,10 @@ if (Session::isAuthenticated()) {
 							$message = '<p>Du må skrive inn et gyldig postnummer.</p>';
 						} else if (!preg_match('/^[a-zæøåA-ZÆØÅ0-9_-]{2,16}$/', $nickname)) {
 							$message = '<p>Kallenavnet du skrev inn er ikke gyldig, det må bestå av minst 2 tegn og max 16 tegn.</p>';
-						} else if (date_diff(date_create($birthdate), date_create('now'))->y < 18 && (!isset($_GET['emergencycontactphone']) || !is_numeric($emergencycontactphone) || strlen($emergencycontactphone) != 8)) {
-							if (!is_numeric($emergencycontactphone)) {
+						} else if (date_diff(date_create($birthdate), date_create('now'))->y < 18 && (!isset($_GET['emergencycontactphone']) || !is_numeric($emergencyContactPhone) || strlen($emergencyContactPhone) != 8)) {
+							if (!is_numeric($emergencyContactPhone)) {
 								$message = '<p>Foresattes telefonnummer må være et tall!</p>';
-							} else if (strlen($emergencycontactphone) != 8) {
+							} else if (strlen($emergencyContactPhone) != 8) {
 								$message = '<p>Foresattes telefonnummer er ikke 8 siffer langt!</p>';
 							}
 							
@@ -96,8 +96,8 @@ if (Session::isAuthenticated()) {
 													$nickname);
 							
 							if (EmergencyContactHandler::hasEmergencyContact($editUser) || 
-								isset($_GET['emergencycontactphone']) && is_numeric($emergencycontactphone)) {
-								EmergencyContactHandler::createEmergencyContact($editUser, $emergencycontactphone);
+								isset($_GET['emergencycontactphone']) && is_numeric($emergencyContactPhone)) {
+								EmergencyContactHandler::createEmergencyContact($editUser, $emergencyContactPhone);
 							}
 							
 							// Update the user instance form database.

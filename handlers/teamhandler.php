@@ -22,7 +22,7 @@ class TeamHandler {
     }
     
     /* 
-     * Get a group by user.
+     * Returns the group of the specified user.
      */
     public static function getTeamByUser(User $user) {
         $database = Database::open(Settings::db_name_infected_crew);
@@ -40,7 +40,9 @@ class TeamHandler {
         }
     }
     
-    /* Get an array of all teams */
+    /* 
+     * Returns a list of all teams.
+     */
     public static function getTeams() {
         $database = Database::open(Settings::db_name_infected_crew);
         
@@ -57,7 +59,9 @@ class TeamHandler {
         return $teamList;
     }
     
-    /* Get an array of all teams */
+    /* 
+     * Returns a list of all teams in the specified group.
+     */
     public static function getTeamsByGroup(Group $group) {
         $database = Database::open(Settings::db_name_infected_crew);
 
@@ -75,7 +79,9 @@ class TeamHandler {
         return $teamList;
     }
     
-    /* Create a new team */
+    /* 
+     * Create a new team
+     */
     public static function createTeam(Event $event, Group $group, $name, $title, $description, $leader) {
         $database = Database::open(Settings::db_name_infected_crew);
         

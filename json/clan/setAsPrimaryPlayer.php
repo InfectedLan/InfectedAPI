@@ -22,7 +22,7 @@ if (Session::isAuthenticated()) {
 					$currentMainPlayers = ClanHandler::getPlayingMembers($clan);
 
 					if (count($currentMainPlayers) < $compo->getTeamSize()) {
-						ClanHandler::setMemberStepinState($clan, $targetUser, ClanHandler::STATE_MAIN_PLAYER);
+						ClanHandler::setMemberStepInState($clan, $targetUser, ClanHandler::STATE_MAIN_PLAYER);
 						$result = true;
 					} else {
 						$message = '<p>Det er allerede for mange spillere som deltar!</p>';

@@ -23,9 +23,9 @@ class UserHandler {
         $result = $database->query('SELECT * FROM `' . Settings::db_table_infected_users . '` 
                                     WHERE `id` = \'' . $database->real_escape_string($id) . '\';');
         
-		$database->close();
+		    $database->close();
 		
-		return $result->fetch_object('User');
+		    return $result->fetch_object('User');
     }
     
     /* 
@@ -34,7 +34,7 @@ class UserHandler {
     public static function getUserByIdentifier($identifier) {
         $database = Database::open(Settings::db_name_infected);
         
-		$safeIdentifier = $database->real_escape_string($identifier);
+		    $safeIdentifier = $database->real_escape_string($identifier);
 		
         $result = $database->query('SELECT * FROM `' . Settings::db_table_infected_users . '` 
                                     WHERE `username` = \'' . $safeIdentifier . '\' 
@@ -43,7 +43,7 @@ class UserHandler {
         
         $database->close();
         
-		return $result->fetch_object('User');
+		    return $result->fetch_object('User');
     }
     
     /* 
@@ -73,9 +73,9 @@ class UserHandler {
         $database = Database::open(Settings::db_name_infected);
         
         $result = $database->query('SELECT DISTINCT `' . Settings::db_table_infected_users . '`.* FROM `' . Settings::db_table_infected_users . '`
-								    LEFT JOIN `' . Settings::db_table_infected_userpermissions . '` ON `' . Settings::db_table_infected_users . '`.`id` = `' . Settings::db_table_infected_userpermissions . '`.`userId`
-								    WHERE `' . Settings::db_table_infected_userpermissions . '`.`id` IS NOT NULL
-								    ORDER BY `' . Settings::db_table_infected_users . '`.`firstname` ASC;');
+                								    LEFT JOIN `' . Settings::db_table_infected_userpermissions . '` ON `' . Settings::db_table_infected_users . '`.`id` = `' . Settings::db_table_infected_userpermissions . '`.`userId`
+                								    WHERE `' . Settings::db_table_infected_userpermissions . '`.`id` IS NOT NULL
+                								    ORDER BY `' . Settings::db_table_infected_users . '`.`firstname` ASC;');
 
         $database->close();
         
@@ -97,7 +97,7 @@ class UserHandler {
         $result = $database->query('SELECT `' . Settings::db_table_infected_users . '`.* FROM `' . Settings::db_table_infected_users . '`
                                     LEFT JOIN `' . Settings::db_name_infected_crew . '`.`' . Settings::db_table_infected_crew_memberof . '` ON `' . Settings::db_table_infected_users . '`.`id` = `' . Settings::db_table_infected_crew_memberof . '`.`userId`
                                     WHERE `eventId` = \'' . EventHandler::getCurrentEvent()->getId() . '\'
-								    AND `' . Settings::db_table_infected_crew_memberof . '`.`groupId` IS NOT NULL 
+								                    AND `' . Settings::db_table_infected_crew_memberof . '`.`groupId` IS NOT NULL 
                                     ORDER BY `' . Settings::db_table_infected_users . '`.`firstname` ASC;');
 
         $database->close();
@@ -120,7 +120,7 @@ class UserHandler {
         $result = $database->query('SELECT `' . Settings::db_table_infected_users . '`.* FROM `' . Settings::db_table_infected_users . '`
                                     LEFT JOIN `' . Settings::db_name_infected_crew . '`.`' . Settings::db_table_infected_crew_memberof . '` ON `' . Settings::db_table_infected_users . '`.`id` = `' . Settings::db_table_infected_crew_memberof . '`.`userId`
                                     WHERE `' . Settings::db_table_infected_crew_memberof . '`.`eventId` IS NULL
-								    OR `' . Settings::db_table_infected_crew_memberof . '`.`eventId` != \'' . EventHandler::getCurrentEvent()->getId() . '\'
+								                    OR `' . Settings::db_table_infected_crew_memberof . '`.`eventId` != \'' . EventHandler::getCurrentEvent()->getId() . '\'
                                     ORDER BY `' . Settings::db_table_infected_users . '`.`firstname` ASC;');
         
 		$database->close();
@@ -141,10 +141,10 @@ class UserHandler {
         $database = Database::open(Settings::db_name_infected);
         
 		$result = $database->query('SELECT DISTINCT `' . Settings::db_table_infected_users . '`.* FROM `' . Settings::db_table_infected_users . '`
-								    LEFT JOIN `' . Settings::db_name_infected_tickets . '`.`' . Settings::db_table_infected_tickets_tickets . '` ON `' . Settings::db_table_infected_users . '`.`id` = `' . Settings::db_table_infected_tickets_tickets . '`.`userId`
-								    WHERE `' . Settings::db_table_infected_tickets_tickets . '`.`eventId` = ' . $event->getId() . '
-								    AND `' . Settings::db_table_infected_tickets_tickets . '`.`id` IS NOT NULL
-								    ORDER BY `' . Settings::db_table_infected_users . '`.`firstname` ASC;');
+            								    LEFT JOIN `' . Settings::db_name_infected_tickets . '`.`' . Settings::db_table_infected_tickets_tickets . '` ON `' . Settings::db_table_infected_users . '`.`id` = `' . Settings::db_table_infected_tickets_tickets . '`.`userId`
+            								    WHERE `' . Settings::db_table_infected_tickets_tickets . '`.`eventId` = ' . $event->getId() . '
+            								    AND `' . Settings::db_table_infected_tickets_tickets . '`.`id` IS NOT NULL
+            								    ORDER BY `' . Settings::db_table_infected_users . '`.`firstname` ASC;');
 		
         $database->close();
                                       
@@ -161,42 +161,42 @@ class UserHandler {
      * Get a list of all users which was a participant of an event in the given timeperiod.
      */
     public static function getPreviousParticipantUsers() {  
-		$currentEvent = EventHandler::getCurrentEvent();
-		$previousEvent = EventHandler::getEvent($currentEvent->getId() - 3);
-		$userList = array();
-	   
-		// Just checking that we're not out of bounds in this array.
-		if (count(EventHandler::getEvents()) >= $previousEvent->getId()) {
-			$database = Database::open(Settings::db_name_infected);
-			
-			$result = $database->query('SELECT DISTINCT `' . Settings::db_table_infected_users . '`.* FROM `' . Settings::db_table_infected_users . '`
-									    LEFT JOIN `' . Settings::db_name_infected_tickets . '`.`' . Settings::db_table_infected_tickets_tickets . '` ON `' . Settings::db_table_infected_users . '`.`id` = `' . Settings::db_table_infected_tickets_tickets . '`.`userId`
-									    WHERE `' . Settings::db_table_infected_tickets_tickets . '`.`eventId` >= ' . $previousEvent->getId() . '
-									    AND `' . Settings::db_table_infected_tickets_tickets . '`.`eventId` <= ' . $currentEvent->getId() . '
-									    ORDER BY `' . Settings::db_table_infected_users . '`.`firstname` ASC;');
-			
-			$database->close();
-			
+    		$currentEvent = EventHandler::getCurrentEvent();
+    		$previousEvent = EventHandler::getEvent($currentEvent->getId() - 3);
+    		$userList = array();
+    	   
+    		// Just checking that we're not out of bounds in this array.
+    		if (count(EventHandler::getEvents()) >= $previousEvent->getId()) {
+      			$database = Database::open(Settings::db_name_infected);
+      			
+      			$result = $database->query('SELECT DISTINCT `' . Settings::db_table_infected_users . '`.* FROM `' . Settings::db_table_infected_users . '`
+                  									    LEFT JOIN `' . Settings::db_name_infected_tickets . '`.`' . Settings::db_table_infected_tickets_tickets . '` ON `' . Settings::db_table_infected_users . '`.`id` = `' . Settings::db_table_infected_tickets_tickets . '`.`userId`
+                  									    WHERE `' . Settings::db_table_infected_tickets_tickets . '`.`eventId` >= ' . $previousEvent->getId() . '
+                  									    AND `' . Settings::db_table_infected_tickets_tickets . '`.`eventId` <= ' . $currentEvent->getId() . '
+                  									    ORDER BY `' . Settings::db_table_infected_users . '`.`firstname` ASC;');
+      			
+      			$database->close();
+    			
             while ($object = $result->fetch_object('User')) {
                 array_push($userList, $object);
             }
-		}
-		
-		return $userList;
+    		}
+    		
+    		return $userList;
     }
     
-	/* 
+    /* 
      * Check if a user with given username or email already exists.
      */
-    public static function userExists($identifier) {
+    public static function hasUser($identifier) {
         $database = Database::open(Settings::db_name_infected);
 
-		$safeIdentifier = $database->real_escape_string($identifier);
+		    $safeIdentifier = $database->real_escape_string($identifier);
 
         $result = $database->query('SELECT `id` FROM `' . Settings::db_table_infected_users . '` 
                                     WHERE `username` = \'' . $safeIdentifier . '\' 
-								    OR `email` = \'' . $safeIdentifier . '\'
-								    OR `phone` = \'' . $safeIdentifier . '\';');
+                								    OR `email` = \'' . $safeIdentifier . '\'
+                								    OR `phone` = \'' . $safeIdentifier . '\';');
         
         $database->close();
                 
@@ -220,12 +220,12 @@ class UserHandler {
                                   \'' . $database->real_escape_string($phone) . '\', 
                                   \'' . $database->real_escape_string($address) . '\', 
                                   \'' . $database->real_escape_string($postalCode) . '\',
-							      \'' . $database->real_escape_string($nickname) . '\',
+                                  \'' . $database->real_escape_string($nickname) . '\',
                                   \'' . date('Y-m-d H:i:s') . '\');');
          
         $database->close();
 		
-		return self::getUser($database->insert_id);
+		    return self::getUser($database->insert_id);
     }
     
     /* 
@@ -264,17 +264,17 @@ class UserHandler {
             $database->close();
             
             // Remove users emergencycontact.
-            if (EmergencyContactHandler::hasEmergencyContact($user)) {
+            if (EmergencyContactHandler::hasEmergencyContactByUser($user)) {
                 EmergencyContactHandler::removeEmergenctContact($user);
             }
             
             // Remove users passwordresetcode.
-            if (PasswordResetCodeHandler::hasPasswordResetCode($user)) {
+            if (PasswordResetCodeHandler::hasPasswordResetCodeByUser($user)) {
                 PasswordResetCodeHandler::removeUserPasswordResetCode($user);
             }
             
             // Remove users registrationscode.
-            if (RegistrationCodeHandler::hasUserRegistrationCode($user)) {
+            if (RegistrationCodeHandler::hasRegistrationCodeByUser($user)) {
                 RegistrationCodeHandler::removeUserRegistrationCode($user);
             }
             
@@ -319,26 +319,26 @@ class UserHandler {
     public static function search($query) {
         $database = Database::open(Settings::db_name_infected);
 		
-		// Sanitize the input and split the query string into an array.
-		$queryList = explode(' ', $query);
-		$wordList = array();
-		
-		// Build the word list, and add "+" and "*" to the start and end of every word.
-		foreach ($queryList as $value) {
-			array_push($wordList, '+' . $value . '*');
-		}
-		
-		// Query the database using a Full-Text Search.
-		$result = $database->query('SELECT * FROM `' . Settings::db_table_infected_users . '` 
-								    WHERE MATCH (`firstname`, `lastname`, `username`, `email`, `nickname`)
-								    AGAINST (\'' . $database->real_escape_string(implode(' ', $wordList)) . '\' IN BOOLEAN MODE)
-								    LIMIT 15;');
+    		// Sanitize the input and split the query string into an array.
+    		$queryList = explode(' ', $query);
+    		$wordList = array();
+    		
+    		// Build the word list, and add "+" and "*" to the start and end of every word.
+    		foreach ($queryList as $value) {
+    			array_push($wordList, '+' . $value . '*');
+    		}
+    		
+    		// Query the database using a Full-Text Search.
+    		$result = $database->query('SELECT * FROM `' . Settings::db_table_infected_users . '` 
+                								    WHERE MATCH (`firstname`, `lastname`, `username`, `email`, `nickname`)
+                								    AGAINST (\'' . $database->real_escape_string(implode(' ', $wordList)) . '\' IN BOOLEAN MODE)
+                								    LIMIT 15;');
         
         $database->close();
         
         $userList = array();
 		
-		while ($object = $result->fetch_object('User')) {
+		    while ($object = $result->fetch_object('User')) {
             array_push($userList, $object);
         }
         
