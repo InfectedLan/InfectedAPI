@@ -70,8 +70,9 @@ class UserPermissionHandler {
         if (!self::hasUserPermission($user, $permission)) {
             $database = Database::open(Settings::db_name_infected);
         
-            $database->query('INSERT INTO `' . Settings::db_table_infected_userpermissions . '` (`userId`, `permissionId`) 
-                              VALUES (\'' . $user->getId() . '\', 
+            $database->query('INSERT INTO `' . Settings::db_table_infected_userpermissions . '` (`eventId`, `userId`, `permissionId`) 
+                              VALUES (\'' . EventHandler::getCurrentEvent()->getId() . '\', 
+                                      \'' . $user->getId() . '\', 
                                       \'' . $permission->getId() . '\')');
             
             $database->close();
