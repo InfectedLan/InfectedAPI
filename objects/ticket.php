@@ -84,6 +84,13 @@ class Ticket extends EventObject {
 		return $user->equals($this->getUser()) && $this->getSeater() == null ||
 			   $user->equals($this->getSeater());
 	}
+
+	/*
+	 * Checks in this ticket.
+	 */
+	public function checkedIn() {
+		return TicketHandler::checkedInTicket($this);
+	}
 	
 	/*
 	 * Returns a human readable representation of the ticket
