@@ -4,7 +4,8 @@ require_once 'handlers/citydictionary.php';
 $result = false;
 $message = null;
 
-if (isset($_GET['postalcode'])) {
+if (isset($_GET['postalcode']) &&
+	is_numeric($_GET['postalcode'])) {
 	$city = CityDictionary::getCity($_GET['postalcode']);
 	
 	if ($city != null) {

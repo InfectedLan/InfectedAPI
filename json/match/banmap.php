@@ -11,10 +11,13 @@ $clanId = 0;
 if (Session::isAuthenticated()) {
 	$user = Session::getCurrentUser();
 
-	if (isset($_GET['id']) && isset($_GET['matchId']) ) {
+	if (isset($_GET['id']) && 
+		isset($_GET['matchId']) &&
+		is_numeric($_GET['id']) &&
+		is_numeric($_GET['matchId'])) {
 		$match = MatchHandler::getMatch($_GET['matchId']);
 		
-		if (isset($match)) {
+		if ($match != null) {
 			$numBanned = VoteHandler::getNumBanned($match->getId());
 			$turn = VoteHandler::getCurrentBanner($numBanned);
 			
@@ -28,8 +31,6 @@ if (Session::isAuthenticated()) {
 					if ($voteOption != null) {
 						if ($voteOption->getCompo()->equals($match->getCompo())) {
 							VoteHandler::banMap($voteOption, $match->getId());
-							//Check if state should be switched
-							$numBanned = VoteHandler::getNumBanned($match->getId());
 							
 							if ($numBanned == 6) {
 								$match->setState(2);

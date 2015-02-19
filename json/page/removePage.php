@@ -15,7 +15,7 @@ if (Session::isAuthenticated()) {
 			$page = PageHandler::getPage($_GET['id']);
 
 			if ($page != null) {
-				PageHandler::removePage($_GET['id']);
+				PageHandler::removePage($page);
 				$result = true;
 			} else {
 				$message = '<p>Siden finnes ikke.</p>';

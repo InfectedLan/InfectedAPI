@@ -3,6 +3,7 @@ require_once 'session.php';
 require_once 'handlers/grouphandler.php';
 require_once 'handlers/teamhandler.php';
 require_once 'handlers/eventhandler.php';
+require_once 'handlers/userhandler.php';
 
 $result = false;
 $message = null;
@@ -24,10 +25,14 @@ if (Session::isAuthenticated()) {
 			$name = strtolower(str_replace(' ', '-', $_GET['title']));
 			$title = $_GET['title'];
 			$description = $_GET['description'];
-			$leader = $_GET['leader'];
+			$leaderUser = UserHandler::getUser($_GET['leader']);
 			
-			TeamHandler::createTeam(EventHandler::getCurrentEvent(), $group, $name, $title, $description, $leader);
-			$result = true;
+			if ($group != null) {
+				TeamHandler::createTeam(EventHandler::getCurrentEvent(), $group, $name, $title, $description, $leaderUser);
+				$result = true;
+			} else {
+				$message = '<p>Gruppen finnes ikke.</p>';
+			}
 		} else {
 			$message = '<p>Du har ikke fyllt ut alle feltene!</p>';
 		}

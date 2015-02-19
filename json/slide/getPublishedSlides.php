@@ -1,10 +1,9 @@
 <?php
 require_once 'handlers/slidehandler.php';
+	
+$slideList = array();
 
-$slideList = SlideHandler::getPublishedSlides();	
-$slides = array();
-
-foreach ($slideList as $slide) {
+foreach (SlideHandler::getPublishedSlides() as $slide) {
 	array_push($slides, array('id' => $slide->getId(),
 							  'name' => $slide->getName(),
 							  'title' => $slide->getTitle(),
@@ -14,5 +13,5 @@ foreach ($slideList as $slide) {
 							  'isPublished' => $slide->isPublished()));
 }
 
-echo json_encode(array('slides' => $slides));
+echo json_encode(array('slideList' => $slideList));
 ?>

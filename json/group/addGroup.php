@@ -21,10 +21,10 @@ if (Session::isAuthenticated()) {
 			$name = strtolower(str_replace(' ', '-', $_GET['title']));
 			$title = $_GET['title'];
 			$description = $_GET['description'];
-			$leader = $_GET['leader'];
-			$coleader = $_GET['leader'];
+			$leaderUser = UserHandler::getUser($_GET['leader']);
+			$coleaderUser = UserHandler::getUser($_GET['leader']);
 			
-			GroupHandler::createGroup(EventHandler::getCurrentEvent(), $name, $title, $description, $leader, $coleader);
+			GroupHandler::createGroup(EventHandler::getCurrentEvent(), $name, $title, $description, $leaderUser, $coleaderUser);
 			$result = true;
 		} else {
 			$message = '<p>Du har ikke fyllt ut alle feltene!</p>';

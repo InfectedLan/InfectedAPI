@@ -13,15 +13,13 @@ if (Session::isAuthenticated()) {
 		if (isset($_GET['id']) &&
 			is_numeric($_GET['id'])) {
 			$group = GroupHandler::getGroup($_GET['id']);
-			$memberList = $group->getMembers();
-			
-			foreach ($memberList as $member) {
-				if (!$user->equals($member)) {
-					GroupHandler::removeUserFromGroup($member);
-				}
+
+			if ($group != null) {
+				GroupHandler::removeUsersFromGroup($group);
+				$result = true;
+			} else {
+				$message = '<p>Gruppen finnes ikke.</p>';
 			}
-			
-			$result = true;
 		} else {
 			$message = '<p>Ingen gruppe spesifisert.</p>';
 		}

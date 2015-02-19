@@ -41,7 +41,7 @@ class Compo extends EventObject {
 	 * Returns the registration deadline of this compo.
 	 */
 	public function getRegistrationDeadline() {
-		return $this->registrationDeadline;
+		return strtotime($this->registrationDeadline);
 	}
 
 	/*
@@ -55,7 +55,7 @@ class Compo extends EventObject {
 	 * Return a list of all matches for this compo.
 	 */
 	public function getMatches() {
-		return MatchHandler::getMatchesForCompo($this);
+		return MatchHandler::getMatchesByCompo($this);
 	}
 }
 ?>

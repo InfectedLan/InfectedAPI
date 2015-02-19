@@ -18,7 +18,7 @@ class RestrictedPageHandler {
     		
     		$database->close();
                 
-    		return $result->festch_object('RestrictedPage');
+    		return $result->fetch_object('RestrictedPage');
     }
     
     /* 
@@ -142,7 +142,7 @@ class RestrictedPageHandler {
     /* 
      * Create a new page.
      */
-    public static function createPage($name, $title, $content, Group $group, Team $team) {
+    public static function createPage($name, $title, $content, Group $group, Team $team = null) {
         $database = Database::open(Settings::db_name_infected_crew);
         
         $database->query('INSERT INTO `' . Settings::db_table_infected_crew_pages . '` (`name`, `title`, `content`, `groupId`, `teamId`) 
@@ -158,7 +158,7 @@ class RestrictedPageHandler {
 	  /*
      * Update a page.
      */
-    public static function updatePage(RestrictedPage $page, $title, $content, Group $group, Team $team) {
+    public static function updatePage(RestrictedPage $page, $title, $content, Group $group, Team $team = null) {
         $database = Database::open(Settings::db_name_infected_crew);
         
         $database->query('UPDATE `' . Settings::db_table_infected_crew_pages . '` 

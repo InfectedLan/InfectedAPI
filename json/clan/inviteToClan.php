@@ -14,14 +14,11 @@ if (Session::isAuthenticated()) {
 		$clan = ClanHandler::getClan($_GET['id']);
 
 		if ($user->equals($clan->getChief())) {
-			$invite = UserHandler::getUser($_GET['user']);
+			$inviteUser = UserHandler::getUser($_GET['user']);
 
-			if ($invite != null) {
-				if ($invite->isEligibleForCompos()) {
-					$compo = ClanHandler::getCompo($clan);
-					$inClan = count(ClanHandler::getInvitesByClan($clan)) + count(ClanHandler::getMembers($clan));
-
-					ClanHandler::inviteUser($clan, $invite);
+			if ($inviteUser != null) {
+				if ($inviteUser->isEligibleForCompos()) {
+					$clan->invite($inviteUser);
 					$result = true;
 				} else {
 					$message = '<p>Du kan ikke invitere denne brukeren.</p>';

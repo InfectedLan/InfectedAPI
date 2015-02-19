@@ -54,8 +54,8 @@ class MatchHandler {
     }
 
     // Unstable if user has multiple matches happening
-    public static function getMatchByUser(User $user, Event $event) {
-        $clanList = ClanHandler::getClansByUser($user, $event);
+    public static function getMatchByUser(User $user) {
+        $clanList = ClanHandler::getClansByUser($user);
         
         foreach ($clanList as $clan) {
             $match = self::getMatchByClan($clan);
@@ -164,7 +164,7 @@ class MatchHandler {
         return $matchList;
     }
 
-    public static function hasMatch(Clan $clan) {
+    public static function hasMatchByClan(Clan $clan) {
         return self::getMatchByClan($clan) != null;
     }
 
@@ -355,7 +355,7 @@ class MatchHandler {
         return $jsonArray;
     }
 
-    public static function getParents(Match $match) {
+    public static function getMatchParents(Match $match) {
         $database = Database::open(Settings::db_name_infected_compo);
 
         $result = $database->query('SELECT * FROM `' . Settings::db_table_infected_compo_matches . '` 

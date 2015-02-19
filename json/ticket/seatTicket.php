@@ -20,7 +20,7 @@ if(Session::isAuthenticated()) {
 					$user->hasPermission('chief.tickets') ||
 					$ticket->canSeat($user)) {
 					
-					if (!SeatHandler::hasTicket($seat)) {
+					if (!$seat->hasTicket()) {
 						if ($seat->getEvent()->equals($ticket->getEvent())) {
 							TicketHandler::updateTicketSeat($ticket, $seat);
 							$result = true;

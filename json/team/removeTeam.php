@@ -11,14 +11,11 @@ if (Session::isAuthenticated()) {
 	
 	if ($user->hasPermission('*') ||
 		$user->hasPermission('chief.teams')) {
-		if (isset($_GET['groupId']) &&
-			isset($_GET['teamId']) &&
-			is_numeric($_GET['groupId']) &&
+		if (isset($_GET['teamId']) &&
 			is_numeric($_GET['teamId'])) {
-			$group = GroupHandler::getGroup($_GET['groupId']); 
 			$team = TeamHandler::getTeam($_GET['teamId']); 
 			
-			TeamHandler::removeTeam($group, $team);
+			TeamHandler::removeTeam($team);
 			$result = true;
 		} else {
 			$message = '<p>Det er ikke spesifisert et lag.</p>';

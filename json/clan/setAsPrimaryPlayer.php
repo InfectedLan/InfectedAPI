@@ -18,14 +18,17 @@ if (Session::isAuthenticated()) {
 			
 			if ($clan != null) {
 				if ($user->equals($clan->getChief())) {
-					$compo = ClanHandler::getCompo($clan);
-					$currentMainPlayers = ClanHandler::getPlayingMembers($clan);
+					$compo = $clan->getCompo();
 
-					if (count($currentMainPlayers) < $compo->getTeamSize()) {
-						ClanHandler::setMemberStepInState($clan, $targetUser, ClanHandler::STATE_MAIN_PLAYER);
-						$result = true;
+					if ($compo != null) {
+						if (count($clan->getPlayingMembers()) < $compo->getTeamSize()) {
+							$clan->setMemberStepInState($targetUser, ClanHandler::STATE_MAIN_PLAYER);
+							$result = true;
+						} else {
+							$message = '<p>Det er allerede for mange spillere som deltar!</p>';
+						}
 					} else {
-						$message = '<p>Det er allerede for mange spillere som deltar!</p>';
+						$message = '<p>Compo\'en finnes ikke.</p>';
 					}
 				} else {
 					$message = '<p>Du er ikke chief.</p>';

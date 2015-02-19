@@ -16,11 +16,15 @@ if (Session::isAuthenticated()) {
 			is_numeric($_GET['userId']) &&
 			is_numeric($_GET['teamId'])) {
 			$groupUser = UserHandler::getUser($_GET['userId']);
-			$group = $groupUser->getGroup();
 			$team = TeamHandler::getTeam($_GET['teamId']);
 			
-			TeamHandler::changeTeamForUser($groupUser, $group, $team);
-			$result = true;
+			if ($groupUser != null &&
+				$team != null) {
+				TeamHandler::changeTeamForUser($groupUser, $team);
+				$result = true;
+			} else {
+				$message = '<p>Brukeren, gruppem eller laget finnes ikke.</p>';
+			}
 		} else {
 			$message = '<p>Ikke noe lag spesifisert.</p>';
 		}

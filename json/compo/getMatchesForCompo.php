@@ -1,8 +1,8 @@
 <?php
 require_once 'session.php';
-require_once 'utils.php';
 require_once 'handlers/compohandler.php';
 require_once 'handlers/matchhandler.php';
+require_once 'utils/dateutils.php';
 
 $result = false;
 $message = null;
@@ -14,18 +14,17 @@ if (Session::isAuthenticated()) {
 		$compo = CompoHandler::getCompo($_GET['id']);
 
 		if ($compo != null) {
-			foreach (MatchHandler::getMatchesByCompo($compo) as $match) {				
-				$parentMatches = MatchHandler::getParents($match);
+			foreach ($compo->getMatches() as $match) {
 				$parentMatchIds = array();
 				
-				foreach($parentMatches as $parentMatch) {
+				foreach ($match->getParents() as $parentMatch) {
 					array_push($parentMatchIds, $parentMatch->getId());
 				}
 
 				array_push($data, array('matchId' => $match->getId(),
 					  					'participants' => MatchHandler::getParticipantTags($match),
 					  					'parents' => $parentMatchIds,
-					  					'startTime' => Utils::getDayFromInt(date('w', $match->getScheduledTime())) . ' ' . date('H:i', $match->getScheduledTime()),
+					  					'startTime' => DateUtils::getDayFromInt(date('w', $match->getScheduledTime())) . ' ' . date('H:i', $match->getScheduledTime()),
 					  					'bracketOffset' => $match->getBracketOffset(),
 					  					'bracket' => $match->getBracket(),
 					  					'state' => $match->getState()));

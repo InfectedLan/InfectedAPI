@@ -11,12 +11,12 @@ if (Session::isAuthenticated()) {
 	if ($user->hasPermission('*')) {
 		if (isset($_GET['id']) &&
 			is_numeric($_GET['id'])) {
-			$fromEvent = EventHandler::getEvent($_GET['id']);
-			$toEvent = EventHandler::getCurrentEvent();
+			$event = EventHandler::getEvent($_GET['id']);
+			$fromEvent = EventHandler::getCurrentEvent();
 			
 			if ($fromEvent != null &&
 				$toEvent != null) {
-				EventHandler::cloneMembers($fromEvent, $toEvent);
+				$event->cloneMembersFrom($fromEvent);
 				$result = true;
 				$message = '<p>Alle medlemene fra det tidligere arrangement ble overført til dette.</p>';
 			} else {

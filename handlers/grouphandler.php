@@ -59,7 +59,7 @@ class GroupHandler {
     /*
      * Create a new group
      */
-    public static function createGroup(Event $event, $name, $title, $description, $leader, $coleader) {
+    public static function createGroup(Event $event, $name, $title, $description, User $leaderUser = null, User $coleaderUser = null) {
         $database = Database::open(Settings::db_name_infected_crew);
         
         $database->query('INSERT INTO `' . Settings::db_table_infected_crew_groups . '` (`eventId`, `name`, `title`, `description`, `leaderId`, `coleaderId`) 
@@ -67,8 +67,8 @@ class GroupHandler {
                                   \'' . $database->real_escape_string($name) . '\', 
                                   \'' . $database->real_escape_string($title) . '\', 
                                   \'' . $database->real_escape_string($description) . '\', 
-                                  \'' . ($leader != null ? $leader->getId() : 0) . '\',
-							                    \'' . ($coleader != null ? $coleader->getId() : 0) . '\');');
+                                  \'' . ($leaderUser != null ? $leaderUser->getId() : 0) . '\',
+							                    \'' . ($coleaderUser != null ? $coleaderUser->getId() : 0) . '\');');
         
         $database->close();
     }
@@ -76,15 +76,15 @@ class GroupHandler {
     /*
      * Update the specified group.
      */
-    public static function updateGroup(Group $group, $name, $title, $description, $leader, $coleader) {
+    public static function updateGroup(Group $group, $name, $title, $description, User $leaderUser = null, User $coleaderUser = null) {
         $database = Database::open(Settings::db_name_infected_crew);
         
         $database->query('UPDATE `' . Settings::db_table_infected_crew_groups . '` 
           					      SET `name` = \'' . $database->real_escape_string($name) . '\', 
           						        `title` = \'' . $database->real_escape_string($title) . '\', 
           						        `description` = \'' . $database->real_escape_string($description) . '\', 
-          						        `leaderId` = \'' . ($leader != null ? $leader->getId() : 0) . '\',
-          						        `coleaderId` = \'' . ($coleader != null ? $coleader->getId() : 0) . '\'
+          						        `leaderId` = \'' . ($leaderUser != null ? $leaderUser->getId() : 0) . '\',
+          						        `coleaderId` = \'' . ($coleaderUser != null ? $coleaderUser->getId() : 0) . '\'
           					      WHERE `id` = \'' . $group->getId() . '\';');
         
         $database->close();
@@ -201,6 +201,19 @@ class GroupHandler {
         $database->query('DELETE FROM `' . Settings::db_table_infected_crew_memberof . '` 
                           WHERE `eventId` = \'' . EventHandler::getCurrentEvent()->getId() . '\'
 					                AND `userId` = \'' . $user->getId() . '\';');
+        
+        $database->close();
+    }
+
+    /*
+     * Remove all users from the specified group.
+     */
+    public static function removeUsersFromGroup(Group $group) {
+        $database = Database::open(Settings::db_name_infected_crew);
+        
+        $database->query('DELETE FROM `' . Settings::db_table_infected_crew_memberof . '` 
+                          WHERE `eventId` = \'' . EventHandler::getCurrentEvent()->getId() . '\'
+                          AND `groupId` = \'' . $group->getId() . '\';');
         
         $database->close();
     }

@@ -13,15 +13,13 @@ if (Session::isAuthenticated()) {
 		if (isset($_GET['id']) &&
 			is_numeric($_GET['id'])) {
 			$team = TeamHandler::getTeam($_GET['id']);
-			$memberList = $team->getMembers();
-			
-			foreach ($memberList as $member) {
-				if ($user->equals($member)) {
-					TeamHandler::removeUserFromTeam($member);
-				}
+
+			if ($team != null {
+				TeamHandler::removeUsersFromTeam($team);
+				$result = true;
+			} else {
+				$message = '<p>Laget finnes ikke.</p>';
 			}
-			
-			$result = true;
 		} else {
 			$message = '<p>Ikke noe lag spesifisert.</p>';
 		}

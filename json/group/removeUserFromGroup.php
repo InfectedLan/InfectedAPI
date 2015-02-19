@@ -15,8 +15,12 @@ if (Session::isAuthenticated()) {
 			is_numeric($_GET['id'])) {
 			$groupUser = UserHandler::getUser($_GET['id']);
 			
-			GroupHandler::removeUserFromGroup($groupUser);
-			$result = true;
+			if ($groupUser != null) {
+				GroupHandler::removeUserFromGroup($groupUser);
+				$result = true;
+			} else {
+				$message = '<p>Brukeren finnes ikke.</p>';
+			}
 		} else {
 			$message = '<p>Ingen bruker spesifisert.</p>';
 		}

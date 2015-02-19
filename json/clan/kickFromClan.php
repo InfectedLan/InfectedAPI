@@ -11,14 +11,14 @@ if (Session::isAuthenticated()) {
 	
 	if (isset($_GET['user']) && 
 		isset($_GET['clan'])) {
-		$victim = UserHandler::getUser($_GET['user']);
+		$kickUser = UserHandler::getUser($_GET['user']);
 		
-		if ($victim != null) {
+		if ($kickUser != null) {
 			$clan = ClanHandler::getClan($_GET['clan']);
 		
 			if ($clan != null) {
 				if ($user->equals($clan->getChief())) {
-					ClanHandler::kickFromClan($victim, $clan);
+					$clan->kick($kickUser);
 					$result = true;
 				} else {
 					$message = '<p>Du er ikke chief.</p>';

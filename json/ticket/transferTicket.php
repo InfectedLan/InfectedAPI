@@ -15,7 +15,8 @@ if (Session::isAuthenticated()) {
 		$ticket = TicketHandler::getTicket($_GET['id']);
 		
 		if ($user->equals($ticket->getUser())) {
-			if (isset($_GET['target'])) {
+			if (isset($_GET['target']) &&
+				is_numeric($_GET['target'])) {
 				$targetUser = UserHandler::getUser($_GET['target']);
 				
 				if ($targetUser != null) {

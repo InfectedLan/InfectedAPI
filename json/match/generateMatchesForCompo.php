@@ -13,7 +13,7 @@ if (Session::isAuthenticated()) {
 		$user->hasPermission('event.compo')) {
 
 		if (isset($_GET['id']) &&
-			!empty($_GET['id'])) {
+			is_numeric($_GET['id'])) {
 			$compo = CompoHandler::getCompo($_GET['id']);
 
 			if ($compo != null) {

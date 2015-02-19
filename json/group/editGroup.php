@@ -22,11 +22,11 @@ if (Session::isAuthenticated()) {
 			$name = strtolower(str_replace(' ', '-', $_GET['title']));
 			$title = $_GET['title'];
 			$description = $_GET['description'];
-			$leader = UserHandler::getUser($_GET['leader']);
-			$coleader = UserHandler::getUser($_GET['coleader']);
+			$leaderUser = UserHandler::getUser($_GET['leader']);
+			$coleaderUser = UserHandler::getUser($_GET['coleader']);
 
 			if ($group != null) {
-				GroupHandler::updateGroup($group, $name, $title, $description, $leader, $coleader);
+				GroupHandler::updateGroup($group, $name, $title, $description, $leaderUser, $coleaderUser);
 				$result = true;
 			} else {
 				$message = '<p>Gruppen finnes ikke.</p>';

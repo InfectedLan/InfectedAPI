@@ -28,7 +28,7 @@ if (Session::isAuthenticated()) {
 					if (($_FILES['bgImageFile']['size'] < 7000000)) {
 						if (in_array($extension, $allowedExts)) {
 							if ($_FILES['bgImageFile']['error'] == 0) {
-								$name = md5(time() . 'yoloswag');
+								$name = md5(time() . 'yoloswag'); // TODO: Refactor this shitty, messy, and terible petterroea code.
 								move_uploaded_file($_FILES['bgImageFile']['tmp_name'], '../content/seatmapBackground/' . $name . '.' . $extension);
 
 								SeatmapHandler::setBackground($seatmap, $name . '.' . $extension);

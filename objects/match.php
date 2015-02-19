@@ -21,7 +21,7 @@ class Match extends Object {
 	private $state;
 	private $compoId;
 	private $bracketOffset;
-	private $chat;
+	private $chatId;
 	private $bracket;
 
 	public function getBracket() {
@@ -29,10 +29,10 @@ class Match extends Object {
 	}
 
 	public function getChat() {
-		return ChatHandler::getChat($this->chat);
+		return ChatHandler::getChat($this->chatId);
 	}
 	public function getScheduledTime() {
-		return $this->scheduledTime;
+		return strtotime($this->scheduledTime);
 	}
 
 	public function getConnectDetails() {
@@ -52,13 +52,8 @@ class Match extends Object {
 	}
 
 	public function isParticipant($user) {
-		//Get list of clans
-		$participantList = MatchHandler::getParticipants($this);
-
-		foreach($participantList as $clan) {
-			if (ClanHandler::isMember($user, $clan)) {
-				return true;
-			}
+		foreach (MatchHandler::getParticipants($this) as $clan) {
+			return $clan->isMember($user);
 		}
 	}
 
@@ -68,17 +63,21 @@ class Match extends Object {
 	}
 
 	public function setState($newState) {
-		$con = Database::open(Settings::db_name_infected_compo);
+		$database = Database::open(Settings::db_name_infected_compo);
 
 		$result = $database->query('UPDATE `' . Settings::db_table_infected_compo_matches . '`
-							        SET `state` = \'' . $con->real_escape_string($newState) . '\'
-							        WHERE `id` = \'' . $this->id . '\';');
+							        SET `state` = \'' . $database->real_escape_string($newState) . '\'
+							        WHERE `id` = \'' . $this->getId() . '\';');
 
 		$database->close();
 	}
 
 	public function getCompo() {
-		return CompoHandler::getCompo($this->compo);
+		return CompoHandler::getCompo($this->compoId);
+	}
+
+	public function getParents() {
+		return MatchHandler::getMatchParents($this);
 	}
 }
 ?>

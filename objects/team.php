@@ -51,7 +51,7 @@ class Team extends EventObject {
 	 * Returns an array of users that are members of this group.
 	 */
 	public function getMembers() {
-		return TeamHandler::getMembers($this->getGroup(), $this);
+		return TeamHandler::getMembers($this);
 	}
 	
 	public function displayWithInfo() {

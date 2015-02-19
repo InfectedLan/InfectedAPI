@@ -1,6 +1,8 @@
 <?php
 require_once 'session.php';
+require_once 'handlers/componhandler.php';
 require_once 'handlers/clanhandler.php';
+require_once 'handlers/eventhandler.php';
 
 $result = false;
 $message = null;
@@ -12,10 +14,15 @@ if (Session::isAuthenticated()) {
 	if ($user->isEligibleForCompos()) {
 		if (isset($_GET['name']) &&
 			isset($_GET['tag']) &&
-			isset($_GET['compo']) ) {
-			$clanId = ClanHandler::registerClan($_GET['name'], $_GET['tag'], $_GET['compo'], $user);
+			isset($_GET['compo'])) {
+			$compo = CompoHandler::getCompo($_GET['compo']);
 
-			$result = true;
+			if ($compo != null) {
+				$clan = ClanHandler::createClan(EventHandler::getCurrentEvent(), $_GET['name'], $_GET['tag'], $compo, $user);
+				$result = true;
+			} else {
+				$message = '<p>Compo\'en finnes ikke.</p>';
+			}
 		} else {
 			$message = '<p>Mangler felt!</p>';
 		}
@@ -27,7 +34,7 @@ if (Session::isAuthenticated()) {
 }
 
 if ($result) {
-	echo json_encode(array('result' => $result, 'clanId' => $clanId));
+	echo json_encode(array('result' => $result, 'clanId' => $clan->getId()));
 } else {
 	echo json_encode(array('result' => $result, 'message' => $message));
 }

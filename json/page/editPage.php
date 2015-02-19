@@ -21,7 +21,7 @@ if (Session::isAuthenticated()) {
 			$content = $_GET['content'];
 			
 			if ($page != null) {
-				PageHandler::updatePage($id, $title, $content);
+				PageHandler::updatePage($page, $title, $content);
 				$result = true;
 			} else {
 				$message = '<p>Siden finnes ikke.</p>';

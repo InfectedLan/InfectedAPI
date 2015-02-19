@@ -14,169 +14,150 @@ $matchData = null;
 if (Session::isAuthenticated()) {
 	$user = Session::getCurrentUser();
 
-	if (isset($_GET['id'])) {
+	if (isset($_GET['id']) &&
+		is_numeric($_GET['id'])) {
 		$match = MatchHandler::getMatch($_GET['id']);
 
-		if ($user->hasPermission('*') ||
-			$user->hasPermission('event.compo') ||
-			$match->isParticipant($user)) {
-			$matchData['state'] = $match->getState();
-			$matchData['ready'] = $match->isReady();
-			$matchData['compoId'] = $match->getCompoId();
-			$matchData['currentTime'] = time(); //Used for synchronizing time
-			$matchData['startTime'] = $match->getScheduledTime();
-			$matchData['chatId'] = $match->getChat();
-			
-			if ($match->getState() == Match::STATE_READYCHECK && 
-				$match->isReady()) {
-				$readyData = array();
+		if ($match != null) {
+			if ($user->hasPermission('*') ||
+				$user->hasPermission('event.compo') ||
+				$match->isParticipant($user)) {
 
-				$participants = MatchHandler::getParticipants($match);
+				$matchData['state'] = $match->getState();
+				$matchData['ready'] = $match->isReady();
+				$matchData['compoId'] = $match->getCompo()->getId();
+				$matchData['currentTime'] = time();
+				$matchData['startTime'] = $match->getScheduledTime();
+				$matchData['chatId'] = $match->getChat();
+				
+				if ($match->getState() == Match::STATE_READYCHECK && 
+					$match->isReady()) {
+					$readyData = array();
 
-				foreach ($participants as $clan) {
-					$members = $clan->getMembers();
+					foreach (MatchHandler::getParticipants($match) as $clan) {
+						$memberData = array();
 
-					$clanData = array();
-					$clanData['clanName'] = $clan->getName();
-					$clanData['clanTag'] = $clan->getTag();
+						foreach ($clan->getMembers() as $member) {
+							$avatarFile = null;
 
-					$memberData = array();
+							if ($member->hasValidAvatar()) {
+								$avatarFile = $member->getAvatar()->getThumbnail();
+							} else {
+								$avatarFile = AvatarHandler::getDefaultAvatar($member);
+							}
 
-					foreach ($members as $member) {
-						$memberReadyStatus = array();
+							$memberReadyStatus = array('userId' => $member->getId(),
+													   'nick' => $member->getNickname(),
+													   'avatarUrl' => $avatarFile,
+													   'ready' => MatchHandler::isUserReady($member, $match));
 
-						$memberReadyStatus['userId'] = $member->getId();
-						$memberReadyStatus['nick'] = $member->getNickname();
-
-						$avatarFile = null;
-
-						if ($member->hasValidAvatar()) {
-							$avatarFile = $member->getAvatar()->getThumbnail();
-						} else {
-							$avatarFile = AvatarHandler::getDefaultAvatar($member);
+							array_push($memberData, $memberReadyStatus);
 						}
 
-						$memberReadyStatus['avatarUrl'] = $avatarFile;
-						$memberReadyStatus['ready'] = MatchHandler::isUserReady($member, $match);
-
-						array_push($memberData, $memberReadyStatus);
+						$clanData = array('clanName' => $clan->getName(),
+										  'clanTag' => $clan->getTag(),
+										  'members' => $memberData);
+						
+						array_push($readyData, $clanData);
 					}
 
-					$clanData['members'] = $memberData;
+					$matchData['readyData'] = $readyData;
+					$result = true;
+				} else if ($match->getState() == Match::STATE_CUSTOM_PREGAME && 
+						   $match->isReady()) {
+					$banData = array();
+					$bannableMapsArray = array();
 
-					array_push($readyData, $clanData);
-				}
-
-				$matchData['readyData'] = $readyData;
-				$result = true;
-			} else if ($match->getState() == Match::STATE_CUSTOM_PREGAME && 
-					   $match->isReady()) {
-				//As of now, it is safe to assume only CS:GO sees this.
-				$voteOptions = VoteOptionHandler::getVoteOptionsForCompo(CompoHandler::getCompo($match->getCompo()));
-				$participants = MatchHandler::getParticipants($match);
-
-				$banData = array();
-				$bannableMapsArray = array();
-
-				foreach ($voteOptions as $voteOption) {
-					$optionData = array();
-					$optionData['name'] = $voteOption->getName();
-					$optionData['thumbnailUrl'] = $voteOption->getThumbnailUrl();
-					$optionData['id'] = $voteOption->getId();
-					$optionData['isBanned'] = VoteOptionHandler::isVoted($voteOption, $match);
-					array_push($bannableMapsArray, $optionData);
-				}
-
-				$banData['options'] = $bannableMapsArray;
-				$numBanned = VoteHandler::getNumBanned($match->getId());
-				$banData['turn'] = VoteHandler::getCurrentBanner($numBanned);
-
-				$clanArray = array();
-
-				foreach ($participants as $clan) {
-					$members = $clan->getMembers();
-
-					$clanData = array();
-					$clanData['clanName'] = $clan->getName();
-					$clanData['clanTag'] = $clan->getTag();
-
-					$memberData = array();
-
-					foreach ($members as $member) {
-						$userData = array();
-
-						$userData['userId'] = $member->getId();
-						$userData['nick'] = $member->getNickname();
-						$userData['chief'] = ($member->getId() == $clan->getChief());
-
-						array_push($memberData, $userData);
+					foreach (VoteOptionHandler::getVoteOptionsByCompo($match->getCompo()) as $voteOption) {
+						$optionData = array();
+						$optionData['name'] = $voteOption->getName();
+						$optionData['thumbnailUrl'] = $voteOption->getThumbnailUrl();
+						$optionData['id'] = $voteOption->getId();
+						$optionData['isBanned'] = VoteOptionHandler::isVoted($voteOption, $match);
+						array_push($bannableMapsArray, $optionData);
 					}
 
-					$clanData['members'] = $memberData;
+					$banData['options'] = $bannableMapsArray;
+					$numBanned = VoteHandler::getNumBanned($match->getId());
+					$banData['turn'] = VoteHandler::getCurrentBanner($numBanned);
 
-					array_push($clanArray, $clanData);
-				}
+					$clanList = array();
 
-				$banData['clans'] = $clanArray;
+					foreach (MatchHandler::getParticipants($match) as $clan) {
+						$clanData = array('clanName' => $clan->getName(),
+										  'clanTag' => $clan->getTag());
 
-				$matchData['banData'] = $banData;
-				$result = true;
-			} else if ($match->getState() == Match::STATE_JOIN_GAME && 
-				       $match->isReady()) {
-				$gameData = array();
-				$gameData['connectDetails'] = $match->getConnectDetails();
+						$memberData = array();
 
-				$clanArray = array();
-				$participants = MatchHandler::getParticipants($match);
+						foreach ($clan->getMembers() as $member) {
+							$userData = array('userId' => $member->getId(),
+											  'nick' => $member->getNickname(),
+											  'chief' => $member->equals($clan->getChief()));
 
-				foreach ($participants as $clan) {
-					$members = $clan->getMembers();
+							array_push($memberData, $userData);
+						}
 
-					$clanData = array();
-					$clanData['clanName'] = $clan->getName();
-					$clanData['clanTag'] = $clan->getTag();
-
-					$memberData = array();
-
-					foreach ($members as $member) {
-						$userData = array();
-
-						$userData['userId'] = $member->getId();
-						$userData['nick'] = $member->getNickname();
-						$userData['chief'] = ($member->getId() == $clan->getChief());
-
-						array_push($memberData, $userData);
+						$clanData['members'] = $memberData;
+						array_push($clanList, $clanData);
 					}
 
-					$clanData['members'] = $memberData;
+					$banData['clans'] = $clanArray;
 
-					array_push($clanArray, $clanData);
-				}
+					$matchData['banData'] = $banData;
+					$result = true;
+				} else if ($match->getState() == Match::STATE_JOIN_GAME && 
+					       $match->isReady()) {
+					$gameData = array();
+					$gameData['connectDetails'] = $match->getConnectDetails();
 
-				$gameData['clans'] = $clanArray;
-				//Get map+
-				$compo = CompoHandler::getCompo($match->getCompoId());
+					$clanList = array();
 
-				if ($compo->getId() == 3) { //Only CS:GO
-					$options = VoteOptionHandler::getVoteOptionsForCompo($compo);
-					foreach ($options as $option) {
-						if (!VoteOptionHandler::isVoted($option, $match)) {
-							$mapData = array();
+					foreach (MatchHandler::getParticipants($match) as $clan) {
+						$clanData = array();
+						$clanData['clanName'] = $clan->getName();
+						$clanData['clanTag'] = $clan->getTag();
 
-							$mapData['name'] = $option->getName();
-							$mapData['thumbnail'] = $option->getThumbnailUrl();
+						$memberData = array();
 
-							$gameData['mapData'] = $mapData;
-							break;
+						foreach ($clan->getMembers() as $member) {
+							$userData = array();
+
+							$userData['userId'] = $member->getId();
+							$userData['nick'] = $member->getNickname();
+							$userData['chief'] = $member->equals($clan->getChief());
+
+							array_push($memberData, $userData);
+						}
+
+						$clanData['members'] = $memberData;
+						array_push($clanList, $clanData);
+					}
+
+					$gameData['clans'] = $clanList;
+					$compo = $match->getCompo();
+
+					if ($compo->getId() == 3) { // Only CS:GO TODO: This should not happend, we need not to use static id's.
+						foreach (VoteOptionHandler::getVoteOptionsByCompo($compo) as $option) {
+							if (!VoteOptionHandler::isVoted($option, $match)) {
+								$mapData = array();
+
+								$mapData['name'] = $option->getName();
+								$mapData['thumbnail'] = $option->getThumbnailUrl();
+
+								$gameData['mapData'] = $mapData;
+								break;
+							}
 						}
 					}
-				}
 
-				$matchData['gameData'] = $gameData;
-				$result = true;
+					$matchData['gameData'] = $gameData;
+					$result = true;
+				}
+			} else {
+				$message = '<p>Du har ikke lov til å se på denne matchen!</p>';
 			}
 		} else {
-			$message = '<p>Du har ikke lov til å se på denne matchen!</p>';
+			$message = '<p>Match\'en finnes ikke.</p>';
 		}
 	} else {
 		$message = '<p>Mangler felt!</p>';

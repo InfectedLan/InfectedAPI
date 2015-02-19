@@ -17,7 +17,6 @@ if (Session::isAuthenticated()) {
 				if (isset($_GET['x']) && 
 				    isset($_GET['y'])) {
 					RowHandler::updateRow($row,  $_GET['x'], $_GET['y']);
-
 					$result = true;
 				} else {
 					$message = '<p>Posisjonen er ikke satt!</p>';

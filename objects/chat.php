@@ -28,31 +28,45 @@ class Chat extends Object {
 	}
 
 	/*
-	 * Returns true if the specified user is a member of this chat.
-	 */
-	public function isMember() {
-		return ChatHandler::isChatMember($this, $user);
-	}
-
-	/*
 	 * Returns the last chat message for this chat.
 	 */
-	public function getLastChatMessage() {
+	public function getLastMessage() {
 		return ChatHandler::getLastChatMessage($this);
 	}
 
 	/*
 	 * Returns the last chat messages, amount specified by count.
 	 */
-	public function getLastChatMessages($count) {
+	public function getLastMessages($count) {
 		return ChatHandler::getLastChatMessages($this, $count);
+	}
+
+	/*
+	 * Returns true if the specified user is a member of this chat.
+	 */
+	public function isMember(User $user) {
+		return ChatHandler::isChatMember($this, $user);
+	}
+
+	/*
+	 * Add the specified user to this chat.
+	 */
+	public function addMember(User $user) {
+		ChatHandler::addChatMember($this, $user);
+	}
+
+	/*
+	 * Remove the specified user from this chat.
+	 */
+	public function removeMember(User $user) {
+		ChatHandler::removeChatMember($this, $user);
 	}
 
 	/*
 	 * Sends a message to this chat.
 	 */
 	public function sendMessage(User $user, $message) {
-		ChatHandler::sendChatMessage($this, $user, $message) {
+		ChatHandler::sendChatMessage($this, $user, $message);
 	}
 }
 ?>
