@@ -21,14 +21,14 @@ if (Session::isAuthenticated()) {
 			if ($compo != null) {
 				$pendingArray = array();
 
-				foreach (MatchHandler::getPendingMatches($compo) as $match) {
+				foreach (MatchHandler::getPendingMatchesByCompo($compo) as $match) {
 					$matchData = array();
 
 					$matchData['id'] = $match->getId();
 					$matchData['startTime'] = $match->getScheduledTime();
 					$matchData['startString'] = date('d F H:i', $match->getScheduledTime());
 					$matchData['connectData'] = $match->getConnectDetails();
-					$matchData['participants'] = MatchHandler::getParticipantString($match);
+					$matchData['participants'] = MatchHandler::getParticipantStringByMatch($match);
 
 					array_push($pendingArray, $matchData);
 				}
@@ -36,7 +36,7 @@ if (Session::isAuthenticated()) {
 				$matchArray['pending'] = $pendingArray;
 				$currentArray = array();
 
-				foreach (MatchHandler::getCurrentMatches($compo) as $match) {
+				foreach (MatchHandler::getCurrentMatchesByCompo($compo) as $match) {
 					$matchData = array();
 
 					$matchData['id'] = $match->getId();
@@ -46,8 +46,8 @@ if (Session::isAuthenticated()) {
 					$matchData['state'] = $match->getState();
 
 					$participantData = array();
-					$participantData['strings'] = MatchHandler::getParticipantString($match);
-					$participantObjects = MatchHandler::getParticipants($match);
+					$participantData['strings'] = MatchHandler::getParticipantStringByMatch($match);
+					$participantObjects = MatchHandler::getParticipantsByMatch($match);
 					$participantData['list'] = array();
 
 					foreach ($participantObjects as $participant) {
@@ -62,9 +62,6 @@ if (Session::isAuthenticated()) {
 
 
 					$matchData['participants'] = $participantData;
-
-
-
 					$compo = $match->getCompo();
 					
 					if ($compo->getId() == 3) {
@@ -94,7 +91,7 @@ if (Session::isAuthenticated()) {
 				$matchArray['current'] = $currentArray;
 				$finishedArray = array();
 
-				foreach (MatchHandler::getFinishedMatches($compo) as $match) {
+				foreach (MatchHandler::getFinishedMatchesByCompo($compo) as $match) {
 					$matchData = array();
 
 					$matchData['id'] = $match->getId();

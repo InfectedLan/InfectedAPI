@@ -22,7 +22,7 @@ if (Session::isAuthenticated()) {
 			$turn = VoteHandler::getCurrentBanner($numBanned);
 			
 			if ($turn != 2) {
-				$participants = MatchHandler::getParticipants($match);
+				$participants = MatchHandler::getParticipantsByMatch($match);
 				$clan = $participants[$turn];
 				
 				if ($user->equals($clan->getChief())) {

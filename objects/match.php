@@ -1,10 +1,11 @@
 <?php
 require_once 'settings.php';
 require_once 'database.php';
-require_once 'handlers/compohandler.php';
 require_once 'handlers/chathandler.php';
+require_once 'handlers/userhandler.php';
 require_once 'handlers/matchhandler.php';
 require_once 'handlers/clanhandler.php';
+require_once 'handlers/compohandler.php';
 require_once 'objects/object.php';
 
 class Match extends Object {
@@ -17,7 +18,7 @@ class Match extends Object {
 
 	private $scheduledTime;
 	private $connectDetails;
-	private $winner;
+	private $winnerId;
 	private $state;
 	private $compoId;
 	private $bracketOffset;
@@ -40,7 +41,7 @@ class Match extends Object {
 	}
 
 	public function getWinner() {
-		return $this->winner;
+		return UserHandler::getUser($this->winnerId);
 	}
 
 	public function getState() {
@@ -52,7 +53,7 @@ class Match extends Object {
 	}
 
 	public function isParticipant($user) {
-		foreach (MatchHandler::getParticipants($this) as $clan) {
+		foreach (MatchHandler::getParticipantsByMatch($this) as $clan) {
 			return $clan->isMember($user);
 		}
 	}

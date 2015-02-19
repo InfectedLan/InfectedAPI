@@ -10,7 +10,7 @@ require_once 'objects/location.php';
 
 class Event extends Object {
 	private $theme;
-	private $location;
+	private $locationId;
 	private $participants;
 	private $bookingTime;
 	private $startTime;
@@ -29,7 +29,7 @@ class Event extends Object {
 	 * Returns the event location.
 	 */
 	public function getLocation() {
-		return LocationHandler::getLocation($this->location);
+		return LocationHandler::getLocation($this->locationId);
 	}
 
 	/*

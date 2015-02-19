@@ -101,7 +101,7 @@ class EventHandler {
         $seatmap = SeatmapHandler::createSeatmap($name, null);
         $database = Database::open(Settings::db_name_infected);
         
-        $database->query('INSERT INTO `' . Settings::db_table_infected_events . '` (`theme`, `location`, `participants`, `bookingTime`, `startTime`, `endTime`, `seatmapId`, `ticketTypeId`) 
+        $database->query('INSERT INTO `' . Settings::db_table_infected_events . '` (`theme`, `locationId`, `participants`, `bookingTime`, `startTime`, `endTime`, `seatmapId`, `ticketTypeId`) 
 					      VALUES (\'' . $database->real_escape_string($theme) . '\', 
 							      \'' . $database->real_escape_string($location) . '\',
 							      \'' . $database->real_escape_string($participants) . '\',
@@ -122,7 +122,7 @@ class EventHandler {
 
         $database->query('UPDATE `' . Settings::db_table_infected_events . '` 
 					      SET `theme` = \'' . $database->real_escape_string($theme) . '\', 
-						      `location` = \'' . $database->real_escape_string($location) . '\', 
+						      `locationId` = \'' . $database->real_escape_string($location) . '\', 
 						      `participants` = \'' . $database->real_escape_string($participants) . '\',
 						      `bookingTime` = \'' . $database->real_escape_string($bookingTime) . '\', 
 						      `startTime` = \'' . $database->real_escape_string($startTime) . '\', 
