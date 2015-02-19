@@ -4,6 +4,7 @@ require_once 'handlers/seatmaphandler.php';
 require_once 'handlers/tickethandler.php';
 require_once 'handlers/tickettypehandler.php';
 require_once 'handlers/storesessionhandler.php';
+require_once 'handlers/eventhandler.php';
 require_once 'objects/object.php';
 require_once 'objects/location.php';
 
@@ -77,7 +78,7 @@ class Event extends Object {
 	 * Returns the title for this event.
 	 */
 	public function getTitle() {
-		return 'Infected ' . (date('m', $this->getStartTime()) == 2 ? 'Vinter' : 'Høst') . ' ' . date('Y', $this->getStartTime());
+		return Settings::name . ' ' . (date('m', $this->getStartTime()) == 2 ? 'Vinter' : 'Høst') . ' ' . date('Y', $this->getStartTime());
 	}
 	
 	/*
@@ -107,6 +108,13 @@ class Event extends Object {
 		$numLeft -= StoreSessionHandler::getReservedTicketCount(TicketTypeHandler::getTicketType($this->ticketType));
 		
 		return $numLeft;
+	}
+
+	/*
+	 * Clone group members from the specified event to this one.
+	 */
+	public function cloneMembersFromEvent($event) {
+		EventHandler::cloneMembers($event, $this);
 	}
 }
 ?>
