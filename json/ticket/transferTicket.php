@@ -19,10 +19,9 @@ if (Session::isAuthenticated()) {
 				$targetUser = UserHandler::getUser($_GET['target']);
 				
 				if ($targetUser != null) {
-					TicketTransferHandler::transfer($ticket, $targetUser);
-					
+					$ticket->transfer($targetUser);
 					$result = true;
-					$message = '<p>Biletten er overført.</p>';
+					$message = '<p>Billetten er overført.</p>';
 				} else {
 					$message = '<p>Målbrukeren eksisterer ikke!</p>';
 				}

@@ -25,7 +25,7 @@ if (Session::isAuthenticated()) {
 								 	  'username' => $ticketUser->getUsername(),
 								 	  'email' => $ticketUser->getEmail(),
 								      'birthdate' => date('d.m.Y', $ticketUser->getBirthdate()),
-								 	  'gender' => $ticketUser->getGenderName(),
+								 	  'gender' => $ticketUser->getGenderAsString(),
 								 	  'age' => $ticketUser->getAge(),
 								 	  'phone' => $ticketUser->getPhone(),
 								 	  'address' => $ticketUser->getAddress(),

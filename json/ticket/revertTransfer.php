@@ -11,10 +11,10 @@ if (Session::isAuthenticated()) {
 
 	if (isset($_GET['id']) &&
 		is_numeric($_GET['id'])) {
-		$ticketToRevert = TicketHandler::getTicket($_GET['id']);
+		$ticket = TicketHandler::getTicket($_GET['id']);
 		
-		if ($ticketToRevert != null) {
-			TicketTransferHandler::revertTransfer($ticketToRevert, $user);
+		if ($ticket != null) {
+			$ticket->revertTransfer($user);
 			$result = true;
 		} else {
 			$message = '<p>Billetten finnes ikke.</p>';

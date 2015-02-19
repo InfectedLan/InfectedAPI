@@ -5,6 +5,7 @@ require_once 'handlers/paymenthandler.php';
 require_once 'handlers/tickettypehandler.php';
 require_once 'handlers/userhandler.php';
 require_once 'handlers/seathandler.php';
+require_once 'handlers/tickettransferhandler.php';
 require_once 'objects/eventobject.php';
 require_once 'objects/user.php';
 
@@ -93,9 +94,23 @@ class Ticket extends EventObject {
 	}
 	
 	/*
-	 * Returns a human readable representation of the ticket
+	 * Transfers this ticket to the specified user.
 	 */
-	public function getHumanName() {
+	public function transfer(User $user) {
+		TicketTransferHandler::transfer($this, $user);
+	}
+
+	/*
+	 * Revert transfer of this ticket and transfer back to the specified user, if it matches the original sender.
+	 */
+	public function revertTransfer(User $user) {
+		TicketTransferHandler::revertTransfer($this, $user);
+	}
+
+	/*
+	 * Returns a string representation of the ticket.
+	 */
+	public function getString() {
 		$event = $this->getEvent();
 		$season = date('m', $event->getStartTime()) == 2 ? 'VINTER' : 'HØST';
 		$theme = $event->getTheme();
