@@ -58,8 +58,8 @@ class UserPermissionHandler {
         $database = Database::open(Settings::db_name_infected);
         
         $result = $database->query('SELECT * FROM `' . Settings::db_table_infected_permissions . '`
-                                    WHERE `id` = (SELECT `permissionId` FROM `' . Settings::db_table_infected_userpermissions . '`
-                                                  WHERE `userId` = \'' . $user->getId() . '\');');
+                                    WHERE `id` IN (SELECT `permissionId` FROM `' . Settings::db_table_infected_userpermissions . '`
+                                                   WHERE `userId` = \'' . $user->getId() . '\');');
         
         $database->close();
         
