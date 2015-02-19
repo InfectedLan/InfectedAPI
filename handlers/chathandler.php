@@ -101,7 +101,7 @@ class ChatHandler {
 	/*
 	 * Returns an array of the last given number of chat messages for given chat.
 	 */
-	public static function getLastMessages(Chat $chat, $count) {
+	public static function getLastChatMessages(Chat $chat, $count) {
 		$database = Database::open(Settings::db_name_infected_compo);
 		
 		$result = $database->query('SELECT * FROM `' . Settings::db_table_infected_compo_chatmessages . '`
@@ -167,7 +167,7 @@ class ChatHandler {
 	/*
 	 * Returns true if the given user is member of the given chat.
 	 */
-	public static function isChatMember(User $user, Chat $chat) {
+	public static function isChatMember(Chat $chat, User $user) {
 		$database = Database::open(Settings::db_name_infected_compo);
 		
 		$result = $database->query('SELECT `id` FROM `' . Settings::db_table_infected_compo_memberofchat . '`
@@ -203,7 +203,7 @@ class ChatHandler {
 	/*
 	 * Add the given user to the specified chat.
 	 */
-	public static function addChatMember(User $user, Chat $chat) {
+	public static function addChatMember(Chat $chat, User $user) {
 		$database = Database::open(Settings::db_name_infected_compo);
 		
 		$database->query('INSERT INTO `' . Settings::db_table_infected_compo_memberofchat . '` (`userId`, `chatId`) 
@@ -216,7 +216,7 @@ class ChatHandler {
 	/*
 	 * Remove the given user from the specified chat.
 	 */
-	public static function removeChatMember(User $user, Chat $chat) {
+	public static function removeChatMember(Chat $chat, User $user) {
 		$database = Database::open(Settings::db_name_infected_compo);
 		
 		$database->query('DELETE FROM `' . Settings::db_table_infected_compo_memberofchat . '` 
@@ -241,7 +241,7 @@ class ChatHandler {
 	/*
 	 * Send a massage to this chat from the given user.
 	 */
-	public static function sendChatMessage(User $user, Chat $chat, $message) {
+	public static function sendChatMessage(Chat $chat, User $user, $message) {
 		$database = Database::open(Settings::db_name_infected_compo);
 		
 		$database->query('INSERT INTO `' . Settings::db_table_infected_compo_chatmessages . '` (`userId`, `chatId`, `time`, `message`) 

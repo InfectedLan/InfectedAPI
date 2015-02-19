@@ -10,7 +10,7 @@ if (Session::isAuthenticated()) {
 	
 	// Remove avatar if the user already have one.
 	if ($user->hasAvatar()) {
-		AvatarHandler::deleteAvatar($user->getAvatar());
+		$user->getAvatar()->remove();
 	}
 
 	$temp = explode('.', $_FILES['file']['name']);

@@ -15,8 +15,8 @@ if (Session::isAuthenticated()) {
 		if ($chat != null) {
 			if ($user->hasPermission('*') || 
 				$user->hasPermission('compo.chat') ||
-				ChatHandler::isChatMember($user, $chat)) {
-				ChatHandler::sendChatMessage($user, $chat, $_GET['message']);
+				$chat->isMember($user)) {
+				$chat->sendMessage($user, $_GET['message']);
 				$result = true;
 			} else {
 				$message = '<p>Du er ikke med i denne chatten!</p>';

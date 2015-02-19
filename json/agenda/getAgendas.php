@@ -1,18 +1,17 @@
 <?php
-require_once 'utils.php';
 require_once 'handlers/agendahandler.php';
+require_once 'utils/dateutils.php';
 
-$agendaList = AgendaHandler::getAgendas();	
-$newAgendaList = array();
+$agendaList = array();
 
-foreach ($agendaList as $agenda) {
-	array_push($newAgendaList, array('id' => $agenda->getId(),
-									 'name' => $agenda->getName(),
-									 'title' => $agenda->getTitle(),
-									 'description' => $agenda->getDescription(),
-									 'startTime' => Utils::getDayFromInt(date('w', $agenda->getStartTime())) . ' ' . date('H:i', $agenda->getStartTime()),
-									 'isHappening' => $agenda->isHappening()));
+foreach (AgendaHandler::getAgendas() as $agenda) {
+	array_push($agendaList, array('id' => $agenda->getId(),
+								  'name' => $agenda->getName(),
+							 	  'title' => $agenda->getTitle(),
+							 	  'description' => $agenda->getDescription(),
+								  'startTime' => DateUtils::getDayFromInt(date('w', $agenda->getStartTime())) . ' ' . date('H:i', $agenda->getStartTime()),
+								  'isHappening' => $agenda->isHappening()));
 }
 
-echo json_encode(array('agendaList' => $newAgendaList));
+echo json_encode(array('agendaList' => $agendaList));
 ?>

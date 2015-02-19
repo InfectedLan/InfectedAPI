@@ -16,7 +16,7 @@ if (Session::isAuthenticated()) {
 				$user->hasPermission('compo.chat') || 
 				ChatHandler::isChatMember($user, $chat) || 
 				$chat->getId() == 1) {
-				$message = ChatHandler::getLastChatMessage($chat);
+				$message = $chat->getLastMessage();
 				
 				if ($message != null) {
 					$subject = $message->getUser();

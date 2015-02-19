@@ -15,7 +15,7 @@ if (Session::isAuthenticated()) {
 			$avatar = AvatarHandler::getAvatar($_GET['id']);
 
 			if ($avatar != null) {
-				AvatarHandler::acceptAvatar($avatar);
+				$avatar->accept();
 				$result = true;
 			} else {
 				$message = '<p>Avataren finnes ikke.</p>';

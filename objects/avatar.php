@@ -1,6 +1,7 @@
 <?php
 require_once 'settings.php';
 require_once 'handlers/userhandler.php';
+require_once 'handlers/avatarhandler.php';
 require_once 'objects/object.php';
 
 class Avatar extends Object {
@@ -85,6 +86,27 @@ class Avatar extends Object {
 		$this->file  = $newName;
 
 		$database->close();
+	}
+
+	/*
+	 * Accepts this avatar.
+	 */
+	public function accept() {
+		AvatarHandler::acceptAvatar($this);
+	}
+
+	/*
+	 * Rejects this avatar.
+	 */
+	public function reject() {
+		AvatarHandler::rejectAvatar($this);
+	}
+
+	/*
+	 * Removes this avatar.
+	 */
+	public function remove() {
+		AvatarHandler::removeAvatar($this);
 	}
 
 	/*

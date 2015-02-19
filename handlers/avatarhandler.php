@@ -134,7 +134,7 @@ class AvatarHandler {
     /*
      * Deletes an avatar.
      */
-    public static function deleteAvatar(Avatar $avatar) {
+    public static function removeAvatar(Avatar $avatar) {
         $database = Database::open(Settings::db_name_infected_crew);
 
         $result = $database->query('DELETE FROM `' . Settings::db_table_infected_crew_avatars . '` 

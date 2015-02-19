@@ -13,7 +13,7 @@ if (Session::isAuthenticated()) {
 		$avatar = $user->getAvatar();
 
 		if ($avatar != null) {
-			AvatarHandler::deleteAvatar($avatar);
+			$avatar->remove();
 			$result = true;
 		} else {
 			$message = '<p>Avataren finnes ikke.</p>';
@@ -26,4 +26,4 @@ if (Session::isAuthenticated()) {
 } 
 
 echo json_encode(array('result' => $result, 'message' => $message));
-?>
+?>SZZ

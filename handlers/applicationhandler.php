@@ -253,7 +253,7 @@ class ApplicationHandler {
     /*
      * Accepts an application, with a optional comment.
      */
-    public static function acceptApplication(User $user, Application $application, $comment, $notify) {
+    public static function acceptApplication(Application $application, User $user, $comment, $notify) {
     		// Only allow application for current event to be accepted.
     		if ($applicatin->getEvent()->equals(EventHandler::getCurrentEvent())) {
       			$database = Database::open(Settings::db_name_infected_crew);
@@ -296,7 +296,7 @@ class ApplicationHandler {
     /*
      * Rejects an application, with a optional comment.
      */
-    public static function rejectApplication(User $user, Application $application, $comment, $notify) {
+    public static function rejectApplication(Application $application, User $user, $comment, $notify) {
     		// Only allow application for current event to be rejected.
         if ($application->getEvent()->equals(EventHandler::getCurrentEvent())) {
       			$database = Database::open(Settings::db_name_infected_crew);
@@ -321,9 +321,9 @@ class ApplicationHandler {
     }
     
     /*
-     * Rejects an application, with a optional comment.
+     * Closes an application, should be used instead of removal for history.
      */
-    public static function closeApplication(User $user, Application $application) {
+    public static function closeApplication(Application $application, User $user) {
         $database = Database::open(Settings::db_name_infected_crew);
         
         $database->query('UPDATE `' . Settings::db_table_infected_crew_applications . '` 
@@ -340,24 +340,9 @@ class ApplicationHandler {
     }
     
     /*
-     * Checks if an application is queued.
-     */
-    public static function isQueued(Application $application) {
-        $database = Database::open(Settings::db_name_infected_crew);
-        
-        $result = $database->query('SELECT `id` FROM `' . Settings::db_table_infected_crew_applicationqueue . '` 
-                                    WHERE `applicationId` = \'' . $application->getId() . '\';');
-        
-
-        $database->close();
-
-        return $result->num_rows > 0;
-    }
-    
-    /*
      * Puts an application in queue.
      */
-    public static function queueApplication(User $user, Application $application, $notify) {
+    public static function queueApplication(Application $application, User $user, $notify) {
     		// Only allow application for current event to be queued.
         if ($application->getEvent()->equals(EventHandler::getCurrentEvent())) {
       			if (!self::isQueued($application)) {
@@ -383,7 +368,7 @@ class ApplicationHandler {
     /*
      * Removes an application from queue.
      */
-    public static function unqueueApplication(User $user, Application $application) {
+    public static function unqueueApplication(Application $application, User $user) {
 		    // Only allow application for current event to be unqueued.
         if ($application->getEvent()->equals(EventHandler::getCurrentEvent())) {
       			$database = Database::open(Settings::db_name_infected_crew);
@@ -397,6 +382,21 @@ class ApplicationHandler {
                                           
       			$database->close();
 		    }
+    }
+
+    /*
+     * Checks if an application is queued.
+     */
+    public static function isQueued(Application $application) {
+        $database = Database::open(Settings::db_name_infected_crew);
+        
+        $result = $database->query('SELECT `id` FROM `' . Settings::db_table_infected_crew_applicationqueue . '` 
+                                    WHERE `applicationId` = \'' . $application->getId() . '\';');
+        
+
+        $database->close();
+
+        return $result->num_rows > 0;
     }
     
     /*

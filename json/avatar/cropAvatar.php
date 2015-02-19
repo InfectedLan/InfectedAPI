@@ -4,10 +4,10 @@ require_once 'session.php';
 $result = false;
 $message = null;
 
-function str_replace_last( $search , $replace , $str ) {
+function str_replace_last($search, $replace, $str) {
     if (($pos = strrpos($str, $search)) !== false) {
-        $search_length  = strlen( $search );
-        $str    = substr_replace( $str , $replace , $pos , $search_length );
+        $search_length = strlen( $search );
+        $str = substr_replace($str, $replace, $pos, $search_length);
     }
 
     return $str;

@@ -18,7 +18,7 @@ if (Session::isAuthenticated()) {
 			
 			if ($application != null) {
 				if ($application->getEvent()->equals(EventHandler::getCurrentEvent())) {
-					ApplicationHandler::acceptApplication($user, $application, $comment, true);
+					$application->accept($user, $comment, true);
 					$result = true;
 				} else {
 					$message = '<p>Kan ikke godkjenne søknader for tidligere arrangementer.</p>';

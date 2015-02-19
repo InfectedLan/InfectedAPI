@@ -20,8 +20,8 @@ if (Session::isAuthenticated()) {
 			
 				if ($application != null) {
 					// Only allow application for current event to be rejected.
-					if ($application->getEvent()->getId() == EventHandler::getCurrentEvent()->getId()) {
-						ApplicationHandler::rejectApplication($user, $application, $comment, true);
+					if ($application->getEvent()->equals(EventHandler::getCurrentEvent())) {
+						$application->reject($user, $comment, true);
 						$result = true;
 					} else {
 						$message = '<p>Kan ikke avslå søknader for tidligere arrangementer.</p>';

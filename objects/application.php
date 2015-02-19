@@ -95,6 +95,41 @@ class Application extends EventObject {
 	}
 	
 	/*
+	 * Accepts this application.
+	 */
+	public function accept(User $user, $comment, $notify) {
+		ApplicationHandler::acceptApplication($this, $user, $comment, $notify);
+	}
+
+	/*
+	 * Rejects this application.
+	 */
+	public function reject(User $user, $comment, $notify) {
+		ApplicationHandler::rejectApplication($this, $user, $comment, $notify);
+	}
+
+	/*
+	 * Closes this application.
+	 */
+	public function close(User $user) {
+		ApplicationHandler::closeApplication($this, $user);
+	}
+
+	/*
+	 * Add this application to the queue.
+	 */
+	public function queue(User $user, $notify) {
+		ApplicationHandler::queueApplication($this, $user, $notify);
+	}
+
+	/*
+	 * Remove this application from the queue.
+	 */
+	public function unqueue(User $user) {
+		ApplicationHandler::unqueueApplication($this, $user);
+	}
+
+	/*
 	 * Returns true if this application is in a queue, otherwise false.
 	 */
 	public function isQueued() {

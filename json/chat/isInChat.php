@@ -14,7 +14,7 @@ if (Session::isAuthenticated()) {
 		if ($chat != null) {
 			if ($user->hasPermission('*') || 
 				$user->hasPermission('compo.chat') ||
-				ChatHandler::isChatMember($user, $chat)) {
+				$chat->isMember($user)) {
 				$result = array('response' => true);
 			} else {
 				$result = array('response' => false);
