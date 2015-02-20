@@ -45,7 +45,7 @@ class Seat extends Object {
 	/*
      * Returns a string representation of this seat.
      */
-    public function getString(Seat $seat) {
+    public function getString() {
         return 'R' . $this->getRow()->getNumber() . ' S' . $this->getNumber();
     }
 }

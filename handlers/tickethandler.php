@@ -73,8 +73,8 @@ class TicketHandler {
         $database = Database::open(Settings::db_name_infected_tickets);
 
         $result = $database->query('SELECT * FROM `' . Settings::db_table_infected_tickets_tickets . '` 
-                                    WHERE `userId` = \'' . $user->getId() . '\'
-                                    AND `eventId` = \'' . $event->getId() . '\' 
+                                    WHERE `eventId` = \'' . $event->getId() . '\' 
+                                    AND `userId` = \'' . $user->getId() . '\'
                                     LIMIT 1;');
 
         $database->close();
@@ -90,8 +90,8 @@ class TicketHandler {
         $database = Database::open(Settings::db_name_infected_tickets);
 
         $result = $database->query('SELECT * FROM `' . Settings::db_table_infected_tickets_tickets . '` 
-                                    WHERE `userId` = \'' . $user->getId() . '\' 
-                                    AND `eventId`= \'' . $event->getId() . '\';');
+                                    WHERE `eventId`= \'' . $event->getId() . '\'
+                                    AND `userId` = \'' . $user->getId() . '\';');
 
         $database->close();
                                  
@@ -111,8 +111,8 @@ class TicketHandler {
         $database = Database::open(Settings::db_name_infected_tickets);
 
         $result = $database->query('SELECT * FROM `' . Settings::db_table_infected_tickets_tickets . '` 
-                                    WHERE (`seaterId` = \'' . $user->getId() . '\' OR (`userId` = \'' . $user->getId() . '\' AND `seaterId` = \'0\'))
-                                    AND `eventId` = \'' . EventHandler::getCurrentEvent()->getId() . '\';');
+                                    WHERE `eventId` = \'' . EventHandler::getCurrentEvent()->getId() . '\'
+                                    AND (`seaterId` = \'' . $user->getId() . '\' OR (`userId` = \'' . $user->getId() . '\' AND `seaterId` = \'0\'));');
     
         $database->close();
     
@@ -128,15 +128,13 @@ class TicketHandler {
     /*
      * Returns true if the specified user has a ticket.
      */
-    public static function hasTicket(User $user) {
+    public static function hasTicketByUser(User $user) {
         $event = EventHandler::getCurrentEvent();
         $database = Database::open(Settings::db_name_infected_tickets);
 
         $result = $database->query('SELECT `id` FROM `' . Settings::db_table_infected_tickets_tickets . '` 
-                                    WHERE `userId` = \'' . $user->getId() . '\'
-                                    AND `eventId` = \'' . $event->getId() . '\';');
-
-        $database->close();
+                                    WHERE `eventId` = \'' . $event->getId() . '\'
+                                    AND `userId` = \'' . $user->getId() . '\';');
 
         return $result->num_rows > 0;
     }
