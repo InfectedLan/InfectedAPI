@@ -80,7 +80,7 @@ class User extends Object {
 	 * Returns the users gendername.
 	 */
 	public function getGenderAsString() {
-		return $this->getGender() ? 'Kvinne' : 'Mann';
+		return $this->getGender() == 0 ? 'Gutt' : 'Jente';
 	}
 	
 	/* 
@@ -219,7 +219,7 @@ class User extends Object {
 	 * Returns true if user has an ticket for the current/upcoming event.
 	 */
 	public function hasTicket() {
-		return TicketHandler::hasTicket($this);
+		return TicketHandler::hasTicketByUser($this);
 	}
 	
 	/*
@@ -240,7 +240,7 @@ class User extends Object {
 	 * Returns true if users has a seat.
 	 */
 	public function hasSeat() {
-		return self::getTicket()->getSeat() != null;
+		return self::getTicket()->isSeated();
 	}
 	
 	/*
