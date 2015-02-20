@@ -35,7 +35,7 @@ class Ticket extends EventObject {
 	 * Returns the buyer of this ticket, also who bought/got it in the first place.
 	 */
 	public function getBuyer() {
-		return UserHandler::getUser($this->buyerId);
+		return $this->buyerId != 0 ? UserHandler::getUser($this->buyerId) : $this->getUser();
 	}
 	
 	/*
@@ -58,7 +58,24 @@ class Ticket extends EventObject {
 	 * The seater is the user account that is allowed to decide what seat this ticket is seated on.
 	 */
 	public function getSeater() {
-		return UserHandler::getUser($this->seaterId);
+		return $this->seaterId != 0 ? UserHandler::getUser($this->seaterId) : $this->getUser();
+	}
+	
+	/*
+	 * Returns a string representation of the ticket.
+	 */
+	public function getString() {
+		$event = $this->getEvent();
+		$season = date('m', $event->getStartTime()) == 2 ? 'VINTER' : 'HØST';
+		$theme = $event->getTheme();
+		$eventName = !empty($theme) ? $theme : $season . date('Y', $event->getStartTime());
+	
+		return strtoupper(Settings::name . '_' . $eventName . '_' . $this->getId());
+	}
+	
+	// TODO: Implement this in a more generic way?
+	public function getQrImagePath() {
+		return QR::getCode('https://crew.infected.no/api/pages/utils/verifyTicket.php?id=' . $this->getId());
 	}
 	
 	/* 
@@ -71,6 +88,13 @@ class Ticket extends EventObject {
 		return $timeLeftToEvent >= Settings::refundBeforeEventTime;
 	}
 	
+	/*
+	 * Returns true if this ticket is seated.
+	 */
+	public function isSeated() {
+		return $this->seatId > 0;
+	}
+
 	/*
 	 * Returns true if this ticket is checked in.
 	 */
@@ -105,23 +129,6 @@ class Ticket extends EventObject {
 	 */
 	public function revertTransfer(User $user) {
 		TicketTransferHandler::revertTransfer($this, $user);
-	}
-
-	/*
-	 * Returns a string representation of the ticket.
-	 */
-	public function getString() {
-		$event = $this->getEvent();
-		$season = date('m', $event->getStartTime()) == 2 ? 'VINTER' : 'HØST';
-		$theme = $event->getTheme();
-		$eventName = !empty($theme) ? $theme : $season . date('Y', $event->getStartTime());
-	
-		return strtoupper(Settings::name . '_' . $eventName . '_' . $this->getId());
-	}
-	
-	// TODO: Implement this in a more generic way?
-	public function getQrImagePath() {
-		return QR::getCode('https://crew.infected.no/api/pages/utils/verifyTicket.php?id=' . $this->getId());
 	}
 }
 ?>
