@@ -1,6 +1,6 @@
 <?php
 require_once 'session.php';
-require_once 'utils.php';
+require_once 'utils/dateutils.php';
 
 if (!Session::isAuthenticated()) {
 	echo '<script src="../api/scripts/register.js"></script>';
@@ -55,7 +55,7 @@ if (!Session::isAuthenticated()) {
 					echo '</select>';
 					echo '<select name="birthmonth">';
 						for ($month = 1; $month < 13; $month++) {
-							echo '<option value="' . $month . '">' . Utils::getMonthFromInt($month) . '</option>';
+							echo '<option value="' . $month . '">' . DateUtils::getMonthFromInt($month) . '</option>';
 						}
 					echo '</select>';
 					echo '<select name="birthyear">';

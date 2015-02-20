@@ -1,8 +1,8 @@
 <?php
 require_once 'session.php';
-require_once 'utils.php';
 require_once 'handlers/userhandler.php';
 require_once 'handlers/emergencycontacthandler.php';
+require_once 'utils/dateutils.php';
 
 $id = isset($_GET['id']) ? $_GET['id'] : Session::getCurrentUser()->getId();
 
@@ -70,9 +70,9 @@ if (Session::isAuthenticated()) {
 							echo '<select name="birthmonth">';					
 								for ($month = 1; $month < 13; $month++) {
 									if ($month == date('m', $birthdate)) {
-										echo '<option value="' . $month . '" selected>' . Utils::getMonthFromInt($month) . '</option>';
+										echo '<option value="' . $month . '" selected>' . DateUtils::getMonthFromInt($month) . '</option>';
 									} else {
-										echo '<option value="' . $month . '">' . Utils::getMonthFromInt($month) . '</option>';
+										echo '<option value="' . $month . '">' . DateUtils::getMonthFromInt($month) . '</option>';
 									}
 								}
 							echo '</select>';
@@ -106,7 +106,7 @@ if (Session::isAuthenticated()) {
 					echo '</tr>';
 					echo '<tr>';
 						echo '<td>Foresatte\'s telefon:</td>';
-							if (EmergencyContactHandler::hasEmergencyContact($editUser)) {
+							if (EmergencyContactHandler::hasEmergencyContactByUser($editUser)) {
 								$emergencyContactPhone = EmergencyContactHandler::getEmergencyContactByUser($editUser)->getPhone();
 							
 								echo '<td><input name="emergencycontactphone" type="tel" value="' . $emergencyContactPhone . '"></td>';
