@@ -1,4 +1,5 @@
-/*
+<?php
+/**
  * This file is part of InfectedAPI.
  *
  * Copyright (C) 2015 Infected <http://infected.no/>.
@@ -16,8 +17,7 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
- 
-<?php
+
 class DateUtils {
 	public static function getDayFromInt($day) {
 		$dayList = array('Søndag',

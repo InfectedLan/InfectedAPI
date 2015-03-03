@@ -1,4 +1,5 @@
-/*
+<?php
+/**
  * This file is part of InfectedAPI.
  *
  * Copyright (C) 2015 Infected <http://infected.no/>.
@@ -17,7 +18,6 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-<?php
 require_once 'session.php';
 require_once 'handlers/componhandler.php';
 require_once 'handlers/clanhandler.php';
