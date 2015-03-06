@@ -142,5 +142,6 @@ if (Session::isAuthenticated()) {
 	$message = '<p>Du er allerede logget inn!</p>';
 } 
 
-echo json_encode(array('result' => $result, 'message' => $message));
+header('Content-Type: text/plain');
+echo json_encode(array('result' => $result, 'message' => $message), JSON_PRETTY_PRINT);
 ?>

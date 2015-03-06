@@ -32,5 +32,6 @@ foreach (SlideHandler::getSlides() as $slide) {
 							  'isPublished' => $slide->isPublished()));
 }
 
-echo json_encode(array('slideList' => $slideList));
+header('Content-Type: text/plain');
+echo json_encode(array('slideList' => $slideList), JSON_PRETTY_PRINT);
 ?>

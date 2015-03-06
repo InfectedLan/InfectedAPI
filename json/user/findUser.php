@@ -55,5 +55,6 @@ if (Session::isAuthenticated()) {
 	}
 }
 
-echo json_encode(array('result' => $result, 'message' => $message, 'users' => $users));
+header('Content-Type: text/plain');
+echo json_encode(array('result' => $result, 'message' => $message, 'users' => $users), JSON_PRETTY_PRINT);
 ?>

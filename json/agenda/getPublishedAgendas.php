@@ -32,5 +32,6 @@ foreach (AgendaHandler::getPublishedAgendas() as $agenda) {
 								  'isHappening' => $agenda->isHappening()));
 }
 
-echo json_encode(array('agendaList' => $agendaList));
+header('Content-Type: text/plain');
+echo json_encode(array('agendaList' => $agendaList), JSON_PRETTY_PRINT);
 ?>

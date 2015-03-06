@@ -78,9 +78,12 @@ if (Session::isAuthenticated()) {
 	$message = 'Du er ikke logget inn.</p>';
 }
 
+
+header('Content-Type: text/plain');
+
 if ($result) {
-	echo json_encode(array('result' => $result));
+	echo json_encode(array('result' => $result), JSON_PRETTY_PRINT);
 } else {
-	echo json_encode(array('result' => $result, 'message' => $message));
+	echo json_encode(array('result' => $result, 'message' => $message), JSON_PRETTY_PRINT);
 }
 ?>
