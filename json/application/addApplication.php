@@ -58,8 +58,8 @@ if (Session::isAuthenticated()) {
 		$message = '<p>Du er allerede med i et crew.</p>';
 	}
 } else {
-	$message = '<p>Du er allerede logget inn!</p>';
-} 
+	$message = Localization::getLocale('you_are_not_logged_in');
+}
 
 header('Content-Type: text/plain');
 echo json_encode(array('result' => $result, 'message' => $message), JSON_PRETTY_PRINT);
