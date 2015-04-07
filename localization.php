@@ -67,5 +67,67 @@ Localization::$localizationList = array('you_are_not_logged_in' 							 => 'Du e
 										'you_must_provide_a_reason_why_the_application_shall_be_rejected' 	=> 'Du må oppgi en grunn på hvorfor søkneden skal bli avvist.',
 										'you_can_not_queue_applications_from_previous_events' 				=> 'Du kan ikke putte søknader fra tidligere arrangementer i køen.',
 										'you_can_not_unqueue_applications_from_previous_events'				=> 'Du kan ikke ta søknader fra tidligere arrangementer ut av køen.',
+
+										// Avatar
+										'' => '',
+
+										// Chat
+										'' => '',
+
+										// Clan
+										'' => '',
+
+										// Compo
+										'' => '',
+
+										// E-mail
+										'' => '',
+
+										// Event
+										'' => '',
+
+										// Group
+										'' => '',
+
+										// Invite
+										'' => '',
+
+										// Location
+										'' => '',
+
+										// Match
+										'' => '',
+
+										// Page
+										'' => '',
+
+										// Pay
+										'' => '',
+
+										// Permissions
+										'' => '',
+
+										// Restricted Page
+										'' => '',
+
+										// Row
+										'' => '',
+
+										// Seatmap
+										'' => '',
+
+										// Session
+										'' => '',
+
+										// Slide
+										'' => '',
+
+										// Team
+										'' => '',
+
+										// Ticket
+										'' => '',
+
+										// User
 										'' => '');
 ?>
