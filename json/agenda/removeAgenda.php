@@ -19,6 +19,7 @@
  */
 
 require_once 'session.php';
+require_once 'localization.php';
 require_once 'handlers/agendahandler.php';
 
 $result = false;
@@ -37,7 +38,7 @@ if (Session::isAuthenticated()) {
 				AgendaHandler::removeAgenda($agenda);
 				$result = true;
 			} else {
-				$message = Localization::getLocale('the_object_you_are_trying_to_remove_does_not_exist');
+				$message = Localization::getLocale('the_agenda_you_are_trying_to_remove_does_not_exist');
 			}
 		} else {
 			$message = Localization::getLocale('no_object_specified');

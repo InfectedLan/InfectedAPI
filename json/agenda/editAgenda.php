@@ -19,6 +19,7 @@
  */
 
 require_once 'session.php';
+require_once 'localization.php';
 require_once 'handlers/agendahandler.php';
 
 $result = false;
@@ -49,7 +50,7 @@ if (Session::isAuthenticated()) {
 				AgendaHandler::updateAgenda($agenda, $title, $description, $startTime, $published);
 				$result = true;
 			} else {
-				$message = Localization::getLocale('the_object_you_are_trying_to_change_does_not_exist');
+				$message = Localization::getLocale('the_agenda_you_are_trying_to_change_does_not_exist');
 			}
 		} else {
 			$message = Localization::getLocale('you_have_not_filled_out_the_required_fields');
