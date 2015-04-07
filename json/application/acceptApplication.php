@@ -19,6 +19,7 @@
  */
 
 require_once 'session.php';
+require_once 'localization.php';
 require_once 'handlers/applicationhandler.php';
 require_once 'handlers/eventhandler.php';
 
@@ -46,7 +47,7 @@ if (Session::isAuthenticated()) {
 				$message = Localization::getLocale('this_application_does_not_exist');
 			}
 		} else {
-			$message = '<p>Ingen søknad spesifisert.</p>';
+			$message = Localization::getLocale('no_application_specified');
 		}
 	} else {
 		$message = Localization::getLocale('you_do_not_have_permission_to_do_that');
