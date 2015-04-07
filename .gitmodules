@@ -1,3 +1,12 @@
-[submodule "test"]
-	path = test
-	url = git@github.com:InfectedLan/InfectedTest.git
+[submodule "libraries/phpmailer"]
+	path = libraries/phpmailer
+	url = git://github.com/PHPMailer/PHPMailer.git
+[submodule "libraries/chosen"]
+	path = libraries/chosen
+	url = git://github.com/harvesthq/chosen
+[submodule "libraries/jcrop"]
+	path = libraries/jcrop
+	url = git://github.com/tapmodo/Jcrop
+[submodule "libraries/phpqrcode"]
+	path = libraries/phpqrcode
+	url = git://github.com/t0k4rt/phpqrcode
