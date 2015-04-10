@@ -19,6 +19,7 @@
  */
 
 require_once 'session.php';
+require_once 'localization.php';
 require_once 'handlers/userhandler.php';
 
 $result = false;
@@ -48,10 +49,10 @@ if (Session::isAuthenticated()) {
 			
 			$result = true;
 		} else {
-			$message = '<p>Fant ingen resultater.</p>';
+			$message = Localization::getLocale('no_results_found');
 		}
 	} else {
-		$message = '<p>Ikke noe søkeord oppgitt.</p>';
+		$message = Localization::getLocale('no_keyword_provided');
 	}
 }
 

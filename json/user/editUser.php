@@ -19,6 +19,7 @@
  */
 
 require_once 'session.php';
+require_once 'localization.php';
 require_once 'handlers/userhandler.php';
 require_once 'handlers/emergencycontacthandler.php';
 
@@ -57,7 +58,6 @@ if (Session::isAuthenticated()) {
 					is_numeric($_GET['phone']) &&
 					!empty($_GET['address']) &&
 					is_numeric($_GET['postalcode'])) {
-					$editUser = UserHandler::getUser($_GET['id']);
 					$firstname = ucfirst($_GET['firstname']);
 					$lastname = ucfirst($_GET['lastname']);
 					$username = $_GET['username'];
@@ -69,78 +69,84 @@ if (Session::isAuthenticated()) {
 					$postalcode = $_GET['postalcode'];
 					$nickname = !empty($_GET['nickname']) ? $_GET['nickname'] : $editUser->getUsername();
 					$emergencyContactPhone = isset($_GET['emergencycontactphone']) ? $_GET['emergencycontactphone'] : 0;
-					
-					if ($editUser != null) {
-						if ($username != $editUser->getUsername() && UserHandler::userExists($username)) {
-							$message = '<p>Brukernavnet du skrev inn er allerede i bruk.</p>';
-						} else if ($email != $editUser->getEmail() && UserHandler::userExists($email)) {
-							$message = '<p>E-post adressen du skrev inn er allerede i bruk.</p>';
-						} else if ($phone != $editUser->getPhone() && UserHandler::userExists($phone)) {
-							$message = '<p>Telefon nummeret du skrev inn er allerede i bruk.</p>';
-						} else if (empty($firstname) || strlen($firstname) > 32) {
-							$message = '<p>Du har ikke skrevet inn noe fornavn.</p>';
-						} else if (empty($lastname) || strlen($lastname) > 32) {
-							$message = '<p>Du har ikke skrevet inn noe etternavn.</p>';
-						} else if (empty($email) || !preg_match('/^([a-zæøåA-ZÆØÅ0-9_\.-]+)@([\da-z\.-]+)\.([a-z\.]{2,6})$/', $email) || !filter_var($email, FILTER_VALIDATE_EMAIL)) {
-							$message = '<p>E-post adressen du skrev inn er ikke gyldig.</p>';
-						} else if (!is_numeric($gender)) {
-							$message = '<p>Du har oppgitt et ugyldig kjønn.</p>';
-						} else if (!is_numeric($phone) || $phone <= 0 || strlen($phone) < 8 || strlen($phone) > 8) {
-							$message = '<p>Du har ikke skrevet inn et gyldig telefonnummer.</p>';
-						} else if (empty($address) && strlen($address) > 32) {
-							$message = '<p>Du må skrive inn en adresse.</p>';
-						} else if (!is_numeric($postalcode) || strlen($postalcode) > 4 || !CityDictionary::hasPostalCode($postalcode)) {
-							$message = '<p>Du må skrive inn et gyldig postnummer.</p>';
-						} else if (!preg_match('/^[a-zæøåA-ZÆØÅ0-9_-]{2,16}$/', $nickname)) {
-							$message = '<p>Kallenavnet du skrev inn er ikke gyldig, det må bestå av minst 2 tegn og max 16 tegn.</p>';
-						} else if (date_diff(date_create($birthdate), date_create('now'))->y < 18 && (!isset($_GET['emergencycontactphone']) || !is_numeric($emergencyContactPhone) || strlen($emergencyContactPhone) != 8)) {
-							if (!is_numeric($emergencyContactPhone)) {
-								$message = '<p>Foresattes telefonnummer må være et tall!</p>';
-							} else if (strlen($emergencyContactPhone) != 8) {
-								$message = '<p>Foresattes telefonnummer er ikke 8 siffer langt!</p>';
-							}
-							
-							$message = '<p>Du er under 18 år, og må derfor oppgi et telefonnummer til en forelder.</p>';
-						} else {
-							UserHandler::updateUser($editUser,
-													$firstname, 
-													$lastname, 
-													$username, 
-													$email, 
-													$birthdate, 
-													$gender, 
-													$phone, 
-													$address, 
-													$postalcode, 
-													$nickname);
-							
-							if (EmergencyContactHandler::hasEmergencyContact($editUser) || 
-								isset($_GET['emergencycontactphone']) && is_numeric($emergencyContactPhone)) {
-								EmergencyContactHandler::createEmergencyContact($editUser, $emergencyContactPhone);
-							}
-							
-							// Update the user instance form database.
-							Session::reload();
-							$result = true;
+					 																																																																																																		
+					'parent_phone_must_be_a_number' 																														
+					'parent_phone_is_too_short_it_must_consist_of_at_least_8_characters' 																					 
+					'you_are_below_the_age_of_18_and_must_therefore_provide_a_phone_number_to_a_guardian' 																	
+					'your_account_is_now_successfully_registered_you_will_now_receive_an_activation_link_per_email_remember_to_check_spam_folder_if_you_should_not_find_it'
+					$message = Localization::getLocale();
+
+
+					if ($username != $editUser->getUsername() && UserHandler::userExists($username)) {
+						$message = Localization::getLocale('the_username_is_already_in_use_by_someone_else');
+					} else if ($email != $editUser->getEmail() && UserHandler::userExists($email)) {
+						$message = Localization::getLocale('the_email_address_is_already_in_use_by_someone_else');
+					} else if ($phone != $editUser->getPhone() && UserHandler::userExists($phone)) {
+						$message = Localization::getLocale('the_phone_number_is_already_in_use_by_someone_else');
+					} else if (empty($firstname) || strlen($firstname) > 32) {
+						$message = Localization::getLocale('you_must_enter_a_first_name');
+					} else if (empty($lastname) || strlen($lastname) > 32) {
+						$message = Localization::getLocale('you_must_enter_a_last_name');
+					} else if (!preg_match('/^[a-zæøåA-ZÆØÅ0-9_-]{2,16}$/', $username)) {
+						$message = Localization::getLocale('the_username_is_not_valid_it_must_consist_of_at_least_2_characters_and_a_maximum_of_16_characters');
+					} else if (empty($email) || !preg_match('/^([a-zæøåA-ZÆØÅ0-9_\.-]+)@([\da-z\.-]+)\.([a-z\.]{2,6})$/', $email) || !filter_var($email, FILTER_VALIDATE_EMAIL)) {
+						$message = Localization::getLocale('the_email_address_is_not_valid');
+					// TODO: Insert confirmEmail here?
+					} else if (!is_numeric($gender)) {
+						$message = Localization::getLocale('you_have_entered_an_invalid_gender');
+					} else if (!is_numeric($phone) || $phone <= 0 || strlen($phone) < 8 || strlen($phone) > 8) {
+						$message = Localization::getLocale('the_phone_number_is_not_valid');
+					} else if (empty($address) && strlen($address) > 32) {
+						$message = Localization::getLocale('you_must_enter_a_valid_address');
+					} else if (!is_numeric($postalcode) || strlen($postalcode) > 4 || !CityDictionary::hasPostalCode($postalcode)) {
+						$message = Localization::getLocale('the_postcode_is_not_valid_the_postcode_consists_of_4_characters');
+					} else if (!preg_match('/^[a-zæøåA-ZÆØÅ0-9_-]{2,16}$/', $nickname)) {
+						$message = Localization::getLocale('the_nickname_is_not_valid_it_must_consist_of_at_least_2_characters_and_maximum_16_characters');
+					} else if (date_diff(date_create($birthdate), date_create('now'))->y < 18 && (!isset($_GET['emergencycontactphone']) || !is_numeric($emergencyContactPhone) || strlen($emergencyContactPhone) != 8)) {
+						if (!is_numeric($emergencyContactPhone)) {
+							$message = Localization::getLocale('parent_phone_must_be_a_number');
+						} else if (strlen($emergencyContactPhone) != 8) {
+							$message = Localization::getLocale('parent_phone_is_too_short_it_must_consist_of_at_least_8_characters');
 						}
+						
+						$message = Localization::getLocale('you_are_below_the_age_of_18_and_must_therefore_provide_a_phone_number_to_a_guardian');
 					} else {
-						$message = '<p>Brukeren finnes ikke.</p>';
+						UserHandler::updateUser($editUser,
+												$firstname, 
+												$lastname, 
+												$username, 
+												$email, 
+												$birthdate, 
+												$gender, 
+												$phone, 
+												$address, 
+												$postalcode, 
+												$nickname);
+						
+						if (EmergencyContactHandler::hasEmergencyContact($editUser) || 
+							isset($_GET['emergencycontactphone']) && is_numeric($emergencyContactPhone)) {
+							EmergencyContactHandler::createEmergencyContact($editUser, $emergencyContactPhone);
+						}
+						
+						// Update the user instance form database.
+						Session::reload();
+						$result = true;
 					}
 				} else {
-					$message = '<p>Du har ikke fyllt ut alle feltene.</p>';
+					$message = Localization::getLocale('you_have_not_filled_out_the_required_fields');
 				}
 			} else {
-				$message = '<p>Du har ikke rettigheter til dette.</p>';
+				$message = Localization::getLocale('you_do_not_have_permission_to_do_that');
 			}
 		} else {
-			$message = '<p>Brukeren eksisterer ikke.</p>';
+			$message = Localization::getLocale('this_user_does_not_exist');
 		}
 	} else {
-		$message = '<p>Bruker ikke spessifisert.</p>';
+		$message = Localization::getLocale('no_user_specified');
 	}
 } else {
-	$message = '<p>Du er allerede logget inn!</p>';
-} 
+	$message = Localization::getLocale('you_are_not_logged_in');
+}
 
 header('Content-Type: text/plain');
 echo json_encode(array('result' => $result, 'message' => $message), JSON_PRETTY_PRINT);

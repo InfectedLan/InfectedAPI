@@ -19,6 +19,7 @@
  */
 
 require_once 'session.php';
+require_once 'localization.php';
 require_once 'handlers/userhandler.php';
 
 $result = false;
@@ -45,17 +46,17 @@ if (Session::isAuthenticated()) {
 				Session::reload();
 				$result = true;
 			} else {
-				$message = '<p>Passordene du skrev inn var ikke like!</p>';
+				$message = Localization::getLocale('passwords_does_not_match');
 			}
 		} else {
-			$message = '<p>Det gamle passordet du skrev inn var ikke riktig.</p>';
+			$message = Localization::getLocale('the_old_password_you_entered_was_incorrect');
 		}
 	} else {
-		$message = '<p>Du har ikke fyllt ut alle feltene.</p>';
+		$message = Localization::getLocale('you_have_not_filled_out_the_required_fields');
 	}
 } else {
-	$message = '<p>Du er allerede logget inn!</p>';
-} 
+	$message = Localization::getLocale('you_are_not_logged_in');
+}
 
 header('Content-Type: text/plain');
 echo json_encode(array('result' => $result, 'message' => $message), JSON_PRETTY_PRINT);
