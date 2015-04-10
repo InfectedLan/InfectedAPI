@@ -18,6 +18,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+require_once 'localization.php';
 require_once 'handlers/userhandler.php';
 require_once 'handlers/passwordresetcodehandler.php';
 
@@ -36,13 +37,13 @@ if (!isset($_GET['code'])) {
 			if ($user != null) {
 				$user->sendPasswordResetMail();
 				$result = true;
-				$message = '<p>En link har blitt sendt til din registrerte e-post adresse, klikk på linken for å endre passordet ditt.</p>';
+				$message = Localization::getLocale('an_email_has_been_sent_to_your_registered_address_click_the_link_to_change_your_password');
 			}
 		} else {
-			$message = '<p>Kunne ikke finne brukeren i vår database.</p>';
+			$message = Localization::getLocale('could_not_find_the_user_in_the_database');
 		}
 	} else {
-		$message = '<p>Du må skrive inn en e-postadresse eller ett brukernavn!</p>';
+		$message = Localization::getLocale('you_must_enter_a_username_an_email_address_or_a_phone_number');
 	}
 } else {
 	if (isset($_GET['password']) &&
@@ -60,15 +61,15 @@ if (!isset($_GET['code'])) {
 				PasswordResetCodeHandler::removePasswordResetCode($code);
 				UserHandler::updateUserPassword($user->getId(), hash('sha256', $password));
 				$result = true;
-				$message = '<p>Passordet ditt er nå endret.</p>';
+				$message = Localization::getLocale('your_password_is_now_changed');
 			} else {
-				$message = '<p>Passordene du skrev inn var ikke like!</p>';
+				$message = Localization::getLocale('passwords_does_not_match');
 			}
 		} else {
-			$message = '<p>Linken du fikk for å resette passwordet ditt er ikke lengre gyldig.</p>';
+			$message = Localization::getLocale('the_link_to_reset_your_password_is_no_longer_valid');
 		}
 	} else {
-		$message = '<p>Du har ikke fyllt ut alle feltene.</p>';
+		$message = Localization::getLocale('you_have_not_filled_out_the_required_fields');
 	}
 }
 
