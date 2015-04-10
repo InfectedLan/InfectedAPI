@@ -19,15 +19,15 @@
  */
 
 class Localization {
-	private static $localizationList;
+	static $localizationList;
 
 	/*
 	 * Get locale by key.
 	 */
 	public static function getLocale($key) {
 		// If key exists in array, return the value.
-		if (in_array($key, $localizationList)) {
-			return $localizationList[$key];
+		if (array_key_exists($key, self::$localizationList)) {
+			return self::$localizationList[$key];
 		}
 
 		// Otherwise, return an error string.
@@ -47,7 +47,7 @@ Localization::$localizationList = array('you_are_not_logged_in' 							 => 'Du e
 										'you_do_not_have_permission_to_do_that' 			 => 'Du har ikke rettigheter til dette.',
 										'you_have_not_filled_out_the_required_fields'		 => 'Du har ikke fylt ut de nødvendige feltene.',
 										'no_object_specified' 								 => 'Ikke noe objekt spesifisert.',
-										'you_are_already_in_a_group'						 => 'Du er allerede i et crew.';
+										'you_are_already_in_a_group'						 => 'Du er allerede i et crew.',
 										
 										/* JSON */
 										// Agenda
