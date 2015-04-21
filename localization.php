@@ -27,7 +27,7 @@ class Localization {
 	public static function getLocale($key) {
 		// If key exists in array, return the value.
 		if (array_key_exists($key, self::$localizationList)) {
-			return self::$localizationList[$key],
+			return self::$localizationList[$key];
 		}
 
 		// Otherwise, return an error string.
@@ -38,7 +38,7 @@ class Localization {
 	 * Get locale by key, with the given replace argument.
 	 */
 	public static function getLocaleWithArgument($key, $argument) {
-		return str_replace('%s', $argument, self::getLocale($key)),
+		return str_replace('%s', $argument, self::getLocale($key));
 	}
 }
 
