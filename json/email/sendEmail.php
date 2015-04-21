@@ -20,6 +20,7 @@
 
 require_once 'session.php';
 require_once 'mailmanager.php';
+require_once 'localization.php';
 require_once 'handlers/eventhandler.php';
 
 $result = false;
@@ -87,22 +88,22 @@ if (Session::isAuthenticated()) {
 				
 				// Format message differently when we're just sending email to one user.
 				if (count($userList) <= 1) {
-					$message = '<p>Din e-post ble sendt til den valgte brukeren.</p>';
+					$message = Localization::getLocale('your_email_was_sent_to_the_selected_user');
 				} else {
-					$message = '<p>Din e-post ble sendt til de valgte brukerene.</p>';
+					$message = Localization::getLocale('your_email_was_sent_to_the_selected_users');
 				}
 				
 				$result = true;
 			}
 		} else {
-			$message = '<p>Mangler informasjon, sjekk at du har fylt ut alle feltene.</p>';
+			$message = Localization::getLocale('you_have_not_filled_out_the_required_fields');
 		}
 	} else {
-		$message = '<p>Du har ikke tilgang til dette.</p>';
+		$message = Localization::getLocale('you_do_not_have_permission_to_do_that');
 	}
 } else {
-	$message = '<p>Du er ikke logget inn.</p>';
-} 
+	$message = Localization::getLocale('you_are_not_logged_in');
+}
 
 header('Content-Type: text/plain');
 echo json_encode(array('result' => $result, 'message' => $message), JSON_PRETTY_PRINT);

@@ -81,6 +81,10 @@ Localization::$localizationList = array(
 	'' => '',
 
 	// E-mail
+	'your_email_was_sent_to_the_selected_user' => 'Din e-post ble sendt til den valgte brukeren.',
+	'your_email_was_sent_to_the_selected_users' => 'Din e-post ble sendt til de valgte brukerene.',
+
+
 	'' => '',
 
 	// Event
