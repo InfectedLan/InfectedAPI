@@ -19,6 +19,7 @@
  */
 
 require_once 'session.php';
+require_once 'localization.php';
 require_once 'handlers/eventhandler.php';
 
 $result = false;
@@ -36,16 +37,16 @@ if (Session::isAuthenticated()) {
 				EventHandler::removeEvent($event);
 				$result = true;
 			} else {
-				$message = '<p>Arrangementet finnes ikke.</p>';
+				$message = Localization::getLocale('the_event_does_not_exist');
 			}
 		} else {
-			$message = '<p>Ikke noe arrangement spesifisert.</p>';
+			$message = Localization::getLocale('you_have_not_filled_out_the_required_fields');
 		}
 	} else {
-		$message = '<p>Du har ikke tillatelse til dette.</p>';
+		$message = Localization::getLocale('you_do_not_have_permission_to_do_that');
 	}
 } else {
-	$message = '<p>Du er ikke logget inn.</p>';
+	$message = Localization::getLocale('you_are_not_logged_in');
 }
 
 header('Content-Type: text/plain');

@@ -84,11 +84,9 @@ Localization::$localizationList = array(
 	'your_email_was_sent_to_the_selected_user' => 'Din e-post ble sendt til den valgte brukeren.',
 	'your_email_was_sent_to_the_selected_users' => 'Din e-post ble sendt til de valgte brukerene.',
 
-
-	'' => '',
-
 	// Event
-	'' => '',
+	'the_event_does_not_exist' 											=> 'Arrangementet finnes ikke.',
+	'all_the_members_of_the_former_event_was_transferred_to_this_one' 	=> 'Alle medlemene fra det tidligere arrangement ble overført til dette.',
 
 	// Group
 	'' => '',
