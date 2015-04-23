@@ -40,7 +40,7 @@ if (Session::isAuthenticated()) {
 					$application->unqueue($user);
 					$result = true;
 				} else {
-					$message = Localization::getLocale('you_can_not_unqueue_applications_from_previous_events');
+					$message = Localization::getLocale('you_cannot_unqueue_applications_from_previous_events');
 				}
 			} else {
 				$message = Localization::getLocale('this_application_does_not_exist');
