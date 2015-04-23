@@ -18,8 +18,14 @@
    "you_cannot_queue_applications_from_previous_events":"Du kan ikke putte s\u00f8knader fra tidligere arrangementer i k\u00f8en.",
    "you_cannot_unqueue_applications_from_previous_events":"Du kan ikke ta s\u00f8knader fra tidligere arrangementer ut av k\u00f8en.",
    
-   "":"",
-   
+   "this_avatar_does_not_exist":"Denne avataren finnes ikke.",
+   "no_avatar_specified":"Ingen avatar spesifisert.",
+   "you_have_no_avatar_and_therefore_cannot_remove_it":"Du har ingen avatar, og kan derfor ikke fjerne den.",
+
+   "this_chat_does_not_exist":"Denne chatten finnes ikke.",
+   "you_are_not_a_participant_of_this_chat":"Du er ikke deltaker i denne chatten.",
+   "this_chat_does_not_contain_any_messages":"Denne chat inneholder ingen meldinger.",
+
    "your_email_was_sent_to_the_selected_user":"Din e-post ble sendt til den valgte brukeren.",
    "your_email_was_sent_to_the_selected_users":"Din e-post ble sendt til de valgte brukerene.",
    

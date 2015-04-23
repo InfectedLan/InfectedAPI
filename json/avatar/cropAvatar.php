@@ -19,18 +19,10 @@
  */
 
 require_once 'session.php';
+require_once 'localization.php';
 
 $result = false;
 $message = null;
-
-function str_replace_last($search, $replace, $str) {
-    if (($pos = strrpos($str, $search)) !== false) {
-        $search_length = strlen( $search );
-        $str = substr_replace($str, $replace, $pos, $search_length);
-    }
-
-    return $str;
-}
 
 if (Session::isAuthenticated()) {
 	$user = Session::getCurrentUser();
@@ -107,8 +99,6 @@ if (Session::isAuthenticated()) {
 				} else {
 					$message = '<p>Avataren din har et ugyldig filformat!</p>';
 				}
-			} else {
-				$message = '<p>Felt mangler!</p>';
 			}
 		} else {
 			$message = '<p>Du har ingen avatar som ikke har blitt beskjært!</p>';
@@ -117,9 +107,18 @@ if (Session::isAuthenticated()) {
 		$message = '<p>Du har ingen avatar!</p>';
 	}
 } else {
-	$message = '<p>Du er ikke logget inn.</p>';
+	$message = Localization::getLocale('you_are_not_logged_in');
 }
 
 header('Content-Type: text/plain');
 echo json_encode(array('result' => $result, 'message' => $message), JSON_PRETTY_PRINT);
+
+function str_replace_last($search, $replace, $str) {
+    if (($pos = strrpos($str, $search)) !== false) {
+        $search_length = strlen( $search );
+        $str = substr_replace($str, $replace, $pos, $search_length);
+    }
+
+    return $str;
+}
 ?>

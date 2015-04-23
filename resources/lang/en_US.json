@@ -11,15 +11,21 @@
    "no_application_specified":"No application specified.",
    "you_have_already_submitted_an_application_to_value_you_can_apply_again_if_your_application_should_be_denied":"You have already submitted an application to %s you can apply again if your application should be denied.",
    "you_must_upload_a_valid_picture_before_you_can_submit_an_application":"You must upload a valid picture before you can submit an application.",
-   "your_appliction_to_value_is_now_submitted":"Your appliction to value is now submitted.",
+   "your_appliction_to_value_is_now_submitted":"Your appliction to %s is now submitted.",
    "you_can_not_approve_applications_from_previous_events":"You_can_not_approve_applications_from_previous_events.",
    "you_can_not_reject_applications_from_previous_events":"You can not reject applications from previous events.",
    "you_must_provide_a_reason_why_the_application_shall_be_rejected":"You must provide a reason why the application shall be rejected.",
    "you_cannot_queue_applications_from_previous_events":"You cannot queue applications from previous events.",
-   "you_cannot_unqueue_applications_from_previous_events":"You cannot unqueue applications from previous events.",
+   "you_cannot_unqueue_applications_from_previous_events":"You cannot unqueue applications from previous events.",   
    
-   "":"",
-   
+   "this_avatar_does_not_exist":"This avatar does not exist.",
+   "no_avatar_specified":"No avatar specified.",
+   "you_have_no_avatar_and_therefore_cannot_remove_it":"You have no avatar, and therefore cannot remove it.",
+
+   "this_chat_does_not_exist":"This chat does not exist.",
+   "you_are_not_a_participant_of_this_chat":"You are not a participant of this chat.",
+   "this_chat_does_not_contain_any_messages":"This chat does not contain any messages.",
+
    "your_email_was_sent_to_the_selected_user":"Your email was sent to the selected user.",
    "your_email_was_sent_to_the_selected_users":"Your email was sent to the selected users.",
    
@@ -49,7 +55,6 @@
    "parent_phone_is_too_short_it_must_consist_of_at_least_8_characters":"Parent phone is too short it must consist of at least 8 characters.",
    "you_are_below_the_age_of_18_and_must_therefore_provide_a_phone_number_to_a_guardian":"You are below the age of 18 and must therefore provide a phone number to a guardian.",
    "your_account_is_now_successfully_registered_you_will_now_receive_an_activation_link_per_email_remember_to_check_spam_folder_if_you_should_not_find_it":"Your account is now successfully registered you will now receive an activation link per email remember to check spam folder if you should not find it.",
-   
    "the_old_password_you_entered_was_incorrect":"The old password you entered was incorrect.",
    "no_results_found":"No results found.",
    "no_keyword_provided":"No keyword provided.",
