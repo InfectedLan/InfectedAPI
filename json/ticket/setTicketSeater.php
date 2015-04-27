@@ -19,6 +19,7 @@
  */
 
 require_once 'session.php';
+require_once 'localization.php';
 require_once 'handlers/tickethandler.php';
 require_once 'handlers/userhandler.php';
 
@@ -39,25 +40,26 @@ if (Session::isAuthenticated()) {
 					
 					if ($seaterUser != null) {
 						TicketHandler::updateTicketSeater($ticket, $seaterUser);
+						
 						$result = true;
-						$message = '<p>Biletten har en ny seater.</p>';
+						$message = Localization::getLocale('the_ticket_has_a_new_seater');
 					} else {
-						$message = '<p>Den oppgitte seateren finnes ikke.</p>';
+						$message = Localization::getLocale('the_specified_seater_does_not_exist');
 					}
 				} else {
-					$message = '<p>Felt mangler!</p>';
+					$message = Localization::getLocale('you_have_not_filled_out_the_required_fields');
 				}
 			} else {
-				$message = '<p>Du eier ikke denne billetten!</p>';
+				$message = Localization::getLocale('you_do_not_own_this_ticket');
 			}
 		} else {
-			$message = '<p>Billetten finnes ikke.</p>';
+			$message = Localization::getLocale('this_ticket_does_not_exist');
 		}
 	} else {
-		$merssage = '<p>Ugyldig bilett.</p>';
+		$message = Localization::getLocale('no_ticket_specified');
 	}
 } else {
-	$message = '<p>Du er ikke logget inn!</p>';
+	$message = Localization::getLocale('you_are_not_logged_in');
 }
 
 header('Content-Type: text/plain');

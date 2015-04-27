@@ -28,10 +28,26 @@
 
    "your_email_was_sent_to_the_selected_user":"Din e-post ble sendt til den valgte brukeren.",
    "your_email_was_sent_to_the_selected_users":"Din e-post ble sendt til de valgte brukerene.",
-   
+
    "the_event_does_not_exist":"Arrangementet finnes ikke.",
    "all_the_members_of_the_former_event_was_transferred_to_this_one":"Alle medlemene fra det tidligere arrangement ble overf\u00f8rt til dette.",
    
+   "no_seatmap_specified":"Ikke noe setekart angitt.",
+
+   "this_ticket_does_not_exist":"Denne billetten finnes ikke.",
+   "no_ticket_specified":"Ingen billett angitt.",
+   "value_ticket_is_now_checked_in":"%s's billett er nå sjekket inn.",
+   "this_ticket_is_already_checked_in":"Denne billetten er allerede sjekket inn.",
+   "the_ticket_has_a_new_seat":"Billetten har fått nytt sete.",
+   "the_ticket_and_the_seat_are_not_from_the_same_event":"Billetten og setet er ikke fra samme arrangement.",
+   "this_seat_is_occupied":"Dette setet er opptatt.",
+   "this_seat_does_not_exist":"Dette setet eksisterer ikke.",
+   "the_ticket_has_a_new_seater":"Biletten har en ny seater.",          
+   "the_specified_seater_does_not_exist":"Den oppgitte seateren finnes ikke.",
+   "you_do_not_own_this_ticket":"Du eier ikke denne billetten.",
+   "the_ticket_is_now_transferred":"Billetten er nå overført.",
+   "the_target_user_does_not_exist":"Målbrukeren eksisterer ikke.",
+
    "this_user_does_not_exist":"Denne brukeren finnes ikke.",
    "no_user_specified":"Ingen bruker er spesifisert.",
    "the_username_is_already_in_use_by_someone_else":"Brukernavnet er allerede i bruk av en annen.",

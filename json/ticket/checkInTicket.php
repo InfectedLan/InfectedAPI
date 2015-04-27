@@ -19,6 +19,7 @@
  */
 
 require_once 'session.php';
+require_once 'localization.php';
 require_once 'handlers/tickethandler.php';
 require_once 'handlers/checkinstatehandler.php';
 
@@ -38,23 +39,23 @@ if (Session::isAuthenticated()) {
 			if ($ticket != null) {
 				if (!$ticket->isCheckedIn()) {
 					$ticket->checkIn();
-					
+
+					$message = Localization::getLocale('value_ticket_is_now_checked_in');
 					$result = true;
-					$message = '<p>Billetten til "' . $ticket->getUser()->getFullName() . '" er nå sjekket inn.</p>';
 				} else {
-					$message = '<p>Denne billetten er allerede sjekket inn!</p>';
+					$message = Localization::getLocale('this_ticket_is_already_checked_in');
 				}
 			} else {
-				$message = '<p>Denne billetten finnes ikke.</p>';
+				$message = Localization::getLocale('this_ticket_does_not_exist');
 			}
 		} else {
-			$message = '<p>Vi mangler felt.</p>';
+			$message = Localization::getLocale('you_have_not_filled_out_the_required_fields');
 		}
 	} else {
-		$message = '<p>Du har ikke tillatelse til dette!</p>';
+		$message = Localization::getLocale('you_do_not_have_permission_to_do_that');
 	}
 } else {
-	$message = '<p>Du er ikke logget inn.</p>';
+	$message = Localization::getLocale('you_are_not_logged_in');
 }
 
 header('Content-Type: text/plain');
