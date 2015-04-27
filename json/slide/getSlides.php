@@ -18,6 +18,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+require_once 'localization.php';
 require_once 'handlers/slidehandler.php';
 
 $slideList = array();

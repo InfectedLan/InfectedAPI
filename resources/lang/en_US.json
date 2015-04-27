@@ -37,6 +37,9 @@
    
    "no_seatmap_specified":"No seatmap specified.",
 
+   "this_slide_does_not_exist":"This slide does not exist.",
+   "no_slide_specified":"No slide specified.",
+
    "this_team_does_not_exist":"This team does not exist.",
    "no_team_specified":"No team specified.",
 
