@@ -19,6 +19,7 @@
  */
 
 require_once 'session.php';
+require_once 'localization.php';
 require_once 'handlers/userhandler.php';
 require_once 'handlers/grouphandler.php';
 
@@ -42,16 +43,16 @@ if (Session::isAuthenticated()) {
 				GroupHandler::changeGroupForUser($groupUser, $group);
 				$result = true;
 			} else {
-				$message = '<p>Noe gikk galt, mangler bruker eller gruppe.</p>';
+				$message = Localization::getLocale('no_group_specified');
 			}
 		} else {
-			$message = '<p>Du har ikke fyllt ut alle feltene.</p>';
+			$message = Localization::getLocale('you_have_not_filled_out_the_required_fields');
 		}
 	} else {
-		$message = '<p>Du har ikke tillatelse til dette.</p>';
+		$message = Localization::getLocale('you_do_not_have_permission_to_do_that');
 	}
 } else {
-	$message = '<p>Du er ikke logget inn.</p>';
+	$message = Localization::getLocale('you_are_not_logged_in');
 }
 
 header('Content-Type: text/plain');
