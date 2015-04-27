@@ -3,6 +3,7 @@
    "you_do_not_have_permission_to_do_that":"Du har ikke rettigheter til dette.",
    "you_have_not_filled_out_the_required_fields":"Du har ikke fylt ut de n\u00f8dvendige feltene.",
    "you_are_already_in_a_group":"Du er allerede i et crew.",
+   "not_found":"Ikke funnet.",
    
    "the_agenda_you_are_trying_to_change_does_not_exist":"Agenda'en du pr\u00f8ver \u00e5 endre, finnes ikke.",
    "the_agenda_you_are_trying_to_remove_does_not_exist":"Agenda'en du pr\u00f8ver \u00e5 fjerne, finnes ikke.",
@@ -36,6 +37,8 @@
    
    "this_group_does_not_exist":"Denne gruppen finnes ikke.",
    "no_group_specified":"Ingen gruppe angitt.",
+
+   "no_postcode_specified":"Ikke noe postnummer angitt.",
 
    "this_page_does_not_exist":"Denne siden finnes ikke.",
    "no_page_specified":"Ikke noe side angitt.",

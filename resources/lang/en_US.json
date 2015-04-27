@@ -3,6 +3,7 @@
    "you_do_not_have_permission_to_do_that":"You do not have permissions to do that.",
    "you_have_not_filled_out_the_required_fields":"You have not filled out the required fields.",
    "you_are_already_in_a_group":"You are already in a group.",
+   "not_found":"Not found.",
    
    "the_agenda_you_are_trying_to_change_does_not_exist":"The agenda you are trying to change does not exist.",
    "the_agenda_you_are_trying_to_remove_does_not_exist":"The agenda you are trying to remove does not exist.",
@@ -37,6 +38,8 @@
    "this_group_does_not_exist":"This group does not exist.",
    "no_group_specified":"No group specified.",
    
+   "no_postcode_specified":"No postcode specified.",
+
    "this_page_does_not_exist":"This page does not exist.",
    "no_page_specified":"No page specified.",
 

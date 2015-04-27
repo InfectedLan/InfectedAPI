@@ -18,6 +18,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+require_once 'localization.php';
 require_once 'handlers/citydictionary.php';
 
 $result = false;
@@ -32,10 +33,10 @@ if (isset($_GET['postalcode']) &&
 		$message = $city;
 	} else {
 		$result = true;
-		$message = '<p>Ikke funnet.</p>';
+		$message = Localization::getLocale('not_found');
 	}
 } else {
-	$message = '<p>Postnummer ikke spesifisert.</p>';
+	$message = Localization::getLocale('no_postcode_specified');
 }
 
 header('Content-Type: text/plain');
