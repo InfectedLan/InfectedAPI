@@ -19,6 +19,7 @@
  */
 
 require_once 'session.php';
+require_once 'localization.php';
 
 $result = false;
 $message = null;
@@ -28,7 +29,7 @@ if (Session::isAuthenticated()) {
 	
 	$result = true;
 } else {
-	$message = '<p>Du er ikke logget inn.</p>';
+	$message = Localization::getLocale('you_are_not_logged_in');
 }
 
 header('Content-Type: text/plain');

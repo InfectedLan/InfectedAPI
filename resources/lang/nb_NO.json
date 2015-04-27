@@ -37,6 +37,11 @@
 
    "no_seatmap_specified":"Ikke noe setekart angitt.",
 
+   "wrong_username_or_password":"Feil brukernavn eller passord.",
+   "you_must_activate_your_user_account_in_order_to_logg_in":"Du må aktivere brukeren din får å kan logge inn.",
+   "you_must_enter_a_username_and_password":"Du må skrive inn et brukernavn og passord.",
+   "you_are_already_logged_in":"Du er allerede logget inn.",
+
    "this_slide_does_not_exist":"Denne sliden finnes ikke.",
    "no_slide_specified":"Ikke noe slide angitt.",
 
