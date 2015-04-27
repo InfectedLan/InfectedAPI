@@ -31,8 +31,14 @@
    
    "the_event_does_not_exist":"The event does not exist.",
    "all_the_members_of_the_former_event_was_transferred_to_this_one":"All the members of the former event was transferred to this one.",
+
+   "this_group_does_not_exist":"This group does not exist.",
+   "no_group_specified":"No group specified.",
    
    "no_seatmap_specified":"No seatmap specified.",
+
+   "this_team_does_not_exist":"This team does not exist.",
+   "no_team_specified":"No team specified.",
 
    "this_ticket_does_not_exist":"This ticket does not exist.",
    "no_ticket_specified":"No ticket specified.",

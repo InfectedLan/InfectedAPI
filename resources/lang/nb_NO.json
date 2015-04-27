@@ -32,7 +32,13 @@
    "the_event_does_not_exist":"Arrangementet finnes ikke.",
    "all_the_members_of_the_former_event_was_transferred_to_this_one":"Alle medlemene fra det tidligere arrangement ble overf\u00f8rt til dette.",
    
+   "this_group_does_not_exist":"Denne gruppen finnes ikke.",
+   "no_group_specified":"Ingen gruppe angitt.",
+
    "no_seatmap_specified":"Ikke noe setekart angitt.",
+
+   "this_team_does_not_exist":"Dette laget finnes ikke.",
+   "no_team_specified":"Ikke noe lag angitt.",
 
    "this_ticket_does_not_exist":"Denne billetten finnes ikke.",
    "no_ticket_specified":"Ingen billett angitt.",
