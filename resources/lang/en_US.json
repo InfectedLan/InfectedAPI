@@ -40,7 +40,11 @@
    "this_page_does_not_exist":"This page does not exist.",
    "no_page_specified":"No page specified.",
 
+   "this_seatmap_does_not_exist":"This seatmap does not exist.",
    "no_seatmap_specified":"No seatmap specified.",
+   "an_error_occurred_while_uploading_your_image":"An error occurred while uploading your image.",
+   "the_file_size_is_too_large":"The file size is too large.",
+   "invalid_file_format":"Invalid file format.",
 
    "wrong_username_or_password":"Wrong username or password.",
    "you_must_activate_your_user_account_in_order_to_logg_in":"You must activate your user account in order to logg in.",
