@@ -40,6 +40,14 @@
    "this_page_does_not_exist":"This page does not exist.",
    "no_page_specified":"No page specified.",
 
+   "this_row_does_not_exist":"This row does not exist.",
+   "no_row_specified":"No row specified.",
+   "position_not_set":"Position not set.",
+   "number_of_seats_not_specified":"Number of seats not specified.",
+   "the_seat_you_are_trying_to_delete_is_occupied":"The seat you are trying to delete is occupied.",
+   "the_row_you_are_trying_to_delete_is_populated":"The row you are trying to delete is populated.",
+   "there_are_fewer_seats_in_the_row_than_you_are_trying_to_delete":"There are fewer seats in the row than you are trying to delete.",
+
    "this_seatmap_does_not_exist":"This seatmap does not exist.",
    "no_seatmap_specified":"No seatmap specified.",
    "an_error_occurred_while_uploading_your_image":"An error occurred while uploading your image.",

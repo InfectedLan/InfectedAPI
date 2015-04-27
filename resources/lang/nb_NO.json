@@ -40,6 +40,14 @@
    "this_page_does_not_exist":"Denne siden finnes ikke.",
    "no_page_specified":"Ikke noe side angitt.",
 
+   "this_row_does_not_exist":"Denne raden finnes ikke.",
+   "no_row_specified":"Ingen rad angitt.",
+   "position_not_set":"Posisjon ikke oppgitt.",
+   "number_of_seats_not_specified":"Antall seter ikke angitt.",
+   "the_seat_you_are_trying_to_delete_is_occupied":"Setet du prøver å slette er opptatt.",
+   "the_row_you_are_trying_to_delete_is_populated":"Raden du prøver å slette er he row you are trying to delete er befolket.",
+   "there_are_fewer_seats_in_the_row_than_you_are_trying_to_delete":"Det er færre seter i raden enn du prøver å slette.",
+
    "this_seatmap_does_not_exist":"This seatmap does not exist.",
    "no_seatmap_specified":"Ikke noe setekart angitt.",
    "an_error_occurred_while_uploading_your_image":"En feil oppstod under opplastningen av bilder ditt.",

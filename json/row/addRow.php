@@ -19,6 +19,7 @@
  */
 
 require_once 'session.php';
+require_once 'localization.php';
 require_once 'handlers/rowhandler.php';
 require_once 'handlers/seatmaphandler.php';
 
@@ -41,19 +42,19 @@ if (Session::isAuthenticated()) {
 					$id = $row->getId();
 					$result = true;
 				} else {
-					$message = '<p>Posisjonen er ikke satt!</p>';
+					$message = Localization::getLocale('position_not_set');
 				}
 			} else {
-				$message = '<p>Seatmappet eksisterer ikke!</p>';
+				$message = Localization::getLocale('this_seatmap_does_not_exist');
 			}
 		} else {
-			$message = '<p>Seatmap er ikke satt!</p>';
+			$message = Localization::getLocale('no_seatmap_specified');
 		}
 	} else {
-		$message = '<p>Du har ikke tillatelse til å legge til en rad!</p>';
+		$message = Localization::getLocale('you_do_not_have_permission_to_do_that');
 	}
 } else {
-	$message = '<p>Du må logge inn først!</p>';
+	$message = Localization::getLocale('you_are_not_logged_in');
 }
 
 header('Content-Type: text/plain');
