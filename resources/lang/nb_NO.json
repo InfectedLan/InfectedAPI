@@ -35,6 +35,9 @@
    "this_group_does_not_exist":"Denne gruppen finnes ikke.",
    "no_group_specified":"Ingen gruppe angitt.",
 
+   "this_page_does_not_exist":"Denne siden finnes ikke.",
+   "no_page_specified":"Ikke noe side angitt.",
+
    "no_seatmap_specified":"Ikke noe setekart angitt.",
 
    "wrong_username_or_password":"Feil brukernavn eller passord.",

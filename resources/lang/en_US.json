@@ -35,6 +35,9 @@
    "this_group_does_not_exist":"This group does not exist.",
    "no_group_specified":"No group specified.",
    
+   "this_page_does_not_exist":"This page does not exist.",
+   "no_page_specified":"No page specified.",
+
    "no_seatmap_specified":"No seatmap specified.",
 
    "wrong_username_or_password":"Wrong username or password.",

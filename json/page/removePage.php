@@ -37,16 +37,16 @@ if (Session::isAuthenticated()) {
 				PageHandler::removePage($page);
 				$result = true;
 			} else {
-				$message = '<p>Siden finnes ikke.</p>';
+				$message = Localization::getLocale('this_page_does_not_exist');
 			}
 		} else {
-			$message = '<p>Ikke noen side spesifisert.</p>';
+			$message = Localization::getLocale('no_page_specified');
 		}
 	} else {
-		$message = '<p>Du har ikke tillatelse til dette.</p>';
+		$message = Localization::getLocale('you_do_not_have_permission_to_do_that');
 	}
 } else {
-	$message = '<p>Du er ikke logget inn.</p>';
+	$message = Localization::getLocale('you_are_not_logged_in');
 }
 
 header('Content-Type: text/plain');
