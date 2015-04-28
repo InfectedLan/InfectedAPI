@@ -1,15 +1,8 @@
 <?xml version="1.0" encoding="UTF-8" ?>
-<phpunit bootstrap="./vendor/autoload.php"
-         color="true"
-         convertErrorsToExceptions="true"
-         convertNoticesToExceptions="true"
-         convertWarningsToExceptions="true"
-         stopOnFailures="false"
-         syntaxCheck="false"
-         >
+<phpunit bootstrap="./vendor/autoload.php">
     <testsuites>
-        <testsuite name="Tutorial Unit Tests">
-            <directory>./json/</directory>
+        <testsuite>
+            <directory>./</directory>
         </testsuite>
     </testsuites>
 </phpunit>
