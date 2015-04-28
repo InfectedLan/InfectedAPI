@@ -19,6 +19,7 @@
  */
 
 require_once 'session.php';
+require_once 'localization.php';
 require_once 'handlers/chathandler.php';
 
 $result = false;
@@ -54,19 +55,19 @@ if (Session::isAuthenticated()) {
 					}
 				} else {
 					$result = array('id' => -1);
-					$message = '<p>Chatten har ingen meldinger!</p>';
+					$message = Localization::getLocale('this_chat_does_not_contain_any_messages');
 				}
 			} else {
-				$message = '<p>Du er ikke med i denne chatten!</p>';
+				$message = Localization::getLocale('you_are_not_a_participant_of_this_chat');
 			}
 		} else {
-			$message = '<p>Chatten finnes ikke!</p>';
+			$message = Localization::getLocale('this_chat_does_not_exist');
 		}
 	} else {
-		$message = '<p>Vi mangler felt.</p>';
+		$message = Localization::getLocale('you_have_not_filled_out_the_required_fields');
 	}
 } else {
-	$message = '<p>Du er ikke logget inn.</p>';
+	$message = Localization::getLocale('you_are_not_logged_in');
 }
 
 header('Content-Type: text/plain');

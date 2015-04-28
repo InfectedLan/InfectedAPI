@@ -19,6 +19,7 @@
  */
 
 require_once 'session.php';
+require_once 'localization.php';
 require_once 'handlers/matchhandler.php';
 require_once 'handlers/votehandler.php';
 require_once 'handlers/voteoptionhandler.php';
@@ -56,26 +57,22 @@ if (Session::isAuthenticated()) {
 							}
 
 							$result = true;
-						} else {
-							$message = '<p>Dette mappet er ikke for denne compoen!</p>';
 						}
 					} else {
-						$message = '<p>Mappet finnes ikke!</p>';
+						$message = Localization::getLocale('this_map_does_not_exist');
 					}
-				} else {
-					$message = '<p>Du har ikke lov til å banne nå!</p>';
 				}
 			} else {
-				$message = '<p>Matchen holder på å starte!</p>';
+				$message = Localization::getLocale('this_match_is_currently_starting');
 			}
 		} else {
-			$message = '<p>Matchen finnes ikke.</p>';
+			$message = Localization::getLocale('this_match_does_not_exist');
 		}
 	} else {
-		$message = '<p>Felt mangler!</p>';
+		$message = Localization::getLocale('you_have_not_filled_out_the_required_fields');
 	}
 } else {
-	$message = '<p>Du er ikke logget inn.</p>';
+	$message = Localization::getLocale('you_are_not_logged_in');
 }
 
 header('Content-Type: text/plain');

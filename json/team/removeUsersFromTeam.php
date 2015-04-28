@@ -19,6 +19,7 @@
  */
 
 require_once 'session.php';
+require_once 'localization.php';
 require_once 'handlers/teamhandler.php';
 
 $result = false;
@@ -37,16 +38,16 @@ if (Session::isAuthenticated()) {
 				TeamHandler::removeUsersFromTeam($team);
 				$result = true;
 			} else {
-				$message = '<p>Laget finnes ikke.</p>';
+				$message = Localization::getLocale('this_team_does_not_exist');
 			}
 		} else {
-			$message = '<p>Ikke noe lag spesifisert.</p>';
+			$message = Localization::getLocale('no_team_specified');
 		}
 	} else {
-		$message = '<p>Du har ikke tillatelse til dette.</p>';
+		$message = Localization::getLocale('you_do_not_have_permission_to_do_that');
 	}
 } else {
-	$message = '<p>Du er ikke logget inn.</p>';
+	$message = Localization::getLocale('you_are_not_logged_in');
 }
 
 header('Content-Type: text/plain');

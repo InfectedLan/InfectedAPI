@@ -19,8 +19,9 @@
  */
 
 require_once 'session.php';
-require_once 'handlers/userhandler.php';
+require_once 'localization.php';
 require_once 'handlers/clanhandler.php';
+require_once 'handlers/userhandler.php';
 
 $result = false;
 $message = null;
@@ -40,19 +41,19 @@ if (Session::isAuthenticated()) {
 					$clan->invite($inviteUser);
 					$result = true;
 				} else {
-					$message = '<p>Du kan ikke invitere denne brukeren.</p>';
+					$message = Localization::getLocale('you_cannot_invite_this_user');
 				}
 			} else {
-				$message = '<p>Brukeren eksisterer ikke!</p>';
+				$message = Localization::getLocale('this_user_does_not_exist');
 			}
 		} else {
-			$message = '<p>Du er ikke sjefen for denne klanen!</p>';
+			$message = Localization::getLocale('you_are_not_the_leader_of_this_clan');
 		}
 	} else {
-		$message = '<p>Mangler felt.</p>';
+		$message = Localization::getLocale('you_have_not_filled_out_the_required_fields');
 	}
 } else {
-	$message = '<p>Du er ikke logget inn.</p>';
+	$message = Localization::getLocale('you_are_not_logged_in');
 }
 
 header('Content-Type: text/plain');

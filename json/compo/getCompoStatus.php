@@ -19,6 +19,7 @@
  */
 
 require_once 'session.php';
+require_once 'localization.php';
 require_once 'handlers/userhandler.php';
 require_once 'handlers/clanhandler.php';
 require_once 'handlers/invitehandler.php';
@@ -76,9 +77,8 @@ if (Session::isAuthenticated()) {
 	}
 
 	$result = true;
-	
 } else {
-	$message = '<p>Du er ikke logget inn.</p>';
+	$message = Localization::getLocale('you_are_not_logged_in');
 }
 
 header('Content-Type: text/plain');

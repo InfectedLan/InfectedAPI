@@ -19,6 +19,7 @@
  */
 
 require_once 'session.php';
+require_once 'localization.php';
 require_once 'handlers/userhandler.php';
 
 $result = false;
@@ -41,19 +42,19 @@ if (!Session::isAuthenticated()) {
 					$_SESSION['user'] = $user;
 					$result = true;
 				} else {
-					$message = '<p>Feil brukernavn eller passord.</p>';
+					$message = Localization::getLocale('wrong_username_or_password');
 				}
 			} else {
-				$message = '<p>Du må aktivere brukeren din før du kan logge inn.</p>';
+				$message = Localization::getLocale('you_must_activate_your_user_account_in_order_to_logg_in');
 			}
 		} else {
-			$message = '<p>Feil brukernavn eller passord.</p>';
+			$message = Localization::getLocale('this_user_does_not_exist');
 		}
 	} else {
-		$message = '<p>Du har ikke skrevet inn et brukernavn og passord.</p>';
+		$message = Localization::getLocale('you_must_enter_a_username_and_password');
 	}
 } else {
-	$message = '<p>Du er allerede logget inn!</p>';
+	$message = Localization::getLocale('you_are_already_logged_in');
 } 
 
 header('Content-Type: text/plain');

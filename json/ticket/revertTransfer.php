@@ -19,6 +19,7 @@
  */
 
 require_once 'session.php';
+require_once 'localization.php';
 require_once 'handlers/tickethandler.php';
 require_once 'handlers/tickettransferhandler.php';
 
@@ -34,15 +35,16 @@ if (Session::isAuthenticated()) {
 		
 		if ($ticket != null) {
 			$ticket->revertTransfer($user);
+			
 			$result = true;
 		} else {
-			$message = '<p>Billetten finnes ikke.</p>';
+			$message = Localization::getLocale('this_ticket_does_not_exist');
 		}
 	} else {
-		$message = '<p>Ugyldig bilett.</p>';
+		$message = Localization::getLocale('no_ticket_specified');
 	}
 } else {
-	$message = '<p>Du er ikke logget inn.</p>';
+	$message = Localization::getLocale('you_are_not_logged_in');
 }
 
 header('Content-Type: text/plain');

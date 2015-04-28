@@ -19,6 +19,7 @@
  */
 
 require_once 'session.php';
+require_once 'localization.php';
 require_once 'handlers/rowhandler.php';
 
 $result = false;
@@ -38,19 +39,19 @@ if (Session::isAuthenticated()) {
 					RowHandler::updateRow($row,  $_GET['x'], $_GET['y']);
 					$result = true;
 				} else {
-					$message = '<p>Posisjonen er ikke satt!</p>';
+					$message = Localization::getLocale('position_not_set');
 				}
 			} else {
-				$message = '<p>Raden eksisterer ikke!</p>';
+				$message = Localization::getLocale('this_row_does_not_exist');
 			}
 		} else {
-			$message = '<p>Raden er ikke satt!</p>';
+			$message = Localization::getLocale('no_row_specified');
 		}
 	} else {
-		$message = '<p>Du har ikke tillatelse til å flytte en rad!</p>';
+		$message = Localization::getLocale('you_do_not_have_permission_to_do_that');
 	}
 } else {
-	$message = '<p>Du må logge inn først!</p>';
+	$message = Localization::getLocale('you_are_not_logged_in');
 }
 
 header('Content-Type: text/plain');

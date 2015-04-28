@@ -19,6 +19,7 @@
  */
 
 require_once 'session.php';
+require_once 'localization.php';
 require_once 'handlers/seatmaphandler.php';
 
 $result = false;
@@ -69,13 +70,13 @@ if (Session::isAuthenticated()) {
 				$result = true;
 			}
 		} else {
-			$message = '<p>Seatmappet finnes ikke.</p>';
+			$message = Localization::getLocale('this_seatmap_does_not_exist');
 		}
 	} else {
-		$message = '<p>Ikke noe seatmap spesifisert.</p>';
+		$message = Localization::getLocale('no_seatmap_specified');
 	}
 } else {
-	$message = '<p>Du er ikke logget inn.</p>';
+	$message = Localization::getLocale('you_are_not_logged_in');
 }
 
 header('Content-Type: text/plain');

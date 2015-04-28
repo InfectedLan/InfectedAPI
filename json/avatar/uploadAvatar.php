@@ -19,6 +19,7 @@
  */
 
 require_once 'session.php';
+require_once 'localization.php';
 require_once 'handlers/avatarhandler.php';
 
 $result = false;
@@ -55,27 +56,18 @@ if (Session::isAuthenticated()) {
 					move_uploaded_file($_FILES['file']['tmp_name'], $path);
 					$result = true;
 				} else {
-					$message = '<p>Bildet er for smått! Det må være minimum ' . Settings::avatar_minimum_width . ' x ' . Settings::avatar_minimum_height . ' piksler stort.';
-				}
-			} else {
-				$error = $_FILES['file']['error'];
-				
-				if ($error == 2 || 
-					$error == 1) {
-					$message = '<p>Det har skjedd en intern feil: Filen er for stor!</p>';
-				} else {
-					$message = '<p>Det har skjedd en intern feil da vi behandlet bildet. Vennligst gi oss feilkoden "' . urlencode($_FILES['file']['error']) . '"</p>';
+					$message = Localization::getLocale('the_image_is_too_small_it_must_be_at_least_value_pixels', Settings::avatar_minimum_width . ' x ' . Settings::avatar_minimum_height);
 				}
 			}
 		} else {
-			$message = '<p>Ugyldig filtype.</p>';
+			$message = Localization::getLocale('invalid_file_format');
 		}
 	} else {
-		$message = '<p>Filen er for stor!</p>';
+		$message = Localization::getLocale('the_file_size_is_too_large');
 	}
 } else {
-	$message = '<p>Du er ikke logget inn!</p>';
-} 
+	$message = Localization::getLocale('you_are_not_logged_in');
+}
 
 header('Content-Type: text/plain');
 echo json_encode(array('result' => $result, 'message' => $message), JSON_PRETTY_PRINT);

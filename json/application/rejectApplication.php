@@ -19,6 +19,7 @@
  */
 
 require_once 'session.php';
+require_once 'localization.php';
 require_once 'handlers/applicationhandler.php';
 
 $result = false;
@@ -43,22 +44,22 @@ if (Session::isAuthenticated()) {
 						$application->reject($user, $comment, true);
 						$result = true;
 					} else {
-						$message = '<p>Kan ikke avslå søknader for tidligere arrangementer.</p>';
+						$message = Localization::getLocale('you_can_not_reject_applications_from_previous_events');
 					}
 				} else {
-					$message = '<p>Søknaden finnes ikke.</p>';
+					$message = Localization::getLocale('this_application_does_not_exist');
 				}
 			} else {
-				$message = '<p>Du har ikke oppgitt noen grunn på hvorfor søkneden skal bli avvist.</p>';
+				$message = Localization::getLocale('you_must_provide_a_reason_why_the_application_shall_be_rejected');
 			}
 		} else {
-			$message = '<p>Ingen søknad spesifisert.</p>';
+			$message = Localization::getLocale('no_application_specified');
 		}
 	} else {
-		$message = '<p>Du har ikke tillatelse til dette.</p>';
+		$message = Localization::getLocale('you_do_not_have_permission_to_do_that');
 	}
 } else {
-	$message = '<p>Du er ikke logget inn.</p>';
+	$message = Localization::getLocale('you_are_not_logged_in');
 }
 
 header('Content-Type: text/plain');

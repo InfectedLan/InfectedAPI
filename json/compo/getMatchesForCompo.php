@@ -19,6 +19,7 @@
  */
 
 require_once 'session.php';
+require_once 'localization.php';
 require_once 'handlers/compohandler.php';
 require_once 'handlers/matchhandler.php';
 require_once 'utils/dateutils.php';
@@ -51,13 +52,13 @@ if (Session::isAuthenticated()) {
 
 			$result = true;
 		} else {
-			$message = '<p>Compo\'en du oppga finnes ikke.</p>';
+			$message = Localization::getLocale('this_compo_does_not_exist');
 		}
 	} else {
-		$message = '<p>Du har ikke fylt ut alle feltene.</p>';
+		$message = Localization::getLocale('you_have_not_filled_out_the_required_fields');
 	}
 } else {
-	$message = '<p>Du er ikke logget inn.</p>';
+	$message = Localization::getLocale('you_are_not_logged_in');
 }
 
 header('Content-Type: text/plain');

@@ -19,6 +19,7 @@
  */
 
 require_once 'session.php';
+require_once 'localization.php';
 require_once 'handlers/tickethandler.php';
 require_once 'handlers/userhandler.php';
 require_once 'handlers/tickettransferhandler.php';
@@ -40,22 +41,23 @@ if (Session::isAuthenticated()) {
 				
 				if ($targetUser != null) {
 					$ticket->transfer($targetUser);
+
 					$result = true;
-					$message = '<p>Billetten er overført.</p>';
+					$message = Localization::getLocale('the_ticket_is_now_transferred');
 				} else {
-					$message = '<p>Målbrukeren eksisterer ikke!</p>';
+					$message = Localization::getLocale('the_target_user_does_not_exist');
 				}
 			} else {
-				$message = '<p>Felt mangler! Trenger mål!</p>';
+				$message = Localization::getLocale('you_have_not_filled_out_the_required_fields');
 			}
 		} else {
-			$message = '<p>Du eier ikke billetten!</p>';
+			$message = Localization::getLocale('you_do_not_own_this_ticket');
 		}
 	} else {
-		$message = '<p>Ugyldig bilett.</p>';
+		$message = Localization::getLocale('no_ticket_specified');
 	}
 } else {
-	$message = '<p>Du er ikke logget inn!</p>';
+	$message = Localization::getLocale('you_are_not_logged_in');
 }
 
 header('Content-Type: text/plain');

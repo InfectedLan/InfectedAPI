@@ -19,9 +19,10 @@
  */
 
 require_once 'session.php';
-require_once 'handlers/storesessionhandler.php';
+require_once 'localization.php';
 require_once 'handlers/tickettypehandler.php';
 require_once 'handlers/eventhandler.php';
+require_once 'handlers/storesessionhandler.php';
 require_once 'paypal/paypal.php';
 
 $result = false;
@@ -49,37 +50,39 @@ if (Session::isAuthenticated()) {
 				
 				// Check that ticket count isn't higher than the limit, and that available ticket count afterwards is still greater than zero.
 				if ($amount <= $amountLimit &&
-					($availableCount - $amount) >= 0) {
-					
-					// Check that the user don't already has a reserved set of tickets.
-					if (!StoreSessionHandler::hasStoreSession($user)) {
-						$price = $ticketType->getPriceForUser($user) * $amount;
-						$code = StoreSessionHandler::registerStoreSession($user, $ticketType, $amount, $price);
-						$url = PayPal::getPaymentUrl($ticketType, $amount, $code, $user);
+					if (($availableCount - $amount) >= 0) {
+						// Check that the user don't already has a reserved set of tickets.
+						if (!StoreSessionHandler::hasStoreSession($user)) {
+							$price = $ticketType->getPriceForUser($user) * $amount;
+							$code = StoreSessionHandler::registerStoreSession($user, $ticketType, $amount, $price);
+							$url = PayPal::getPaymentUrl($ticketType, $amount, $code, $user);
 
-						if (isset($url)) {
-							$result = true;
+							if (isset($url)) {
+								$result = true;
+							} else {
+								$message = Localization::getLocale('someting_went_wrong_while_talking_to_the_payment_service');
+							}
 						} else {
-							$message = '<p>Noe gikk galt da vi snakket med paypal.</p>';
+							$message = Localization::getLocale('you_already_got_a_session');
 						}
 					} else {
-						$message = '<p>Du har allerede en session!</p>';
+						$message = Localization::getLocale('there_are_no_more_tickets_left');
 					}
 				} else {
-					$message = '<p>Du har enten valgt for mange billetter, eller så er det utsolgt.</p>';
+					$message = Localization::getLocale('you_have_selected_too_many_tickets_the_limit_is_10');
 				}
 			} else {
-				$message = '<p>Du har valgt en ugyldig billett type.</p>';
+				$message = Localization::getLocale('you_have_selected_an_invalid_ticket_type');
 			}
 		} else {
-			$message = '<p>Billettsalget har ikke åpnet!</p>';
+			$message = Localization::getLocale('the_ticket_sale_is_not_open_yet');
 		}
 	} else {
-		$message = '<p>Du har ikke fyllt ut alle feltene.</p>';
+		$message = Localization::getLocale('you_do_not_have_permission_to_do_that');
 	}
 } else {
-	$message = '<p>Du er ikke logget inn!</p>';
-} 
+	$message = Localization::getLocale('you_are_not_logged_in');
+}
 
 header('Content-Type: text/plain');
 

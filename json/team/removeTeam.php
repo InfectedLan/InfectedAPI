@@ -19,7 +19,7 @@
  */
 
 require_once 'session.php';
-require_once 'handlers/grouphandler.php';
+require_once 'localization.php';
 require_once 'handlers/teamhandler.php';
 
 $result = false;
@@ -34,16 +34,20 @@ if (Session::isAuthenticated()) {
 			is_numeric($_GET['teamId'])) {
 			$team = TeamHandler::getTeam($_GET['teamId']); 
 			
-			TeamHandler::removeTeam($team);
-			$result = true;
+			if ($team != null) {
+				TeamHandler::removeTeam($team);
+				$result = true;
+			} else {
+				$message = Localization::getLocale('this_team_does_not_exist');
+			}
 		} else {
-			$message = '<p>Det er ikke spesifisert et lag.</p>';
+			$message = Localization::getLocale('no_team_specified');
 		}
 	} else {
-		$message = '<p>Du har ikke tillatelse til dette.</p>';
+		$message = Localization::getLocale('you_do_not_have_permission_to_do_that');
 	}
 } else {
-	$message = '<p>Du er ikke logget inn.</p>';
+	$message = Localization::getLocale('you_are_not_logged_in');
 }
 
 header('Content-Type: text/plain');

@@ -19,6 +19,7 @@
  */
 
 require_once 'session.php';
+require_once 'localization.php';
 require_once 'handlers/rowhandler.php';
 require_once 'handlers/seathandler.php';
 
@@ -34,52 +35,48 @@ if (Session::isAuthenticated()) {
 			$row = RowHandler::getRow($_GET['row']);
 			
 			if ($row != null) {
-				if (isset($_GET['numSeats'])) {
+				if (isset($_GET['numSeats']) &&
+					is_numeric($_GET['numSeats'])) {
 					$numSeats = $_GET['numSeats'];
-					
-					if (is_numeric($numSeats)) {
-						$seats = RowHandler::getSeats($row);
+					$seats = RowHandler::getSeats($row);
 						
-						if (count($seats)>=$numSeats) {
-							$startIndex = count($seats) - 1;
-							$endIndex = $startIndex - $numSeats;
-							$safeToDelete = true;
-							
+					if (count($seats)>=$numSeats) {
+						$startIndex = count($seats) - 1;
+						$endIndex = $startIndex - $numSeats;
+						$safeToDelete = true;
+						
+						for ($i = $startIndex; $i > $endIndex; $i--) {
+							if (SeatHandler::hasTicket($seats[$i])) {
+								$safeToDelete = false;
+							}
+						}
+						
+						if ($safeToDelete) {
 							for ($i = $startIndex; $i > $endIndex; $i--) {
-								if (SeatHandler::hasTicket($seats[$i])) {
-									$safeToDelete = false;
-								}
+								SeatHandler::removeSeat($seats[$i]);
 							}
 							
-							if ($safeToDelete) {
-								for ($i = $startIndex; $i > $endIndex; $i--) {
-									SeatHandler::removeSeat($seats[$i]);
-								}
-								
-								$result = true;
-							} else {
-								$message = '<p>Noen sitter på et av setene du prøver å slette!</p>';
-							}
+							$result = true;
 						} else {
-							$message = '<p>Det er færre seter i raden enn det du prøver å slette!</p>';
+							$message = Localization::getLocale('the_seat_you_are_trying_to_delete_is_occupied');
 						}
 					} else {
-						$message = '<p>Antall seter er ikke et tall!</p>';
+						$message = Localization::getLocale('there_are_fewer_seats_in_the_row_than_you_are_trying_to_delete');
 					}
 				} else {
-					$message = '<p>Antall seter er ikke satt!</p>';
+					$message = Localization::getLocale('you_have_not_filled_out_the_required_fields');
 				}
 			} else {
-				$message = '<p>Raden eksisterer ikke!</p>';
+				$message = Localization::getLocale('this_row_does_not_exist');
 			}
 		} else {
-			$message = '<p>Raden er ikke satt!</p>';
+			$message = Localization::getLocale('no_row_specified');
 		}
 	} else {
-		$message = '<p>Du har ikke tillatelse til å legge til en rad!</p>';
+		$message = Localization::getLocale('you_do_not_have_permission_to_do_that');
 	}
 } else {
-	$message = '<p>Du må logge inn først!</p>';
+	$message = Localization::getLocale('you_are_not_logged_in');
 }
 
 header('Content-Type: text/plain');

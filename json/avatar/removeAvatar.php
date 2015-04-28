@@ -19,6 +19,7 @@
  */
 
 require_once 'session.php';
+require_once 'localization.php';
 require_once 'handlers/avatarhandler.php';
 
 $result = false;
@@ -35,15 +36,18 @@ if (Session::isAuthenticated()) {
 			$avatar->remove();
 			$result = true;
 		} else {
-			$message = '<p>Avataren finnes ikke.</p>';
+				$message = Localization::getLocale('this_avatar_does_not_exist');
+			}
+		} else {
+			$message = Localization::getLocale('no_avatar_specified');
 		}
 	} else {
-		$message = '<p>Du har ingen avatar!</p>';
+		$message = Localization::getLocale('you_have_no_avatar_and_therefore_cannot_remove_it');
 	}
 } else {
-	$message = '<p>Du er allerede logget inn!</p>';
-} 
+	$message = Localization::getLocale('you_are_not_logged_in');
+}
 
 header('Content-Type: text/plain');
 echo json_encode(array('result' => $result, 'message' => $message), JSON_PRETTY_PRINT);
-?>SZZ
+?>

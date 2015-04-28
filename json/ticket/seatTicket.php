@@ -19,6 +19,7 @@
  */
 
 require_once 'session.php';
+require_once 'localization.php';
 require_once 'handlers/tickethandler.php';
 require_once 'handlers/seathandler.php';
 
@@ -42,28 +43,29 @@ if(Session::isAuthenticated()) {
 					if (!$seat->hasTicket()) {
 						if ($seat->getEvent()->equals($ticket->getEvent())) {
 							TicketHandler::updateTicketSeat($ticket, $seat);
+
+							$message = Localization::getLocale('the_ticket_has_a_new_seat');
 							$result = true;
-							$message = '<p>Billetten har fått nytt sete.</p>';
 						} else {
-							$message = '<p>Billetten og setet er ikke fra samme event!</p>';
+							$message = Localization::getLocale('the_ticket_and_the_seat_are_not_from_the_same_event');
 						}
 					} else {
-						$message = '<p>Det er noen som sitter i det setet!</p>';
+						$message = Localization::getLocale('this_seat_is_occupied');
 					}
 				} else {
-					$message = '<p>Du har ikke tillatelse til å seate den billetten!</p>';
+					$message = Localization::getLocale('you_do_not_have_permission_to_do_that');
 				}
 			} else {
-				$message = '<p>Setet eksisterer ikke!</p>';
+				$message = Localization::getLocale('this_seat_does_not_exist');
 			}
 		} else {
-			$message = '<p>Biletten eksisterer ikke!</p>';
+			$message = Localization::getLocale('this_ticket_does_not_exist');
 		}
 	} else {
-		$message = '<p>Du har ikke fylt inn alle feltene!</p>';
+		$message = Localization::getLocale('you_have_not_filled_out_the_required_fields');
 	}
 } else {
-	$message = '<p>Du er ikke logget inn!</p>';
+	$message = Localization::getLocale('you_are_not_logged_in');
 }
 
 header('Content-Type: text/plain');

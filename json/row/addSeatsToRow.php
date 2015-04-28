@@ -19,6 +19,7 @@
  */
 
 require_once 'session.php';
+require_once 'localization.php';
 require_once 'handlers/rowhandler.php';
 
 $result = false;
@@ -33,32 +34,29 @@ if (Session::isAuthenticated()) {
 			$row = RowHandler::getRow($_GET['row']);
 			
 			if ($row != null) {
-				if (isset($_GET['numSeats'])) {
+				if (isset($_GET['numSeats']) &&
+					is_numeric($_GET['numSeats'])) {
 					$seats = $_GET['numSeats'];
 					
-					if (is_numeric($seats)) {
-						for ($i = 0; $i < $seats; $i++) {
-							$row->addSeat();
-						}
-						
-						$result = true;
-					} else {
-						$message = '<p>Antall seter er ikke et tall!</p>';
+					for ($i = 0; $i < $seats; $i++) {
+						$row->addSeat();
 					}
+					
+					$result = true;
 				} else {
-					$message = '<p>Antall seter er ikke satt!</p>';
+					$message = Localization::getLocale('number_of_seats_not_specified');
 				}
 			} else {
-				$message = '<p>Raden eksisterer ikke!</p>';
+				$message = Localization::getLocale('this_row_does_not_exist');
 			}
 		} else {
-			$message = '<p>Raden er ikke satt!</p>';
+			$message = Localization::getLocale('no_row_specified');
 		}
 	} else {
-		$message = '<p>Du har ikke tillatelse til å legge til en rad!</p>';
+		$message = Localization::getLocale('you_do_not_have_permission_to_do_that');
 	}
 } else {
-	$message = '<p>Du må logge inn først!</p>';
+	$message = Localization::getLocale('you_are_not_logged_in');
 }
 
 header('Content-Type: text/plain');

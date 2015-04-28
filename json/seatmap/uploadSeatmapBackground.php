@@ -19,6 +19,7 @@
  */
 
 require_once 'session.php';
+require_once 'localization.php';
 require_once 'handlers/seatmaphandler.php';
 
 $result = false;
@@ -49,33 +50,30 @@ if (Session::isAuthenticated()) {
 							if ($_FILES['bgImageFile']['error'] == 0) {
 								$name = md5(time() . 'yoloswag'); // TODO: Refactor this shitty, messy, and terible petterroea code.
 								move_uploaded_file($_FILES['bgImageFile']['tmp_name'], '../content/seatmapBackground/' . $name . '.' . $extension);
-
 								SeatmapHandler::setBackground($seatmap, $name . '.' . $extension);
 
 								$result = true;
 							} else {
-								$message = 'Det skjedde en feil under opplastingen av bildet!</p>';
+								$message = Localization::getLocale('an_error_occurred_while_uploading_your_image');
 							}
-						} else {
-							$message = 'Feil filformat!</p>';
 						}
 					} else {
-						$message = 'Bildet er for stort!</p>';
+						$message = Localization::getLocale('the_file_size_is_too_large');
 					}
 				} else {
-					$message = 'Filformatet er ikke riktig!</p>';
+					$message = Localization::getLocale('invalid_file_format');
 				}
 			} else {
-				$message = 'Seatmappet finnes ikke!</p>';
+				$message = Localization::getLocale('this_seatmap_does_not_exist');
 			}
 		} else {
-			$message = 'SeatmapId er ikke satt!</p>';
+			$message = Localization::getLocale('no_seatmap_specified');
 		}
 	} else {
-		$message = 'Du har ikke tillatelse til å legge til en rad!</p>';
+		$message = Localization::getLocale('you_do_not_have_permission_to_do_that');
 	}
 } else {
-	$message = 'Du er ikke logget inn.</p>';
+	$message = Localization::getLocale('you_are_not_logged_in');
 }
 
 

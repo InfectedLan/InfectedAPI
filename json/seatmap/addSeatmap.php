@@ -19,6 +19,7 @@
  */
 
 require_once 'session.php';
+require_once 'localization.php';
 require_once 'handlers/seatmaphandler.php';
 
 $result = false;
@@ -35,13 +36,13 @@ if (Session::isAuthenticated()) {
 			$result = true;
 			$id = $seatmap->getId();
 		} else {
-			$message = '<p>Navn er ikke satt!</p>';
+			$message = Localization::getLocale('you_have_not_filled_out_the_required_fields');
 		}
 	} else {
-		$message = '<p>Du har ikke tillatelse til å lage et seatmap</p>!';
+		$message = Localization::getLocale('you_do_not_have_permission_to_do_that');
 	}
 } else {
-	$message = '<p>Du må logge inn først!</p>';
+	$message = Localization::getLocale('you_are_not_logged_in');
 }
 
 header('Content-Type: text/plain');

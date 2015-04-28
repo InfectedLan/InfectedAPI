@@ -19,6 +19,7 @@
  */
 
 require_once 'session.php';
+require_once 'localization.php';
 require_once 'handlers/rowhandler.php';
 
 $result = false;
@@ -37,19 +38,19 @@ if (Session::isAuthenticated()) {
 					RowHandler::removeRow($row);
 					$result = true;
 				} else {
-					$message = '<p>Noen sitter på raden du prøver å slette!</p>';
+					$message = Localization::getLocale('the_row_you_are_trying_to_delete_is_populated');
 				}
 			} else {
-				$message = '<p>Raden eksisterer ikke!</p>';
+				$message = Localization::getLocale('this_row_does_not_exist');
 			}
 		} else {
-			$message = '<p>Raden er ikke satt!</p>';
+			$message = Localization::getLocale('no_row_specified');
 		}
 	} else {
-		$message = '<p>Du har ikke tillatelse til å legge til en rad!</p>';
+		$message = Localization::getLocale('you_do_not_have_permission_to_do_that');
 	}
 } else {
-	$message = '<p>Du er ikke logget inn.</p>';
+	$message = Localization::getLocale('you_are_not_logged_in');
 }
 
 header('Content-Type: text/plain');

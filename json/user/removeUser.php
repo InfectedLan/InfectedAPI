@@ -19,8 +19,8 @@
  */
 
 require_once 'session.php';
+require_once 'localization.php';
 require_once 'handlers/userhandler.php';
-require_once 'handlers/tickethandler.php';
 
 $result = false;
 $message = null;
@@ -32,25 +32,25 @@ if (Session::isAuthenticated()) {
 		if (isset($_GET['id']) &&
 			is_numeric($_GET['id'])) {
 			$removeUser = UserHandler::getUser($_GET['id']); 
-			
+
 			if ($removeUser != null) {
 				if (!$removeUser->hasTicket()) {
 					UserHandler::removeUser($removeUser);
 					$result = true;
 				} else {
-					$message = '<p>Brukeren har en billett, og kan derfor ikke slettes.</p>';
+					$message = Localization::getLocale('the_user_got_a_ticket_and_can_therefore_not_be_removed');
 				}
 			} else {
-				$message = '<p>Brukeren finnes ikke.</p>';
+				$message = Localization::getLocale('this_user_does_not_exist');
 			}
 		} else {
-			$message = '<p>Det er ikke spessifisert noen bruker.</p>';
+			$message = Localization::getLocale('no_user_specified');
 		}
 	} else {
-		$message = '<p>Du har ikke tillatelse til dette.</p>';
+		$message = Localization::getLocale('you_do_not_have_permission_to_do_that');
 	}
 } else {
-	$message = '<p>Du er ikke logget inn.</p>';
+	$message = Localization::getLocale('you_are_not_logged_in');
 }
 
 header('Content-Type: text/plain');
