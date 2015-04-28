@@ -421,7 +421,7 @@ class ApplicationHandler {
     /*
      * Returns a true if user has application for group.
      */
-    public static function hasUserApplicationByGroup(User $user, Group $group) {
+    public static function hasUserApplicationsByGroup(User $user, Group $group) {
         $database = Database::open(Settings::db_name_infected_crew);
         
         $result = $database->query('SELECT `id` FROM `' . Settings::db_table_infected_crew_applications . '`
@@ -438,7 +438,7 @@ class ApplicationHandler {
     /*
      * Returns the application for group and user.
      */
-    public static function getUserApplicationByGroup(User $user, Group $group) {
+    public static function getUserApplicationsByGroup(User $user, Group $group) {
         $database = Database::open(Settings::db_name_infected_crew);
         
         $result = $database->query('SELECT * FROM `' . Settings::db_table_infected_crew_applications . '`
@@ -451,7 +451,7 @@ class ApplicationHandler {
         
         return $result->fetch_object('Application');
     }
-    
+
     /*
      * Returns a list of all applications for given user.
      */
