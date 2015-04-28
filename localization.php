@@ -18,6 +18,8 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+require_once 'settings.php';
+
 class Localization {
 	static $defaultLanguage = 'nb_NO';
 
@@ -25,15 +27,16 @@ class Localization {
 	 * Get locale by key.
 	 */
 	public static function getLocale($key) {
-		$lang = Locale::acceptFromHttp($_SERVER['HTTP_ACCEPT_LANGUAGE']);
-		$path = 'http://crew.test.infected.no/api/resources/lang/';
-		$filename = $path . $lang . '.json';
+		$path = Settings::api_path . 'resources/lang/';
+		$language = Locale::acceptFromHttp($_SERVER['HTTP_ACCEPT_LANGUAGE']);
+		$filename = $path . $language . '.json';
 
 		// Check if language exists, if not fallback to default language.
 		if (!file_exists($filename)) {
 		    $filename = $path . self::$defaultLanguage . '.json';
 		}
 
+		// Fetch the language json file as an array.
 		$list = json_decode(file_get_contents($filename), true);
 
 		// If key exists in array, return the value.
@@ -42,7 +45,7 @@ class Localization {
 		}
 
 		// Otherwise, return an error string.
-		return 'Locale not found in language \'' . $lang . '\', this is a bug. Please submit a report at https://github.com/InfectedLan/InfectedAPI/issues';
+		return 'Locale not found in language \'' . $lang . '\', this is a bug.';
 	}
 
 	/*
