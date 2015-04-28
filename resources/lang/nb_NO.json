@@ -22,6 +22,14 @@
    "this_avatar_does_not_exist":"Denne avataren finnes ikke.",
    "no_avatar_specified":"Ingen avatar spesifisert.",
    "you_have_no_avatar_and_therefore_cannot_remove_it":"Du har ingen avatar, og kan derfor ikke fjerne den.",
+   "the_image_is_too_small_it_must_be_at_least_value_pixels":"Bilet er for lite, det må minst være %s piksler stort.",
+   "the_file_size_is_too_large":"Filstørrelsen er for stor.",
+   "invalid_file_format":"Ugyldig filformat.",
+   "the_image_was_scaled":"Bildet ble skalert.",
+   "you_must_choose_a_larger_section_of_the_image":"Du må velge ut et større utsnitt av bildet",
+   "the_image_was_not_found":"Bildet ble ikke funnet.",
+   "you_have_no_avatar_that_has_not_already_been_cropped":"Du har ingen avatar som ikke allerede har blitt beskjært.",
+   "you_have_no_avatar":"Du har ingen avatar.",
 
    "this_chat_does_not_exist":"Denne chatten finnes ikke.",
    "you_are_not_a_participant_of_this_chat":"Du er ikke deltaker av denne chatten.",
@@ -77,8 +85,6 @@
    "this_seatmap_does_not_exist":"This seatmap does not exist.",
    "no_seatmap_specified":"Ikke noe setekart angitt.",
    "an_error_occurred_while_uploading_your_image":"En feil oppstod under opplastningen av bilder ditt.",
-   "the_file_size_is_too_large":"Filstørrelsen er for stor.",
-   "invalid_file_format":"Ugyldig filformat.",
 
    "wrong_username_or_password":"Feil brukernavn eller passord.",
    "you_must_activate_your_user_account_in_order_to_logg_in":"Du må aktivere brukeren din får å kan logge inn.",

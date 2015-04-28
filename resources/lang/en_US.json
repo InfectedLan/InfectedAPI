@@ -22,6 +22,14 @@
    "this_avatar_does_not_exist":"This avatar does not exist.",
    "no_avatar_specified":"No avatar specified.",
    "you_have_no_avatar_and_therefore_cannot_remove_it":"You have no avatar, and therefore cannot remove it.",
+   "the_image_is_too_small_it_must_be_at_least_value_pixels":"The image is too small, it must be at least %s pixels.",
+   "the_file_size_is_too_large":"The file size is too large.",
+   "invalid_file_format":"Invalid file format.",
+   "the_image_was_scaled":"The image was scaled.",
+   "you_must_choose_a_larger_section_of_the_image":"You must choose a larger section of the image.",
+   "the_image_was_not_found":"The image was not found.",
+   "you_have_no_avatar_that_has_not_already_been_cropped":"You have no avatar that has not already been cropped.",
+   "you_have_no_avatar":"You have no avatar.",
 
    "this_chat_does_not_exist":"This chat does not exist.",
    "you_are_not_a_participant_of_this_chat":"You are not a participant of this chat.",
@@ -77,8 +85,6 @@
    "this_seatmap_does_not_exist":"This seatmap does not exist.",
    "no_seatmap_specified":"No seatmap specified.",
    "an_error_occurred_while_uploading_your_image":"An error occurred while uploading your image.",
-   "the_file_size_is_too_large":"The file size is too large.",
-   "invalid_file_format":"Invalid file format.",
 
    "wrong_username_or_password":"Wrong username or password.",
    "you_must_activate_your_user_account_in_order_to_logg_in":"You must activate your user account in order to logg in.",
