@@ -19,6 +19,7 @@
  */
 
 require_once 'session.php';
+require_once 'localization.php';
 require_once 'handlers/userhandler.php';
 require_once 'handlers/matchhandler.php';
 require_once 'handlers/clanhandler.php';

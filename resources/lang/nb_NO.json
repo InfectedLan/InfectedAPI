@@ -52,6 +52,13 @@
    "this_page_does_not_exist":"Denne siden finnes ikke.",
    "no_page_specified":"Ikke noe side angitt.",
 
+   "someting_went_wrong_while_talking_to_the_payment_service":"Noe gikk galg mens vi snakket med betalingstjenesten.",
+   "you_already_got_a_session":"Du har allerede en sesjon.",
+   "there_are_no_more_tickets_left":"Det er ikke flere billetter igjen.",
+   "you_have_selected_too_many_tickets_the_limit_per_purchase_is_10_tickets":"Du har valgt for mange billetter, grensen per kjøp er 10 billetter.",
+   "you_have_selected_an_invalid_ticket_type":"Du har valgt en ugyldig billett type.",
+   "the_ticket_sale_is_not_open_yet":"Billettsalget har ikke åpnet enda.",
+
    "this_row_does_not_exist":"Denne raden finnes ikke.",
    "no_row_specified":"Ingen rad angitt.",
    "position_not_set":"Posisjon ikke oppgitt.",

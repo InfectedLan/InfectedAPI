@@ -52,6 +52,13 @@
    "this_page_does_not_exist":"This page does not exist.",
    "no_page_specified":"No page specified.",
 
+   "someting_went_wrong_while_talking_to_the_payment_service":"Someting went wrong while talking to the payment service.",
+   "you_already_got_a_session":"You already got a session.",
+   "there_are_no_more_tickets_left":"There are no more tickets left.",
+   "you_have_selected_too_many_tickets_the_limit_per_purchase_is_10_tickets":"You have selected too many tickets, the limit per purchase is 10 tickets.",
+   "you_have_selected_an_invalid_ticket_type":"You have selected an invalid ticket type.",
+   "the_ticket_sale_is_not_open_yet":"The ticket sale is not open yet.",
+
    "this_row_does_not_exist":"This row does not exist.",
    "no_row_specified":"No row specified.",
    "position_not_set":"Position not set.",
