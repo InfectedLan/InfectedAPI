@@ -1,6 +1,9 @@
 [submodule "libraries/phpmailer"]
 	path = libraries/phpmailer
 	url = git://github.com/PHPMailer/PHPMailer.git
+[submodule "libraries/chosen"]
+	path = libraries/chosen
+	url = git://github.com/harvesthq/chosen
 [submodule "libraries/jcrop"]
 	path = libraries/jcrop
 	url = git://github.com/tapmodo/Jcrop
