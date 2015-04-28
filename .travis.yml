@@ -8,4 +8,4 @@ php:
   - nightly
   
 # Commands you want to run that will verify your build.
-script: phpunit
+script: phpunit localization.php
