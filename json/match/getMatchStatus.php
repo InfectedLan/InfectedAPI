@@ -19,6 +19,7 @@
  */
 
 require_once 'session.php';
+require_once 'localization.php';
 require_once 'handlers/matchhandler.php';
 require_once 'handlers/avatarhandler.php';
 require_once 'handlers/voteoptionhandler.php';
@@ -173,16 +174,16 @@ if (Session::isAuthenticated()) {
 					$result = true;
 				}
 			} else {
-				$message = '<p>Du har ikke lov til å se på denne matchen!</p>';
+				$message = Localization::getLocale('you_do_not_have_permission_to_do_that');
 			}
 		} else {
-			$message = '<p>Match\'en finnes ikke.</p>';
+			$message = Localization::getLocale('this_match_does_not_exist');
 		}
 	} else {
-		$message = '<p>Mangler felt!</p>';
+		$message = Localization::getLocale('you_have_not_filled_out_the_required_fields');
 	}
 } else {
-	$message = '<p>Du er ikke logget inn.</p>';
+	$message = Localization::getLocale('you_are_not_logged_in');
 }
 
 header('Content-Type: text/plain');

@@ -24,10 +24,14 @@
    "you_have_no_avatar_and_therefore_cannot_remove_it":"Du har ingen avatar, og kan derfor ikke fjerne den.",
 
    "this_chat_does_not_exist":"Denne chatten finnes ikke.",
-   "you_are_not_a_participant_of_this_chat":"Du er ikke deltaker i denne chatten.",
+   "you_are_not_a_participant_of_this_chat":"Du er ikke deltaker av denne chatten.",
    "this_chat_does_not_contain_any_messages":"Denne chat inneholder ingen meldinger.",
 
+   "this_clan_does_not_exist":"Denne clanen finnes ikke.",
+
    "this_compo_does_not_exist":"Denne compo'en finnes ikke.",
+   "no_compo_specified":"Ingen compo angitt.",
+   "this_compo_has_already_generated_matches":"Denne compoen har allerede generert matcher.",
 
    "your_email_was_sent_to_the_selected_user":"Din e-post ble sendt til den valgte brukeren.",
    "your_email_was_sent_to_the_selected_users":"Din e-post ble sendt til de valgte brukerene.",
@@ -39,6 +43,11 @@
    "no_group_specified":"Ingen gruppe angitt.",
 
    "no_postcode_specified":"Ikke noe postnummer angitt.",
+
+   "this_match_does_not_exist":"Denne matchen finnes ikke.",
+   "this_map_does_not_exist":"Dette kartet finnes ikke.",
+   "you_are_not_a_participant_of_this_match":"Du er ikke deltaker av denne matchen.",
+   "this_match_is_currently_starting":"Denne matchen holder på å starte.",
 
    "this_page_does_not_exist":"Denne siden finnes ikke.",
    "no_page_specified":"Ikke noe side angitt.",
