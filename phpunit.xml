@@ -2,7 +2,7 @@
 <phpunit bootstrap="./localization.php">
     <testsuites>
         <testsuite>
-            <directory>./</directory>
+            <directory>./json</directory>
         </testsuite>
     </testsuites>
 </phpunit>
