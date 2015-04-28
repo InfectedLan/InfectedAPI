@@ -22,12 +22,28 @@
    "this_avatar_does_not_exist":"This avatar does not exist.",
    "no_avatar_specified":"No avatar specified.",
    "you_have_no_avatar_and_therefore_cannot_remove_it":"You have no avatar, and therefore cannot remove it.",
+   "the_image_is_too_small_it_must_be_at_least_value_pixels":"The image is too small, it must be at least %s pixels.",
+   "the_file_size_is_too_large":"The file size is too large.",
+   "invalid_file_format":"Invalid file format.",
+   "the_image_was_scaled":"The image was scaled.",
+   "you_must_choose_a_larger_section_of_the_image":"You must choose a larger section of the image.",
+   "the_image_was_not_found":"The image was not found.",
+   "you_have_no_avatar_that_has_not_already_been_cropped":"You have no avatar that has not already been cropped.",
+   "you_have_no_avatar":"You have no avatar.",
 
    "this_chat_does_not_exist":"This chat does not exist.",
    "you_are_not_a_participant_of_this_chat":"You are not a participant of this chat.",
    "this_chat_does_not_contain_any_messages":"This chat does not contain any messages.",
 
+   "this_clan_does_not_exist":"This clan does not exist.",
+   "you_are_not_the_leader_of_this_clan":"You are not the leader of this clan.",
+   "this_clan_is_full":"This clan is full.",
+   "you_cannot_create_a_new_clan_you_need_a_valid_ticket":"You cannot create a new clan, you need a valid ticket.",
+   "you_cannot_invite_this_user":"You cannot invite this user.",
+
    "this_compo_does_not_exist":"This compo does not exist.",
+   "no_compo_specified":"No compo specified.",
+   "this_compo_has_already_generated_matches":"This compo has already generated matches.",
 
    "your_email_was_sent_to_the_selected_user":"Your email was sent to the selected user.",
    "your_email_was_sent_to_the_selected_users":"Your email was sent to the selected users.",
@@ -38,10 +54,25 @@
    "this_group_does_not_exist":"This group does not exist.",
    "no_group_specified":"No group specified.",
    
+   "this_invite_does_not_exist":"This invite does not exist.",
+   "you_are_not_the_owner_of_this_invite":"You are not the owner of this invite.",
+
    "no_postcode_specified":"No postcode specified.",
+
+   "this_match_does_not_exist":"This match does not exist.",
+   "this_map_does_not_exist":"This map does not exist.",
+   "you_are_not_a_participant_of_this_match":"You are not a participant of this match.",
+   "this_match_is_currently_starting":"This match is currently starting.",
 
    "this_page_does_not_exist":"This page does not exist.",
    "no_page_specified":"No page specified.",
+
+   "someting_went_wrong_while_talking_to_the_payment_service":"Someting went wrong while talking to the payment service.",
+   "you_already_got_a_session":"You already got a session.",
+   "there_are_no_more_tickets_left":"There are no more tickets left.",
+   "you_have_selected_too_many_tickets_the_limit_per_purchase_is_10_tickets":"You have selected too many tickets, the limit per purchase is 10 tickets.",
+   "you_have_selected_an_invalid_ticket_type":"You have selected an invalid ticket type.",
+   "the_ticket_sale_is_not_open_yet":"The ticket sale is not open yet.",
 
    "this_row_does_not_exist":"This row does not exist.",
    "no_row_specified":"No row specified.",
@@ -54,8 +85,6 @@
    "this_seatmap_does_not_exist":"This seatmap does not exist.",
    "no_seatmap_specified":"No seatmap specified.",
    "an_error_occurred_while_uploading_your_image":"An error occurred while uploading your image.",
-   "the_file_size_is_too_large":"The file size is too large.",
-   "invalid_file_format":"Invalid file format.",
 
    "wrong_username_or_password":"Wrong username or password.",
    "you_must_activate_your_user_account_in_order_to_logg_in":"You must activate your user account in order to logg in.",

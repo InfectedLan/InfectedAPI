@@ -19,6 +19,7 @@
  */
 
 require_once 'session.php';
+require_once 'localization.php';
 require_once 'handlers/userhandler.php';
 require_once 'handlers/clanhandler.php';
 
@@ -44,25 +45,25 @@ if (Session::isAuthenticated()) {
 							$clan->setMemberStepInState($targetUser, ClanHandler::STATE_MAIN_PLAYER);
 							$result = true;
 						} else {
-							$message = '<p>Det er allerede for mange spillere som deltar!</p>';
+							$message = Localization::getLocale('this_clan_is_full');
 						}
 					} else {
-						$message = '<p>Compo\'en finnes ikke.</p>';
+						$message = Localization::getLocale('this_compo_does_not_exist');
 					}
 				} else {
-					$message = '<p>Du er ikke chief.</p>';
+					$message = Localization::getLocale('you_are_not_the_leader_of_this_clan');
 				}
 			} else {
-				$message = '<p>Clanen finnes ikke!</p>';
+				$message = Localization::getLocale('this_clan_does_not_exist');
 			}
 		} else {
-			$message = '<p>Brukeren du prøvde å kicke finnes ikke!</p>';
+			$message = Localization::getLocale('this_user_does_not_exist');
 		}
 	} else {
-		$message = '<p>Vi mangler felt.</p>';
+		$message = Localization::getLocale('you_have_not_filled_out_the_required_fields');
 	}
 } else {
-	$message = '<p>Du er ikke logget inn.</p>';
+	$message = Localization::getLocale('you_are_not_logged_in');
 }
 
 header('Content-Type: text/plain');

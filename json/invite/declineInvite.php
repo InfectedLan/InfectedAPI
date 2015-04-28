@@ -19,8 +19,8 @@
  */
 
 require_once 'session.php';
-require_once 'handlers/userhandler.php';
-require_once 'handlers/clanhandler.php';
+require_once 'localization.php';
+require_once 'handlers/invitehandler.php';
 
 $result = false;
 $message = null;
@@ -38,16 +38,16 @@ if (Session::isAuthenticated()) {
 				$invite->decline();
 				$result = true;
 			} else {
-				$message = '<p>Denne invitasjonen er ikke din!</p>';
+				$message = Localization::getLocale('you_are_not_the_owner_of_this_invite');
 			}
 		} else {
-			$message = '<p>Invitasjonen finnes ikke!</p>';
+			$message = Localization::getLocale('this_invite_does_not_exist');
 		}
 	} else {
-		$message = '<p>Felt mangler!</p>';
+		$message = Localization::getLocale('you_have_not_filled_out_the_required_fields');
 	}
 } else {
-	$message = '<p>Du er ikke logget inn.</p>';
+	$message = Localization::getLocale('you_are_not_logged_in');
 }
 
 header('Content-Type: text/plain');

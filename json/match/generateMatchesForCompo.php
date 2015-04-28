@@ -19,6 +19,7 @@
  */
 
 require_once 'session.php';
+require_once 'localization.php';
 require_once 'handlers/compohandler.php';
 
 $message = null;
@@ -45,22 +46,22 @@ if (Session::isAuthenticated()) {
 						CompoHandler::generateDoubleElimination($compo, $_GET['startTime'], $_GET['compoSpacing']);
 						$result = true;
 					} else {
-						$message = '<p>Compoen har allerede genererte matcher.</p>';
+						$message = Localization::getLocale('this_compo_has_already_generated_matches');
 					}
 				} else {
-					$message = '<p>Felt mangler.</p>';
+					$message = Localization::getLocale('you_have_not_filled_out_the_required_fields');
 				}
 			} else {
-				$message = '<p>Compoen finnes ikke!</p>';
+				$message = Localization::getLocale('this_compo_does_not_exist');
 			}
 		} else {
-			$message = '<p>Felt mangler!</p>';
+			$message = Localization::getLocale('no_compo_specified');
 		}
 	} else {
-		$message = '<p>Du har ikke tillatelse til å gjøre dette!</p>';
+		$message = Localization::getLocale('you_do_not_have_permission_to_do_that');
 	}
 } else {
-	$message = '<p>Du er ikke logget inn!</p>';
+	$message = Localization::getLocale('you_are_not_logged_in');
 }
 
 header('Content-Type: text/plain');

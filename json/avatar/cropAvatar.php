@@ -89,22 +89,22 @@ if (Session::isAuthenticated()) {
 							$avatar->setFileName(str_replace_last($extension, 'jpg', $avatar->getFileName()));
 							$avatar->setState(1);
 							$result = true;
-							$message = '<p>Avataren har blitt skalert!</p>';
+							$message = Localization::getLocale('the_image_was_scaled');
 						} else {
-							$message = '<p>Du har valgt et for lite omeråde! Dette er ikke lov, ettersom det kan medføre et pikselert bilde.</p>';
+							$message = Localization::getLocale('you_must_choose_a_larger_section_of_the_image');
 						}
 					} else {
-						$message = '<p>Bildet ble ikke funnet!</p>';
+						$message = Localization::getLocale('the_image_was_not_found');
 					}
 				} else {
-					$message = '<p>Avataren din har et ugyldig filformat!</p>';
+					$message = Localization::getLocale('invalid_file_format');
 				}
 			}
 		} else {
-			$message = '<p>Du har ingen avatar som ikke har blitt beskjært!</p>';
+			$message = Localization::getLocale('you_have_no_avatar_that_has_not_already_been_cropped');
 		}
 	} else {
-		$message = '<p>Du har ingen avatar!</p>';
+		$message = Localization::getLocale('you_have_no_avatar');
 	}
 } else {
 	$message = Localization::getLocale('you_are_not_logged_in');
