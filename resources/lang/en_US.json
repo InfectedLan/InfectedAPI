@@ -42,6 +42,9 @@
    "this_group_does_not_exist":"This group does not exist.",
    "no_group_specified":"No group specified.",
    
+   "this_invite_does_not_exist":"This invite does not exist.",
+   "you_are_not_the_owner_of_this_invite":"You are not the owner of this invite.",
+
    "no_postcode_specified":"No postcode specified.",
 
    "this_match_does_not_exist":"This match does not exist.",

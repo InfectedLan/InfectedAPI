@@ -42,6 +42,9 @@
    "this_group_does_not_exist":"Denne gruppen finnes ikke.",
    "no_group_specified":"Ingen gruppe angitt.",
 
+   "this_invite_does_not_exist":"Denne invitasjonen finnes ikke.",
+   "you_are_not_the_owner_of_this_invite":"Du eier ikke denne invitasjonen.",
+
    "no_postcode_specified":"Ikke noe postnummer angitt.",
 
    "this_match_does_not_exist":"Denne matchen finnes ikke.",
