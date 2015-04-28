@@ -28,6 +28,10 @@
    "this_chat_does_not_contain_any_messages":"This chat does not contain any messages.",
 
    "this_clan_does_not_exist":"This clan does not exist.",
+   "you_are_not_the_leader_of_this_clan":"You are not the leader of this clan.",
+   "this_clan_is_full":"This clan is full.",
+   "you_cannot_create_a_new_clan_you_need_a_valid_ticket":"You cannot create a new clan, you need a valid ticket.",
+   "you_cannot_invite_this_user":"You cannot invite this user.",
 
    "this_compo_does_not_exist":"This compo does not exist.",
    "no_compo_specified":"No compo specified.",

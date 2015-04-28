@@ -28,6 +28,10 @@
    "this_chat_does_not_contain_any_messages":"Denne chat inneholder ingen meldinger.",
 
    "this_clan_does_not_exist":"Denne clanen finnes ikke.",
+   "you_are_not_the_leader_of_this_clan":"Du er ikke sjefen for denne klanen.",
+   "this_clan_is_full":"Denne klanen er full.",
+   "you_cannot_create_a_new_clan_you_need_a_valid_ticket":"Du kan ikke lage en ny clan, du trenger en gyldig billett.",
+   "you_cannot_invite_this_user":"Du kan ikke invitere denne brukeren.",
 
    "this_compo_does_not_exist":"Denne compo'en finnes ikke.",
    "no_compo_specified":"Ingen compo angitt.",

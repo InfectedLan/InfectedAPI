@@ -19,6 +19,7 @@
  */
 
 require_once 'session.php';
+require_once 'localization.php';
 require_once 'handlers/componhandler.php';
 require_once 'handlers/clanhandler.php';
 require_once 'handlers/eventhandler.php';
@@ -40,16 +41,16 @@ if (Session::isAuthenticated()) {
 				$clan = ClanHandler::createClan(EventHandler::getCurrentEvent(), $_GET['name'], $_GET['tag'], $compo, $user);
 				$result = true;
 			} else {
-				$message = '<p>Compo\'en finnes ikke.</p>';
+				$message = Localization::getLocale('this_compo_does_not_exist');
 			}
 		} else {
-			$message = '<p>Mangler felt!</p>';
+			$message = Localization::getLocale('you_have_not_filled_out_the_required_fields');
 		}
 	} else {
-		$message = '<p>Du kan ikke lage en clan! Har du en billett?</p>';
+		$message = Localization::getLocale('you_cannot_create_a_new_clan_you_need_a_valid_ticket');
 	}
 } else {
-	$message = '<p>Du er ikke logget inn.</p>';
+	$message = Localization::getLocale('you_are_not_logged_in');
 }
 
 header('Content-Type: text/plain');
