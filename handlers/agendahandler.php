@@ -20,6 +20,7 @@
 
 require_once 'settings.php';
 require_once 'database.php';
+require_once 'handlers/eventhandler.php';
 require_once 'objects/agenda.php';
 require_once 'objects/event.php';
 

@@ -20,8 +20,9 @@
 
 require_once 'session.php';
 require_once 'handlers/grouphandler.php';
-require_once 'handlers/teamhandler.php';
 require_once 'handlers/userhandler.php';
+require_once 'handlers/teamhandler.php';
+require_once 'handlers/avatarhandler.php';
 require_once 'objects/eventobject.php';
 
 class Team extends EventObject {
@@ -128,7 +129,7 @@ class Team extends EventObject {
 					$index++;
 				}
 			} else {
-					echo '<p>Det er ingen medlemmer av dette laget.</p>';
+				echo '<p>Det er ingen medlemmer av dette laget.</p>';
 			}
 		}
 	}

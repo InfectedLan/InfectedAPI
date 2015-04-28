@@ -344,7 +344,7 @@ class UserHandler {
     		
     		// Build the word list, and add "+" and "*" to the start and end of every word.
     		foreach ($queryList as $value) {
-    			array_push($wordList, '+' . $value . '*');
+    		  array_push($wordList, '+' . $value . '*');
     		}
     		
     		// Query the database using a Full-Text Search.
