@@ -229,6 +229,18 @@ class ClanHandler {
     }
 
     /*
+     * Remove the specified clan.
+     */
+    public static function removeClan(Clan clan) {
+        $database = Database::open(Settings::db_name_infected_compo);
+        
+        $database->query('DELETE FROM `' . Settings::db_table_infected_compo_clans . '` 
+                          WHERE `id` = \'' . $clan->getId() . '\';');
+        
+        $database->close();
+    }
+
+    /*
      * Kick a specified member from specified clan.
      */
     public static function kickFromClan(Clan $clan, User $user) {
