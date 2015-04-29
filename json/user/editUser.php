@@ -40,6 +40,7 @@ if (Session::isAuthenticated()) {
 					isset($_GET['lastname']) &&
 					isset($_GET['username']) &&
 					isset($_GET['email']) &&
+					isset($_GET['confirmemail']) && 
 					isset($_GET['gender']) &&
 					isset($_GET['birthday']) &&
 					isset($_GET['birthmonth']) &&
@@ -51,6 +52,7 @@ if (Session::isAuthenticated()) {
 					!empty($_GET['lastname']) &&
 					!empty($_GET['username']) &&
 					!empty($_GET['email']) &&
+					!empty($_GET['confirmemail']) && 
 					is_numeric($_GET['gender']) &&
 					is_numeric($_GET['birthday']) &&
 					is_numeric($_GET['birthmonth']) &&
@@ -62,6 +64,7 @@ if (Session::isAuthenticated()) {
 					$lastname = ucfirst($_GET['lastname']);
 					$username = $_GET['username'];
 					$email = $_GET['email'];
+					$confirmEmail = $_GET['confirmemail'];
 					$gender = $_GET['gender'];
 					$birthdate = $_GET['birthyear'] . '-' . $_GET['birthmonth'] . '-' . $_GET['birthday']; 
 					$phone = $_GET['phone'];
@@ -69,14 +72,7 @@ if (Session::isAuthenticated()) {
 					$postalcode = $_GET['postalcode'];
 					$nickname = !empty($_GET['nickname']) ? $_GET['nickname'] : $editUser->getUsername();
 					$emergencyContactPhone = isset($_GET['emergencycontactphone']) ? $_GET['emergencycontactphone'] : 0;
-					 																																																																																																		
-					'parent_phone_must_be_a_number' 																														
-					'parent_phone_is_too_short_it_must_consist_of_at_least_8_characters' 																					 
-					'you_are_below_the_age_of_18_and_must_therefore_provide_a_phone_number_to_a_guardian' 																	
-					'your_account_is_now_successfully_registered_you_will_now_receive_an_activation_link_per_email_remember_to_check_spam_folder_if_you_should_not_find_it'
-					$message = Localization::getLocale();
-
-
+					 																																																																																																	
 					if ($username != $editUser->getUsername() && UserHandler::userExists($username)) {
 						$message = Localization::getLocale('the_username_is_already_in_use_by_someone_else');
 					} else if ($email != $editUser->getEmail() && UserHandler::userExists($email)) {
@@ -91,7 +87,8 @@ if (Session::isAuthenticated()) {
 						$message = Localization::getLocale('the_username_is_not_valid_it_must_consist_of_at_least_2_characters_and_a_maximum_of_16_characters');
 					} else if (empty($email) || !preg_match('/^([a-zæøåA-ZÆØÅ0-9_\.-]+)@([\da-z\.-]+)\.([a-z\.]{2,6})$/', $email) || !filter_var($email, FILTER_VALIDATE_EMAIL)) {
 						$message = Localization::getLocale('the_email_address_is_not_valid');
-					// TODO: Insert confirmEmail here?
+					} else if ($email != $confirmEmail) {
+						$message = Localization::getLocale('the_email_addresses_does_not_match');
 					} else if (!is_numeric($gender)) {
 						$message = Localization::getLocale('you_have_entered_an_invalid_gender');
 					} else if (!is_numeric($phone) || $phone <= 0 || strlen($phone) < 8 || strlen($phone) > 8) {
