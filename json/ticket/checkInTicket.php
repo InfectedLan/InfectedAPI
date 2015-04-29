@@ -40,7 +40,7 @@ if (Session::isAuthenticated()) {
 				if (!$ticket->isCheckedIn()) {
 					$ticket->checkIn();
 
-					$message = Localization::getLocale('value_ticket_is_now_checked_in');
+					$message = Localization::getLocale('value_ticket_is_now_checked_in', $ticket->getUser()->getName());
 					$result = true;
 				} else {
 					$message = Localization::getLocale('this_ticket_is_already_checked_in');

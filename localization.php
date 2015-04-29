@@ -26,7 +26,7 @@ class Localization {
 	/*
 	 * Get locale by key.
 	 */
-	public static function getLocale($key) {
+	public static function getLocale($key, ...$arguments) {
 		$path = Settings::api_path . 'resources/lang/';
 		$language = Locale::acceptFromHttp($_SERVER['HTTP_ACCEPT_LANGUAGE']);
 		$filename = $path . $language . '.json';
@@ -41,18 +41,11 @@ class Localization {
 
 		// If key exists in array, return the value.
 		if (array_key_exists($key, $list)) {
-			return $list[$key];
+			return vsprintf($list[$key], $arguments);
 		}
 
 		// Otherwise, return an error string.
-		return 'Locale not found in language \'' . $lang . '\', this is a bug.';
-	}
-
-	/*
-	 * Get locale by key, with the given replace argument.
-	 */
-	public static function getLocaleWithArgument($key, $argument) {
-		return sprintf(self::getLocale($key), $argument);
+		return 'Locale not found in language \'' . $language . '\', this is a bug.';
 	}
 }
 ?>

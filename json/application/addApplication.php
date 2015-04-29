@@ -46,9 +46,9 @@ if (Session::isAuthenticated()) {
 					ApplicationHandler::createApplication($group, $user, $content);
 					$result = true;
 
-					$message = Localization::getLocaleWithArgument('your_appliction_to_value_is_now_submitted', $group->getTitle());
+					$message = Localization::getLocale('your_appliction_to_value_is_now_submitted', $group->getTitle());
 				} else {
-					$message = Localization::getLocaleWithArgument('you_have_already_submitted_an_application_to_value_you_can_apply_again_if_your_application_should_be_denied', $group->getTitle());
+					$message = Localization::getLocale('you_have_already_submitted_an_application_to_value_you_can_apply_again_if_your_application_should_be_denied', $group->getTitle());
 				}
 			} else {
 				$message = Localization::getLocale('you_have_not_filled_out_the_required_fields');
