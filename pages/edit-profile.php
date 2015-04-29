@@ -82,7 +82,7 @@ if (Session::isAuthenticated()) {
 							$birthdate = $editUser->getBirthdate();
 						
 							echo '<select name="birthday">';
-								for ($day = 1; $day < 32; $day++) {
+								for ($day = 1; $day <= 31; $day++) {
 									if ($day == date('d', $birthdate)) {
 										echo '<option value="' . $day . '" selected>' . $day . '</option>';
 									} else {
@@ -91,7 +91,7 @@ if (Session::isAuthenticated()) {
 								}
 							echo '</select>';
 							echo '<select name="birthmonth">';					
-								for ($month = 1; $month < 13; $month++) {
+								for ($month = 1; $month <= 12; $month++) {
 									if ($month == date('m', $birthdate)) {
 										echo '<option value="' . $month . '" selected>' . DateUtils::getMonthFromInt($month) . '</option>';
 									} else {
@@ -100,7 +100,7 @@ if (Session::isAuthenticated()) {
 								}
 							echo '</select>';
 							echo '<select name="birthyear">';
-								for ($year = date('Y') - 100; $year < date('Y'); $year++) {
+								for ($year = date('Y') - 100; $year <= date('Y'); $year++) {
 									if ($year == date('Y', $birthdate)) {
 										echo '<option value="' . $year . '" selected>' . $year . '</option>';
 									} else {

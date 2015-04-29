@@ -68,17 +68,17 @@ if (!Session::isAuthenticated()) {
 				echo '<td>Fødselsdato:</td>';
 				echo '<td>';
 					echo '<select name="birthday">';
-						for ($day = 1; $day < 32; $day++) {
+						for ($day = 1; $day <= 31; $day++) {
 							echo '<option value="' . $day . '">' . $day . '</option>';
 						}
 					echo '</select>';
 					echo '<select name="birthmonth">';
-						for ($month = 1; $month < 13; $month++) {
+						for ($month = 1; $month <= 12; $month++) {
 							echo '<option value="' . $month . '">' . DateUtils::getMonthFromInt($month) . '</option>';
 						}
 					echo '</select>';
 					echo '<select name="birthyear">';
-						for ($year = date('Y') - 100; $year < date('Y'); $year++) {
+						for ($year = date('Y') - 100; $year <= date('Y'); $year++) {
 							if ($year == date('Y') - 18) {
 								echo '<option value="' . $year . '" selected>' . $year . '</option>';
 							} else {
