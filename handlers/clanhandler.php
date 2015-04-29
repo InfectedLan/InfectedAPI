@@ -229,6 +229,20 @@ class ClanHandler {
     }
 
     /*
+     * Update the specified clan.
+     */
+    public static function updateClan(Clan $clan, $name, $tag) {
+        $database = Database::open(Settings::db_name_infected_compo);
+        
+        $database->query('UPDATE `' . Settings::db_table_infected_compo_clans . '` 
+                          SET `name` = \'' . $database->real_escape_string($name) . '\', 
+                              `tag` = \'' . $database->real_escape_string($tag) . '\',
+                          WHERE `id` = \'' . $clan->getId() . '\';');
+        
+        $database->close();
+    }
+
+    /*
      * Remove the specified clan.
      */
     public static function removeClan(Clan clan) {

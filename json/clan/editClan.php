@@ -29,12 +29,18 @@ if (Session::isAuthenticated()) {
 	$user = Session::getCurrentUser();
 	
 	if (isset($_GET['id']) &&
-		is_numeric($_GET['id'])) {
+		is_numeric($_GET['id']) &&
+		isset($_GET['name']) &&
+		isset($_GET['tag']) &&
+		!empty($_GET['name']) &&
+		!empty($_GET['tag'])) {
 		$clan = ClanHandler::getClan($_GET['id']);
+		$name = $_GET['name'];
+		$tag = $_GET['tag'];
 		
 		if ($clan != null) {
 			if ($user->equals($clan->getChief())) {
-				ClanHandler::removeClan($clan);
+				ClanHandler::updateClan($clan, $name, $tag);
 				$result = true;
 			} else {
 				$message = Localization::getLocale('you_are_not_the_leader_of_this_clan');
