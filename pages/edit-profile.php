@@ -24,9 +24,8 @@ require_once 'handlers/userhandler.php';
 require_once 'handlers/emergencycontacthandler.php';
 require_once 'utils/dateutils.php';
 
-$id = isset($_GET['id']) ? $_GET['id'] : Session::getCurrentUser()->getId();
-
 if (Session::isAuthenticated()) {
+	$id = isset($_GET['id']) ? $_GET['id'] : Session::getCurrentUser()->getId();
 	$user = Session::getCurrentUser();
 	$editUser = UserHandler::getUser($id);
 	

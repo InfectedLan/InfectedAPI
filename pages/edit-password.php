@@ -36,7 +36,7 @@ if (Session::isAuthenticated()) {
 				echo '<td><input type="password" name="newPassword" required></td>';
 			echo '</tr>';
 			echo '<tr>';
-				echo '<td>' . Localization::getLocale('repeat_old_password') . ':</td>';
+				echo '<td>' . Localization::getLocale('repeat_new_password') . ':</td>';
 				echo '<td><input type="password" name="confirmNewPassword" required></td>';
 			echo '</tr>';
 			echo '<tr>';

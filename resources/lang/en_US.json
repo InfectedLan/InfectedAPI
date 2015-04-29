@@ -162,6 +162,8 @@
    "firstname":"Firstname",
    "lastname":"Lastname",
    "username":"Username",
+   "password":"Password",
+   "repeat_password":"Repeat password",
    "email":"E-mail",
    "repeat_email":"Repeat e-mail",
    "gender":"Gender",

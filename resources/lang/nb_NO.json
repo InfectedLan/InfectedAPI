@@ -162,6 +162,8 @@
    "firstname":"Fornavn",
    "lastname":"Etternavn",
    "username":"Brukernavn",
+   "password":"Passord",
+   "repeat_password":"Gjenta passord",
    "email":"E-post",
    "repeat_email":"Gjenta e-post",
    "gender":"Kjønn",

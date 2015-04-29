@@ -109,7 +109,7 @@ if (!Session::isAuthenticated()) {
 			echo '<tr>';
 				echo '<td>' . Localization::getLocale('guardians_phone') . ':</td>';
 				echo '<td><input type="text" name="emergencycontactphone"></td>';
-				echo '<td>(' . Localization::getLocale('required_if_you_are_under_the_age_of_value', 18) . ')</td>';
+				echo '<td><i>(' . Localization::getLocale('required_if_you_are_under_the_age_of_value', 18) . ')</i></td>';
 			echo '</tr>';
 			echo '<tr>';
 				echo '<td><input type="submit" value="' . Localization::getLocale('sign_up') . '"></td>';
