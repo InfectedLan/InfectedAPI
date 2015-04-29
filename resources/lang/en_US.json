@@ -143,5 +143,46 @@
    "you_must_enter_a_username_an_email_address_or_a_phone_number":"You must enter a username an email address or a phone number.",
    "your_password_is_now_changed":"Your password is now changed.",
    "the_link_to_reset_your_password_is_no_longer_valid":"The link to reset your password is no longer valid.",
-   "the_user_you_tried_to_switch_to_does_not_exist":"The user you tried to switch to does not exist."
+   "the_user_you_tried_to_switch_to_does_not_exist":"The user you tried to switch to does not exist.",
+
+
+   
+
+   "your_account_is_now_activated_and_ready_for_use":"Your account is now activated and ready for use.",
+   "your_account_has_already_been_activated":"Your account has already been activated.",
+   "the_link_you_clicked_is_no_longer_valid":"The link you clicked is no longer valid.",
+
+   "change_password":"Change password",
+   "old_password":"Old password",
+   "new_password":"New password",
+   "repeat_new_password":"Repeat new password",
+   "save":"Save",
+
+   "change_user":"Change user",
+   "firstname":"Firstname",
+   "lastname":"Lastname",
+   "username":"Username",
+   "email":"E-mail",
+   "repeat_email":"Repeat e-mail",
+   "gender":"Gender",
+   "male":"Male",
+   "female":"Female",
+   "birthdate":"Birthdate",
+   "phone":"Phone",
+   "street_address":"Street address",
+   "zip_code":"ZIP code",
+   "nickname":"Nickname",
+   "guardians_phone":"Guardian's phone",
+   "required_if_you_are_under_the_age_of_value":"Required if you are under the age of %d",
+   "change_upload_profile_photo":"Change/Upload profile photo",
+
+   "sign_up":"Sign up",
+   "you_are_already_logged_in_and_therefore_you_cannot_register_again":"You are already logged in and therefore you cannot register again.",
+
+   "forgot_password":"Forgot password",
+   "enter_your_username_or_email_in_order_to_reset_your_password":"Enter your username or email in order to reset your password.",
+   "reset_password":"Reset password",
+   "enter_a_new_password":"Enter a new password.",
+   "change":"Change",
+   "since_you_are_already_logged_in_you_it_seems_like_you_remember_your_password_after_all":"Since you are already logged in you remember your password after all."
 }

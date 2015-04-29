@@ -19,31 +19,32 @@
  */
 
 require_once 'session.php';
+require_once 'localization.php';
 
 if (Session::isAuthenticated()) {
-	echo '<h3>Endre passord</h3>';
+	echo '<h3>' . Localization::getLocale('change_password') . '</h3>';
 	
 	echo '<script src="../api/scripts/edit-password.js"></script>';
 	echo '<form class="edit-password" method="post">';
 		echo '<table>';
 			echo '<tr>';
-				echo '<td>Gammelt passord:</td>';
+				echo '<td>' . Localization::getLocale('old_password') . ':</td>';
 				echo '<td><input type="password" name="oldPassword" required autofocus></td>';
 			echo '</tr>';
 			echo '<tr>';
-				echo '<td>Nytt passord:</td>';
+				echo '<td>' . Localization::getLocale('new_password') . ':</td>';
 				echo '<td><input type="password" name="newPassword" required></td>';
 			echo '</tr>';
 			echo '<tr>';
-				echo '<td>Gjenta nytt passord:</td>';
+				echo '<td>' . Localization::getLocale('repeat_old_password') . ':</td>';
 				echo '<td><input type="password" name="confirmNewPassword" required></td>';
 			echo '</tr>';
 			echo '<tr>';
-				echo '<td><input type="submit" value="Lagre"></td>';
+				echo '<td><input type="submit" value="' . Localization::getLocale('save') . '"></td>';
 			echo '</tr>';
 		echo '</table>';
 	echo '</form>';
 } else {
-	echo '<p>Du er ikke logget inn!</p>';
+	echo Localization::getLocale('you_are_not_logged_in');
 }
 ?>

@@ -18,6 +18,7 @@
  * License along with this library.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+require_once 'localization.php';
 require_once 'handlers/registrationcodehandler.php';
 
 if (isset($_GET['code'])) {
@@ -26,11 +27,11 @@ if (isset($_GET['code'])) {
 	if (RegistrationCodeHandler::hasRegistrationCode($code)) {
 		RegistrationCodeHandler::removeRegistrationCode($_GET['code']);
 		
-		echo '<p>Brukeren din er nå aktivert og klar for bruk.</p>';
+		echo Localization::getLocale('your_account_is_now_activated_and_ready_for_use');
 	} else {
-		echo '<p>Brukeren din er allerede aktivert.</p>';
+		echo Localization::getLocale('your_account_has_already_been_activated');
 	}
 } else {
-	echo '<p>En feil oppstod.</p>';
+	echo Localization::getLocale('the_link_you_clicked_is_no_longer_valid');
 }
 ?>

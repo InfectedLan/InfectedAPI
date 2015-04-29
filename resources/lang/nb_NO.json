@@ -143,5 +143,46 @@
    "you_must_enter_a_username_an_email_address_or_a_phone_number":"Du må skrive inn et brukernavn, en e-post adresse eller et telefonnummer.",
    "your_password_is_now_changed":"Passordet ditt er nå endret.",
    "the_link_to_reset_your_password_is_no_longer_valid":"Linken til å resette passordet ditt, er ikke lengre gyldig.",
-   "the_user_you_tried_to_switch_to_does_not_exist":"Brukeren du prøvde å bytte til eksisterer ikke."
+   "the_user_you_tried_to_switch_to_does_not_exist":"Brukeren du prøvde å bytte til eksisterer ikke.",
+
+
+   
+
+   "your_account_is_now_activated_and_ready_for_use":"Brukeren din er nå aktivert og klar for bruk.",
+   "your_account_has_already_been_activated":"Brukeren din er allerede aktivert.",
+   "the_link_you_clicked_is_no_longer_valid":"Linken du trykket på er ikke lengre gyldig.",
+
+   "change_password":"Endre passord",
+   "old_password":"Gammelt passord:",
+   "new_password":"Nytt passord:",
+   "repeat_new_password":"Gjenta nytt passord:",
+   "save":"Lagre",
+
+   "change_user":"Endre bruker",
+   "firstname":"Fornavn",
+   "lastname":"Etternavn",
+   "username":"Brukernavn",
+   "email":"E-post",
+   "repeat_email":"Gjenta e-post",
+   "gender":"Kjønn",
+   "male":"Mann",
+   "female":"Kvinne",
+   "birthdate":"Fødselsdato",
+   "phone":"Telefon",
+   "street_address":"Gateadresse",
+   "zip_code":"Postnummer",
+   "nickname":"Kallenavn",
+   "guardians_phone":"Foresatte's telefon",
+   "required_if_you_are_under_the_age_of_value":"Påkrevd hvis du er under %d",
+   "change_upload_profile_photo":"Endre/Last opp profilbilde",
+
+   "sign_up":"Registrer deg",
+   "you_are_already_logged_in_and_therefore_you_cannot_register_again":"Du er allerede logget inn, og kan derfor ikke registrere deg igjen.",
+
+   "forgot_password":"Glemt passord",
+   "enter_your_username_or_e-mail_in_order_to_reset_your_password":"Skriv inn ditt brukernavn eller din e-postadresse for å nullstille passordet.",
+   "reset_password":"Nullstill passord",
+   "enter_a_new_password":"Skriv inn et nytt passord.",
+   "change":"Endre",
+   "since_you_are_already_logged_in_you_it_seems_like_you_remember_your_password_after_all":"Siden du allerede er logget inn, ser det ut til at du husker passordet ditt likevel."
 }
