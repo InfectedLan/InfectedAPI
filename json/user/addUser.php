@@ -37,7 +37,23 @@ if (isset($_GET['firstname']) &&
 	isset($_GET['birthday']) && 
 	isset($_GET['birthmonth']) && 
 	isset($_GET['birthyear']) && 
-	isset($_GET['phone'])) {
+	isset($_GET['phone']) &&
+	isset($_GET['address']) &&
+	isset($_GET['postalcode']) &&
+	!empty($_GET['firstname']) &&
+	!empty($_GET['lastname']) &&
+	!empty($_GET['username']) &&
+	!empty($_GET['password']) && 
+	!empty($_GET['confirmpassword']) && 
+	!empty($_GET['email']) &&
+	!empty($_GET['confirmemail']) && 
+	is_numeric($_GET['gender']) &&
+	is_numeric($_GET['birthday']) &&
+	is_numeric($_GET['birthmonth']) &&
+	is_numeric($_GET['birthyear']) &&
+	is_numeric($_GET['phone']) &&
+	!empty($_GET['address']) &&
+	is_numeric($_GET['postalcode'])) {
 	$firstname = ucfirst($_GET['firstname']);
 	$lastname = ucfirst($_GET['lastname']);
 	$username = $_GET['username'];
