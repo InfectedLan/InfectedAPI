@@ -115,33 +115,31 @@ class EventHandler {
     /* 
      * Create new event
      */
-    public static function createEvent($theme, $location, $participants, $bookingTime, $startTime, $endTime) {
+    public static function createEvent($location, $participants, $bookingTime, $startTime, $endTime) {
     	$name = Settings::name . ' ' . (date('m', strtotime($startTime)) == 2 ? 'Vinter' : 'Høst') . ' ' . date('Y', strtotime($startTime));    
         $seatmap = SeatmapHandler::createSeatmap($name, null);
         $database = Database::open(Settings::db_name_infected);
         
-        $database->query('INSERT INTO `' . Settings::db_table_infected_events . '` (`theme`, `locationId`, `participants`, `bookingTime`, `startTime`, `endTime`, `seatmapId`, `ticketTypeId`) 
-					      VALUES (\'' . $database->real_escape_string($theme) . '\', 
-							      \'' . $database->real_escape_string($location) . '\',
+        $database->query('INSERT INTO `' . Settings::db_table_infected_events . '` (`locationId`, `participants`, `bookingTime`, `startTime`, `endTime`, `seatmapId`, `ticketTypeId`) 
+					      VALUES (\'' . $database->real_escape_string($location) . '\',
 							      \'' . $database->real_escape_string($participants) . '\',
 							      \'' . $database->real_escape_string($bookingTime) . '\', 
 							      \'' . $database->real_escape_string($startTime) . '\', 
 							      \'' . $database->real_escape_string($endTime) . '\',
 							      \'' . $seatmap->getId() . '\',
 							      \'1\');');
-                                    
+        
         $database->close();
     }
     
     /* 
      * Update an event 
      */
-    public static function updateEvent(Event $event, $theme, $location, $participants, $bookingTime, $startTime, $endTime) {
+    public static function updateEvent(Event $event, $location, $participants, $bookingTime, $startTime, $endTime) {
       	$database = Database::open(Settings::db_name_infected);
 
         $database->query('UPDATE `' . Settings::db_table_infected_events . '` 
-					      SET `theme` = \'' . $database->real_escape_string($theme) . '\', 
-						      `locationId` = \'' . $database->real_escape_string($location) . '\', 
+					      SET `locationId` = \'' . $database->real_escape_string($location) . '\', 
 						      `participants` = \'' . $database->real_escape_string($participants) . '\',
 						      `bookingTime` = \'' . $database->real_escape_string($bookingTime) . '\', 
 						      `startTime` = \'' . $database->real_escape_string($startTime) . '\', 
@@ -203,9 +201,9 @@ class EventHandler {
 	}
 	
 	/*
-	 * Clones members from fromEvent to toEvent, but only if toEvent don't have any members yet (Maybe improve in the future).
+	 * Copy members from fromEvent to toEvent, but only if toEvent don't have any members yet.
 	 */
-    public static function cloneMembersFromEvent(Event $fromEvent, Event $toEvent) {
+    public static function copyMembers(Event $fromEvent, Event $toEvent) {
     	if (!$fromEvent->equals($toEvent)) {
 	        $database = Database::open(Settings::db_name_infected_crew);
 	        

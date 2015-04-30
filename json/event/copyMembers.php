@@ -31,14 +31,14 @@ if (Session::isAuthenticated()) {
 	if ($user->hasPermission('*')) {
 		if (isset($_GET['id']) &&
 			is_numeric($_GET['id'])) {
-			$event = EventHandler::getEvent($_GET['id']);
-			$fromEvent = EventHandler::getCurrentEvent();
+			$event = EventHandler::getCurrentEvent();
+			$fromEvent = EventHandler::getEvent($_GET['id']);
 			
-			if ($fromEvent != null &&
-				$toEvent != null) {
-				$event->cloneMembersFrom($fromEvent);
-				$result = true;
+			if ($event =! null &&
+				$fromEvent != null) {
+				$event->copyMembers($fromEvent);
 
+				$result = true;
 				$message = Localization::getLocale('all_the_members_of_the_former_event_was_transferred_to_this_one');
 			} else {
 				$message = Localization::getLocale('the_event_does_not_exist');

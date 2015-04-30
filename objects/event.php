@@ -130,10 +130,10 @@ class Event extends Object {
 	}
 
 	/*
-	 * Clone group members from the specified event to this one.
+	 * Copy group members from the specified event to this one.
 	 */
-	public function cloneMembersFromEvent($event) {
-		EventHandler::cloneMembers($event, $this);
+	public function copyMembers($event) {
+		EventHandler::copyMembers($event, $this);
 	}
 }
 ?>
