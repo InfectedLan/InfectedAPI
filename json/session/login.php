@@ -38,7 +38,7 @@ if (!Session::isAuthenticated()) {
 			$storedPassword = $user->getPassword();
 			
 			if ($user->isActivated()) {
-				if ($password == $storedPassword) {
+				if (hash_equals($password, $storedPassword)) {
 					$_SESSION['user'] = $user;
 					$result = true;
 				} else {
