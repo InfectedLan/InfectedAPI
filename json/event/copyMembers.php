@@ -34,7 +34,7 @@ if (Session::isAuthenticated()) {
 			$event = EventHandler::getCurrentEvent();
 			$fromEvent = EventHandler::getEvent($_GET['id']);
 			
-			if ($event =! null &&
+			if ($event != null &&
 				$fromEvent != null) {
 				$event->copyMembers($fromEvent);
 
