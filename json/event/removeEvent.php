@@ -32,10 +32,16 @@ if (Session::isAuthenticated()) {
 		if (isset($_GET['id']) &&
 			is_numeric($_GET['id'])) {
 			$event = EventHandler::getEvent($_GET['id']);
+			$currentEvent = EventHandler::getCurrentEvent();
 
 			if ($event != null) {
-				EventHandler::removeEvent($event);
-				$result = true;
+				// Check that this event is the same or newer than the current event.
+				if ($event->getBookingTime() >= $currentEvent->getBookingTime()) {
+					EventHandler::removeEvent($event);
+					$result = true;
+				} else {
+					$message = Localization::getLocale('you_cannot_remove_this_event');
+				}
 			} else {
 				$message = Localization::getLocale('the_event_does_not_exist');
 			}

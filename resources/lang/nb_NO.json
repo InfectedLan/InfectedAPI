@@ -50,6 +50,7 @@
 
    "the_event_does_not_exist":"Arrangementet finnes ikke.",
    "all_the_members_of_the_former_event_was_transferred_to_this_one":"Alle medlemene fra det tidligere arrangement ble overført til dette.",
+   "you_cannot_remove_this_event":"Du kan ikke fjerne dette arrangementet.",
    
    "this_group_does_not_exist":"Denne gruppen finnes ikke.",
    "no_group_specified":"Ingen gruppe angitt.",
