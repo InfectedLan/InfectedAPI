@@ -31,7 +31,6 @@ if (Session::isAuthenticated()) {
 	if ($user->hasPermission('*') ||
 		$user->hasPermission('admin-events')) {
 		if (isset($_GET['id']) &&
-			isset($_GET['theme']) &&
 			isset($_GET['location']) &&
 			isset($_GET['participants']) &&
 			isset($_GET['bookingDate']) &&
@@ -50,7 +49,6 @@ if (Session::isAuthenticated()) {
 			!empty($_GET['endDate']) &&
 			!empty($_GET['endTime']) &&
 			$event = EventHandler::getEvent($_GET['id']);
-			$theme = $_GET['theme'];
 			$location = $_GET['location'];
 			$participants = $_GET['participants'];
 			$bookingTime = $_GET['bookingDate'] . ' ' . $_GET['bookingTime'];
@@ -58,7 +56,7 @@ if (Session::isAuthenticated()) {
 			$endTime = $_GET['endDate'] . ' ' . $_GET['endTime'];
 			
 			if ($event != null) {
-				EventHandler::updateEvent($event, $theme, $location, $participants, $bookingTime, $startTime, $endTime);
+				EventHandler::updateEvent($event, $location, $participants, $bookingTime, $startTime, $endTime);
 				$result = true;
 			} else {
 				$message = Localization::getLocale('the_event_does_not_exist');

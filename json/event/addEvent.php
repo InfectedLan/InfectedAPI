@@ -30,8 +30,7 @@ if (Session::isAuthenticated()) {
 	
 	if ($user->hasPermission('*') ||
 		$user->hasPermission('admin.events')) {
-		if (isset($_GET['theme']) &&
-			isset($_GET['location']) &&
+		if (isset($_GET['location']) &&
 			isset($_GET['participants']) &&
 			isset($_GET['bookingDate']) &&
 			isset($_GET['bookingTime']) &&
@@ -47,14 +46,13 @@ if (Session::isAuthenticated()) {
 			!empty($_GET['startTime']) &&
 			!empty($_GET['endDate']) &&
 			!empty($_GET['endTime'])) {
-			$theme = $_GET['theme'];
 			$location = $_GET['location'];
 			$participants = $_GET['participants'];
 			$bookingTime = $_GET['bookingDate'] . ' ' . $_GET['bookingTime'];
 			$startTime = $_GET['startDate'] . ' ' . $_GET['startTime'];
 			$endTime = $_GET['endDate'] . ' ' . $_GET['endTime'];
 			
-			EventHandler::createEvent($theme, $location, $participants, $bookingTime, $startTime, $endTime);
+			EventHandler::createEvent($location, $participants, $bookingTime, $startTime, $endTime);
 			$result = true;
 		} else {
 			$message = Localization::getLocale('you_have_not_filled_out_the_required_fields');
