@@ -22,6 +22,7 @@ require_once 'settings.php';
 require_once 'database.php';
 require_once 'handlers/eventhandler.php';
 require_once 'objects/group.php';
+require_once 'objects/event.php';
 require_once 'objects/user.php';
 
 class GroupHandler {
@@ -40,28 +41,36 @@ class GroupHandler {
     }
     
     /* 
-     * Get a group for the specified user.
+     * Get a group for the specified user from the given event.
      */
-    public static function getGroupByUser(User $user) {
+    public static function getGroupByEventAndUser(Event $event, User $user) {
         $database = Database::open(Settings::db_name_infected_crew);
         
         $result = $database->query('SELECT * FROM `' . Settings::db_table_infected_crew_groups . '` 
                                     WHERE `id` = (SELECT `groupId` FROM `' . Settings::db_table_infected_crew_memberof . '` 
-                                                  WHERE `eventId` = \'' . EventHandler::getCurrentEvent()->getId() . '\'
-            								        AND `userId` = \'' . $user->getId() . '\');');
+                                                  WHERE `eventId` = \'' . $event->getId() . '\'
+                                    AND `userId` = \'' . $user->getId() . '\');');
           
         $database->close();
 
         return $result->fetch_object('Group');
     }
+
+    /* 
+     * Get a group for the specified user.
+     */
+    public static function getGroupByUser(User $user) {
+        return self::getGroupByEventAndUser(EventHandler::getCurrentEvent(), $user);
+    }
     
     /*
-     * Get a list of all groups.
+     * Get a list of all groups from the given event.
      */
-    public static function getGroups() {
+    public static function getGroupsByEvent(Event $event) {
         $database = Database::open(Settings::db_name_infected_crew);
         
         $result = $database->query('SELECT * FROM `' . Settings::db_table_infected_crew_groups . '` 
+                                    WHERE `eventId` = \'' . $event->getId() . '\'
                                     ORDER BY `name`;');
         
         $database->close();
@@ -73,6 +82,13 @@ class GroupHandler {
         }
         
         return $groupList;
+    }
+
+    /*
+     * Get a list of all groups.
+     */
+    public static function getGroups() {
+        return self::getGroupsByEvent(EventHandler::getCurrentEvent());
     }
     
     /*
@@ -122,16 +138,16 @@ class GroupHandler {
     }
     
     /* 
-	 * Returns an list of users that are members of this group.
-	 */
-    public static function getMembers(Group $group) {
+     * Returns an list of users that are members of this group in the given event.
+     */
+    public static function getMembersByEvent(Event $event, Group $group) {
         $database = Database::open(Settings::db_name_infected);
         
         $result = $database->query('SELECT `' . Settings::db_table_infected_users . '`.* FROM `' . Settings::db_table_infected_users . '`
                                     LEFT JOIN `' . Settings::db_name_infected_crew . '`.`' . Settings::db_table_infected_crew_memberof . '`
                                     ON `' . Settings::db_table_infected_users . '`.`id` = `userId` 
-                                    WHERE `eventId` = \'' . EventHandler::getCurrentEvent()->getId() . '\'
-								                    AND `groupId` = \'' . $group->getId() . '\'
+                                    WHERE `eventId` = \'' . $event->getId() . '\'
+                                    AND `groupId` = \'' . $group->getId() . '\'
                                     ORDER BY `firstname` ASC;');
         
         $database->close();
@@ -144,48 +160,79 @@ class GroupHandler {
         
         return $memberList;
     }
-	
+
+
+    /* 
+	   * Returns an list of users that are members of this group.
+	   */
+    public static function getMembers(Group $group) {
+        return self::getMembersByEvent(EventHandler::getCurrentEvent(), $group);
+    }
+
+    /* 
+     * Returns true of the specified user is member of a group in the given event.
+     */
+    public static function isGroupMemberByEvent(Event $event, User $user) {
+        $database = Database::open(Settings::db_name_infected_crew);
+        
+        $result = $database->query('SELECT `id` FROM `' . Settings::db_table_infected_crew_memberof . '`
+                                    WHERE `eventId` = \'' . $event->getId() . '\'
+                                    AND `userId` = \'' . $user->getId() . '\'
+                                    AND `groupId` != \'0\';');
+        
+        $database->close();
+    
+        return $result->num_rows > 0;
+    }
+
     /* 
      * Returns true of the specified user is member of a group.
      */
     public static function isGroupMember(User $user) {
-        $database = Database::open(Settings::db_name_infected_crew);
-        
-        $result = $database->query('SELECT `id` FROM `' . Settings::db_table_infected_crew_memberof . '`
-                                    WHERE `eventId` = \'' . EventHandler::getCurrentEvent()->getId() . '\'
-								                    AND `userId` = \'' . $user->getId() . '\'
-                                    AND `groupId` != \'0\';');
-        
-		    $database->close();
-		
-        return $result->num_rows > 0;
+        return self::isGroupMemberByEvent(EventHandler::getCurrentEvent(), $user);
     }
     
     /* 
      * Return true if the specified user is leader of a group.
      */
-    public static function isGroupLeader(User $user) {
+    public static function isGroupLeaderByEvent(Event $event, User $user) {
         $database = Database::open(Settings::db_name_infected_crew);
         
-        $result = $database->query('SELECT `id` FROM `' . Settings::db_table_infected_crew_groups . '` 
-                                    WHERE `leaderId` = \'' . $user->getId() . '\';');
-		    $database->close();
+        $result = $database->query('SELECT `id` FROM `' . Settings::db_table_infected_crew_groups . '`
+                                    WHERE `eventId` = \'' . $event->getId() . '\'
+                                    AND `leaderId` = \'' . $user->getId() . '\';');
+        $database->close();
 
          return $result->num_rows > 0;
     }
+
+    /* 
+     * Return true if the specified user is leader of a group.
+     */
+    public static function isGroupLeader(User $user) {
+        return self::isGroupLeaderByEvent(EventHandler::getCurrentEvent(), $user);
+    }
 	
-	/* 
+	  /* 
      * Return true if user is co-leader for a group.
      */
-    public static function isGroupCoLeader(User $user) {
+    public static function isGroupCoLeaderByEvent(Event $event, User $user) {
         $database = Database::open(Settings::db_name_infected_crew);
         
-        $result = $database->query('SELECT `id` FROM `' . Settings::db_table_infected_crew_groups . '` 
-                                    WHERE `coleaderId` = \'' . $user->getId() . '\';');
+        $result = $database->query('SELECT `id` FROM `' . Settings::db_table_infected_crew_groups . '`
+                                    WHERE `eventId` = \'' . $event->getId() . '\'
+                                    AND `coleaderId` = \'' . $user->getId() . '\';');
         
         $database->close();
 
         return $result->num_rows > 0;
+    }
+
+    /* 
+     * Return true if user is co-leader for a group.
+     */
+    public static function isGroupCoLeader(User $user) {
+        return self::isGroupCoLeaderByEvent(EventHandler::getCurrentEvent(), $user);
     }
 
     /*
