@@ -364,73 +364,140 @@ class User extends Object {
 	public function getAvatar() {
 		return AvatarHandler::getAvatarByUser($this);
 	}
-	
+
+	/* 
+	 * Returns the users group for the fiven event.
+	 */
+	public function getGroupByEvent(Event $event) {
+		return GroupHandler::getGroupByEventAndUser($event, $this);
+	}
+
 	/* 
 	 * Returns the users group.
 	 */
 	public function getGroup() {
-		return GroupHandler::getGroupByUser($this);
+		return $this->getGroupByEvent(EventHandler::getCurrentEvent());
 	}
 	
 	/* 
-	 * Is member of a group which means it's not a plain user.
+	 * Is member of a group for the given event.
+	 */
+	public function isGroupMemberByEvent(Event $event) {
+		return GroupHandler::isGroupMemberByEvent($event, $this);
+	}
+
+	/* 
+	 * Is member of a group.
 	 */
 	public function isGroupMember() {
-		return GroupHandler::isGroupMember($this);
+		return $this->isGroupMemberByEvent(EventHandler::getCurrentEvent());
 	}
 	
+	/* 
+	 * Return true if user is leader of a group for the given event.
+	 */
+	public function isGroupLeaderByEvent(Event $event) {
+		return GroupHandler::isGroupLeaderByEvent($event, $this);
+	}
+
 	/* 
 	 * Return true if user is leader of a group.
 	 */
 	public function isGroupLeader() {
-		return GroupHandler::isGroupLeader($this);
+		return $this->isGroupLeaderByEvent(EventHandler::getCurrentEvent());
 	}
 	
+	/* 
+	 * Return true if user is co-leader of a group for the given event.
+	 */
+	public function isGroupCoLeaderByEvent(Event $event) {
+		return GroupHandler::isGroupCoLeaderByEvent($event, $this);
+	}
+
 	/* 
 	 * Return true if user is co-leader of a group.
 	 */
 	public function isGroupCoLeader() {
-		return GroupHandler::isGroupCoLeader($this);
+		return $this->isGroupCoLeaderByEvent(EventHandler::getCurrentEvent());
 	}
 	
+	/* 
+	 * Returns the team for the given event.
+	 */
+	public function getTeamByEvent(Event $event) {
+		return TeamHandler::getTeamByEventAndUser($event, $this);
+	}
+
 	/* 
 	 * Returns the team.
 	 */
 	public function getTeam() {
-		return TeamHandler::getTeamByUser($this);
+		return $this->getTeamByEvent(EventHandler::getCurrentEvent());
 	}
 	
 	/* 
-	 * Is member of a team which means it's not a plain user.
+	 * Is member of a team for the given event.
+	 */
+	public function isTeamMemberByEvent(Event $event) {
+		return TeamHandler::isTeamMemberByEvent($event, $this);
+	}
+
+	/* 
+	 * Is member of a team.
 	 */
 	public function isTeamMember() {
-		return TeamHandler::isTeamMember($this);
+		return $this->isTeamMemberByEvent(EventHandler::getCurrentEvent());
 	}
 	
+	/*
+	 * Return true if user is leader of a team for the given event.
+	 */
+	public function isTeamLeaderByEvent(Event $event) {
+		return TeamHandler::isTeamLeaderByEvent($event, $this);
+	}
+
 	/*
 	 * Return true if user is leader of a team.
 	 */
 	public function isTeamLeader() {
-		return TeamHandler::isTeamLeader($this);
+		return $this->isTeamMemberByEvent(EventHandler::getCurrentEvent());
 	}
 	
 	/* 
 	 * Returns the name of the users position.
 	 */
-	public function getPosition() {
-		if ($this->isGroupMember()) {
-			if ($this->isGroupLeader()) {
-				return 'Chief';
-			} else if ($this->isGroupCoLeader()) {
-				return 'Co-chief';
-			} else if ($this->isTeamLeader()) {
-				return 'Shift-leder';
+	public function getRoleByEvent(Event $event) {
+		if ($this->isGroupMemberByEvent($event)) {
+			$group = $this->getGroupByEvent($event);
+
+			if ($this->isGroupLeaderByEvent($event)) {
+				$role = 'Leder i ' . $group->getTitle();
+			} else if ($this->isGroupCoLeaderByEvent($event)) {
+				$role = 'Co-leder i ' . $group->getTitle();
+			} else if ($this->isTeamLeaderByEvent($event)) {
+				$role = 'Lag-leder i ' . $group->getTitle();
 			} else {
-				return 'Medlem';
+				$role = 'Medlem av ' . $group->getTitle();
 			}
 		} else {
-			return 'Deltaker';
+			$role = 'Deltaker';
 		}
+
+		return $role;
+	}
+
+	/* 
+	 * Returns the name of the users position.
+	 */
+	public function getRole() {
+		return $this->getPositionByEvent(EventHandler::getCurrentEvent());
+	}
+
+	/* 
+	 * This function is replaced by getRole(), this is deprecated and only kept for compatibility reasons and should be removed soon.
+	 */
+	public function getPosition() {
+		return $this->getRole();
 	}
 
 	/*
