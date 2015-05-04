@@ -20,7 +20,7 @@
 
 require_once 'settings.php';
 require_once 'database.php';
-require_once 'handlers/permissionhandler.php';
+require_once 'handlers/eventhandler.php';
 require_once 'objects/user.php';
 require_once 'objects/permission.php';
 
@@ -32,7 +32,8 @@ class UserPermissionHandler {
         $database = Database::open(Settings::db_name_infected);
 		
         $result = $database->query('SELECT `id` FROM `' . Settings::db_table_infected_userpermissions . '` 
-                                    WHERE `userId` = \'' . $user->getId() . '\'
+                                    WHERE `eventId` = \'' . EventHandler::getCurrentEvent()->getId() . '\'
+                                    AND `userId` = \'' . $user->getId() . '\'
                                     AND `permissionId` = \'' . $permission->getId() . '\';');
 		
         $database->close();
@@ -47,7 +48,8 @@ class UserPermissionHandler {
 		$database = Database::open(Settings::db_name_infected);
 		
         $result = $database->query('SELECT `id` FROM `' . Settings::db_table_infected_userpermissions . '` 
-                                    WHERE `userId` = \'' . $user->getId() . '\'
+                                    WHERE `eventId` = \'' . EventHandler::getCurrentEvent()->getId() . '\'
+                                    AND `userId` = \'' . $user->getId() . '\'
                                     AND `permissionId` = (SELECT `id` FROM `' . Settings::db_table_infected_permissions . '` 
 													      WHERE `value` = \'' . $database->real_escape_string($value) . '\');');
 		
@@ -63,7 +65,8 @@ class UserPermissionHandler {
         $database = Database::open(Settings::db_name_infected);
         
         $result = $database->query('SELECT `id` FROM `' . Settings::db_table_infected_userpermissions . '` 
-                                    WHERE `userId` = \'' . $user->getId() . '\';');
+                                    WHERE `eventId` = \'' . EventHandler::getCurrentEvent()->getId() . '\'
+                                    AND `userId` = \'' . $user->getId() . '\';');
         
         $database->close();
         
@@ -77,8 +80,9 @@ class UserPermissionHandler {
         $database = Database::open(Settings::db_name_infected);
         
         $result = $database->query('SELECT * FROM `' . Settings::db_table_infected_permissions . '`
-                                    WHERE `id` IN (SELECT `permissionId` FROM `' . Settings::db_table_infected_userpermissions . '`
-                                                   WHERE `userId` = \'' . $user->getId() . '\');');
+                                    WHERE `eventId` = \'' . EventHandler::getCurrentEvent()->getId() . '\'
+                                    AND `id` IN (SELECT `permissionId` FROM `' . Settings::db_table_infected_userpermissions . '`
+                                                 WHERE `userId` = \'' . $user->getId() . '\');');
         
         $database->close();
         
@@ -114,7 +118,8 @@ class UserPermissionHandler {
         $database = Database::open(Settings::db_name_infected);
         
         $database->query('DELETE FROM `' . Settings::db_table_infected_userpermissions . '` 
-                          WHERE `userId` = \'' . $user->getId() . '\'
+                          WHERE `eventId` = \'' . EventHandler::getCurrentEvent()->getId() . '\'
+                          AND `userId` = \'' . $user->getId() . '\'
                           AND `permissionId` = \'' . $permission->getId() . '\';');
         
         $database->close();
@@ -127,7 +132,8 @@ class UserPermissionHandler {
         $database = Database::open(Settings::db_name_infected);
         
         $database->query('DELETE FROM `' . Settings::db_table_infected_userpermissions . '` 
-                          WHERE `userId` = \'' . $user->getId() . '\';');
+                          WHERE `eventId` = \'' . EventHandler::getCurrentEvent()->getId() . '\'
+                          AND `userId` = \'' . $user->getId() . '\';');
         
         $database->close();
     }
