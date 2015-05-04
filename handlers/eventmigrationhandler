@@ -25,15 +25,6 @@ require_once 'utils/databaseutils.php';
 
 class EventMigrationHandler {
 	/*
-	 * Copies all information that is relevant from the old event to the new one, overwriting is forbidden so no entries for the new event can already exist.
-	 */
-    public static function copy(Event $fromEvent, Event $toEvent) {
-    	self::copyGroups($fromEvent, $toEvent);
-    	self::copyMembers($fromEvent, $toEvent);
-    	self::copyPermissions($fromEvent, $toEvent);
-    }
-
-	/*
 	 * Copies all information from the given event to the new one.
 	 */
     public static function copyTableByEvent(Event $fromEvent, Event $toEvent, $databaseName, $tableName) {
@@ -43,7 +34,17 @@ class EventMigrationHandler {
     }
 
 	/*
-	 * Copies groups from given event to the new one, this also include teams, overwriting is forbidden so no entries for the new event can already exist.
+	 * Copies all information that is relevant from the old event to the new one, overwriting is forbidden so no entries for the new event can already exist.
+	 */
+    public static function copy(Event $fromEvent, Event $toEvent) {
+    	self::copyGroups($fromEvent, $toEvent);
+    	self::copyTeams($fromEvent, $toEvent);
+    	self::copyMembers($fromEvent, $toEvent);
+    	self::copyPermissions($fromEvent, $toEvent);
+    }
+
+	/*
+	 * Copies groups from given event to the new one, overwriting is forbidden so no entries for the new event can already exist.
 	 */
     public static function copyGroups(Event $fromEvent, Event $toEvent) {
     	self::copyTableByEvent($fromEvent, $toEvent, Settings::db_name_infected_crew, Settings::db_table_infected_crew_groups);
