@@ -24,6 +24,7 @@ require_once 'handlers/tickethandler.php';
 require_once 'handlers/tickettypehandler.php';
 require_once 'handlers/storesessionhandler.php';
 require_once 'handlers/eventhandler.php';
+require_once 'handlers/eventmigrationhandler.php';
 require_once 'objects/object.php';
 require_once 'objects/location.php';
 
@@ -133,7 +134,7 @@ class Event extends Object {
 	 * Copy group members from the specified event to this one.
 	 */
 	public function copyMembers($event) {
-		EventHandler::copyMembers($event, $this);
+		EventMigrationHandler::copyMembers($event, $this);
 	}
 }
 ?>

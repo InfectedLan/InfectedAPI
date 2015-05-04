@@ -199,22 +199,5 @@ class EventHandler {
 
         return $userList;
 	}
-	
-	/*
-	 * Copy members from fromEvent to toEvent, but only if toEvent don't have any members yet.
-	 */
-    public static function copyMembers(Event $fromEvent, Event $toEvent) {
-    	if (!$fromEvent->equals($toEvent)) {
-	        $database = Database::open(Settings::db_name_infected_crew);
-	        
-	        $database->query('INSERT INTO `' . Settings::db_table_infected_crew_memberof . '` (`eventId`, `userId`, `groupId`, `teamId`)
-						      SELECT \'' . $toEvent->getId() . '\', `userId`, `groupId`, `teamId` FROM `' . Settings::db_table_infected_crew_memberof . '`
-						      WHERE `eventId` = \'' . $fromEvent->getId() . '\'
-						      AND NOT EXISTS (SELECT `id` FROM `' . Settings::db_table_infected_crew_memberof . '`
-										      WHERE `eventId` = \'' . $toEvent->getId() . '\');');
-	        
-	        $database->close();
-	    }
-    }
 }
 ?>
