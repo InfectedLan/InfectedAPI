@@ -30,7 +30,7 @@ class PageHandler {
         $database = Database::open(Settings::db_name_infected_main);
         
         $result = $database->query('SELECT * FROM `' . Settings::db_table_infected_main_pages . '` 
-                                    WHERE id=\'' . $database->real_escape_string($id) . '\';');
+                                    WHERE id = \'' . $database->real_escape_string($id) . '\';');
         
         $database->close();
 

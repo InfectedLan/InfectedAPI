@@ -21,9 +21,9 @@
 require_once 'objects/object.php';
 
 class Page extends Object {
-	protected $name;
-	protected $title;
-	protected $content;
+	private $name;
+	private $title;
+	private $content;
 	
 	/*
 	 * Returns the name of this page.

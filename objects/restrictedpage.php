@@ -20,12 +20,36 @@
 
 require_once 'handlers/grouphandler.php';
 require_once 'handlers/teamhandler.php';
-require_once 'page.php';
+require_once 'objects/eventobject.php';
 
-class RestrictedPage extends Page {
+class RestrictedPage extends EventObject {
+	private $name;
+	private $title;
+	private $content;
 	private $groupId;
 	private $teamId;
 	
+	/*
+	 * Returns the name of this page.
+	 */
+	public function getName() {
+		return $this->name;
+	}
+	
+	/*
+	 * Returns the title of this page.
+	 */
+	public function getTitle() {
+		return $this->title;
+	}
+	
+	/*
+	 * Returns the content of this page.
+	 */
+	public function getContent() {
+		return $this->content;
+	}
+
 	/*
 	 * Returns the group of this page.
 	 */
