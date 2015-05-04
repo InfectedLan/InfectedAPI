@@ -40,12 +40,30 @@ class EventMigrationHandler {
     	// Infected
     	self::copyPermissions($fromEvent, $toEvent);
 
+    	// InfectedCompo
+    	self::copyCompos($fromEvent, $toEvent);
+    	//self::copyInvites($fromEvent, $toEvent); // This is commented out because this may be unwanted behavior.
+    	
     	// InfectedCrew
     	self::copyGroups($fromEvent, $toEvent);
     	self::copyTeams($fromEvent, $toEvent);
     	self::copyMembers($fromEvent, $toEvent);
     	self::copyRestrictedPages($fromEvent, $toEvent);
+
+    	// InfectedInfo
+    	self::copySlides($fromEvent, $toEvent);
+
+    	// InfectedMain
+    	self::copyAgenda($fromEvent, $toEvent);
+
+    	// InfectedTickets
+    	//self::copyTickets($fromEvent, $toEvent); // This is commented out because this may be unwanted behavior.
     }
+
+    /* Infected */
+
+    copyCompos($fromEvent, $toEvent);
+    	//self::copyInvites($fromEvent, $toEvent); // This is commented out because this may be unwanted behavior.
 
     /*
 	 * Copies permissions from the given event to the new one, overwriting is forbidden so no entries for the new event can already exist.
@@ -53,6 +71,24 @@ class EventMigrationHandler {
     public static function copyPermissions(Event $fromEvent, Event $toEvent) {
 	    self::copyTableByEvent($fromEvent, $toEvent, Settings::db_name_infected, Settings::db_table_infected_userpermissions);
     }
+
+    /* InfectedCompo */
+
+ 	/*
+	 * Copies compos from given event to the new one, overwriting is forbidden so no entries for the new event can already exist.
+	 */
+    public static function copyCompos($fromEvent, $toEvent) {
+	    self::copyTableByEvent($fromEvent, $toEvent, Settings::db_name_infected_compo, Settings::db_table_infected_compo_compos);
+    }
+
+    /*
+	 * Copies invites from given event to the new one, overwriting is forbidden so no entries for the new event can already exist.
+	 */
+    public static function copyInvites($fromEvent, $toEvent) {
+	    self::copyTableByEvent($fromEvent, $toEvent, Settings::db_name_infected_compo, Settings::db_table_infected_compo_invites);
+    }
+
+    /* InfectedCrew */
 
 	/*
 	 * Copies groups from given event to the new one, overwriting is forbidden so no entries for the new event can already exist.
@@ -80,6 +116,33 @@ class EventMigrationHandler {
 	 */
     public static function copyRestrictedPages(Event $fromEvent, Event $toEvent) {
 	    self::copyTableByEvent($fromEvent, $toEvent, Settings::db_name_infected_crew, Settings::db_table_infected_crew_pages);
+    }
+
+    /* InfectedInfo */
+
+    /*
+	 * Copies slides from given event to the new one, overwriting is forbidden so no entries for the new event can already exist.
+	 */
+    public static function copySlides($fromEvent, $toEvent) {
+	    self::copyTableByEvent($fromEvent, $toEvent, Settings::db_name_infected_info, Settings::db_table_infected_info_slides);
+    }
+
+    /* InfectedMain */
+
+    /*
+	 * Copies agenda entries from given event to the new one, overwriting is forbidden so no entries for the new event can already exist.
+	 */
+    public static function copyAgenda($fromEvent, $toEvent) {
+	    self::copyTableByEvent($fromEvent, $toEvent, Settings::db_name_infected_main, Settings::db_table_infected_main_agenda);
+    }
+
+    /* InfectedTickets */
+
+    /*
+	 * Copies tickets from given event to the new one, overwriting is forbidden so no entries for the new event can already exist.
+	 */
+    public static function copyTickets($fromEvent, $toEvent) {
+	    self::copyTableByEvent($fromEvent, $toEvent, Settings::db_name_infected_tickets, Settings::db_table_infected_tickets_tickets);
     }
 }
 ?>
