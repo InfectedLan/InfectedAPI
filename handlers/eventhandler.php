@@ -4,18 +4,18 @@
  *
  * Copyright (C) 2015 Infected <http://infected.no/>.
  *
- * This program is free software: you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version.
+ * This library is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU Lesser General Public
+ * License as published by the Free Software Foundation; either
+ * version 3.0 of the License, or (at your option) any later version.
  * 
- * This program is distributed in the hope that it will be useful,
+ * This library is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- *
- * You should have received a copy of the GNU General Public License
- * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ * Lesser General Public License for more details.
+ * 
+ * You should have received a copy of the GNU Lesser General Public
+ * License along with this library.  If not, see <http://www.gnu.org/licenses/>.
  */
 
 require_once 'settings.php';
@@ -115,33 +115,31 @@ class EventHandler {
     /* 
      * Create new event
      */
-    public static function createEvent($theme, $location, $participants, $bookingTime, $startTime, $endTime) {
+    public static function createEvent($location, $participants, $bookingTime, $startTime, $endTime) {
     	$name = Settings::name . ' ' . (date('m', strtotime($startTime)) == 2 ? 'Vinter' : 'Høst') . ' ' . date('Y', strtotime($startTime));    
         $seatmap = SeatmapHandler::createSeatmap($name, null);
         $database = Database::open(Settings::db_name_infected);
         
-        $database->query('INSERT INTO `' . Settings::db_table_infected_events . '` (`theme`, `locationId`, `participants`, `bookingTime`, `startTime`, `endTime`, `seatmapId`, `ticketTypeId`) 
-					      VALUES (\'' . $database->real_escape_string($theme) . '\', 
-							      \'' . $database->real_escape_string($location) . '\',
+        $database->query('INSERT INTO `' . Settings::db_table_infected_events . '` (`locationId`, `participants`, `bookingTime`, `startTime`, `endTime`, `seatmapId`, `ticketTypeId`) 
+					      VALUES (\'' . $database->real_escape_string($location) . '\',
 							      \'' . $database->real_escape_string($participants) . '\',
 							      \'' . $database->real_escape_string($bookingTime) . '\', 
 							      \'' . $database->real_escape_string($startTime) . '\', 
 							      \'' . $database->real_escape_string($endTime) . '\',
 							      \'' . $seatmap->getId() . '\',
 							      \'1\');');
-                                    
+        
         $database->close();
     }
     
     /* 
      * Update an event 
      */
-    public static function updateEvent(Event $event, $theme, $location, $participants, $bookingTime, $startTime, $endTime) {
+    public static function updateEvent(Event $event, $location, $participants, $bookingTime, $startTime, $endTime) {
       	$database = Database::open(Settings::db_name_infected);
 
         $database->query('UPDATE `' . Settings::db_table_infected_events . '` 
-					      SET `theme` = \'' . $database->real_escape_string($theme) . '\', 
-						      `locationId` = \'' . $database->real_escape_string($location) . '\', 
+					      SET `locationId` = \'' . $database->real_escape_string($location) . '\', 
 						      `participants` = \'' . $database->real_escape_string($participants) . '\',
 						      `bookingTime` = \'' . $database->real_escape_string($bookingTime) . '\', 
 						      `startTime` = \'' . $database->real_escape_string($startTime) . '\', 
@@ -201,22 +199,5 @@ class EventHandler {
 
         return $userList;
 	}
-	
-	/*
-	 * Clones members from fromEvent to toEvent, but only if toEvent don't have any members yet (Maybe improve in the future).
-	 */
-    public static function cloneMembersFromEvent(Event $fromEvent, Event $toEvent) {
-    	if (!$fromEvent->equals($toEvent)) {
-	        $database = Database::open(Settings::db_name_infected_crew);
-	        
-	        $database->query('INSERT INTO `' . Settings::db_table_infected_crew_memberof . '` (`eventId`, `userId`, `groupId`, `teamId`)
-						      SELECT \'' . $toEvent->getId() . '\', `userId`, `groupId`, `teamId` FROM `' . Settings::db_table_infected_crew_memberof . '`
-						      WHERE `eventId` = \'' . $fromEvent->getId() . '\'
-						      AND NOT EXISTS (SELECT `id` FROM `' . Settings::db_table_infected_crew_memberof . '`
-										      WHERE `eventId` = \'' . $toEvent->getId() . '\');');
-	        
-	        $database->close();
-	    }
-    }
 }
 ?>

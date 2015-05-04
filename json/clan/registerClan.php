@@ -4,21 +4,22 @@
  *
  * Copyright (C) 2015 Infected <http://infected.no/>.
  *
- * This program is free software: you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version.
+ * This library is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU Lesser General Public
+ * License as published by the Free Software Foundation; either
+ * version 3.0 of the License, or (at your option) any later version.
  * 
- * This program is distributed in the hope that it will be useful,
+ * This library is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- *
- * You should have received a copy of the GNU General Public License
- * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ * Lesser General Public License for more details.
+ * 
+ * You should have received a copy of the GNU Lesser General Public
+ * License along with this library.  If not, see <http://www.gnu.org/licenses/>.
  */
 
 require_once 'session.php';
+require_once 'localization.php';
 require_once 'handlers/componhandler.php';
 require_once 'handlers/clanhandler.php';
 require_once 'handlers/eventhandler.php';
@@ -40,16 +41,16 @@ if (Session::isAuthenticated()) {
 				$clan = ClanHandler::createClan(EventHandler::getCurrentEvent(), $_GET['name'], $_GET['tag'], $compo, $user);
 				$result = true;
 			} else {
-				$message = '<p>Compo\'en finnes ikke.</p>';
+				$message = Localization::getLocale('this_compo_does_not_exist');
 			}
 		} else {
-			$message = '<p>Mangler felt!</p>';
+			$message = Localization::getLocale('you_have_not_filled_out_the_required_fields');
 		}
 	} else {
-		$message = '<p>Du kan ikke lage en clan! Har du en billett?</p>';
+		$message = Localization::getLocale('you_cannot_create_a_new_clan_you_need_a_valid_ticket');
 	}
 } else {
-	$message = '<p>Du er ikke logget inn.</p>';
+	$message = Localization::getLocale('you_are_not_logged_in');
 }
 
 header('Content-Type: text/plain');

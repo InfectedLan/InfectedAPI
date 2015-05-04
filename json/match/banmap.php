@@ -4,21 +4,22 @@
  *
  * Copyright (C) 2015 Infected <http://infected.no/>.
  *
- * This program is free software: you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version.
+ * This library is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU Lesser General Public
+ * License as published by the Free Software Foundation; either
+ * version 3.0 of the License, or (at your option) any later version.
  * 
- * This program is distributed in the hope that it will be useful,
+ * This library is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- *
- * You should have received a copy of the GNU General Public License
- * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ * Lesser General Public License for more details.
+ * 
+ * You should have received a copy of the GNU Lesser General Public
+ * License along with this library.  If not, see <http://www.gnu.org/licenses/>.
  */
 
 require_once 'session.php';
+require_once 'localization.php';
 require_once 'handlers/matchhandler.php';
 require_once 'handlers/votehandler.php';
 require_once 'handlers/voteoptionhandler.php';
@@ -56,26 +57,22 @@ if (Session::isAuthenticated()) {
 							}
 
 							$result = true;
-						} else {
-							$message = '<p>Dette mappet er ikke for denne compoen!</p>';
 						}
 					} else {
-						$message = '<p>Mappet finnes ikke!</p>';
+						$message = Localization::getLocale('this_map_does_not_exist');
 					}
-				} else {
-					$message = '<p>Du har ikke lov til å banne nå!</p>';
 				}
 			} else {
-				$message = '<p>Matchen holder på å starte!</p>';
+				$message = Localization::getLocale('this_match_is_currently_starting');
 			}
 		} else {
-			$message = '<p>Matchen finnes ikke.</p>';
+			$message = Localization::getLocale('this_match_does_not_exist');
 		}
 	} else {
-		$message = '<p>Felt mangler!</p>';
+		$message = Localization::getLocale('you_have_not_filled_out_the_required_fields');
 	}
 } else {
-	$message = '<p>Du er ikke logget inn.</p>';
+	$message = Localization::getLocale('you_are_not_logged_in');
 }
 
 header('Content-Type: text/plain');

@@ -4,21 +4,22 @@
  *
  * Copyright (C) 2015 Infected <http://infected.no/>.
  *
- * This program is free software: you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version.
+ * This library is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU Lesser General Public
+ * License as published by the Free Software Foundation; either
+ * version 3.0 of the License, or (at your option) any later version.
  * 
- * This program is distributed in the hope that it will be useful,
+ * This library is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- *
- * You should have received a copy of the GNU General Public License
- * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ * Lesser General Public License for more details.
+ * 
+ * You should have received a copy of the GNU Lesser General Public
+ * License along with this library.  If not, see <http://www.gnu.org/licenses/>.
  */
 
 require_once 'session.php';
+require_once 'localization.php';
 require_once 'handlers/eventhandler.php';
 
 $result = false;
@@ -30,7 +31,6 @@ if (Session::isAuthenticated()) {
 	if ($user->hasPermission('*') ||
 		$user->hasPermission('admin-events')) {
 		if (isset($_GET['id']) &&
-			isset($_GET['theme']) &&
 			isset($_GET['location']) &&
 			isset($_GET['participants']) &&
 			isset($_GET['bookingDate']) &&
@@ -49,7 +49,6 @@ if (Session::isAuthenticated()) {
 			!empty($_GET['endDate']) &&
 			!empty($_GET['endTime']) &&
 			$event = EventHandler::getEvent($_GET['id']);
-			$theme = $_GET['theme'];
 			$location = $_GET['location'];
 			$participants = $_GET['participants'];
 			$bookingTime = $_GET['bookingDate'] . ' ' . $_GET['bookingTime'];
@@ -57,19 +56,19 @@ if (Session::isAuthenticated()) {
 			$endTime = $_GET['endDate'] . ' ' . $_GET['endTime'];
 			
 			if ($event != null) {
-				EventHandler::updateEvent($event, $theme, $location, $participants, $bookingTime, $startTime, $endTime);
+				EventHandler::updateEvent($event, $location, $participants, $bookingTime, $startTime, $endTime);
 				$result = true;
 			} else {
-				$message = '<p>Arrangementet finnes ikke.</p>';
+				$message = Localization::getLocale('the_event_does_not_exist');
 			}
 		} else {
-			$message = '<p>Du har ikke fyllt ut alle feltene!</p>';
+			$message = Localization::getLocale('you_have_not_filled_out_the_required_fields');
 		}
 	} else {
-		$message = '<p>Du har ikke tillatelse til dette.</p>';
+		$message = Localization::getLocale('you_do_not_have_permission_to_do_that');
 	}
 } else {
-	$message = '<p>Du er ikke logget inn.</p>';
+	$message = Localization::getLocale('you_are_not_logged_in');
 }
 
 header('Content-Type: text/plain');

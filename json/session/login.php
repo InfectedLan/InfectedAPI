@@ -4,21 +4,22 @@
  *
  * Copyright (C) 2015 Infected <http://infected.no/>.
  *
- * This program is free software: you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version.
+ * This library is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU Lesser General Public
+ * License as published by the Free Software Foundation; either
+ * version 3.0 of the License, or (at your option) any later version.
  * 
- * This program is distributed in the hope that it will be useful,
+ * This library is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- *
- * You should have received a copy of the GNU General Public License
- * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ * Lesser General Public License for more details.
+ * 
+ * You should have received a copy of the GNU Lesser General Public
+ * License along with this library.  If not, see <http://www.gnu.org/licenses/>.
  */
 
 require_once 'session.php';
+require_once 'localization.php';
 require_once 'handlers/userhandler.php';
 
 $result = false;
@@ -37,23 +38,23 @@ if (!Session::isAuthenticated()) {
 			$storedPassword = $user->getPassword();
 			
 			if ($user->isActivated()) {
-				if ($password == $storedPassword) {
+				if (hash_equals($password, $storedPassword)) {
 					$_SESSION['user'] = $user;
 					$result = true;
 				} else {
-					$message = '<p>Feil brukernavn eller passord.</p>';
+					$message = Localization::getLocale('wrong_username_or_password');
 				}
 			} else {
-				$message = '<p>Du må aktivere brukeren din før du kan logge inn.</p>';
+				$message = Localization::getLocale('you_must_activate_your_user_account_in_order_to_logg_in');
 			}
 		} else {
-			$message = '<p>Feil brukernavn eller passord.</p>';
+			$message = Localization::getLocale('this_user_does_not_exist');
 		}
 	} else {
-		$message = '<p>Du har ikke skrevet inn et brukernavn og passord.</p>';
+		$message = Localization::getLocale('you_must_enter_a_username_and_password');
 	}
 } else {
-	$message = '<p>Du er allerede logget inn!</p>';
+	$message = Localization::getLocale('you_are_already_logged_in');
 } 
 
 header('Content-Type: text/plain');
