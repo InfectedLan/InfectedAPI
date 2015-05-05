@@ -18,7 +18,25 @@
  * License along with this library.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-interface Task {
-	public function run();
+require_once 'taskmanager.php';
+require_once 'task.php';
+
+class TestTask implements Task {
+    public function run() {
+        echo 'Hallo';
+    }
+}
+
+if (isset($_GET['fetch'])) {
+    $class = TaskManager::getTask(1);
+    $class->run();
+} else {
+    echo 'Creating crontab job.';
+
+    $output = array();
+
+    echo exec('crontab -l');
+
+    TaskManager::scheduleTask(new TestTask());
 }
 ?>

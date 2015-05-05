@@ -58,7 +58,7 @@ class UserHandler {
         $result = $database->query('SELECT * FROM `' . Settings::db_table_infected_users . '` 
                                     WHERE `username` = \'' . $safeIdentifier . '\' 
                                     OR `email` = \'' . $safeIdentifier . '\'
-								    OR `phone` = \'' . $safeIdentifier . '\';');
+								                    OR `phone` = \'' . $safeIdentifier . '\';');
         
         $database->close();
         
