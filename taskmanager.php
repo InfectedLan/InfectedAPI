@@ -20,7 +20,7 @@
 
 require_once 'settings.php';
 require_once 'database.php';
-require_once 'task.php';
+require_once 'interfaces/task.php';
 
 class TaskManager {
 	/* 
