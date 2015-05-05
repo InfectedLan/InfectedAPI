@@ -129,12 +129,5 @@ class Event extends Object {
 		
 		return $numLeft;
 	}
-
-	/*
-	 * Copy group members from the specified event to this one.
-	 */
-	public function copyMembers($event) {
-		EventMigrationHandler::copyMembers($event, $this);
-	}
 }
 ?>
