@@ -81,16 +81,5 @@ class TaskManager {
         
         $database->close();
     }
-
-    /* 
-     * Create new scheduled task, this will run on an hourly basis.
-     */
-    public static function scheduleTask(Task $task) {
-        // Make sure that a crontab job for the scheduled tasks exists.
-        echo exec('crontab 0 * * * * php ' . Settings::api_path . 'cron.php');
-
-        // Create the task in the database.
-        self::createTask($task);
-    }
 }
 ?>
