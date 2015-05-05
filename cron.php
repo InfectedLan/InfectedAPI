@@ -26,6 +26,8 @@ require_once 'taskmanager.php';
 require_once 'handlers/eventhandler.php';
 require_once 'handlers/eventmigrationhandler.php';
 
+/* Static tasks */
+
 $event = EventHandler::getCurrentEvent();
 
 // Check if we should automatically migrate from previous event, 
@@ -34,6 +36,8 @@ if ($event->getBookingTime() >= time()) {
 	// Migrates all information from the previous event to this one.
 	EventMigrationHandler::copy(EventHandler::getPreviousEvent(), $event);
 }
+
+/* Dynamic tasks */
 
 // Run all scheduled tasks.
 $taskList = TaskManager::getTasks();
