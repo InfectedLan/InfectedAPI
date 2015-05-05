@@ -62,9 +62,6 @@ class EventMigrationHandler {
 
     /* Infected */
 
-    copyCompos($fromEvent, $toEvent);
-    	//self::copyInvites($fromEvent, $toEvent); // This is commented out because this may be unwanted behavior.
-
     /*
 	 * Copies permissions from the given event to the new one, overwriting is forbidden so no entries for the new event can already exist.
 	 */

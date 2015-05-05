@@ -21,6 +21,7 @@
 require_once 'session.php';
 require_once 'localization.php';
 require_once 'handlers/eventhandler.php';
+require_once 'handlers/eventmigrationhandler.php';
 
 $result = false;
 $message = null;
@@ -36,7 +37,7 @@ if (Session::isAuthenticated()) {
 			
 			if ($event != null &&
 				$fromEvent != null) {
-				$event->copyMembers($fromEvent);
+				EventMigrationHandler::copyMembers($fromEvent, $event);
 
 				$result = true;
 				$message = Localization::getLocale('all_the_members_of_the_former_event_was_transferred_to_this_one');
