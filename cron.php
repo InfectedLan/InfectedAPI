@@ -19,8 +19,10 @@
  */
 
 require_once 'settings.php';
+
 set_include_path(Settings::api_path);
 
+require_once 'taskmanager.php';
 require_once 'handlers/eventhandler.php';
 require_once 'handlers/eventmigrationhandler.php';
 
@@ -31,5 +33,12 @@ $event = EventHandler::getCurrentEvent();
 if ($event->getBookingTime() >= time()) {
 	// Migrates all information from the previous event to this one.
 	EventMigrationHandler::copy(EventHandler::getPreviousEvent(), $event);
+}
+
+// Run all scheduled tasks.
+$taskList = TaskManager::getTasks();
+
+foreach ($taskList as $task) {
+	$task->run();
 }
 ?>
