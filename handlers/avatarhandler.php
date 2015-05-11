@@ -195,8 +195,6 @@ class AvatarHandler {
      * Get the default avatar for the specified user.
      */
     public static function getDefaultAvatar(User $user) {
-        $file = null;
-        
         if ($user->getAge() >= 18) {
             if ($user->getGender() == 0) {
                 $file = 'default_gutt.png';

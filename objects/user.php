@@ -365,6 +365,13 @@ class User extends Object {
 		return AvatarHandler::getAvatarByUser($this);
 	}
 
+	/*
+	 * Returns the default avatar, determined by gender of this user.
+	 */
+	public function getDefaultAvatar() {
+		return AvatarHandler::getDefaultAvatar($this);
+	}
+
 	/* 
 	 * Returns the users group for the fiven event.
 	 */
@@ -490,7 +497,7 @@ class User extends Object {
 	 * Returns the name of the users position.
 	 */
 	public function getRole() {
-		return $this->getPositionByEvent(EventHandler::getCurrentEvent());
+		return $this->getRoleByEvent(EventHandler::getCurrentEvent());
 	}
 
 	/* 

@@ -103,8 +103,8 @@ class Settings {
 	const email = 'no-reply@infected.no';
 	
 	// Tells where QR images should be stored.
-	const qr_path = 'content/qrcache/';
-	const avatar_path = 'content/avatars/';
+	const qr_path = '../api/content/qrcache/';
+	const avatar_path = '../api/content/avatars/';
 	
 	/* Compo */
 	// Match participant of state.

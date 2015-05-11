@@ -222,7 +222,7 @@ class TeamHandler {
     /*
      * Return true if user is leader for a team.
      */
-    public static function isTeamLeaderByEvent(Event $event, ser $user) {
+    public static function isTeamLeaderByEvent(Event $event, User $user) {
         $database = Database::open(Settings::db_name_infected_crew);
         
         $result = $database->query('SELECT `id` FROM `' . Settings::db_table_infected_crew_teams . '` 
