@@ -22,6 +22,7 @@ require_once 'settings.php';
 require_once 'database.php';
 require_once 'handlers/matchhandler.php';
 require_once 'handlers/chathandler.php';
+require_once 'handlers/clanhandler.php';
 require_once 'objects/compo.php';
 require_once 'objects/event.php';
 
@@ -82,6 +83,22 @@ class CompoHandler {
     }
 
     /*
+     * Get compo by specified clan.
+     */
+    public static function getCompoByClan(Clan $clan) {
+        $database = Database::open(Settings::db_name_infected_compo);
+
+        $result = $database->query('SELECT * FROM `' . Settings::db_table_infected_compo_compo . '`
+                                    WHERE `id` = (SELECT `compoId` FROM `' . Settings::db_table_infected_compo_participantof . '` 
+                                                  WHERE `clanId` = \'' . $clan->getId() . '\'
+                                                  LIMIT 1);');
+
+        $database->close();
+
+        return $result->fetch_object('Compo');
+    }
+
+    /*
      * Returns true if the given compo has generated matches.
      */
     public static function hasGeneratedMatches(Compo $compo) {
@@ -93,90 +110,6 @@ class CompoHandler {
         $database->close();
 
         return $result->num_rows > 0;
-    }
-
-    /*
-     * Get clans for specified compo.
-     */
-    public static function getClans(Compo $compo) {
-        $database = Database::open(Settings::db_name_infected_compo);
-
-        $result = $database->query('SELECT * FROM `' . Settings::db_table_infected_compo_clans . '` 
-                                    WHERE `id` = (SELECT `clanId` FROM `' . Settings::db_table_infected_compo_participantof . '` 
-                                                  WHERE `compoId` = \'' . $compo->getId() . '\');');
-
-        $database->close();
-
-        $clanList = array();
-
-        while ($object = $result->fetch_object('Clan')) {
-            array_push($clanList, $object);
-        }
-        
-        return $clanList;
-    }
-
-    public static function getCompleteClans(Compo $compo) {
-        $clanList = array();
-
-        foreach (self::getClans($compo) as $clan) {
-            $playing = ClanHandler::getPlayingMembers($clan);
-            
-            if (count($playing) == $compo->getTeamSize()) {
-                array_push($clanList, $clan);
-            }
-        }
-
-        return $clanList;
-    }
-
-    public static function generateDoubleElimination(Compo $compo, $startTime, $compoSpacing) {
-        /*
-         * Psudocode:
-         * Get list of participants, order randomly
-         * Pass to some round iteration function that:
-         * Generates matches based on passed clans/previous matches
-         * Returns matches that should carry on in the winners and loosers bracket.
-        */
-        $clans = self::getCompleteClans($compo);
-        $newClanList = array();
-        
-        //Randomize participant list to avoid any cheating
-        while (count($clans) > 0) {
-            $toRemove = rand(0, count($clans)-1);
-            array_push($newClanList, $clans[$toRemove]);
-            array_splice($clans, $toRemove, 1);
-        }
-
-        $carryData = array('matches' => array(), 
-                           'clans' => $newClanList, 
-                           'looserMatches' => array());
-        $iteration = 0;
-        
-        while (true) { // Um. Memory leak here?
-            $carryData = self::generateMatches($carryData['matches'], 
-                                               $carryData['clans'], 
-                                               $carryData['looserMatches'], 
-                                               $iteration, $compo, $startTime + ($iteration * $compoSpacing), $compoSpacing);
-            
-            foreach ($carryData['carryMatches'] as $match) {
-                array_push($carryData['matches'], $match);
-            }
-            //echo ', looser matches:';
-            /*foreach($carryData['looserMatches'] as $looserMatches) {
-                //echo 'Old looser: ' . $looserMatches->getId() . ',';
-            }*/
-
-            $iteration++;
-
-            if (count($carryData['matches']) < 2) {
-                $chat = ChatHandler::createChat('match chat');
-                $match = MatchHandler::createMatch($startTime + ($iteration * $compoSpacing), '', $compo, $iteration, $chat->getId(), Match::BRACKET_WINNER); //TODO connectData
-                MatchHandler::addMatchParticipant(1, $carryData['matches'][0]->getId(), $match);
-                MatchHandler::addMatchParticipant(1, $carryData['looserMatches'][0]->getId(), $match);
-                break;
-            }
-        }
     }
 
     private static function generateMatches(array $carryMatches, array $carryClans, array $carryLoosers, $iteration, Compo $compo, $time, $looserOffsetTime) {
@@ -199,7 +132,7 @@ class CompoHandler {
         while ($numberOfObjects > 0) {
             //Create match
             $chat = ChatHandler::createChat('match chat');
-            $match = MatchHandler::createMatch($time, '', $compo, $iteration, $chat->getId(), Match::BRACKET_WINNER); //TODO connectData
+            $match = MatchHandler::createMatch($time, '', $compo, $iteration, $chat->getId(), Match::BRACKET_WINNER); // TODO: connectData
             array_push($carryObjects['matches'], $match);
 
             //Assign participants
@@ -265,6 +198,73 @@ class CompoHandler {
         }
 
         return $carryObjects;
+    }
+
+    public static function generateDoubleElimination(Compo $compo, $startTime, $compoSpacing) {
+        /*
+         * Psudocode:
+         * Get list of participants, order randomly
+         * Pass to some round iteration function that:
+         * Generates matches based on passed clans/previous matches
+         * Returns matches that should carry on in the winners and loosers bracket.
+        */
+        $clans = self::getCompleteClans($compo);
+        $newClanList = array();
+        
+        //Randomize participant list to avoid any cheating
+        while (count($clans) > 0) {
+            $toRemove = rand(0, count($clans) - 1);
+            array_push($newClanList, $clans[$toRemove]);
+            array_splice($clans, $toRemove, 1);
+        }
+
+        $carryData = array('matches' => array(), 
+                           'clans' => $newClanList, 
+                           'looserMatches' => array());
+        $iteration = 0;
+        
+        while (true) { // Um. Memory leak here? We should have some objects that we could iterate instead?...
+            $carryData = self::generateMatches($carryData['matches'], 
+                                               $carryData['clans'], 
+                                               $carryData['looserMatches'], 
+                                               $iteration, $compo, $startTime + ($iteration * $compoSpacing), $compoSpacing);
+            
+            foreach ($carryData['carryMatches'] as $match) {
+                array_push($carryData['matches'], $match);
+            }
+            //echo ', looser matches:';
+            /*foreach($carryData['looserMatches'] as $looserMatches) {
+                //echo 'Old looser: ' . $looserMatches->getId() . ',';
+            }*/
+
+            $iteration++;
+
+            if (count($carryData['matches']) < 2) {
+                $chat = ChatHandler::createChat('match chat');
+                $match = MatchHandler::createMatch($startTime + ($iteration * $compoSpacing), '', $compo, $iteration, $chat->getId(), Match::BRACKET_WINNER); //TODO connectData
+                MatchHandler::addMatchParticipant(1, $carryData['matches'][0]->getId(), $match);
+                MatchHandler::addMatchParticipant(1, $carryData['looserMatches'][0]->getId(), $match);
+                break;
+            }
+        }
+    }
+
+    /*
+     * Get clans for specified compo.
+     *
+     * DEPRECATED: This is only kept for comptibility, should be removed as soon as possible.
+     */
+    public static function getClans(Compo $compo) {
+        return ClanHandler::getClansByCompo($compo);
+    }
+
+    /*
+     * Get complete clans for specified compo.
+     *
+     * DEPRECATED: This is only kept for comptibility, should be removed as soon as possible.
+     */
+    public static function getCompleteClans(Compo $compo) {
+        return ClanHandler::getCompleteClansByCompo($compo);
     }
 }
 ?>

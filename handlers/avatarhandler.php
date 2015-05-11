@@ -35,7 +35,7 @@ class AvatarHandler {
         
         $database->close();
 		
-		return $result->fetch_object('Avatar');
+		    return $result->fetch_object('Avatar');
     }
     
     /*

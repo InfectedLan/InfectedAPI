@@ -90,13 +90,13 @@ class EmergencyContactHandler {
      */
     public static function createEmergencyContact(User $user, $phone) {
         if (!self::hasEmergencyContact($user)) {
-                $database = Database::open(Settings::db_name_infected);
+            $database = Database::open(Settings::db_name_infected);
 
-                $database->query('INSERT INTO `' . Settings::db_table_infected_emergencycontacts . '` (`userId`, `phone`) 
-                                  VALUES (\'' . $user->getId() . '\', 
-                                          \'' . $database->real_escape_string($phone) . '\');');
+            $database->query('INSERT INTO `' . Settings::db_table_infected_emergencycontacts . '` (`userId`, `phone`) 
+                              VALUES (\'' . $user->getId() . '\', 
+                                      \'' . $database->real_escape_string($phone) . '\');');
                 
-                $database->close();
+            $database->close();
         } else {
             if (!empty($phone) && $phone != 0) {
                 self::updateEmergencyContact($user, $phone);

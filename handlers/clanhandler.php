@@ -70,18 +70,38 @@ class ClanHandler {
     }
 
     /*
-     * Get compo by specified clan.
+     * Get clans for specified compo.
      */
-    public static function getCompo(Clan $clan) {
+    public static function getClansByCompo(Compo $compo) {
         $database = Database::open(Settings::db_name_infected_compo);
 
-        $result = $database->query('SELECT * FROM `' . Settings::db_table_infected_compo_compo . '`
-                                    WHERE `id` = (SELECT `compoId` FROM `' . Settings::db_table_infected_compo_participantof . '` 
-                                                  WHERE `clanId` = \'' . $clan->getId() . '\');');
+        $result = $database->query('SELECT * FROM `' . Settings::db_table_infected_compo_clans . '` 
+                                    WHERE `id` = (SELECT `clanId` FROM `' . Settings::db_table_infected_compo_participantof . '` 
+                                                  WHERE `compoId` = \'' . $compo->getId() . '\');');
 
         $database->close();
 
-        return $result->fetch_object('Compo');
+        $clanList = array();
+
+        while ($object = $result->fetch_object('Clan')) {
+            array_push($clanList, $object);
+        }
+        
+        return $clanList;
+    }
+
+    public static function getCompleteClansByCompo(Compo $compo) {
+        $clanList = array();
+
+        foreach (self::getClansByCompo($compo) as $clan) {
+            $playing = ClanHandler::getPlayingMembers($clan);
+            
+            if (count($playing) == $compo->getTeamSize()) {
+                array_push($clanList, $clan);
+            }
+        }
+
+        return $clanList;
     }
 
     /*
@@ -265,6 +285,15 @@ class ClanHandler {
                                     AND `clanId` = \'' . $clan->getId() . '\';');
     
         $database->close();
+    }
+
+    /*
+     * Get compo by specified clan.
+     *
+     * DEPRECATED: This is only kept for comptibility, should be removed as soon as possible.
+     */
+    public static function getCompo(Clan $clan) {
+        return CompoHandler::getCompoByClan($clan);
     }
 }
 ?>
