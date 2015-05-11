@@ -39,13 +39,32 @@ class EventHandler {
     }
     
     /*
+	 * Returns the event after the current event.
+	 */
+    public static function getNextEvent() {
+        $database = Database::open(Settings::db_name_infected);
+        
+        $result = $database->query('SELECT * FROM `' . Settings::db_table_infected_events . '`
+								    WHERE `id` > (SELECT `id` FROM `' . Settings::db_table_infected_events . '`
+											      WHERE `endTime` > NOW()
+											      ORDER BY `startTime` ASC
+											      LIMIT 1)
+								    ORDER BY `startTime` ASC
+								    LIMIT 1;');
+		
+		$database->close();
+		
+        return $result->fetch_object('Event');
+    }
+
+    /*
 	 * Returns the event that is closest in time, which means the next or goiong event.
 	 */
     public static function getCurrentEvent() {
         $database = Database::open(Settings::db_name_infected);
         
         $result = $database->query('SELECT * FROM `' . Settings::db_table_infected_events . '`
-                                    WHERE DATE(`endTime`) >= CURDATE()
+                                    WHERE endTime` >= NOW()
                                     ORDER BY `startTime` ASC
                                     LIMIT 1;');
 		
