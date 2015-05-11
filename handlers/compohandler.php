@@ -20,6 +20,7 @@
 
 require_once 'settings.php';
 require_once 'database.php';
+require_once 'handlers/eventhandler.php';
 require_once 'handlers/matchhandler.php';
 require_once 'handlers/chathandler.php';
 require_once 'handlers/clanhandler.php';
@@ -45,11 +46,10 @@ class CompoHandler {
      * Get a list of compos.
      */
     public static function getCompos() {
-        $event = EventHandler::getCurrentEvent();
         $database = Database::open(Settings::db_name_infected_compo);
 
         $result = $database->query('SELECT * FROM `' . Settings::db_table_infected_compo_compos . '` 
-                                    WHERE `eventId` = \'' . $event->getId() . '\';');
+                                    WHERE `eventId` = \'' . EventHandler::getCurrentEvent()->getId() . '\';');
 
         $database->close();
 

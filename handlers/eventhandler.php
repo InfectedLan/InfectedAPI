@@ -64,7 +64,7 @@ class EventHandler {
         $database = Database::open(Settings::db_name_infected);
         
         $result = $database->query('SELECT * FROM `' . Settings::db_table_infected_events . '`
-                                    WHERE endTime` >= NOW()
+                                    WHERE `endTime` >= NOW()
                                     ORDER BY `startTime` ASC
                                     LIMIT 1;');
 		
