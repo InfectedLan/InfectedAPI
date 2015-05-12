@@ -30,9 +30,6 @@ class Session {
 	 * Returns true if the current user is authenticated.
 	 */
 	public static function isAuthenticated() {
-		// Check if we remember this user.
-		self::isRemembered();
-
 		return isset($_SESSION['user']);
 	}
 	
@@ -52,29 +49,6 @@ class Session {
 		}
 	}
 	
-	/*
-	 * Returns true if the current user is remembered.
-	 */
-	public static function isRemembered() {
-		// Check if the cookie exists
-		if (isset($_COOKIE['rememberUser'])) {
-		    parse_str($_COOKIE['rememberUser']);
-		 	
-		    if (UserHandler::hasUser($identifier)) {
-				$user = UserHandler::getUserByIdentifier($identifier);
-				$storedPassword = $user->getPassword();
-			
-				if ($user->isActivated()) {
-			        $_SESSION['user'] = $user;
-
-			        return true;
-			    }
-			}
-		}
-
-		return false;
-	}
-
 	/*
 	 * Reloads the current user from database.
 	 */
