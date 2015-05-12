@@ -40,9 +40,9 @@ if (!Session::isAuthenticated()) {
 			if ($user->isActivated()) {
 				if (hash_equals($password, $storedPassword)) {
 					// If we should remember the user, we store a cookie for 1 month.
-					if (isset($_GET['remember'])) {
-						setcookie('rememberUser', 'identifier=' . $username . '&password=' . $password, time() + (3600 * 24 * 30);
-					}
+					//if (isset($_GET['remember'])) {
+						setcookie('rememberUser', 'identifier=' . $identifier . '&password=' . $password, time() + 2629743);
+					//}
 
 					$_SESSION['user'] = $user;
 					$result = true;
