@@ -32,13 +32,18 @@ if (!Session::isAuthenticated()) {
 		!empty($_GET['password'])) {
 		$identifier = $_GET['identifier'];
 		$password = hash('sha256', $_GET['password']);
-		
+
 		if (UserHandler::hasUser($identifier)) {
 			$user = UserHandler::getUserByIdentifier($identifier);
 			$storedPassword = $user->getPassword();
 			
 			if ($user->isActivated()) {
 				if (hash_equals($password, $storedPassword)) {
+					// If we should remember the user, we store a cookie for 1 month.
+					if (isset($_GET['remember'])) {
+						setcookie('rememberUser', 'identifier=' . $username . '&password=' . $password, time() + (3600 * 24 * 30);
+					}
+
 					$_SESSION['user'] = $user;
 					$result = true;
 				} else {
