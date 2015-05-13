@@ -28,13 +28,13 @@ class Database {
 	public static function open($database) {
 		// Create connection
 		$mysqli = new mysqli(Settings::db_host, 
-							   Secret::db_username, 
-							   Secret::db_password,
-							   $database);
+							 Secret::db_username, 
+							 Secret::db_password,
+							 $database);
 
 		// Check connection.
 		if ($mysqli->connect_errno) {
-			printf('Connect failed: %s\n', $mysqli->connect_error());
+			printf('Connect failed: %s\n', $mysqli->connect_error);
 			exit();
 		}
 
