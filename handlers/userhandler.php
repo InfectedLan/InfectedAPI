@@ -241,10 +241,12 @@ class UserHandler {
                                   \'' . $database->real_escape_string($postalCode) . '\',
                                   \'' . $database->real_escape_string($nickname) . '\',
                                   \'' . date('Y-m-d H:i:s') . '\');');
-         
+        
+        $user = self::getUser($database->insert_id);
+
         $database->close();
 		
-		    return self::getUser($database->insert_id);
+		    return $user;
     }
     
     /* 
