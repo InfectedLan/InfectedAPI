@@ -113,9 +113,7 @@ class User extends Object {
 	 * Returns the users phone number formatted as a string.
 	 */
 	public function getPhoneAsString() {
-		$phone = $this->getPhone();
-		
-		return $phone != 0 ? chunk_split($phone, 2, ' ') : 'Skjult nummer';
+		return rtrim(chunk_split($this->getPhone(), 2, ' '));
 	}
 	
 	/*
