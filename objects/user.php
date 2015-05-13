@@ -46,7 +46,7 @@ class User extends Object {
 	private $nickname;
 	private $registereddate;
 	
-	/* 
+	/*
 	 * Returns the users firstname.
 	 */
 	public function getFirstname() {
@@ -106,7 +106,7 @@ class User extends Object {
 	 * Returns the users phone number, if hidden it return zero.
 	 */
 	public function getPhone() {
-		return !UserOptionHandler::isPhoneHidden($this) ? $this->phone : 0;
+		return !UserOptionHandler::isPhoneHidden($this) ? intval($this->phone) : 0;
 	}
 	
 	/* 
