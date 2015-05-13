@@ -23,40 +23,40 @@ require_once 'database.php';
 require_once 'objects/event.php';
 
 class DatabaseUtils {
-    /*
-     * Copies the contents of the given table to the new one.
-     */
-    public static function copyTable($databaseName, $fromTableName, $toTableName) {
-        $database = Database::open($databaseName);
-        
-        $database->query('INSERT INTO `' . $toTableName . '`
-                          SELECT * FROM `' . $fromTableName . '`;');
-        
-        $database->close();
-    }
+	/*
+	 * Copies the contents of the given table to the new one.
+	 */
+	public static function copyTable($databaseName, $fromTableName, $toTableName) {
+		$database = Database::open($databaseName);
+		
+		$database->query('INSERT INTO `' . $toTableName . '`
+						  SELECT * FROM `' . $fromTableName . '`;');
+		
+		$database->close();
+	}
 
-    /*
-     * Copies the contents of the given table to the new one, but only the specified selection and referenceField is changed with the new value.
-     */
-    public static function copyTableSelection($databaseName, $tableName, $referenceField, $fromValue, $toValue) {
-        $database = Database::open($databaseName);
-        
-        $database->query('CREATE TEMPORARY TABLE `temporary` 
-        				          SELECT * FROM `' . $tableName . '`
-        				          WHERE `' . $referenceField . '` = \'' . $fromValue . '\';');
-        
-        $database->query('UPDATE `temporary` SET `id` = NULL;');
-        
-        $database->query('UPDATE `temporary` SET `' . $referenceField . '` = \'' . $toValue . '\' 
-        				          WHERE `' . $referenceField . '` = \'' . $fromValue . '\';');
-        
-		    $database->query('INSERT INTO `' . $tableName . '`
-						              SELECT * FROM `temporary`
-                          AND NOT EXISTS (SELECT `id` FROM `' . $tableName . '`
-                                          WHERE `' . $referenceField . '` = \'' . $toValue . '\');');
-        
-		    $database->query('DROP TABLE `temporary`;');
-        
-        $database->close();
-    }
+	/*
+	 * Copies the contents of the given table to the new one, but only the specified selection and referenceField is changed with the new value.
+	 */
+	public static function copyTableSelection($databaseName, $tableName, $referenceField, $fromValue, $toValue) {
+		$database = Database::open($databaseName);
+		
+		$database->query('CREATE TEMPORARY TABLE `temporary` 
+								  SELECT * FROM `' . $tableName . '`
+								  WHERE `' . $referenceField . '` = \'' . $fromValue . '\';');
+		
+		$database->query('UPDATE `temporary` SET `id` = NULL;');
+		
+		$database->query('UPDATE `temporary` SET `' . $referenceField . '` = \'' . $toValue . '\' 
+								  WHERE `' . $referenceField . '` = \'' . $fromValue . '\';');
+		
+			$database->query('INSERT INTO `' . $tableName . '`
+									  SELECT * FROM `temporary`
+						  AND NOT EXISTS (SELECT `id` FROM `' . $tableName . '`
+										  WHERE `' . $referenceField . '` = \'' . $toValue . '\');');
+		
+			$database->query('DROP TABLE `temporary`;');
+		
+		$database->close();
+	}
 }

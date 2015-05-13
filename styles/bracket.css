@@ -43,11 +43,11 @@
 	position: relative;
 }
 .winnersBracket:after {
-    content: ".";
-    display: block;
-    height: 0;
-    clear: both;
-    visibility: hidden;
+	content: ".";
+	display: block;
+	height: 0;
+	clear: both;
+	visibility: hidden;
 }
 .loosersBracket {
 	background-image: url("../content/static/bracket_background.png");
@@ -55,11 +55,11 @@
 	position: relative;
 }
 .loosersBracket:after {
-    content: ".";
-    display: block;
-    height: 0;
-    clear: both;
-    visibility: hidden;
+	content: ".";
+	display: block;
+	height: 0;
+	clear: both;
+	visibility: hidden;
 }
 .bracket_time {
 	font-size: 11px;

@@ -26,262 +26,262 @@ require_once 'objects/event.php';
 require_once 'objects/user.php';
 
 class GroupHandler {
-    /* 
-     * Get a group by the internal id.
-     */
-    public static function getGroup($id) {
-        $database = Database::open(Settings::db_name_infected_crew);
-        
-        $result = $database->query('SELECT * FROM `' . Settings::db_table_infected_crew_groups . '` 
-                                    WHERE `id` = \'' . $database->real_escape_string($id) . '\';');
-        
-        $database->close();
+	/* 
+	 * Get a group by the internal id.
+	 */
+	public static function getGroup($id) {
+		$database = Database::open(Settings::db_name_infected_crew);
 		
-		    return $result->fetch_object('Group');
-    }
-    
-    /* 
-     * Get a group for the specified user from the given event.
-     */
-    public static function getGroupByEventAndUser(Event $event, User $user) {
-        $database = Database::open(Settings::db_name_infected_crew);
-        
-        $result = $database->query('SELECT * FROM `' . Settings::db_table_infected_crew_groups . '` 
-                                    WHERE `id` = (SELECT `groupId` FROM `' . Settings::db_table_infected_crew_memberof . '` 
-                                                  WHERE `eventId` = \'' . $event->getId() . '\'
-                                    AND `userId` = \'' . $user->getId() . '\');');
-          
-        $database->close();
+		$result = $database->query('SELECT * FROM `' . Settings::db_table_infected_crew_groups . '` 
+									WHERE `id` = \'' . $database->real_escape_string($id) . '\';');
+		
+		$database->close();
+		
+			return $result->fetch_object('Group');
+	}
+	
+	/* 
+	 * Get a group for the specified user from the given event.
+	 */
+	public static function getGroupByEventAndUser(Event $event, User $user) {
+		$database = Database::open(Settings::db_name_infected_crew);
+		
+		$result = $database->query('SELECT * FROM `' . Settings::db_table_infected_crew_groups . '` 
+									WHERE `id` = (SELECT `groupId` FROM `' . Settings::db_table_infected_crew_memberof . '` 
+												  WHERE `eventId` = \'' . $event->getId() . '\'
+									AND `userId` = \'' . $user->getId() . '\');');
+		  
+		$database->close();
 
-        return $result->fetch_object('Group');
-    }
+		return $result->fetch_object('Group');
+	}
 
-    /* 
-     * Get a group for the specified user.
-     */
-    public static function getGroupByUser(User $user) {
-        return self::getGroupByEventAndUser(EventHandler::getCurrentEvent(), $user);
-    }
-    
-    /*
-     * Get a list of all groups from the given event.
-     */
-    public static function getGroupsByEvent(Event $event) {
-        $database = Database::open(Settings::db_name_infected_crew);
-        
-        $result = $database->query('SELECT * FROM `' . Settings::db_table_infected_crew_groups . '` 
-                                    WHERE `eventId` = \'' . $event->getId() . '\'
-                                    ORDER BY `name`;');
-        
-        $database->close();
+	/* 
+	 * Get a group for the specified user.
+	 */
+	public static function getGroupByUser(User $user) {
+		return self::getGroupByEventAndUser(EventHandler::getCurrentEvent(), $user);
+	}
+	
+	/*
+	 * Get a list of all groups from the given event.
+	 */
+	public static function getGroupsByEvent(Event $event) {
+		$database = Database::open(Settings::db_name_infected_crew);
+		
+		$result = $database->query('SELECT * FROM `' . Settings::db_table_infected_crew_groups . '` 
+									WHERE `eventId` = \'' . $event->getId() . '\'
+									ORDER BY `name`;');
+		
+		$database->close();
 
-        $groupList = array();
-        
-        while ($object = $result->fetch_object('Group')) {
-            array_push($groupList, $object);
-        }
-        
-        return $groupList;
-    }
+		$groupList = array();
+		
+		while ($object = $result->fetch_object('Group')) {
+			array_push($groupList, $object);
+		}
+		
+		return $groupList;
+	}
 
-    /*
-     * Get a list of all groups.
-     */
-    public static function getGroups() {
-        return self::getGroupsByEvent(EventHandler::getCurrentEvent());
-    }
-    
-    /*
-     * Create a new group
-     */
-    public static function createGroup(Event $event, $name, $title, $description, User $leaderUser = null, User $coleaderUser = null) {
-        $database = Database::open(Settings::db_name_infected_crew);
-        
-        $database->query('INSERT INTO `' . Settings::db_table_infected_crew_groups . '` (`eventId`, `name`, `title`, `description`, `leaderId`, `coleaderId`) 
-                          VALUES (\'' . $event->getId() . '\', 
-                                  \'' . $database->real_escape_string($name) . '\', 
-                                  \'' . $database->real_escape_string($title) . '\', 
-                                  \'' . $database->real_escape_string($description) . '\', 
-                                  \'' . ($leaderUser != null ? $leaderUser->getId() : 0) . '\',
-							                    \'' . ($coleaderUser != null ? $coleaderUser->getId() : 0) . '\');');
-        
-        $database->close();
-    }
-    
-    /*
-     * Update the specified group.
-     */
-    public static function updateGroup(Group $group, $name, $title, $description, User $leaderUser = null, User $coleaderUser = null) {
-        $database = Database::open(Settings::db_name_infected_crew);
-        
-        $database->query('UPDATE `' . Settings::db_table_infected_crew_groups . '` 
-          					      SET `name` = \'' . $database->real_escape_string($name) . '\', 
-          						        `title` = \'' . $database->real_escape_string($title) . '\', 
-          						        `description` = \'' . $database->real_escape_string($description) . '\', 
-          						        `leaderId` = \'' . ($leaderUser != null ? $leaderUser->getId() : 0) . '\',
-          						        `coleaderId` = \'' . ($coleaderUser != null ? $coleaderUser->getId() : 0) . '\'
-          					      WHERE `id` = \'' . $group->getId() . '\';');
-        
-        $database->close();
-    }
-    
-    /*
-     * Remove the specified group
-     */
-    public static function removeGroup(Group $group) {
-        $database = Database::open(Settings::db_name_infected_crew);
-        
-        $database->query('DELETE FROM `' . Settings::db_table_infected_crew_groups . '` 
-                          WHERE `id` = \'' . $group->getId() . '\';');
-        
-        $database->close();
-    }
-    
-    /* 
-     * Returns an list of users that are members of this group in the given event.
-     */
-    public static function getMembersByEvent(Event $event, Group $group) {
-        $database = Database::open(Settings::db_name_infected);
-        
-        $result = $database->query('SELECT `' . Settings::db_table_infected_users . '`.* FROM `' . Settings::db_table_infected_users . '`
-                                    LEFT JOIN `' . Settings::db_name_infected_crew . '`.`' . Settings::db_table_infected_crew_memberof . '`
-                                    ON `' . Settings::db_table_infected_users . '`.`id` = `userId` 
-                                    WHERE `eventId` = \'' . $event->getId() . '\'
-                                    AND `groupId` = \'' . $group->getId() . '\'
-                                    ORDER BY `firstname` ASC;');
-        
-        $database->close();
+	/*
+	 * Get a list of all groups.
+	 */
+	public static function getGroups() {
+		return self::getGroupsByEvent(EventHandler::getCurrentEvent());
+	}
+	
+	/*
+	 * Create a new group
+	 */
+	public static function createGroup(Event $event, $name, $title, $description, User $leaderUser = null, User $coleaderUser = null) {
+		$database = Database::open(Settings::db_name_infected_crew);
+		
+		$database->query('INSERT INTO `' . Settings::db_table_infected_crew_groups . '` (`eventId`, `name`, `title`, `description`, `leaderId`, `coleaderId`) 
+						  VALUES (\'' . $event->getId() . '\', 
+								  \'' . $database->real_escape_string($name) . '\', 
+								  \'' . $database->real_escape_string($title) . '\', 
+								  \'' . $database->real_escape_string($description) . '\', 
+								  \'' . ($leaderUser != null ? $leaderUser->getId() : 0) . '\',
+												\'' . ($coleaderUser != null ? $coleaderUser->getId() : 0) . '\');');
+		
+		$database->close();
+	}
+	
+	/*
+	 * Update the specified group.
+	 */
+	public static function updateGroup(Group $group, $name, $title, $description, User $leaderUser = null, User $coleaderUser = null) {
+		$database = Database::open(Settings::db_name_infected_crew);
+		
+		$database->query('UPDATE `' . Settings::db_table_infected_crew_groups . '` 
+		  						  SET `name` = \'' . $database->real_escape_string($name) . '\', 
+		  								`title` = \'' . $database->real_escape_string($title) . '\', 
+		  								`description` = \'' . $database->real_escape_string($description) . '\', 
+		  								`leaderId` = \'' . ($leaderUser != null ? $leaderUser->getId() : 0) . '\',
+		  								`coleaderId` = \'' . ($coleaderUser != null ? $coleaderUser->getId() : 0) . '\'
+		  						  WHERE `id` = \'' . $group->getId() . '\';');
+		
+		$database->close();
+	}
+	
+	/*
+	 * Remove the specified group
+	 */
+	public static function removeGroup(Group $group) {
+		$database = Database::open(Settings::db_name_infected_crew);
+		
+		$database->query('DELETE FROM `' . Settings::db_table_infected_crew_groups . '` 
+						  WHERE `id` = \'' . $group->getId() . '\';');
+		
+		$database->close();
+	}
+	
+	/* 
+	 * Returns an list of users that are members of this group in the given event.
+	 */
+	public static function getMembersByEvent(Event $event, Group $group) {
+		$database = Database::open(Settings::db_name_infected);
+		
+		$result = $database->query('SELECT `' . Settings::db_table_infected_users . '`.* FROM `' . Settings::db_table_infected_users . '`
+									LEFT JOIN `' . Settings::db_name_infected_crew . '`.`' . Settings::db_table_infected_crew_memberof . '`
+									ON `' . Settings::db_table_infected_users . '`.`id` = `userId` 
+									WHERE `eventId` = \'' . $event->getId() . '\'
+									AND `groupId` = \'' . $group->getId() . '\'
+									ORDER BY `firstname` ASC;');
+		
+		$database->close();
 
-        $memberList = array();
-        
-        while ($object = $result->fetch_object('User')) {
-            array_push($memberList, $object);
-        }
-        
-        return $memberList;
-    }
+		$memberList = array();
+		
+		while ($object = $result->fetch_object('User')) {
+			array_push($memberList, $object);
+		}
+		
+		return $memberList;
+	}
 
 
-    /* 
+	/* 
 	   * Returns an list of users that are members of this group.
 	   */
-    public static function getMembers(Group $group) {
-        return self::getMembersByEvent(EventHandler::getCurrentEvent(), $group);
-    }
+	public static function getMembers(Group $group) {
+		return self::getMembersByEvent(EventHandler::getCurrentEvent(), $group);
+	}
 
-    /* 
-     * Returns true of the specified user is member of a group in the given event.
-     */
-    public static function isGroupMemberByEvent(Event $event, User $user) {
-        $database = Database::open(Settings::db_name_infected_crew);
-        
-        $result = $database->query('SELECT `id` FROM `' . Settings::db_table_infected_crew_memberof . '`
-                                    WHERE `eventId` = \'' . $event->getId() . '\'
-                                    AND `userId` = \'' . $user->getId() . '\'
-                                    AND `groupId` != \'0\';');
-        
-        $database->close();
-    
-        return $result->num_rows > 0;
-    }
+	/* 
+	 * Returns true of the specified user is member of a group in the given event.
+	 */
+	public static function isGroupMemberByEvent(Event $event, User $user) {
+		$database = Database::open(Settings::db_name_infected_crew);
+		
+		$result = $database->query('SELECT `id` FROM `' . Settings::db_table_infected_crew_memberof . '`
+									WHERE `eventId` = \'' . $event->getId() . '\'
+									AND `userId` = \'' . $user->getId() . '\'
+									AND `groupId` != \'0\';');
+		
+		$database->close();
+	
+		return $result->num_rows > 0;
+	}
 
-    /* 
-     * Returns true of the specified user is member of a group.
-     */
-    public static function isGroupMember(User $user) {
-        return self::isGroupMemberByEvent(EventHandler::getCurrentEvent(), $user);
-    }
-    
-    /* 
-     * Return true if the specified user is leader of a group.
-     */
-    public static function isGroupLeaderByEvent(Event $event, User $user) {
-        $database = Database::open(Settings::db_name_infected_crew);
-        
-        $result = $database->query('SELECT `id` FROM `' . Settings::db_table_infected_crew_groups . '`
-                                    WHERE `eventId` = \'' . $event->getId() . '\'
-                                    AND `leaderId` = \'' . $user->getId() . '\';');
-        $database->close();
+	/* 
+	 * Returns true of the specified user is member of a group.
+	 */
+	public static function isGroupMember(User $user) {
+		return self::isGroupMemberByEvent(EventHandler::getCurrentEvent(), $user);
+	}
+	
+	/* 
+	 * Return true if the specified user is leader of a group.
+	 */
+	public static function isGroupLeaderByEvent(Event $event, User $user) {
+		$database = Database::open(Settings::db_name_infected_crew);
+		
+		$result = $database->query('SELECT `id` FROM `' . Settings::db_table_infected_crew_groups . '`
+									WHERE `eventId` = \'' . $event->getId() . '\'
+									AND `leaderId` = \'' . $user->getId() . '\';');
+		$database->close();
 
-         return $result->num_rows > 0;
-    }
+		 return $result->num_rows > 0;
+	}
 
-    /* 
-     * Return true if the specified user is leader of a group.
-     */
-    public static function isGroupLeader(User $user) {
-        return self::isGroupLeaderByEvent(EventHandler::getCurrentEvent(), $user);
-    }
+	/* 
+	 * Return true if the specified user is leader of a group.
+	 */
+	public static function isGroupLeader(User $user) {
+		return self::isGroupLeaderByEvent(EventHandler::getCurrentEvent(), $user);
+	}
 	
 	  /* 
-     * Return true if user is co-leader for a group.
-     */
-    public static function isGroupCoLeaderByEvent(Event $event, User $user) {
-        $database = Database::open(Settings::db_name_infected_crew);
-        
-        $result = $database->query('SELECT `id` FROM `' . Settings::db_table_infected_crew_groups . '`
-                                    WHERE `eventId` = \'' . $event->getId() . '\'
-                                    AND `coleaderId` = \'' . $user->getId() . '\';');
-        
-        $database->close();
+	 * Return true if user is co-leader for a group.
+	 */
+	public static function isGroupCoLeaderByEvent(Event $event, User $user) {
+		$database = Database::open(Settings::db_name_infected_crew);
+		
+		$result = $database->query('SELECT `id` FROM `' . Settings::db_table_infected_crew_groups . '`
+									WHERE `eventId` = \'' . $event->getId() . '\'
+									AND `coleaderId` = \'' . $user->getId() . '\';');
+		
+		$database->close();
 
-        return $result->num_rows > 0;
-    }
+		return $result->num_rows > 0;
+	}
 
-    /* 
-     * Return true if user is co-leader for a group.
-     */
-    public static function isGroupCoLeader(User $user) {
-        return self::isGroupCoLeaderByEvent(EventHandler::getCurrentEvent(), $user);
-    }
+	/* 
+	 * Return true if user is co-leader for a group.
+	 */
+	public static function isGroupCoLeader(User $user) {
+		return self::isGroupCoLeaderByEvent(EventHandler::getCurrentEvent(), $user);
+	}
 
-    /*
-     * Change the specifised users grooup to the one specified.
-     */
-    public static function changeGroupForUser(User $user, Group $group) {
-        $database = Database::open(Settings::db_name_infected_crew);
-        
-        if ($user->isGroupMember()) {    
-            $database->query('UPDATE `' . Settings::db_table_infected_crew_memberof . '` 
-                              SET `groupId` = \'' . $group->getId() . '\', 
-                                  `teamId` = \'0\' 
-                              WHERE `eventId` = \'' . EventHandler::getCurrentEvent()->getId() . '\'
-						                  AND `userId` = \'' . $user->getId() . '\';');
-        } else {
-            $database->query('INSERT INTO `' . Settings::db_table_infected_crew_memberof . '` (`eventId`, `userId`, `groupId`, `teamId`) 
-                              VALUES (\'' . EventHandler::getCurrentEvent()->getId() . '\', 
-								                      \'' . $user->getId() . '\', 
-                                      \'' . $group->getId() . '\', 
-                                      \'0\');');
-        }
-        
-        $database->close();
-    }
-    
-    /*
-     * Remove a specified user from all groups.
-     */
-    public static function removeUserFromGroup(User $user) {
-        $database = Database::open(Settings::db_name_infected_crew);
-        
-        $database->query('DELETE FROM `' . Settings::db_table_infected_crew_memberof . '` 
-                          WHERE `eventId` = \'' . EventHandler::getCurrentEvent()->getId() . '\'
-					                AND `userId` = \'' . $user->getId() . '\';');
-        
-        $database->close();
-    }
+	/*
+	 * Change the specifised users grooup to the one specified.
+	 */
+	public static function changeGroupForUser(User $user, Group $group) {
+		$database = Database::open(Settings::db_name_infected_crew);
+		
+		if ($user->isGroupMember()) {	
+			$database->query('UPDATE `' . Settings::db_table_infected_crew_memberof . '` 
+							  SET `groupId` = \'' . $group->getId() . '\', 
+								  `teamId` = \'0\' 
+							  WHERE `eventId` = \'' . EventHandler::getCurrentEvent()->getId() . '\'
+										  AND `userId` = \'' . $user->getId() . '\';');
+		} else {
+			$database->query('INSERT INTO `' . Settings::db_table_infected_crew_memberof . '` (`eventId`, `userId`, `groupId`, `teamId`) 
+							  VALUES (\'' . EventHandler::getCurrentEvent()->getId() . '\', 
+													  \'' . $user->getId() . '\', 
+									  \'' . $group->getId() . '\', 
+									  \'0\');');
+		}
+		
+		$database->close();
+	}
+	
+	/*
+	 * Remove a specified user from all groups.
+	 */
+	public static function removeUserFromGroup(User $user) {
+		$database = Database::open(Settings::db_name_infected_crew);
+		
+		$database->query('DELETE FROM `' . Settings::db_table_infected_crew_memberof . '` 
+						  WHERE `eventId` = \'' . EventHandler::getCurrentEvent()->getId() . '\'
+									AND `userId` = \'' . $user->getId() . '\';');
+		
+		$database->close();
+	}
 
-    /*
-     * Remove all users from the specified group.
-     */
-    public static function removeUsersFromGroup(Group $group) {
-        $database = Database::open(Settings::db_name_infected_crew);
-        
-        $database->query('DELETE FROM `' . Settings::db_table_infected_crew_memberof . '` 
-                          WHERE `eventId` = \'' . EventHandler::getCurrentEvent()->getId() . '\'
-                          AND `groupId` = \'' . $group->getId() . '\';');
-        
-        $database->close();
-    }
+	/*
+	 * Remove all users from the specified group.
+	 */
+	public static function removeUsersFromGroup(Group $group) {
+		$database = Database::open(Settings::db_name_infected_crew);
+		
+		$database->query('DELETE FROM `' . Settings::db_table_infected_crew_memberof . '` 
+						  WHERE `eventId` = \'' . EventHandler::getCurrentEvent()->getId() . '\'
+						  AND `groupId` = \'' . $group->getId() . '\';');
+		
+		$database->close();
+	}
 }
 ?>

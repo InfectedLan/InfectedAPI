@@ -27,119 +27,119 @@ class EventMigrationHandler {
 		/*
 	 * Copies all information from the given event to the new one.
 	 */
-    public static function copyTableByEvent(Event $fromEvent, Event $toEvent, $databaseName, $tableName) {
+	public static function copyTableByEvent(Event $fromEvent, Event $toEvent, $databaseName, $tableName) {
 		if (!$fromEvent->equals($toEvent)) {
 			DatabaseUtils::copyTableSelection($databaseName, $tableName, 'eventId', $fromEvent->getId(), $toEvent->getId());
 		}
-    }
+	}
 
 	/*
 	 * Copies all information that is relevant from the old event to the new one, overwriting is forbidden so no entries for the new event can already exist.
 	 */
-    public static function copy(Event $fromEvent, Event $toEvent) {
-    	// Infected
-    	self::copyPermissions($fromEvent, $toEvent);
+	public static function copy(Event $fromEvent, Event $toEvent) {
+		// Infected
+		self::copyPermissions($fromEvent, $toEvent);
 
-    	// InfectedCompo
-    	self::copyCompos($fromEvent, $toEvent);
-    	//self::copyInvites($fromEvent, $toEvent); // This is commented out because this may be unwanted behavior.
-    	
-    	// InfectedCrew
-    	self::copyGroups($fromEvent, $toEvent);
-    	self::copyTeams($fromEvent, $toEvent);
-    	self::copyMembers($fromEvent, $toEvent);
-    	self::copyRestrictedPages($fromEvent, $toEvent);
+		// InfectedCompo
+		self::copyCompos($fromEvent, $toEvent);
+		//self::copyInvites($fromEvent, $toEvent); // This is commented out because this may be unwanted behavior.
+		
+		// InfectedCrew
+		self::copyGroups($fromEvent, $toEvent);
+		self::copyTeams($fromEvent, $toEvent);
+		self::copyMembers($fromEvent, $toEvent);
+		self::copyRestrictedPages($fromEvent, $toEvent);
 
-    	// InfectedInfo
-    	self::copySlides($fromEvent, $toEvent);
+		// InfectedInfo
+		self::copySlides($fromEvent, $toEvent);
 
-    	// InfectedMain
-    	self::copyAgenda($fromEvent, $toEvent);
+		// InfectedMain
+		self::copyAgenda($fromEvent, $toEvent);
 
-    	// InfectedTickets
-    	//self::copyTickets($fromEvent, $toEvent); // This is commented out because this may be unwanted behavior.
-    }
+		// InfectedTickets
+		//self::copyTickets($fromEvent, $toEvent); // This is commented out because this may be unwanted behavior.
+	}
 
-    /* Infected */
+	/* Infected */
 
-    /*
+	/*
 	 * Copies permissions from the given event to the new one, overwriting is forbidden so no entries for the new event can already exist.
 	 */
-    public static function copyPermissions(Event $fromEvent, Event $toEvent) {
-	    self::copyTableByEvent($fromEvent, $toEvent, Settings::db_name_infected, Settings::db_table_infected_userpermissions);
-    }
+	public static function copyPermissions(Event $fromEvent, Event $toEvent) {
+		self::copyTableByEvent($fromEvent, $toEvent, Settings::db_name_infected, Settings::db_table_infected_userpermissions);
+	}
 
-    /* InfectedCompo */
+	/* InfectedCompo */
 
  	/*
 	 * Copies compos from given event to the new one, overwriting is forbidden so no entries for the new event can already exist.
 	 */
-    public static function copyCompos($fromEvent, $toEvent) {
-	    self::copyTableByEvent($fromEvent, $toEvent, Settings::db_name_infected_compo, Settings::db_table_infected_compo_compos);
-    }
+	public static function copyCompos($fromEvent, $toEvent) {
+		self::copyTableByEvent($fromEvent, $toEvent, Settings::db_name_infected_compo, Settings::db_table_infected_compo_compos);
+	}
 
-    /*
+	/*
 	 * Copies invites from given event to the new one, overwriting is forbidden so no entries for the new event can already exist.
 	 */
-    public static function copyInvites($fromEvent, $toEvent) {
-	    self::copyTableByEvent($fromEvent, $toEvent, Settings::db_name_infected_compo, Settings::db_table_infected_compo_invites);
-    }
+	public static function copyInvites($fromEvent, $toEvent) {
+		self::copyTableByEvent($fromEvent, $toEvent, Settings::db_name_infected_compo, Settings::db_table_infected_compo_invites);
+	}
 
-    /* InfectedCrew */
+	/* InfectedCrew */
 
 	/*
 	 * Copies groups from given event to the new one, overwriting is forbidden so no entries for the new event can already exist.
 	 */
-    public static function copyGroups(Event $fromEvent, Event $toEvent) {
-    	self::copyTableByEvent($fromEvent, $toEvent, Settings::db_name_infected_crew, Settings::db_table_infected_crew_groups);
-    }
+	public static function copyGroups(Event $fromEvent, Event $toEvent) {
+		self::copyTableByEvent($fromEvent, $toEvent, Settings::db_name_infected_crew, Settings::db_table_infected_crew_groups);
+	}
 
-    /*
+	/*
 	 * Copies teams from given event to the new one, overwriting is forbidden so no entries for the new event can already exist.
 	 */
-    public static function copyTeams(Event $fromEvent, Event $toEvent) {
-    	self::copyTableByEvent($fromEvent, $toEvent, Settings::db_name_infected_crew, Settings::db_table_infected_crew_teams);
-    }
+	public static function copyTeams(Event $fromEvent, Event $toEvent) {
+		self::copyTableByEvent($fromEvent, $toEvent, Settings::db_name_infected_crew, Settings::db_table_infected_crew_teams);
+	}
 
 	/*
 	 * Copies members from given event to the new one, overwriting is forbidden so no entries for the new event can already exist.
 	 */
-    public static function copyMembers(Event $fromEvent, Event $toEvent) {
-    	self::copyTableByEvent($fromEvent, $toEvent, Settings::db_name_infected_crew, Settings::db_table_infected_crew_memberof);
-    }
+	public static function copyMembers(Event $fromEvent, Event $toEvent) {
+		self::copyTableByEvent($fromEvent, $toEvent, Settings::db_name_infected_crew, Settings::db_table_infected_crew_memberof);
+	}
 
-    /*
+	/*
 	 * Copies restricted pages from given event to the new one, overwriting is forbidden so no entries for the new event can already exist.
 	 */
-    public static function copyRestrictedPages(Event $fromEvent, Event $toEvent) {
-	    self::copyTableByEvent($fromEvent, $toEvent, Settings::db_name_infected_crew, Settings::db_table_infected_crew_pages);
-    }
+	public static function copyRestrictedPages(Event $fromEvent, Event $toEvent) {
+		self::copyTableByEvent($fromEvent, $toEvent, Settings::db_name_infected_crew, Settings::db_table_infected_crew_pages);
+	}
 
-    /* InfectedInfo */
+	/* InfectedInfo */
 
-    /*
+	/*
 	 * Copies slides from given event to the new one, overwriting is forbidden so no entries for the new event can already exist.
 	 */
-    public static function copySlides($fromEvent, $toEvent) {
-	    self::copyTableByEvent($fromEvent, $toEvent, Settings::db_name_infected_info, Settings::db_table_infected_info_slides);
-    }
+	public static function copySlides($fromEvent, $toEvent) {
+		self::copyTableByEvent($fromEvent, $toEvent, Settings::db_name_infected_info, Settings::db_table_infected_info_slides);
+	}
 
-    /* InfectedMain */
+	/* InfectedMain */
 
-    /*
+	/*
 	 * Copies agenda entries from given event to the new one, overwriting is forbidden so no entries for the new event can already exist.
 	 */
-    public static function copyAgenda($fromEvent, $toEvent) {
-	    self::copyTableByEvent($fromEvent, $toEvent, Settings::db_name_infected_main, Settings::db_table_infected_main_agenda);
-    }
+	public static function copyAgenda($fromEvent, $toEvent) {
+		self::copyTableByEvent($fromEvent, $toEvent, Settings::db_name_infected_main, Settings::db_table_infected_main_agenda);
+	}
 
-    /* InfectedTickets */
+	/* InfectedTickets */
 
-    /*
+	/*
 	 * Copies tickets from given event to the new one, overwriting is forbidden so no entries for the new event can already exist.
 	 */
-    public static function copyTickets($fromEvent, $toEvent) {
-	    self::copyTableByEvent($fromEvent, $toEvent, Settings::db_name_infected_tickets, Settings::db_table_infected_tickets_tickets);
-    }
+	public static function copyTickets($fromEvent, $toEvent) {
+		self::copyTableByEvent($fromEvent, $toEvent, Settings::db_name_infected_tickets, Settings::db_table_infected_tickets_tickets);
+	}
 }
 ?>

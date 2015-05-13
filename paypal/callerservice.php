@@ -59,7 +59,7 @@ else {
 	elseif (!empty($AUTH_token) && !empty($AUTH_signature) && !empty($AUTH_timestamp)) {
 		$AuthMode = "PERMISSION";
 	}
-    elseif(!empty($subject)) {
+	elseif(!empty($subject)) {
 		$AuthMode = "FIRSTPARTY";
 	}
 	else
@@ -85,8 +85,8 @@ switch($AuthMode) {
 			$nvpHeaderStr = "&PWD=".urlencode($API_Password)."&USER=".urlencode($API_UserName)."&SIGNATURE=".urlencode($API_Signature)."&SUBJECT=".urlencode($subject);
 			break;		
 	case "PERMISSION" :
-		    $nvpHeaderStr = formAutorization($AUTH_token,$AUTH_signature,$AUTH_timestamp);
-		    break;
+			$nvpHeaderStr = formAutorization($AUTH_token,$AUTH_signature,$AUTH_timestamp);
+			break;
 }*/
 	return $nvpHeaderStr;
 }
@@ -122,14 +122,14 @@ function hash_call($methodName,$nvpStr)
 	 {
 		$headers_array[] = "X-PP-AUTHORIZATION: ".$nvpheader;
   
-    curl_setopt($ch, CURLOPT_HTTPHEADER, $headers_array);
-    curl_setopt($ch, CURLOPT_HEADER, false);
+	curl_setopt($ch, CURLOPT_HTTPHEADER, $headers_array);
+	curl_setopt($ch, CURLOPT_HEADER, false);
 	}
 	else 
 	{
 		$nvpStr=$nvpheader.$nvpStr;
 	}
-    //if USE_PROXY constant set to TRUE in Constants.php, then only proxy will be enabled.
+	//if USE_PROXY constant set to TRUE in Constants.php, then only proxy will be enabled.
    //Set proxy name to PROXY_HOST and port number to PROXY_PORT in constants.php 
 	/*if(USE_PROXY)
 	curl_setopt ($ch, CURLOPT_PROXY, PROXY_HOST.":".PROXY_PORT); */
@@ -192,7 +192,7 @@ function deformatNVP($nvpstr)
 		//decoding the respose
 		$nvpArray[urldecode($keyval)] =urldecode( $valval);
 		$nvpstr=substr($nvpstr,$valuepos+1,strlen($nvpstr));
-     }
+	 }
 	return $nvpArray;
 }
 function formAutorization($auth_token,$auth_signature,$auth_timestamp)

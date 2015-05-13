@@ -34,8 +34,8 @@ if (Session::isAuthenticated()) {
 
 		if ($chat != null) {
 			if ($user->hasPermission('*') || 
-			    $user->hasPermission('compo.chat') || 
-			    ChatHandler::isChatMember($user, $chat) ||
+				$user->hasPermission('compo.chat') || 
+				ChatHandler::isChatMember($user, $chat) ||
 				$chat->getId() == 1) {
 				$messageList = $chat->getLastMessages($_GET['count']);
 				$result = array();

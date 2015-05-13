@@ -24,62 +24,62 @@ require_once 'interfaces/task.php';
 
 class TaskManager {
 	/* 
-     * Get a task by given id.
-     */
-    public static function getTask($id) {
-        $database = Database::open(Settings::db_name_infected);
-        
-        $result = $database->query('SELECT * FROM `'. Settings::db_table_infected_tasks . '`
-                                    WHERE `id` = \'' . $database->real_escape_string($id) . '\';');
+	 * Get a task by given id.
+	 */
+	public static function getTask($id) {
+		$database = Database::open(Settings::db_name_infected);
+		
+		$result = $database->query('SELECT * FROM `'. Settings::db_table_infected_tasks . '`
+									WHERE `id` = \'' . $database->real_escape_string($id) . '\';');
 
-        $database->close();
+		$database->close();
 
 		$row = $result->fetch_array();
 
 		return unserialize($row['object']);
-    }
+	}
 
-    /* 
-     * Get a list of all the tasks.
-     */
-    public static function getTasks() {
-        $database = Database::open(Settings::db_name_infected);
-        
-        $result = $database->query('SELECT * FROM `'. Settings::db_table_infected_tasks . '`;');
-        
-        $database->close();
-        
-        $taskList = array();
-        
-        while ($row = $result->fetch_row()) {
-            array_push($taskList, unserialize($row['object']));
-        }
-        
-        return $taskList;
-    }
+	/* 
+	 * Get a list of all the tasks.
+	 */
+	public static function getTasks() {
+		$database = Database::open(Settings::db_name_infected);
+		
+		$result = $database->query('SELECT * FROM `'. Settings::db_table_infected_tasks . '`;');
+		
+		$database->close();
+		
+		$taskList = array();
+		
+		while ($row = $result->fetch_row()) {
+			array_push($taskList, unserialize($row['object']));
+		}
+		
+		return $taskList;
+	}
 
-    /* 
-     * Create new task.
-     */
-    public static function createTask(Task $task) {
-        $database = Database::open(Settings::db_name_infected);
-        
-        $database->query('INSERT INTO `' . Settings::db_table_infected_tasks . '` (`object`) 
-                          VALUES (\'' . serialize($task) . '\');');
-        
-        $database->close();
-    }
+	/* 
+	 * Create new task.
+	 */
+	public static function createTask(Task $task) {
+		$database = Database::open(Settings::db_name_infected);
+		
+		$database->query('INSERT INTO `' . Settings::db_table_infected_tasks . '` (`object`) 
+						  VALUES (\'' . serialize($task) . '\');');
+		
+		$database->close();
+	}
 
-    /* 
-     * Remove a task.
-     */
-    public static function removeTask($id) {
-        $database = Database::open(Settings::db_name_infected);
-        
-        $database->query('DELETE FROM `' . Settings::db_table_infected_tasks . '` 
-                          WHERE `id` = \'' . $id . '\';');
-        
-        $database->close();
-    }
+	/* 
+	 * Remove a task.
+	 */
+	public static function removeTask($id) {
+		$database = Database::open(Settings::db_name_infected);
+		
+		$database->query('DELETE FROM `' . Settings::db_table_infected_tasks . '` 
+						  WHERE `id` = \'' . $id . '\';');
+		
+		$database->close();
+	}
 }
 ?>

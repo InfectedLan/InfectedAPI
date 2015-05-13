@@ -11,17 +11,17 @@
  * (for example to upgrade), visit one the following links:
  *
  * (1) http://ckeditor.com/builder
- *     Visit online builder to build CKEditor from scratch.
+ *	 Visit online builder to build CKEditor from scratch.
  *
  * (2) http://ckeditor.com/builder/e41bccb8290b6d530f8478ddafe95c48
- *     Visit online builder to build CKEditor, starting with the same setup as before.
+ *	 Visit online builder to build CKEditor, starting with the same setup as before.
  *
  * (3) http://ckeditor.com/builder/download/e41bccb8290b6d530f8478ddafe95c48
- *     Straight download link to the latest version of CKEditor (Optimized) with the same setup as before.
+ *	 Straight download link to the latest version of CKEditor (Optimized) with the same setup as before.
  *
  * NOTE:
- *    This file is not used by CKEditor, you may remove it.
- *    Changing this file will not change your CKEditor configuration.
+ *	This file is not used by CKEditor, you may remove it.
+ *	Changing this file will not change your CKEditor configuration.
  */
 
 var CKBUILDER_CONFIG = {

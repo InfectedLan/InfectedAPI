@@ -40,14 +40,14 @@ function createChat(divId, chatId, height) {
 			//Listen to enter key
 			if(data.result.response == true) {
 				$("#" + divId).find('.chatBox').keypress({chat: chatId, div: divId}, function(e) {
-				    if(e.which == 13) {
-				    	if($(this).val().length > 0) {
-				    		sendChat(e.data.chat, $(this).val());
-				        	$(this).val("");
-				    	} else {
-				    		error("Chatmeldingen er for kort!");
-				    	}
-				    }
+					if(e.which == 13) {
+						if($(this).val().length > 0) {
+							sendChat(e.data.chat, $(this).val());
+							$(this).val("");
+						} else {
+							error("Chatmeldingen er for kort!");
+						}
+					}
 				});
 			}
 		} else {

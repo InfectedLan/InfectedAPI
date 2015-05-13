@@ -18,6 +18,7 @@
  * License along with this library.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+require_once 'handlers/userhandler.php';
 require_once 'objects/user.php';
 
 session_start();
@@ -30,7 +31,10 @@ class Session {
 	 * Returns true if the current user is authenticated.
 	 */
 	public static function isAuthenticated() {
-		return isset($_SESSION['user']);
+		// Check if we remember this user.
+		return self::isRemembered();
+
+		//return isset($_SESSION['user']);
 	}
 	
 	/*
@@ -49,6 +53,40 @@ class Session {
 		}
 	}
 	
+	/*
+	 * Returns true if the current user is remembered.
+	 */
+	public static function isRemembered() {
+		// Check if the cookie exists
+		echo 'Identifier is:...';
+
+		if (isset($_COOKIE['rememberUser'])) {
+			
+			
+			parse_str($_COOKIE['rememberUser']);
+		 	
+			echo 'Identifier is: ' . $identifier;
+			echo 'Password is: ' . $password;
+
+			if (UserHandler::hasUser($identifier)) {
+				$user = UserHandler::getUserByIdentifier($identifier);
+				$storedPassword = $user->getPassword();
+			
+				if (hash_equals($password, $storedPassword)) {
+					echo 'Passordene er faktisk like.';
+
+					if ($user->isActivated()) {
+						//$_SESSION['user'] = $user;
+
+						return true;
+					}
+				}
+			}
+		}
+
+		return false;
+	}
+
 	/*
 	 * Reloads the current user from database.
 	 */

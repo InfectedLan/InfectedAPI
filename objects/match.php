@@ -86,8 +86,8 @@ class Match extends Object {
 		$database = Database::open(Settings::db_name_infected_compo);
 
 		$result = $database->query('UPDATE `' . Settings::db_table_infected_compo_matches . '`
-							        SET `state` = \'' . $database->real_escape_string($newState) . '\'
-							        WHERE `id` = \'' . $this->getId() . '\';');
+									SET `state` = \'' . $database->real_escape_string($newState) . '\'
+									WHERE `id` = \'' . $this->getId() . '\';');
 
 		$database->close();
 	}

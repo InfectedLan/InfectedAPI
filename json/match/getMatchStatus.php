@@ -126,7 +126,7 @@ if (Session::isAuthenticated()) {
 					$matchData['banData'] = $banData;
 					$result = true;
 				} else if ($match->getState() == Match::STATE_JOIN_GAME && 
-					       $match->isReady()) {
+						   $match->isReady()) {
 					$gameData = array();
 					$gameData['connectDetails'] = $match->getConnectDetails();
 
