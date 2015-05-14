@@ -71,7 +71,7 @@ class Compo extends EventObject {
 	 * Returns the price of this compo.
 	 */
 	public function getPrice() {
-		return $this->price;
+		return (int) $this->price;
 	}
 
 	/*
@@ -92,7 +92,7 @@ class Compo extends EventObject {
 	 * Returns the size of this team.
 	 */
 	public function getTeamSize() {
-		return $this->teamSize;
+		return (int) $this->teamSize;
 	}
 
 	/*

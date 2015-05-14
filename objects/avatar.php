@@ -67,7 +67,7 @@ class Avatar extends Object {
 	 * Returns the state of this avatar.
 	 */
 	public function getState() {
-		return $this->state;
+		return (int) $this->state;
 	}
 
 	/*

@@ -64,7 +64,7 @@ class Match extends Object {
 	}
 
 	public function getState() {
-		return $this->state;
+		return (int) $this->state;
 	}
 
 	public function getBracketOffset() {

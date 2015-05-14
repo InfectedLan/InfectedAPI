@@ -92,7 +92,7 @@ class User extends Object {
 	 * Returns the users gender.
 	 */
 	public function getGender() {
-		return $this->gender;
+		return $this->gender ? true : false;
 	}
 	
 	/* 
@@ -106,7 +106,7 @@ class User extends Object {
 	 * Returns the users phone number, if hidden it return zero.
 	 */
 	public function getPhone() {
-		return !UserOptionHandler::isPhoneHidden($this) ? intval($this->phone) : 0;
+		return !UserOptionHandler::isPhoneHidden($this) ? (int) $this->phone : 0;
 	}
 	
 	/* 
@@ -169,7 +169,7 @@ class User extends Object {
 	 * Returns the users age.
 	 */
 	public function getAge() {
-		return date_diff(date_create(date('Y-m-d', $this->getBirthdate())), date_create('now'))->y;
+		return (int) date_diff(date_create(date('Y-m-d', $this->getBirthdate())), date_create('now'))->y;
 	}
 	
 	/* 

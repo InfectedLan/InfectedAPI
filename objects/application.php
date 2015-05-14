@@ -64,7 +64,7 @@ class Application extends EventObject {
 	 * Returns the state of this application.
 	 */
 	public function getState() {
-		return $this->state;
+		return (int) $this->state;
 	}
 	
 	/*

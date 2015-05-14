@@ -37,7 +37,7 @@ class Seat extends Object {
 	 * Returns seat number relative to row.
 	 */
 	public function getNumber() {
-		return $this->number;
+		return (int) $this->number;
 	}
 
 	/*

@@ -36,14 +36,14 @@ class EmergencyContact extends Object {
 	 * Returns the phone number.
 	 */
 	public function getPhone() {
-		return $this->phone;
+		return (int) $this->phone;
 	}
 	
 	/* 
 	 * Returns the phone number formatted as a string.
 	 */
 	public function getPhoneAsString() {
-		return !empty($this->phone) ? chunk_split($this->phone, 2, ' ') : 'Ikke oppgitt';
+		return rtrim(chunk_split($this->getPhone(), 2, ' '));
 	}
 }
 ?>
