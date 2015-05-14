@@ -19,6 +19,8 @@
  */
 
 interface IPage {
+	public function getParent();
+
 	public function getTitle();
 
 	public function getContent();
