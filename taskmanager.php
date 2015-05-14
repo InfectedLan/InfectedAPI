@@ -20,7 +20,7 @@
 
 require_once 'settings.php';
 require_once 'database.php';
-require_once 'interfaces/task.php';
+require_once 'interfaces/itask.php';
 
 class TaskManager {
 	/* 
@@ -61,7 +61,7 @@ class TaskManager {
 	/* 
 	 * Create new task.
 	 */
-	public static function createTask(Task $task) {
+	public static function createTask(ITask $task) {
 		$database = Database::open(Settings::db_name_infected);
 		
 		$database->query('INSERT INTO `' . Settings::db_table_infected_tasks . '` (`object`) 
