@@ -69,11 +69,11 @@ class Invite extends EventObject {
 		$compo = ClanHandler::getCompo($clan);
 
 		if (count($memberList) < $compo->getTeamSize()) {
-			$database->query('INSERT INTO `' . Settings::db_table_infected_compo_memberof . '` (`userId`, `clanId`, `stepInId`) 
+			$con->query('INSERT INTO `' . Settings::db_table_infected_compo_memberof . '` (`userId`, `clanId`, `stepInId`) 
 							  VALUES (' . $this->getUser()->getId() . ', 
 									  ' . $clan->getId() . ', 0);');
 		} else {
-			$database->query('INSERT INTO `' . Settings::db_table_infected_compo_memberof . '` (`userId`, `clanId`, `stepInId`) 
+			$con->query('INSERT INTO `' . Settings::db_table_infected_compo_memberof . '` (`userId`, `clanId`, `stepInId`) 
 							  VALUES (\'' . $this->getUser()->getId() . '\', 
 									  \'' . $clan->getId() . '\', 
 									  \'1\');');
