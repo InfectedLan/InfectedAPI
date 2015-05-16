@@ -242,7 +242,7 @@ class ClanHandler {
 		$database->close();
 
 		// Allow user to talk in global chat.
-		$mainChat = ChatHandler::getChat(1); // TODO: Change this to the first chat in the array?
+		$mainChat = ChatHandler::getChat(1); // TODO: Change this to the first chat in the array? <- Hmm. Good question.
 		$mainChat->addMember($user);
 
 		return $result->fetch_object('Clan');
