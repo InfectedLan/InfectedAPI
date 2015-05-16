@@ -88,7 +88,7 @@ class CompoHandler {
 	public static function getCompoByClan(Clan $clan) {
 		$database = Database::open(Settings::db_name_infected_compo);
 
-		$result = $database->query('SELECT * FROM `' . Settings::db_table_infected_compo_compo . '`
+		$result = $database->query('SELECT * FROM `' . Settings::db_table_infected_compo_compos . '`
 									WHERE `id` = (SELECT `compoId` FROM `' . Settings::db_table_infected_compo_participantof . '` 
 												  WHERE `clanId` = \'' . $clan->getId() . '\'
 												  LIMIT 1);');
