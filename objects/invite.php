@@ -51,7 +51,7 @@ class Invite extends EventObject {
 		mysqli_query($con, 'DELETE FROM `' . Settings::db_table_infected_compo_invites . '`
 							WHERE `id` = \'' . $this->getId() . '\';');
 	
-		Database::close($con);
+		$con->close();
 	}
 
 	/*
