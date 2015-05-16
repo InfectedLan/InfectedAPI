@@ -65,7 +65,7 @@ class Invite extends EventObject {
 
 		$clan = $this->getClan();
 
-		$memberList = ClanHandler::getPlayingMembers($clan);
+		$memberList = ClanHandler::getPlayingClanMembers($clan);
 		$compo = ClanHandler::getCompo($clan);
 
 		if (count($memberList) < $compo->getTeamSize()) {
