@@ -79,7 +79,7 @@ class Invite extends EventObject {
 									  \'1\');');
 		}
 
-		$database->close();
+		$con->close();
 	}
 }
 ?>
