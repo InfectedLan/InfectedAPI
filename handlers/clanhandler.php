@@ -229,11 +229,11 @@ class ClanHandler {
 		$id = $database->insert_id;
 
 		$database->query('INSERT INTO `' . Settings::db_table_infected_compo_participantof . '` (`clanId`, `compoId`) 
-						  VALUES (\'' . $database->real_escape_string($fetchedId) . '\', 
+						  VALUES (\'' . $database->real_escape_string($id) . '\', 
 								  \'' . $compo->getId() . '\');');
 		
 		$database->query('INSERT INTO `' . Settings::db_table_infected_compo_memberof . '` (`clanId`, `userId`) 
-						  VALUES (\'' . $database->real_escape_string($fetchedId) . '\', 
+						  VALUES (\'' . $database->real_escape_string($id) . '\', 
 								  \'' . $user->getId() . '\');');
 
 		$result = $database->query('SELECT * FROM `' . Settings::db_table_infected_compo_clans . '` 
