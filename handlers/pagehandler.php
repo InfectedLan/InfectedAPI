@@ -34,7 +34,7 @@ class PageHandler {
 		
 		$database->close();
 
-			return $result->fetch_object('Page');
+		return $result->fetch_object('Page');
 	}
 	
 	/*

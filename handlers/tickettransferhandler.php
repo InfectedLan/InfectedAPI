@@ -40,7 +40,7 @@ class TicketTransferHandler {
 
 		$database->close();
 		
-			return $result->fetch_object('TicketTransfer');
+		return $result->fetch_object('TicketTransfer');
 	}
 
 	/*
@@ -93,38 +93,38 @@ class TicketTransferHandler {
 									SET `revertable` = \'0\'
 									WHERE `id` = \'' . $ticketTransfer->getId() . '\';');
 								 
-			$database->close();
+		$database->close();
 	}
 	
 	/*
 	 * Transfers a given ticket from it's current user to the user specified.
 	 */
 	public static function transfer(Ticket $ticket, User $user) {
-			$ticketTransfer = self::getTransferFromTicket($ticket);
+		$ticketTransfer = self::getTransferFromTicket($ticket);
 	
 		// Check that the ticket is for current event, we don't allow transfers of old tickets.
-			if ($ticket->getEvent()->equals(EventHandler::getCurrentEvent())) {
-				  // Check that the recipient user is activated.
-	  			if ($user->isActivated()) {
-	  		
-						// If the ticket is checked in, we don't allow transfers.
-						if (!$ticket->isCheckedIn()) {
-		  				
-		  					// Check that the new user isn't the same as the old one.
-		  					if (!$user->equals($ticket->getUser())) {
-									// Prevent the original transfer from being reverted.
-									if ($ticketTransfer != null) {
-										self::freezeTransfer($ticketTransfer);
-									}
-								
-									// Add row to ticket transfers table.
-									self::createTransfer($ticket, $user, true);
-																
-									// Actually change the user of the ticket.
-									TicketHandler::updateTicketUser($ticket, $user);
-		  					}
-						}
-	  			}
+		if ($ticket->getEvent()->equals(EventHandler::getCurrentEvent())) {
+			  // Check that the recipient user is activated.
+  			if ($user->isActivated()) {
+  		
+				// If the ticket is checked in, we don't allow transfers.
+				if (!$ticket->isCheckedIn()) {
+  				
+  					// Check that the new user isn't the same as the old one.
+  					if (!$user->equals($ticket->getUser())) {
+							// Prevent the original transfer from being reverted.
+							if ($ticketTransfer != null) {
+								self::freezeTransfer($ticketTransfer);
+							}
+						
+							// Add row to ticket transfers table.
+							self::createTransfer($ticket, $user, true);
+														
+							// Actually change the user of the ticket.
+							TicketHandler::updateTicketUser($ticket, $user);
+  					}
+				}
+  			}
 		}
 	}
 	
@@ -139,32 +139,32 @@ class TicketTransferHandler {
 		if ($ticket->getEvent()->equals(EventHandler::getCurrentEvent())) {
 		
 			// Check that the recipient user is activated.
-	  			if ($user->isActivated()) {
-	  				
-						// If the ticket is checked in, we don't allow transfers.
-						if (!$ticket->isCheckedIn()) {
+  			if ($user->isActivated()) {
+  				
+				// If the ticket is checked in, we don't allow transfers.
+				if (!$ticket->isCheckedIn()) {
+				
+  					// Check if the user specified matches the former user of the ticket.	 
+  					if ($user->equals($ticketTransfer->getFrom())) {
+  		
+						// Check if the ticket is revertable.
+						if ($ticketTransfer->isRevertable()) {
 						
-		  					// Check if the user specified matches the former user of the ticket.	 
-		  					if ($user->equals($ticketTransfer->getFrom())) {
-		  		
-									// Check if the ticket is revertable.
-									if ($ticketTransfer->isRevertable()) {
-									
-			  							// Check that the time limit isn't run out.
-			  							if ($ticketTransfer->getDateTime() + $timeLimit >= time()) {
-			  								// Prevent the original transfer from being reverted.
-			  								self::freezeTransfer($ticketTransfer);
-			  								
-			  								// Add row to ticket transfers table.
-			  								self::createTransfer($ticket, $ticketTransfer->getFrom(), false);
-			  								
-			  								// Actually change the user of the ticket.
-			  								TicketHandler::updateTicketUser($ticket, $user);
-			  							}
-									}
-		  					}
+  							// Check that the time limit isn't run out.
+  							if ($ticketTransfer->getDateTime() + $timeLimit >= time()) {
+  								// Prevent the original transfer from being reverted.
+  								self::freezeTransfer($ticketTransfer);
+  								
+  								// Add row to ticket transfers table.
+  								self::createTransfer($ticket, $ticketTransfer->getFrom(), false);
+  								
+  								// Actually change the user of the ticket.
+  								TicketHandler::updateTicketUser($ticket, $user);
+  							}
 						}
-	  			}
+  					}
+				}
+  			}
 		}
 	}
 }

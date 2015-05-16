@@ -42,9 +42,9 @@ class UserHandler {
 		$result = $database->query('SELECT * FROM `' . Settings::db_table_infected_users . '` 
 									WHERE `id` = \'' . $database->real_escape_string($id) . '\';');
 		
-			$database->close();
+		$database->close();
 		
-			return $result->fetch_object('User');
+		return $result->fetch_object('User');
 	}
 	
 	/* 
@@ -53,16 +53,16 @@ class UserHandler {
 	public static function getUserByIdentifier($identifier) {
 		$database = Database::open(Settings::db_name_infected);
 		
-			$safeIdentifier = $database->real_escape_string($identifier);
+		$safeIdentifier = $database->real_escape_string($identifier);
 		
 		$result = $database->query('SELECT * FROM `' . Settings::db_table_infected_users . '` 
 									WHERE `username` = \'' . $safeIdentifier . '\' 
 									OR `email` = \'' . $safeIdentifier . '\'
-													OR `phone` = \'' . $safeIdentifier . '\';');
+									OR `phone` = \'' . $safeIdentifier . '\';');
 		
 		$database->close();
 		
-			return $result->fetch_object('User');
+		return $result->fetch_object('User');
 	}
 	
 	/* 
@@ -180,28 +180,28 @@ class UserHandler {
 	 * Get a list of all users which was a participant of an event in the given timeperiod.
 	 */
 	public static function getPreviousParticipantUsers() {  
-			$currentEvent = EventHandler::getCurrentEvent();
-			$previousEvent = EventHandler::getEvent($currentEvent->getId() - 3);
-			$userList = array();
-		   
-			// Just checking that we're not out of bounds in this array.
-			if (count(EventHandler::getEvents()) >= $previousEvent->getId()) {
-	  			$database = Database::open(Settings::db_name_infected);
-	  			
-	  			$result = $database->query('SELECT DISTINCT `' . Settings::db_table_infected_users . '`.* FROM `' . Settings::db_table_infected_users . '`
-				  										LEFT JOIN `' . Settings::db_name_infected_tickets . '`.`' . Settings::db_table_infected_tickets_tickets . '` ON `' . Settings::db_table_infected_users . '`.`id` = `' . Settings::db_table_infected_tickets_tickets . '`.`userId`
-				  										WHERE `' . Settings::db_table_infected_tickets_tickets . '`.`eventId` >= ' . $previousEvent->getId() . '
-				  										AND `' . Settings::db_table_infected_tickets_tickets . '`.`eventId` <= ' . $currentEvent->getId() . '
-				  										ORDER BY `' . Settings::db_table_infected_users . '`.`firstname` ASC;');
-	  			
-	  			$database->close();
-				
+		$currentEvent = EventHandler::getCurrentEvent();
+		$previousEvent = EventHandler::getEvent($currentEvent->getId() - 3);
+		$userList = array();
+	   
+		// Just checking that we're not out of bounds in this array.
+		if (count(EventHandler::getEvents()) >= $previousEvent->getId()) {
+  			$database = Database::open(Settings::db_name_infected);
+  			
+  			$result = $database->query('SELECT DISTINCT `' . Settings::db_table_infected_users . '`.* FROM `' . Settings::db_table_infected_users . '`
+			  										LEFT JOIN `' . Settings::db_name_infected_tickets . '`.`' . Settings::db_table_infected_tickets_tickets . '` ON `' . Settings::db_table_infected_users . '`.`id` = `' . Settings::db_table_infected_tickets_tickets . '`.`userId`
+			  										WHERE `' . Settings::db_table_infected_tickets_tickets . '`.`eventId` >= ' . $previousEvent->getId() . '
+			  										AND `' . Settings::db_table_infected_tickets_tickets . '`.`eventId` <= ' . $currentEvent->getId() . '
+			  										ORDER BY `' . Settings::db_table_infected_users . '`.`firstname` ASC;');
+  			
+  			$database->close();
+			
 			while ($object = $result->fetch_object('User')) {
 				array_push($userList, $object);
 			}
-			}
-			
-			return $userList;
+		}
+		
+		return $userList;
 	}
 	
 	/* 
@@ -210,7 +210,7 @@ class UserHandler {
 	public static function hasUser($identifier) {
 		$database = Database::open(Settings::db_name_infected);
 
-			$safeIdentifier = $database->real_escape_string($identifier);
+		$safeIdentifier = $database->real_escape_string($identifier);
 
 		$result = $database->query('SELECT `id` FROM `' . Settings::db_table_infected_users . '` 
 									WHERE `username` = \'' . $safeIdentifier . '\' 
@@ -246,7 +246,7 @@ class UserHandler {
 
 		$database->close();
 		
-			return $user;
+		return $user;
 	}
 	
 	/* 
@@ -340,26 +340,26 @@ class UserHandler {
 	public static function search($query) {
 		$database = Database::open(Settings::db_name_infected);
 		
-			// Sanitize the input and split the query string into an array.
-			$queryList = explode(' ', $query);
-			$wordList = array();
+		// Sanitize the input and split the query string into an array.
+		$queryList = explode(' ', $query);
+		$wordList = array();
 			
-			// Build the word list, and add "+" and "*" to the start and end of every word.
-			foreach ($queryList as $value) {
-			  array_push($wordList, '+' . $value . '*');
-			}
-			
-			// Query the database using a Full-Text Search.
-			$result = $database->query('SELECT * FROM `' . Settings::db_table_infected_users . '` 
-													WHERE MATCH (`firstname`, `lastname`, `username`, `email`, `nickname`)
-													AGAINST (\'' . $database->real_escape_string(implode(' ', $wordList)) . '\' IN BOOLEAN MODE)
-													LIMIT 15;');
+		// Build the word list, and add "+" and "*" to the start and end of every word.
+		foreach ($queryList as $value) {
+		  array_push($wordList, '+' . $value . '*');
+		}
+		
+		// Query the database using a Full-Text Search.
+		$result = $database->query('SELECT * FROM `' . Settings::db_table_infected_users . '` 
+												WHERE MATCH (`firstname`, `lastname`, `username`, `email`, `nickname`)
+												AGAINST (\'' . $database->real_escape_string(implode(' ', $wordList)) . '\' IN BOOLEAN MODE)
+												LIMIT 15;');
 		
 		$database->close();
 		
 		$userList = array();
 		
-			while ($object = $result->fetch_object('User')) {
+		while ($object = $result->fetch_object('User')) {
 			array_push($userList, $object);
 		}
 		

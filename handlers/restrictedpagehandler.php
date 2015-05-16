@@ -31,14 +31,14 @@ class RestrictedPageHandler {
 	 * Get page by the internal id.
 	 */
 	public static function getPage($id) {
-			$database = Database::open(Settings::db_name_infected_crew);
-			
-			$result = $database->query('SELECT * FROM `' . Settings::db_table_infected_crew_pages . '`
-													WHERE `id` = \'' . $database->real_escape_string($id) . '\';');
-			
-			$database->close();
-				
-			return $result->fetch_object('RestrictedPage');
+		$database = Database::open(Settings::db_name_infected_crew);
+		
+		$result = $database->query('SELECT * FROM `' . Settings::db_table_infected_crew_pages . '`
+												WHERE `id` = \'' . $database->real_escape_string($id) . '\';');
+		
+		$database->close();
+		
+		return $result->fetch_object('RestrictedPage');
 	}
 	
 	/* 
@@ -46,17 +46,17 @@ class RestrictedPageHandler {
 	 */
 	public static function getPageByName($name) {
 		if (Session::isAuthenticated()) {
-	  			$user = Session::getCurrentUser();
-	  			
-	  			if ($user->hasPermission('*') ||
+  			$user = Session::getCurrentUser();
+  			
+  			if ($user->hasPermission('*') ||
 				$user->isGroupMember()) {
 				$database = Database::open(Settings::db_name_infected_crew);
-					
-	  				  if ($user->hasPermission('*')) {
+				
+  				if ($user->hasPermission('*')) {
 					$result = $database->query('SELECT * FROM `' . Settings::db_table_infected_crew_pages . '`
 												WHERE `eventId` = \'' . EventHandler::getCurrentEvent()->getId() . '\'
 												AND `name` = \'' . $database->real_escape_string($name) . '\';');
-	  				  } else if ($user->isGroupLeader()) {
+  				} else if ($user->isGroupLeader()) {
 					$result = $database->query('SELECT * FROM `' . Settings::db_table_infected_crew_pages . '`
 												WHERE `eventId` = \'' . EventHandler::getCurrentEvent()->getId() . '\'
 												AND `name` = \'' . $database->real_escape_string($name) . '\' 
@@ -75,9 +75,9 @@ class RestrictedPageHandler {
 												AND `teamId` = \'0\';');
 				}
 				
-						$database->close();
+				$database->close();
 				
-						return $result->fetch_object('RestrictedPage');
+				return $result->fetch_object('RestrictedPage');
 			}
 		}
 	}
@@ -113,7 +113,7 @@ class RestrictedPageHandler {
 									AND `groupId` = \'' . $group->getId() . '\'
 									AND `teamId` = \'0\';');
 		
-			$database->close();
+		$database->close();
 		
 		$restrictedPageList = array();
 		
@@ -134,7 +134,7 @@ class RestrictedPageHandler {
 									WHERE `eventId` = \'' . EventHandler::getCurrentEvent()->getId() . '\'
 									AND `groupId` = \'' . $group->getId() . '\';');
 		
-			$database->close();
+		$database->close();
 		
 		$restrictedPageList = array();
 		
@@ -156,7 +156,7 @@ class RestrictedPageHandler {
 									AND `groupId` = \'' . $group->getId() . '\'
 									AND (`teamId` = \'' . $team->getId() . '\' OR `teamId` = \'0\');');
 		
-			$database->close();
+		$database->close();
 		
 		$restrictedPageList = array();
 		

@@ -37,7 +37,7 @@ class GroupHandler {
 		
 		$database->close();
 		
-			return $result->fetch_object('Group');
+		return $result->fetch_object('Group');
 	}
 	
 	/* 

@@ -102,7 +102,7 @@ class Avatar extends Object {
  						  SET `file` = \'' . $con->real_escape_string($newName) . '\' 
  						  WHERE `id` = \'' . $this->getId() . '\';');
 		
-		$this->file  = $newName;
+		$this->file = $newName;
 
 		$database->close();
 	}

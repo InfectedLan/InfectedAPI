@@ -46,22 +46,22 @@ class Invite extends EventObject {
 	 * Decline this invite.
 	 */ 
 	public function decline() {
-		$con = Database::open(Settings::db_name_infected_compo);
+		$database = Database::open(Settings::db_name_infected_compo);
 
-		mysqli_query($con, 'DELETE FROM `' . Settings::db_table_infected_compo_invites . '`
-							WHERE `id` = \'' . $this->getId() . '\';');
+		$database->query('DELETE FROM `' . Settings::db_table_infected_compo_invites . '`
+					 	  WHERE `id` = \'' . $this->getId() . '\';');
 	
-		$con->close();
+		$database->close();
 	}
 
 	/*
 	 * Accept this invite.
 	 */ 
 	public function accept() {
-		$con = Database::open(Settings::db_name_infected_compo);
+		$database = Database::open(Settings::db_name_infected_compo);
 
-		mysqli_query($con, 'DELETE FROM `' . Settings::db_table_infected_compo_invites . '`
-							WHERE `id` = \'' . $this->getId() . '\';');
+		$database->query('DELETE FROM `' . Settings::db_table_infected_compo_invites . '`
+						  WHERE `id` = \'' . $this->getId() . '\';');
 
 		$clan = $this->getClan();
 
@@ -69,17 +69,17 @@ class Invite extends EventObject {
 		$compo = ClanHandler::getCompo($clan);
 
 		if (count($memberList) < $compo->getTeamSize()) {
-			$con->query('INSERT INTO `' . Settings::db_table_infected_compo_memberof . '` (`userId`, `clanId`, `stepInId`) 
+			$database->query('INSERT INTO `' . Settings::db_table_infected_compo_memberof . '` (`userId`, `clanId`, `stepInId`) 
 							  VALUES (' . $this->getUser()->getId() . ', 
 									  ' . $clan->getId() . ', 0);');
 		} else {
-			$con->query('INSERT INTO `' . Settings::db_table_infected_compo_memberof . '` (`userId`, `clanId`, `stepInId`) 
+			$database->query('INSERT INTO `' . Settings::db_table_infected_compo_memberof . '` (`userId`, `clanId`, `stepInId`) 
 							  VALUES (\'' . $this->getUser()->getId() . '\', 
 									  \'' . $clan->getId() . '\', 
 									  \'1\');');
 		}
 
-		$con->close();
+		$database->close();
 	}
 }
 ?>

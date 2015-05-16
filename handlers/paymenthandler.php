@@ -36,7 +36,7 @@ class PaymentHandler {
 		
 		$database->close();
 
-			return $result->fetch_object('Payment');
+		return $result->fetch_object('Payment');
 	}
 	
 	/*

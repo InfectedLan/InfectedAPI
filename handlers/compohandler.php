@@ -121,21 +121,21 @@ class CompoHandler {
 							  'looserMatches' => array(), 
 							  'carryMatches' => array()); // Prepare all the info to return back
 
-		if ($match_start_index == 1) { //If there is an uneven amount of objects
-			if (count($carryMatches) > 0 ) { //Prioritize carrying matches
+		if ($match_start_index == 1) { // If there is an uneven amount of objects
+			if (count($carryMatches) > 0 ) { // Prioritize carrying matches
 				array_push($carryObjects['carryMatches'], array_shift($carryMatches));
-			} else { //No matches to carry, carry a clan
+			} else { // No matches to carry, carry a clan
 				array_push($carryObjects['clans'], array_shift($carryClans));
 			}
 		}
 		
 		while ($numberOfObjects > 0) {
-			//Create match
+			// Create match
 			$chat = ChatHandler::createChat('match chat');
 			$match = MatchHandler::createMatch($time, '', $compo, $iteration, $chat->getId(), Match::BRACKET_WINNER); // TODO: connectData
 			array_push($carryObjects['matches'], $match);
 
-			//Assign participants
+			// Assign participants
 			for ($a = 0; $a < 2; $a++) {
 				if (count($carryClans) > 0) {
 					$clan = array_shift($carryClans);

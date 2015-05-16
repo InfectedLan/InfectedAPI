@@ -35,7 +35,7 @@ class AvatarHandler {
 		
 		$database->close();
 		
-			return $result->fetch_object('Avatar');
+		return $result->fetch_object('Avatar');
 	}
 	
 	/*
@@ -146,7 +146,7 @@ class AvatarHandler {
 											\'' . $fileName . '\');');
 		
 		$database->close();
-
+		
 		return Settings::api_path . Settings::avatar_path . 'temp/' . $fileName;
 	}
 	

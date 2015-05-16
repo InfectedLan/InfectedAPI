@@ -156,7 +156,9 @@ class ClanHandler {
 		$result = $database->query('SELECT * FROM `' . Settings::db_table_infected_users . '` 
 									WHERE `id` = (SELECT `userId` FROM `' . Settings::db_name_infected_compo . '`.`' . Settings::db_table_infected_compo_memberof . '` 
 												  WHERE `clanId` = \'' . $clan->getId() . '\'
-												  AND `stepInId` = \'1\');');
+												  AND `stepInId` = \'1\'
+												  LIMIT 1);');
+
 		$database->close();
 
 		$memberList = array();

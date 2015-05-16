@@ -35,7 +35,7 @@ class EmergencyContactHandler {
 		
 		$database->close();
 		
-			return $result->fetch_object('EmergencyContact');
+		return $result->fetch_object('EmergencyContact');
 	}
 	
 	/*
@@ -91,11 +91,11 @@ class EmergencyContactHandler {
 	public static function createEmergencyContact(User $user, $phone) {
 		if (!self::hasEmergencyContact($user)) {
 			$database = Database::open(Settings::db_name_infected);
-
+			
 			$database->query('INSERT INTO `' . Settings::db_table_infected_emergencycontacts . '` (`userId`, `phone`) 
 							  VALUES (\'' . $user->getId() . '\', 
 									  \'' . $database->real_escape_string($phone) . '\');');
-				
+			
 			$database->close();
 		} else {
 			if (!empty($phone) && $phone != 0) {

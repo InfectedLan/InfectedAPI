@@ -46,7 +46,7 @@ class MatchHandler {
 		$database = Database::open(Settings::db_name_infected_compo);
 		
 		$result = $database->query('SELECT * FROM `' . Settings::db_table_infected_compo_matches . '` 
-								 WHERE `id` = \'' . $id . '\';');
+								 	WHERE `id` = \'' . $id . '\';');
 		
 		$database->close();
 
@@ -366,7 +366,7 @@ class MatchHandler {
 
 		$result = $database->query('SELECT * FROM `' . Settings::db_table_infected_compo_participantOfMatch . '` 
 									WHERE `matchId` = \'' . $match->getId() . '\';');
- 
+ 		
 		$database->close();
 
 		$jsonArray = array();
@@ -424,7 +424,7 @@ class MatchHandler {
 		return $hasParticipants;
 	}
 
-	//Used in the ready check
+	// Used in the ready check
 	public static function isUserReady(User $user, Match $match) {
 		$database = Database::open(Settings::db_name_infected_compo);
 

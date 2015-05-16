@@ -38,7 +38,7 @@ class TeamHandler {
 		
 		$database->close();
 		
-			return $result->fetch_object('Team');
+		return $result->fetch_object('Team');
 	}
 	
 	/* 
