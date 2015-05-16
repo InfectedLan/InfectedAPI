@@ -95,7 +95,7 @@ class InviteHandler {
 			array_push($inviteList, $object);
 		}
 
-		return $userList;
+		return $inviteList;
 	}
 
 	/*
