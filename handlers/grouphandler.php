@@ -104,8 +104,12 @@ class GroupHandler {
 								  \'' . $database->real_escape_string($description) . '\', 
 								  \'' . ($leaderUser != null ? $leaderUser->getId() : 0) . '\',
 												\'' . ($coleaderUser != null ? $coleaderUser->getId() : 0) . '\');');
-		
+
+		$group = self::getGroup($database->insert_id);
+
 		$database->close();
+		
+		return $group;
 	}
 	
 	/*
