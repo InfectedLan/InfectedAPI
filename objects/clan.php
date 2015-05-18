@@ -56,7 +56,7 @@ class Clan extends EventObject {
 	 * Return the compo of this clan.
 	 */
 	public function getCompo() {
-		return ClanHandler::getCompo($this);
+		return CompoHandler::getCompo($this);
 	}
 
 	/*
