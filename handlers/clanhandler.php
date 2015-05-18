@@ -77,9 +77,8 @@ class ClanHandler {
 		$database = Database::open(Settings::db_name_infected_compo);
 
 		$result = $database->query('SELECT * FROM `' . Settings::db_table_infected_compo_clans . '` 
-									WHERE `id` = (SELECT `clanId` FROM `' . Settings::db_table_infected_compo_participantof . '` 
-												  WHERE `compoId` = \'' . $compo->getId() . '\'
-												  LIMIT 1);');
+									WHERE `id` IN (SELECT `clanId` FROM `' . Settings::db_table_infected_compo_participantof . '` 
+												  WHERE `compoId` = \'' . $compo->getId() . '\');');
 
 		$database->close();
 
@@ -113,9 +112,8 @@ class ClanHandler {
 		$database = Database::open(Settings::db_name_infected);
 
 		$result = $database->query('SELECT * FROM `' . Settings::db_table_infected_users . '` 
-									WHERE `id` = (SELECT `userId` FROM `' . Settings::db_name_infected_compo . '`.`' . Settings::db_table_infected_compo_memberof . '` 
-												  WHERE `clanId` = \'' . $clan->getId() . '\')
-												  LIMIT 1;');
+									WHERE `id` IN (SELECT `userId` FROM `' . Settings::db_name_infected_compo . '`.`' . Settings::db_table_infected_compo_memberof . '` 
+												   WHERE `clanId` = \'' . $clan->getId() . '\');');
 
 		$database->close();
 
@@ -135,10 +133,9 @@ class ClanHandler {
 		$database = Database::open(Settings::db_name_infected);
 
 		$result = $database->query('SELECT * FROM `' . Settings::db_table_infected_users . '` 
-									WHERE `id` = (SELECT `userId` FROM `' . Settings::db_name_infected_compo . '`.`' . Settings::db_table_infected_compo_memberof . '` 
-												  WHERE `clanId` = \'' . $clan->getId() . '\'
-												  AND `stepInId` = \'0\'
-												  LIMIT 1);');
+									WHERE `id` IN (SELECT `userId` FROM `' . Settings::db_name_infected_compo . '`.`' . Settings::db_table_infected_compo_memberof . '` 
+												   WHERE `clanId` = \'' . $clan->getId() . '\'
+												   AND `stepInId` = \'0\');');
 
 		$database->close();
 
@@ -158,10 +155,9 @@ class ClanHandler {
 		$database = Database::open(Settings::db_name_infected);
 
 		$result = $database->query('SELECT * FROM `' . Settings::db_table_infected_users . '` 
-									WHERE `id` = (SELECT `userId` FROM `' . Settings::db_name_infected_compo . '`.`' . Settings::db_table_infected_compo_memberof . '` 
-												  WHERE `clanId` = \'' . $clan->getId() . '\'
-												  AND `stepInId` = \'1\'
-												  LIMIT 1);');
+									WHERE `id` IN (SELECT `userId` FROM `' . Settings::db_name_infected_compo . '`.`' . Settings::db_table_infected_compo_memberof . '` 
+												   WHERE `clanId` = \'' . $clan->getId() . '\'
+												   AND `stepInId` = \'1\');');
 
 		$database->close();
 
