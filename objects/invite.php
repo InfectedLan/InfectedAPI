@@ -66,7 +66,7 @@ class Invite extends EventObject {
 		$clan = $this->getClan();
 
 		$memberList = ClanHandler::getPlayingClanMembers($clan);
-		$compo = ClanHandler::getCompo($clan);
+		$compo = $clan->getCompo();
 
 		if (count($memberList) < $compo->getTeamSize()) {
 			$database->query('INSERT INTO `' . Settings::db_table_infected_compo_memberof . '` (`userId`, `clanId`, `stepInId`) 

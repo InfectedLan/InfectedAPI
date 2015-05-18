@@ -49,7 +49,8 @@ class GroupHandler {
 		$result = $database->query('SELECT * FROM `' . Settings::db_table_infected_crew_groups . '` 
 									WHERE `id` = (SELECT `groupId` FROM `' . Settings::db_table_infected_crew_memberof . '` 
 												  WHERE `eventId` = \'' . $event->getId() . '\'
-									AND `userId` = \'' . $user->getId() . '\');');
+												  AND `userId` = \'' . $user->getId() . '\'
+												  LIMIT 1);');
 		  
 		$database->close();
 
