@@ -54,7 +54,8 @@ class ClanHandler {
 
 		$result = $database->query('SELECT * FROM `' . Settings::db_table_infected_compo_clans . '` 
 									WHERE `id` = (SELECT `clanId` FROM `' . Settings::db_table_infected_compo_memberof . '` 
-												  WHERE `userId` = \'' . $user->getId() . '\');');
+												  WHERE `userId` = \'' . $user->getId() . '\'
+												  LIMIT 1);');
 
 		$database->close();
 
@@ -77,7 +78,8 @@ class ClanHandler {
 
 		$result = $database->query('SELECT * FROM `' . Settings::db_table_infected_compo_clans . '` 
 									WHERE `id` = (SELECT `clanId` FROM `' . Settings::db_table_infected_compo_participantof . '` 
-												  WHERE `compoId` = \'' . $compo->getId() . '\');');
+												  WHERE `compoId` = \'' . $compo->getId() . '\'
+												  LIMIT 1);');
 
 		$database->close();
 
@@ -112,7 +114,8 @@ class ClanHandler {
 
 		$result = $database->query('SELECT * FROM `' . Settings::db_table_infected_users . '` 
 									WHERE `id` = (SELECT `userId` FROM `' . Settings::db_name_infected_compo . '`.`' . Settings::db_table_infected_compo_memberof . '` 
-												  WHERE `clanId` = \'' . $clan->getId() . '\');');
+												  WHERE `clanId` = \'' . $clan->getId() . '\')
+												  LIMIT 1;');
 
 		$database->close();
 
@@ -134,7 +137,8 @@ class ClanHandler {
 		$result = $database->query('SELECT * FROM `' . Settings::db_table_infected_users . '` 
 									WHERE `id` = (SELECT `userId` FROM `' . Settings::db_name_infected_compo . '`.`' . Settings::db_table_infected_compo_memberof . '` 
 												  WHERE `clanId` = \'' . $clan->getId() . '\'
-												  AND `stepInId` = \'0\');');
+												  AND `stepInId` = \'0\'
+												  LIMIT 1);');
 
 		$database->close();
 
@@ -287,15 +291,6 @@ class ClanHandler {
 									AND `clanId` = \'' . $clan->getId() . '\';');
 	
 		$database->close();
-	}
-
-	/*
-	 * Get compo by specified clan.
-	 *
-	 * DEPRECATED: This is only kept for comptibility, should be removed as soon as possible.
-	 */
-	public static function getCompo(Clan $clan) {
-		return CompoHandler::getCompoByClan($clan);
 	}
 }
 ?>
