@@ -245,13 +245,15 @@ class ClanHandler {
 		$result = $database->query('SELECT * FROM `' . Settings::db_table_infected_compo_clans . '` 
 									WHERE `id` = \'' . $database->real_escape_string($id) . '\';');
 		
+		$clan = self::getClan($database->insert_id);
+
 		$database->close();
 
 		// Allow user to talk in global chat.
 		$mainChat = ChatHandler::getChat(1); // TODO: Change this to the first chat in the array? <- Hmm. Good question.
 		$mainChat->addMember($user);
 
-		return $result->fetch_object('Clan');
+		return $clan;
 	}
 
 	/*
