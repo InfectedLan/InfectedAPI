@@ -33,21 +33,21 @@ class Row extends Object {
 	 * Returns the row of the section.
 	 */
 	public function getNumber() {
-		return (int) $this->number;
+		return $this->number;
 	}
 	
 	/*
 	 * Returns the x coordinate of the section.
 	 */
 	public function getX() {
-		return (int) $this->x;
+		return $this->x;
 	}
 
 	/*
 	 * Returns the y coordinate of the section.
 	 */
 	public function getY() {
-		return (int) $this->y;
+		return $this->y;
 	}
 
 	/*

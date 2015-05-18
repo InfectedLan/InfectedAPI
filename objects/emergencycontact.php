@@ -36,7 +36,7 @@ class EmergencyContact extends Object {
 	 * Returns the phone number.
 	 */
 	public function getPhone() {
-		return (int) $this->phone;
+		return $this->phone;
 	}
 	
 	/* 

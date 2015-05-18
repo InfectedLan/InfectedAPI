@@ -48,21 +48,21 @@ class Payment extends Object{
 	 * Returns the price for this payment.
 	 */
 	public function getPrice() {
-		return (int) $this->price;
+		return $this->price;
 	}
 
 	/*
 	 * Returns the total price for this payment.
 	 */
 	public function getTotalPrice() {
-		return (int) $this->totalPrice;
+		return $this->totalPrice;
 	}
 
 	/*
 	 * Returns the transaction id of this payment.
 	 */
 	public function getTransactionId() {
-		return (int) $this->transactionId;
+		return $this->transactionId;
 	}
 	
 	/*

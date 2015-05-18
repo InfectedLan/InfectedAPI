@@ -25,7 +25,7 @@ class Object {
 	 * Retuns the internal id for this object.
 	 */
 	public function getId() {
-		return (int) $this->id;
+		return $this->id;
 	}
 
 	/*
