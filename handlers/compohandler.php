@@ -248,23 +248,5 @@ class CompoHandler {
 			}
 		}
 	}
-
-	/*
-	 * Get clans for specified compo.
-	 *
-	 * DEPRECATED: This is only kept for comptibility, should be removed as soon as possible.
-	 */
-	public static function getClans(Compo $compo) {
-		return ClanHandler::getClansByCompo($compo);
-	}
-
-	/*
-	 * Get complete clans for specified compo.
-	 *
-	 * DEPRECATED: This is only kept for comptibility, should be removed as soon as possible.
-	 */
-	public static function getCompleteClans(Compo $compo) {
-		return ClanHandler::getCompleteClansByCompo($compo);
-	}
 }
 ?>

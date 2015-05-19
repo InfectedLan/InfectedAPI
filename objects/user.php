@@ -498,13 +498,6 @@ class User extends Object {
 		return $this->getRoleByEvent(EventHandler::getCurrentEvent());
 	}
 
-	/* 
-	 * This function is replaced by getRole(), this is deprecated and only kept for compatibility reasons and should be removed soon.
-	 */
-	public function getPosition() {
-		return $this->getRole();
-	}
-
 	/*
 	 * Returns true if user is eligible to play in a infected compo
 	 */
