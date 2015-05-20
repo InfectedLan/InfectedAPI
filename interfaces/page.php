@@ -25,6 +25,8 @@ interface IPage {
 
 	public function getTitle();
 
+	public function getIcon():
+
 	public function getContent();
 }
 ?>

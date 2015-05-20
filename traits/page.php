@@ -20,11 +20,13 @@
 
 trait Page {
     public function hasParent() {
-		return false;
+		return get_parent_class($this);
     }
 
     public function getParent() {
-    	return;
+    	$class = get_parent_class($this);
+
+    	return new $class();
     }
 }
 ?>
