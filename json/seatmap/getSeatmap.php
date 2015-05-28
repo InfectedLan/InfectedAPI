@@ -50,9 +50,9 @@ if (Session::isAuthenticated()) {
 
 				array_push($seatmapData, array('seats' => $seatData, 
 											   'id' => $row->getId(), 
-											   'x' => $row->getX(), 
-											   'y' => $row->getY(), 
-											   'number' => $row->getNumber());
+											   'x' => $row->getX(),
+											   'y' => $row->getY(),
+											   'number' => $row->getNumber()));
 			}
 
 			$result = true;
