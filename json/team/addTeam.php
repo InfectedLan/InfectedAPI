@@ -32,7 +32,7 @@ if (Session::isAuthenticated()) {
 	$user = Session::getCurrentUser();
 	
 	if ($user->hasPermission('*') ||
-		$user->hasPermission('chief.teams')) {
+		$user->hasPermission('chief.team')) {
 		if (isset($_GET['groupId']) &&
 			isset($_GET['title']) &&
 			isset($_GET['description']) &&
