@@ -34,7 +34,7 @@ if (Session::isAuthenticated()) {
 			is_numeric($_GET['teamId'])) {
 			$team = TeamHandler::getTeam($_GET['teamId']);
 
-			if ($team != null {
+			if ($team != null) {
 				TeamHandler::removeUsersFromTeam($team);
 				$result = true;
 			} else {
