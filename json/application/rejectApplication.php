@@ -29,13 +29,13 @@ if (Session::isAuthenticated()) {
 	$user = Session::getCurrentUser();
 	
 	if ($user->hasPermission('*') ||
-		$user->hasPermission('chief.applications')) {
-		if (isset($_GET['id']) &&
-			is_numeric($_GET['id'])) {
-			$id = $_GET['id'];
+		$user->hasPermission('chief.application')) {
+		if (isset($_GET['applicationId']) &&
+			is_numeric($_GET['applicationId'])) {
+			$id = $_GET['applicationId'];
 			if (isset($_GET['comment']) &&
 				!empty($_GET['comment'])) {
-				$application = ApplicationHandler::getApplication($_GET['id']);
+				$application = ApplicationHandler::getApplication($_GET['applicationId']);
 				$comment = $_GET['comment'];
 			
 				if ($application != null) {
