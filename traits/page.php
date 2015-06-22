@@ -18,7 +18,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-trait Page {
+trait TPage {
     public function hasParent() {
 		return get_parent_class($this);
     }
