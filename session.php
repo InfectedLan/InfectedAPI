@@ -32,9 +32,7 @@ class Session {
 	 */
 	public static function isAuthenticated() {
 		// Check if we remember this user.
-		return self::isRemembered();
-
-		//return isset($_SESSION['user']);
+		return isset($_SESSION['user']);
 	}
 	
 	/*
@@ -51,40 +49,6 @@ class Session {
 		if (self::isAuthenticated()) {
 			return $_SESSION['user'];
 		}
-	}
-	
-	/*
-	 * Returns true if the current user is remembered.
-	 */
-	public static function isRemembered() {
-		// Check if the cookie exists
-		echo 'Identifier is:...';
-
-		if (isset($_COOKIE['rememberUser'])) {
-			
-			
-			parse_str($_COOKIE['rememberUser']);
-		 	
-			echo 'Identifier is: ' . $identifier;
-			echo 'Password is: ' . $password;
-
-			if (UserHandler::hasUser($identifier)) {
-				$user = UserHandler::getUserByIdentifier($identifier);
-				$storedPassword = $user->getPassword();
-			
-				if (hash_equals($password, $storedPassword)) {
-					echo 'Passordene er faktisk like.';
-
-					if ($user->isActivated()) {
-						//$_SESSION['user'] = $user;
-
-						return true;
-					}
-				}
-			}
-		}
-
-		return false;
 	}
 
 	/*
