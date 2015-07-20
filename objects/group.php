@@ -82,14 +82,14 @@ class Group extends EventObject {
 	 * Returns an array of users that are member of this group. 
 	 */
 	public function getMembers() {
-		return GroupHandler::getMembers($this);
+		return GroupHandler::getMembersByEvent($this->getEvent(), $this);
 	}
 	
 	/* 
 	 * Returns an array of all teams connected to this group.
 	 */
 	public function getTeams() {		
-		return TeamHandler::getTeamsByGroup($this);
+		return TeamHandler::getTeamsByEventAndGroup($this->getEvent(), $this);
 	}
 }
 ?>

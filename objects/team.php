@@ -36,7 +36,7 @@ class Team extends EventObject {
 	 * Returns the group for this team.
 	 */
 	public function getGroup() {
-		return GroupHandler::getGroup($this->groupId);
+		return GroupHandler::getGroupByEvent($this->getEvent(), $this->groupId);
 	}
 	
 	/*
@@ -71,7 +71,7 @@ class Team extends EventObject {
 	 * Returns an array of users that are members of this group.
 	 */
 	public function getMembers() {
-		return TeamHandler::getMembers($this);
+		return TeamHandler::getMembersBvent($this->getEvent(), $this);
 	}
 }
 ?>

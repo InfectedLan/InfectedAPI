@@ -166,7 +166,6 @@ class GroupHandler {
 		return $memberList;
 	}
 
-
 	/* 
 	   * Returns an list of users that are members of this group.
 	   */
@@ -182,8 +181,7 @@ class GroupHandler {
 		
 		$result = $database->query('SELECT `id` FROM `' . Settings::db_table_infected_crew_memberof . '`
 									WHERE `eventId` = \'' . $event->getId() . '\'
-									AND `userId` = \'' . $user->getId() . '\'
-									AND `groupId` != \'0\';');
+									AND `userId` = \'' . $user->getId() . '\';');
 		
 		$database->close();
 	
@@ -208,7 +206,7 @@ class GroupHandler {
 									AND `leaderId` = \'' . $user->getId() . '\';');
 		$database->close();
 
-		 return $result->num_rows > 0;
+		return $result->num_rows > 0;
 	}
 
 	/* 
@@ -251,7 +249,7 @@ class GroupHandler {
 							  SET `groupId` = \'' . $group->getId() . '\', 
 								  `teamId` = \'0\' 
 							  WHERE `eventId` = \'' . EventHandler::getCurrentEvent()->getId() . '\'
-										  AND `userId` = \'' . $user->getId() . '\';');
+							  AND `userId` = \'' . $user->getId() . '\';');
 		} else {
 			$database->query('INSERT INTO `' . Settings::db_table_infected_crew_memberof . '` (`eventId`, `userId`, `groupId`, `teamId`) 
 							  VALUES (\'' . EventHandler::getCurrentEvent()->getId() . '\', 
