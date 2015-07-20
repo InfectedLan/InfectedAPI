@@ -4,21 +4,22 @@
  *
  * Copyright (C) 2015 Infected <http://infected.no/>.
  *
- * This program is free software: you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version.
+ * This library is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU Lesser General Public
+ * License as published by the Free Software Foundation; either
+ * version 3.0 of the License, or (at your option) any later version.
  * 
- * This program is distributed in the hope that it will be useful,
+ * This library is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
-
- * You should have received a copy of the GNU General Public License
- * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ * Lesser General Public License for more details.
+ * 
+ * You should have received a copy of the GNU Lesser General Public
+ * License along with this library.  If not, see <http://www.gnu.org/licenses/>.
  */
 
 require_once 'session.php';
+require_once 'localization.php';
 require_once 'handlers/eventhandler.php';
 require_once 'handlers/applicationhandler.php';
 require_once 'handlers/grouphandler.php';
@@ -44,22 +45,24 @@ if (Session::isAuthenticated()) {
 				if (!ApplicationHandler::hasUserApplicationByGroup($user, $group)) {
 					ApplicationHandler::createApplication($group, $user, $content);
 					$result = true;
-					$message = '<p>Din søknad til crewet "' . $group->getTitle() . '" er nå sendt.</p>';
+
+					$message = Localization::getLocale('your_appliction_to_value_is_now_submitted', $group->getTitle());
 				} else {
-					$message = '<p>Du har allerede søkt til ' . $group->getTitle() . ' crew. Du kan søke igjen hvis søknaden din skulle bli avslått.</p>';
+					$message = Localization::getLocale('you_have_already_submitted_an_application_to_value_you_can_apply_again_if_your_application_should_be_denied', $group->getTitle());
 				}
 			} else {
-				$message = '<p>Du har ikke fyllt ut alle feltene.</p>';
+				$message = Localization::getLocale('you_have_not_filled_out_the_required_fields');
 			}
 		} else {
-			$message = '<p>Du må laste opp en avatar før du kan søke!</p>';
+			$message = Localization::getLocale('you_must_upload_a_valid_picture_before_you_can_submit_an_application');
 		}
 	} else {
-		$message = '<p>Du er allerede med i et crew.</p>';
+		$message = Localization::getLocale('you_are_already_in_a_group');
 	}
 } else {
-	$message = '<p>Du er allerede logget inn!</p>';
-} 
+	$message = Localization::getLocale('you_are_not_logged_in');
+}
 
-echo json_encode(array('result' => $result, 'message' => $message));
+header('Content-Type: text/plain');
+echo json_encode(array('result' => $result, 'message' => $message), JSON_PRETTY_PRINT);
 ?>

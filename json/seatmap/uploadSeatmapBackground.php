@@ -4,21 +4,22 @@
  *
  * Copyright (C) 2015 Infected <http://infected.no/>.
  *
- * This program is free software: you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version.
+ * This library is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU Lesser General Public
+ * License as published by the Free Software Foundation; either
+ * version 3.0 of the License, or (at your option) any later version.
  * 
- * This program is distributed in the hope that it will be useful,
+ * This library is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
-
- * You should have received a copy of the GNU General Public License
- * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ * Lesser General Public License for more details.
+ * 
+ * You should have received a copy of the GNU Lesser General Public
+ * License along with this library.  If not, see <http://www.gnu.org/licenses/>.
  */
 
 require_once 'session.php';
+require_once 'localization.php';
 require_once 'handlers/seatmaphandler.php';
 
 $result = false;
@@ -40,47 +41,47 @@ if (Session::isAuthenticated()) {
 				$extension = strtolower(end($temp));
 
 				if (($_FILES['bgImageFile']['type'] == 'image/jpeg') || 
-				    ($_FILES['bgImageFile']['type'] == 'image/jpg') || 
-				    ($_FILES['bgImageFile']['type'] == 'image/x-png') || 
-				    ($_FILES['bgImageFile']['type'] == 'image/png')) {
+					($_FILES['bgImageFile']['type'] == 'image/jpg') || 
+					($_FILES['bgImageFile']['type'] == 'image/x-png') || 
+					($_FILES['bgImageFile']['type'] == 'image/png')) {
 					
 					if (($_FILES['bgImageFile']['size'] < 7000000)) {
 						if (in_array($extension, $allowedExts)) {
 							if ($_FILES['bgImageFile']['error'] == 0) {
 								$name = md5(time() . 'yoloswag'); // TODO: Refactor this shitty, messy, and terible petterroea code.
 								move_uploaded_file($_FILES['bgImageFile']['tmp_name'], '../content/seatmapBackground/' . $name . '.' . $extension);
-
 								SeatmapHandler::setBackground($seatmap, $name . '.' . $extension);
 
 								$result = true;
 							} else {
-								$message = 'Det skjedde en feil under opplastingen av bildet!</p>';
+								$message = Localization::getLocale('an_error_occurred_while_uploading_your_image');
 							}
-						} else {
-							$message = 'Feil filformat!</p>';
 						}
 					} else {
-						$message = 'Bildet er for stort!</p>';
+						$message = Localization::getLocale('the_file_size_is_too_large');
 					}
 				} else {
-					$message = 'Filformatet er ikke riktig!</p>';
+					$message = Localization::getLocale('invalid_file_format');
 				}
 			} else {
-				$message = 'Seatmappet finnes ikke!</p>';
+				$message = Localization::getLocale('this_seatmap_does_not_exist');
 			}
 		} else {
-			$message = 'SeatmapId er ikke satt!</p>';
+			$message = Localization::getLocale('no_seatmap_specified');
 		}
 	} else {
-		$message = 'Du har ikke tillatelse til å legge til en rad!</p>';
+		$message = Localization::getLocale('you_do_not_have_permission_to_do_that');
 	}
 } else {
-	$message = 'Du er ikke logget inn.</p>';
+	$message = Localization::getLocale('you_are_not_logged_in');
 }
 
+
+header('Content-Type: text/plain');
+
 if ($result) {
-	echo json_encode(array('result' => $result));
+	echo json_encode(array('result' => $result), JSON_PRETTY_PRINT);
 } else {
-	echo json_encode(array('result' => $result, 'message' => $message));
+	echo json_encode(array('result' => $result, 'message' => $message), JSON_PRETTY_PRINT);
 }
 ?>

@@ -4,18 +4,18 @@
  *
  * Copyright (C) 2015 Infected <http://infected.no/>.
  *
- * This program is free software: you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version.
+ * This library is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU Lesser General Public
+ * License as published by the Free Software Foundation; either
+ * version 3.0 of the License, or (at your option) any later version.
  * 
- * This program is distributed in the hope that it will be useful,
+ * This library is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
-
- * You should have received a copy of the GNU General Public License
- * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ * Lesser General Public License for more details.
+ * 
+ * You should have received a copy of the GNU Lesser General Public
+ * License along with this library.  If not, see <http://www.gnu.org/licenses/>.
  */
 
 require_once 'database.php';
@@ -46,27 +46,27 @@ class Invite extends EventObject {
 	 * Decline this invite.
 	 */ 
 	public function decline() {
-		$con = Database::open(Settings::db_name_infected_compo);
+		$database = Database::open(Settings::db_name_infected_compo);
 
-		mysqli_query($con, 'DELETE FROM `' . Settings::db_table_infected_compo_invites . '`
-							WHERE `id` = \'' . $this->getId() . '\';');
+		$database->query('DELETE FROM `' . Settings::db_table_infected_compo_invites . '`
+					 	  WHERE `id` = \'' . $this->getId() . '\';');
 	
-		Database::close($con);
+		$database->close();
 	}
 
 	/*
 	 * Accept this invite.
 	 */ 
 	public function accept() {
-		$con = Database::open(Settings::db_name_infected_compo);
+		$database = Database::open(Settings::db_name_infected_compo);
 
-		mysqli_query($con, 'DELETE FROM `' . Settings::db_table_infected_compo_invites . '`
-							WHERE `id` = \'' . $this->getId() . '\';');
+		$database->query('DELETE FROM `' . Settings::db_table_infected_compo_invites . '`
+						  WHERE `id` = \'' . $this->getId() . '\';');
 
 		$clan = $this->getClan();
 
-		$memberList = ClanHandler::getPlayingMembers($clan);
-		$compo = ClanHandler::getCompo($clan);
+		$memberList = ClanHandler::getPlayingClanMembers($clan);
+		$compo = $clan->getCompo();
 
 		if (count($memberList) < $compo->getTeamSize()) {
 			$database->query('INSERT INTO `' . Settings::db_table_infected_compo_memberof . '` (`userId`, `clanId`, `stepInId`) 

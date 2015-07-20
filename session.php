@@ -4,20 +4,21 @@
  *
  * Copyright (C) 2015 Infected <http://infected.no/>.
  *
- * This program is free software: you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version.
+ * This library is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU Lesser General Public
+ * License as published by the Free Software Foundation; either
+ * version 3.0 of the License, or (at your option) any later version.
  * 
- * This program is distributed in the hope that it will be useful,
+ * This library is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
-
- * You should have received a copy of the GNU General Public License
- * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ * Lesser General Public License for more details.
+ * 
+ * You should have received a copy of the GNU Lesser General Public
+ * License along with this library.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+require_once 'handlers/userhandler.php';
 require_once 'objects/user.php';
 
 session_start();
@@ -30,7 +31,10 @@ class Session {
 	 * Returns true if the current user is authenticated.
 	 */
 	public static function isAuthenticated() {
-		return isset($_SESSION['user']);
+		// Check if we remember this user.
+		return self::isRemembered();
+
+		//return isset($_SESSION['user']);
 	}
 	
 	/*
@@ -49,6 +53,40 @@ class Session {
 		}
 	}
 	
+	/*
+	 * Returns true if the current user is remembered.
+	 */
+	public static function isRemembered() {
+		// Check if the cookie exists
+		echo 'Identifier is:...';
+
+		if (isset($_COOKIE['rememberUser'])) {
+			
+			
+			parse_str($_COOKIE['rememberUser']);
+		 	
+			echo 'Identifier is: ' . $identifier;
+			echo 'Password is: ' . $password;
+
+			if (UserHandler::hasUser($identifier)) {
+				$user = UserHandler::getUserByIdentifier($identifier);
+				$storedPassword = $user->getPassword();
+			
+				if (hash_equals($password, $storedPassword)) {
+					echo 'Passordene er faktisk like.';
+
+					if ($user->isActivated()) {
+						//$_SESSION['user'] = $user;
+
+						return true;
+					}
+				}
+			}
+		}
+
+		return false;
+	}
+
 	/*
 	 * Reloads the current user from database.
 	 */

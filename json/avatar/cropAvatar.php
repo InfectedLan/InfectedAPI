@@ -4,33 +4,25 @@
  *
  * Copyright (C) 2015 Infected <http://infected.no/>.
  *
- * This program is free software: you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version.
+ * This library is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU Lesser General Public
+ * License as published by the Free Software Foundation; either
+ * version 3.0 of the License, or (at your option) any later version.
  * 
- * This program is distributed in the hope that it will be useful,
+ * This library is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
-
- * You should have received a copy of the GNU General Public License
- * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ * Lesser General Public License for more details.
+ * 
+ * You should have received a copy of the GNU Lesser General Public
+ * License along with this library.  If not, see <http://www.gnu.org/licenses/>.
  */
 
 require_once 'session.php';
+require_once 'localization.php';
 
 $result = false;
 $message = null;
-
-function str_replace_last($search, $replace, $str) {
-    if (($pos = strrpos($str, $search)) !== false) {
-        $search_length = strlen( $search );
-        $str = substr_replace($str, $replace, $pos, $search_length);
-    }
-
-    return $str;
-}
 
 if (Session::isAuthenticated()) {
 	$user = Session::getCurrentUser();
@@ -97,28 +89,36 @@ if (Session::isAuthenticated()) {
 							$avatar->setFileName(str_replace_last($extension, 'jpg', $avatar->getFileName()));
 							$avatar->setState(1);
 							$result = true;
-							$message = '<p>Avataren har blitt skalert!</p>';
+							$message = Localization::getLocale('the_image_was_scaled');
 						} else {
-							$message = '<p>Du har valgt et for lite omeråde! Dette er ikke lov, ettersom det kan medføre et pikselert bilde.</p>';
+							$message = Localization::getLocale('you_must_choose_a_larger_section_of_the_image');
 						}
 					} else {
-						$message = '<p>Bildet ble ikke funnet!</p>';
+						$message = Localization::getLocale('the_image_was_not_found');
 					}
 				} else {
-					$message = '<p>Avataren din har et ugyldig filformat!</p>';
+					$message = Localization::getLocale('invalid_file_format');
 				}
-			} else {
-				$message = '<p>Felt mangler!</p>';
 			}
 		} else {
-			$message = '<p>Du har ingen avatar som ikke har blitt beskjært!</p>';
+			$message = Localization::getLocale('you_have_no_avatar_that_has_not_already_been_cropped');
 		}
 	} else {
-		$message = '<p>Du har ingen avatar!</p>';
+		$message = Localization::getLocale('you_have_no_avatar');
 	}
 } else {
-	$message = '<p>Du er ikke logget inn.</p>';
+	$message = Localization::getLocale('you_are_not_logged_in');
 }
 
-echo json_encode(array('result' => $result, 'message' => $message));
+header('Content-Type: text/plain');
+echo json_encode(array('result' => $result, 'message' => $message), JSON_PRETTY_PRINT);
+
+function str_replace_last($search, $replace, $str) {
+	if (($pos = strrpos($str, $search)) !== false) {
+		$search_length = strlen( $search );
+		$str = substr_replace($str, $replace, $pos, $search_length);
+	}
+
+	return $str;
+}
 ?>

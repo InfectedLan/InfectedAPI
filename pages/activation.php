@@ -4,20 +4,21 @@
  *
  * Copyright (C) 2015 Infected <http://infected.no/>.
  *
- * This program is free software: you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version.
+ * This library is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU Lesser General Public
+ * License as published by the Free Software Foundation; either
+ * version 3.0 of the License, or (at your option) any later version.
  * 
- * This program is distributed in the hope that it will be useful,
+ * This library is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
-
- * You should have received a copy of the GNU General Public License
- * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ * Lesser General Public License for more details.
+ * 
+ * You should have received a copy of the GNU Lesser General Public
+ * License along with this library.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+require_once 'localization.php';
 require_once 'handlers/registrationcodehandler.php';
 
 if (isset($_GET['code'])) {
@@ -26,11 +27,11 @@ if (isset($_GET['code'])) {
 	if (RegistrationCodeHandler::hasRegistrationCode($code)) {
 		RegistrationCodeHandler::removeRegistrationCode($_GET['code']);
 		
-		echo '<p>Brukeren din er nå aktivert og klar for bruk.</p>';
+		echo Localization::getLocale('your_account_is_now_activated_and_ready_for_use');
 	} else {
-		echo '<p>Brukeren din er allerede aktivert.</p>';
+		echo Localization::getLocale('your_account_has_already_been_activated');
 	}
 } else {
-	echo '<p>En feil oppstod.</p>';
+	echo Localization::getLocale('the_link_you_clicked_is_no_longer_valid');
 }
 ?>

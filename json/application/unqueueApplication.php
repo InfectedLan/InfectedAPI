@@ -4,21 +4,22 @@
  *
  * Copyright (C) 2015 Infected <http://infected.no/>.
  *
- * This program is free software: you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version.
+ * This library is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU Lesser General Public
+ * License as published by the Free Software Foundation; either
+ * version 3.0 of the License, or (at your option) any later version.
  * 
- * This program is distributed in the hope that it will be useful,
+ * This library is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
-
- * You should have received a copy of the GNU General Public License
- * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ * Lesser General Public License for more details.
+ * 
+ * You should have received a copy of the GNU Lesser General Public
+ * License along with this library.  If not, see <http://www.gnu.org/licenses/>.
  */
 
 require_once 'session.php';
+require_once 'localization.php';
 require_once 'handlers/applicationhandler.php';
 
 $result = false;
@@ -28,10 +29,10 @@ if (Session::isAuthenticated()) {
 	$user = Session::getCurrentUser();
 	
 	if ($user->hasPermission('*') ||
-		$user->hasPermission('chief.applications')) {
-		if (isset($_GET['id']) &&
-			is_numeric($_GET['id'])) {
-			$application = ApplicationHandler::getApplication($_GET['id']);
+		$user->hasPermission('chief.application')) {
+		if (isset($_GET['applicationId']) &&
+			is_numeric($_GET['applicationId'])) {
+			$application = ApplicationHandler::getApplication($_GET['applicationId']);
 			
 			if ($application != null) {
 				// Only allow application for current event to be accepted.
@@ -39,20 +40,21 @@ if (Session::isAuthenticated()) {
 					$application->unqueue($user);
 					$result = true;
 				} else {
-					$message = '<p>Kan ikke ta søknader for tidligere arrangementer ut av kø.</p>';
+					$message = Localization::getLocale('you_cannot_unqueue_applications_from_previous_events');
 				}
 			} else {
-				$message = '<p>Søknaden finnes ikke.</p>';
+				$message = Localization::getLocale('this_application_does_not_exist');
 			}
 		} else {
-			$message = '<p>Ingen søknad spesifisert.</p>';
+			$message = Localization::getLocale('no_application_specified');
 		}
 	} else {
-		$message = '<p>Du har ikke tillatelse til dette.</p>';
+		$message = Localization::getLocale('you_do_not_have_permission_to_do_that');
 	}
 } else {
-	$message = '<p>Du er ikke logget inn.</p>';
+	$message = Localization::getLocale('you_are_not_logged_in');
 }
 
-echo json_encode(array('result' => $result, 'message' => $message));
+header('Content-Type: text/plain');
+echo json_encode(array('result' => $result, 'message' => $message), JSON_PRETTY_PRINT);
 ?>

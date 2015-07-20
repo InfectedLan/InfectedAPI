@@ -20,7 +20,7 @@
 $(document).ready(function() {
 	$('.login').submit(function(e) {
 		e.preventDefault();
-		$.getJSON('../api/json/session/login.php' + '?' + $(this).serialize(), function(data){
+		$.getJSON('../api/json/user/loginUser.php' + '?' + $(this).serialize(), function(data){
 			if (data.result) {
 				location.reload();
 			} else {

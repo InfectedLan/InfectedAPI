@@ -4,267 +4,249 @@
  *
  * Copyright (C) 2015 Infected <http://infected.no/>.
  *
- * This program is free software: you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version.
+ * This library is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU Lesser General Public
+ * License as published by the Free Software Foundation; either
+ * version 3.0 of the License, or (at your option) any later version.
  * 
- * This program is distributed in the hope that it will be useful,
+ * This library is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
-
- * You should have received a copy of the GNU General Public License
- * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ * Lesser General Public License for more details.
+ * 
+ * You should have received a copy of the GNU Lesser General Public
+ * License along with this library.  If not, see <http://www.gnu.org/licenses/>.
  */
 
 require_once 'settings.php';
 require_once 'database.php';
+require_once 'handlers/eventhandler.php';
 require_once 'handlers/matchhandler.php';
 require_once 'handlers/chathandler.php';
+require_once 'handlers/clanhandler.php';
 require_once 'objects/compo.php';
 require_once 'objects/event.php';
 
 class CompoHandler {
-    /*
-     * Get a compo by the internal id.
-     */
-    public static function getCompo($id) {
-        $database = Database::open(Settings::db_name_infected_compo);
-        
-        $result = $database->query('SELECT * FROM `' . Settings::db_table_infected_compo_compos . '` 
-                                    WHERE `id` = \'' . $database->real_escape_string($id) . '\';');
-        
-        $database->close();
+	/*
+	 * Get a compo by the internal id.
+	 */
+	public static function getCompo($id) {
+		$database = Database::open(Settings::db_name_infected_compo);
+		
+		$result = $database->query('SELECT * FROM `' . Settings::db_table_infected_compo_compos . '` 
+									WHERE `id` = \'' . $database->real_escape_string($id) . '\';');
+		
+		$database->close();
 
-        return $result->fetch_object('Compo');
-    }
+		return $result->fetch_object('Compo');
+	}
 
-    /*
-     * Get a list of compos.
-     */
-    public static function getCompos() {
-        $event = EventHandler::getCurrentEvent();
-        $database = Database::open(Settings::db_name_infected_compo);
+	/*
+	 * Get a list of compos.
+	 */
+	public static function getCompos() {
+		$database = Database::open(Settings::db_name_infected_compo);
 
-        $result = $database->query('SELECT * FROM `' . Settings::db_table_infected_compo_compos . '` 
-                                    WHERE `eventId` = \'' . $event->getId() . '\';');
+		$result = $database->query('SELECT * FROM `' . Settings::db_table_infected_compo_compos . '` 
+									WHERE `eventId` = \'' . EventHandler::getCurrentEvent()->getId() . '\';');
 
-        $database->close();
+		$database->close();
 
-        $compoList = array();
+		$compoList = array();
 
-        while ($object = $result->fetch_object('Compo')) {
-            array_push($compoList, $object);
-        }
+		while ($object = $result->fetch_object('Compo')) {
+			array_push($compoList, $object);
+		}
 
-        return $compoList;
-    }
+		return $compoList;
+	}
 
-    /*
-     * Get compos for the specified event.
-     */
-    public static function getComposByEvent(Event $event) {
-        $database = Database::open(Settings::db_name_infected_compo);
+	/*
+	 * Get compos for the specified event.
+	 */
+	public static function getComposByEvent(Event $event) {
+		$database = Database::open(Settings::db_name_infected_compo);
 
-        $result = $database->query('SELECT * FROM `' . Settings::db_table_infected_compo_compos . '` 
-                                    WHERE `eventId` = \'' . $event->getId() . '\';');
+		$result = $database->query('SELECT * FROM `' . Settings::db_table_infected_compo_compos . '` 
+									WHERE `eventId` = \'' . $event->getId() . '\';');
 
-        $database->close();
+		$database->close();
 
-        $compoList = array();
+		$compoList = array();
 
-        while ($object = $result->fetch_object('Compo')) {
-            array_push($compoList, $object);
-        }
+		while ($object = $result->fetch_object('Compo')) {
+			array_push($compoList, $object);
+		}
 
-        return $compoList;
-    }
+		return $compoList;
+	}
 
-    /*
-     * Returns true if the given compo has generated matches.
-     */
-    public static function hasGeneratedMatches(Compo $compo) {
-        $database = Database::open(Settings::db_name_infected_compo);
+	/*
+	 * Get compo by specified clan.
+	 */
+	public static function getCompoByClan(Clan $clan) {
+		$database = Database::open(Settings::db_name_infected_compo);
 
-        $result = $database->query('SELECT `id` FROM `' . Settings::db_table_infected_compo_matches . '` 
-                                    WHERE `compoId` = \'' . $compo->getId() . '\';');
-        
-        $database->close();
+		$result = $database->query('SELECT * FROM `' . Settings::db_table_infected_compo_compos . '`
+									WHERE `id` = (SELECT `compoId` FROM `' . Settings::db_table_infected_compo_participantof . '` 
+												  WHERE `clanId` = \'' . $clan->getId() . '\'
+												  LIMIT 1);');
 
-        return $result->num_rows > 0;
-    }
+		$database->close();
 
-    /*
-     * Get clans for specified compo.
-     */
-    public static function getClans(Compo $compo) {
-        $database = Database::open(Settings::db_name_infected_compo);
+		return $result->fetch_object('Compo');
+	}
 
-        $result = $database->query('SELECT * FROM `' . Settings::db_table_infected_compo_clans . '` 
-                                    WHERE `id` = (SELECT `clanId` FROM `' . Settings::db_table_infected_compo_participantof . '` 
-                                                  WHERE `compoId` = \'' . $compo->getId() . '\');');
+	/*
+	 * Returns true if the given compo has generated matches.
+	 */
+	public static function hasGeneratedMatches(Compo $compo) {
+		$database = Database::open(Settings::db_name_infected_compo);
 
-        $database->close();
+		$result = $database->query('SELECT `id` FROM `' . Settings::db_table_infected_compo_matches . '` 
+									WHERE `compoId` = \'' . $compo->getId() . '\';');
+		
+		$database->close();
 
-        $clanList = array();
+		return $result->num_rows > 0;
+	}
 
-        while ($object = $result->fetch_object('Clan')) {
-            array_push($clanList, $object);
-        }
-        
-        return $clanList;
-    }
+	private static function generateMatches(array $carryMatches, array $carryClans, array $carryLoosers, $iteration, Compo $compo, $time, $looserOffsetTime) {
+		$numberOfObjects = count($carryMatches) + count($carryClans); //The amount of objects we are going to handle
+		$match_start_index = $numberOfObjects % 2; // 0 if even number of objects, 1 if uneven
 
-    public static function getCompleteClans(Compo $compo) {
-        $clanList = array();
+		$carryObjects = array('matches' => array(), 
+							  'clans' => array(), 
+							  'looserMatches' => array(), 
+							  'carryMatches' => array()); // Prepare all the info to return back
 
-        foreach (self::getClans($compo) as $clan) {
-            $playing = ClanHandler::getPlayingMembers($clan);
-            
-            if (count($playing) == $compo->getTeamSize()) {
-                array_push($clanList, $clan);
-            }
-        }
+		if ($match_start_index == 1) { // If there is an uneven amount of objects
+			if (count($carryMatches) > 0 ) { // Prioritize carrying matches
+				array_push($carryObjects['carryMatches'], array_shift($carryMatches));
+			} else { // No matches to carry, carry a clan
+				array_push($carryObjects['clans'], array_shift($carryClans));
+			}
+		}
+		
+		while ($numberOfObjects > 0) {
+			// Create match
+			$chat = ChatHandler::createChat('match chat');
+			$match = MatchHandler::createMatch($time, '', $compo, $iteration, $chat->getId(), Match::BRACKET_WINNER); // TODO: connectData
+			array_push($carryObjects['matches'], $match);
 
-        return $clanList;
-    }
+			// Assign participants
+			for ($a = 0; $a < 2; $a++) {
+				if (count($carryClans) > 0) {
+					$clan = array_shift($carryClans);
+					MatchHandler::addMatchParticipant(0, $clan->getId(), $match);
+					ChatHandler::addClanMembersToChat($chat, $clan);
+				} else {
+					MatchHandler::addMatchParticipant(1, array_shift($carryMatches)->getId(), $match);
+				}
+			}
 
-    public static function generateDoubleElimination(Compo $compo, $startTime, $compoSpacing) {
-        /*
-         * Psudocode:
-         * Get list of participants, order randomly
-         * Pass to some round iteration function that:
-         * Generates matches based on passed clans/previous matches
-         * Returns matches that should carry on in the winners and loosers bracket.
-        */
-        $clans = self::getCompleteClans($compo);
-        $newClanList = array();
-        
-        //Randomize participant list to avoid any cheating
-        while (count($clans) > 0) {
-            $toRemove = rand(0, count($clans)-1);
-            array_push($newClanList, $clans[$toRemove]);
-            array_splice($clans, $toRemove, 1);
-        }
+			$numberOfObjects = count($carryMatches) + count($carryClans); // The amount of objects we are going to handle
+		}
 
-        $carryData = array('matches' => array(), 
-                           'clans' => $newClanList, 
-                           'looserMatches' => array());
-        $iteration = 0;
-        
-        while (true) { // Um. Memory leak here?
-            $carryData = self::generateMatches($carryData['matches'], 
-                                               $carryData['clans'], 
-                                               $carryData['looserMatches'], 
-                                               $iteration, $compo, $startTime + ($iteration * $compoSpacing), $compoSpacing);
-            
-            foreach ($carryData['carryMatches'] as $match) {
-                array_push($carryData['matches'], $match);
-            }
-            //echo ', looser matches:';
-            /*foreach($carryData['looserMatches'] as $looserMatches) {
-                //echo 'Old looser: ' . $looserMatches->getId() . ',';
-            }*/
+		// Generate loosers
+		$oldLooserCarry = $carryLoosers;
+		$currentMatches = $carryObjects['matches'];
 
-            $iteration++;
+		$looserCount = count($oldLooserCarry) + count($currentMatches);
 
-            if (count($carryData['matches']) < 2) {
-                $chat = ChatHandler::createChat('match chat');
-                $match = MatchHandler::createMatch($startTime + ($iteration * $compoSpacing), '', $compo, $iteration, $chat->getId(), Match::BRACKET_WINNER); //TODO connectData
-                MatchHandler::addMatchParticipant(1, $carryData['matches'][0]->getId(), $match);
-                MatchHandler::addMatchParticipant(1, $carryData['looserMatches'][0]->getId(), $match);
-                break;
-            }
-        }
-    }
+		//echo ';Number of loosers: ' . $looserCount . '. Old loosers: ' . count($oldLooserCarry) . '. Newer matches: ' . count($currentMatches) . '. Data: ';
+		foreach ($oldLooserCarry as $old) {
+			//echo 'Old looser: ' . $old->getId() . ',';
+		}
 
-    private static function generateMatches(array $carryMatches, array $carryClans, array $carryLoosers, $iteration, Compo $compo, $time, $looserOffsetTime) {
-        $numberOfObjects = count($carryMatches) + count($carryClans); //The amount of objects we are going to handle
-        $match_start_index = $numberOfObjects % 2; // 0 if even number of objects, 1 if uneven
+		foreach ($currentMatches as $new) {
+			//echo 'New match: ' . $new->getId() . ',';
+		}
 
-        $carryObjects = array('matches' => array(), 
-                              'clans' => array(), 
-                              'looserMatches' => array(), 
-                              'carryMatches' => array()); // Prepare all the info to return back
+		if ($looserCount % 2 != 0) {
+			//Prioritize carrying new
+			if (count($currentMatches) > 0) {
+				$matchToPush = array_shift($currentMatches);
+				//echo ';we have to carry a looser match. Carrying a current match: ' . $matchToPush->getId() . '.';
+				array_push($carryObjects['looserMatches'], $matchToPush);
+			} else if (count($oldLooserCarry) > 0) {
+				$matchToPush = array_shift($oldLooserCarry);
+				//echo ';we have to carry a looser match. Carrying a old match: ' . $matchToPush->getId() . '.';
+				array_push($carryObjects['looserMatches'], $matchToPush);
+			}
+		}
 
-        if ($match_start_index == 1) { //If there is an uneven amount of objects
-            if (count($carryMatches) > 0 ) { //Prioritize carrying matches
-                array_push($carryObjects['carryMatches'], array_shift($carryMatches));
-            } else { //No matches to carry, carry a clan
-                array_push($carryObjects['clans'], array_shift($carryClans));
-            }
-        }
-        
-        while ($numberOfObjects > 0) {
-            //Create match
-            $chat = ChatHandler::createChat('match chat');
-            $match = MatchHandler::createMatch($time, '', $compo, $iteration, $chat->getId(), Match::BRACKET_WINNER); //TODO connectData
-            array_push($carryObjects['matches'], $match);
+		while ($looserCount > 0) {
+			$chat = ChatHandler::createChat('match chat');
+			$match = MatchHandler::createMatch($time + $looserOffsetTime, '', $compo, $iteration, $chat->getId(), Match::BRACKET_LOOSER); //TODO connectData
 
-            //Assign participants
-            for ($a = 0; $a < 2; $a++) {
-                if (count($carryClans) > 0) {
-                    $clan = array_shift($carryClans);
-                    MatchHandler::addMatchParticipant(0, $clan->getId(), $match);
-                    ChatHandler::addClanMembersToChat($chat, $clan);
-                } else {
-                    MatchHandler::addMatchParticipant(1, array_shift($carryMatches)->getId(), $match);
-                }
-            }
+			if (count($oldLooserCarry) > 0) {
+				MatchHandler::addMatchParticipant(MatchHandler::participantof_state_winner, array_shift($oldLooserCarry)->getId(), $match);
+			} else {
+				MatchHandler::addMatchParticipant(MatchHandler::participantof_state_looser, array_shift($currentMatches)->getId(), $match);
+			}
 
-            $numberOfObjects = count($carryMatches) + count($carryClans); // The amount of objects we are going to handle
-        }
+			if (count($currentMatches) > 0) {
+				MatchHandler::addMatchParticipant(MatchHandler::participantof_state_looser, array_shift($currentMatches)->getId(), $match);
+			} else {
+				MatchHandler::addMatchParticipant(MatchHandler::participantof_state_winner, array_shift($oldLooserCarry)->getId(), $match);
+			}
 
-        // Generate loosers
-        $oldLooserCarry = $carryLoosers;
-        $currentMatches = $carryObjects['matches'];
+			array_push($carryObjects['looserMatches'], $match);
+			$looserCount = count($oldLooserCarry) + count($currentMatches);
+		}
 
-        $looserCount = count($oldLooserCarry) + count($currentMatches);
+		return $carryObjects;
+	}
 
-        //echo ';Number of loosers: ' . $looserCount . '. Old loosers: ' . count($oldLooserCarry) . '. Newer matches: ' . count($currentMatches) . '. Data: ';
-        foreach ($oldLooserCarry as $old) {
-            //echo 'Old looser: ' . $old->getId() . ',';
-        }
+	public static function generateDoubleElimination(Compo $compo, $startTime, $compoSpacing) {
+		/*
+		 * Psudocode:
+		 * Get list of participants, order randomly
+		 * Pass to some round iteration function that:
+		 * Generates matches based on passed clans/previous matches
+		 * Returns matches that should carry on in the winners and loosers bracket.
+		*/
+		$clans = self::getCompleteClans($compo);
+		$newClanList = array();
+		
+		//Randomize participant list to avoid any cheating
+		while (count($clans) > 0) {
+			$toRemove = rand(0, count($clans) - 1);
+			array_push($newClanList, $clans[$toRemove]);
+			array_splice($clans, $toRemove, 1);
+		}
 
-        foreach ($currentMatches as $new) {
-            //echo 'New match: ' . $new->getId() . ',';
-        }
+		$carryData = array('matches' => array(), 
+						   'clans' => $newClanList, 
+						   'looserMatches' => array());
+		$iteration = 0;
+		
+		while (true) { // Um. Memory leak here? We should have some objects that we could iterate instead?...
+			$carryData = self::generateMatches($carryData['matches'], 
+											   $carryData['clans'], 
+											   $carryData['looserMatches'], 
+											   $iteration, $compo, $startTime + ($iteration * $compoSpacing), $compoSpacing);
+			
+			foreach ($carryData['carryMatches'] as $match) {
+				array_push($carryData['matches'], $match);
+			}
+			//echo ', looser matches:';
+			/*foreach($carryData['looserMatches'] as $looserMatches) {
+				//echo 'Old looser: ' . $looserMatches->getId() . ',';
+			}*/
 
-        if ($looserCount % 2 != 0) {
-            //Prioritize carrying new
-            if (count($currentMatches) > 0) {
-                $matchToPush = array_shift($currentMatches);
-                //echo ';we have to carry a looser match. Carrying a current match: ' . $matchToPush->getId() . '.';
-                array_push($carryObjects['looserMatches'], $matchToPush);
-            } else if (count($oldLooserCarry) > 0) {
-                $matchToPush = array_shift($oldLooserCarry);
-                //echo ';we have to carry a looser match. Carrying a old match: ' . $matchToPush->getId() . '.';
-                array_push($carryObjects['looserMatches'], $matchToPush);
-            }
-        }
+			$iteration++;
 
-        while ($looserCount > 0) {
-            $chat = ChatHandler::createChat('match chat');
-            $match = MatchHandler::createMatch($time + $looserOffsetTime, '', $compo, $iteration, $chat->getId(), Match::BRACKET_LOOSER); //TODO connectData
-
-            if (count($oldLooserCarry) > 0) {
-                MatchHandler::addMatchParticipant(MatchHandler::participantof_state_winner, array_shift($oldLooserCarry)->getId(), $match);
-            } else {
-                MatchHandler::addMatchParticipant(MatchHandler::participantof_state_looser, array_shift($currentMatches)->getId(), $match);
-            }
-
-            if (count($currentMatches) > 0) {
-                MatchHandler::addMatchParticipant(MatchHandler::participantof_state_looser, array_shift($currentMatches)->getId(), $match);
-            } else {
-                MatchHandler::addMatchParticipant(MatchHandler::participantof_state_winner, array_shift($oldLooserCarry)->getId(), $match);
-            }
-
-            array_push($carryObjects['looserMatches'], $match);
-            $looserCount = count($oldLooserCarry) + count($currentMatches);
-        }
-
-        return $carryObjects;
-    }
+			if (count($carryData['matches']) < 2) {
+				$chat = ChatHandler::createChat('match chat');
+				$match = MatchHandler::createMatch($startTime + ($iteration * $compoSpacing), '', $compo, $iteration, $chat->getId(), Match::BRACKET_WINNER); //TODO connectData
+				MatchHandler::addMatchParticipant(1, $carryData['matches'][0]->getId(), $match);
+				MatchHandler::addMatchParticipant(1, $carryData['looserMatches'][0]->getId(), $match);
+				break;
+			}
+		}
+	}
 }
 ?>

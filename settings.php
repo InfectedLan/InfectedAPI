@@ -4,18 +4,18 @@
  *
  * Copyright (C) 2015 Infected <http://infected.no/>.
  *
- * This program is free software: you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version.
+ * This library is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU Lesser General Public
+ * License as published by the Free Software Foundation; either
+ * version 3.0 of the License, or (at your option) any later version.
  * 
- * This program is distributed in the hope that it will be useful,
+ * This library is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
-
- * You should have received a copy of the GNU General Public License
- * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ * Lesser General Public License for more details.
+ * 
+ * You should have received a copy of the GNU Lesser General Public
+ * License along with this library.  If not, see <http://www.gnu.org/licenses/>.
  */
 
 class Settings {
@@ -41,6 +41,7 @@ class Settings {
 	const db_table_infected_permissions = 'permissions';
 	const db_table_infected_postalcodes = 'postalcodes';
 	const db_table_infected_registrationcodes = 'registrationcodes';
+	const db_table_infected_tasks = 'tasks';
 	const db_table_infected_useroptions = 'useroptions';
 	const db_table_infected_userpermissions = 'userpermissions';
 	const db_table_infected_users = 'users';
@@ -102,8 +103,8 @@ class Settings {
 	const email = 'no-reply@infected.no';
 	
 	// Tells where QR images should be stored.
-	const qr_path = 'content/qrcache/';
-	const avatar_path = 'content/avatars/';
+	const qr_path = '../api/content/qrcache/';
+	const avatar_path = '../api/content/avatars/';
 	
 	/* Compo */
 	// Match participant of state.
