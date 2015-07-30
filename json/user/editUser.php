@@ -67,12 +67,12 @@ if (Session::isAuthenticated()) {
 					$confirmEmail = $_GET['confirmemail'];
 					$gender = $_GET['gender'];
 					$birthdate = $_GET['birthyear'] . '-' . $_GET['birthmonth'] . '-' . $_GET['birthday']; 
-					$phone = $_GET['phone'];
+					$phone = str_replace('+47', '', str_replace(' ', '', $_GET['phone']));
 					$address = ucfirst($_GET['address']);
 					$postalcode = $_GET['postalcode'];
 					$nickname = !empty($_GET['nickname']) ? $_GET['nickname'] : $editUser->getUsername();
-					$emergencyContactPhone = isset($_GET['emergencycontactphone']) ? $_GET['emergencycontactphone'] : 0;
-					 																																																																																																	
+					$emergencyContactPhone = isset($_GET['emergencycontactphone']) ? str_replace('+47', '', str_replace(' ', '', $_GET['emergencycontactphone'])) : 0;
+					
 					if ($username != $editUser->getUsername() && UserHandler::userExists($username)) {
 						$message = Localization::getLocale('the_username_is_already_in_use_by_someone_else');
 					} else if ($email != $editUser->getEmail() && UserHandler::userExists($email)) {
