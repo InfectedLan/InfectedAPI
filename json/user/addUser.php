@@ -69,11 +69,11 @@ if (isset($_GET['firstname']) &&
 	$nickname = !empty($_GET['nickname']) ? $_GET['nickname'] : $username;
 	$emergencycontactphone = isset($_GET['emergencycontactphone']) ? str_replace(' ', '', $_GET['emergencycontactphone']) : null;
 	
-	if (UserHandler::userExists($username)) {
+	if (UserHandler::hasUser($username)) {
 		$message = Localization::getLocale('the_username_is_already_in_use_by_someone_else');
-	} else if (UserHandler::userExists($email)) {
+	} else if (UserHandler::hasUser($email)) {
 		$message = Localization::getLocale('the_email_address_is_already_in_use_by_someone_else');
-	} else if (UserHandler::userExists($phone)) {
+	} else if (UserHandler::hasUser($phone)) {
 		$message = Localization::getLocale('the_phone_number_is_already_in_use_by_someone_else');
 	} else if (empty($firstname) || strlen($firstname) > 32) {
 		$message = Localization::getLocale('you_must_enter_a_first_name');
