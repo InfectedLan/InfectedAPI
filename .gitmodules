@@ -10,6 +10,3 @@
 [submodule "phpqrcode-git"]
 	path = phpqrcode-git
 	url = git://git.code.sf.net/p/phpqrcode/git
-[submodule "libraries/phpwebsockets"]
-	path = libraries/phpwebsockets
-	url = git@github.com:ghedipunk/PHP-Websockets.git
