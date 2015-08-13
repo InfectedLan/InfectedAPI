@@ -116,7 +116,7 @@ class InviteHandler {
 	/*
 	 * Accept the specified invite.
 	 */
-	public function acceptInvite(Invite $invite) {
+	public static function acceptInvite(Invite $invite) {
 		$database = Database::open(Settings::db_name_infected_compo);
 
 		$database->query('DELETE FROM `' . Settings::db_table_infected_compo_invites . '`
@@ -137,7 +137,7 @@ class InviteHandler {
 	/*
 	 * Decline the specified invite.
 	 */
-	public function declineInvite(Invite $invite) {
+	public static function declineInvite(Invite $invite) {
 		$database = Database::open(Settings::db_name_infected_compo);
 
 		$database->query('DELETE FROM `' . Settings::db_table_infected_compo_invites . '`

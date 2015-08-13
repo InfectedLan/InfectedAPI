@@ -196,27 +196,6 @@ class MatchHandler {
 		return $result->num_rows > 0;
 	}
 
-	public static function createMatch($scheduledTime, $connectData, Compo $compo, $bracketOffset, Chat $chat, $bracket) {
-		$database = Database::open(Settings::db_name_infected_compo);
-
-		$database->query('INSERT INTO `' . Settings::db_table_infected_compo_matches . '` (`scheduledTime`, `connectDetails`, `state`, `winnerId`, `compoId`, `bracketOffset`, `chatId`, `bracket`)
-						  VALUES (\'' . $database->real_escape_string($scheduledTime) . '\',
-								  \'' . $database->real_escape_string($connectData) . '\',
-								  \'' . Match::STATE_READYCHECK . '\',
-								  \'0\',
-								  \'' . $compo->getId() . '\',
-								  \'' . $database->real_escape_string($bracketOffset) . '\',
-								  \'' . $chat->getId() . '\',
-								  \'' . $database->real_escape_string($bracket) . '\');');
-
-		$result = $database->query('SELECT * FROM `' . Settings::db_table_infected_compo_matches . '`
-									WHERE `id` = \'' . $database->insert_id . '\';');
-
-		$database->close();
-
-		return $result->fetch_object('Match');
-	}
-
 	public static function addMatchParticipant($type, $participantId, Match $match) {
 		$database = Database::open(Settings::db_name_infected_compo);
 
@@ -477,7 +456,28 @@ class MatchHandler {
 		return true;
 	}
 
-	public function updateMatch(Match $match, $state) {
+	public static function createMatch($scheduledTime, $connectData, Compo $compo, $bracketOffset, Chat $chat, $bracket) {
+		$database = Database::open(Settings::db_name_infected_compo);
+
+		$database->query('INSERT INTO `' . Settings::db_table_infected_compo_matches . '` (`scheduledTime`, `connectDetails`, `state`, `winnerId`, `compoId`, `bracketOffset`, `chatId`, `bracket`)
+							VALUES (\'' . $database->real_escape_string($scheduledTime) . '\',
+									\'' . $database->real_escape_string($connectData) . '\',
+									\'' . Match::STATE_READYCHECK . '\',
+									\'0\',
+									\'' . $compo->getId() . '\',
+									\'' . $database->real_escape_string($bracketOffset) . '\',
+									\'' . $chat->getId() . '\',
+									\'' . $database->real_escape_string($bracket) . '\');');
+
+		$result = $database->query('SELECT * FROM `' . Settings::db_table_infected_compo_matches . '`
+									WHERE `id` = \'' . $database->insert_id . '\';');
+
+		$database->close();
+
+		return $result->fetch_object('Match');
+	}
+
+	public static function updateMatch(Match $match, $state) {
 		$database = Database::open(Settings::db_name_infected_compo);
 
 		$result = $database->query('UPDATE `' . Settings::db_table_infected_compo_matches . '`
