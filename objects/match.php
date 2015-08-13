@@ -87,7 +87,7 @@ class Match extends Object {
 	}
 
 	public function setState($state) {
-		MatchHandler->updateMatch($this, $state);
+		MatchHandler::updateMatch($this, $state);
 	}
 
 	public function getCompo() {
