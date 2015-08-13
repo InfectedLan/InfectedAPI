@@ -18,12 +18,16 @@
  * License along with this library.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+require_once 'handlers/matchhandler.php';
 require_once 'objects/eventobject.php';
 
 class Compo extends EventObject {
 	private $name;
+	private $title;
 	private $tag;
-	private $descscription;
+	private $description;
+	private $mode;
+	private $price;
 	private $startTime;
 	private $registrationDeadline;
 	private $teamSize;
@@ -33,6 +37,13 @@ class Compo extends EventObject {
 	 */
 	public function getName() {
 		return $this->name;
+	}
+
+	/*
+	 * Returns the title of this compo.
+	 */
+	public function getTitle() {
+		return $this->title;
 	}
 
 	/*
@@ -50,10 +61,24 @@ class Compo extends EventObject {
 	}
 
 	/*
+	 * Returns the gamemode for this compo.
+	 */
+	public function getMode() {
+		return $this->mode;
+	}
+
+	/*
+	 * Returns the price of this compo.
+	 */
+	public function getPrice() {
+		return $this->price;
+	}
+
+	/*
 	 * Returns the startTime of this compo.
 	 */
 	public function getStartTime() {
-		return $this->startTime;
+		return strtotime($this->startTime);
 	}
 
 	/*

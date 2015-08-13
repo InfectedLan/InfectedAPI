@@ -114,11 +114,11 @@ header('Content-Type: text/plain');
 echo json_encode(array('result' => $result, 'message' => $message), JSON_PRETTY_PRINT);
 
 function str_replace_last($search, $replace, $str) {
-    if (($pos = strrpos($str, $search)) !== false) {
-        $search_length = strlen( $search );
-        $str = substr_replace($str, $replace, $pos, $search_length);
-    }
+	if (($pos = strrpos($str, $search)) !== false) {
+		$search_length = strlen( $search );
+		$str = substr_replace($str, $replace, $pos, $search_length);
+	}
 
-    return $str;
+	return $str;
 }
 ?>

@@ -40,11 +40,11 @@ if (Session::isAuthenticated()) {
 					$ticketUser = $ticket->getUser();
 
 					$userData = array('id' => $ticketUser->getId(),
-								      'firstname' => $ticketUser->getFirstname(),
+									  'firstname' => $ticketUser->getFirstname(),
 									  'lastname' => $ticketUser->getLastname(),
 								 	  'username' => $ticketUser->getUsername(),
 								 	  'email' => $ticketUser->getEmail(),
-								      'birthdate' => date('d.m.Y', $ticketUser->getBirthdate()),
+									  'birthdate' => date('d.m.Y', $ticketUser->getBirthdate()),
 								 	  'gender' => $ticketUser->getGenderAsString(),
 								 	  'age' => $ticketUser->getAge(),
 								 	  'phone' => $ticketUser->getPhone(),

@@ -41,9 +41,9 @@ if (Session::isAuthenticated()) {
 				$extension = strtolower(end($temp));
 
 				if (($_FILES['bgImageFile']['type'] == 'image/jpeg') || 
-				    ($_FILES['bgImageFile']['type'] == 'image/jpg') || 
-				    ($_FILES['bgImageFile']['type'] == 'image/x-png') || 
-				    ($_FILES['bgImageFile']['type'] == 'image/png')) {
+					($_FILES['bgImageFile']['type'] == 'image/jpg') || 
+					($_FILES['bgImageFile']['type'] == 'image/x-png') || 
+					($_FILES['bgImageFile']['type'] == 'image/png')) {
 					
 					if (($_FILES['bgImageFile']['size'] < 7000000)) {
 						if (in_array($extension, $allowedExts)) {

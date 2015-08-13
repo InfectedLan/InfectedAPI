@@ -18,7 +18,7 @@
  */
 
 function logout() {
-	$.getJSON('../api/json/session/logout.php', function(data){
+	$.getJSON('../api/json/user/logoutUser.php', function(data){
 		if (data.result) {
 			location.reload();
 		} else {

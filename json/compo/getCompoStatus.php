@@ -61,8 +61,8 @@ if (Session::isAuthenticated()) {
 								 'id' => $clan->getId());
 
 		$inviteData = array('id' => $invite->getId(), 
-						    'compo' => $compoData, 
-						    'clanData' => $invitedClanData);
+							'compo' => $compoData, 
+							'clanData' => $invitedClanData);
 
 		array_push($inviteList, $inviteData);
 	}

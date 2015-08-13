@@ -31,14 +31,14 @@ class UserHistoryHandler {
 	  $database = Database::open(Settings::db_name_infected);
 	  
 	  $result = $database->query('SELECT * FROM (SELECT `' . Settings::db_table_infected_events . '`.* FROM `' . Settings::db_table_infected_events . '`
-                      												 WHERE `' . Settings::db_table_infected_events . '`.`id` IN (SELECT `eventId` FROM `' . Settings::db_name_infected_crew . '`.`' . Settings::db_table_infected_crew_memberof . '`
-                      																		                                                 WHERE `userId` = \'' . $user->getId() . '\')
-                      												 UNION ALL
-                      												 SELECT `' . Settings::db_table_infected_events . '`.* FROM `' . Settings::db_table_infected_events . '`
-                      												 WHERE `' . Settings::db_table_infected_events . '`.`id` IN (SELECT `eventId` FROM `' . Settings::db_name_infected_tickets . '`.`' . Settings::db_table_infected_tickets_tickets . '`
-                      																		                                                 WHERE `userId` = \'' . $user->getId() . '\')
-                      												 ) AS `' . Settings::db_table_infected_events . '`
-								                GROUP BY `' . Settings::db_table_infected_events . '`.`id`;');
+  												 WHERE `' . Settings::db_table_infected_events . '`.`id` IN (SELECT `eventId` FROM `' . Settings::db_name_infected_crew . '`.`' . Settings::db_table_infected_crew_memberof . '`
+  																														 WHERE `userId` = \'' . $user->getId() . '\')
+  												 UNION ALL
+  												 SELECT `' . Settings::db_table_infected_events . '`.* FROM `' . Settings::db_table_infected_events . '`
+  												 WHERE `' . Settings::db_table_infected_events . '`.`id` IN (SELECT `eventId` FROM `' . Settings::db_name_infected_tickets . '`.`' . Settings::db_table_infected_tickets_tickets . '`
+  																														 WHERE `userId` = \'' . $user->getId() . '\')
+  												 ) AS `' . Settings::db_table_infected_events . '`
+								  GROUP BY `' . Settings::db_table_infected_events . '`.`id`;');
 	  
 	  $database->close();
 	  

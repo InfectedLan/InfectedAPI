@@ -46,7 +46,7 @@ if (Session::isAuthenticated()) {
 				if ($extension == 'png') {
 					$image = imagecreatefrompng($_FILES['file']['tmp_name']);
 				} else if ($extension == 'jpeg' || 
-					       $extension == 'jpg') {
+						   $extension == 'jpg') {
 					$image = imagecreatefromjpeg($_FILES['file']['tmp_name']);
 				}
 

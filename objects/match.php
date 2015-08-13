@@ -8,12 +8,12 @@
  * modify it under the terms of the GNU Lesser General Public
  * License as published by the Free Software Foundation; either
  * version 3.0 of the License, or (at your option) any later version.
- * 
+ *
  * This library is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
  * Lesser General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU Lesser General Public
  * License along with this library.  If not, see <http://www.gnu.org/licenses/>.
  */
@@ -73,8 +73,12 @@ class Match extends Object {
 
 	public function isParticipant($user) {
 		foreach (MatchHandler::getParticipantsByMatch($this) as $clan) {
-			return $clan->isMember($user);
+			if ($clan->isMember($user)) {
+				return true;
+			}
 		}
+
+		return false;
 	}
 
 	//Returns true if the match can be run
@@ -82,14 +86,8 @@ class Match extends Object {
 		return MatchHandler::isReady($this);
 	}
 
-	public function setState($newState) {
-		$database = Database::open(Settings::db_name_infected_compo);
-
-		$result = $database->query('UPDATE `' . Settings::db_table_infected_compo_matches . '`
-							        SET `state` = \'' . $database->real_escape_string($newState) . '\'
-							        WHERE `id` = \'' . $this->getId() . '\';');
-
-		$database->close();
+	public function setState($state) {
+		MatchHandler::updateMatch($this, $state);
 	}
 
 	public function getCompo() {

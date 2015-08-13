@@ -8,12 +8,12 @@
  * modify it under the terms of the GNU Lesser General Public
  * License as published by the Free Software Foundation; either
  * version 3.0 of the License, or (at your option) any later version.
- * 
+ *
  * This library is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
  * Lesser General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU Lesser General Public
  * License along with this library.  If not, see <http://www.gnu.org/licenses/>.
  */
@@ -29,13 +29,27 @@ require_once 'objects/eventobject.php';
 require_once 'objects/user.php';
 
 class Ticket extends EventObject {
-	private $paymentId;
 	private $typeId;
 	private $buyerId;
+	private $paymentId;
 	private $userId;
-	private $seatId;
 	private $seaterId;
-	
+	private $seatId;
+
+	/*
+	 * Returns the ticket type.
+	 */
+	public function getType() {
+		return TicketTypeHandler::getTicketType($this->typeId);
+	}
+
+	/*
+	 * Returns the buyer of this ticket, also who bought/got it in the first place.
+	 */
+	public function getBuyer() {
+		return $this->buyerId != 0 ? UserHandler::getUser($this->buyerId) : $this->getUser();
+	}
+
 	/*
 	 * Returns the payment that this ticket is linked to, if any.
 	 */
@@ -44,42 +58,28 @@ class Ticket extends EventObject {
 	}
 
 	/*
-	 * Returns the ticket type.
-	 */
-	public function getType() {
-		return TicketTypeHandler::getTicketType($this->typeId);
-	}
-	
-	/*
-	 * Returns the buyer of this ticket, also who bought/got it in the first place.
-	 */
-	public function getBuyer() {
-		return $this->buyerId != 0 ? UserHandler::getUser($this->buyerId) : $this->getUser();
-	}
-	
-	/*
 	 * Returns the user of this ticket.
 	 */
 	public function getUser() {
 		return UserHandler::getUser($this->userId);
 	}
-	
-	/*
-	 * Returns the seat that this ticket is seated at.
-	 */
-	public function getSeat() {
-		return SeatHandler::getSeat($this->seatId);
-	}
-	
+
 	/*
 	 * Returns the seater of this ticket.
 	 *
 	 * The seater is the user account that is allowed to decide what seat this ticket is seated on.
 	 */
 	public function getSeater() {
-		return $this->seaterId != 0 ? UserHandler::getUser($this->seaterId) : $this->getUser();
+		return $this->seaterId > 0 ? UserHandler::getUser($this->seaterId) : $this->getUser();
 	}
-	
+
+	/*
+	 * Returns the seat that this ticket is seated at.
+	 */
+	public function getSeat() {
+		return SeatHandler::getSeat($this->seatId);
+	}
+
 	/*
 	 * Returns a string representation of the ticket.
 	 */
@@ -88,25 +88,25 @@ class Ticket extends EventObject {
 		$season = date('m', $event->getStartTime()) == 2 ? 'VINTER' : 'HØST';
 		$theme = $event->getTheme();
 		$eventName = !empty($theme) ? $theme : $season . date('Y', $event->getStartTime());
-	
+
 		return strtoupper(Settings::name . '_' . $eventName . '_' . $this->getId());
 	}
-	
+
 	// TODO: Implement this in a more generic way?
 	public function getQrImagePath() {
-		return QR::getCode('https://crew.infected.no/api/pages/utils/verifyTicket.php?id=' . $this->getId());
+		return QR::getCode('https://infected.no/api/pages/utils/verifyTicket.php?id=' . $this->getId());
 	}
-	
-	/* 
+
+	/*
 	 * Returns true if this ticket can be refunded.
 	 */
 	public function isRefundable() {
 		$event = $this->getEvent();
 		$timeLeftToEvent = date('U', $event->getStartTime()) - time();
-		
+
 		return $timeLeftToEvent >= Settings::refundBeforeEventTime;
 	}
-	
+
 	/*
 	 * Returns true if this ticket is seated.
 	 */
@@ -120,7 +120,7 @@ class Ticket extends EventObject {
 	public function isCheckedIn() {
 		return TicketHandler::isTicketCheckedIn($this);
 	}
-	
+
 	/*
 	 * Returns true if given user is allowed to seat this ticket.
 	 */
@@ -135,7 +135,7 @@ class Ticket extends EventObject {
 	public function checkedIn() {
 		return TicketHandler::checkedInTicket($this);
 	}
-	
+
 	/*
 	 * Transfers this ticket to the specified user.
 	 */

@@ -27,141 +27,141 @@ require_once 'objects/row.php';
 require_once 'objects/seatmap.php';
 
 class RowHandler {
-    /*
-     * Return the row by the internal id.
-     */
-    public static function getRow($id) {
-        $database = Database::open(Settings::db_name_infected_tickets);
+	/*
+	 * Return the row by the internal id.
+	 */
+	public static function getRow($id) {
+		$database = Database::open(Settings::db_name_infected_tickets);
 
-        $result = $database->query('SELECT * FROM `' . Settings::db_table_infected_tickets_rows . '`
-                                    WHERE `id` = \'' . $database->real_escape_string($id) . '\';');
-        
-        $database->close();
+		$result = $database->query('SELECT * FROM `' . Settings::db_table_infected_tickets_rows . '`
+									WHERE `id` = \'' . $database->real_escape_string($id) . '\';');
+		
+		$database->close();
 		
 		return $result->fetch_object('Row');
-    }
+	}
 
-    /* 
-     * Returns a list of all rows.
-     */
-    public static function getRows() {
-        $database = Database::open(Settings::db_name_infected_tickets);
-        
-        $result = $database->query('SELECT * FROM `' . Settings::db_table_infected_tickets_rows . '`;');
-        
-        $database->close();
+	/* 
+	 * Returns a list of all rows.
+	 */
+	public static function getRows() {
+		$database = Database::open(Settings::db_name_infected_tickets);
+		
+		$result = $database->query('SELECT * FROM `' . Settings::db_table_infected_tickets_rows . '`;');
+		
+		$database->close();
 
-        $rowList = array();
-        
-        while ($object = $result->fetch_object('Row')) {
-            array_push($rowList, $object);
-        }
+		$rowList = array();
+		
+		while ($object = $result->fetch_object('Row')) {
+			array_push($rowList, $object);
+		}
 
-        return $rowList;
-    }
+		return $rowList;
+	}
 
-    /* 
-     * Returns a list of all rows for the specified seatmap.
-     */
-    public static function getRowsBySeatmap(Seatmap $seatmap) {
-        $database = Database::open(Settings::db_name_infected_tickets);
+	/* 
+	 * Returns a list of all rows for the specified seatmap.
+	 */
+	public static function getRowsBySeatmap(Seatmap $seatmap) {
+		$database = Database::open(Settings::db_name_infected_tickets);
 
-        $result = $database->query('SELECT * FROM `' . Settings::db_table_infected_tickets_rows . '` 
-                                    WHERE `seatmapId` = \'' . $seatmap->getId() . '\';');
+		$result = $database->query('SELECT * FROM `' . Settings::db_table_infected_tickets_rows . '` 
+									WHERE `seatmapId` = \'' . $seatmap->getId() . '\';');
 
-        $database->close();
+		$database->close();
 
-        $rowList = array();
+		$rowList = array();
 
-        while ($object = $result->fetch_object('Row')) {
-            array_push($rowList, $object);
-        }
+		while ($object = $result->fetch_object('Row')) {
+			array_push($rowList, $object);
+		}
 
-        return $rowList;
-    }
+		return $rowList;
+	}
 
-    /*
-     * Create a new row.
-     */
-    public static function createRow(Seatmap $seatmap, $x, $y) {
-        $database = Database::open(Settings::db_name_infected_tickets);
+	/*
+	 * Create a new row.
+	 */
+	public static function createRow(Seatmap $seatmap, $x, $y) {
+		$database = Database::open(Settings::db_name_infected_tickets);
 
-        //Find out what row is max row
-        $highestRowNum = $database->query('SELECT `rowId` FROM `' . Settings::db_table_infected_tickets_rows . '`
-                                           WHERE `seatmapId`=' . $seatmap->getId() . ' 
-                                           ORDER BY `rowId` DESC 
-                                           LIMIT 1;');
+		//Find out what row is max row
+		$highestRowNum = $database->query('SELECT `rowId` FROM `' . Settings::db_table_infected_tickets_rows . '`
+										   WHERE `seatmapId`=' . $seatmap->getId() . ' 
+										   ORDER BY `rowId` DESC 
+										   LIMIT 1;');
 
-        $row = mysqli_fetch_array($highestRowNum);
+		$row = mysqli_fetch_array($highestRowNum);
 
-        $newRowNumber = $row['row'] + 1;
-        $entrance = EntranceHandler::getEntrance(1); // TODO: Set this somewere else?
+		$newRowNumber = $row['row'] + 1;
+		$entrance = EntranceHandler::getEntrance(1); // TODO: Set this somewere else?
 
-        $database->query('INSERT INTO `' . Settings::db_table_infected_tickets_rows . '` (`number`, `x`, `y`, `entranceId`, `seatmapId`) 
-                          VALUES (\'' . $database->real_escape_string($newRowNumber) . '\', 
-                                  \'' . $database->real_escape_string($x) . '\', 
-                                  \'' . $database->real_escape_string($y) . '\', 
-                                  \'' . $entrance->getId() . '\', 
-                                  \'' . $seatmap->getId() . '\');');
+		$database->query('INSERT INTO `' . Settings::db_table_infected_tickets_rows . '` (`number`, `x`, `y`, `entranceId`, `seatmapId`) 
+						  VALUES (\'' . $database->real_escape_string($newRowNumber) . '\', 
+								  \'' . $database->real_escape_string($x) . '\', 
+								  \'' . $database->real_escape_string($y) . '\', 
+								  \'' . $entrance->getId() . '\', 
+								  \'' . $seatmap->getId() . '\');');
 
-        $result = $database->query('SELECT * FROM `' .  Settings::db_table_infected_tickets_rows . '`
-                                    WHERE `id` = \'' . $database->insert_id . '\';');
+		$result = $database->query('SELECT * FROM `' .  Settings::db_table_infected_tickets_rows . '`
+									WHERE `id` = \'' . $database->insert_id . '\';');
 
-        $database->close();
+		$database->close();
 
-        return $result->fetch_object('Row');
-    }
-    
-    /*
-     * Move the specified row to the specified coordinates.
-     */
-    public static function updateRow(Row $row, $x, $y) {
-        $database = Database::open(Settings::db_name_infected_tickets);
+		return $result->fetch_object('Row');
+	}
+	
+	/*
+	 * Move the specified row to the specified coordinates.
+	 */
+	public static function updateRow(Row $row, $x, $y) {
+		$database = Database::open(Settings::db_name_infected_tickets);
 
-        $database->query('UPDATE `' . Settings::db_table_infected_tickets_rows . '` 
-                          SET `x` = \'' . $database->real_escape_string($x) . '\',
-                              `y` = \'' . $database->real_escape_string($y) . '\'
-                          WHERE `id` = \'' . $row->getId() . '\';');
+		$database->query('UPDATE `' . Settings::db_table_infected_tickets_rows . '` 
+						  SET `x` = \'' . $database->real_escape_string($x) . '\',
+							  `y` = \'' . $database->real_escape_string($y) . '\'
+						  WHERE `id` = \'' . $row->getId() . '\';');
 
-        $database->close();
-    }
+		$database->close();
+	}
 
-    /*
-     * Removes the specified row.
-     */
-    public static function removeRow(Row $row) {
-        $database = Database::open(Settings::db_name_infected_tickets);
+	/*
+	 * Removes the specified row.
+	 */
+	public static function removeRow(Row $row) {
+		$database = Database::open(Settings::db_name_infected_tickets);
 
-        $result = $database->query('DELETE FROM `' . Settings::db_table_infected_tickets_rows . '` 
-                                    WHERE `id` = ' . $row->getId() . ';');
+		$result = $database->query('DELETE FROM `' . Settings::db_table_infected_tickets_rows . '` 
+									WHERE `id` = ' . $row->getId() . ';');
 
-        $database->close();
+		$database->close();
 
-        foreach (self::getSeats($row) as $seat) {
-            SeatHandler::deleteSeat($seat);
-        }
-    }
+		foreach (self::getSeats($row) as $seat) {
+			SeatHandler::deleteSeat($seat);
+		}
+	}
 
-    /*
-     * Returns true if the row is safe to delete.
-     */
-    public static function safeToDelete(Row $row) {
-        $seatList = self::getSeats($row);
-        
-        foreach($seatList as $seat) {
-            if (SeatHandler::hasOwner($seat)) {
-                return false;
-            }
-        }
-        
-        return true;
-    }
+	/*
+	 * Returns true if the row is safe to delete.
+	 */
+	public static function safeToDelete(Row $row) {
+		$seatList = self::getSeats($row);
+		
+		foreach($seatList as $seat) {
+			if (SeatHandler::hasOwner($seat)) {
+				return false;
+			}
+		}
+		
+		return true;
+	}
 
-    /*
-     * Returns the event this row is for.
-     */
-    public static function getEvent($row) {
-        return SeatmapHandler::getEvent($row->getSeatmap());
-    }
+	/*
+	 * Returns the event this row is for.
+	 */
+	public static function getEvent($row) {
+		return SeatmapHandler::getEvent($row->getSeatmap());
+	}
 }
 ?>

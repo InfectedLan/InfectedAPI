@@ -10,7 +10,7 @@
  * (at your option) any later version.
  * 
  * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * but WITHOUT ANY WARRANTY, without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
  *
@@ -18,31 +18,15 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-class Transaction {
-	/*
-	 * Creates a payment of the given amount of the specified valuta.
-	 */
-	public static function pay($user, $valuta, $amount) {
-		$transactionId = /* Generated transaction id here */;
+trait TPage {
+    public function hasParent() {
+		return get_parent_class($this);
+    }
 
-		if (/* Given amount is successfully paid. */) {
-			/* Log the transaction to database */
+    public function getParent() {
+    	$class = get_parent_class($this);
 
-			return $transactionId;
-		}
-
-		return false;
-	}
-
-	/*
-	 * Refunds the amount of the given transaction to the originating users account.
-	 */
-	public static function refund($transactionId) {
-		if (/* Transaction is refunded completly. */) {
-			return true;
-		}
-
-		return false;
-	}
+    	return new $class();
+    }
 }
 ?>

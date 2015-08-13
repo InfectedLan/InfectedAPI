@@ -33,7 +33,7 @@ class Localization {
 
 		// Check if language exists, if not fallback to default language.
 		if (!file_exists($filename)) {
-		    $filename = $path . self::$defaultLanguage . '.json';
+			$filename = $path . self::$defaultLanguage . '.json';
 		}
 
 		// Fetch the language json file as an array.

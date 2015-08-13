@@ -8,12 +8,12 @@
  * modify it under the terms of the GNU Lesser General Public
  * License as published by the Free Software Foundation; either
  * version 3.0 of the License, or (at your option) any later version.
- * 
+ *
  * This library is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
  * Lesser General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU Lesser General Public
  * License along with this library.  If not, see <http://www.gnu.org/licenses/>.
  */
@@ -25,9 +25,9 @@ require_once 'objects/object.php';
 
 class Avatar extends Object {
 	private $userId;
-	private $file;
+	private $fileName;
 	private $state;
-	
+
 	/*
 	 * Returns the user this avatar belongs to.
 	 */
@@ -39,28 +39,28 @@ class Avatar extends Object {
 	 * Returns the avatar image in HD.
 	 */
 	public function getHd() {
-		return Settings::avatar_path . 'hd/' . $this->file;
+		return Settings::avatar_path . 'hd/' . $this->getFileName();
 	}
-	
+
 	/*
 	 * Returns the avatar image in SD.
 	 */
 	public function getSd() {
-		return Settings::avatar_path . 'sd/' . $this->file;
+		return Settings::avatar_path . 'sd/' . $this->getFileName();
 	}
-	
+
 	/*
 	 * Returns the avatar image as thumbnail.
 	 */
 	public function getThumbnail() {
-		return Settings::avatar_path . 'thumbnail/' . $this->file;
+		return Settings::avatar_path . 'thumbnail/' . $this->getFileName();
 	}
 
 	/*
 	 * Returns the avatar temporarily image.
 	 */
 	public function getTemp() {
-		return Settings::avatar_path . 'temp/' . $this->file;
+		return Settings::avatar_path . 'temp/' . $this->getFileName();
 	}
 
 	/*
@@ -73,38 +73,26 @@ class Avatar extends Object {
 	/*
 	 * Returns the avatar temporarily image.
 	 */
-	public function setState($newstatus) { // TODO: We don't make SQL queries in object files.
-		$database = Database::open(Settings::db_name_infected_crew);
-		
-		$database->query('UPDATE `' . Settings::db_table_infected_crew_avatars . '` 
-					      SET `state` = ' . $con->real_escape_string($newstatus) . ' 
-					      WHERE id = \'' . $this->getId() . '\'');
+	public function setState($state) {
+		$this->state = $state;
 
-		$this->state = $newstatus;
-		
-		$database->close();
+		AvatarHandler::updateAvatar($this, $state, $this->getFileName());
 	}
 
 	/*
 	 * Returns the filename of this avatar.
 	 */
 	public function getFileName() {
-		return $this->file;
+		return $this->fileName;
 	}
-	
+
 	/*
 	 * Sets the filename of this avatar.
 	 */
- 	public function setFileName($newName) { // TODO: We don't make SQL queries in object files.
- 		$database = Database::open(Settings::db_name_infected_crew);
+ 	public function setFileName($fileName) {
+		$this->fileName = $fileName;
 
- 		$database->query('UPDATE `' . Settings::db_table_infected_crew_avatars . '` 
- 						  SET `file` = \'' . $con->real_escape_string($newName) . '\' 
- 						  WHERE `id` = \'' . $this->getId() . '\';');
-		
-		$this->file  = $newName;
-
-		$database->close();
+ 		AvatarHandler::updateAvatar($this, $this->getState(), $fileName);
 	}
 
 	/*

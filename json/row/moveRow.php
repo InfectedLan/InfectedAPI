@@ -35,7 +35,7 @@ if (Session::isAuthenticated()) {
 			
 			if ($row != null) {
 				if (isset($_GET['x']) && 
-				    isset($_GET['y'])) {
+					isset($_GET['y'])) {
 					RowHandler::updateRow($row,  $_GET['x'], $_GET['y']);
 					$result = true;
 				} else {

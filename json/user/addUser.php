@@ -63,17 +63,17 @@ if (isset($_GET['firstname']) &&
 	$confirmEmail = $_GET['confirmemail'];
 	$gender = $_GET['gender'];
 	$birthdate = $_GET['birthyear'] . '-' . $_GET['birthmonth'] . '-' . $_GET['birthday']; 
-	$phone = $_GET['phone'];
+	$phone = str_replace('+47', '', str_replace(' ', '', $_GET['phone']));
 	$address = ucfirst($_GET['address']);
 	$postalcode = $_GET['postalcode'];
 	$nickname = !empty($_GET['nickname']) ? $_GET['nickname'] : $username;
-	$emergencycontactphone = isset($_GET['emergencycontactphone']) ? $_GET['emergencycontactphone'] : null;
+	$emergencycontactphone = isset($_GET['emergencycontactphone']) ? str_replace('+47', '', str_replace(' ', '', $_GET['emergencycontactphone'])) : null;
 	
-	if (UserHandler::userExists($username)) {
+	if (UserHandler::hasUser($username)) {
 		$message = Localization::getLocale('the_username_is_already_in_use_by_someone_else');
-	} else if (UserHandler::userExists($email)) {
+	} else if (UserHandler::hasUser($email)) {
 		$message = Localization::getLocale('the_email_address_is_already_in_use_by_someone_else');
-	} else if (UserHandler::userExists($phone)) {
+	} else if (UserHandler::hasUser($phone)) {
 		$message = Localization::getLocale('the_phone_number_is_already_in_use_by_someone_else');
 	} else if (empty($firstname) || strlen($firstname) > 32) {
 		$message = Localization::getLocale('you_must_enter_a_first_name');

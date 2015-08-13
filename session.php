@@ -18,6 +18,7 @@
  * License along with this library.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+require_once 'handlers/userhandler.php';
 require_once 'objects/user.php';
 
 session_start();
@@ -30,6 +31,7 @@ class Session {
 	 * Returns true if the current user is authenticated.
 	 */
 	public static function isAuthenticated() {
+		// Check if we remember this user.
 		return isset($_SESSION['user']);
 	}
 	
@@ -48,7 +50,7 @@ class Session {
 			return $_SESSION['user'];
 		}
 	}
-	
+
 	/*
 	 * Reloads the current user from database.
 	 */

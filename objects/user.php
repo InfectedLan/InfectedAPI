@@ -8,12 +8,12 @@
  * modify it under the terms of the GNU Lesser General Public
  * License as published by the Free Software Foundation; either
  * version 3.0 of the License, or (at your option) any later version.
- * 
+ *
  * This library is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
  * Lesser General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU Lesser General Public
  * License along with this library.  If not, see <http://www.gnu.org/licenses/>.
  */
@@ -45,148 +45,146 @@ class User extends Object {
 	private $postalcode;
 	private $nickname;
 	private $registereddate;
-	
-	/* 
+
+	/*
 	 * Returns the users firstname.
 	 */
 	public function getFirstname() {
 		return $this->firstname;
 	}
-	
-	/* 
+
+	/*
 	 * Returns the users lastname.
 	 */
 	public function getLastname() {
 		return $this->lastname;
 	}
-	
-	/* 
+
+	/*
 	 * Returns the users username
 	 */
 	public function getUsername() {
 		return $this->username;
 	}
-	
-	/* 
-	 * Returns the users password as a sha256 hash. 
+
+	/*
+	 * Returns the users password as a sha256 hash.
 	 */
 	public function getPassword() {
 		return $this->password;
 	}
-	
-	/* 
+
+	/*
 	 * Returns the users email address.
 	 */
 	public function getEmail() {
 		return $this->email;
 	}
-	
-	/* 
+
+	/*
 	 * Returns the users birthdate.
 	 */
 	public function getBirthdate() {
 		return strtotime($this->birthdate);
 	}
-	
-	/* 
+
+	/*
 	 * Returns the users gender.
 	 */
 	public function getGender() {
-		return $this->gender;
+		return $this->gender ? true : false;
 	}
-	
-	/* 
+
+	/*
 	 * Returns the users gendername.
 	 */
 	public function getGenderAsString() {
 		return $this->getGender() == 0 ? 'Gutt' : 'Jente';
 	}
-	
-	/* 
+
+	/*
 	 * Returns the users phone number, if hidden it return zero.
 	 */
 	public function getPhone() {
 		return !UserOptionHandler::isPhoneHidden($this) ? $this->phone : 0;
 	}
-	
-	/* 
+
+	/*
 	 * Returns the users phone number formatted as a string.
 	 */
 	public function getPhoneAsString() {
-		$phone = $this->getPhone();
-		
-		return $phone != 0 ? chunk_split($phone, 2, ' ') : 'Skjult nummer';
+		return rtrim(chunk_split($this->getPhone(), 2, ' '));
 	}
-	
+
 	/*
 	 * Returns the users address.
 	 */
 	public function getAddress() {
 		return $this->address;
 	}
-	
-	/* 
+
+	/*
 	 * Returns the users postalcode.
 	 */
 	public function getPostalCode() {
 		return sprintf('%04u', $this->postalcode);
 	}
-	
-	/* 
+
+	/*
 	 * Returns the users city, based on the postalcode.
 	 */
 	public function getCity() {
 		return CityDictionary::getCity($this->getPostalCode());
 	}
-	
-	/* 
+
+	/*
 	 * Returns the users nickname.
 	 */
 	public function getNickname() {
 		return $this->nickname;
 	}
-	
+
 	/*
 	 * Returns the date which this user was registered.
 	 */
 	public function getRegisteredDate() {
 		return strtotime($this->registereddate);
 	}
-	
+
 	/*
 	 * Returns users fullname.
 	 */
 	public function getFullName() {
 		return $this->getFirstname() . ' ' . $this->getLastname();
 	}
-	
-	/* 
+
+	/*
 	 * Returns users displayname.
 	 */
 	public function getDisplayName() {
 		return $this->getFirstname() . ' "' . $this->getUsername() . '" ' . $this->getLastname();
 	}
-	
-	/* 
+
+	/*
 	 * Returns the users age.
 	 */
 	public function getAge() {
 		return date_diff(date_create(date('Y-m-d', $this->getBirthdate())), date_create('now'))->y;
 	}
-	
-	/* 
+
+	/*
 	 * Returns true if the given users account is activated.
 	 */
 	public function isActivated() {
 		return !RegistrationCodeHandler::hasRegistrationCodeByUser($this);
 	}
-	
-	/* 
+
+	/*
 	 * Returns true if user have specified permission, otherwise false.
 	 */
 	public function hasPermission($value) {
 		// Prevent users from using permission if they are not a group member or is god.
-		if ($this->isGroupMember() || 
+		if ($this->isGroupMember() ||
 			UserPermissionHandler::hasUserPermissionByValue($this, '*')) {
 
 			// Match wildcard permissions, if value is admin.permissions and user has permission "admin.*" this would return true.
@@ -214,69 +212,69 @@ class User extends Object {
 					return preg_match('/^' . $allowed . '\./', $value);
 				}
 			}
-			
+
 			return UserPermissionHandler::hasUserPermissionByValue($this, $value);
 		}
 
 		return false;
 	}
-	
-	/* 
+
+	/*
 	 * Returns the permissions assigned to this user.
 	 */
 	public function getPermissions() {
 		return UserPermissionHandler::getUserPermissions($this);
 	}
-	
+
 	/*
 	 * Returns true if user has an emergency contact linked to this account.
 	 */
 	public function hasEmergencyContact() {
 		return EmergencyContactHandler::hasEmergencyContactByUser($this);
 	}
-	
+
 	/*
 	 * Returns emergency contact linked to this account.
 	 */
 	public function getEmergencyContact() {
 		return EmergencyContactHandler::getEmergencyContactByUser($this);
 	}
-	
+
 	/*
 	 * Returns true if user has an ticket for the current/upcoming event.
 	 */
 	public function hasTicket() {
 		return TicketHandler::hasTicketByUser($this);
 	}
-	
+
 	/*
 	 * Returns the first ticket for the current/upcoming event found for ths user.
 	 */
 	public function getTicket() {
 		return TicketHandler::getTicketByUser($this);
 	}
-	
+
 	/*
 	 * Returns the tickets for the current/upcoming event linked to this account.
 	 */
 	public function getTickets() {
 		return TicketHandler::getTicketsByUser($this);
 	}
-	
+
 	/*
 	 * Returns true if users has a seat.
 	 */
 	public function hasSeat() {
 		return self::getTicket()->isSeated();
 	}
-	
+
 	/*
 	 * Sends an mail to the users address with an activation link.
 	 */
 	public function sendRegistrationMail() {
 		// Put the code in the database.
 		$code = RegistrationCodeHandler::createRegistrationCode($this);
-		
+
 		// Send an email to the user with a link for resetting the password.
 		$url = 'https://' . $_SERVER['HTTP_HOST'] . '/v2/index.php?page=activation&code=' . $code;
 		$message = array();
@@ -288,17 +286,17 @@ class User extends Object {
 				$message[] = '<p>Med vennlig hilsen <a href="http://infected.no/">Infected</a>.</p>';
 			$message[] = '</body>';
 		$message[] = '</html>';
-			
+
 		return MailManager::sendMail($this, 'Infected registrering', implode("\r\n", $message));
 	}
-	
+
 	/*
 	 * Sends a mail to the user with a link where they can reset the password.
 	 */
 	public function sendPasswordResetMail() {
 		// Put the code in the database.
 		$code = PasswordResetCodeHandler::createPasswordResetCode($this);
-		
+
 		// Send an email to the user with a link for resetting the password.
 		$url = 'https://' . $_SERVER['HTTP_HOST'] . '/v2/index.php?page=reset-password&code=' . $code;
 		$message = array();
@@ -310,10 +308,10 @@ class User extends Object {
 				$message[] = '<p>Med vennlig hilsen <a href="http://infected.no/">Infected</a>.</p>';
 			$message[] = '</body>';
 		$message[] = '</html>';
-			
+
 		return MailManager::sendMail($this, 'Infected tilbakestilling av passord', implode("\r\n", $message));
 	}
-	
+
 	/*
 	 * Sends a mail to the user that the avatar was accepted or rejected, depening on the accepted boolean.
 	 */
@@ -323,7 +321,7 @@ class User extends Object {
 		} else {
 			$text = 'Din avatar på <a href="' . $_SERVER['HTTP_HOST'] . '">' . $_SERVER['HTTP_HOST'] . '</a> ble ikke godkjent, vennligst last opp en ny en.';
 		}
-	
+
 		$message = array();
 		$message[] = '<!DOCTYPE html>';
 		$message[] = '<html>';
@@ -333,31 +331,31 @@ class User extends Object {
 				$message[] = '<p>Med vennlig hilsen <a href="http://infected.no/">Infected</a>.</p>';
 			$message[] = '</body>';
 		$message[] = '</html>';
-			
+
 		return MailManager::sendMail($this, 'Infected avatar', implode("\r\n", $message));
 	}
-	
+
 	/*
 	 * Returns true if the user has an avatar.
 	 */
 	public function hasAvatar() {
 		return AvatarHandler::hasAvatar($this);
 	}
-	
+
 	/*
 	 * Returns true if the user has an successfully cropped avatar.
 	 */
 	public function hasCroppedAvatar() {
 		return AvatarHandler::hasCroppedAvatar($this);
 	}
-	
+
 	/*
 	 * Returns true if the user has an accpeted avatar.
 	 */
 	public function hasValidAvatar() {
 		return AvatarHandler::hasValidAvatar($this);
 	}
-	
+
 	/*
 	 * Returns the avatar linked to this user.
 	 */
@@ -365,90 +363,97 @@ class User extends Object {
 		return AvatarHandler::getAvatarByUser($this);
 	}
 
-	/* 
+	/*
+	 * Returns the default avatar, determined by gender of this user.
+	 */
+	public function getDefaultAvatar() {
+		return AvatarHandler::getDefaultAvatar($this);
+	}
+
+	/*
 	 * Returns the users group for the fiven event.
 	 */
 	public function getGroupByEvent(Event $event) {
 		return GroupHandler::getGroupByEventAndUser($event, $this);
 	}
 
-	/* 
+	/*
 	 * Returns the users group.
 	 */
 	public function getGroup() {
 		return $this->getGroupByEvent(EventHandler::getCurrentEvent());
 	}
-	
-	/* 
+
+	/*
 	 * Is member of a group for the given event.
 	 */
 	public function isGroupMemberByEvent(Event $event) {
 		return GroupHandler::isGroupMemberByEvent($event, $this);
 	}
 
-	/* 
+	/*
 	 * Is member of a group.
 	 */
 	public function isGroupMember() {
 		return $this->isGroupMemberByEvent(EventHandler::getCurrentEvent());
 	}
-	
-	/* 
+
+	/*
 	 * Return true if user is leader of a group for the given event.
 	 */
 	public function isGroupLeaderByEvent(Event $event) {
 		return GroupHandler::isGroupLeaderByEvent($event, $this);
 	}
 
-	/* 
+	/*
 	 * Return true if user is leader of a group.
 	 */
 	public function isGroupLeader() {
 		return $this->isGroupLeaderByEvent(EventHandler::getCurrentEvent());
 	}
-	
-	/* 
+
+	/*
 	 * Return true if user is co-leader of a group for the given event.
 	 */
 	public function isGroupCoLeaderByEvent(Event $event) {
 		return GroupHandler::isGroupCoLeaderByEvent($event, $this);
 	}
 
-	/* 
+	/*
 	 * Return true if user is co-leader of a group.
 	 */
 	public function isGroupCoLeader() {
 		return $this->isGroupCoLeaderByEvent(EventHandler::getCurrentEvent());
 	}
-	
-	/* 
+
+	/*
 	 * Returns the team for the given event.
 	 */
 	public function getTeamByEvent(Event $event) {
 		return TeamHandler::getTeamByEventAndUser($event, $this);
 	}
 
-	/* 
+	/*
 	 * Returns the team.
 	 */
 	public function getTeam() {
 		return $this->getTeamByEvent(EventHandler::getCurrentEvent());
 	}
-	
-	/* 
+
+	/*
 	 * Is member of a team for the given event.
 	 */
 	public function isTeamMemberByEvent(Event $event) {
 		return TeamHandler::isTeamMemberByEvent($event, $this);
 	}
 
-	/* 
+	/*
 	 * Is member of a team.
 	 */
 	public function isTeamMember() {
 		return $this->isTeamMemberByEvent(EventHandler::getCurrentEvent());
 	}
-	
+
 	/*
 	 * Return true if user is leader of a team for the given event.
 	 */
@@ -462,8 +467,22 @@ class User extends Object {
 	public function isTeamLeader() {
 		return $this->isTeamMemberByEvent(EventHandler::getCurrentEvent());
 	}
+
+	public function hasRoleByEvent(Event $event) {
+		if ($this->isGroupMemberByEvent($event)) {
+			return $this->isGroupLeaderByEvent($event) ||
+						$this->isGroupCoLeaderByEvent($event) ||
+						($this->isTeamMemberByEvent($event) && $this->isTeamLeaderByEvent($event));
+		}
+
+		return false;
+	}
+
+	public function hasRole() {
+		return $this->hasRoleByEvent(EventHandler::getCurrentEvent());
+	}
 	
-	/* 
+	/*
 	 * Returns the name of the users position.
 	 */
 	public function getRoleByEvent(Event $event) {
@@ -474,30 +493,22 @@ class User extends Object {
 				$role = 'Leder i ' . $group->getTitle();
 			} else if ($this->isGroupCoLeaderByEvent($event)) {
 				$role = 'Co-leder i ' . $group->getTitle();
-			} else if ($this->isTeamLeaderByEvent($event)) {
-				$role = 'Lag-leder i ' . $group->getTitle();
-			} else {
-				$role = 'Medlem av ' . $group->getTitle();
+			} else if ($this->isTeamMemberByEvent($event) &&
+				$this->isTeamLeaderByEvent($event)) {
+				$team = $this->getTeam();
+
+				$role = 'Lag-leder i ' . $group->getTitle() . ":" . $team->getTitle();
 			}
-		} else {
-			$role = 'Deltaker';
 		}
 
 		return $role;
 	}
 
-	/* 
+	/*
 	 * Returns the name of the users position.
 	 */
 	public function getRole() {
-		return $this->getPositionByEvent(EventHandler::getCurrentEvent());
-	}
-
-	/* 
-	 * This function is replaced by getRole(), this is deprecated and only kept for compatibility reasons and should be removed soon.
-	 */
-	public function getPosition() {
-		return $this->getRole();
+		return $this->getRoleByEvent(EventHandler::getCurrentEvent());
 	}
 
 	/*
@@ -507,7 +518,7 @@ class User extends Object {
 		return $this->hasTicket() || $this->isGroupMember();
 	}
 
-	/* 
+	/*
 	 * Returns the full name with nickname instead of username for use in compos.
 	 */
 	public function getCompoDisplayName() {

@@ -56,7 +56,7 @@ class Clan extends EventObject {
 	 * Return the compo of this clan.
 	 */
 	public function getCompo() {
-		return ClanHandler::getCompo($this);
+		return CompoHandler::getCompoByClan($this);
 	}
 
 	/*
@@ -66,19 +66,19 @@ class Clan extends EventObject {
 		return ClanHandler::getClanMembers($this);
 	}
 
-    /*
-     * Returns a list of all playing members of this clan.
-     */
-    public function getPlayingMembers() {
-    	return ClanHandler::getPlayingClanMembers($this);
-    }
+	/*
+	 * Returns a list of all playing members of this clan.
+	 */
+	public function getPlayingMembers() {
+		return ClanHandler::getPlayingClanMembers($this);
+	}
 
-    /*
-     * Returns a list of all step in members of this clan.
-     */
-    public function getStepInMembers() {
-    	return ClanHandler::getStepInClanMembers($this);
-    }
+	/*
+	 * Returns a list of all step in members of this clan.
+	 */
+	public function getStepInMembers() {
+		return ClanHandler::getStepInClanMembers($this);
+	}
 
 	/*
 	 * Returns a list of all invites to this clan.
@@ -87,12 +87,12 @@ class Clan extends EventObject {
 		return ClanHandler::getInvitesByClan($this);
 	}
 
-    /*
-     * Set the step in state of a member.
-     */
-    public static function setStepInMemberState(User $user, $state) {
+	/*
+	 * Set the step in state of a member.
+	 */
+	public static function setStepInMemberState(User $user, $state) {
  		ClanHandler::setStepInMemberState($this, $user, $state);
-    }
+	}
 
 	/*
 	 * Returns true if this clan is qualified for specified compo.
@@ -116,18 +116,18 @@ class Clan extends EventObject {
 	}
 
 	/*
-     * Returns true of the specified user is member of this clan.
-     */
-    public static function isMember(User $user) {
-    	return ClanHandler::isClanMember($this, $user);
-    }
+	 * Returns true of the specified user is member of this clan.
+	 */
+	public static function isMember(User $user) {
+		return ClanHandler::isClanMember($this, $user);
+	}
 
-    /*
-     * Return true if the specified user is a stepin member of this clan.
-     */
-    public static function isStepInMember(User $user) {
-    	return ClanHandler::isStepInClanMember($this, $user);
-    }
+	/*
+	 * Return true if the specified user is a stepin member of this clan.
+	 */
+	public static function isStepInMember(User $user) {
+		return ClanHandler::isStepInClanMember($this, $user);
+	}
 
 	/*
 	 * Invite the specified user to this clan.
