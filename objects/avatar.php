@@ -39,28 +39,28 @@ class Avatar extends Object {
 	 * Returns the avatar image in HD.
 	 */
 	public function getHd() {
-		return Settings::avatar_path . 'hd/' . $this->file;
+		return Settings::avatar_path . 'hd/' . $this->getFileName();
 	}
 
 	/*
 	 * Returns the avatar image in SD.
 	 */
 	public function getSd() {
-		return Settings::avatar_path . 'sd/' . $this->file;
+		return Settings::avatar_path . 'sd/' . $this->getFileName();
 	}
 
 	/*
 	 * Returns the avatar image as thumbnail.
 	 */
 	public function getThumbnail() {
-		return Settings::avatar_path . 'thumbnail/' . $this->file;
+		return Settings::avatar_path . 'thumbnail/' . $this->getFileName();
 	}
 
 	/*
 	 * Returns the avatar temporarily image.
 	 */
 	public function getTemp() {
-		return Settings::avatar_path . 'temp/' . $this->file;
+		return Settings::avatar_path . 'temp/' . $this->getFileName();
 	}
 
 	/*
@@ -90,9 +90,9 @@ class Avatar extends Object {
 	 * Sets the filename of this avatar.
 	 */
  	public function setFileName($fileName) {
-		$this->file = $fileName;
+		$this->fileName = $fileName;
 
- 		AvatarHandler::updateAvatar($this, $this->getState(), $fileName):
+ 		AvatarHandler::updateAvatar($this, $this->getState(), $fileName);
 	}
 
 	/*
