@@ -18,11 +18,43 @@
  */
 
 var chatList = [];
+var socket;
 
-//Bootstrap
+//Bootup
 $(document).ready(function() {
 	setInterval(updateChats, 5000);
+	socket = new WebSocket("ws://127.0.0.1:1337/compoServer");
+	socket.onopen = function(msg) {
+		console.log("Socket open");
+		socketSend('{"intent": "auth", "data": ["' + getCookie("PHPSESSID") + '"]}');
+	};
+	socket.onmessage = function(msg) {
+		console.log("Recieved:");
+		console.log(msg);
+	}
+	socket.onclose = function(msg) {
+		console.log("Disconnected");
+		error("Vi mistet tilkobling til serveren. Vennligst oppdater siden for å prøve å koble til på nytt.");
+	}
 });
+function socketSend(msg) {
+	try {
+		socket.send(msg);
+	} catch(ex) {
+		log(ex);
+	}
+}
+
+function getCookie(cname) {
+    var name = cname + "=";
+    var ca = document.cookie.split(';');
+    for(var i=0; i<ca.length; i++) {
+        var c = ca[i];
+        while (c.charAt(0)==' ') c = c.substring(1);
+        if (c.indexOf(name) == 0) return c.substring(name.length,c.length);
+    }
+    return "";
+}
 
 function createChat(divId, chatId, height) {
 	for(var i = 0; i < chatList.length; i++) {
