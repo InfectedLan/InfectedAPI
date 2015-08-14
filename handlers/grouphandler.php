@@ -33,7 +33,7 @@ class GroupHandler {
 		$database = Database::open(Settings::db_name_infected_crew);
 
 		$result = $database->query('SELECT * FROM `' . Settings::db_table_infected_crew_groups . '`
-									WHERE `id` = \'' . $database->real_escape_string($id) . '\';');
+																WHERE `id` = \'' . $database->real_escape_string($id) . '\';');
 
 		$database->close();
 
@@ -47,10 +47,10 @@ class GroupHandler {
 		$database = Database::open(Settings::db_name_infected_crew);
 
 		$result = $database->query('SELECT * FROM `' . Settings::db_table_infected_crew_groups . '`
-									WHERE `id` = (SELECT `groupId` FROM `' . Settings::db_table_infected_crew_memberof . '` 
-												  WHERE `eventId` = \'' . $event->getId() . '\'
-												  AND `userId` = \'' . $user->getId() . '\'
-												  LIMIT 1);');
+																WHERE `id` = (SELECT `groupId` FROM `' . Settings::db_table_infected_crew_memberof . '`
+																						  WHERE `eventId` = \'' . $event->getId() . '\'
+																						  AND `userId` = \'' . $user->getId() . '\'
+																						  LIMIT 1);');
 
 		$database->close();
 
@@ -71,8 +71,8 @@ class GroupHandler {
 		$database = Database::open(Settings::db_name_infected_crew);
 
 		$result = $database->query('SELECT * FROM `' . Settings::db_table_infected_crew_groups . '`
-									WHERE `eventId` = \'' . $event->getId() . '\'
-									ORDER BY `name`;');
+																WHERE `eventId` = \'' . $event->getId() . '\'
+																ORDER BY `name`;');
 
 		$database->close();
 
@@ -99,12 +99,12 @@ class GroupHandler {
 		$database = Database::open(Settings::db_name_infected_crew);
 
 		$database->query('INSERT INTO `' . Settings::db_table_infected_crew_groups . '` (`eventId`, `name`, `title`, `description`, `leaderId`, `coleaderId`)
-						  VALUES (\'' . $event->getId() . '\',
-								  \'' . $database->real_escape_string($name) . '\',
-								  \'' . $database->real_escape_string($title) . '\',
-								  \'' . $database->real_escape_string($description) . '\',
-								  \'' . ($leaderUser != null ? $leaderUser->getId() : 0) . '\',
-												\'' . ($coleaderUser != null ? $coleaderUser->getId() : 0) . '\');');
+										  VALUES (\'' . $event->getId() . '\',
+														  \'' . $database->real_escape_string($name) . '\',
+														  \'' . $database->real_escape_string($title) . '\',
+														  \'' . $database->real_escape_string($description) . '\',
+														  \'' . ($leaderUser != null ? $leaderUser->getId() : 0) . '\',
+															\'' . ($coleaderUser != null ? $coleaderUser->getId() : 0) . '\');');
 
 		$group = self::getGroup($database->insert_id);
 
@@ -120,12 +120,12 @@ class GroupHandler {
 		$database = Database::open(Settings::db_name_infected_crew);
 
 		$database->query('UPDATE `' . Settings::db_table_infected_crew_groups . '`
-		  						  SET `name` = \'' . $database->real_escape_string($name) . '\',
-		  								`title` = \'' . $database->real_escape_string($title) . '\',
-		  								`description` = \'' . $database->real_escape_string($description) . '\',
-		  								`leaderId` = \'' . ($leaderUser != null ? $leaderUser->getId() : 0) . '\',
-		  								`coleaderId` = \'' . ($coleaderUser != null ? $coleaderUser->getId() : 0) . '\'
-		  						  WHERE `id` = \'' . $group->getId() . '\';');
+			  						  SET `name` = \'' . $database->real_escape_string($name) . '\',
+				  								`title` = \'' . $database->real_escape_string($title) . '\',
+				  								`description` = \'' . $database->real_escape_string($description) . '\',
+				  								`leaderId` = \'' . ($leaderUser != null ? $leaderUser->getId() : 0) . '\',
+				  								`coleaderId` = \'' . ($coleaderUser != null ? $coleaderUser->getId() : 0) . '\'
+			  						  WHERE `id` = \'' . $group->getId() . '\';');
 
 		$database->close();
 	}
@@ -137,7 +137,7 @@ class GroupHandler {
 		$database = Database::open(Settings::db_name_infected_crew);
 
 		$database->query('DELETE FROM `' . Settings::db_table_infected_crew_groups . '`
-						  WHERE `id` = \'' . $group->getId() . '\';');
+						  				WHERE `id` = \'' . $group->getId() . '\';');
 
 		$database->close();
 	}
@@ -149,11 +149,11 @@ class GroupHandler {
 		$database = Database::open(Settings::db_name_infected);
 
 		$result = $database->query('SELECT `' . Settings::db_table_infected_users . '`.* FROM `' . Settings::db_table_infected_users . '`
-									LEFT JOIN `' . Settings::db_name_infected_crew . '`.`' . Settings::db_table_infected_crew_memberof . '`
-									ON `' . Settings::db_table_infected_users . '`.`id` = `userId`
-									WHERE `eventId` = \'' . $event->getId() . '\'
-									AND `groupId` = \'' . $group->getId() . '\'
-									ORDER BY `firstname` ASC;');
+																LEFT JOIN `' . Settings::db_name_infected_crew . '`.`' . Settings::db_table_infected_crew_memberof . '`
+																ON `' . Settings::db_table_infected_users . '`.`id` = `userId`
+																WHERE `eventId` = \'' . $event->getId() . '\'
+																AND `groupId` = \'' . $group->getId() . '\'
+																ORDER BY `firstname` ASC;');
 
 		$database->close();
 
@@ -180,8 +180,8 @@ class GroupHandler {
 		$database = Database::open(Settings::db_name_infected_crew);
 
 		$result = $database->query('SELECT `id` FROM `' . Settings::db_table_infected_crew_memberof . '`
-									WHERE `eventId` = \'' . $event->getId() . '\'
-									AND `userId` = \'' . $user->getId() . '\';');
+																WHERE `eventId` = \'' . $event->getId() . '\'
+																AND `userId` = \'' . $user->getId() . '\';');
 
 		$database->close();
 
@@ -202,8 +202,8 @@ class GroupHandler {
 		$database = Database::open(Settings::db_name_infected_crew);
 
 		$result = $database->query('SELECT `id` FROM `' . Settings::db_table_infected_crew_groups . '`
-									WHERE `eventId` = \'' . $event->getId() . '\'
-									AND `leaderId` = \'' . $user->getId() . '\';');
+																WHERE `eventId` = \'' . $event->getId() . '\'
+																AND `leaderId` = \'' . $user->getId() . '\';');
 		$database->close();
 
 		return $result->num_rows > 0;
@@ -223,8 +223,8 @@ class GroupHandler {
 		$database = Database::open(Settings::db_name_infected_crew);
 
 		$result = $database->query('SELECT `id` FROM `' . Settings::db_table_infected_crew_groups . '`
-									WHERE `eventId` = \'' . $event->getId() . '\'
-									AND `coleaderId` = \'' . $user->getId() . '\';');
+																WHERE `eventId` = \'' . $event->getId() . '\'
+																AND `coleaderId` = \'' . $user->getId() . '\';');
 
 		$database->close();
 
@@ -246,16 +246,16 @@ class GroupHandler {
 
 		if ($user->isGroupMember()) {
 			$database->query('UPDATE `' . Settings::db_table_infected_crew_memberof . '`
-							  SET `groupId` = \'' . $group->getId() . '\',
-								  `teamId` = \'0\'
-							  WHERE `eventId` = \'' . EventHandler::getCurrentEvent()->getId() . '\'
-							  AND `userId` = \'' . $user->getId() . '\';');
+											  SET `groupId` = \'' . $group->getId() . '\',
+												  	`teamId` = \'0\'
+											  WHERE `eventId` = \'' . EventHandler::getCurrentEvent()->getId() . '\'
+											  AND `userId` = \'' . $user->getId() . '\';');
 		} else {
 			$database->query('INSERT INTO `' . Settings::db_table_infected_crew_memberof . '` (`eventId`, `userId`, `groupId`, `teamId`)
-							  VALUES (\'' . EventHandler::getCurrentEvent()->getId() . '\',
-													  \'' . $user->getId() . '\',
-									  \'' . $group->getId() . '\',
-									  \'0\');');
+											  VALUES (\'' . EventHandler::getCurrentEvent()->getId() . '\',
+																\'' . $user->getId() . '\',
+													  		\'' . $group->getId() . '\',
+													  		\'0\');');
 		}
 
 		$database->close();
@@ -268,8 +268,8 @@ class GroupHandler {
 		$database = Database::open(Settings::db_name_infected_crew);
 
 		$database->query('DELETE FROM `' . Settings::db_table_infected_crew_memberof . '`
-						  WHERE `eventId` = \'' . EventHandler::getCurrentEvent()->getId() . '\'
-									AND `userId` = \'' . $user->getId() . '\';');
+										  WHERE `eventId` = \'' . EventHandler::getCurrentEvent()->getId() . '\'
+											AND `userId` = \'' . $user->getId() . '\';');
 
 		$database->close();
 	}
@@ -281,8 +281,8 @@ class GroupHandler {
 		$database = Database::open(Settings::db_name_infected_crew);
 
 		$database->query('DELETE FROM `' . Settings::db_table_infected_crew_memberof . '`
-						  WHERE `eventId` = \'' . EventHandler::getCurrentEvent()->getId() . '\'
-						  AND `groupId` = \'' . $group->getId() . '\';');
+										  WHERE `eventId` = \'' . EventHandler::getCurrentEvent()->getId() . '\'
+										  AND `groupId` = \'' . $group->getId() . '\';');
 
 		$database->close();
 	}

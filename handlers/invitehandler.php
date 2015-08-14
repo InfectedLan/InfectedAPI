@@ -33,7 +33,7 @@ class InviteHandler {
 		$database = Database::open(Settings::db_name_infected_compo);
 
 		$result = $database->query('SELECT * FROM `' . Settings::db_table_infected_compo_invites . '`
-									WHERE `id` = \'' . $id . '\';');
+																WHERE `id` = \'' . $id . '\';');
 
 		$database->close();
 
@@ -66,7 +66,7 @@ class InviteHandler {
 		$database = Database::open(Settings::db_name_infected_compo);
 
 		$result = $database->query('SELECT * FROM `'  . Settings::db_table_infected_compo_invites . '`
-									WHERE `userId` = \'' . $user->getId() . '\';');
+																WHERE `userId` = \'' . $user->getId() . '\';');
 
 		$database->close();
 
@@ -86,7 +86,7 @@ class InviteHandler {
 		$database = Database::open(Settings::db_name_infected_compo);
 
 		$result = $database->query('SELECT * FROM `' . Settings::db_table_infected_compo_invites . '`
-									WHERE `clanId` = \'' . $clan->getId() . '\';');
+																WHERE `clanId` = \'' . $clan->getId() . '\';');
 
 		$database->close();
 
@@ -106,9 +106,9 @@ class InviteHandler {
 		$database = Database::open(Settings::db_name_infected_compo);
 
 		$database->query('INSERT INTO `' . Settings::db_table_infected_compo_invites . '` (`eventId`, `userId`, `clanId`)
-						  VALUES (\'' . EventHandler::getCurrentEvent()->getId() . '\',
-								  \'' . $user->getId() . '\',
-								  \'' . $clan->getId() . '\');');
+										  VALUES (\'' . EventHandler::getCurrentEvent()->getId() . '\',
+														  \'' . $user->getId() . '\',
+														  \'' . $clan->getId() . '\');');
 
 		$database->close();
 	}

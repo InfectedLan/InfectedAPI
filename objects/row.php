@@ -8,12 +8,12 @@
  * modify it under the terms of the GNU Lesser General Public
  * License as published by the Free Software Foundation; either
  * version 3.0 of the License, or (at your option) any later version.
- * 
+ *
  * This library is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
  * Lesser General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU Lesser General Public
  * License along with this library.  If not, see <http://www.gnu.org/licenses/>.
  */
@@ -23,11 +23,25 @@ require_once 'handlers/seatmaphandler.php';
 require_once 'objects/object.php';
 
 class Row extends Object {
+	private $seatmapId;
+	private $entranceId;
 	private $number;
 	private $x;
 	private $y;
-	private $entranceId;
-	private $seatmapId;
+
+	/*
+	 * Returns the seatmap the section belongs to.
+	 */
+	public function getSeatmap() {
+		return SeatmapHandler::getSeatmap($this->seatmapId);
+	}
+
+	/*
+	 * Returns the row of the section.
+	 */
+	public function getEntrance() {
+		return EntranceHandler::getEntrance($this->entranceId);
+	}
 
 	/*
 	 * Returns the row of the section.
@@ -35,7 +49,7 @@ class Row extends Object {
 	public function getNumber() {
 		return $this->number;
 	}
-	
+
 	/*
 	 * Returns the x coordinate of the section.
 	 */
@@ -48,20 +62,6 @@ class Row extends Object {
 	 */
 	public function getY() {
 		return $this->y;
-	}
-
-	/*
-	 * Returns the row of the section.
-	 */
-	public function getEntrance() {
-		return EntranceHandler::getEntrance($this->entranceId);
-	}
-
-	/*
-	 * Returns the seatmap the section belongs to.
-	 */
-	public function getSeatmap() {
-		return SeatmapHandler::getSeatmap($this->seatmapId);
 	}
 
 	/*

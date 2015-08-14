@@ -32,7 +32,7 @@ class SeatHandler {
 		$database = Database::open(Settings::db_name_infected_tickets);
 
 		$result = $database->query('SELECT * FROM `' . Settings::db_table_infected_tickets_seats . '`
-									WHERE `id` = \'' . $database->real_escape_string($id) . '\';');
+																WHERE `id` = \'' . $database->real_escape_string($id) . '\';');
 
 		$database->close();
 
@@ -65,7 +65,7 @@ class SeatHandler {
 		$database = Database::open(Settings::db_name_infected_tickets);
 
 		$result = $database->query('SELECT * FROM `' . Settings::db_table_infected_tickets_seats . '`
-									WHERE `rowId` = \'' . $row->getId() . '\';');
+																WHERE `rowId` = \'' . $row->getId() . '\';');
 
 		$database->close();
 
@@ -86,17 +86,17 @@ class SeatHandler {
 
 		// Find out what seat number we are at.
 		$highestSeatNum = $database->query('SELECT `number` FROM `' . Settings::db_table_infected_tickets_seats . '`
-											WHERE `rowId` = ' . $row->getId() . '
-											ORDER BY `number` DESC
-											LIMIT 1;');
+																				WHERE `rowId` = \'' . $row->getId() . '\'
+																				ORDER BY `number` DESC
+																				LIMIT 1;');
 
 		$seatRow = $database->fetch_array($highestSeatNum);
 
 		$newSeatNumber = $seatRow['number'] + 1;
 
 		$database->query('INSERT INTO `' . Settings::db_table_infected_tickets_seats . '` (`rowId`, `number`)
-						  VALUES (\'' . $row->getId() . '\',
-								  \'' . $database->real_escape_string($newSeatNumber) . '\');');
+										  VALUES (\'' . $row->getId() . '\',
+												  		\'' . $database->real_escape_string($newSeatNumber) . '\');');
 
 		$database->close();
 	}
@@ -108,7 +108,7 @@ class SeatHandler {
 		$database = Database::open(Settings::db_name_infected_tickets);
 
 		$result = $database->query('DELETE FROM `' . Settings::db_table_infected_tickets_seats . '`
-									WHERE `id` = ' . $seat->getId() . ';');
+																WHERE `id` = \'' . $seat->getId() . '\';');
 
 		$database->close();
 	}
@@ -120,7 +120,7 @@ class SeatHandler {
 		$database = Database::open(Settings::db_name_infected_tickets);
 
 		$result = $database->query('SELECT `id` FROM `' . Settings::db_table_infected_tickets_tickets . '`
-									WHERE `seatId` = ' . $seat->getId() . ';');
+																WHERE `seatId` = \'' . $seat->getId() . '\';');
 
 		$row = $result->fetch_array();
 
@@ -134,7 +134,7 @@ class SeatHandler {
 		$database = Database::open(Settings::db_name_infected_tickets);
 
 		$result = $database->query('SELECT * FROM `' . Settings::db_table_infected_tickets_tickets . '`
-																WHERE `seatId` = ' . $seat->getId() . ';');
+																WHERE `seatId` = \'' . $seat->getId() . '\';');
 
 		$database->close();
 

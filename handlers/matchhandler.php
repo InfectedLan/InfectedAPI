@@ -46,7 +46,7 @@ class MatchHandler {
 		$database = Database::open(Settings::db_name_infected_compo);
 
 		$result = $database->query('SELECT * FROM `' . Settings::db_table_infected_compo_matches . '`
-								 	WHERE `id` = \'' . $id . '\';');
+								 								WHERE `id` = \'' . $id . '\';');
 
 		$database->close();
 
@@ -89,9 +89,9 @@ class MatchHandler {
 		$database = Database::open(Settings::db_name_infected_compo);
 
 		$result = $database->query('SELECT * FROM `' . Settings::db_table_infected_compo_matches . '`
-									WHERE `id` = (SELECT `matchId` FROM `' . Settings::db_table_infected_compo_participantOfMatch . '`
-												  WHERE `type` = \'' . Settings::compo_match_participant_type_clan . '\'
-												  AND `participantId` = \'' . $clan->getId() . '\');');
+																WHERE `id` = (SELECT `matchId` FROM `' . Settings::db_table_infected_compo_participantOfMatch . '`
+																						  WHERE `type` = \'' . Settings::compo_match_participant_type_clan . '\'
+																						  AND `participantId` = \'' . $clan->getId() . '\');');
 
 		$database->close();
 
@@ -108,7 +108,7 @@ class MatchHandler {
 		$database = Database::open(Settings::db_name_infected_compo);
 
 		$result = $database->query('SELECT * FROM `' . Settings::db_table_infected_compo_matches . '`
-									WHERE `compoId` = ' . $compo->getId() . ';');
+																WHERE `compoId` = ' . $compo->getId() . ';');
 
 		$database->close();
 
@@ -130,9 +130,9 @@ class MatchHandler {
 
 		//Picks matches that 'should' be running.
 		$result = $database->query('SELECT * FROM `' . Settings::db_table_infected_compo_matches . '`
-									WHERE `compoId` = \'' . $compo->getId() . '\'
-									AND `winnerId` = \'0\'
-									AND `scheduledTime` < \'' . time() . '\';');
+																WHERE `compoId` = \'' . $compo->getId() . '\'
+																AND `winnerId` = \'0\'
+																AND `scheduledTime` < \'' . time() . '\';');
 
 		$database->close();
 
@@ -152,8 +152,8 @@ class MatchHandler {
 
 		//Picks matches that 'should' be running.
 		$result = $database->query('SELECT * FROM `' . Settings::db_table_infected_compo_matches . '`
-									WHERE `compoId` = ' . $compo->getId() . '
-									AND `winnerId` != 0;');
+																WHERE `compoId` = ' . $compo->getId() . '
+																AND `winnerId` != 0;');
 
 		$database->close();
 
@@ -170,7 +170,7 @@ class MatchHandler {
 		$database = Database::open(Settings::db_name_infected_compo);
 
 		$result = $database->query('SELECT * FROM `' . Settings::db_table_infected_compo_matches . '`
-									WHERE `compoId` = \'' . $compo->getId() . '\';');
+																WHERE `compoId` = \'' . $compo->getId() . '\';');
 
 		$database->close();
 
@@ -187,9 +187,9 @@ class MatchHandler {
 		$database = Database::open(Settings::db_name_infected_compo);
 
 		$result = $database->query('SELECT `id` FROM `' . Settings::db_table_infected_compo_matches . '`
-									WHERE `id` = (SELECT `matchId` FROM `' . Settings::db_table_infected_compo_participantOfMatch . '`
-												  WHERE `type` = \'' . Settings::compo_match_participant_type_clan . '\'
-												  AND `participantId` = \'' . $clan->getId() . '\');');
+																WHERE `id` = (SELECT `matchId` FROM `' . Settings::db_table_infected_compo_participantOfMatch . '`
+																						  WHERE `type` = \'' . Settings::compo_match_participant_type_clan . '\'
+																						  AND `participantId` = \'' . $clan->getId() . '\');');
 
 		$database->close();
 
@@ -200,15 +200,15 @@ class MatchHandler {
 		$database = Database::open(Settings::db_name_infected_compo);
 
 		$database->query('INSERT INTO `' . Settings::db_table_infected_compo_participantOfMatch . '` (`type`, `participantId`, `matchId`)
-						  VALUES (\'' . $database->real_escape_string($type) . '\',
-								  \'' . $database->real_escape_string($participantId) . '\',
-								  \'' . $match->getId() . '\');');
+										  VALUES (\'' . $database->real_escape_string($type) . '\',
+														  \'' . $database->real_escape_string($participantId) . '\',
+														  \'' . $match->getId() . '\');');
 
 		if ($type != self::participantof_state_clan &&
 			$type != self::participantof_state_looser) {
 			$database->query('INSERT INTO `' . Settings::db_table_infected_compo_matchrelationships . '` (`fromCompo`, `toCompo`)
-							  VALUES (\'' . $database->real_escape_string($participantId) . '\',
-									  \'' . $match->getId() . '\');');
+											  VALUES (\'' . $database->real_escape_string($participantId) . '\',
+													  		\'' . $match->getId() . '\');');
 		}
 
 		$database->close();
@@ -219,20 +219,20 @@ class MatchHandler {
 
 		// Set winner of match
 		$database->query('UPDATE `' . Settings::db_table_infected_compo_matches . '`
-						  SET `winnerId` = \'' . $clan->getId() . '\'
-						  WHERE `id` = \'' . $match->getId() . '\';');
+										  SET `winnerId` = \'' . $clan->getId() . '\'
+										  WHERE `id` = \'' . $match->getId() . '\';');
 
 		// Update match results
 		//First, get list of matches we want to change
 		$toWinList = $database->query('SELECT * FROM `' . Settings::db_table_infected_compo_participantOfMatch . '`
-									   WHERE `type` = \'1\'
-									   AND `participantId` = \'' . $match->getId() . '\';');
+																   WHERE `type` = \'1\'
+																   AND `participantId` = \'' . $match->getId() . '\';');
 
 		while ($row = $toWinList->fetch_array()) {
 			$database->query('UPDATE `' . Settings::db_table_infected_compo_participantOfMatch . '`
-							  SET `type` = \'0\',
-								  `participantId` = \'' . $clan->getId() . '\'
-							  WHERE `id` = \'' . $row['id'] . '\';');
+											  SET `type` = \'0\',
+												  	`participantId` = \'' . $clan->getId() . '\'
+											  WHERE `id` = \'' . $row['id'] . '\';');
 
 			$checkingMatchId = MatchHandler::getMatch($row['matchId']);
 			ChatHandler::addClanMembersToChat(ChatHandler::getChat($checkingMatchId->getChat()), $clan);
@@ -254,14 +254,14 @@ class MatchHandler {
 		}
 
 		$toLooseList = $database->query('SELECT * FROM `' . Settings::db_table_infected_compo_participantOfMatch . '`
-										 WHERE `type` = \'2\'
-										 AND `participantId` = \'' . $match->getId() . '\';');
+																		 WHERE `type` = \'2\'
+																		 AND `participantId` = \'' . $match->getId() . '\';');
 
 		while ($row = $toLooseList->fetch_array()) {
 			$database->query('UPDATE `' . Settings::db_table_infected_compo_participantOfMatch . '`
-							  SET `type` = \'0\',
-								  `participantId` = \'' . $clan->getId() . '\'
-							  WHERE `id` = \'' . $row['id'] . '\';');
+											  SET `type` = \'0\',
+												  	`participantId` = \'' . $clan->getId() . '\'
+											  WHERE `id` = \'' . $row['id'] . '\';');
 
 			$checkingMatchId = MatchHandler::getMatch($row['matchId']);
 			ChatHandler::addClanMembersToChat(ChatHandler::getChat($checkingMatchId->getChat()), $clan);
@@ -278,9 +278,9 @@ class MatchHandler {
 		$database = Database::open(Settings::db_name_infected_compo);
 
 		$result = $database->query('SELECT * FROM `' . Settings::db_table_infected_compo_clans . '`
-									WHERE `id` = (SELECT `participantId` FROM `' . Settings::db_table_infected_compo_participantOfMatch . '`
-												  WHERE `matchId` = \'' . $match->getId() . '\'
-												  AND `type` = \'' . Settings::compo_match_participant_type_clan . '\');');
+																WHERE `id` = (SELECT `participantId` FROM `' . Settings::db_table_infected_compo_participantOfMatch . '`
+																						  WHERE `matchId` = \'' . $match->getId() . '\'
+																						  AND `type` = \'' . Settings::compo_match_participant_type_clan . '\');');
 
 		$database->close();
 
@@ -297,7 +297,7 @@ class MatchHandler {
 		$database = Database::open(Settings::db_name_infected_compo);
 
 		$result = $database->query('SELECT * FROM `' . Settings::db_table_infected_compo_participantOfMatch . '`
-									WHERE `matchId` = \'' . $match->getId() . '\';');
+																WHERE `matchId` = \'' . $match->getId() . '\';');
 
 		$database->close();
 
@@ -321,7 +321,7 @@ class MatchHandler {
 		$database = Database::open(Settings::db_name_infected_compo);
 
 		$result = $database->query('SELECT * FROM `' . Settings::db_table_infected_compo_participantOfMatch . '`
-									WHERE `matchId` = \'' . $match->getId() . '\';');
+																WHERE `matchId` = \'' . $match->getId() . '\';');
 
 		$database->close();
 
@@ -344,7 +344,7 @@ class MatchHandler {
 		$database = Database::open(Settings::db_name_infected_compo);
 
 		$result = $database->query('SELECT * FROM `' . Settings::db_table_infected_compo_participantOfMatch . '`
-									WHERE `matchId` = \'' . $match->getId() . '\';');
+																WHERE `matchId` = \'' . $match->getId() . '\';');
 
 		$database->close();
 
@@ -366,8 +366,8 @@ class MatchHandler {
 		$database = Database::open(Settings::db_name_infected_compo);
 
 		$result = $database->query('SELECT * FROM `' . Settings::db_table_infected_compo_matches . '`
-									WHERE `id` = (SELECT `fromCompo` FROM `' . Settings::db_table_infected_compo_matchrelationships . '`
-												  WHERE `toCompo` = \'' . $match->getId() . '\');');
+																WHERE `id` = (SELECT `fromCompo` FROM `' . Settings::db_table_infected_compo_matchrelationships . '`
+																			  			WHERE `toCompo` = \'' . $match->getId() . '\');');
 
 		$database->close();
 
@@ -385,7 +385,7 @@ class MatchHandler {
 		$database = Database::open(Settings::db_name_infected_compo);
 
 		$result = $database->query('SELECT `type` FROM `' . Settings::db_table_infected_compo_participantOfMatch . '`
-									WHERE `matchId` = \'' . $match->getId() . '\';');
+																WHERE `matchId` = \'' . $match->getId() . '\';');
 
 		$database->close();
 
@@ -408,8 +408,8 @@ class MatchHandler {
 		$database = Database::open(Settings::db_name_infected_compo);
 
 		$result = $database->query('SELECT `id` FROM `' . Settings::db_table_infected_compo_readyusers . '`
-									WHERE `userId` = \'' . $user->getId() . '\'
-									AND `matchId` = \'' . $match->getId() . '\';');
+																WHERE `userId` = \'' . $user->getId() . '\'
+																AND `matchId` = \'' . $match->getId() . '\';');
 
 		$database->close();
 
@@ -420,8 +420,8 @@ class MatchHandler {
 		$database = Database::open(Settings::db_name_infected_compo);
 
 		$result = $database->query('INSERT INTO `' . Settings::db_table_infected_compo_readyusers . '` (`userId`, `matchId`)
-									VALUES (\'' . $user->getId() . '\',
-											\'' . $match->getId() . '\');');
+																VALUES (\'' . $user->getId() . '\',
+																				\'' . $match->getId() . '\');');
 
 		$database->close();
 	}
@@ -430,18 +430,18 @@ class MatchHandler {
 		$database = Database::open(Settings::db_name_infected_compo);
 
 		$result = $database->query('SELECT * FROM `' . Settings::db_table_infected_compo_participantOfMatch . '`
-									WHERE `type` = \'0\'
-									AND `matchId` = \'' . $match->getId() . '\';');
+																WHERE `type` = \'0\'
+																AND `matchId` = \'' . $match->getId() . '\';');
 
 		// Iterate through clans
 		while ($row = $result->fetch_array()) {
 			$users = $database->query('SELECT * FROM `' . Settings::db_table_infected_compo_memberof . '`
-									   WHERE `clanId` = \'' . $row['participantId'] . '\';');
+															   WHERE `clanId` = \'' . $row['participantId'] . '\';');
 
 			while ($userRow = mysqli_fetch_array($users)) {
 				$userCheck = $database->query('SELECT * FROM `' . Settings::db_table_infected_compo_readyusers . '`
-											   WHERE `userId` = \'' . $userRow['userId'] . '\'
-											   AND `matchId` = \'' . $match->getId() . '\';');
+																		   WHERE `userId` = \'' . $userRow['userId'] . '\'
+																		   AND `matchId` = \'' . $match->getId() . '\';');
 
 			 	$row = mysqli_fetch_array($userCheck);
 
@@ -460,17 +460,17 @@ class MatchHandler {
 		$database = Database::open(Settings::db_name_infected_compo);
 
 		$database->query('INSERT INTO `' . Settings::db_table_infected_compo_matches . '` (`scheduledTime`, `connectDetails`, `state`, `winnerId`, `compoId`, `bracketOffset`, `chatId`, `bracket`)
-							VALUES (\'' . $database->real_escape_string($scheduledTime) . '\',
-									\'' . $database->real_escape_string($connectData) . '\',
-									\'' . Match::STATE_READYCHECK . '\',
-									\'0\',
-									\'' . $compo->getId() . '\',
-									\'' . $database->real_escape_string($bracketOffset) . '\',
-									\'' . $chat->getId() . '\',
-									\'' . $database->real_escape_string($bracket) . '\');');
+											VALUES (\'' . $database->real_escape_string($scheduledTime) . '\',
+															\'' . $database->real_escape_string($connectData) . '\',
+															\'' . Match::STATE_READYCHECK . '\',
+															\'0\',
+															\'' . $compo->getId() . '\',
+															\'' . $database->real_escape_string($bracketOffset) . '\',
+															\'' . $chat->getId() . '\',
+															\'' . $database->real_escape_string($bracket) . '\');');
 
 		$result = $database->query('SELECT * FROM `' . Settings::db_table_infected_compo_matches . '`
-									WHERE `id` = \'' . $database->insert_id . '\';');
+																WHERE `id` = \'' . $database->insert_id . '\';');
 
 		$database->close();
 
@@ -481,8 +481,8 @@ class MatchHandler {
 		$database = Database::open(Settings::db_name_infected_compo);
 
 		$result = $database->query('UPDATE `' . Settings::db_table_infected_compo_matches . '`
-									SET `state` = \'' . $database->real_escape_string($state) . '\'
-									WHERE `id` = \'' . $match->getId() . '\';');
+																SET `state` = \'' . $database->real_escape_string($state) . '\'
+																WHERE `id` = \'' . $match->getId() . '\';');
 
 		$database->close();
 	}

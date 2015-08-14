@@ -36,7 +36,7 @@ class TicketHandler {
 		$database = Database::open(Settings::db_name_infected_tickets);
 
 		$result = $database->query('SELECT * FROM `' . Settings::db_table_infected_tickets_tickets . '`
-									WHERE `id` = \'' . $database->real_escape_string($id) . '\';');
+																WHERE `id` = \'' . $database->real_escape_string($id) . '\';');
 
 		$database->close();
 
@@ -50,8 +50,8 @@ class TicketHandler {
 		$database = Database::open(Settings::db_name_infected_tickets);
 
 		$result = $database->query('SELECT `id` FROM `' . Settings::db_table_infected_tickets_tickets . '`
-									WHERE `eventId` = \'' . $event->getId() . '\'
-									AND `userId` = \'' . $user->getId() . '\';');
+																WHERE `eventId` = \'' . $event->getId() . '\'
+																AND `userId` = \'' . $user->getId() . '\';');
 
 		$database->close();
 
@@ -72,9 +72,9 @@ class TicketHandler {
 		$database = Database::open(Settings::db_name_infected_tickets);
 
 		$result = $database->query('SELECT `id` FROM `' . Settings::db_table_infected_tickets_tickets . '`
-									WHERE `eventId` = \'' . $event->getId() . '\'
-									AND `userId` = \'' . $user->getId() . '\'
-									LIMIT 1;');
+																WHERE `eventId` = \'' . $event->getId() . '\'
+																AND `userId` = \'' . $user->getId() . '\'
+																LIMIT 1;');
 
 		$database->close();
 
@@ -95,8 +95,8 @@ class TicketHandler {
 		$database = Database::open(Settings::db_name_infected_tickets);
 
 		$result = $database->query('SELECT * FROM `' . Settings::db_table_infected_tickets_tickets . '`
-									WHERE `eventId`= \'' . $event->getId() . '\'
-									AND `userId` = \'' . $user->getId() . '\';');
+																WHERE `eventId`= \'' . $event->getId() . '\'
+																AND `userId` = \'' . $user->getId() . '\';');
 
 		$database->close();
 
@@ -123,7 +123,7 @@ class TicketHandler {
 		$database = Database::open(Settings::db_name_infected_tickets);
 
 		$result = $database->query('SELECT * FROM `' . Settings::db_table_infected_tickets_tickets . '`
-									WHERE `eventId` = \'' . $event->getId() . '\';');
+																WHERE `eventId` = \'' . $event->getId() . '\';');
 
 		$database->close();
 
@@ -184,8 +184,8 @@ class TicketHandler {
 		$database = Database::open(Settings::db_name_infected_tickets);
 
 		$result = $database->query('SELECT * FROM `' . Settings::db_table_infected_tickets_tickets . '`
-									WHERE `eventId` = \'' . EventHandler::getCurrentEvent()->getId() . '\'
-									AND (`seaterId` = \'' . $user->getId() . '\' OR (`userId` = \'' . $user->getId() . '\' AND `seaterId` = \'0\'));');
+																WHERE `eventId` = \'' . EventHandler::getCurrentEvent()->getId() . '\'
+																AND (`seaterId` = \'' . $user->getId() . '\' OR (`userId` = \'' . $user->getId() . '\' AND `seaterId` = \'0\'));');
 
 		$database->close();
 
@@ -205,11 +205,11 @@ class TicketHandler {
 		$database = Database::open(Settings::db_name_infected_tickets);
 
 		$result = $database->query('INSERT INTO `' . Settings::db_table_infected_tickets_tickets . '` (`eventId`, `typeId`, `buyerId`, `paymentId`, `userId`)
-									VALUES (\'' . EventHandler::getCurrentEvent()->getId() . '\',
-											\'' . $ticketType->getId() . '\',
-											\'' . $user->getId() . '\',
-											\'' . $payment->getId() . '\',
-											\'' . $user->getId() . '\');');
+																VALUES (\'' . EventHandler::getCurrentEvent()->getId() . '\',
+																				\'' . $ticketType->getId() . '\',
+																				\'' . $user->getId() . '\',
+																				\'' . $payment->getId() . '\',
+																				\'' . $user->getId() . '\');');
 
 		$database->close();
 	}
@@ -223,8 +223,8 @@ class TicketHandler {
 
 			// Change the user of the ticket.
 			$database->query('UPDATE `' . Settings::db_table_infected_tickets_tickets . '`
-							  SET `userId` = ' . $user->getId() . '
-							  WHERE `id` = ' . $ticket->getId() . ';');
+											  SET `userId` = \'' . $user->getId() . '\'
+											  WHERE `id` = \'' . $ticket->getId() . '\';');
 
 			$database->close();
 		}
@@ -237,8 +237,8 @@ class TicketHandler {
 		$database = Database::open(Settings::db_name_infected_tickets);
 
 		$database->query('UPDATE `' . Settings::db_table_infected_tickets_tickets . '`
-						  SET `seaterId` = \'' . ($seater != null ? $seater->getId() : 0) . '\'
-						  WHERE `id` = \'' . $ticket->getId() . '\';');
+										  SET `seaterId` = \'' . ($seater != null ? $seater->getId() : 0) . '\'
+										  WHERE `id` = \'' . $ticket->getId() . '\';');
 
 		$database->close();
 	}
@@ -250,8 +250,8 @@ class TicketHandler {
 		$database = Database::open(Settings::db_name_infected_tickets);
 
 		$result = $database->query('UPDATE `' . Settings::db_table_infected_tickets_tickets . '`
-									SET `seatId` = \'' . ($seat != null ? $seat->getId() : 0) . '\'
-									WHERE `id` = \'' . $ticket->getId() . '\';');
+																SET `seatId` = \'' . ($seat != null ? $seat->getId() : 0) . '\'
+																WHERE `id` = \'' . $ticket->getId() . '\';');
 
 		$database->close();
 	}
@@ -263,7 +263,7 @@ class TicketHandler {
 		$database = Database::open(Settings::db_name_infected_tickets);
 
 		$result = $database->query('DELETE FROM `' . Settings::db_table_infected_tickets_storesessions . '`
-									WHERE `id` = ' . $storeSession->getId() . ';');
+																WHERE `id` = \'' . $storeSession->getId() . '\';');
 
 		$database->close();
 	}
@@ -275,8 +275,8 @@ class TicketHandler {
 		$database = Database::open(Settings::db_name_infected_tickets);
 
 		$reuslt = $database->query('INSERT INTO `' . Settings::db_table_infected_tickets_checkedintickets . '` (`ticketId`, `userId`)
-									VALUES (\'' . $ticket->getId() . '\',
-											\'' . $ticket->getUser()->getId() . '\');');
+																VALUES (\'' . $ticket->getId() . '\',
+																				\'' . $ticket->getUser()->getId() . '\');');
 
 		$database->close();
 	}
@@ -288,7 +288,7 @@ class TicketHandler {
 		$database = Database::open(Settings::db_name_infected_tickets);
 
 		$result = $database->query('SELECT `id` FROM `' . Settings::db_table_infected_tickets_checkedintickets . '`
-									WHERE `ticketId` = \'' . $ticket->getId() . '\';');
+																WHERE `ticketId` = \'' . $ticket->getId() . '\';');
 
 		$database->close();
 

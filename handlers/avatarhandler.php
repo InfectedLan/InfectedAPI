@@ -31,7 +31,7 @@ class AvatarHandler {
 		$database = Database::open(Settings::db_name_infected_crew);
 
 		$result = $database->query('SELECT * FROM `' . Settings::db_table_infected_crew_avatars . '`
-									WHERE `id` = \'' . $database->real_escape_string($id) . '\';');
+																WHERE `id` = \'' . $database->real_escape_string($id) . '\';');
 
 		$database->close();
 
@@ -45,7 +45,7 @@ class AvatarHandler {
 		$database = Database::open(Settings::db_name_infected_crew);
 
 		$result = $database->query('SELECT * FROM `' . Settings::db_table_infected_crew_avatars . '`
-									WHERE `userId` = \'' . $user->getId() . '\';');
+																WHERE `userId` = \'' . $user->getId() . '\';');
 
 		$database->close();
 
@@ -78,7 +78,7 @@ class AvatarHandler {
 		$database = Database::open(Settings::db_name_infected_crew);
 
 		$result = $database->query('SELECT * FROM `' . Settings::db_table_infected_crew_avatars . '`
-									WHERE `state` = \'1\';');
+																WHERE `state` = \'1\';');
 
 		$database->close();
 
@@ -98,7 +98,7 @@ class AvatarHandler {
 		$database = Database::open(Settings::db_name_infected_crew);
 
 		$result = $database->query('SELECT `id` FROM `' . Settings::db_table_infected_crew_avatars . '`
-									WHERE `userId` = \'' . $user->getId() . '\';');
+																WHERE `userId` = \'' . $user->getId() . '\';');
 
 		$database->close();
 
@@ -112,8 +112,8 @@ class AvatarHandler {
 		$database = Database::open(Settings::db_name_infected_crew);
 
 		$result = $database->query('SELECT `id` FROM `' . Settings::db_table_infected_crew_avatars . '`
-									WHERE `userId` = \'' . $user->getId() . '\'
-									AND (`state` = 1 OR `state` = 2);');
+																WHERE `userId` = \'' . $user->getId() . '\'
+																AND (`state` = 1 OR `state` = 2);');
 
 		$database->close();
 
@@ -127,8 +127,8 @@ class AvatarHandler {
 		$database = Database::open(Settings::db_name_infected_crew);
 
 		$result = $database->query('SELECT `id` FROM `' . Settings::db_table_infected_crew_avatars . '`
-									WHERE `userId` = \'' . $user->getId() . '\'
-									AND `state` = \'2\';');
+																WHERE `userId` = \'' . $user->getId() . '\'
+																AND `state` = \'2\';');
 
 		$database->close();
 
@@ -142,8 +142,8 @@ class AvatarHandler {
 		$database = Database::open(Settings::db_name_infected_crew);
 
 		$result = $database->query('INSERT INTO `' . Settings::db_table_infected_crew_avatars . '` (`userId`, `fileName`)
-									VALUES (\'' . $user->getId() . '\',
-											\'' . $fileName . '\');');
+																VALUES (\'' . $user->getId() . '\',
+																				\'' . $fileName . '\');');
 
 		$database->close();
 
@@ -157,9 +157,9 @@ class AvatarHandler {
 		$database = Database::open(Settings::db_name_infected_crew);
 
 		$database->query('UPDATE `' . Settings::db_table_infected_crew_avatars . '`
-						  SET `state` = \'' . $database->real_escape_string($state) . '\',
-									`fileName` = \'' . $database->real_escape_string($fileName) . '\'
-						  WHERE `id` = \'' . $avatar->getId() . '\'');
+										  SET `state` = \'' . $database->real_escape_string($state) . '\',
+													`fileName` = \'' . $database->real_escape_string($fileName) . '\'
+										  WHERE `id` = \'' . $avatar->getId() . '\'');
 
 		$database->close();
 	}
@@ -171,7 +171,7 @@ class AvatarHandler {
 		$database = Database::open(Settings::db_name_infected_crew);
 
 		$result = $database->query('DELETE FROM `' . Settings::db_table_infected_crew_avatars . '`
-									WHERE `id` = \'' . $avatar->getId() . '\';');
+																WHERE `id` = \'' . $avatar->getId() . '\';');
 
 		$database->close();
 
@@ -186,9 +186,9 @@ class AvatarHandler {
 		$database = Database::open(Settings::db_name_infected_crew);
 
 		$database->query('UPDATE `' . Settings::db_table_infected_crew_avatars . '`
-						  SET `state` = \'2\'
-						  WHERE `id` = \'' . $avatar->getId() . '\';');
-
+										  SET `state` = \'2\'
+										  WHERE `id` = \'' . $avatar->getId() . '\';');
+											
 		$database->close();
 	}
 
@@ -199,8 +199,8 @@ class AvatarHandler {
 		$database = Database::open(Settings::db_name_infected_crew);
 
 		$database->query('UPDATE `' . Settings::db_table_infected_crew_avatars . '`
-						  SET `state` =  \'3\'
-						  WHERE `id` = \'' . $avatar->getId() . '\';');
+										  SET `state` =  \'3\'
+										  WHERE `id` = \'' . $avatar->getId() . '\';');
 
 		$database->close();
 	}

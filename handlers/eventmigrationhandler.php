@@ -139,9 +139,6 @@ class EventMigrationHandler {
 	 */
 	public static function copySeatmap($fromEvent, $toEvent) {
 		//self::copyTableByEvent($fromEvent, $toEvent, Settings::db_name_infected_sea, Settings::db_table_infected_tickets_tickets);
-
-
-
 	}
 }
 ?>
