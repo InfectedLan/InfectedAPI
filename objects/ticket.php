@@ -87,9 +87,9 @@ class Ticket extends EventObject {
 		$event = $this->getEvent();
 		$season = date('m', $event->getStartTime()) == 2 ? 'VINTER' : 'HØST';
 		$theme = $event->getTheme();
-		$eventName = !empty($theme) ? $theme : $season . date('Y', $event->getStartTime());
+		$eventName = !empty($theme) ? $theme : $season;
 
-		return strtoupper(Settings::name . '_' . $eventName . '_' . $this->getId());
+		return strtoupper(Settings::name . '_' . $eventName . '_' . date('Y', $event->getStartTime()) . '_' . $this->getId());
 	}
 
 	// TODO: Implement this in a more generic way?
