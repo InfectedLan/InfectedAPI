@@ -7,7 +7,7 @@
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -20,7 +20,7 @@
 var seatmapData = null;
 
 function downloadAndRenderSeatmap(target, seatHandlerFunction, callback) {
-	$.getJSON('../api/json/seatmap/seatmapAvailability.php?id=' + seatmapId, function(data){
+	$.getJSON('../api/json/seatmap/getSeatmapAvailability.php?id=' + seatmapId, function(data){
 		if(data.result) {
 			seatmapData = data;
 			renderSeatmap(target, seatHandlerFunction, callback);
@@ -49,11 +49,11 @@ function renderSeatmap(target, seatHandlerFunction, callback) {
 			}
 			//Run the seat handler function if set
 			var customClass = seatmapData.rows[i].seats[s].occupied ? "taken" : "free";
-			
+
 			if(typeof seatHandlerFunction !== "undefined")
 			{
-				var customClassCheck = seatHandlerFunction( seatmapData.rows[i].seats[s].id, 
-															'#seat' + seatmapData.rows[i].seats[s].id, 
+				var customClassCheck = seatHandlerFunction( seatmapData.rows[i].seats[s].id,
+															'#seat' + seatmapData.rows[i].seats[s].id,
 															seatmapData.rows[i].seats[s].occupied,
 															seatmapData.rows[i].seats[s].occupiedTicket);
 				//Check if we got anything of use
