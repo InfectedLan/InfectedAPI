@@ -113,7 +113,7 @@ class TicketHandler {
 	 * Returns a list of the specified user tickets for the current event..
 	 */
 	public static function getTicketsByUser(User $user) {
-		return self::getTicketsByUserAndEvent($user, Handler::getCurrentEvent());
+		return self::getTicketsByUserAndEvent($user, EventHandler::getCurrentEvent());
 	}
 
 	/*
