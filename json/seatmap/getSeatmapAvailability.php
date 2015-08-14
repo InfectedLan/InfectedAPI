@@ -8,12 +8,12 @@
  * modify it under the terms of the GNU Lesser General Public
  * License as published by the Free Software Foundation; either
  * version 3.0 of the License, or (at your option) any later version.
- * 
+ *
  * This library is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
  * Lesser General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU Lesser General Public
  * License along with this library.  If not, see <http://www.gnu.org/licenses/>.
  */
@@ -33,11 +33,11 @@ if (Session::isAuthenticated()) {
 
 	if (isset($_GET['id'])) {
 		$seatmap = SeatmapHandler::getSeatmap($_GET['id']);
-		
+
 		if ($seatmap != null) {
 			$seatmapData = array();
 			$backgroundImage = $seatmap->getBackgroundImage();
-			
+
 			foreach ($seatmap->getRows() as $row) {
 				$seatData = array();
 
@@ -48,13 +48,12 @@ if (Session::isAuthenticated()) {
 					$data['number'] = $seat->getNumber();
 					$data['humanName'] = $seat->getString();
 
-					$ticketUser = $seat->getTicket()->getUser();
-
-					if ($ticketUser != null) {
-						$data['occupied'] = true;
+					if ($seat->hasTicket()) {
 						$ticket = $seat->getTicket();
-						$data['occupiedTicket'] = array('id' => $ticket->getId(), 
-														'owner' => htmlspecialchars($owner->getDisplayName()) );
+
+						$data['occupied'] = true;
+						$data['occupiedTicket'] = array('id' => $ticket->getId(),
+																						'owner' => htmlspecialchars($ticket->getUser()->getDisplayName()));
 					} else {
 						$data['occupied'] = false;
 					}
@@ -62,11 +61,12 @@ if (Session::isAuthenticated()) {
 					array_push($seatData, $data);
 				}
 
-				array_push($seatmapData, array('seats' => $seatData, 
-											   'id' => $row->getId(), 
-											   'x' => $row->getX(), 
-											   'y' => $row->getY(), 
+				array_push($seatmapData, array('seats' => $seatData,
+											   'id' => $row->getId(),
+											   'x' => $row->getX(),
+											   'y' => $row->getY(),
 											   'number' => $row->getNumber()));
+
 				$result = true;
 			}
 		} else {

@@ -8,12 +8,12 @@
  * modify it under the terms of the GNU Lesser General Public
  * License as published by the Free Software Foundation; either
  * version 3.0 of the License, or (at your option) any later version.
- * 
+ *
  * This library is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
  * Lesser General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU Lesser General Public
  * License along with this library.  If not, see <http://www.gnu.org/licenses/>.
  */
@@ -31,26 +31,26 @@ class SeatHandler {
 	public static function getSeat($id) {
 		$database = Database::open(Settings::db_name_infected_tickets);
 
-		$result = $database->query('SELECT * FROM `' . Settings::db_table_infected_tickets_seats . '` 
+		$result = $database->query('SELECT * FROM `' . Settings::db_table_infected_tickets_seats . '`
 									WHERE `id` = \'' . $database->real_escape_string($id) . '\';');
-		 
+
 		$database->close();
-		
+
 		return $result->fetch_object('Seat');
 	}
 
-	/* 
+	/*
 	 * Returns a list of all seats.
 	 */
 	public static function getSeats() {
 		$database = Database::open(Settings::db_name_infected_tickets);
-		
+
 		$result = $database->query('SELECT * FROM `' . Settings::db_table_infected_tickets_seats . '`;');
-		
+
 		$database->close();
 
 		$seatList = array();
-		
+
 		while ($object = $result->fetch_object('Seat')) {
 			array_push($seatList, $object);
 		}
@@ -64,7 +64,7 @@ class SeatHandler {
 	public static function getSeatsByRow(Row $row) {
 		$database = Database::open(Settings::db_name_infected_tickets);
 
-		$result = $database->query('SELECT * FROM `' . Settings::db_table_infected_tickets_seats . '` 
+		$result = $database->query('SELECT * FROM `' . Settings::db_table_infected_tickets_seats . '`
 									WHERE `rowId` = \'' . $row->getId() . '\';');
 
 		$database->close();
@@ -85,8 +85,8 @@ class SeatHandler {
 		$database = Database::open(Settings::db_name_infected_tickets);
 
 		// Find out what seat number we are at.
-		$highestSeatNum = $database->query('SELECT `number` FROM `' . Settings::db_table_infected_tickets_seats . '` 
-											WHERE `rowId` = ' . $row->getId() . ' 
+		$highestSeatNum = $database->query('SELECT `number` FROM `' . Settings::db_table_infected_tickets_seats . '`
+											WHERE `rowId` = ' . $row->getId() . '
 											ORDER BY `number` DESC
 											LIMIT 1;');
 
@@ -94,8 +94,8 @@ class SeatHandler {
 
 		$newSeatNumber = $seatRow['number'] + 1;
 
-		$database->query('INSERT INTO `' . Settings::db_table_infected_tickets_seats . '` (`rowId`, `number`) 
-						  VALUES (\'' . $row->getId() . '\', 
+		$database->query('INSERT INTO `' . Settings::db_table_infected_tickets_seats . '` (`rowId`, `number`)
+						  VALUES (\'' . $row->getId() . '\',
 								  \'' . $database->real_escape_string($newSeatNumber) . '\');');
 
 		$database->close();
@@ -107,7 +107,7 @@ class SeatHandler {
 	public static function removeSeat(Seat $seat) {
 		$database = Database::open(Settings::db_name_infected_tickets);
 
-		$result = $database->query('DELETE FROM `' . Settings::db_table_infected_tickets_seats . '` 
+		$result = $database->query('DELETE FROM `' . Settings::db_table_infected_tickets_seats . '`
 									WHERE `id` = ' . $seat->getId() . ';');
 
 		$database->close();
@@ -119,7 +119,7 @@ class SeatHandler {
 	public static function hasTicket(Seat $seat) {
 		$database = Database::open(Settings::db_name_infected_tickets);
 
-		$result = $database->query('SELECT `id` FROM `' . Settings::db_table_infected_tickets_tickets . '` 
+		$result = $database->query('SELECT `id` FROM `' . Settings::db_table_infected_tickets_tickets . '`
 									WHERE `seatId` = ' . $seat->getId() . ';');
 
 		$row = $result->fetch_array();
@@ -133,9 +133,9 @@ class SeatHandler {
 	public static function getTicket(Seat $seat) {
 		$database = Database::open(Settings::db_name_infected_tickets);
 
-		$result = $database->query('SELECT * FROM `' . Settings::db_table_infected_tickets_tickets . '` 
-									WHERE `seatId` = ' . $seat->getId() . ';');
-		
+		$result = $database->query('SELECT * FROM `' . Settings::db_table_infected_tickets_tickets . '`
+																WHERE `seatId` = ' . $seat->getId() . ';');
+
 		$database->close();
 
 		return $result->fetch_object('Ticket');
