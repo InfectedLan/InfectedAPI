@@ -98,16 +98,6 @@ class Ticket extends EventObject {
 	}
 
 	/*
-	 * Returns true if this ticket can be refunded.
-	 */
-	public function isRefundable() {
-		$event = $this->getEvent();
-		$timeLeftToEvent = date('U', $event->getStartTime()) - time();
-
-		return $timeLeftToEvent >= Settings::refundBeforeEventTime;
-	}
-
-	/*
 	 * Returns true if this ticket is seated.
 	 */
 	public function isSeated() {
@@ -119,6 +109,16 @@ class Ticket extends EventObject {
 	 */
 	public function isCheckedIn() {
 		return TicketHandler::isTicketCheckedIn($this);
+	}
+
+	/*
+	 * Returns true if this ticket can be refunded.
+	 */
+	public function isRefundable() {
+		$event = $this->getEvent();
+		$timeLeftToEvent = date('U', $event->getStartTime()) - time();
+
+		return $this->getType()->isRefundable() && $timeLeftToEvent >= Settings::refundBeforeEventTime;
 	}
 
 	/*
