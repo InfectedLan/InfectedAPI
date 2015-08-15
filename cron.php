@@ -22,22 +22,19 @@ require_once 'utils/utils.php';
 
 // Only run this if we are running in a CLI enviroment.
 if (Utils::isCli()) {
-	// Set the include path since we are running in CLI.
-	require_once 'settings.php';
-	set_include_path(Settings::api_path);
-
 	require_once 'taskmanager.php';
 	require_once 'handlers/eventmigrationhandler.php';
 	require_once 'handlers/eventhandler.php';
 
 	/* Static tasks */
-	$event = EventHandler::getCurrentEvent();
+	$previousEvent = EventHandler::getPreviousEvent();
+	$currentEvent = EventHandler::getCurrentEvent();
 
 	// Check if we should automatically migrate from previous event,
 	// this is done when booking time for the current event haven't happend yet, also that we're early in this event.
-	if ($event->getBookingTime() >= time()) {
+	if ($currentEvent->getBookingTime() >= time()) {
 		// Migrates all information from the previous event to this one.
-		EventMigrationHandler::copy(EventHandler::getPreviousEvent(), $event);
+		EventMigrationHandler::copy($previousEvent, $currentEvent);
 	}
 
 	/* Dynamic tasks */
