@@ -113,7 +113,7 @@ class User extends Object {
 	 * Returns the users phone number formatted as a string.
 	 */
 	public function getPhoneAsString() {
-		return rtrim(chunk_split($this->getPhone(), 2, ' '));
+		return rtrim('(+47) ' . chunk_split($this->getPhone(), 2, ' '));
 	}
 
 	/*

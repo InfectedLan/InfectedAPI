@@ -8,12 +8,12 @@
  * modify it under the terms of the GNU Lesser General Public
  * License as published by the Free Software Foundation; either
  * version 3.0 of the License, or (at your option) any later version.
- * 
+ *
  * This library is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
  * Lesser General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU Lesser General Public
  * License along with this library.  If not, see <http://www.gnu.org/licenses/>.
  */
@@ -91,7 +91,7 @@ if (!Session::isAuthenticated()) {
 			echo '</tr>';
 			echo '<tr>';
 				echo '<td>' . Localization::getLocale('phone') . ':</td>';
-				echo '<td><input type="tel" name="phone" required></td>';
+				echo '<td>(+47) <input type="tel" name="phone" required></td>';
 			echo '</tr>';
 			echo '<tr>';
 				echo '<td>' . Localization::getLocale('street_address') . ':</td>';
@@ -108,7 +108,7 @@ if (!Session::isAuthenticated()) {
 			echo '</tr>';
 			echo '<tr>';
 				echo '<td>' . Localization::getLocale('guardians_phone') . ':</td>';
-				echo '<td><input type="text" name="emergencycontactphone"></td>';
+				echo '<td>(+47) <input type="text" name="emergencycontactphone"></td>';
 				echo '<td><i>(' . Localization::getLocale('required_if_you_are_under_the_age_of_value', 18) . ')</i></td>';
 			echo '</tr>';
 			echo '<tr>';
