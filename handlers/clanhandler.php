@@ -95,7 +95,7 @@ class ClanHandler {
 		$clanList = array();
 
 		foreach (self::getClansByCompo($compo) as $clan) {
-			$playing = ClanHandler::getPlayingMembers($clan);
+			$playing = ClanHandler::getPlayingClanMembers($clan);
 
 			if (count($playing) == $compo->getTeamSize()) {
 				array_push($clanList, $clan);
@@ -286,7 +286,7 @@ class ClanHandler {
 		$result = $database->query('DELETE FROM `' . Settings::db_table_infected_compo_memberof . '`
 																WHERE `userId` = \'' . $user->getId() . '\'
 																AND `clanId` = \'' . $clan->getId() . '\';');
-																
+
 		$database->close();
 	}
 }
