@@ -196,6 +196,29 @@ class GroupHandler {
 	}
 
 	/*
+	 * Return true if user has a leader for the given group and event.
+	 */
+	public static function hasGroupLeaderByEvent(Group $group, Event $event) {
+		$database = Database::open(Settings::db_name_infected_crew);
+
+		$result = $database->query('SELECT `id` FROM `' . Settings::db_table_infected_crew_groups . '`
+																WHERE `id` = \'' . $group->getId() . '\'
+																AND `eventId` = \'' . $event->getId() . '\'
+																AND `leaderId` > \'0\';');
+
+		$database->close();
+
+		return $result->num_rows > 0;
+	}
+
+	/*
+	 * Return true if user has a leader for the given group.
+	 */
+	public static function hasGroupLeader(Group $group) {
+		return self::hasGroupLeaderByEvent($group, EventHandler::getCurrentEvent());
+	}
+
+	/*
 	 * Return true if the specified user is leader of a group.
 	 */
 	public static function isGroupLeaderByEvent(Event $event, User $user) {
@@ -216,7 +239,30 @@ class GroupHandler {
 		return self::isGroupLeaderByEvent(EventHandler::getCurrentEvent(), $user);
 	}
 
-	  /*
+	/*
+	 * Return true if user has a co-leader for the given group and event.
+	 */
+	public static function hasGroupCoLeaderByEvent(Group $group, Event $event) {
+		$database = Database::open(Settings::db_name_infected_crew);
+
+		$result = $database->query('SELECT `id` FROM `' . Settings::db_table_infected_crew_groups . '`
+																WHERE `id` = \'' . $group->getId() . '\'
+																AND `eventId` = \'' . $event->getId() . '\'
+																AND `coleaderId` > \'0\';');
+
+		$database->close();
+
+		return $result->num_rows > 0;
+	}
+
+	/*
+	 * Return true if user has a co-leader for the given group.
+	 */
+	public static function hasGroupCoLeader(Group $group) {
+		return self::hasGroupCoLeaderByEvent($group, EventHandler::getCurrentEvent());
+	}
+
+	/*
 	 * Return true if user is co-leader for a group.
 	 */
 	public static function isGroupCoLeaderByEvent(Event $event, User $user) {
