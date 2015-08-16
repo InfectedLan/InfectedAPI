@@ -95,9 +95,7 @@ class SeatmapHandler {
 
 		$row = $result->fetch_array();
 
-		if ($row) {
-			return EventHandler::getEvent($row['id']);
-		}
+		return EventHandler::getEvent($row['id']);
 	}
 
 	/*
