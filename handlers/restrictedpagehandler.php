@@ -170,7 +170,7 @@ class RestrictedPageHandler {
 	/*
 	 * Create a new page.
 	 */
-	public static function createPage($name, $title, $content, Group $group, Team $team = null) {
+	public static function createPage($name, $title, $content, Group $group = null, Team $team = null) {
 		$database = Database::open(Settings::db_name_infected_crew);
 
 		$database->query('INSERT INTO `' . Settings::db_table_infected_crew_pages . '` (`eventId`, `name`, `title`, `content`, `groupId`, `teamId`)
@@ -187,14 +187,14 @@ class RestrictedPageHandler {
 	  /*
 	 * Update a page.
 	 */
-	public static function updatePage(RestrictedPage $page, $title, $content, Group $group, Team $team = null) {
+	public static function updatePage(RestrictedPage $page, $title, $content, Group $group = null, Team $team = null) {
 		$database = Database::open(Settings::db_name_infected_crew);
 
 		$database->query('UPDATE `' . Settings::db_table_infected_crew_pages . '`
 										  SET `title` = \'' . $database->real_escape_string($title) . '\',
 											  	`content` = \'' . $database->real_escape_string($content) . '\',
-													`groupId` = \'' . $group->getId() . '\',
-													`teamId` = \'' . $team->getId() . '\'
+													`groupId` = \'' . ($group != null ? $group->getId() : '0') . '\',
+													`teamId` = \'' . ($team != null ? $team->getId() : '0') . '\'
 										  WHERE `id` = \'' . $page->getId() . '\';');
 
 		$database->close();

@@ -246,7 +246,7 @@ class ApplicationHandler {
 		if ($group->isQueuing()) {
 			$application = self::getUserApplicationForGroup($user, $group);
 
-			self::queueApplication($application);
+			self::queueApplication($application, Session::getCurrentUser());
 		}
 
 		// Notify the group leader by email.
@@ -274,7 +274,7 @@ class ApplicationHandler {
 	 */
 	public static function acceptApplication(Application $application, User $user, $comment, $notify) {
 			// Only allow application for current event to be accepted.
-			if ($applicatin->getEvent()->equals(EventHandler::getCurrentEvent())) {
+			if ($application->getEvent()->equals(EventHandler::getCurrentEvent())) {
 	  			$database = Database::open(Settings::db_name_infected_crew);
 
 	  			$database->query('UPDATE `' . Settings::db_table_infected_crew_applications . '`
@@ -290,14 +290,14 @@ class ApplicationHandler {
 	  			$group = $application->getGroup();
 
 	  			// Remove the application from the queue, if present.
-	  			self::unqueueApplication($user, $application);
+	  			self::unqueueApplication($application, $user);
 
 	  			// Reject users application for all other groups.
 	  			$applicationList = self::getUserApplications($applicationUser);
 
 	  			foreach ($applicationList as $applicationValue) {
 					if ($group->equals($applicationValue->getGroup())) {
-						self::closeApplication($user, $applicationValue);
+						self::closeApplication($applicationValue, $user);
 	  				}
 	  			}
 
@@ -330,7 +330,7 @@ class ApplicationHandler {
   			$database->close();
 
   			// Remove the application from the queue, if present.
-  			self::unqueueApplication($user, $application);
+  			self::unqueueApplication($application, $user);
 
   			// Notify the user by email, if notify is true.
   			if ($notify) {
@@ -355,7 +355,7 @@ class ApplicationHandler {
 		$database->close();
 
 		// Remove the application from the queue, if present.
-		self::unqueueApplication($user, $application);
+		self::unqueueApplication($application, $user);
 	}
 
 	/*
