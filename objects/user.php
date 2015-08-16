@@ -295,7 +295,7 @@ class User extends Object {
 			$message[] = '</body>';
 		$message[] = '</html>';
 
-		return MailManager::sendMail($this, 'Infected registrering', implode("\r\n", $message));
+		return MailManager::sendEmail($this, 'Infected registrering', implode("\r\n", $message));
 	}
 
 	/*
@@ -317,7 +317,7 @@ class User extends Object {
 			$message[] = '</body>';
 		$message[] = '</html>';
 
-		return MailManager::sendMail($this, 'Infected tilbakestilling av passord', implode("\r\n", $message));
+		return MailManager::sendEmail($this, 'Infected tilbakestilling av passord', implode("\r\n", $message));
 	}
 
 	/*
@@ -340,7 +340,7 @@ class User extends Object {
 			$message[] = '</body>';
 		$message[] = '</html>';
 
-		return MailManager::sendMail($this, 'Infected avatar', implode("\r\n", $message));
+		return MailManager::sendEmail($this, 'Infected avatar', implode("\r\n", $message));
 	}
 
 	/*
