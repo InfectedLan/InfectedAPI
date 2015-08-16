@@ -221,6 +221,29 @@ class TeamHandler {
 	}
 
 	/*
+	 * Return true if user has a leader for the given team and event.
+	 */
+	public static function hasTeamLeaderByEvent(Team $team, Event $event) {
+		$database = Database::open(Settings::db_name_infected_crew);
+
+		$result = $database->query('SELECT `id` FROM `' . Settings::db_table_infected_crew_teams . '`
+																WHERE `id` = \'' . $team->getId() . '\'
+																AND `eventId` = \'' . $event->getId() . '\'
+																AND `leaderId` > \'0\';');
+
+		$database->close();
+
+		return $result->num_rows > 0;
+	}
+
+	/*
+	 * Return true if user has a leader for the given team.
+	 */
+	public static function hasTeamLeader(Team $team) {
+		return self::hasTeamLeaderByEvent($team, EventHandler::getCurrentEvent());
+	}
+
+	/*
 	 * Return true if user is leader for a team.
 	 */
 	public static function isTeamLeaderByEvent(Event $event, User $user) {
