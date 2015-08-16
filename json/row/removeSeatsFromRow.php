@@ -8,12 +8,12 @@
  * modify it under the terms of the GNU Lesser General Public
  * License as published by the Free Software Foundation; either
  * version 3.0 of the License, or (at your option) any later version.
- * 
+ *
  * This library is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
  * Lesser General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU Lesser General Public
  * License along with this library.  If not, see <http://www.gnu.org/licenses/>.
  */
@@ -28,34 +28,34 @@ $message = null;
 
 if (Session::isAuthenticated()) {
 	$user = Session::getCurrentUser();
-	
+
 	if ($user->hasPermission('*') ||
 		$user->hasPermission('admin.seatmap')) {
 		if (isset($_GET['row'])) {
 			$row = RowHandler::getRow($_GET['row']);
-			
+
 			if ($row != null) {
 				if (isset($_GET['numSeats']) &&
 					is_numeric($_GET['numSeats'])) {
 					$numSeats = $_GET['numSeats'];
-					$seats = RowHandler::getSeats($row);
-						
+					$seats = SeatHandler::getSeatsByRow($row);
+
 					if (count($seats)>=$numSeats) {
 						$startIndex = count($seats) - 1;
 						$endIndex = $startIndex - $numSeats;
 						$safeToDelete = true;
-						
+
 						for ($i = $startIndex; $i > $endIndex; $i--) {
 							if (SeatHandler::hasTicket($seats[$i])) {
 								$safeToDelete = false;
 							}
 						}
-						
+
 						if ($safeToDelete) {
 							for ($i = $startIndex; $i > $endIndex; $i--) {
 								SeatHandler::removeSeat($seats[$i]);
 							}
-							
+
 							$result = true;
 						} else {
 							$message = Localization::getLocale('the_seat_you_are_trying_to_delete_is_occupied');

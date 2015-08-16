@@ -86,15 +86,11 @@ class RowHandler {
 	public static function createRow(Seatmap $seatmap, $x, $y) {
 		$database = Database::open(Settings::db_name_infected_tickets);
 
-		//Find out what row is max row
-		$highestRowNum = $database->query('SELECT `rowId` FROM `' . Settings::db_table_infected_tickets_rows . '`
-																		   WHERE `seatmapId`=' . $seatmap->getId() . '
-																		   ORDER BY `rowId` DESC
-																		   LIMIT 1;');
+		// Find out what row is max row
+		$result = $database->query('SELECT COUNT(*) FROM `' . Settings::db_table_infected_tickets_rows . '`
+																WHERE `seatmapId` = \'' . $seatmap->getId() . '\';');
 
-		$row = mysqli_fetch_array($highestRowNum);
-
-		$newRowNumber = $row['row'] + 1;
+		$newRowNumber = $result->num_rows + 1;
 		$entrance = EntranceHandler::getEntrance(1); // TODO: Set this somewere else?
 
 		$database->query('INSERT INTO `' . Settings::db_table_infected_tickets_rows . '` (`seatmapId`, `entranceId`, `number`, `x`, `y`)
@@ -146,7 +142,7 @@ class RowHandler {
 	 * Returns true if the row is safe to delete.
 	 */
 	public static function safeToDelete(Row $row) {
-		$seatList = self::getSeats($row);
+		$seatList = SeatHandler::getSeatsByRow($row);
 
 		foreach($seatList as $seat) {
 			if (SeatHandler::hasOwner($seat)) {

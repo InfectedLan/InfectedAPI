@@ -85,12 +85,12 @@ class SeatHandler {
 		$database = Database::open(Settings::db_name_infected_tickets);
 
 		// Find out what seat number we are at.
-		$highestSeatNum = $database->query('SELECT `number` FROM `' . Settings::db_table_infected_tickets_seats . '`
+		$result = $database->query('SELECT `number` FROM `' . Settings::db_table_infected_tickets_seats . '`
 																				WHERE `rowId` = \'' . $row->getId() . '\'
 																				ORDER BY `number` DESC
 																				LIMIT 1;');
 
-		$seatRow = $database->fetch_array($highestSeatNum);
+		$seatRow = $result->fetch_array();
 
 		$newSeatNumber = $seatRow['number'] + 1;
 
