@@ -266,7 +266,7 @@ class ApplicationHandler {
 		$database->close();
 
 		// Remove the application from the queue, if present.
-		self::unqueueApplication($application);
+		self::unqueueApplication($application, Session::getCurrentUser());
 	}
 
 	/*
@@ -420,11 +420,11 @@ class ApplicationHandler {
 	/*
 	 * Returns a true if user has application for group.
 	 */
-	public static function hasUserApplicationsByGroup(User $user, Group $group) {
+	public static function hasUserApplicationsByGroupAndEvent(User $user, Group $group, Event $event) {
 		$database = Database::open(Settings::db_name_infected_crew);
 
 		$result = $database->query('SELECT `id` FROM `' . Settings::db_table_infected_crew_applications . '`
-																WHERE `eventId` = \'' . EventHandler::getCurrentEvent()->getId() . '\'
+																WHERE `eventId` = \'' . $event->getId() . '\'
 																AND `userId` = \'' . $user->getId() . '\'
 																AND `groupId` = \'' . $group->getId() . '\'
 																AND (`state` = \'1\' OR `state` = \'2\');');
@@ -435,13 +435,20 @@ class ApplicationHandler {
 	}
 
 	/*
-	 * Returns the application for group and user.
+	 * Returns a true if user has application for group.
 	 */
-	public static function getUserApplicationsByGroup(User $user, Group $group) {
+	public static function hasUserApplicationsByGroup(User $user, Group $group) {
+		return self::hasUserApplicationsByGroupAndEvent($user, $group, EventHandler::getCurrentEvent());
+	}
+
+	/*
+	 * Returns the application for user, group and event.
+	 */
+	public static function getUserApplicationsByGroupAndEvent(User $user, Group $group, Event $event) {
 		$database = Database::open(Settings::db_name_infected_crew);
 
 		$result = $database->query('SELECT * FROM `' . Settings::db_table_infected_crew_applications . '`
-																WHERE `eventId` = \'' . EventHandler::getCurrentEvent()->getId() . '\'
+																WHERE `eventId` = \'' . $event->getId() . '\'
 																AND `userId` = \'' . $user->getId() . '\'
 																AND `groupId` = \'' . $group->getId() . '\'
 																AND (`state` = \'1\' OR `state` = \'2\');');
@@ -452,13 +459,20 @@ class ApplicationHandler {
 	}
 
 	/*
+	 * Returns the application for user and group.
+	 */
+	public static function getUserApplicationsByGroup(User $user, Group $group) {
+		return self::getUserApplicationsByGroupAndEvent($user, $group, EventHandler::getCurrentEvent());
+	}
+
+	/*
 	 * Returns a list of all applications for given user.
 	 */
-	public static function getUserApplications(User $user) {
+	public static function getUserApplicationsByEvent(User $user, Event $event) {
 		$database = Database::open(Settings::db_name_infected_crew);
 
 		$result = $database->query('SELECT * FROM `' . Settings::db_table_infected_crew_applications . '`
-																WHERE `eventId` = \'' . EventHandler::getCurrentEvent()->getId() . '\'
+																WHERE `eventId` = \'' . $event->getId() . '\'
 																AND `userId` = \'' . $user->getId() . '\';');
 
 		$database->close();
@@ -470,6 +484,13 @@ class ApplicationHandler {
 		}
 
 		return $applicationList;
+	}
+
+	/*
+	 * Returns a list of all applications for given user.
+	 */
+	public static function getUserApplications(User $user) {
+		return self::getUserApplicationsByEvent($user, EventHandler::getCurrentEvent());
 	}
 }
 ?>
