@@ -8,12 +8,12 @@
  * modify it under the terms of the GNU Lesser General Public
  * License as published by the Free Software Foundation; either
  * version 3.0 of the License, or (at your option) any later version.
- * 
+ *
  * This library is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
  * Lesser General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU Lesser General Public
  * License along with this library.  If not, see <http://www.gnu.org/licenses/>.
  */
@@ -98,7 +98,7 @@ class Clan extends EventObject {
 	 * Returns true if this clan is qualified for specified compo.
 	 */
 	public function isQualified($compo) {
-		$primaryPlayers = ClanHandler::getPlayingMembers($this);
+		$primaryPlayers = ClanHandler::getPlayingClanMembers($this);
 
 		if (count($primaryPlayers) != $compo->getTeamSize()) {
 			return false;
@@ -106,8 +106,8 @@ class Clan extends EventObject {
 
 		$database = Database::open(Settings::db_name_infected_compo);
 
-		$result = $database->query('SELECT `id` FROM `' . Settings::db_table_infected_compo_participantof . '` 
-								 WHERE `clanId` = \'' . $this->getId() . '\' 
+		$result = $database->query('SELECT `id` FROM `' . Settings::db_table_infected_compo_participantof . '`
+								 WHERE `clanId` = \'' . $this->getId() . '\'
 								 AND `compoId` = \'' . $database->real_escape_string($compo->getId()) . '\';');
 
 		$database->close();
