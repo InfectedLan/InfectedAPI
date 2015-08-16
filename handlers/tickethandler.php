@@ -51,7 +51,8 @@ class TicketHandler {
 
 		$result = $database->query('SELECT `id` FROM `' . Settings::db_table_infected_tickets_tickets . '`
 																WHERE `eventId` = \'' . $event->getId() . '\'
-																AND `userId` = \'' . $user->getId() . '\';');
+																AND `userId` = \'' . $user->getId() . '\'
+																LIMIT 1;');
 
 		$database->close();
 
@@ -71,7 +72,7 @@ class TicketHandler {
 	public static function getTicketByUserAndEvent(User $user, Event $event) {
 		$database = Database::open(Settings::db_name_infected_tickets);
 
-		$result = $database->query('SELECT `id` FROM `' . Settings::db_table_infected_tickets_tickets . '`
+		$result = $database->query('SELECT * FROM `' . Settings::db_table_infected_tickets_tickets . '`
 																WHERE `eventId` = \'' . $event->getId() . '\'
 																AND `userId` = \'' . $user->getId() . '\'
 																LIMIT 1;');

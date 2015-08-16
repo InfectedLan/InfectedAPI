@@ -20,8 +20,8 @@
 
 require_once 'settings.php';
 require_once 'qr.php';
-require_once 'handlers/paymenthandler.php';
 require_once 'handlers/tickettypehandler.php';
+require_once 'handlers/paymenthandler.php';
 require_once 'handlers/userhandler.php';
 require_once 'handlers/seathandler.php';
 require_once 'handlers/tickettransferhandler.php';

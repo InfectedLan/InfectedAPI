@@ -34,7 +34,7 @@ class EventHandler {
 																WHERE `id` = \'' . $database->real_escape_string($id) . '\';');
 
 		$database->close();
-
+		
 		return $result->fetch_object('Event');
 	}
 

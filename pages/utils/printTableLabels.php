@@ -41,8 +41,6 @@ if (Session::isAuthenticated()) {
 
 				if (!empty($rowList)) {
 					foreach ($rowList as $row) {
-						echo "error";
-
 						foreach ($row->getSeats() as $seat) {
 							echo '<div id="name">';
 								echo '<img width="600px" src="../../content/static/infected_logo_print_all.jpg">';
