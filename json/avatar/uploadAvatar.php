@@ -37,7 +37,7 @@ if (Session::isAuthenticated()) {
 	$extension = strtolower(end($temp));
 	$allowedExts = array('jpeg', 'jpg', 'png');
 	
-	if (($_FILES['file']['size'] < 7 * 1024 * 1024)) {
+	if (($_FILES['file']['size'] < 15 * 1024 * 1024)) {
 		if (in_array($extension, $allowedExts)) {
 			if ($_FILES['file']['error'] == 0) {
 				// Validate size
