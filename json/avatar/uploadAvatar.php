@@ -23,52 +23,59 @@ require_once 'localization.php';
 require_once 'handlers/avatarhandler.php';
 
 $result = false;
-$message = null;
-
-if (Session::isAuthenticated()) {
-	$user = Session::getCurrentUser();
+$message = Localization::getLocale('an_unknown_error_occurred');
+try {
+    if (Session::isAuthenticated()) {
+        $user = Session::getCurrentUser();
 	
-	// Remove avatar if the user already have one.
-	if ($user->hasAvatar()) {
-		$user->getAvatar()->remove();
-	}
+        // Remove avatar if the user already have one.
+        if ($user->hasAvatar()) {
+            $user->getAvatar()->remove();
+        }
 
-	$temp = explode('.', $_FILES['file']['name']);
-	$extension = strtolower(end($temp));
-	$allowedExts = array('jpeg', 'jpg', 'png');
-	
-	if (($_FILES['file']['size'] < 15 * 1024 * 1024)) {
-		if (in_array($extension, $allowedExts)) {
-			if ($_FILES['file']['error'] == 0) {
-				// Validate size
-				$image = 0;
+        $temp = explode('.', $_FILES['file']['name']);
+        $extension = strtolower(end($temp));
+        $allowedExts = array('jpeg', 'jpg', 'png');
 
-				if ($extension == 'png') {
-					$image = imagecreatefrompng($_FILES['file']['tmp_name']);
-				} else if ($extension == 'jpeg' || 
-						   $extension == 'jpg') {
-					$image = imagecreatefromjpeg($_FILES['file']['tmp_name']);
-				}
+        $message = "Extension: " . $extension;
 
-				if (imagesx($image) >= Settings::avatar_minimum_width && imagesy($image) >= Settings::avatar_minimum_height) {
-					$name = bin2hex(openssl_random_pseudo_bytes(16)) . $user->getUsername();
-					$path = AvatarHandler::createAvatar($name . '.' . $extension, $user);
-					move_uploaded_file($_FILES['file']['tmp_name'], $path);
-					$result = true;
-				} else {
-					$message = Localization::getLocale('the_image_is_too_small_it_must_be_at_least_value_pixels', Settings::avatar_minimum_width . ' x ' . Settings::avatar_minimum_height);
-				}
-			}
-		} else {
-			$message = Localization::getLocale('invalid_file_format');
-		}
-	} else {
-		$message = Localization::getLocale('the_file_size_is_too_large');
-	}
-} else {
-	$message = Localization::getLocale('you_are_not_logged_in');
+        if (($_FILES['file']['size'] < 15 * 1024 * 1024)) {
+            $message = "Size ok!";
+            if (in_array($extension, $allowedExts)) {
+                $message = "Extension ok!";
+                $message = "Error: " . $_FILES['file']['error'];
+                if ($_FILES['file']['error'] == 0) {
+                    // Validate size
+                    $image = 0;
+                    
+                    if ($extension == 'png') {
+                        $image = imagecreatefrompng($_FILES['file']['tmp_name']);
+                    } else if ($extension == 'jpeg' || 
+                               $extension == 'jpg') {
+                        $image = imagecreatefromjpeg($_FILES['file']['tmp_name']);
+                    }
+
+                    if (imagesx($image) >= Settings::avatar_minimum_width && imagesy($image) >= Settings::avatar_minimum_height) {
+                        $name = bin2hex(openssl_random_pseudo_bytes(16)) . $user->getUsername();
+                        $path = AvatarHandler::createAvatar($name . '.' . $extension, $user);
+                        move_uploaded_file($_FILES['file']['tmp_name'], $path);
+                        $result = true;
+                    } else {
+                        $message = Localization::getLocale('the_image_is_too_small_it_must_be_at_least_value_pixels', Settings::avatar_minimum_width . ' x ' . Settings::avatar_minimum_height);
+                    }
+                }
+            } else {
+                $message = Localization::getLocale('invalid_file_format');
+            }
+        } else {
+            $message = Localization::getLocale('the_file_size_is_too_large');
+        }
+    } else {
+        $message = Localization::getLocale('you_are_not_logged_in');
+    }
+} catch(Exception $e) {
+    $message = Localization::getLocale('an_exception_occurred', $e);
 }
-
 header('Content-Type: text/plain');
 echo json_encode(array('result' => $result, 'message' => $message), JSON_PRETTY_PRINT);
 ?>
