@@ -235,7 +235,7 @@ class MatchHandler {
 											  WHERE `id` = \'' . $row['id'] . '\';');
 
 			$checkingMatchId = MatchHandler::getMatch($row['matchId']);
-			ChatHandler::addClanMembersToChat(ChatHandler::getChat($checkingMatchId->getChat()), $clan);
+			ChatHandler::addChatMembers(ChatHandler::getChat($checkingMatchId->getChat()), $clan->getMembers());
 		}
 		/*
 		$database->query('UPDATE `' . Settings::db_table_infected_compo_participantOfMatch . '`
@@ -264,7 +264,7 @@ class MatchHandler {
 											  WHERE `id` = \'' . $row['id'] . '\';');
 
 			$checkingMatchId = MatchHandler::getMatch($row['matchId']);
-			ChatHandler::addClanMembersToChat(ChatHandler::getChat($checkingMatchId->getChat()), $clan);
+			ChatHandler::addChatMembers(ChatHandler::getChat($checkingMatchId->getChat()), $clan->getMembers());
 		}
 
 		/*$database->query('UPDATE `' . Settings::db_table_infected_compo_participantOfMatch . '`

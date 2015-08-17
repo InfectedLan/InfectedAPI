@@ -43,26 +43,6 @@ class CompoHandler {
 	}
 
 	/*
-	 * Get a list of compos.
-	 */
-	public static function getCompos() {
-		$database = Database::open(Settings::db_name_infected_compo);
-
-		$result = $database->query('SELECT * FROM `' . Settings::db_table_infected_compo_compos . '`
-																WHERE `eventId` = \'' . EventHandler::getCurrentEvent()->getId() . '\';');
-
-		$database->close();
-
-		$compoList = array();
-
-		while ($object = $result->fetch_object('Compo')) {
-			array_push($compoList, $object);
-		}
-
-		return $compoList;
-	}
-
-	/*
 	 * Get compos for the specified event.
 	 */
 	public static function getComposByEvent(Event $event) {
@@ -80,6 +60,13 @@ class CompoHandler {
 		}
 
 		return $compoList;
+	}
+
+	/*
+	 * Get a list of compos.
+	 */
+	public static function getCompos() {
+		return self::getComposByEvent(EventHandler::getCurrentEvent());
 	}
 
 	/*
@@ -131,7 +118,7 @@ class CompoHandler {
 
 		while ($numberOfObjects > 0) {
 			// Create match
-			$chat = ChatHandler::createChat('match chat');
+			$chat = ChatHandler::createChat('match-chat', 'Match chat');
 			$match = MatchHandler::createMatch($time, '', $compo, $iteration, $chat->getId(), Match::BRACKET_WINNER); // TODO: connectData
 			array_push($carryObjects['matches'], $match);
 
@@ -140,7 +127,7 @@ class CompoHandler {
 				if (count($carryClans) > 0) {
 					$clan = array_shift($carryClans);
 					MatchHandler::addMatchParticipant(0, $clan->getId(), $match);
-					ChatHandler::addClanMembersToChat($chat, $clan);
+					ChatHandler::addChatMembers($chat, $clan->getMembers());
 				} else {
 					MatchHandler::addMatchParticipant(1, array_shift($carryMatches)->getId(), $match);
 				}
@@ -180,7 +167,8 @@ class CompoHandler {
 		}
 
 		while ($looserCount > 0) {
-			$chat = ChatHandler::createChat('match chat');
+			$chat = ChatHandler::createChat('match-chat', 'Match chat');
+
 			$match = MatchHandler::createMatch($time + $looserOffsetTime, '', $compo, $iteration, $chat->getId(), Match::BRACKET_LOOSER); //TODO connectData
 
 			if (count($oldLooserCarry) > 0) {
@@ -242,7 +230,7 @@ class CompoHandler {
 			$iteration++;
 
 			if (count($carryData['matches']) < 2) {
-				$chat = ChatHandler::createChat('match chat');
+				$chat = ChatHandler::createChat('match-chat', 'Match chat');
 				$match = MatchHandler::createMatch($startTime + ($iteration * $compoSpacing), '', $compo, $iteration, $chat->getId(), Match::BRACKET_WINNER); //TODO connectData
 				MatchHandler::addMatchParticipant(1, $carryData['matches'][0]->getId(), $match);
 				MatchHandler::addMatchParticipant(1, $carryData['looserMatches'][0]->getId(), $match);
