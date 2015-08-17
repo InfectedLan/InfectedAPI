@@ -120,5 +120,21 @@ class Avatar extends Object {
 			unlink(Settings::api_path . $this->getThumbnail());
 		}
 	}
+
+    /*
+     * Returns the state of this avatar
+     */
+    public function getState() {
+        return $this->state;
+    }
+
+    /*
+     * Sets the state of this avatar
+     */
+    public function setState($state) {
+        $this->state = $state;
+
+        AvatarHandler::updateAvatar($this, $state, $this->getFileName());
+    }
 }
 ?>

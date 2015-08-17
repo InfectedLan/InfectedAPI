@@ -85,12 +85,16 @@
 
    "this_seatmap_does_not_exist":"This seatmap does not exist.",
    "no_seatmap_specified":"No seatmap specified.",
+   "an_unknown_error_occurred": "An unknown error occurred",
    "an_error_occurred_while_uploading_your_image":"An error occurred while uploading your image.",
+   "an_internal_error_occurred_when_uploading_image":"An internal error occurred when uploading your image. Errorcode: %s",
 
    "wrong_username_or_password":"Wrong username or password.",
    "you_must_activate_your_user_account_in_order_to_logg_in":"You must activate your user account in order to logg in.",
    "you_must_enter_a_username_and_password":"You must enter a username and password.",
    "you_are_already_logged_in":"You are already logged in.",
+
+   "an_exception_occurred": "An exception occurred: %s",
 
    "this_slide_does_not_exist":"This slide does not exist.",
    "no_slide_specified":"No slide specified.",
