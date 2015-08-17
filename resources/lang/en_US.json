@@ -87,6 +87,7 @@
    "no_seatmap_specified":"No seatmap specified.",
    "an_unknown_error_occurred": "An unknown error occurred",
    "an_error_occurred_while_uploading_your_image":"An error occurred while uploading your image.",
+   "an_internal_error_occurred_when_uploading_image":"An internal error occurred when uploading your image. Errorcode: %s",
 
    "wrong_username_or_password":"Wrong username or password.",
    "you_must_activate_your_user_account_in_order_to_logg_in":"You must activate your user account in order to logg in.",

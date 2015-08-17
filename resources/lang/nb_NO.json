@@ -88,6 +88,7 @@
    "an_error_occurred_while_uploading_your_image":"En feil oppstod under opplastningen av bilder ditt.",
    "an_unknown_error_occurred":"En ukjent feil oppstod",
    "an_exception_occurred":"En programfeil oppstod: %s",
+   "an_internal_error_occurred_when_uploading_image":"En intern feil oppstod under opplasting av avataren. Feilkode: %s",
 
    "wrong_username_or_password":"Feil brukernavn eller passord.",
    "you_must_activate_your_user_account_in_order_to_logg_in":"Du må aktivere brukeren din får å kan logge inn.",

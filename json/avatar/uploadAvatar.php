@@ -37,13 +37,8 @@ try {
         $extension = strtolower(end($temp));
         $allowedExts = array('jpeg', 'jpg', 'png');
 
-        $message = "Extension: " . $extension;
-
         if (($_FILES['file']['size'] < 15 * 1024 * 1024)) {
-            $message = "Size ok!";
             if (in_array($extension, $allowedExts)) {
-                $message = "Extension ok!";
-                $message = "Error: " . $_FILES['file']['error'];
                 if ($_FILES['file']['error'] == 0) {
                     // Validate size
                     $image = 0;
@@ -63,6 +58,8 @@ try {
                     } else {
                         $message = Localization::getLocale('the_image_is_too_small_it_must_be_at_least_value_pixels', Settings::avatar_minimum_width . ' x ' . Settings::avatar_minimum_height);
                     }
+                } else {
+                    $message = Localization::getLocale('an_internal_error_occurred_when_uploading_image', $_FILES['file']['error']);
                 }
             } else {
                 $message = Localization::getLocale('invalid_file_format');
