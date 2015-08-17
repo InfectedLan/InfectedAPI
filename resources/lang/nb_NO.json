@@ -4,10 +4,10 @@
    "you_have_not_filled_out_the_required_fields":"Du har ikke fylt ut de nødvendige feltene.",
    "you_are_already_in_a_group":"Du er allerede i et crew.",
    "not_found":"Ikke funnet.",
-   
+
    "the_agenda_you_are_trying_to_change_does_not_exist":"Agenda'en du prøver å endre, finnes ikke.",
    "the_agenda_you_are_trying_to_remove_does_not_exist":"Agenda'en du prøver å fjerne, finnes ikke.",
-   
+
    "this_application_does_not_exist":"Denne søknaden finnes ikke.",
    "no_application_specified":"Ingen søknad er spesifisert.",
    "you_have_already_submitted_an_application_to_value_you_can_apply_again_if_your_application_should_be_denied":"Du har allerede søkt til %s. Du kan søke igjen hvis søknaden din skulle bli avslått.",
@@ -18,7 +18,7 @@
    "you_must_provide_a_reason_why_the_application_shall_be_rejected":"Du må oppgi en grunn på hvorfor søkneden skal bli avvist.",
    "you_cannot_queue_applications_from_previous_events":"Du kan ikke putte søknader fra tidligere arrangementer i køen.",
    "you_cannot_unqueue_applications_from_previous_events":"Du kan ikke ta søknader fra tidligere arrangementer ut av køen.",
-   
+
    "this_avatar_does_not_exist":"Denne avataren finnes ikke.",
    "no_avatar_specified":"Ingen avatar spesifisert.",
    "you_have_no_avatar_and_therefore_cannot_remove_it":"Du har ingen avatar, og kan derfor ikke fjerne den.",
@@ -51,7 +51,7 @@
    "the_event_does_not_exist":"Arrangementet finnes ikke.",
    "all_the_members_of_the_former_event_was_transferred_to_this_one":"Alle medlemene fra det tidligere arrangement ble overført til dette.",
    "you_cannot_remove_this_event":"Du kan ikke fjerne dette arrangementet.",
-   
+
    "this_group_does_not_exist":"Denne gruppen finnes ikke.",
    "no_group_specified":"Ingen gruppe angitt.",
 
@@ -147,16 +147,16 @@
    "the_user_you_tried_to_switch_to_does_not_exist":"Brukeren du prøvde å bytte til eksisterer ikke.",
 
 
-   
+
 
    "your_account_is_now_activated_and_ready_for_use":"Brukeren din er nå aktivert og klar for bruk.",
    "your_account_has_already_been_activated":"Brukeren din er allerede aktivert.",
    "the_link_you_clicked_is_no_longer_valid":"Linken du trykket på er ikke lengre gyldig.",
 
    "change_password":"Endre passord",
-   "old_password":"Gammelt passord:",
-   "new_password":"Nytt passord:",
-   "repeat_new_password":"Gjenta nytt passord:",
+   "old_password":"Gammelt passord",
+   "new_password":"Nytt passord",
+   "repeat_new_password":"Gjenta nytt passord",
    "save":"Lagre",
 
    "change_user":"Endre bruker",
