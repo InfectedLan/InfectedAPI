@@ -86,6 +86,48 @@ class CompoHandler {
 	}
 
 	/*
+	 * Create a new compo entry.
+	 */
+	public static function createCompo($name, $title, $tag, $description, $mode, $price, $startTime, $registrationEndTime, $teamSize) {
+		$database = Database::open(Settings::db_name_infected_compo);
+
+		$database->query('INSERT INTO `' . Settings::db_table_infected_main_compo_compo . '` (`eventId`, `name`, `title`, `tag`, `description`, `mode`, `price`, `startTime`, `registrationEndTime`, `teamSize`)
+										  VALUES (\'' . EventHandler::getCurrentEvent()->getId() . '\',
+														  \'' . $database->real_escape_string($name) . '\',
+														  \'' . $database->real_escape_string($title) . '\',
+															\'' . $database->real_escape_string($tag) . '\',
+															\'' . $database->real_escape_string($description) . '\',
+															\'' . $database->real_escape_string($mode) . '\',
+															\'' . $database->real_escape_string($price) . '\',
+															\'' . $database->real_escape_string($startTime) . '\'
+															\'' . $database->real_escape_string($registrationEndTime) . '\',
+														  \'' . $database->real_escape_string($teamSize) . '\');');
+
+		$database->close();
+	}
+
+	/*
+	 * Update a compo.
+	 */
+	public static function updateCompo(Compo $compo, $name, $title, $tag, $description, $mode, $price, $startTime, $registrationEndTime, $teamSize) {
+		$database = Database::open(Settings::db_name_infected_compo);
+
+		$database->query('UPDATE `' . Settings::db_table_infected_compo_compo . '`
+										  SET `name` = \'' . $database->real_escape_string($name) . '\',
+													`title` = \'' . $database->real_escape_string($title) . '\',
+													`tag` = \'' . $database->real_escape_string($tag) . '\',
+												  `description` = \'' . $database->real_escape_string($description) . '\',
+													`mode` = \'' . $database->real_escape_string($mode) . '\',
+													`price` = \'' . $database->real_escape_string($price) . '\',
+												  `startTime` = \'' . $database->real_escape_string($startTime) . '\',
+													`registrationEndTime` = \'' . $database->real_escape_string($registrationEndTime) . '\',
+												  `teamSize` = \'' . $database->real_escape_string($teamSize) . '\'
+										  WHERE `id` = \'' . $compo->getId() . '\';');
+
+		$database->close();
+	}
+
+	/*
 	 * Returns true if the given compo has generated matches.
 	 */
 	public static function hasGeneratedMatches(Compo $compo) {
