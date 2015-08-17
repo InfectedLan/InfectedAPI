@@ -328,7 +328,7 @@ class ChatHandler {
 														  \'' . $chat->getId() . '\',
 														  \'' . date('Y-m-d H:i:s') . '\',
 														  \'' . htmlspecialchars($database->real_escape_string($message), ENT_QUOTES | ENT_HTML401) . '\');');
-															
+
 		$database->close();
 	}
 }

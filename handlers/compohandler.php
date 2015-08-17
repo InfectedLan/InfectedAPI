@@ -43,26 +43,6 @@ class CompoHandler {
 	}
 
 	/*
-	 * Get a list of compos.
-	 */
-	public static function getCompos() {
-		$database = Database::open(Settings::db_name_infected_compo);
-
-		$result = $database->query('SELECT * FROM `' . Settings::db_table_infected_compo_compos . '`
-																WHERE `eventId` = \'' . EventHandler::getCurrentEvent()->getId() . '\';');
-
-		$database->close();
-
-		$compoList = array();
-
-		while ($object = $result->fetch_object('Compo')) {
-			array_push($compoList, $object);
-		}
-
-		return $compoList;
-	}
-
-	/*
 	 * Get compos for the specified event.
 	 */
 	public static function getComposByEvent(Event $event) {
@@ -80,6 +60,13 @@ class CompoHandler {
 		}
 
 		return $compoList;
+	}
+
+	/*
+	 * Get a list of compos.
+	 */
+	public static function getCompos() {
+		return self::getComposByEvent(EventHandler::getCurrentEvent());
 	}
 
 	/*
