@@ -36,11 +36,8 @@ if (Session::isAuthenticated()) {
 			$avatar->remove();
 			$result = true;
 		} else {
-				$message = Localization::getLocale('this_avatar_does_not_exist');
-			}
-		} else {
-			$message = Localization::getLocale('no_avatar_specified');
-		}
+            $message = Localization::getLocale('this_avatar_does_not_exist');
+		} 
 	} else {
 		$message = Localization::getLocale('you_have_no_avatar_and_therefore_cannot_remove_it');
 	}
