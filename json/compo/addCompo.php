@@ -45,7 +45,6 @@ if (Session::isAuthenticated()) {
 			!empty($_GET['registrationEndTime']) &&
 			!empty($_GET['registrationEndDate']) &&
 			is_numeric($_GET['teamSize'])) {
-
 			$name = strtolower(str_replace(' ', '-', $_GET['title']));
 			$title = $_GET['title'];
 			$tag = $_GET['tag'];
