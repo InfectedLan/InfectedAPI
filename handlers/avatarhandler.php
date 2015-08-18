@@ -188,7 +188,7 @@ class AvatarHandler {
 		$database->query('UPDATE `' . Settings::db_table_infected_crew_avatars . '`
 										  SET `state` = \'2\'
 										  WHERE `id` = \'' . $avatar->getId() . '\';');
-											
+
 		$database->close();
 	}
 
@@ -210,7 +210,7 @@ class AvatarHandler {
 	 */
 	public static function getDefaultAvatar(User $user) {
 		if ($user->getAge() >= 18) {
-			if ($user->getGender() == 0) {
+			if ($user->getGender()) {
 				$file = 'default_gutt.png';
 			} else {
 				$file = 'default_jente.png';
