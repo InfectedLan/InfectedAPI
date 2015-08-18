@@ -44,6 +44,7 @@
    "this_compo_does_not_exist":"This compo does not exist.",
    "no_compo_specified":"No compo specified.",
    "this_compo_has_already_generated_matches":"This compo has already generated matches.",
+   "the_compo_you_are_trying_to_change_does_not_exist":"The compo you are trying to change does not exist.",
 
    "your_email_was_sent_to_the_selected_user":"Your email was sent to the selected user.",
    "your_email_was_sent_to_the_selected_users":"Your email was sent to the selected users.",

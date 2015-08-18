@@ -44,6 +44,7 @@
    "this_compo_does_not_exist":"Denne compo'en finnes ikke.",
    "no_compo_specified":"Ingen compo angitt.",
    "this_compo_has_already_generated_matches":"Denne compoen har allerede generert matcher.",
+   "the_compo_you_are_trying_to_change_does_not_exist":"Compo'en du prøver å endre, finnes ikke.",
 
    "your_email_was_sent_to_the_selected_user":"Din e-post ble sendt til den valgte brukeren.",
    "your_email_was_sent_to_the_selected_users":"Din e-post ble sendt til de valgte brukerene.",
