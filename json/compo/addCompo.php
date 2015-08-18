@@ -52,11 +52,10 @@ if (Session::isAuthenticated()) {
 			$mode = $_GET['mode'];
 			$price = is_numeric($_GET['price']) ? $_GET['price'] : 0;
 			$startTime = $_GET['startDate'] . ' ' . $_GET['startTime'];
-			$startTime = $_GET['registrationEndDate'] . ' ' . $_GET['registrationEndTime'];
+			$registrationEndTime = $_GET['registrationEndDate'] . ' ' . $_GET['registrationEndTime'];
 			$teamSize = $_GET['teamSize'];
 
 			CompoHandler::createCompo($name, $title, $tag, $description, $mode, $price, $startTime, $registrationEndTime, $teamSize);
-
 			$result = true;
 		} else {
 			$message = Localization::getLocale('you_have_not_filled_out_the_required_fields');

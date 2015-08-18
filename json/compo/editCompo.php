@@ -45,6 +45,15 @@ if (Session::isAuthenticated()) {
 			!empty($_GET['registrationEndDate']) &&
 			is_numeric($_GET['teamSize'])) {
 			$compo = CompoHandler::getCompo($_GET['id']);
+			$name = strtolower(str_replace(' ', '-', $_GET['title']));
+			$title = $_GET['title'];
+			$tag = $_GET['tag'];
+			$description = $_GET['description'];
+			$mode = $_GET['mode'];
+			$price = is_numeric($_GET['price']) ? $_GET['price'] : 0;
+			$startTime = $_GET['startDate'] . ' ' . $_GET['startTime'];
+			$registrationEndTime = $_GET['registrationEndDate'] . ' ' . $_GET['registrationEndTime'];
+			$teamSize = $_GET['teamSize'];
 
 			if ($compo != null) {
 				CompoHandler::updateCompo($compo, $name, $title, $tag, $description, $mode, $price, $startTime, $registrationEndTime, $teamSize);
