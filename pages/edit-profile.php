@@ -8,12 +8,12 @@
  * modify it under the terms of the GNU Lesser General Public
  * License as published by the Free Software Foundation; either
  * version 3.0 of the License, or (at your option) any later version.
- * 
+ *
  * This library is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
  * Lesser General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU Lesser General Public
  * License along with this library.  If not, see <http://www.gnu.org/licenses/>.
  */
@@ -28,15 +28,15 @@ if (Session::isAuthenticated()) {
 	$id = isset($_GET['id']) ? $_GET['id'] : Session::getCurrentUser()->getId();
 	$user = Session::getCurrentUser();
 	$editUser = UserHandler::getUser($id);
-	
+
 	if ($editUser != null) {
 		if ($user->hasPermission('*') ||
 			$user->equals($editUser)) {
 			echo '<script src="../api/scripts/edit-profile.js"></script>';
 			echo '<script src="../api/scripts/lookupCity.js"></script>';
-			
+
 			echo '<h3>' . Localization::getLocale('change_user') . '</h3>';
-			
+
 			echo '<table>';
 				echo '<form class="edit-profile" method="post">';
 					echo '<input type="hidden" name="id" value="' . $editUser->getId() . '">';
@@ -65,7 +65,7 @@ if (Session::isAuthenticated()) {
 						echo '<td>';
 							echo '<select name="gender">';
 								$gender = $editUser->getGender();
-								
+
 								if ($gender == 0) {
 									echo '<option value="0" selected>' . Localization::getLocale('male') . '</option>';
 									echo '<option value="1">' . Localization::getLocale('female') . '</option>';
@@ -80,7 +80,7 @@ if (Session::isAuthenticated()) {
 						echo '<td>' . Localization::getLocale('birthdate') . ':</td>';
 						echo '<td>';
 							$birthdate = $editUser->getBirthdate();
-						
+
 							echo '<select name="birthday">';
 								for ($day = 1; $day <= 31; $day++) {
 									if ($day == date('d', $birthdate)) {
@@ -90,7 +90,7 @@ if (Session::isAuthenticated()) {
 									}
 								}
 							echo '</select>';
-							echo '<select name="birthmonth">';					
+							echo '<select name="birthmonth">';
 								for ($month = 1; $month <= 12; $month++) {
 									if ($month == date('m', $birthdate)) {
 										echo '<option value="' . $month . '" selected>' . DateUtils::getMonthFromInt($month) . '</option>';
@@ -112,7 +112,7 @@ if (Session::isAuthenticated()) {
 					echo '</tr>';
 					echo '<tr>';
 						echo '<td>' . Localization::getLocale('phone') . ':</td>';
-						echo '<td><input type="tel" name="phone" value="' . $editUser->getPhone() . '" required></td>';
+						echo '<td>(+47) <input type="tel" name="phone" value="' . $editUser->getPhone() . '" required></td>';
 					echo '</tr>';
 					echo '<tr>';
 						echo '<td>' . Localization::getLocale('street_address') . ':</td>';
@@ -131,10 +131,10 @@ if (Session::isAuthenticated()) {
 						echo '<td>' . Localization::getLocale('guardians_phone') . ':</td>';
 							if (EmergencyContactHandler::hasEmergencyContactByUser($editUser)) {
 								$emergencyContactPhone = EmergencyContactHandler::getEmergencyContactByUser($editUser)->getPhone();
-							
-								echo '<td><input name="emergencycontactphone" type="tel" value="' . $emergencyContactPhone . '"></td>';
+
+								echo '<td>(+47) <input name="emergencycontactphone" type="tel" value="' . $emergencyContactPhone . '"></td>';
 							} else {
-								echo '<td><input name="emergencycontactphone" type="tel"></td>';
+								echo '<td>(+47) <input name="emergencycontactphone" type="tel"></td>';
 							}
 						echo '<td><i>(' . Localization::getLocale('required_if_you_are_under_the_age_of_value', 18) . ')</i></td>';
 					echo '</tr>';
@@ -142,7 +142,7 @@ if (Session::isAuthenticated()) {
 						echo '<td><input type="submit" value="' . Localization::getLocale('save') . '"></td>';
 					echo '</tr>';
 				echo '</form>';
-				
+
 				if ($user->equals($editUser)) {
 					echo '<tr>';
 						echo '<td></td>';

@@ -4,10 +4,10 @@
    "you_have_not_filled_out_the_required_fields":"You have not filled out the required fields.",
    "you_are_already_in_a_group":"You are already in a group.",
    "not_found":"Not found.",
-   
+
    "the_agenda_you_are_trying_to_change_does_not_exist":"The agenda you are trying to change does not exist.",
    "the_agenda_you_are_trying_to_remove_does_not_exist":"The agenda you are trying to remove does not exist.",
-   
+
    "this_application_does_not_exist":"This application does not exist.",
    "no_application_specified":"No application specified.",
    "you_have_already_submitted_an_application_to_value_you_can_apply_again_if_your_application_should_be_denied":"You have already submitted an application to %s you can apply again if your application should be denied.",
@@ -17,8 +17,8 @@
    "you_can_not_reject_applications_from_previous_events":"You can not reject applications from previous events.",
    "you_must_provide_a_reason_why_the_application_shall_be_rejected":"You must provide a reason why the application shall be rejected.",
    "you_cannot_queue_applications_from_previous_events":"You cannot queue applications from previous events.",
-   "you_cannot_unqueue_applications_from_previous_events":"You cannot unqueue applications from previous events.",   
-   
+   "you_cannot_unqueue_applications_from_previous_events":"You cannot unqueue applications from previous events.",
+
    "this_avatar_does_not_exist":"This avatar does not exist.",
    "no_avatar_specified":"No avatar specified.",
    "you_have_no_avatar_and_therefore_cannot_remove_it":"You have no avatar, and therefore cannot remove it.",
@@ -44,17 +44,18 @@
    "this_compo_does_not_exist":"This compo does not exist.",
    "no_compo_specified":"No compo specified.",
    "this_compo_has_already_generated_matches":"This compo has already generated matches.",
+   "the_compo_you_are_trying_to_change_does_not_exist":"The compo you are trying to change does not exist.",
 
    "your_email_was_sent_to_the_selected_user":"Your email was sent to the selected user.",
    "your_email_was_sent_to_the_selected_users":"Your email was sent to the selected users.",
-   
+
    "the_event_does_not_exist":"The event does not exist.",
    "all_the_members_of_the_former_event_was_transferred_to_this_one":"All the members of the former event was transferred to this one.",
    "you_cannot_remove_this_event":"You cannot remove this event.",
 
    "this_group_does_not_exist":"This group does not exist.",
    "no_group_specified":"No group specified.",
-   
+
    "this_invite_does_not_exist":"This invite does not exist.",
    "you_are_not_the_owner_of_this_invite":"You are not the owner of this invite.",
 
@@ -85,12 +86,16 @@
 
    "this_seatmap_does_not_exist":"This seatmap does not exist.",
    "no_seatmap_specified":"No seatmap specified.",
+   "an_unknown_error_occurred": "An unknown error occurred",
    "an_error_occurred_while_uploading_your_image":"An error occurred while uploading your image.",
+   "an_internal_error_occurred_when_uploading_image":"An internal error occurred when uploading your image. Errorcode: %s",
 
    "wrong_username_or_password":"Wrong username or password.",
    "you_must_activate_your_user_account_in_order_to_logg_in":"You must activate your user account in order to logg in.",
    "you_must_enter_a_username_and_password":"You must enter a username and password.",
    "you_are_already_logged_in":"You are already logged in.",
+
+   "an_exception_occurred": "An exception occurred: %s",
 
    "this_slide_does_not_exist":"This slide does not exist.",
    "no_slide_specified":"No slide specified.",
@@ -147,7 +152,7 @@
    "the_user_you_tried_to_switch_to_does_not_exist":"The user you tried to switch to does not exist.",
 
 
-   
+
 
    "your_account_is_now_activated_and_ready_for_use":"Your account is now activated and ready for use.",
    "your_account_has_already_been_activated":"Your account has already been activated.",

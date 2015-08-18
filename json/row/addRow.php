@@ -8,12 +8,12 @@
  * modify it under the terms of the GNU Lesser General Public
  * License as published by the Free Software Foundation; either
  * version 3.0 of the License, or (at your option) any later version.
- * 
+ *
  * This library is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
  * Lesser General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU Lesser General Public
  * License along with this library.  If not, see <http://www.gnu.org/licenses/>.
  */
@@ -29,17 +29,17 @@ $id = null;
 
 if (Session::isAuthenticated()) {
 	$user = Session::getCurrentUser();
-	
+
 	if ($user->hasPermission('*') ||
 		$user->hasPermission('admin.seatmap')) {
 		if (isset($_GET['seatmap'])) {
 			$seatmap = SeatmapHandler::getSeatmap($_GET['seatmap']);
-			
+
 			if ($seatmap != null) {
-				if (isset($_GET['x']) && 
+				if (isset($_GET['x']) &&
 					isset($_GET['y'])) {
-					$row = $seatmap->addRow($_GET['x'], $_GET['y']);
-					$id = $row->getId();
+					$id = $seatmap->addRow($_GET['x'], $_GET['y'])->getId();
+					
 					$result = true;
 				} else {
 					$message = Localization::getLocale('position_not_set');

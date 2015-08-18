@@ -8,12 +8,12 @@
  * modify it under the terms of the GNU Lesser General Public
  * License as published by the Free Software Foundation; either
  * version 3.0 of the License, or (at your option) any later version.
- * 
+ *
  * This library is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
  * Lesser General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU Lesser General Public
  * License along with this library.  If not, see <http://www.gnu.org/licenses/>.
  */
@@ -29,10 +29,10 @@ $message = null;
 
 if (Session::isAuthenticated()) {
 	$user = Session::getCurrentUser();
-	
+
 	// Only allow non-members to apply.
 	if (!$user->isGroupMember()) {
-		
+
 		// Check that the user has an cropped avatar.
 		if ($user->hasCroppedAvatar()) {
 			if (isset($_GET['groupId']) &&
@@ -41,8 +41,8 @@ if (Session::isAuthenticated()) {
 				!empty($_GET['content'])) {
 				$group = GroupHandler::getGroup($_GET['groupId']);
 				$content = $_GET['content'];
-				
-				if (!ApplicationHandler::hasUserApplicationByGroup($user, $group)) {
+
+				if (!ApplicationHandler::hasUserApplicationsByGroup($user, $group)) {
 					ApplicationHandler::createApplication($group, $user, $content);
 					$result = true;
 

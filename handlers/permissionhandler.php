@@ -8,12 +8,12 @@
  * modify it under the terms of the GNU Lesser General Public
  * License as published by the Free Software Foundation; either
  * version 3.0 of the License, or (at your option) any later version.
- * 
+ *
  * This library is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
  * Lesser General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU Lesser General Public
  * License along with this library.  If not, see <http://www.gnu.org/licenses/>.
  */
@@ -28,12 +28,12 @@ class PermissionHandler {
 	 */
 	public static function getPermission($id) {
 		$database = Database::open(Settings::db_name_infected);
-		
+
 		$result = $database->query('SELECT * FROM `' . Settings::db_table_infected_permissions . '`
-									WHERE `id` = \'' . $database->real_escape_string($id) . '\';');
-		
+																WHERE `id` = \'' . $database->real_escape_string($id) . '\';');
+
 		$database->close();
-		
+
 		return $result->fetch_object('Permission');
 	}
 
@@ -42,28 +42,28 @@ class PermissionHandler {
 	 */
 	public static function getPermissionByValue($value) {
 		$database = Database::open(Settings::db_name_infected);
-		
+
 		$result = $database->query('SELECT * FROM `' . Settings::db_table_infected_permissions . '`
-									WHERE `value` = \'' . $database->real_escape_string($value) . '\';');
-		
+																WHERE `value` = \'' . $database->real_escape_string($value) . '\';');
+
 		$database->close();
-		
+
 		return $result->fetch_object('Permission');
 	}
-	
+
 	/*
 	 * Returns a list of all permissions.
 	 */
 	public static function getPermissions() {
 		$database = Database::open(Settings::db_name_infected);
-		
+
 		$result = $database->query('SELECT * FROM `' . Settings::db_table_infected_permissions . '`
-									ORDER BY `value` ASC;');
+																ORDER BY `value` ASC;');
 		
 		$database->close();
 
 		$permissionList = array();
-		
+
 		while ($object = $result->fetch_object('Permission')) {
 			array_push($permissionList, $object);
 		}

@@ -20,7 +20,7 @@
 
 require_once 'session.php';
 require_once 'localization.php';
-require_once 'handlers/pagehandler.php';
+require_once 'handlers/compohandler.php';
 
 $result = false;
 $message = null;
@@ -29,23 +29,38 @@ if (Session::isAuthenticated()) {
 	$user = Session::getCurrentUser();
 
 	if ($user->hasPermission('*') ||
-		$user->hasPermission('admin.website')) {
-		if (isset($_GET['id']) &&
-			isset($_GET['title']) &&
-			isset($_GET['content']) &&
-			is_numeric($_GET['id']) &&
+		$user->hasPermission('event.compo')) {
+		if (isset($_GET['title']) &&
+			isset($_GET['tag']) &&
+			isset($_GET['startTime']) &&
+			isset($_GET['startDate']) &&
+			isset($_GET['registrationEndTime']) &&
+			isset($_GET['registrationEndDate']) &&
+			isset($_GET['teamSize']) &&
 			!empty($_GET['title']) &&
-			!empty($_GET['content'])) {
-			$page = PageHandler::getPage($_GET['id']);
+			!empty($_GET['tag']) &&
+			!empty($_GET['startTime']) &&
+			!empty($_GET['startDate']) &&
+			!empty($_GET['registrationEndTime']) &&
+			!empty($_GET['registrationEndDate']) &&
+			is_numeric($_GET['teamSize'])) {
+			$compo = CompoHandler::getCompo($_GET['id']);
+			$name = strtolower(str_replace(' ', '-', $_GET['title']));
 			$title = $_GET['title'];
-			$content = $_GET['content'];
+			$tag = $_GET['tag'];
+			$description = $_GET['description'];
+			$mode = $_GET['mode'];
+			$price = is_numeric($_GET['price']) ? $_GET['price'] : 0;
+			$startTime = $_GET['startDate'] . ' ' . $_GET['startTime'];
+			$registrationEndTime = $_GET['registrationEndDate'] . ' ' . $_GET['registrationEndTime'];
+			$teamSize = $_GET['teamSize'];
 
-			if ($page != null) {
-				PageHandler::updatePage($page, $title, $content);
-				
+			if ($compo != null) {
+				CompoHandler::updateCompo($compo, $name, $title, $tag, $description, $mode, $price, $startTime, $registrationEndTime, $teamSize);
+
 				$result = true;
 			} else {
-				$message = Localization::getLocale('this_page_does_not_exist');
+				$message = Localization::getLocale('the_compo_you_are_trying_to_change_does_not_exist');
 			}
 		} else {
 			$message = Localization::getLocale('you_have_not_filled_out_the_required_fields');
