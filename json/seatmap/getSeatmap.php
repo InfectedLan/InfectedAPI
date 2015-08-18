@@ -8,12 +8,12 @@
  * modify it under the terms of the GNU Lesser General Public
  * License as published by the Free Software Foundation; either
  * version 3.0 of the License, or (at your option) any later version.
- * 
+ *
  * This library is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
  * Lesser General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU Lesser General Public
  * License along with this library.  If not, see <http://www.gnu.org/licenses/>.
  */
@@ -34,22 +34,22 @@ if (Session::isAuthenticated()) {
 
 	if (isset($_GET['id'])) {
 		$seatmap = SeatmapHandler::getSeatmap($_GET['id']);
-		
+
 		if ($seatmap != null) {
 			$seatmapData = array();
 			$backgroundImage = $seatmap->getBackgroundImage();
-			
+
 			foreach ($seatmap->getRows() as $row) {
 				$seatData = array();
 
 				foreach ($row->getSeats() as $seat) {
-					array_push($seatData, array('id' => $seat->getId(), 
-												'number' => $seat->getNumber(), 
+					array_push($seatData, array('id' => $seat->getId(),
+												'number' => $seat->getNumber(),
 												'humanName' => $seat->getString()));
 				}
 
-				array_push($seatmapData, array('seats' => $seatData, 
-											   'id' => $row->getId(), 
+				array_push($seatmapData, array('seats' => $seatData,
+											   'id' => $row->getId(),
 											   'x' => $row->getX(),
 											   'y' => $row->getY(),
 											   'number' => $row->getNumber()));
