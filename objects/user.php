@@ -92,14 +92,18 @@ class User extends Object {
 	 * Returns the users gender.
 	 */
 	public function getGender() {
-		return $this->gender ? true : false;
+		return $this->gender == 0 ? true : false;
 	}
 
 	/*
 	 * Returns the users gendername.
 	 */
 	public function getGenderAsString() {
-		return $this->getGender() == 0 ? 'Gutt' : 'Jente';
+		if ($this->getAge() < 18) {
+			return $this->getGender() ? 'Gutt' : 'Jente';
+		}
+
+		return $this->getGender() ? 'Mann' : 'Kvinne';
 	}
 
 	/*
