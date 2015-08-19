@@ -17,20 +17,46 @@
  * You should have received a copy of the GNU Lesser General Public
  * License along with this library.  If not, see <http://www.gnu.org/licenses/>.
  */
+/**
+ * How the protocol works
+ * 
+ * The protocol is a simple JSON-based packet protocol. Why JSON? It's simple to decode on the js client. Seriously.
+ * Each packet consists of an object with two fields: intent, and data. 
+ * Intent is a string that describes what the packet represents. Think of it as a "packet type"
+ * Data is ALLWAYS an array containing the data the packet wants to communicate.
+ *
+ * Why allways an array? This way, we are never confused as to what intent uses object, and what uses an array.
+ */
+/**
+ * Client -> Server intents:
+ *     auth - data[0] contains the current session id. This is used to identify the client to the server.
+ *
+ * Server -> Client intents:
+ *     authResult - data[0] containts the result of the authentication
+ */
 set_include_path(get_include_path() . PATH_SEPARATOR . '/home/test.infected.no/public_html/api');
 
 require_once '../libraries/phpwebsockets/websockets.php';
-require_once 'authenticateduser.php';
+require_once 'session.php';
 set_time_limit(0); //Make sure the script runs forever
 
 class CompoServer extends WebSocketServer {
+    private $authenticatedUsers;
+    
 	protected function process($session, $message) {
+        $this->authenticatedUsers = new SplObjectStorage();
 		//$this->send($session, "You sendt" . $message);
 		echo $message . "\n";
 		$parsedJson = json_decode($message);
 		switch ($parsedJson->intent) {
 			case 'auth':
-				AuthenticatedUser::AuthenticateUser($session, $parsedJson->data[0]);
+                $user = Session::getUserFromSessionId($parsedJson->data[0]);
+                if($user != null) {
+                    $this->registerUser($user, $session);
+                    $this->send('{"intent": "authResult", "data": [true]}', $session);
+                } else {
+                    $this->send('{"intent": "authResult", "data": [false]}', $session);
+                }
 				break;
 			
 			default:
@@ -45,6 +71,23 @@ class CompoServer extends WebSocketServer {
 	protected function closed($session) {
 		echo "Lost connection\n";
 	}
+
+    protected function registerUser($user, $session){
+        echo "Got user: " . $user->getUsername() . ".\n";
+        $this->authenticatedUsers[$session] = $user;
+    }
+
+    protected function isAuthenticated($session) {
+        return $this->authenticatedUsers[$session] != null;
+    }
+
+    protected function getUser($session) {
+        return $this->authenticatedUsers($session);
+    }
+
+    protected function tick() {
+
+    }
 }
 
 $server = new CompoServer("0.0.0.0", "1337");

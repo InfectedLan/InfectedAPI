@@ -62,5 +62,16 @@ class Session {
 			$_SESSION['user'] = UserHandler::getUser($user->getId());;
 		}
 	}
+
+    /*
+     *
+     */
+    public function getUserFromSessionId($sessionId) {
+        $sessionData = exec("cat /var/lib/php5/sessions/sess_" . $sessionId); //I am not debugging regex at 0:35 in the morning, and it is temp anyways
+        $regex = '/"*id";s:\d+:"(.+)";/';
+        preg_match($regex, $sessionData, $matches);
+        $id = $matches[1]; //$matches[0] returns the entire regex, $matches[1] returns the first subgroup.
+        return UserHandler::getUser($id);
+    }
 }
 ?>
