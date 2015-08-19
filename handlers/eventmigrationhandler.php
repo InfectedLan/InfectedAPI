@@ -38,7 +38,7 @@ class EventMigrationHandler {
 	 */
 	public static function copy(Event $fromEvent, Event $toEvent) {
 		// Infected
-		self::copyPermissions($fromEvent, $toEvent);
+		self::copyUserPermissions($fromEvent, $toEvent);
 
 		// InfectedCompo
 		self::copyCompos($fromEvent, $toEvent);
@@ -64,7 +64,7 @@ class EventMigrationHandler {
 	/*
 	 * Copies permissions from the given event to the new one, overwriting is forbidden so no entries for the new event can already exist.
 	 */
-	public static function copyPermissions(Event $fromEvent, Event $toEvent) {
+	public static function copyUserPermissions(Event $fromEvent, Event $toEvent) {
 		self::copyTableByEvent($fromEvent, $toEvent, Settings::db_name_infected, Settings::db_table_infected_userpermissions);
 	}
 
