@@ -8,12 +8,12 @@
  * modify it under the terms of the GNU Lesser General Public
  * License as published by the Free Software Foundation; either
  * version 3.0 of the License, or (at your option) any later version.
- * 
+ *
  * This library is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
  * Lesser General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU Lesser General Public
  * License along with this library.  If not, see <http://www.gnu.org/licenses/>.
  */
@@ -35,6 +35,7 @@
  *     authResult - data[0] containts the result of the authentication
  */
 set_include_path(get_include_path() . PATH_SEPARATOR . '/home/test.infected.no/public_html/api');
+set_time_limit(0); //Make sure the script runs forever
 
 require_once '../libraries/phpwebsockets/websockets.php';
 require_once 'session.php';
@@ -58,7 +59,7 @@ class CompoServer extends WebSocketServer {
                     $this->send('{"intent": "authResult", "data": [false]}', $session);
                 }
 				break;
-			
+
 			default:
 				echo "Got unhandled intent: " . $parsedJson->intent . "\n";
 		}
@@ -92,7 +93,7 @@ class CompoServer extends WebSocketServer {
 
 $server = new CompoServer("0.0.0.0", "1337");
 echo "Whoami: " . exec("whoami") . "\n";
-phpinfo();
+//phpinfo();
 echo "\n";
 
 try {

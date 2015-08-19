@@ -8,12 +8,12 @@
  * modify it under the terms of the GNU Lesser General Public
  * License as published by the Free Software Foundation; either
  * version 3.0 of the License, or (at your option) any later version.
- * 
+ *
  * This library is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
  * Lesser General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU Lesser General Public
  * License along with this library.  If not, see <http://www.gnu.org/licenses/>.
  */
@@ -39,11 +39,11 @@ class NotificationManager {
 					$message[] = '<p>Med vennlig hilsen <a href="http://infected.no/">Infected</a>.</p>';
 				$message[] = '</body>';
 			$message[] = '</html>';
-				
-			return MailManager::sendMails(array($group->getLeader(), $group->getCoLeader()), 'Ny søknad til ' . $group->getTitle() . ' crew', implode("\r\n", $message));
+
+			return MailManager::sendEmails(array($group->getLeader(), $group->getCoLeader()), 'Ny søknad til ' . $group->getTitle() . ' crew', implode("\r\n", $message));
 		}
 	}
-	
+
 	/*
 	 * Sends an mail to the users e-mail address with status information.
 	 */
@@ -59,10 +59,10 @@ class NotificationManager {
 				$message[] = '<p>Med vennlig hilsen <a href="http://infected.no/">Infected</a>.</p>';
 			$message[] = '</body>';
 		$message[] = '</html>';
-			
-		return MailManager::sendMail($application->getUser(), 'Din Infected Crew søknad har blitt oppdatert', implode("\r\n", $message));
+
+		return MailManager::sendEmail($application->getUser(), 'Din Infected Crew søknad har blitt oppdatert', implode("\r\n", $message));
 	}
-	
+
 	/*
 	 * Sends an mail to the users e-mail address with status information.
 	 */
@@ -78,10 +78,10 @@ class NotificationManager {
 				$message[] = '<p>Med vennlig hilsen <a href="http://infected.no/">Infected</a>.</p>';
 			$message[] = '</body>';
 		$message[] = '</html>';
-			
-		return MailManager::sendMail($application->getUser(), 'Din Infected Crew søknad har blitt oppdatert', implode("\r\n", $message));
+
+		return MailManager::sendEmail($application->getUser(), 'Din Infected Crew søknad har blitt oppdatert', implode("\r\n", $message));
 	}
-	
+
 	/*
 	 * Sends an mail to the users e-mail address with status information.
 	 */
@@ -98,10 +98,10 @@ class NotificationManager {
 				$message[] = '<p>Med vennlig hilsen <a href="http://infected.no/">Infected</a>.</p>';
 			$message[] = '</body>';
 		$message[] = '</html>';
-			
-		return MailManager::sendMail($application->getUser(), 'Din Infected Crew søknad har blitt oppdatert', implode("\r\n", $message));
+
+		return MailManager::sendEmail($application->getUser(), 'Din Infected Crew søknad har blitt oppdatert', implode("\r\n", $message));
 	}
-	
+
 	/*
 	 * Sends a notification to the users e-mail address with purchase information.
 	 */
@@ -117,8 +117,8 @@ class NotificationManager {
 				$message[] = '<p>Med vennlig hilsen <a href="http://infected.no/">Infected</a>.</p>';
 			$message[] = '</body>';
 		$message[] = '</html>';
-			
-		return MailManager::sendMail($user, 'Takk for ditt kjøp av billett til Infected.', implode("\r\n", $message));
+
+		return MailManager::sendEmail($user, 'Takk for ditt kjøp av billett til Infected.', implode("\r\n", $message));
 	}
 }
 ?>

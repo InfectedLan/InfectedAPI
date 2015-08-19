@@ -8,12 +8,12 @@
  * modify it under the terms of the GNU Lesser General Public
  * License as published by the Free Software Foundation; either
  * version 3.0 of the License, or (at your option) any later version.
- * 
+ *
  * This library is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
  * Lesser General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU Lesser General Public
  * License along with this library.  If not, see <http://www.gnu.org/licenses/>.
  */
@@ -43,7 +43,7 @@ class EventMigrationHandler {
 		// InfectedCompo
 		self::copyCompos($fromEvent, $toEvent);
 		//self::copyInvites($fromEvent, $toEvent); // This is commented out because this may be unwanted behavior.
-		
+
 		// InfectedCrew
 		self::copyGroups($fromEvent, $toEvent);
 		self::copyTeams($fromEvent, $toEvent);
@@ -57,7 +57,6 @@ class EventMigrationHandler {
 		self::copyAgenda($fromEvent, $toEvent);
 
 		// InfectedTickets
-		//self::copyTickets($fromEvent, $toEvent); // This is commented out because this may be unwanted behavior.
 	}
 
 	/* Infected */
@@ -138,8 +137,8 @@ class EventMigrationHandler {
 	/*
 	 * Copies tickets from given event to the new one, overwriting is forbidden so no entries for the new event can already exist.
 	 */
-	public static function copyTickets($fromEvent, $toEvent) {
-		self::copyTableByEvent($fromEvent, $toEvent, Settings::db_name_infected_tickets, Settings::db_table_infected_tickets_tickets);
+	public static function copySeatmap($fromEvent, $toEvent) {
+		//self::copyTableByEvent($fromEvent, $toEvent, Settings::db_name_infected_sea, Settings::db_table_infected_tickets_tickets);
 	}
 }
 ?>

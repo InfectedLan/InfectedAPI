@@ -17,44 +17,26 @@
  * You should have received a copy of the GNU Lesser General Public
  * License along with this library.  If not, see <http://www.gnu.org/licenses/>.
  */
+require_once '../session.php';
 
-require_once 'database.php';
-require_once 'settings.php';
-require_once 'handlers/userhandler.php';
-require_once 'handlers/clanhandler.php';
-require_once 'handlers/invitehandler.php';
-require_once 'objects/eventobject.php';
+class AuthenticatedUser {
+	private $infectedUser;
+	private $session;
 
-class Invite extends EventObject {
-	private $userId;
-	private $clanId;
-
-	/*
-	 * Returns the user that this invite is for.
-	 */
-	public function getUser() {
-		return UserHandler::getUser($this->userId);
+	function __construct($session, $user) {
+		$this->infectedUser = $user;
+		$this->session = $session;
 	}
 
-	/*
-	 * Returns the clan this invite is to.
-	 */
-	public function getClan() {
-		return ClanHandler::getClan($this->clanId);
-	}
+	static function authenticateUser($session, $sessionid) {
+		echo "Authenticating session id " . $sessionid . "\n";
+		echo "session data: " . exec("cat /var/lib/php5/sessions/sess_" . $sessionid) . "\n";
+		session_id($sessionid);
 
-	/*
-	 * Accept this invite.
-	 */
-	public function accept() {
-		InviteHandler::acceptInvite($this);
-	}
+		//session_start(); // This is not needed, is already done in session.php.
 
-	/*
-	 * Decline this invite.
-	 */
-	public function decline() {
-		InviteHandler::declineInvite($this);
+		$user = Session::getCurrentUser();
+		echo 'Authenticated user: ' . $user->getUsername();
 	}
 }
 ?>

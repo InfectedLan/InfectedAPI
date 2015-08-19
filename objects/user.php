@@ -113,7 +113,7 @@ class User extends Object {
 	 * Returns the users phone number formatted as a string.
 	 */
 	public function getPhoneAsString() {
-		return rtrim(chunk_split($this->getPhone(), 2, ' '));
+		return rtrim('(+47) ' . chunk_split($this->getPhone(), 2, ' '));
 	}
 
 	/*
@@ -261,6 +261,14 @@ class User extends Object {
 		return TicketHandler::getTicketsByUser($this);
 	}
 
+	public function hasTicketsByAllEvents() {
+		return TicketHandler::hasTicketsByUserAndAllEvents($this);
+	}
+
+	public function getTicketsByAllEvents() {
+		return TicketHandler::getTicketsByUserAndAllEvents($this);
+	}
+
 	/*
 	 * Returns true if users has a seat.
 	 */
@@ -287,7 +295,7 @@ class User extends Object {
 			$message[] = '</body>';
 		$message[] = '</html>';
 
-		return MailManager::sendMail($this, 'Infected registrering', implode("\r\n", $message));
+		return MailManager::sendEmail($this, 'Infected registrering', implode("\r\n", $message));
 	}
 
 	/*
@@ -309,7 +317,7 @@ class User extends Object {
 			$message[] = '</body>';
 		$message[] = '</html>';
 
-		return MailManager::sendMail($this, 'Infected tilbakestilling av passord', implode("\r\n", $message));
+		return MailManager::sendEmail($this, 'Infected tilbakestilling av passord', implode("\r\n", $message));
 	}
 
 	/*
@@ -332,7 +340,7 @@ class User extends Object {
 			$message[] = '</body>';
 		$message[] = '</html>';
 
-		return MailManager::sendMail($this, 'Infected avatar', implode("\r\n", $message));
+		return MailManager::sendEmail($this, 'Infected avatar', implode("\r\n", $message));
 	}
 
 	/*
@@ -481,7 +489,7 @@ class User extends Object {
 	public function hasRole() {
 		return $this->hasRoleByEvent(EventHandler::getCurrentEvent());
 	}
-	
+
 	/*
 	 * Returns the name of the users position.
 	 */

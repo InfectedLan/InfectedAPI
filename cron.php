@@ -8,41 +8,43 @@
  * modify it under the terms of the GNU Lesser General Public
  * License as published by the Free Software Foundation; either
  * version 3.0 of the License, or (at your option) any later version.
- * 
+ *
  * This library is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
  * Lesser General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU Lesser General Public
  * License along with this library.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-require_once 'settings.php';
+require_once 'utils/utils.php';
 
-set_include_path(Settings::api_path);
+// Only run this if we are running in a CLI enviroment.
+if (Utils::isCli()) {
+	require_once 'taskmanager.php';
+	require_once 'handlers/eventmigrationhandler.php';
+	require_once 'handlers/eventhandler.php';
 
-require_once 'taskmanager.php';
-require_once 'handlers/eventhandler.php';
-require_once 'handlers/eventmigrationhandler.php';
+	/* Static tasks */
+	$previousEvent = EventHandler::getPreviousEvent();
+	$currentEvent = EventHandler::getCurrentEvent();
 
-/* Static tasks */
+	// Check if we should automatically migrate from previous event,
+	// this is done when booking time for the current event haven't happend yet, also that we're early in this event.
+	if ($currentEvent->getBookingTime() >= time()) {
+		// Migrates all information from the previous event to this one.
+		EventMigrationHandler::copy($previousEvent, $currentEvent);
+	}
 
-$event = EventHandler::getCurrentEvent();
+	/* Dynamic tasks */
+	// Run all scheduled tasks.
+	$taskList = TaskManager::getTasks();
 
-// Check if we should automatically migrate from previous event, 
-// this is done when booking time for the current event haven't happend yet, also that we're early in this event.
-if ($event->getBookingTime() >= time()) {
-	// Migrates all information from the previous event to this one.
-	EventMigrationHandler::copy(EventHandler::getPreviousEvent(), $event);
-}
-
-/* Dynamic tasks */
-
-// Run all scheduled tasks.
-$taskList = TaskManager::getTasks();
-
-foreach ($taskList as $task) {
-	$task->run();
+	foreach ($taskList as $task) {
+		$task->run();
+	}
+} else {
+	echo 'You don\'t have permission do do this, you\'ll only be able to run this from the CLI.';
 }
 ?>

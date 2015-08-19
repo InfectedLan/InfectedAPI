@@ -127,8 +127,8 @@ class Settings {
 	const sd_compression_rate = 100;
 	const hd_compression_rate = 100;
 
-	const avatar_minimum_width = 1200;
-	const avatar_minimum_height = 900;
+	const avatar_minimum_width = 600;
+	const avatar_minimum_height = 450;
 
 	/* Tickets */
 	// How long time before the tickets event should allow it to be refunded?

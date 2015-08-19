@@ -18,43 +18,8 @@
  * License along with this library.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-require_once 'database.php';
-require_once 'settings.php';
-require_once 'handlers/userhandler.php';
-require_once 'handlers/clanhandler.php';
-require_once 'handlers/invitehandler.php';
-require_once 'objects/eventobject.php';
-
-class Invite extends EventObject {
-	private $userId;
-	private $clanId;
-
-	/*
-	 * Returns the user that this invite is for.
-	 */
-	public function getUser() {
-		return UserHandler::getUser($this->userId);
-	}
-
-	/*
-	 * Returns the clan this invite is to.
-	 */
-	public function getClan() {
-		return ClanHandler::getClan($this->clanId);
-	}
-
-	/*
-	 * Accept this invite.
-	 */
-	public function accept() {
-		InviteHandler::acceptInvite($this);
-	}
-
-	/*
-	 * Decline this invite.
-	 */
-	public function decline() {
-		InviteHandler::declineInvite($this);
-	}
+class Utils {
+  public static function isCli() {
+    return (!isset($_SERVER['SERVER_SOFTWARE']) && (php_sapi_name() == 'cli' || (is_numeric($_SERVER['argc']) && $_SERVER['argc'] > 0)));
+  }
 }
-?>

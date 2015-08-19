@@ -8,18 +8,20 @@
  * modify it under the terms of the GNU Lesser General Public
  * License as published by the Free Software Foundation; either
  * version 3.0 of the License, or (at your option) any later version.
- * 
+ *
  * This library is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
  * Lesser General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU Lesser General Public
  * License along with this library.  If not, see <http://www.gnu.org/licenses/>.
  */
 
 require_once 'handlers/seatmaphandler.php';
+require_once 'handlers/rowhandler.php';
 require_once 'objects/object.php';
+require_once 'objects/row.php';
 
 class Seatmap extends Object {
 	private $humanName;
@@ -65,6 +67,13 @@ class Seatmap extends Object {
 	 */
 	public function addRow($x, $y) {
 		return RowHandler::createRow($this, $x, $y);
+	}
+
+	/*
+	 * Remove an row to this seatmap.
+	 */
+	public function removeRow(Row $row) {
+		return RowHandler::removeRow($row);
 	}
 }
 ?>

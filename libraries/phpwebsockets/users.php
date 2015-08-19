@@ -12,7 +12,7 @@ class WebSocketUser {
 
   public $sendingContinuous = false;
   public $partialMessage = "";
-  
+
   public $hasSentClose = false;
 
   function __construct($id, $socket) {
@@ -20,3 +20,4 @@ class WebSocketUser {
     $this->socket = $socket;
   }
 }
+?>

@@ -22,7 +22,6 @@ require_once 'session.php';
 require_once 'handlers/grouphandler.php';
 require_once 'handlers/userhandler.php';
 require_once 'handlers/teamhandler.php';
-require_once 'handlers/avatarhandler.php';
 require_once 'objects/eventobject.php';
 
 class Team extends EventObject {
@@ -58,6 +57,13 @@ class Team extends EventObject {
 	 */
 	public function getDescription() {
 		return $this->description;
+	}
+
+	/*
+	 * Returns if this team has a leader.
+	 */
+	public function hasLeader() {
+		return TeamHandler::hasTeamLeader($this);
 	}
 
 	/*
