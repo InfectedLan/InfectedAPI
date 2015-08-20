@@ -19,9 +19,9 @@
  */
 
 require_once 'handlers/chathandler.php';
-require_once 'objects/eventobject.php';
+require_once 'objects/object.php';
 
-class Chat extends EventObject {
+class Chat extends Object {
 	private $name;
 	private $title;
 

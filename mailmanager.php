@@ -53,7 +53,7 @@ class MailManager {
 	 */
 	public static function sendEmails(array $userList, $subject, $message) {
 		foreach ($userList as $user) {
-			self::sendMail($user, $subject, $message);
+			self::sendEmail($user, $subject, $message);
 		}
 	}
 }

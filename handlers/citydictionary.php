@@ -30,7 +30,7 @@ class CityDictionary {
 
 		$result = $database->query('SELECT `city` FROM `' . Settings::db_table_infected_postalcodes . '`
 																WHERE `code` = \'' . $database->real_escape_string($postalCode) . '\';');
-																
+
 		$database->close();
 
 		$row = $result->fetch_array();

@@ -20,9 +20,7 @@
 
 require_once 'settings.php';
 require_once 'database.php';
-require_once 'handlers/eventhandler.php';
 require_once 'objects/chat.php';
-require_once 'objects/event.php';
 require_once 'objects/user.php';
 require_once 'objects/chatmessage.php';
 
@@ -44,11 +42,10 @@ class ChatHandler {
 	/*
 	 * Return all chats.
 	 */
-	public static function getChatsByEvent(Event $event) {
+	public static function getChats() {
 		$database = Database::open(Settings::db_name_infected_compo);
 
-		$result = $database->query('SELECT * FROM `' . Settings::db_table_infected_compo_chats . '`
-																WHERE `eventId` = \'' . $event->getId() . '\';');
+		$result = $database->query('SELECT * FROM `' . Settings::db_table_infected_compo_chats . '`;');
 
 		$database->close();
 
@@ -62,21 +59,13 @@ class ChatHandler {
 	}
 
 	/*
-	 * Return all chats.
-	 */
-	public static function getChats() {
-		return self::getChatsByEvent(EventHandler::getCurrentEvent());
-	}
-
-	/*
 	 * Creates a new chat and returns the object.
 	 */
 	public static function createChat($name, $title) {
 		$database = Database::open(Settings::db_name_infected_compo);
 
-		$database->query('INSERT INTO `' . Settings::db_table_infected_compo_chats . '` (`eventId`, `name`, `title`)
-						  				VALUES (\'' . EventHandler::getCurrentEvent()->getId() . '\',
-															\'' . $database->real_escape_string($name) . '\',
+		$database->query('INSERT INTO `' . Settings::db_table_infected_compo_chats . '` (`name`, `title`)
+						  				VALUES (\'' . $database->real_escape_string($name) . '\',
 															\'' . $database->real_escape_string($title) . '\');');
 
 		$database->close();
@@ -105,12 +94,11 @@ class ChatHandler {
 	/*
 	 * Returns true if the given user is member of the given chat.
 	 */
-	public static function isChatMemberByEvent(Chat $chat, Event $event, User $user) {
+	public static function isChatMember(Chat $chat, User $user) {
 		$database = Database::open(Settings::db_name_infected_compo);
 
 		$result = $database->query('SELECT `id` FROM `' . Settings::db_table_infected_compo_memberofchat . '`
-																WHERE `eventId` = \'' . $event->getId() . '\'
-																AND `userId` = \'' . $user->getId() . '\'
+																WHERE `userId` = \'' . $user->getId() . '\'
 																AND `chatId` = \'' . $chat->getId() . '\';');
 
 		$database->close();
@@ -119,22 +107,14 @@ class ChatHandler {
 	}
 
 	/*
-	 * Returns true if the given user is member of the given chat.
-	 */
-	public static function isChatMember(Chat $chat, User $user) {
-		return self::isChatMemberByEvent($chat, EventHandler::getCurrentEvent(), $user);
-	}
-
-	/*
 	 * Returns an array of all members in the specificed chat.
 	 */
-	public static function getChatMembersByEvent(Chat $chat, Event $event) {
+	public static function getChatMembers(Chat $chat) {
 		$database = Database::open(Settings::db_name_infected);
 
 		$result = $database->query('SELECT * FROM `' . Settings::db_table_infected_users . '`
 																WHERE `id` = (SELECT `userId` FROM `' . Settings::db_name_infected_compo . '`.`' . Settings::db_table_infected_compo_memberofchat . '`
-																							WHERE `eventId` = \'' . $event->getId() . '\'
-																							AND `chatId` = \'' . $chat->getId() . '\');');
+																							WHERE `chatId` = \'' . $chat->getId() . '\');');
 
 		$database->close();
 
@@ -148,21 +128,13 @@ class ChatHandler {
 	}
 
 	/*
-	 * Returns an array of all members in the specificed chat.
-	 */
-	public static function getChatMembers(Chat $chat) {
-		return self::getChatMembersByEvent($chat, EventHandler::getCurrentEvent());
-	}
-
-	/*
 	 * Add the given user to the specified chat.
 	 */
 	public static function addChatMember(Chat $chat, User $user) {
 		$database = Database::open(Settings::db_name_infected_compo);
 
-		$database->query('INSERT INTO `' . Settings::db_table_infected_compo_memberofchat . '` (`eventId`, `userId`, `chatId`)
-										  VALUES (\'' . EventHandler::getCurrentEvent()->getId() . '\',
-															\'' . $user->getId() . '\',
+		$database->query('INSERT INTO `' . Settings::db_table_infected_compo_memberofchat . '` (`userId`, `chatId`)
+										  VALUES (\'' . $user->getId() . '\',
 												  		\'' . $chat->getId() . '\');');
 
 		$database->close();
@@ -171,22 +143,14 @@ class ChatHandler {
 	/*
 	 * Remove the given user from the specified chat.
 	 */
-	public static function removeChatMemberByEvent(Chat $chat, Event $event, User $user) {
+	public static function removeChatMember(Chat $chat, User $user) {
 		$database = Database::open(Settings::db_name_infected_compo);
 
 		$database->query('DELETE FROM `' . Settings::db_table_infected_compo_memberofchat . '`
-											WHERE `eventId` = \'' . $event->getId() . '\'
-											AND `userId` = \'' . $user->getId() . '\'
+											WHERE `userId` = \'' . $user->getId() . '\'
 											AND `chatId` = \'' . $chat->getId() . '\';');
 
 		$database->close();
-	}
-
-	/*
-	 * Remove the given user from the specified chat.
-	 */
-	public static function removeChatMember(Chat $chat, User $user) {
-		self::removeChatMemberByEvent($chat, EventHandler::getCurrentEvent(), $user);
 	}
 
 	/*
@@ -196,9 +160,8 @@ class ChatHandler {
 		$database = Database::open(Settings::db_name_infected_compo);
 
 		foreach ($userList as $user) {
-			$database->query('INSERT INTO `' . Settings::db_table_infected_compo_memberofchat . '` (`eventId`, `userId`, `chatId`)
-												VALUES (\'' . EventHandler::getCurrentEvent()->getId() . '\',
-																\'' . $user->getId() . '\',
+			$database->query('INSERT INTO `' . Settings::db_table_infected_compo_memberofchat . '` (`userId`, `chatId`)
+												VALUES (\'' . $user->getId() . '\',
 																\'' . $chat->getId() . '\');');
 		}
 
@@ -208,21 +171,13 @@ class ChatHandler {
 	/*
 	 * Remove members from the given chat.
 	 */
-	public static function removeChatMembersByEvent(Chat $chat, Event $event) {
+	public static function removeChatMembers(Chat $chat) {
 		$database = Database::open(Settings::db_name_infected_compo);
 
 		$database->query('DELETE FROM `' . Settings::db_table_infected_compo_memberofchat . '`
-											WHERE `eventId` = \'' . $event->getId() . '\'
-											AND `chatId` = \'' . $chat->getId() . '\';');
+											WHERE `chatId` = \'' . $chat->getId() . '\';');
 
 		$database->close();
-	}
-
-	/*
-	 * Remove members from the given chat.
-	 */
-	public static function removeChatMembers(Chat $chat) {
-		self::removeChatMembersByEvent($chat, EventHandler::getCurrentEvent());
 	}
 
 	/*
@@ -242,11 +197,10 @@ class ChatHandler {
 	/*
 	 * Return the chat message with the given id.
 	 */
-	public static function getChatMessagesByEvent(Event $event) {
+	public static function getChatMessages() {
 		$database = Database::open(Settings::db_name_infected_compo);
 
-		$result = $database->query('SELECT * FROM `' . Settings::db_table_infected_compo_chatmessages . '`
-																WHERE `eventId` = \'' . $event->getId() . '\';');
+		$result = $database->query('SELECT * FROM `' . Settings::db_table_infected_compo_chatmessages . '`;');
 
 		$database->close();
 
@@ -257,13 +211,6 @@ class ChatHandler {
 		}
 
 		return $chatMessageList;
-	}
-
-	/*
-	 * Return the chat message with the given id.
-	 */
-	public static function getChatMessages() {
-		return self::getChatMessagesByEvent(EventHandler::getCurrentEvent());
 	}
 
 	/*
@@ -322,9 +269,8 @@ class ChatHandler {
 	public static function sendChatMessage(Chat $chat, User $user, $message) {
 		$database = Database::open(Settings::db_name_infected_compo);
 
-		$database->query('INSERT INTO `' . Settings::db_table_infected_compo_chatmessages . '` (`eventId`, `userId`, `chatId`, `time`, `message`)
-										  VALUES (\'' . EventHandler::getCurrentEvent()->getId() . '\',
-															\'' . $user->getId() . '\',
+		$database->query('INSERT INTO `' . Settings::db_table_infected_compo_chatmessages . '` (`userId`, `chatId`, `time`, `message`)
+										  VALUES (\'' . $user->getId() . '\',
 														  \'' . $chat->getId() . '\',
 														  \'' . date('Y-m-d H:i:s') . '\',
 														  \'' . htmlspecialchars($database->real_escape_string($message), ENT_QUOTES | ENT_HTML401) . '\');');

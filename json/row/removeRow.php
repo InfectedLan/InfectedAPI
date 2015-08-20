@@ -8,12 +8,12 @@
  * modify it under the terms of the GNU Lesser General Public
  * License as published by the Free Software Foundation; either
  * version 3.0 of the License, or (at your option) any later version.
- * 
+ *
  * This library is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
  * Lesser General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU Lesser General Public
  * License along with this library.  If not, see <http://www.gnu.org/licenses/>.
  */
@@ -27,12 +27,12 @@ $message = null;
 
 if (Session::isAuthenticated()) {
 	$user = Session::getCurrentUser();
-	
+
 	if ($user->hasPermission('*') ||
 		$user->hasPermission('admin.seatmap')) {
 		if (isset($_GET['row'])) {
 			$row = RowHandler::getRow($_GET['row']);
-			
+
 			if ($row != null) {
 				if (RowHandler::safeToDelete($row)) {
 					RowHandler::removeRow($row);
@@ -54,10 +54,5 @@ if (Session::isAuthenticated()) {
 }
 
 header('Content-Type: text/plain');
-
-if ($result) {
-	echo json_encode(array('result' => $result), JSON_PRETTY_PRINT);
-} else {
-	echo json_encode(array('result' => $result, 'message' => $message), JSON_PRETTY_PRINT);
-}
+echo json_encode(array('result' => $result, 'message' => $message), JSON_PRETTY_PRINT);
 ?>

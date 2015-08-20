@@ -8,12 +8,12 @@
  * modify it under the terms of the GNU Lesser General Public
  * License as published by the Free Software Foundation; either
  * version 3.0 of the License, or (at your option) any later version.
- * 
+ *
  * This library is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
  * Lesser General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU Lesser General Public
  * License along with this library.  If not, see <http://www.gnu.org/licenses/>.
  */
@@ -27,12 +27,12 @@ $message = null;
 
 if (Session::isAuthenticated()) {
 	$user = Session::getCurrentUser();
-	
+
 	if ($user->hasPermission('*') ||
 		$user->hasPermission('admin.seatmap')) {
 		if (isset($_POST['seatmapId'])) {
 			$seatmap = SeatmapHandler::getSeatmap($_POST['seatmapId']);
-			
+
 			if ($seatmap != null) {
 				//TODO cleanup if the upload 'overwrites' another image
 				//Validate image
@@ -40,11 +40,11 @@ if (Session::isAuthenticated()) {
 				$temp = explode('.', $_FILES['bgImageFile']['name']);
 				$extension = strtolower(end($temp));
 
-				if (($_FILES['bgImageFile']['type'] == 'image/jpeg') || 
-					($_FILES['bgImageFile']['type'] == 'image/jpg') || 
-					($_FILES['bgImageFile']['type'] == 'image/x-png') || 
+				if (($_FILES['bgImageFile']['type'] == 'image/jpeg') ||
+					($_FILES['bgImageFile']['type'] == 'image/jpg') ||
+					($_FILES['bgImageFile']['type'] == 'image/x-png') ||
 					($_FILES['bgImageFile']['type'] == 'image/png')) {
-					
+
 					if (($_FILES['bgImageFile']['size'] < 7000000)) {
 						if (in_array($extension, $allowedExts)) {
 							if ($_FILES['bgImageFile']['error'] == 0) {

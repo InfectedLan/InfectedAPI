@@ -88,12 +88,13 @@ class UserHandler {
 	/*
 	 * Returns all users that have one or more permission values in the permissions table.
 	 */
-	public static function getPermissionUsers() {
+	public static function getPermissionUsersByEvent(Event $event) {
 		$database = Database::open(Settings::db_name_infected);
 
 		$result = $database->query('SELECT DISTINCT `' . Settings::db_table_infected_users . '`.* FROM `' . Settings::db_table_infected_users . '`
 																LEFT JOIN `' . Settings::db_table_infected_userpermissions . '` ON `' . Settings::db_table_infected_users . '`.`id` = `' . Settings::db_table_infected_userpermissions . '`.`userId`
 																WHERE `' . Settings::db_table_infected_userpermissions . '`.`id` IS NOT NULL
+																AND `' . Settings::db_table_infected_userpermissions . '`.`eventId` = \'' . $event->getId() . '\'
 																ORDER BY `' . Settings::db_table_infected_users . '`.`firstname` ASC;');
 
 		$database->close();
@@ -105,6 +106,45 @@ class UserHandler {
 		}
 
 		return $userList;
+	}
+
+	/*
+	 * Returns all users that have one or more permission values in the permissions table.
+	 */
+	public static function getPermissionUsers() {
+		return self::getPermissionUsersByEvent(EventHandler::getCurrentEvent());
+	}
+
+	/*
+	 * Returns all users that have one or more permission values in the permissions table and is member of the specifed group.
+	 */
+	public static function getPermissionUsersByGroupAndEvent(Group $group = null, Event $event) {
+		$database = Database::open(Settings::db_name_infected);
+
+		$result = $database->query('SELECT DISTINCT `' . Settings::db_table_infected_users . '`.* FROM `' . Settings::db_table_infected_users . '`
+																LEFT JOIN `' . Settings::db_table_infected_userpermissions . '` ON `' . Settings::db_table_infected_users . '`.`id` = `' . Settings::db_table_infected_userpermissions . '`.`userId`
+																LEFT JOIN `' . Settings::db_name_infected_crew . '`.`' . Settings::db_table_infected_crew_memberof . '` ON `users`.`id` = `' . Settings::db_table_infected_crew_memberof . '`.`userId`
+																WHERE `' . Settings::db_table_infected_userpermissions . '`.`id` IS NOT NULL
+																AND (`' . Settings::db_table_infected_userpermissions . '`.`eventId` = \'' . $event->getId() . '\' OR `' . Settings::db_table_infected_userpermissions . '`.`eventId` = \'0\')
+																AND `' . Settings::db_table_infected_crew_memberof . '`.`groupId` ' . ($group != null ? '= \'' . $group->getId() . '\'' : 'IS NULL') . '
+																ORDER BY `' . Settings::db_table_infected_users . '`.`firstname` ASC;');
+
+		$database->close();
+
+		$userList = array();
+
+		while ($object = $result->fetch_object('User')) {
+			array_push($userList, $object);
+		}
+
+		return $userList;
+	}
+
+	/*
+	 * Returns all users that have one or more permission values in the permissions table and is member of the specifed group.
+	 */
+	public static function getPermissionUsersByGroup(Group $group = null) {
+		return self::getPermissionUsersByGroupAndEvent($group, EventHandler::getCurrentEvent());
 	}
 
 	/*

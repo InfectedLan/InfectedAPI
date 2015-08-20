@@ -20,9 +20,9 @@
 
 require_once 'handlers/userhandler.php';
 require_once 'handlers/chathandler.php';
-require_once 'objects/eventobject.php';
+require_once 'objects/object.php';
 
-class ChatMessage extends EventObject {
+class ChatMessage extends Object {
 	private $userId;
 	private $chatId;
 	private $time;
