@@ -54,9 +54,9 @@ class CompoServer extends WebSocketServer {
                 $user = Session::getUserFromSessionId($parsedJson->data[0]);
                 if($user != null) {
                     $this->registerUser($user, $session);
-                    $this->send('{"intent": "authResult", "data": [true]}', $session);
+                    $this->send($session, '{"intent": "authResult", "data": [true]}');
                 } else {
-                    $this->send('{"intent": "authResult", "data": [false]}', $session);
+                    $this->send($session, '{"intent": "authResult", "data": [false]}');
                 }
 				break;
 
@@ -76,6 +76,7 @@ class CompoServer extends WebSocketServer {
     protected function registerUser($user, $session){
         echo "Got user: " . $user->getUsername() . ".\n";
         $this->authenticatedUsers[$session] = $user;
+        print_r($this->authenticatedUsers);
     }
 
     protected function isAuthenticated($session) {
