@@ -41,6 +41,7 @@ set_time_limit(0); //Make sure the script runs forever
 
 require_once '../libraries/phpwebsockets/websockets.php';
 require_once 'session.php';
+require_once 'handlers/chathandler.php';
 set_time_limit(0); //Make sure the script runs forever
 
 class CompoServer extends WebSocketServer {
@@ -65,7 +66,8 @@ class CompoServer extends WebSocketServer {
             break;
         case 'subscribeChatroom':
             if($this->isAuthenticated($session)) {
-
+                $chat = ChatHandler::getChat($parsedJson->data[0]);
+                $this->subscribeChatroom($chat, $session);
             } else {
                 $this->send($session, '{"intent": "subscribeChatroomResult", "data": [false, "Du har ikke logget inn!"]}');
             }
@@ -83,6 +85,17 @@ class CompoServer extends WebSocketServer {
 	protected function closed($session) {
 		echo "Lost connection\n";
 	}
+
+    protected function subscribeChatroom($chat, $session) {
+        if(ChatHandler::canRead($chat, $this->getUser($session))) {
+            if(!isset($this->followingChatChannels[$parsedJson->data[0]])) {
+                $this->followingChatChannels[$parsedJson->data[0]] = array();
+            }
+            $this->followingChatChannels[$parsedJson->data[0]][] = $session; //Add thge user to list of people who will recieve updates when something changes
+        } else {
+            $this->send($session, '{"intent": "subscribeChatroomResult", "data": [false, "Du har ikke tillatelse til å bruke dette chatrommet"]}'); // TODO add locale
+        }
+    }
 
     protected function registerUser($user, $session){
         echo "Got user: " . $user->getUsername() . ".\n";

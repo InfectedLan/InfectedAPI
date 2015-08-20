@@ -295,7 +295,12 @@ class ChatHandler {
             return true;
         } else {
             //You can also read the chat if it is a compo chat for a compo you are currently participating in. Soooo....
-            $compos = CompoHandler::getComposByEvent(EventHandler::getCurrentEvent());
+            $clans = ClanHandler::getClansByUser($user);
+            foreach($clans as $clan) {
+                if($clan->isQualified() && $clan->getCompo()->getChat()->getId() == $chat->getId()) {
+                    return true;
+                }
+            }
         }
     }
 }
