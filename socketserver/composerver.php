@@ -30,6 +30,7 @@
 /**
  * Client -> Server intents:
  *     auth - data[0] contains the current session id. This is used to identify the client to the server.
+ *     subscribeChatroom - data[0] contains the chatroom the client wants to subscribe to.
  *
  * Server -> Client intents:
  *     authResult - data[0] containts the result of the authentication
@@ -43,25 +44,30 @@ set_time_limit(0); //Make sure the script runs forever
 
 class CompoServer extends WebSocketServer {
     private $authenticatedUsers;
+    private $followingChatChannels;
     
 	protected function process($session, $message) {
         $this->authenticatedUsers = new SplObjectStorage();
+        $this->followingChatChannels = array(); //Fun fact, PHP arrays are not arrays! 
 		//$this->send($session, "You sendt" . $message);
 		echo $message . "\n";
 		$parsedJson = json_decode($message);
 		switch ($parsedJson->intent) {
-			case 'auth':
-                $user = Session::getUserFromSessionId($parsedJson->data[0]);
-                if($user != null) {
-                    $this->registerUser($user, $session);
-                    $this->send($session, '{"intent": "authResult", "data": [true]}');
-                } else {
-                    $this->send($session, '{"intent": "authResult", "data": [false]}');
-                }
-				break;
+        case 'auth':
+            $user = Session::getUserFromSessionId($parsedJson->data[0]);
+            if($user != null) {
+                $this->registerUser($user, $session);
+                $this->send($session, '{"intent": "authResult", "data": [true]}');
+            } else {
+                $this->send($session, '{"intent": "authResult", "data": [false]}');
+            }
+            break;
+        case 'subscribeChatroom':
+            
+            break;
 
-			default:
-				echo "Got unhandled intent: " . $parsedJson->intent . "\n";
+        default:
+            echo "Got unhandled intent: " . $parsedJson->intent . "\n";
 		}
 	}
 

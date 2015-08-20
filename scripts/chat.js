@@ -17,26 +17,72 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-var chatList = [];
-var socket;
+//JoMS suggested this as OOP javascript style. Ty JoMs <3
+var Chat = function(){
+    
+};
+//This is apparently how you add functions...
+Chat.prototype.init = function() {
+    //Set up private variables
+    function onSocketOpen(msg) {
+	console.log("Socket open");
+	this.sendMessage({intent: "auth", "data": [getCookie("PHPSESSID")]});
+    }
 
-//Bootup
-$(document).ready(function() {
-	setInterval(updateChats, 5000);
-	socket = new WebSocket("ws://127.0.0.1:1337/compoServer");
-	socket.onopen = function(msg) {
-		console.log("Socket open");
-		socketSend('{"intent": "auth", "data": ["' + getCookie("PHPSESSID") + '"]}');
-	};
-	socket.onmessage = function(msg) {
-		console.log("Recieved:");
-		console.log(msg);
+    function onRecvMessage(msg) {
+	console.log("Recieved:");
+	console.log(msg);
+	var packet = JSON.parse(msg.data);
+	switch(packet.intent) {
+	case "authResult":
+	    if(packet.data[0]) {
+		console.log("Successfully authenticated");
+	    } else {
+		error("Vi fikk ikke logget inn på chatserveren! Prøv å trykke F5, og prøv på nytt");
+	    }
+	    break;
+	case "default":
+	    console.log("ERROR: Unsupported intent: " + packet.intent);
+	    break;
 	}
-	socket.onclose = function(msg) {
-		console.log("Disconnected");
-		error("Vi mistet tilkobling til serveren. Vennligst oppdater siden for å prøve å koble til på nytt.");
+    }
+
+    function onClose(msg) {
+	console.log("Disconnected");
+	error("Vi mistet tilkobling til serveren. Vennligst oppdater siden for å prøve å koble til på nytt.");
+    }
+    var chatList = [];
+
+    this.bindChat = function(divId, chatId) {
+	for(var i = 0; i < chatList.length; i++) {
+	    if(chatList[i].divId == divId) {
+		console.log("WARNING: Trying to bind a div twice");
+		return;
+	    }
 	}
-});
+	chatList.push({divId: divId, chatId: chatId});
+
+	this.sendMessage({intent: "subscribeChatroom", data: [chatId]});
+    }
+
+    this.sendMessage = function(message) {
+	socket.send(JSON.stringify(message)); //Yes, you ARE allowed to mention a variable befire it is created, as long as it isn't called before it is initialized!
+    }
+	
+    var url = window.location.href;
+    //Autodetect magic: Let's convert http to ws, and https to wss
+    url = url.replace("http://", "ws://");
+    url = url.replace("https://", "wss://");
+    //Now, let's remove the other part of the URL we don't need
+    url = url.substr(0, url.indexOf("/", 6)) + ":1337/";
+    console.log("Connecting to " + url);
+    this.socket = new WebSocket(url);
+    this.socket.onopen = onSocketOpen;
+    this.socket.onmessage = onRecvMessage;
+    this.socket.onclose = onClose;
+    
+};
+
 function socketSend(msg) {
 	try {
 		socket.send(msg);
