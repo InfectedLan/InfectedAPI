@@ -23,6 +23,8 @@ require_once 'database.php';
 require_once 'objects/chat.php';
 require_once 'objects/user.php';
 require_once 'objects/chatmessage.php';
+require_once 'handlers/compohandler.php';
+require_once 'handlers/eventhandler.php';
 
 class ChatHandler {
 	/*
@@ -277,5 +279,24 @@ class ChatHandler {
 
 		$database->close();
 	}
+
+    public static function canChat(Chat $chat, User $user) {
+        if ($user->hasPermission('*') || 
+            $user->hasPermission('compo.chat') ||
+            $chat->isMember($user)) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    public static function canRead(Chat $chat, User $user) {
+        if(self::canChat($chat, $user)) {
+            return true;
+        } else {
+            //You can also read the chat if it is a compo chat for a compo you are currently participating in. Soooo....
+            $compos = CompoHandler::getComposByEvent(EventHandler::getCurrentEvent());
+        }
+    }
 }
 ?>

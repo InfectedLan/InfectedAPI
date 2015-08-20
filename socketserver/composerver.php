@@ -34,6 +34,7 @@
  *
  * Server -> Client intents:
  *     authResult - data[0] containts the result of the authentication
+ *     subscribeChatroomResult - data[0] contains if the task failed or not, data[1] contains a message(might be blank)
  */
 set_include_path(get_include_path() . PATH_SEPARATOR . '/home/test.infected.no/public_html/api');
 set_time_limit(0); //Make sure the script runs forever
@@ -63,7 +64,11 @@ class CompoServer extends WebSocketServer {
             }
             break;
         case 'subscribeChatroom':
-            
+            if($this->isAuthenticated($session)) {
+
+            } else {
+                $this->send($session, '{"intent": "subscribeChatroomResult", "data": [false, "Du har ikke logget inn!"]}');
+            }
             break;
 
         default:
