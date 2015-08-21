@@ -177,6 +177,13 @@ class User extends Object {
 	}
 
 	/*
+	 * Returns true if the given users phone number is private.
+	 */
+	public function isPhonePrivate() {
+		return UserHandler::isPhonePrivate($this);
+	}
+
+	/*
 	 * Returns true if the given users account is activated.
 	 */
 	public function isActivated() {
