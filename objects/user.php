@@ -110,7 +110,7 @@ class User extends Object {
 	 * Returns the users phone number, if hidden it return zero.
 	 */
 	public function getPhone() {
-		return !UserOptionHandler::isPhoneHidden($this) ? $this->phone : 0;
+		return !$this->isPhonePrivate() ? $this->phone : 0;
 	}
 
 	/*
