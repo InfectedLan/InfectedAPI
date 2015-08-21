@@ -405,35 +405,5 @@ class UserHandler {
 
 		return $userList;
 	}
-
-	/*
-	 * Returns true is the phone number is set to private for the specified user.
-	 */
-	public static function hasPrivatePhone(User $user) {
-		$database = Database::open(Settings::db_name_infected);
-
-		$result = $database->query('SELECT `id` FROM `' . Settings::db_table_infected_useroptions . '`
-																WHERE `userId` = \'' . $user->getId() . '\'
-																AND `privatePhone` = \'1\';');
-
-		$database->close();
-
-		return $result->num_rows > 0;
-	}
-
-	/*
-	 * Returns true is the phone number is set to private for the specified user.
-	 */
-	public static function isReservedFromNotifications(User $user) {
-		$database = Database::open(Settings::db_name_infected);
-
-		$result = $database->query('SELECT `id` FROM `' . Settings::db_table_infected_useroptions . '`
-																WHERE `userId` = \'' . $user->getId() . '\'
-																AND `reserveFromNotifications` = \'1\';');
-
-		$database->close();
-
-		return $result->num_rows > 0;
-	}
 }
 ?>
