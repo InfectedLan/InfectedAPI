@@ -8,12 +8,12 @@
  * modify it under the terms of the GNU Lesser General Public
  * License as published by the Free Software Foundation; either
  * version 3.0 of the License, or (at your option) any later version.
- * 
+ *
  * This library is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
  * Lesser General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU Lesser General Public
  * License along with this library.  If not, see <http://www.gnu.org/licenses/>.
  */
@@ -34,19 +34,19 @@ class PayPal {
 		//$returnURL = urlencode('https://tickets.infected.no/v2/index.php?page=reviewOrder');
 		//$cancelURL = urlencode('https://tickets.infected.no/v2/index.php');
 
-		//Calculate total price		   	
-		$itemamt = $amount*$ticketType->getPriceForUser($user);
+		//Calculate total price
+		$itemamt = $amount * $ticketType->getPriceByUser($user);
 		$amt = $itemamt;
 		$maxamt= $amt;
-	   
-		$nvpstr = "&_LITEMCATEGORY0=Digital&NOSHIPPING=1&L_NAME0=" . $ticketType->getHumanName() . "&L_AMT0=" . $ticketType->getPriceForUser($user) . 
-		"&L_QTY0=" . $amount . "&MAXAMT=" . (string)$maxamt . "&AMT=" . (string)$amt . "&ITEMAMT=" . 
-		(string)$itemamt . "&CALLBACKTIMEOUT=4&L_NUMBER0=10001&L_DESC0=" . $ticketType->getHumanName() . 
-		"&ReturnUrl=" . PaypalSecret::ReturnUrl . "&CANCELURL=" . PaypalSecret::CancelUrl ."&CURRENCYCODE=" . $currencyCodeType . 
+
+		$nvpstr = "&_LITEMCATEGORY0=Digital&NOSHIPPING=1&L_NAME0=" . $ticketType->getTitle() . "&L_AMT0=" . $ticketType->getPriceByUser($user) .
+		"&L_QTY0=" . $amount . "&MAXAMT=" . (string)$maxamt . "&AMT=" . (string)$amt . "&ITEMAMT=" .
+		(string)$itemamt . "&CALLBACKTIMEOUT=4&L_NUMBER0=10001&L_DESC0=" . $ticketType->getTitle() .
+		"&ReturnUrl=" . PaypalSecret::ReturnUrl . "&CANCELURL=" . PaypalSecret::CancelUrl ."&CURRENCYCODE=" . $currencyCodeType .
 		"&PAYMENTACTION=" . $paymentType;
-	   
+
 		$nvpstr = /*$nvpHeader .*/$nvpstr;
-	   
+
 		//Make the call to PayPal to get the Express Checkout token
 		$resArray=hash_call("SetExpressCheckout",$nvpstr);
 		$_SESSION['reshash']=$resArray;
@@ -91,7 +91,7 @@ class PayPal {
 		return null;
 		/*
 		if($ack != 'SUCCESS' && $ack != 'SUCCESSWITHWARNING' && $paymentstatus != 'COMPLETED'){
-			return null; 
+			return null;
 		}
 		if($ack == 'SUCCESS' && $paymentstatus == "COMPLETED"){
 			$transid = strtoupper($resArray["TRANSACTIONID"]);

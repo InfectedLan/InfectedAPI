@@ -8,12 +8,12 @@
  * modify it under the terms of the GNU Lesser General Public
  * License as published by the Free Software Foundation; either
  * version 3.0 of the License, or (at your option) any later version.
- * 
+ *
  * This library is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
  * Lesser General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU Lesser General Public
  * License along with this library.  If not, see <http://www.gnu.org/licenses/>.
  */
@@ -31,7 +31,7 @@ $url = null;
 
 if (Session::isAuthenticated()) {
 	$user = Session::getCurrentUser();
-	
+
 	if (isset($_GET['ticketType']) &&
 		isset($_GET['amount']) &&
 		is_numeric($_GET['ticketType']) &&
@@ -39,22 +39,23 @@ if (Session::isAuthenticated()) {
 		$ticketType = TicketTypeHandler::getTicketType($_GET['ticketType']);
 		$amount = $_GET['amount'];
 		$event = EventHandler::getCurrentEvent();
-		
+
 		// Only allow users to buy tickets within the booking time period.
-		if ($event->isBookingTime()) {
-			
+		if ($user->hasPermission('tickets.byPassBookingTime') ||
+			$event->isBookingTime()) {
+
 			// Verify that this type of ticket actually exists.
 			if ($ticketType != null) {
-				$availableCount = 0;
+				$availableCount = $event->getAvailableTickets();
 				$amountLimit = 10;
-				
+
 				// Check that ticket count isn't higher than the limit, and that available ticket count afterwards is still greater than zero.
-				if ($amount <= $amountLimit &&
+				if ($amount <= $amountLimit) {
 					if (($availableCount - $amount) >= 0) {
 						// Check that the user don't already has a reserved set of tickets.
 						if (!StoreSessionHandler::hasStoreSession($user)) {
-							$price = $ticketType->getPriceForUser($user) * $amount;
-							$code = StoreSessionHandler::registerStoreSession($user, $ticketType, $amount, $price);
+							$price = $ticketType->getPriceByUser($user) * $amount;
+							$code = StoreSessionHandler::createStoreSession($user, $ticketType, $amount, $price);
 							$url = PayPal::getPaymentUrl($ticketType, $amount, $code, $user);
 
 							if (isset($url)) {

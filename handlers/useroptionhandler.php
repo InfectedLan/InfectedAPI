@@ -21,11 +21,8 @@
 require_once 'settings.php';
 require_once 'database.php';
 require_once 'objects/user.php';
-require_once 'objects/event.php';
 
 class UserOptionHandler {
-
-
 	/*
 	 * Returns true is the phone number is set to private for the specified user.
 	 */
