@@ -110,7 +110,7 @@ class User extends Object {
 	 * Returns the users phone number, if hidden it return zero.
 	 */
 	public function getPhone() {
-		return !$this->isPhonePrivate() ? $this->phone : 0;
+		return !$this->hasPrivatePhone() ? $this->phone : 0;
 	}
 
 	/*
@@ -177,17 +177,24 @@ class User extends Object {
 	}
 
 	/*
-	 * Returns true if the given users phone number is private.
-	 */
-	public function isPhonePrivate() {
-		return UserHandler::isPhonePrivate($this);
-	}
-
-	/*
 	 * Returns true if the given users account is activated.
 	 */
 	public function isActivated() {
 		return !RegistrationCodeHandler::hasRegistrationCodeByUser($this);
+	}
+
+	/*
+	 * Returns true if the given users phone number is private.
+	 */
+	public function hasPrivatePhone() {
+		return UserHandler::hasPrivatePhone($this);
+	}
+
+	/*
+	 * Returns true if the given users phone number is private.
+	 */
+	public function isReservedFromNotifications() {
+		return UserHandler::isReservedFromNotifications($this);
 	}
 
 	/*
