@@ -32,7 +32,7 @@ class Session {
 	 */
 	public static function isAuthenticated() {
 		// Check if we remember this user.
-		return isset($_SESSION['user']);
+		return isset($_SESSION['userId']);
 	}
 
 	/*
@@ -47,17 +47,7 @@ class Session {
 	 */
 	public static function getCurrentUser() {
 		if (self::isAuthenticated()) {
-			return $_SESSION['user'];
-		}
-	}
-
-	/*
-	 * Reloads the current user from database.
-	 */
-	public static function reloadCurrentUser() {
-		if (self::isAuthenticated()) {
-			unset($_SESSION['user']);
-			$_SESSION['user'] = UserHandler::getUser(self::getCurrentUser()->getId());
+			return UserHandler::getUser($_SESSION['userId']);
 		}
 	}
 }
