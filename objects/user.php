@@ -187,54 +187,48 @@ class User extends Object {
 	 * Returns true if the given users phone number is private.
 	 */
 	public function hasPrivatePhone() {
-		return UserHandler::hasPrivatePhone($this);
+		return UserOptionHandler::hasUserPrivatePhone($this);
 	}
 
 	/*
 	 * Returns true if the given users phone number is private.
 	 */
 	public function isReservedFromNotifications() {
-		return UserHandler::isReservedFromNotifications($this);
+		return UserOptionHandler::isUserReservedFromNotifications($this);
 	}
 
 	/*
 	 * Returns true if user have specified permission, otherwise false.
 	 */
 	public function hasPermission($value) {
-		// Prevent users from using permission if they are not a group member or is god.
-		if ($this->isGroupMember() ||
-			UserPermissionHandler::hasUserPermissionByValue($this, '*')) {
+		// Match wildcard permissions, if value is admin.permissions and user has permission "admin.*" this would return true.
+		$wildcardValue = preg_replace('/[^\.]([^.]*)$/', '*', $value);
+		$parentValue = preg_replace('/[\.*](.*)/', '', $value);
 
-			// Match wildcard permissions, if value is admin.permissions and user has permission "admin.*" this would return true.
-			$wildcardValue = preg_replace('/[^\.]([^.]*)$/', '*', $value);
-			$parentValue = preg_replace('/[\.*](.*)/', '', $value);
-
-			// Accept permission if user has equal wildcard permission.
-			if (UserPermissionHandler::hasUserPermissionByValue($this, $wildcardValue)) {
-				return true;
-			}
-
-			// Check if user has parent of value.
-			if (!empty($parentValue)) {
-				foreach ($this->getPermissions() as $permission) {
-					return preg_match('/^' . $parentValue . '/', $permission->getValue());
-				}
-			}
-
-			// If the user is a leader or co leader return true on chief permissions.
-			if ($this->isGroupMember() &&
-				($this->isGroupLeader() || $this->isGroupCoLeader())) {
-				$allowedList = array('chief');
-
-				foreach ($allowedList as $allowed) {
-					return preg_match('/^' . $allowed . '\./', $value);
-				}
-			}
-
-			return UserPermissionHandler::hasUserPermissionByValue($this, $value);
+		// Accept permission if user has god permission or a equally wildcard.
+		if (UserPermissionHandler::hasUserPermissionByValue($this, '*') ||
+			UserPermissionHandler::hasUserPermissionByValue($this, $wildcardValue)) {
+			return true;
 		}
 
-		return false;
+		// Check if user has parent of value.
+		if (!empty($parentValue)) {
+			foreach ($this->getPermissions() as $permission) {
+				return preg_match('/^' . $parentValue . '/', $permission->getValue());
+			}
+		}
+
+		// If the user is a leader or co leader return true on chief permissions.
+		if ($this->isGroupMember() &&
+			($this->isGroupLeader() || $this->isGroupCoLeader())) {
+			$allowedList = array('chief');
+
+			foreach ($allowedList as $allowed) {
+				return preg_match('/^' . $allowed . '\./', $value);
+			}
+		}
+
+		return UserPermissionHandler::hasUserPermissionByValue($this, $value);
 	}
 
 	/*
