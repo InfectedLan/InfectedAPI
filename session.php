@@ -8,12 +8,12 @@
  * modify it under the terms of the GNU Lesser General Public
  * License as published by the Free Software Foundation; either
  * version 3.0 of the License, or (at your option) any later version.
- * 
+ *
  * This library is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
  * Lesser General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU Lesser General Public
  * License along with this library.  If not, see <http://www.gnu.org/licenses/>.
  */
@@ -34,14 +34,14 @@ class Session {
 		// Check if we remember this user.
 		return isset($_SESSION['user']);
 	}
-	
+
 	/*
 	 * Returns true if the current user is a member (To clarify, is a crew member).
 	 */
 	public static function isMember() {
 		return self::isAuthenticated() && self::getCurrentUser()->isGroupMember();
 	}
-	
+
 	/*
 	 * Returns the current user.
 	 */
@@ -54,12 +54,10 @@ class Session {
 	/*
 	 * Reloads the current user from database.
 	 */
-	public static function reload() {
+	public static function reloadCurrentUser() {
 		if (self::isAuthenticated()) {
-			$user = self::getCurrentUser();
-			
 			unset($_SESSION['user']);
-			$_SESSION['user'] = UserHandler::getUser($user->getId());;
+			$_SESSION['user'] = UserHandler::getUser(self::getCurrentUser()->getId());
 		}
 	}
 }

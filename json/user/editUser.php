@@ -8,12 +8,12 @@
  * modify it under the terms of the GNU Lesser General Public
  * License as published by the Free Software Foundation; either
  * version 3.0 of the License, or (at your option) any later version.
- * 
+ *
  * This library is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
  * Lesser General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU Lesser General Public
  * License along with this library.  If not, see <http://www.gnu.org/licenses/>.
  */
@@ -28,11 +28,11 @@ $message = null;
 
 if (Session::isAuthenticated()) {
 	$user = Session::getCurrentUser();
-	
+
 	if (isset($_GET['id']) &&
 		is_numeric($_GET['id'])) {
 		$editUser = UserHandler::getUser($_GET['id']);
-		
+
 		if ($editUser != null) {
 			if ($user->hasPermission('*') ||
 				$user->equals($editUser)) {
@@ -40,7 +40,7 @@ if (Session::isAuthenticated()) {
 					isset($_GET['lastname']) &&
 					isset($_GET['username']) &&
 					isset($_GET['email']) &&
-					isset($_GET['confirmemail']) && 
+					isset($_GET['confirmemail']) &&
 					isset($_GET['gender']) &&
 					isset($_GET['birthday']) &&
 					isset($_GET['birthmonth']) &&
@@ -52,7 +52,7 @@ if (Session::isAuthenticated()) {
 					!empty($_GET['lastname']) &&
 					!empty($_GET['username']) &&
 					!empty($_GET['email']) &&
-					!empty($_GET['confirmemail']) && 
+					!empty($_GET['confirmemail']) &&
 					is_numeric($_GET['gender']) &&
 					is_numeric($_GET['birthday']) &&
 					is_numeric($_GET['birthmonth']) &&
@@ -66,13 +66,13 @@ if (Session::isAuthenticated()) {
 					$email = $_GET['email'];
 					$confirmEmail = $_GET['confirmemail'];
 					$gender = $_GET['gender'];
-					$birthdate = $_GET['birthyear'] . '-' . $_GET['birthmonth'] . '-' . $_GET['birthday']; 
+					$birthdate = $_GET['birthyear'] . '-' . $_GET['birthmonth'] . '-' . $_GET['birthday'];
 					$phone = str_replace('+47', '', str_replace(' ', '', $_GET['phone']));
 					$address = ucfirst($_GET['address']);
 					$postalcode = $_GET['postalcode'];
 					$nickname = !empty($_GET['nickname']) ? $_GET['nickname'] : $editUser->getUsername();
 					$emergencyContactPhone = isset($_GET['emergencycontactphone']) ? str_replace('+47', '', str_replace(' ', '', $_GET['emergencycontactphone'])) : 0;
-					
+
 					if ($username != $editUser->getUsername() && UserHandler::userExists($username)) {
 						$message = Localization::getLocale('the_username_is_already_in_use_by_someone_else');
 					} else if ($email != $editUser->getEmail() && UserHandler::userExists($email)) {
@@ -105,28 +105,28 @@ if (Session::isAuthenticated()) {
 						} else if (strlen($emergencyContactPhone) != 8) {
 							$message = Localization::getLocale('parent_phone_is_too_short_it_must_consist_of_at_least_8_characters');
 						}
-						
+
 						$message = Localization::getLocale('you_are_below_the_age_of_18_and_must_therefore_provide_a_phone_number_to_a_guardian');
 					} else {
 						UserHandler::updateUser($editUser,
-												$firstname, 
-												$lastname, 
-												$username, 
-												$email, 
-												$birthdate, 
-												$gender, 
-												$phone, 
-												$address, 
-												$postalcode, 
+												$firstname,
+												$lastname,
+												$username,
+												$email,
+												$birthdate,
+												$gender,
+												$phone,
+												$address,
+												$postalcode,
 												$nickname);
-						
-						if (EmergencyContactHandler::hasEmergencyContact($editUser) || 
+
+						if (EmergencyContactHandler::hasEmergencyContact($editUser) ||
 							isset($_GET['emergencycontactphone']) && is_numeric($emergencyContactPhone)) {
 							EmergencyContactHandler::createEmergencyContact($editUser, $emergencyContactPhone);
 						}
-						
+
 						// Update the user instance form database.
-						Session::reload();
+						Session::reloadCurrentUser();
 						$result = true;
 					}
 				} else {
