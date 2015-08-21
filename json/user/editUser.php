@@ -125,8 +125,6 @@ if (Session::isAuthenticated()) {
 							EmergencyContactHandler::createEmergencyContact($editUser, $emergencyContactPhone);
 						}
 
-						// Update the user instance form database.
-						Session::reloadCurrentUser();
 						$result = true;
 					}
 				} else {

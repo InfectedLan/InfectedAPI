@@ -42,8 +42,6 @@ if (Session::isAuthenticated()) {
 			if ($newPassword == $confirmNewPassword) {
 				UserHandler::updateUserPassword($user, hash('sha256', $newPassword));
 
-				// Update the user instance form database.
-				Session::reloadCurrentUser();
 				$result = true;
 			} else {
 				$message = Localization::getLocale('passwords_does_not_match');
