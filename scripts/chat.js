@@ -25,17 +25,32 @@ var Chat = function(){
      * bindChat(divId, chatId, height) - binds chat to a div. Notice that you have to specify the height in pixels.
      * sendMessage(message) - sends a message
      */
-};
-//This is apparently how you add functions...
-Chat.prototype.init = function() {
-    //Set up private variables
+    //Private variables
     var chatList = [];
     var exitError = "";
+    
+    //Public functions
+    this.bindChat = function(divId, chatId, height) {
+	for(var i = 0; i < chatList.length; i++) {
+	    if(chatList[i].divId == divId) {
+		console.log("WARNING: Trying to bind a div twice");
+		return;
+	    }
+	}
+	chatList.push({divId: divId, chatId: chatId});
+
+	this.sendMessage({intent: "subscribeChatroom", data: [chatId]});
+	$("#" + divId).html('<div class="chatArea" style="height: ' + (height-25-5-10 - 7 - 5) + 'px;"></div><div class="chatTextfield" style="padding-right:27px;padding-left:0px;margin-right:0px;"></div>');
+    };
+
+    this.sendMessage = function(message) {
+	this.socket.send(JSON.stringify(message)); //Yes, you ARE allowed to mention a variable befire it is created, as long as it isn't called before it is initialized!
+    };
     
     function onSocketOpen(msg) {
 	console.log("Socket open");
 	this.sendMessage({intent: "auth", "data": [getCookie("PHPSESSID")]});
-    }
+    };
 
     function onRecvMessage(msg) {
 	console.log("Recieved:");
@@ -80,15 +95,24 @@ Chat.prototype.init = function() {
 		console.log("Failed to join chat");
 	    }
 	    break;
+	case "chat":
+	    chatWrite(packet.data[0], packet.data[1]);
+	    break;
+	case "chatMessageResult":
+	    if(packet.data[0]) {
+		chatWrite(packet.data[1], packet.data[2]);
+	    } else {
+		console.log("Got an error when sending chat message to channel " + packet.data[1] + ": " + packet.data[2]);
+	    }
 	case "default":
 	    console.log("ERROR: Unsupported intent: " + packet.intent);
 	    break;
 	}
-    }
+    };
 
     function sendMsg(chatId, msg) {
 	this.sendMessage({"intent": "chatMessage", data: [chatId, msg]});
-    }
+    };
 
     function getChatDiv(chatId) {
 	for(var i = 0; i < chatList.length; i++) {
@@ -103,8 +127,8 @@ Chat.prototype.init = function() {
 	    }
 	}
 	return null;
-    }
-
+    };
+    
     function chatWrite(chatId, msg) {
 	var chatDivId = getChatDiv(chatId);
 	if(chatDivId != null) {
@@ -113,7 +137,7 @@ Chat.prototype.init = function() {
 	    //Scroll down
 	    $("#" + chatDivId).find(".chatArea").scrollTop($("#" + chatDivId).find(".chatArea")[0].scrollHeight);
 	}
-    }
+    };
 
     function onClose(msg) {
 	console.log("Disconnected");
@@ -122,24 +146,7 @@ Chat.prototype.init = function() {
 	} else {
 	    error(exitError);
 	}
-    }
-
-    this.bindChat = function(divId, chatId, height) {
-	for(var i = 0; i < chatList.length; i++) {
-	    if(chatList[i].divId == divId) {
-		console.log("WARNING: Trying to bind a div twice");
-		return;
-	    }
-	}
-	chatList.push({divId: divId, chatId: chatId});
-
-	this.sendMessage({intent: "subscribeChatroom", data: [chatId]});
-	$("#" + divId).html('<div class="chatArea" style="height: ' + (height-25-5-10 - 7 - 5) + 'px;"></div><div class="chatTextfield" style="padding-right:27px;padding-left:0px;margin-right:0px;"></div>');
-    }
-
-    this.sendMessage = function(message) {
-	socket.send(JSON.stringify(message)); //Yes, you ARE allowed to mention a variable befire it is created, as long as it isn't called before it is initialized!
-    }
+    };
 	
     var url = window.location.href;
     //Autodetect magic: Let's convert http to ws, and https to wss
@@ -148,11 +155,21 @@ Chat.prototype.init = function() {
     //Now, let's remove the other part of the URL we don't need
     url = url.substr(0, url.indexOf("/", 6)) + ":1337/";
     console.log("Connecting to " + url);
-    this.socket = new WebSocket(url);
-    this.socket.onopen = onSocketOpen;
-    this.socket.onmessage = onRecvMessage;
-    this.socket.onclose = onClose;
+    var socket = new WebSocket(url);
+    socket.onopen = onSocketOpen;
+    socket.onmessage = onRecvMessage;
+    socket.onclose = onClose;
     
+};
+function getCookie(cname) {
+    var name = cname + "=";
+    var ca = document.cookie.split(';');
+    for(var i=0; i<ca.length; i++) {
+        var c = ca[i];
+        while (c.charAt(0)==' ') c = c.substring(1);
+        if (c.indexOf(name) == 0) return c.substring(name.length,c.length);
+    }
+    return "";
 };
 /*
 function socketSend(msg) {

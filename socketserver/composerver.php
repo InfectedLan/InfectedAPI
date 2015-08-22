@@ -32,11 +32,18 @@
  *     auth - data[0] contains the current session id. This is used to identify the client to the server.
  *     subscribeChatroom - data[0] contains the chatroom the client wants to subscribe to.
  *     chatMessage - data[0] is the channel, data[1] is the message.
+ *     unsubscribeChatroom - data[0] is the chatroom to unsubscribe from
  *
  * Server -> Client intents:
  *     authResult - data[0] containts the result of the authentication
  *     subscribeChatroomResult - data[0] contains if the task failed or not, data[1] contains if you can chat or not, data[2] contains the chat id, and data[3] contains a message(might be blank)
- *     chatMessageResult - data[0] is if the chatmessage was success or not, data[1] is either the new chat line(handle it same way as newChat[1], or an error message
+ *     chatMessageResult - data[0] is if the chatmessage was success or not, data[1] is the channel the message was sendt to, data[2] is either the new chat line(handle it same way as newChat[1], or an error message
+ *     chat - data[0] is the channel, data[1]  is a formatted chat message
+ *     unsubscribeChatroomResult - data[0] is if it was successful or not, data[1] is an error message(or an empty string if none)
+ *
+ * FAQ:
+ *  * Why all the result packets? Why not reuse the name back?
+ *     - Consistency. 
  *
  */
 set_include_path(get_include_path() . PATH_SEPARATOR . '/home/test.infected.no/public_html/api');
@@ -50,10 +57,14 @@ set_time_limit(0); //Make sure the script runs forever
 class CompoServer extends WebSocketServer {
     private $authenticatedUsers;
     private $followingChatChannels;
-    
-	protected function process($session, $message) {
+
+    function __construct($addr, $port, $bufferLength = 2048) {
+        parent::__construct($addr, $port, $bufferLength);
         $this->authenticatedUsers = new SplObjectStorage();
         $this->followingChatChannels = array(); //Fun fact, PHP arrays are not arrays! 
+    }
+    
+	protected function process($session, $message) {
 		//$this->send($session, "You sendt" . $message);
 		echo $message . "\n";
 		$parsedJson = json_decode($message);
@@ -88,6 +99,15 @@ class CompoServer extends WebSocketServer {
                 $this->disconnect($session);
             }
             break;
+        case 'unsubscribeChatroom':
+            if($this->isAuthenticated($session)) {
+                $this->unsubscribeChatroom($parsedJson->data[0], $session);
+            } else {
+                echo "Disconnecting user due to no authentication: " . $this->getUser($session)->getUsername() . "\n";
+                $this->send($session, '{"intent": "unsubscribeChatroomResult", "data": [false, "Du er ikke authentisert!"]}');
+                $this->disconnect($session);
+            }
+            break;
         default:
             echo "Got unhandled intent: " . $parsedJson->intent . "\n";
 		}
@@ -101,7 +121,7 @@ class CompoServer extends WebSocketServer {
 	protected function closed($session) {
 		echo "Lost connection\n";
         //Cleanup
-        for($chatroom in $this->followingChatChannels) {
+        foreach($this->followingChatChannels as $chatroom) {
             if(($key = array_search($session, $chatroom)) !== false) {
                 unset($chatroom[$key]);
             }
@@ -109,30 +129,44 @@ class CompoServer extends WebSocketServer {
         $this->unregisterUser($session);
 	}
 
+    protected function unsubscribeChatroom($channel, $session) {
+        if(isset($this->followingChatChannels[$channel])) {
+            if(($key = array_search($session, $this->followingChatChannels[$channel])) !== false) {
+                unset($this->followingChatChannels[$channel][$key]);
+                $this->send($session, '{"intent": "unsubscribeChatroomResult", "data": [true, ""]}');
+            } else {
+                $this->send($session, '{"intent": "unsubscribeChatroomResult", "data": [false, "Du prøvde å forlate et chatrom du aldri var i!"]}');
+            }
+        } else {
+            $this->send($session, '{"intent": "unsubscribeChatroomResult", "data": [false, "Du prøvde å forlate et chatrom du aldri var i!"]}');
+        }
+    }
+
     protected function sendChatMessage($session, $channel, $message) {
         $chat = ChatHandler::getChat($channel);
         $user = $this->getUser($session);
         if($chat != null) {
             if(ChatHandler::canChat($chat, $user)) {
                 //We can chat here. Let's
-                $line = $this->getFormattedChatMessage($user, $message);
-                $this->send($session, '{"intent": "chatMessageResult", "data": [true, "' . $line . '"]}');
+                $line = $this->getFormattedChatMessage($user, $message, time());
+                $this->send($session, '{"intent": "chatMessageResult", "data": [true, ' . $channel . ', "' . $line . '"]}');
                 //Next, broadcast to all people following the chat
-                foreach($victim in $this->followingChannels[$channel]) {
+                foreach($this->followingChannels[$channel] as $victim) {
                     if($victim != $session) {
-                        $this->send($session, '{"intent": "chat", "data": ["' . $line . '"]}');
+                        $this->send($session, '{"intent": "chat", "data": [' . $channel . ', "' . $line . '"]}');
                     }
                 }
+                $chat->sendMessage($user, $line);
             } else {
-                $this->send($session, '{"intent": "chatMessageResult", "data": [false, "Du kan ikke chatte her!"]}');
+                $this->send($session, '{"intent": "chatMessageResult", "data": [false, ' . $channel . ', "Du kan ikke chatte her!"]}');
             }
         } else {
-            $this->send($session, '{"intent": "chatMessageResult", "data": [false, "Chatten finnes ikke!"]}');
+            $this->send($session, '{"intent": "chatMessageResult", "data": [false, ' . $channel . ', "Chatten finnes ikke!"]}');
         }
     }
 
-    protected function getFormattedChatMessage($user, $message) {
-        $time = date('H:i:s', time());
+    protected function getFormattedChatMessage($user, $message, $timestamp) {
+        $time = date('H:i:s', $timestamp);
         $username = ($user->hasPermission('*') || $user->hasPermission('compo.chat') ? "<b>[Admin] " . $user->getUsername() . "</b>" : $user->getUsername());
         $message = htmlspecialchars($message, ENT_QUOTES, 'UTF-8');
 
@@ -146,12 +180,19 @@ class CompoServer extends WebSocketServer {
             }
             $this->followingChatChannels[$parsedJson->data[0]][] = $session; //Add thge user to list of people who will recieve updates when something changes
             $this->send($session, '{"intent": "subscribeChatroomResult", "data": [true, ' . ChatHandler::canChat($chat, $this->getgetUser($session)) . ', ' . $chat->getId() . ', ""]}');
+            //Get the latest messages, and send them!
+            $messages = $chat->getLastMessage(20);
+            foreach($messages as $message) {
+                $text = $this->getFormattedChatMessage($message->getUser(), $message->getMessage(), $message->getTime());
+                //Send as a chat for now
+                $this->send($session, '{"intent": "chat", "data": [' . $chat->getId() . ', "' . $text . '"]}');
+            }
         } else {
             $this->send($session, '{"intent": "subscribeChatroomResult", "data": [false, false, ' . $chat->getId() . ' , "Du har ikke tillatelse til å bruke dette chatrommet"]}'); // TODO add locale
         }
     }
 
-    protected function unregisterUser() {
+    protected function unregisterUser($session) {
         unset($this->authenticatedUsers[$session]);
     }
 
