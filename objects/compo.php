@@ -31,7 +31,7 @@ class Compo extends EventObject {
 	private $startTime;
 	private $registrationEndTime;
 	private $teamSize;
-    private $chat;
+  private $chatId;
 
 	/*
 	 * Returns the name of this compo.
@@ -102,17 +102,17 @@ class Compo extends EventObject {
 	}
 
 	/*
+	 * Returns the chat used by this compo
+	 */
+	public function getChat() {
+		return ChatHandler::getChat($this->chatId);
+	}
+
+	/*
 	 * Return a list of all matches for this compo.
 	 */
 	public function getMatches() {
 		return MatchHandler::getMatchesByCompo($this);
 	}
-
-    /*
-     * Returns the chat used by this compo
-     */
-    public function getChat() {
-        return ChatHandler::getChat($this->chat);
-    }
 }
 ?>

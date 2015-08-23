@@ -73,11 +73,11 @@ if (Session::isAuthenticated()) {
 					$nickname = !empty($_GET['nickname']) ? $_GET['nickname'] : $editUser->getUsername();
 					$emergencyContactPhone = isset($_GET['emergencycontactphone']) ? str_replace('+47', '', str_replace(' ', '', $_GET['emergencycontactphone'])) : 0;
 
-					if ($username != $editUser->getUsername() && UserHandler::userExists($username)) {
+					if ($username != $editUser->getUsername() && UserHandler::hasUser($username)) {
 						$message = Localization::getLocale('the_username_is_already_in_use_by_someone_else');
-					} else if ($email != $editUser->getEmail() && UserHandler::userExists($email)) {
+					} else if ($email != $editUser->getEmail() && UserHandler::hasUser($email)) {
 						$message = Localization::getLocale('the_email_address_is_already_in_use_by_someone_else');
-					} else if ($phone != $editUser->getPhone() && UserHandler::userExists($phone)) {
+					} else if ($phone != $editUser->getPhone() && UserHandler::hasUser($phone)) {
 						$message = Localization::getLocale('the_phone_number_is_already_in_use_by_someone_else');
 					} else if (empty($firstname) || strlen($firstname) > 32) {
 						$message = Localization::getLocale('you_must_enter_a_first_name');
@@ -120,7 +120,7 @@ if (Session::isAuthenticated()) {
 												$postalcode,
 												$nickname);
 
-						if (EmergencyContactHandler::hasEmergencyContact($editUser) ||
+						if ($editUser->hasEmergencyContact() ||
 							isset($_GET['emergencycontactphone']) && is_numeric($emergencyContactPhone)) {
 							EmergencyContactHandler::createEmergencyContact($editUser, $emergencyContactPhone);
 						}

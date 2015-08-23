@@ -510,18 +510,18 @@ class User extends Object {
 			$group = $this->getGroupByEvent($event);
 
 			if ($this->isGroupLeaderByEvent($event)) {
-				$role = 'Leder i ' . $group->getTitle();
+				return 'Leder i ' . $group->getTitle();
 			} else if ($this->isGroupCoLeaderByEvent($event)) {
-				$role = 'Co-leder i ' . $group->getTitle();
+				return 'Co-leder i ' . $group->getTitle();
 			} else if ($this->isTeamMemberByEvent($event) &&
 				$this->isTeamLeaderByEvent($event)) {
 				$team = $this->getTeam();
 
-				$role = 'Lag-leder i ' . $group->getTitle() . ":" . $team->getTitle();
+				return 'Lag-leder i ' . $group->getTitle() . ":" . $team->getTitle();
 			}
 		}
 
-		return $role;
+		return null;
 	}
 
 	/*

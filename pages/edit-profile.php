@@ -64,14 +64,12 @@ if (Session::isAuthenticated()) {
 						echo '<td>' . Localization::getLocale('gender') . ':</td>';
 						echo '<td>';
 							echo '<select name="gender">';
-								$gender = $editUser->getGender();
-
-								if ($gender == 0) {
-									echo '<option value="0" selected>' . Localization::getLocale('male') . '</option>';
-									echo '<option value="1">' . Localization::getLocale('female') . '</option>';
-								} else if ($gender == 1) {
-									echo '<option value="0">' . Localization::getLocale('male') . '</option>';
-									echo '<option value="1" selected>' . Localization::getLocale('female') . '</option>';
+								if ($editUser->getGender()) {
+									echo '<option value="0" selected>' . $editUser->getGenderAsString() . '</option>';
+									echo '<option value="1">' . $editUser->getGenderAsString() . '</option>';
+								} else {
+									echo '<option value="0">' . $editUser->getGenderAsString() . '</option>';
+									echo '<option value="1" selected>' . $editUser->getGenderAsString() . '</option>';
 								}
 							echo '</select>';
 						echo '</td>';
@@ -129,8 +127,8 @@ if (Session::isAuthenticated()) {
 					echo '</tr>';
 					echo '<tr>';
 						echo '<td>' . Localization::getLocale('guardians_phone') . ':</td>';
-							if (EmergencyContactHandler::hasEmergencyContactByUser($editUser)) {
-								$emergencyContactPhone = EmergencyContactHandler::getEmergencyContactByUser($editUser)->getPhone();
+							if ($editUser->hasEmergencyContact()) {
+								$emergencyContactPhone = $editUser->getEmergencyContact()->getPhone();
 
 								echo '<td>(+47) <input name="emergencycontactphone" type="tel" value="' . $emergencyContactPhone . '"></td>';
 							} else {
