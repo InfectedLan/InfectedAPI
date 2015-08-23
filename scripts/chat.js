@@ -18,136 +18,151 @@
  */
 
 //JoMS suggested this as OOP javascript style. Ty JoMs <3
-var Chat = function(){
+var Chat = Chat || {};
     /*
      * Chat api overview
      *
      * bindChat(divId, chatId, height) - binds chat to a div. Notice that you have to specify the height in pixels.
      * sendMessage(message) - sends a message
      */
-    //Private variables
-    var chatList = [];
-    var exitError = "";
+//Private variables
+Chat.chatList = [];
+Chat.exitError = "";
+Chat.connected = false;
+Chat.sendQueue = [];
     
     //Public functions
-    this.bindChat = function(divId, chatId, height) {
-	for(var i = 0; i < chatList.length; i++) {
-	    if(chatList[i].divId == divId) {
-		console.log("WARNING: Trying to bind a div twice");
-		return;
-	    }
+Chat.bindChat = function(divId, chatId, height) {
+    for(var i = 0; i < this.chatList.length; i++) {
+	if(this.chatList[i].divId == divId) {
+	    console.log("WARNING: Trying to bind a div twice");
+	    return;
 	}
-	chatList.push({divId: divId, chatId: chatId});
+    }
+    this.chatList.push({divId: divId, chatId: chatId});
 
-	this.sendMessage({intent: "subscribeChatroom", data: [chatId]});
-	$("#" + divId).html('<div class="chatArea" style="height: ' + (height-25-5-10 - 7 - 5) + 'px;"></div><div class="chatTextfield" style="padding-right:27px;padding-left:0px;margin-right:0px;"></div>');
-    };
+    this.sendMessage({intent: "subscribeChatroom", data: [chatId]});
+    $("#" + divId).html('<div class="chatArea" style="height: ' + (height-25-5-10 - 7 - 5) + 'px;"></div><div class="chatTextfield" style="padding-right:27px;padding-left:0px;margin-right:0px;"></div>');
+};
 
-    this.sendMessage = function(message) {
+Chat.sendMessage = function(message) {
+    if(!this.connected && message.intent != "auth") {
+	this.sendQueue.push(message);
+    } else {
 	this.socket.send(JSON.stringify(message)); //Yes, you ARE allowed to mention a variable befire it is created, as long as it isn't called before it is initialized!
-    };
+    }
+};
     
-    function onSocketOpen(msg) {
-	console.log("Socket open");
-	this.sendMessage({intent: "auth", "data": [getCookie("PHPSESSID")]});
-    };
+Chat.onSocketOpen = function(msg) {
+    console.log("Socket open");
+    Chat.sendMessage({intent: "auth", "data": [getCookie("PHPSESSID")]});
+};
 
-    function onRecvMessage(msg) {
-	console.log("Recieved:");
-	console.log(msg);
-	var packet = JSON.parse(msg.data);
-	switch(packet.intent) {
-	case "authResult":
-	    if(packet.data[0]) {
-		console.log("Successfully authenticated");
-	    } else {
-		error("Vi fikk ikke logget inn på chatserveren! Prøv å trykke F5, og prøv på nytt");
-		socket.close();
+Chat.onRecvMessage = function(msg) {
+    console.log("Recieved:");
+    console.log(msg);
+    var packet = JSON.parse(msg.data);
+    switch(packet.intent) {
+    case "authResult":
+	if(packet.data[0]) {
+	    console.log("Successfully authenticated");
+	    Chat.connected = true;
+	    for(var i = 0; i < Chat.sendQueue.length; i++) {
+		Chat.sendMessage(Chat.sendQueue[i]);
 	    }
-	    break;
-	case "subscribeChatroomResult":
-	    if(packet.data[0]) {
-		//Find the div for the chatroom
-		for(var i = 0; i < chatList.length; i++) {
-		    if(chatList[i].chatId == packet.data[2]) {
-			//'tis our div!
-			//Add the text field...
-			$("#" + chatList[i].divId).find(".chatTextfield").html('<input type="text" placeholder="' + (packet.data[1] ? "Skriv her, trykk enter for å sende" : "Kun clan-chiefs kan skrive her!") + '" class="chatBox" />');
-			//Add enter listener if we can write
-			if(packet.data[1]) {
-			    $("#" + divId).find('.chatBox').keypress({chat: chatId, div: divId}, function(e) {
-				if(e.which == 13) {
-				    if($(this).val().length > 0) {
-					sendMsg(e.data.chat, $(this).val());
-					$(this).val("");
-				    } else {
-					error("Chatmeldingen er for kort!");
-				    }
-				}
-			    });
-			}
-			chatWrite(packet.data[2], "<i>Koblet til chatten</i>");
-			break; //We don't need to search any more
-		    }
-		}
-	    } else {
-		chatWrite(packet.data[2], "<i>Kunne ikke bli med i chatten: " + packet.data[3] + "</i>");
-		console.log("Failed to join chat");
-	    }
-	    break;
-	case "chat":
-	    chatWrite(packet.data[0], packet.data[1]);
-	    break;
-	case "chatMessageResult":
-	    if(packet.data[0]) {
-		chatWrite(packet.data[1], packet.data[2]);
-	    } else {
-		console.log("Got an error when sending chat message to channel " + packet.data[1] + ": " + packet.data[2]);
-	    }
-	case "default":
-	    console.log("ERROR: Unsupported intent: " + packet.intent);
-	    break;
-	}
-    };
-
-    function sendMsg(chatId, msg) {
-	this.sendMessage({"intent": "chatMessage", data: [chatId, msg]});
-    };
-
-    function getChatDiv(chatId) {
-	for(var i = 0; i < chatList.length; i++) {
-	    if(chatList[i].chatId == chatId) {
-		if($("#" + chatList[i].divId).length == 0) {
-		    console.log("Chat " + chatList[i].chatId + " at divId " + chatList[i].divId + " is gone! Removing");
-		    chatList.splice(i, 1);
-		    i--;
-		    return null;
-		}
-		return chatLists[i].divId;
-	    }
-	}
-	return null;
-    };
-    
-    function chatWrite(chatId, msg) {
-	var chatDivId = getChatDiv(chatId);
-	if(chatDivId != null) {
-	    //Write message to bottom
-	    $("#" + chatDivId).find(".chatArea").append("<span>" + msg + "</span>");
-	    //Scroll down
-	    $("#" + chatDivId).find(".chatArea").scrollTop($("#" + chatDivId).find(".chatArea")[0].scrollHeight);
-	}
-    };
-
-    function onClose(msg) {
-	console.log("Disconnected");
-	if(exitError == "") {
-	    error("Vi mistet tilkobling til serveren. Vennligst oppdater siden for å prøve å koble til på nytt.");
+	    Chat.sendQueue = [];
 	} else {
-	    error(exitError);
+	    error("Vi fikk ikke logget inn på chatserveren! Prøv å trykke F5, og prøv på nytt");
+	    socket.close();
 	}
-    };
-	
+	break;
+    case "subscribeChatroomResult":
+	if(packet.data[0]) {
+	    //Find the div for the chatroom
+	    for(var i = 0; i < Chat.chatList.length; i++) {
+		if(Chat.chatList[i].chatId == packet.data[2]) {
+		    var chatId = Chat.chatList[i].chatId;
+		    var divId = Chat.chatList[i].divId;
+		    //'tis our div!
+		    //Add the text field...
+		    $("#" + divId).find(".chatTextfield").html('<input type="text" placeholder="' + (packet.data[1] == 1 ? "Skriv her, trykk enter for å sende" : "Kun clan-chiefs kan skrive her!") + '" class="chatBox" />');
+		    //Add enter listener if we can write
+		    if(packet.data[1]) {
+			$("#" + divId).find('.chatBox').keypress({chat: chatId, div: divId}, function(e) {
+			    if(e.which == 13) {
+				if($(this).val().length > 0) {
+				    Chat.sendMsg(e.data.chat, $(this).val());
+				    $(this).val("");
+				} else {
+				    error("Chatmeldingen er for kort!");
+				}
+			    }
+			});
+		    }
+		    Chat.chatWrite(packet.data[2], "<i>Koblet til chatten</i>");
+		    break; //We don't need to search any more
+		}
+	    }
+	} else {
+	    Chat.chatWrite(packet.data[2], "<i>Kunne ikke bli med i chatten: " + packet.data[3] + "</i>");
+	    console.log("Failed to join chat");
+	}
+	break;
+    case "chat":
+	Chat.chatWrite(packet.data[0], packet.data[1]);
+	break;
+    case "chatMessageResult":
+	if(packet.data[0]) {
+	    Chat.chatWrite(packet.data[1], packet.data[2]);
+	} else {
+	    console.log("Got an error when sending chat message to channel " + packet.data[1] + ": " + packet.data[2]);
+	}
+	break;
+    case "default":
+	console.log("ERROR: Unsupported intent: " + packet.intent);
+	break;
+    }
+};
+
+Chat.sendMsg = function(chatId, msg) {
+    this.sendMessage({"intent": "chatMessage", data: [chatId, msg]});
+};
+
+Chat.getChatDiv = function(chatId) {
+    for(var i = 0; i < Chat.chatList.length; i++) {
+	if(Chat.chatList[i].chatId == chatId) {
+	    if($("#" + Chat.chatList[i].divId).length == 0) {
+		console.log("Chat " + Chat.chatList[i].chatId + " at divId " + Chat.chatList[i].divId + " is gone! Removing");
+		Chat.chatList.splice(i, 1);
+		i--;
+		return null;
+	    }
+	    return Chat.chatList[i].divId;
+	}
+    }
+    return null;
+};
+
+Chat.chatWrite = function(chatId, msg) {
+    var chatDivId = this.getChatDiv(chatId);
+    if(chatDivId != null) {
+	//Write message to bottom
+	$("#" + chatDivId).find(".chatArea").append("<div>" + msg + "</div>");
+	//Scroll down
+	$("#" + chatDivId).find(".chatArea").scrollTop($("#" + chatDivId).find(".chatArea")[0].scrollHeight);
+    }
+};
+
+Chat.onClose = function(msg) {
+    console.log("Disconnected");
+    if(this.exitError == "") {
+	error("Vi mistet tilkobling til serveren. Vennligst oppdater siden for å prøve å koble til på nytt.");
+    } else {
+	error(this.exitError);
+    }
+};
+Chat.init = function() {
+    console.log("Initializing");
     var url = window.location.href;
     //Autodetect magic: Let's convert http to ws, and https to wss
     url = url.replace("http://", "ws://");
@@ -155,11 +170,11 @@ var Chat = function(){
     //Now, let's remove the other part of the URL we don't need
     url = url.substr(0, url.indexOf("/", 6)) + ":1337/";
     console.log("Connecting to " + url);
-    var socket = new WebSocket(url);
-    socket.onopen = onSocketOpen;
-    socket.onmessage = onRecvMessage;
-    socket.onclose = onClose;
-    
+    this.socket = new WebSocket(url);
+    this.socket.onopen = this.onSocketOpen;
+    this.socket.onmessage = this.onRecvMessage;
+    this.socket.onclose = this.onClose;
+    console.log("Init done!");
 };
 function getCookie(cname) {
     var name = cname + "=";

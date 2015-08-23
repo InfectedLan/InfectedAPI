@@ -121,8 +121,9 @@ class CompoServer extends WebSocketServer {
 	protected function closed($session) {
 		echo "Lost connection\n";
         //Cleanup
-        foreach($this->followingChatChannels as $chatroom) {
+        foreach($this->followingChatChannels as &$chatroom) {
             if(($key = array_search($session, $chatroom)) !== false) {
+                echo "Removing from one chatroom\n";
                 unset($chatroom[$key]);
             }
         }
@@ -151,12 +152,12 @@ class CompoServer extends WebSocketServer {
                 $line = $this->getFormattedChatMessage($user, $message, time());
                 $this->send($session, '{"intent": "chatMessageResult", "data": [true, ' . $channel . ', "' . $line . '"]}');
                 //Next, broadcast to all people following the chat
-                foreach($this->followingChannels[$channel] as $victim) {
+                foreach($this->followingChatChannels[$channel] as $victim) {
                     if($victim != $session) {
                         $this->send($session, '{"intent": "chat", "data": [' . $channel . ', "' . $line . '"]}');
                     }
                 }
-                $chat->sendMessage($user, $line);
+                $chat->sendMessage($user, $message);
             } else {
                 $this->send($session, '{"intent": "chatMessageResult", "data": [false, ' . $channel . ', "Du kan ikke chatte her!"]}');
             }
@@ -175,13 +176,14 @@ class CompoServer extends WebSocketServer {
 
     protected function subscribeChatroom($chat, $session) {
         if(ChatHandler::canRead($chat, $this->getUser($session))) {
-            if(!isset($this->followingChatChannels[$parsedJson->data[0]])) {
-                $this->followingChatChannels[$parsedJson->data[0]] = array();
+            if(!isset($this->followingChatChannels[$chat->getId()])) {
+                $this->followingChatChannels[$chat->getId()] = array();
             }
-            $this->followingChatChannels[$parsedJson->data[0]][] = $session; //Add thge user to list of people who will recieve updates when something changes
-            $this->send($session, '{"intent": "subscribeChatroomResult", "data": [true, ' . ChatHandler::canChat($chat, $this->getgetUser($session)) . ', ' . $chat->getId() . ', ""]}');
+            $this->followingChatChannels[$chat->getId()][] = $session; //Add thge user to list of people who will recieve updates when something changes
+            $this->send($session, '{"intent": "subscribeChatroomResult", "data": [true, ' . ChatHandler::canChat($chat, $this->getUser($session)) . ', ' . $chat->getId() . ', ""]}');
             //Get the latest messages, and send them!
-            $messages = $chat->getLastMessage(20);
+            $messages = $chat->getLastMessages(30);
+            $messages = array_reverse($messages);
             foreach($messages as $message) {
                 $text = $this->getFormattedChatMessage($message->getUser(), $message->getMessage(), $message->getTime());
                 //Send as a chat for now
@@ -199,7 +201,6 @@ class CompoServer extends WebSocketServer {
     protected function registerUser($user, $session){
         echo "Got user: " . $user->getUsername() . ".\n";
         $this->authenticatedUsers[$session] = $user;
-        print_r($this->authenticatedUsers);
     }
 
     protected function isAuthenticated($session) {
@@ -207,7 +208,7 @@ class CompoServer extends WebSocketServer {
     }
 
     protected function getUser($session) {
-        return $this->authenticatedUsers($session);
+        return $this->authenticatedUsers[$session];
     }
 
     protected function tick() {
