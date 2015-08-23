@@ -123,7 +123,7 @@ class Event extends Object {
 	public function getAvailableTickets() {
 		$ticketCount = $this->getTicketCount();
 		$numLeft = $this->getParticipants() - $ticketCount;
-		$numLeft -= StoreSessionHandler::getReservedTicketCount(TicketTypeHandler::getTicketType($this->ticketType));
+		$numLeft -= StoreSessionHandler::getReservedTicketCount($this->getTicketType());
 
 		return $numLeft;
 	}

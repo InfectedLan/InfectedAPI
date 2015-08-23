@@ -24,14 +24,29 @@ require_once 'objects/user.php';
 
 class UserOptionHandler {
 	/*
-	 * Returns true is the phone number is set to hidden for the specified user.
+	 * Returns true is the phone number is set to private for the specified user.
 	 */
-	public static function isPhoneHidden(User $user) {
+	public static function hasUserPrivatePhone(User $user) {
 		$database = Database::open(Settings::db_name_infected);
 
 		$result = $database->query('SELECT `id` FROM `' . Settings::db_table_infected_useroptions . '`
 																WHERE `userId` = \'' . $user->getId() . '\'
-																AND `hidePhone` = \'1\';');
+																AND `privatePhone` = \'1\';');
+
+		$database->close();
+
+		return $result->num_rows > 0;
+	}
+
+	/*
+	 * Returns true is the phone number is set to private for the specified user.
+	 */
+	public static function isUserReservedFromNotifications(User $user) {
+		$database = Database::open(Settings::db_name_infected);
+
+		$result = $database->query('SELECT `id` FROM `' . Settings::db_table_infected_useroptions . '`
+																WHERE `userId` = \'' . $user->getId() . '\'
+																AND `reserveFromNotifications` = \'1\';');
 
 		$database->close();
 

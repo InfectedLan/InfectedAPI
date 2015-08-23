@@ -8,12 +8,12 @@
  * modify it under the terms of the GNU Lesser General Public
  * License as published by the Free Software Foundation; either
  * version 3.0 of the License, or (at your option) any later version.
- * 
+ *
  * This library is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
  * Lesser General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU Lesser General Public
  * License along with this library.  If not, see <http://www.gnu.org/licenses/>.
  */
@@ -32,14 +32,15 @@ if (!Session::isAuthenticated()) {
 		!empty($_GET['password'])) {
 		$identifier = $_GET['identifier'];
 		$password = hash('sha256', $_GET['password']);
-		
+
 		if (UserHandler::hasUser($identifier)) {
 			$user = UserHandler::getUserByIdentifier($identifier);
 			$storedPassword = $user->getPassword();
-			
+
 			if ($user->isActivated()) {
 				if (hash_equals($password, $storedPassword)) {
-					$_SESSION['user'] = $user;
+					$_SESSION['userId'] = $user->getId();
+
 					$result = true;
 				} else {
 					$message = Localization::getLocale('wrong_username_or_password');
@@ -55,7 +56,7 @@ if (!Session::isAuthenticated()) {
 	}
 } else {
 	$message = Localization::getLocale('you_are_already_logged_in');
-} 
+}
 
 header('Content-Type: text/plain');
 echo json_encode(array('result' => $result, 'message' => $message), JSON_PRETTY_PRINT);
