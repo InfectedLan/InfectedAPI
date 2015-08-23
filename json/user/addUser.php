@@ -8,12 +8,12 @@
  * modify it under the terms of the GNU Lesser General Public
  * License as published by the Free Software Foundation; either
  * version 3.0 of the License, or (at your option) any later version.
- * 
+ *
  * This library is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
  * Lesser General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU Lesser General Public
  * License along with this library.  If not, see <http://www.gnu.org/licenses/>.
  */
@@ -26,27 +26,27 @@ require_once 'handlers/citydictionary.php';
 $result = false;
 $message = null;
 
-if (isset($_GET['firstname']) && 
-	isset($_GET['lastname']) && 
-	isset($_GET['username']) &&  
-	isset($_GET['password']) && 
-	isset($_GET['confirmpassword']) && 
-	isset($_GET['email']) && 
-	isset($_GET['confirmemail']) && 
-	isset($_GET['gender']) && 
-	isset($_GET['birthday']) && 
-	isset($_GET['birthmonth']) && 
-	isset($_GET['birthyear']) && 
+if (isset($_GET['firstname']) &&
+	isset($_GET['lastname']) &&
+	isset($_GET['username']) &&
+	isset($_GET['password']) &&
+	isset($_GET['confirmpassword']) &&
+	isset($_GET['email']) &&
+	isset($_GET['confirmemail']) &&
+	isset($_GET['gender']) &&
+	isset($_GET['birthday']) &&
+	isset($_GET['birthmonth']) &&
+	isset($_GET['birthyear']) &&
 	isset($_GET['phone']) &&
 	isset($_GET['address']) &&
 	isset($_GET['postalcode']) &&
 	!empty($_GET['firstname']) &&
 	!empty($_GET['lastname']) &&
 	!empty($_GET['username']) &&
-	!empty($_GET['password']) && 
-	!empty($_GET['confirmpassword']) && 
+	!empty($_GET['password']) &&
+	!empty($_GET['confirmpassword']) &&
 	!empty($_GET['email']) &&
-	!empty($_GET['confirmemail']) && 
+	!empty($_GET['confirmemail']) &&
 	is_numeric($_GET['gender']) &&
 	is_numeric($_GET['birthday']) &&
 	is_numeric($_GET['birthmonth']) &&
@@ -62,13 +62,13 @@ if (isset($_GET['firstname']) &&
 	$email = $_GET['email'];
 	$confirmEmail = $_GET['confirmemail'];
 	$gender = $_GET['gender'];
-	$birthdate = $_GET['birthyear'] . '-' . $_GET['birthmonth'] . '-' . $_GET['birthday']; 
+	$birthdate = $_GET['birthyear'] . '-' . $_GET['birthmonth'] . '-' . $_GET['birthday'];
 	$phone = str_replace('+47', '', str_replace(' ', '', $_GET['phone']));
 	$address = ucfirst($_GET['address']);
 	$postalcode = $_GET['postalcode'];
 	$nickname = !empty($_GET['nickname']) ? $_GET['nickname'] : $username;
 	$emergencycontactphone = isset($_GET['emergencycontactphone']) ? str_replace('+47', '', str_replace(' ', '', $_GET['emergencycontactphone'])) : null;
-	
+
 	if (UserHandler::hasUser($username)) {
 		$message = Localization::getLocale('the_username_is_already_in_use_by_someone_else');
 	} else if (UserHandler::hasUser($email)) {
@@ -109,34 +109,34 @@ if (isset($_GET['firstname']) &&
 		} else if (strlen($emergencycontactphone) != 8) {
 			$message = Localization::getLocale('parent_phone_is_too_short_it_must_consist_of_at_least_8_characters');
 		}
-		
+
 		$message = Localization::getLocale('you_are_below_the_age_of_18_and_must_therefore_provide_a_phone_number_to_a_guardian');
 	} else {
 		// Creates the user in database.
-		$user = UserHandler::createUser($firstname, 
-										$lastname, 
-										$username, 
-										$password, 
-										$email, 
-										$birthdate, 
-										$gender, 
-										$phone, 
-										$address, 
-										$postalcode, 
+		$user = UserHandler::createUser($firstname,
+										$lastname,
+										$username,
+										$password,
+										$email,
+										$birthdate,
+										$gender,
+										$phone,
+										$address,
+										$postalcode,
 										$nickname);
-		
+
 		if (isset($_GET['emergencycontactphone']) &&
-			is_numeric($emergencycontactphone) && 
+			is_numeric($emergencycontactphone) &&
 			$emergencycontactphone > 0 &&
 			strlen($emergencycontactphone) < 8 &&
 			strlen($emergencycontactphone) > 8) {
 			EmergencyContactHandler::createEmergencyContact($user, $emergencycontactphone);
 		}
-		
+
 		$user->sendRegistrationMail();
-		
-		$result = true;
 		$message = Localization::getLocale('your_account_is_now_successfully_registered_you_will_now_receive_an_activation_link_per_email_remember_to_check_spam_folder_if_you_should_not_find_it');
+
+		$result = true;
 	}
 } else {
 	$message = Localization::getLocale('you_have_not_filled_out_the_required_fields');

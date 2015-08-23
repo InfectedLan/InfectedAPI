@@ -28,24 +28,24 @@ class MailManager {
 	 */
 	public static function sendEmail(User $user, $subject, $message) {
 		// Create PHPMailer object.
-		$mail = new PHPMailer;
+		$email = new PHPMailer;
 
 		// Set sender and recipient.
-		$mail->SetFrom(Settings::email, Settings::name);
-		$mail->addAddress($user->getEmail(), $user->getFullName());
+		$email->SetFrom(Settings::email, Settings::name);
+		$email->addAddress($user->getEmail(), $user->getFullName());
 
 		// Set to use HTML and UTF-8 as charset.
-		$mail->isHTML(true);  // Set email format to HTML
-		$mail->CharSet = 'UTF-8'; // Set charset to UTF-8
-		$mail->WordWrap = 70; // Set word wrap to 70 characters
+		$email->isHTML(true);  // Set email format to HTML
+		$email->CharSet = 'UTF-8'; // Set charset to UTF-8
+		$email->WordWrap = 70; // Set word wrap to 70 characters
 
 		// Create subject and body.
-		$mail->Subject = $subject;
-		$mail->Body = $message;
-		$mail->AltBody = 'Denne e-posten krever en e-post klient som støtter visning av HTML innhold.';
+		$email->Subject = $subject;
+		$email->Body = $message;
+		$email->AltBody = 'Denne e-posten krever en e-post klient som støtter visning av HTML innhold.';
 
 		// Sending the e-mail.
-		$mail->send();
+		$email->send();
 	}
 
 	/*

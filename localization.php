@@ -8,7 +8,7 @@
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY, without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -21,14 +21,12 @@
 require_once 'settings.php';
 
 class Localization {
-	static $defaultLanguage = 'nb_NO';
-
 	/*
 	 * Get locale by key.
 	 */
 	public static function getLocale($key, ...$arguments) {
 		$path = Settings::api_path . 'resources/lang/';
-		$language = Locale::acceptFromHttp($_SERVER['HTTP_ACCEPT_LANGUAGE']);
+		$language = isset($_SERVER['HTTP_ACCEPT_LANGUAGE']) ? Locale::acceptFromHttp($_SERVER['HTTP_ACCEPT_LANGUAGE']) : 'nb_NO';
 		$filename = $path . $language . '.json';
 
 		// Check if language exists, if not fallback to default language.
