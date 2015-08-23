@@ -46,7 +46,7 @@ class ClanHandler {
 	}
 
 	/*
-	 * Get clan for a specified user.
+	 * Get clan for a specified user. Note that as of 20 august 2015, this on only works on clans for current event.
 	 */
 	public static function getClansByUser(User $user) {
 		$event = EventHandler::getCurrentEvent();
