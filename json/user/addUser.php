@@ -95,7 +95,7 @@ if (isset($_GET['firstname']) &&
 		$message = Localization::getLocale('the_email_addresses_does_not_match');
 	} else if (!is_numeric($gender)) {
 		$message = Localization::getLocale('you_have_entered_an_invalid_gender');
-	} else if (!is_numeric($phone) || $phone <= 0 || strlen($phone) < 8 || strlen($phone) > 8) {
+	} else if (!is_numeric($phone) || strlen($phone) < 8 || strlen($phone) > 8) {
 		$message = Localization::getLocale('the_phone_number_is_not_valid');
 	} else if (empty($address) && strlen($address) > 32) {
 		$message = Localization::getLocale('you_must_enter_a_valid_address');
@@ -103,10 +103,10 @@ if (isset($_GET['firstname']) &&
 		$message = Localization::getLocale('the_postcode_is_not_valid_the_postcode_consists_of_4_characters');
 	} else if (!preg_match('/^[a-zæøåA-ZÆØÅ0-9_-]{2,16}$/', $nickname) && !empty($nickname)) {
 		$message = Localization::getLocale('the_nickname_is_not_valid_it_must_consist_of_at_least_2_characters_and_maximum_16_characters');
-	} else if (date_diff(date_create($birthdate), date_create('now'))->y < 18 && (!isset($_GET['emergencycontactphone']) || !is_numeric($emergencycontactphone) || strlen($emergencycontactphone) != 8)) {
+	} else if (date_diff(date_create($birthdate), date_create('now'))->y < 18 && (!isset($_GET['emergencycontactphone']) || !is_numeric($emergencycontactphone) || strlen($emergencycontactphone) < 8 || strlen($emergencycontactphone) > 8)) {
 		if (!is_numeric($emergencycontactphone)) {
 			$message = Localization::getLocale('parent_phone_must_be_a_number');
-		} else if (strlen($emergencycontactphone) != 8) {
+		} else if (strlen($emergencycontactphone) < 8) {
 			$message = Localization::getLocale('parent_phone_is_too_short_it_must_consist_of_at_least_8_characters');
 		}
 
@@ -114,26 +114,24 @@ if (isset($_GET['firstname']) &&
 	} else {
 		// Creates the user in database.
 		$user = UserHandler::createUser($firstname,
-										$lastname,
-										$username,
-										$password,
-										$email,
-										$birthdate,
-										$gender,
-										$phone,
-										$address,
-										$postalcode,
-										$nickname);
+																		$lastname,
+																		$username,
+																		$password,
+																		$email,
+																		$birthdate,
+																		$gender,
+																		$phone,
+																		$address,
+																		$postalcode,
+																		$nickname);
 
 		if (isset($_GET['emergencycontactphone']) &&
 			is_numeric($emergencycontactphone) &&
-			$emergencycontactphone > 0 &&
-			strlen($emergencycontactphone) < 8 &&
-			strlen($emergencycontactphone) > 8) {
+			strlen($emergencycontactphone) >= 8) {
 			EmergencyContactHandler::createEmergencyContact($user, $emergencycontactphone);
 		}
 
-		$user->sendRegistrationMail();
+		$user->sendRegistrationEmail();
 		$message = Localization::getLocale('your_account_is_now_successfully_registered_you_will_now_receive_an_activation_link_per_email_remember_to_check_spam_folder_if_you_should_not_find_it');
 
 		$result = true;
