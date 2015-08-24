@@ -64,13 +64,8 @@ if (Session::isAuthenticated()) {
 						echo '<td>' . Localization::getLocale('gender') . ':</td>';
 						echo '<td>';
 							echo '<select name="gender">';
-								if ($editUser->getGender()) {
-									echo '<option value="0" selected>' . $editUser->getGenderAsString() . '</option>';
-									echo '<option value="1">' . $editUser->getGenderAsString() . '</option>';
-								} else {
-									echo '<option value="0">' . $editUser->getGenderAsString() . '</option>';
-									echo '<option value="1" selected>' . $editUser->getGenderAsString() . '</option>';
-								}
+								echo '<option value="0"' . ($editUser->getGender() ? ' selected' : null) . '>' . Localization::getLocale($editUser->getAge() < 18 ? 'boy' : 'male') . '</option>';
+								echo '<option value="1"' . (!$editUser->getGender() ? ' selected' : null) . '>' . Localization::getLocale($editUser->getAge() < 18 ? 'girl' : 'female') . '</option>';
 							echo '</select>';
 						echo '</td>';
 					echo '</tr>';

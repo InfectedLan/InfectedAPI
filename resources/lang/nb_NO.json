@@ -172,6 +172,8 @@
    "email":"E-post",
    "repeat_email":"Gjenta e-post",
    "gender":"Kjønn",
+   "boy":"Gutt",
+   "girl":"Jente",
    "male":"Mann",
    "female":"Kvinne",
    "birthdate":"Fødselsdato",

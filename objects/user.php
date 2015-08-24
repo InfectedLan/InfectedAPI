@@ -100,10 +100,10 @@ class User extends Object {
 	 */
 	public function getGenderAsString() {
 		if ($this->getAge() < 18) {
-			return $this->getGender() ? 'Gutt' : 'Jente';
+			return Localization::getLocale($this->getGender() ? 'boy' : 'girl');
 		}
 
-		return $this->getGender() ? 'Mann' : 'Kvinne';
+		return Localization::getLocale($this->getGender() ? 'male' : 'female');
 	}
 
 	/*

@@ -173,6 +173,8 @@
    "email":"E-mail",
    "repeat_email":"Repeat e-mail",
    "gender":"Gender",
+   "boy":"Boy",
+   "girl":"Girl",
    "male":"Male",
    "female":"Female",
    "birthdate":"Birthdate",
