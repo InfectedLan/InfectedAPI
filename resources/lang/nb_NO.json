@@ -189,7 +189,7 @@
    "you_are_already_logged_in_and_therefore_you_cannot_register_again":"Du er allerede logget inn, og kan derfor ikke registrere deg igjen.",
 
    "forgot_password":"Glemt passord",
-   "enter_your_username_or_e-mail_in_order_to_reset_your_password":"Skriv inn ditt brukernavn eller din e-postadresse for å nullstille passordet.",
+   "enter_your_username_or_e-mail_in_order_to_reset_your_password":"Skriv inn ditt brukernavn eller din e-postadresse for å nullstille passordet",
    "reset_password":"Nullstill passord",
    "enter_a_new_password":"Skriv inn et nytt passord.",
    "change":"Endre",

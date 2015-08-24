@@ -19,6 +19,7 @@
  */
 
 require_once 'mailmanager.php';
+require_once 'localization.php';
 require_once 'handlers/useroptionhandler.php';
 require_once 'handlers/citydictionary.php';
 require_once 'handlers/registrationcodehandler.php';
@@ -313,7 +314,7 @@ class User extends Object {
 	/*
 	 * Sends a mail to the user with a link where they can reset the password.
 	 */
-	public function sendPasswordResetMail() {
+	public function sendPasswordResetEmail() {
 		// Put the code in the database.
 		$code = PasswordResetCodeHandler::createPasswordResetCode($this);
 
@@ -324,7 +325,7 @@ class User extends Object {
 		$message[] = '<html>';
 			$message[] = '<body>';
 				$message[] = '<h3>Hei!</h3>';
-				$message[] = '<p>For å tilbakestille ditt passord på ' . $_SERVER['HTTP_HOST'] . ', klikk på denne:<a href="' . $url . '">' . $url . '</a>.</p>';
+				$message[] = '<p>For å tilbakestille ditt passord på ' . $_SERVER['HTTP_HOST'] . ', klikk på denne linken: <a href="' . $url . '">' . $url . '</a>.</p>';
 				$message[] = '<p>Med vennlig hilsen <a href="http://infected.no/">Infected</a>.</p>';
 			$message[] = '</body>';
 		$message[] = '</html>';

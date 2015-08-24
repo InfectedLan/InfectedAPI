@@ -8,12 +8,12 @@
  * modify it under the terms of the GNU Lesser General Public
  * License as published by the Free Software Foundation; either
  * version 3.0 of the License, or (at your option) any later version.
- * 
+ *
  * This library is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
  * Lesser General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU Lesser General Public
  * License along with this library.  If not, see <http://www.gnu.org/licenses/>.
  */
@@ -27,13 +27,13 @@ if (!Session::isAuthenticated()) {
 	if (!isset($_GET['code'])) {
 		echo '<h2>' . Localization::getLocale('forgot_password') . '?</h2>';
 		echo '<form class="request-reset-password" method="post">';
-			echo '<p>' . Localization::getLocale('enter_your_username_or_email_in_order_to_reset_your_password') . ': <input type="text" name="identifier"></p>';
+			echo '<p>' . Localization::getLocale('enter_your_username_or_e-mail_in_order_to_reset_your_password') . ': <input type="text" name="identifier"></p>';
 			echo '<input type="submit" value="' . Localization::getLocale('reset_password') . '">';
 		echo '</form>';
-	} else {	
+	} else {
 		echo '<h2>' . Localization::getLocale('reset_password') . '</h2>';
 		echo '<p>' . Localization::getLocale('enter_a_new_password') . '</p>';
-		
+
 		echo '<form class="reset-password" method="post">';
 			echo '<input type="hidden" name="code" value="' . $_GET['code'] . '">';
 			echo '<table>';

@@ -8,12 +8,12 @@
  * modify it under the terms of the GNU Lesser General Public
  * License as published by the Free Software Foundation; either
  * version 3.0 of the License, or (at your option) any later version.
- * 
+ *
  * This library is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
  * Lesser General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU Lesser General Public
  * License along with this library.  If not, see <http://www.gnu.org/licenses/>.
  */
@@ -28,14 +28,14 @@ $message = null;
 if (!isset($_GET['code'])) {
 	if (isset($_GET['identifier']) &&
 		!empty($_GET['identifier'])) {
-		
+
 		$identifier = $_GET['identifier'];
-		
+
 		if (UserHandler::hasUser($identifier)) {
 			$user = UserHandler::getUserByIdentifier($identifier);
-			
+
 			if ($user != null) {
-				$user->sendPasswordResetMail();
+				$user->sendPasswordResetEmail();
 				$result = true;
 				$message = Localization::getLocale('an_email_has_been_sent_to_your_registered_address_click_the_link_to_change_your_password');
 			}
@@ -53,13 +53,13 @@ if (!isset($_GET['code'])) {
 		$code = $_GET['code'];
 		$password = $_GET['password'];
 		$confirmPassword = $_GET['confirmpassword'];
-		
+
 		if (PasswordResetCodeHandler::hasPasswordResetCode($code)) {
 			$user = PasswordResetCodeHandler::getUserFromPasswordResetCode($code);
-			
+
 			if ($password == $confirmPassword) {
 				PasswordResetCodeHandler::removePasswordResetCode($code);
-				UserHandler::updateUserPassword($user->getId(), hash('sha256', $password));
+				UserHandler::updateUserPassword($user, hash('sha256', $password));
 				$result = true;
 				$message = Localization::getLocale('your_password_is_now_changed');
 			} else {
