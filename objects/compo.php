@@ -30,6 +30,7 @@ class Compo extends EventObject {
 	private $startTime;
 	private $registrationEndTime;
 	private $teamSize;
+    private $participantLimit;
   private $chatId;
 
 	/*
@@ -99,6 +100,10 @@ class Compo extends EventObject {
 	public function getChat() {
 		return ChatHandler::getChat($this->chatId);
 	}
+
+    public function getParticipantLimit() {
+        return $this->participantLimit;
+    }
 
 	/*
 	 * Return a list of all matches for this compo.

@@ -124,12 +124,21 @@ class InviteHandler {
 
 		$clan = $invite->getClan();
 		$memberList = ClanHandler::getPlayingClanMembers($clan);
-		$stepInId = count($memberList) < $clan->getCompo()->getTeamSize() ? 0 : 1;
-
+        $compo = $clan->getCompo();
+		$stepInId = count($memberList) < $compo->getTeamSize() ? 0 : 1;
+        
 		$database->query('INSERT INTO `' . Settings::db_table_infected_compo_memberof . '` (`userId`, `clanId`, `stepInId`)
 											VALUES (\'' . $invite->getUser()->getId() . '\',
 															\'' . $clan->getId() . '\',
 															\'' . $stepInId . '\');');
+
+        if(count($memberList) == $compo->getTeamSize()-1) {
+            $playingClans = ClanHandler::getQualifiedClansByCompo($compo);
+            if(count($playingClans) < $compo->getParticipantLimit() || $compo->getParticipantLimit() == 0) {
+                ClanHandler::setQualified($clan, true);
+            }
+            
+        }
 
 		$database->close();
 	}

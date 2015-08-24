@@ -98,11 +98,9 @@ class Clan extends EventObject {
 	 * Returns true if this clan is qualified for specified compo.
 	 */
 	public function isQualified($compo) {
-		$primaryPlayers = ClanHandler::getPlayingClanMembers($this);
-
-		if (count($primaryPlayers) != $compo->getTeamSize()) {
-			return false;
-		}
+        if(!ClanHandler::isQualified($this, $compo)) {
+            return false;
+        }
 
 		$database = Database::open(Settings::db_name_infected_compo);
 

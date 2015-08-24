@@ -91,19 +91,38 @@ class ClanHandler {
 		return $clanList;
 	}
 
-	public static function getCompleteClansByCompo(Compo $compo) {
+    public static function getCompleteClansByCompo(Compo $compo) {
+        return self::getQualifiedClansByCompo($compo);
+    }
+	public static function getQualifiedClansByCompo(Compo $compo) {
 		$clanList = array();
 
 		foreach (self::getClansByCompo($compo) as $clan) {
-			$playing = ClanHandler::getPlayingClanMembers($clan);
-
-			if (count($playing) == $compo->getTeamSize()) {
+			if (self::isQualified($clan, $compo)) {
 				array_push($clanList, $clan);
 			}
 		}
 
 		return $clanList;
 	}
+
+    public static function isQualified(Clan $clan, Compo $compo) {
+        $database = Database::open(Settings::db_name_infected_compo);
+
+        $result = $database->query('SELECT * FROM `' . Settings::db_table_infected_compo_participantof . '` WHERE `clanId` = \'' . $clan->getId() . '\' AND `compoId` = \'' . $compo->getId() . '\' AND `qualified` = 1;');
+
+        $database->close();
+        
+        return $result->num_rows > 0;
+    }
+
+    public static function setQualified(Clan $clan, $state) {
+        $database = Database::open(Settings::db_name_infected_compo);
+
+        $database->query('UPDATE `' . Settings::db_table_infected_compo_participantof . '` SET `qualified`=1  WHERE `clanId` = \'' . $clan->getId() . '\';');
+        
+        $database->close();
+    }
 
 	/*
 	 * Get members for specified clan.
@@ -231,9 +250,9 @@ class ClanHandler {
 		$id = $database->insert_id;
 		$clan = self::getClan($id);
 
-		$database->query('INSERT INTO `' . Settings::db_table_infected_compo_participantof . '` (`clanId`, `compoId`)
+		$database->query('INSERT INTO `' . Settings::db_table_infected_compo_participantof . '` (`clanId`, `compoId`, `qualified`)
 										  VALUES (\'' . $database->real_escape_string($id) . '\',
-												  		\'' . $compo->getId() . '\');');
+												  		\'' . $compo->getId() . '\', \'0\');');
 
 		$database->query('INSERT INTO `' . Settings::db_table_infected_compo_memberof . '` (`clanId`, `userId`)
 										  VALUES (\'' . $database->real_escape_string($id) . '\',
