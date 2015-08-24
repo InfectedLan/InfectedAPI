@@ -24,38 +24,36 @@ require_once 'handlers/userhandler.php';
 
 $result = false;
 $message = null;
-$users = array();
 
 if (Session::isAuthenticated()) {
 	$user = Session::getCurrentUser();
 
-	if (isset($_GET['query']) &&
-		strlen($_GET['query']) >= 2) {
-		$query = preg_replace('/[^A-Za-z0-9]/', ' ', $_GET['query']);
-		$userList = UserHandler::search($query);
+	if ($user->hasPermission('user.activate')) {
+		if (isset($_GET['id']) &&
+			is_numeric($_GET['id'])) {
+			$activateUser = UserHandler::getUser($_GET['id']);
 
-		if (!empty($userList)) {
-			foreach ($userList as $userValue) {
-				if ($userValue->isActivated() ||
-					!$userValue->isActivated() && $user->hasPermission('*')) {
-					array_push($users, array('id' => $userValue->getId(),
-											 'firstname' => $userValue->getFirstname(),
-											 'lastname' => $userValue->getLastname(),
-											 'username' => $userValue->getUsername(),
-											 'email' => $userValue->getEmail(),
-											 'nickname' => $userValue->getNickname()));
+			if ($activateUser != null) {
+				if (!$activateUser->isActivated()) {
+					RegistrationCodeHandler::removeRegistrationCodeByUser($user);
+
+					$result = true;
+				} else {
+					$message = Localization::getLocale('the_user_is_already_activated');
 				}
+			} else {
+				$message = Localization::getLocale('this_user_does_not_exist');
 			}
-
-			$result = true;
 		} else {
-			$message = Localization::getLocale('no_results_found');
+			$message = Localization::getLocale('no_user_specified');
 		}
 	} else {
-		$message = Localization::getLocale('no_keyword_provided');
+		$message = Localization::getLocale('you_do_not_have_permission_to_do_that');
 	}
+} else {
+	$message = Localization::getLocale('you_are_not_logged_in');
 }
 
 header('Content-Type: text/plain');
-echo json_encode(array('result' => $result, 'message' => $message, 'users' => $users), JSON_PRETTY_PRINT);
+echo json_encode(array('result' => $result, 'message' => $message), JSON_PRETTY_PRINT);
 ?>

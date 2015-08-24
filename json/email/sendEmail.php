@@ -8,12 +8,12 @@
  * modify it under the terms of the GNU Lesser General Public
  * License as published by the Free Software Foundation; either
  * version 3.0 of the License, or (at your option) any later version.
- * 
+ *
  * This library is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
  * Lesser General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU Lesser General Public
  * License along with this library.  If not, see <http://www.gnu.org/licenses/>.
  */
@@ -21,6 +21,7 @@
 require_once 'session.php';
 require_once 'mailmanager.php';
 require_once 'localization.php';
+require_once 'handlers/userhandler.php';
 require_once 'handlers/eventhandler.php';
 
 $result = false;
@@ -28,9 +29,8 @@ $message = null;
 
 if (Session::isAuthenticated()) {
 	$user = Session::getCurrentUser();
-	
-	if ($user->hasPermission('*') ||
-		$user->hasPermission('chief.email')) {
+
+	if ($user->hasPermission('chief.email')) {
 		if (isset($_GET['userIdList']) &&
 			isset($_GET['subject']) &&
 			isset($_GET['message']) &&
@@ -39,7 +39,7 @@ if (Session::isAuthenticated()) {
 			!empty($_GET['message'])) {
 			$userIdList = explode(',', $_GET['userIdList']);
 			$userList = array();
-			
+
 			// If the id's in user list is lower or equal to 0, we have to do something special here.
 			if (count($userIdList) >= 1) {
 				$value = $userIdList[0];
@@ -67,13 +67,13 @@ if (Session::isAuthenticated()) {
 						$userList = UserHandler::getPreviousParticipantUsers();
 					}
 				}
-				
+
 				if ($user->isGroupMember()) {
 					if ($value == 'group') {
 						$userList = $user->getGroup()->getMembers();
 					}
 				}
-				
+
 				// Build the userList from the given id's
 				if (is_numeric($value)) {
 					foreach ($userIdList as $userId) {
@@ -81,18 +81,18 @@ if (Session::isAuthenticated()) {
 					}
 				}
 			}
-			
+
 			if (!empty($userList)) {
 				// Sends emails to users in userList with the given subject and message.
 				MailManager::sendEmails($userList, $_GET['subject'], $_GET['message']);
-				
+
 				// Format message differently when we're just sending email to one user.
 				if (count($userList) <= 1) {
 					$message = Localization::getLocale('your_email_was_sent_to_the_selected_user');
 				} else {
 					$message = Localization::getLocale('your_email_was_sent_to_the_selected_users');
 				}
-				
+
 				$result = true;
 			}
 		} else {

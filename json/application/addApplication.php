@@ -32,7 +32,6 @@ if (Session::isAuthenticated()) {
 
 	// Only allow non-members to apply.
 	if (!$user->isGroupMember()) {
-
 		// Check that the user has an cropped avatar.
 		if ($user->hasCroppedAvatar()) {
 			if (isset($_GET['groupId']) &&

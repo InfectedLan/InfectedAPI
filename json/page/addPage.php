@@ -37,7 +37,7 @@ if (Session::isAuthenticated()) {
 			$name = strtolower(str_replace(' ', '-', $_GET['title']));
 			$title = $_GET['title'];
 			$content = $_GET['content'];
-			
+
 			PageHandler::createPage($name, $title, $content);
 
 			$result = true;

@@ -27,15 +27,14 @@ $message = null;
 if (Session::isAuthenticated()) {
 	$user = Session::getCurrentUser();
 
-	if ($user->hasPermission('*') ||
-		$user->hasPermission('developer.change-user')) {
+	if ($user->hasPermission('developer.change-user')) {
 		if (isset($_GET['userId']) &&
 			is_numeric($_GET['userId'])) {
 			$changeUser = UserHandler::getUser($_GET['userId']);
 
 			if ($changeUser != null) {
 				$_SESSION['userId'] = $changeUser->getId();
-				
+
 				$result = true;
 			} else {
 				$message = Localization::getLocale('the_user_you_tried_to_switch_to_does_not_exist');
