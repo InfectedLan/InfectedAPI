@@ -27,7 +27,7 @@ if (!Session::isAuthenticated()) {
 	if (!isset($_GET['code'])) {
 		echo '<h2>' . Localization::getLocale('forgot_password') . '?</h2>';
 		echo '<form class="request-reset-password" method="post">';
-			echo '<p>' . Localization::getLocale('enter_your_username_or_e-mail_in_order_to_reset_your_password') . ': <input type="text" name="identifier"></p>';
+			echo '<p>' . Localization::getLocale('enter_your_username_or_e-mail_in_order_to_reset_your_password') . ': <input type="text" name="identifier" placeholder="Brukernavn, e-post eller telefon" required autofocus></p>';
 			echo '<input type="submit" value="' . Localization::getLocale('reset_password') . '">';
 		echo '</form>';
 	} else {
