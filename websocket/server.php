@@ -53,7 +53,7 @@ require_once 'session.php';
 require_once 'handlers/chathandler.php';
 require_once 'libraries/phpwebsockets/websockets.php';
 
-class CompoServer extends WebSocketServer {
+class Server extends WebSocketServer {
   private $authenticatedUsers;
   private $followingChatChannels;
 
@@ -121,7 +121,7 @@ class CompoServer extends WebSocketServer {
           $this->disconnect($session);
         }
         break;
-        
+
       default:
         echo 'Got unhandled intent: ' . $parsedJson->intent . '\n';
 		}

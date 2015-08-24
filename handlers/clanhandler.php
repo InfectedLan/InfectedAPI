@@ -53,9 +53,8 @@ class ClanHandler {
 		$database = Database::open(Settings::db_name_infected_compo);
 
 		$result = $database->query('SELECT * FROM `' . Settings::db_table_infected_compo_clans . '`
-																WHERE `id` = (SELECT `clanId` FROM `' . Settings::db_table_infected_compo_memberof . '`
-																						  WHERE `userId` = \'' . $user->getId() . '\'
-																						  LIMIT 1);');
+																WHERE `id` IN (SELECT `clanId` FROM `' . Settings::db_table_infected_compo_memberof . '`
+																						  WHERE `userId` = \'' . $user->getId() . '\');');
 
 		$database->close();
 
