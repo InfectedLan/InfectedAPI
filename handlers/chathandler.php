@@ -281,7 +281,7 @@ class ChatHandler {
 	}
 
     public static function canChat(Chat $chat, User $user) {
-        if ($user->hasPermission('*') || 
+        if ($user->hasPermission('*') ||
             $user->hasPermission('compo.chat') ||
             $chat->isMember($user)) {
             return true;

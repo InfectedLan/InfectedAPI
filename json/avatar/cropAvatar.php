@@ -8,12 +8,12 @@
  * modify it under the terms of the GNU Lesser General Public
  * License as published by the Free Software Foundation; either
  * version 3.0 of the License, or (at your option) any later version.
- * 
+ *
  * This library is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
  * Lesser General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU Lesser General Public
  * License along with this library.  If not, see <http://www.gnu.org/licenses/>.
  */
@@ -26,14 +26,14 @@ $message = null;
 
 if (Session::isAuthenticated()) {
 	$user = Session::getCurrentUser();
-	
+
 	if ($user->hasAvatar()) {
 		$avatar = $user->getAvatar();
-		
+
 		if ($avatar->getState() == 0) {
-			if (isset($_GET['x']) && 
-				isset($_GET['y']) && 
-				isset($_GET['w']) && 
+			if (isset($_GET['x']) &&
+				isset($_GET['y']) &&
+				isset($_GET['w']) &&
 				isset($_GET['h'])) {
 				$x = max($_GET['x'], 0);
 				$y = max($_GET['y'], 0);
@@ -44,15 +44,15 @@ if (Session::isAuthenticated()) {
 				$temp = explode('.', $avatar->getTemp());
 				$extension = strtolower(end($temp));
 
-				if ($extension == 'png' || 
-					$extension == 'jpeg' || 
+				if ($extension == 'png' ||
+					$extension == 'jpeg' ||
 					$extension == 'jpg') {
 					//Load the image
 					$image = 0;
 
 					if ($extension == 'png') {
 						$image = imagecreatefrompng(Settings::api_path . $avatar->getTemp());
-					} else if ($extension == 'jpeg' || 
+					} else if ($extension == 'jpeg' ||
 							   $extension == 'jpg') {
 						$image = imagecreatefromjpeg(Settings::api_path . $avatar->getTemp())	;
 					}
@@ -64,7 +64,7 @@ if (Session::isAuthenticated()) {
 						$cropWidth = ceil($w * $scalefactor);
 						$cropHeight = ceil($h * $scalefactor);
 
-						if ($cropWidth >= Settings::avatar_minimum_width && 
+						if ($cropWidth >= Settings::avatar_minimum_width &&
 							$cropHeight >= Settings::avatar_minimum_height) {
 							// Render to tumbnail
 							$target = imagecreatetruecolor(Settings::avatar_thumb_w, Settings::avatar_thumb_h);

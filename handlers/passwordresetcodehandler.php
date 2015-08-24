@@ -96,7 +96,7 @@ class PasswordResetCodeHandler {
 
 		$database = Database::open(Settings::db_name_infected);
 
-		if (!self::hasPasswordResetCode($user)) {
+		if (!self::hasPasswordResetCodeByUser($user)) {
 			$database->query('INSERT INTO `' . Settings::db_table_infected_passwordresetcodes . '` (`userId`, `code`)
 											  VALUES (\'' . $user->getId() . '\',
 													  		\'' . $database->real_escape_string($code) . '\');');
