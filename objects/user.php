@@ -292,7 +292,7 @@ class User extends Object {
 	/*
 	 * Sends an mail to the users address with an activation link.
 	 */
-	public function sendRegistrationMail() {
+	public function sendRegistrationEmail() {
 		// Put the code in the database.
 		$code = RegistrationCodeHandler::createRegistrationCode($this);
 
@@ -336,8 +336,8 @@ class User extends Object {
 	/*
 	 * Sends a mail to the user that the avatar was accepted or rejected, depening on the accepted boolean.
 	 */
-	public function sendAvatarMail($accepted) {
-		if ($accepted) {
+	public function sendAvatarEmail($isAccepted) {
+		if ($isAccepted) {
 			$text = 'Din avatar på <a href="' . $_SERVER['HTTP_HOST'] . '">' . $_SERVER['HTTP_HOST'] . '</a> har blitt godjent!';
 		} else {
 			$text = 'Din avatar på <a href="' . $_SERVER['HTTP_HOST'] . '">' . $_SERVER['HTTP_HOST'] . '</a> ble ikke godkjent, vennligst last opp en ny en.';
