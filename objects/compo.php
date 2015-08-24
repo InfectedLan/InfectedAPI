@@ -27,7 +27,6 @@ class Compo extends EventObject {
 	private $tag;
 	private $description;
 	private $mode;
-	private $price;
 	private $startTime;
 	private $registrationEndTime;
 	private $teamSize;
@@ -66,13 +65,6 @@ class Compo extends EventObject {
 	 */
 	public function getMode() {
 		return $this->mode;
-	}
-
-	/*
-	 * Returns the price of this compo.
-	 */
-	public function getPrice() {
-		return $this->price;
 	}
 
 	/*

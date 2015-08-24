@@ -28,8 +28,7 @@ $message = null;
 if (Session::isAuthenticated()) {
 	$user = Session::getCurrentUser();
 
-	if ($user->hasPermission('*') ||
-		$user->hasPermission('event.compo')) {
+	if ($user->hasPermission('event.compo')) {
 		if (isset($_GET['title']) &&
 			isset($_GET['tag']) &&
 			isset($_GET['startTime']) &&
@@ -50,13 +49,12 @@ if (Session::isAuthenticated()) {
 			$tag = $_GET['tag'];
 			$description = $_GET['description'];
 			$mode = $_GET['mode'];
-			$price = is_numeric($_GET['price']) ? $_GET['price'] : 0;
 			$startTime = $_GET['startDate'] . ' ' . $_GET['startTime'];
 			$registrationEndTime = $_GET['registrationEndDate'] . ' ' . $_GET['registrationEndTime'];
 			$teamSize = $_GET['teamSize'];
 
 			if ($compo != null) {
-				CompoHandler::updateCompo($compo, $name, $title, $tag, $description, $mode, $price, $startTime, $registrationEndTime, $teamSize);
+				CompoHandler::updateCompo($compo, $name, $title, $tag, $description, $mode, $startTime, $registrationEndTime, $teamSize);
 
 				$result = true;
 			} else {

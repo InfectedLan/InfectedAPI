@@ -28,8 +28,7 @@ $message = null;
 if (Session::isAuthenticated()) {
 	$user = Session::getCurrentUser();
 
-	if ($user->hasPermission('*') ||
-		$user->hasPermission('admin.seatmap')) {
+	if ($user->hasPermission('admin.seatmap')) {
 		if (isset($_GET['row'])) {
 			$row = RowHandler::getRow($_GET['row']);
 

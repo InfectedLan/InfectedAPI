@@ -48,12 +48,11 @@ if (Session::isAuthenticated()) {
 			$tag = $_GET['tag'];
 			$description = $_GET['description'];
 			$mode = $_GET['mode'];
-			$price = is_numeric($_GET['price']) ? $_GET['price'] : 0;
 			$startTime = $_GET['startDate'] . ' ' . $_GET['startTime'];
 			$registrationEndTime = $_GET['registrationEndDate'] . ' ' . $_GET['registrationEndTime'];
 			$teamSize = $_GET['teamSize'];
 
-			CompoHandler::createCompo($name, $title, $tag, $description, $mode, $price, $startTime, $registrationEndTime, $teamSize);
+			CompoHandler::createCompo($name, $title, $tag, $description, $mode, $startTime, $registrationEndTime, $teamSize);
 			$result = true;
 		} else {
 			$message = Localization::getLocale('you_have_not_filled_out_the_required_fields');

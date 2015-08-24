@@ -39,7 +39,7 @@ if (Session::isAuthenticated()) {
 
 					$result = true;
 				} else {
-					$message = Localization::getLocale('the_user_is_already_activated');
+					$message = Localization::getLocale('the_user_has_already_been_activated');
 				}
 			} else {
 				$message = Localization::getLocale('this_user_does_not_exist');

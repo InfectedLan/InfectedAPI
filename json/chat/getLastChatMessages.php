@@ -8,12 +8,12 @@
  * modify it under the terms of the GNU Lesser General Public
  * License as published by the Free Software Foundation; either
  * version 3.0 of the License, or (at your option) any later version.
- * 
+ *
  * This library is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
  * Lesser General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU Lesser General Public
  * License along with this library.  If not, see <http://www.gnu.org/licenses/>.
  */
@@ -28,13 +28,12 @@ $message = null;
 if (Session::isAuthenticated()) {
 	$user = Session::getCurrentUser();
 
-	if (isset($_GET['id']) && 
+	if (isset($_GET['id']) &&
 		isset($_GET['count'])) {
 		$chat = ChatHandler::getChat($_GET['id']);
 
 		if ($chat != null) {
-			if ($user->hasPermission('*') || 
-				$user->hasPermission('compo.chat') || 
+			if ($user->hasPermission('compo.chat') ||
 				ChatHandler::isChatMember($user, $chat) ||
 				$chat->getId() == 1) {
 				$messageList = $chat->getLastMessages($_GET['count']);
@@ -43,13 +42,13 @@ if (Session::isAuthenticated()) {
 				foreach ($messageList as $message) {
 					$subject = $message->getUser();
 
-					$toPush = array('id' => $message->getId(), 
+					$toPush = array('id' => $message->getId(),
 									'user' => $subject->getNickname(),
 									'time' => date('H:i:s', $message->getTime()),
 									'message' => $message->getMessage());
 
 					//Tell chat if admin or not
-					if ($subject->hasPermission('*') || 
+					if ($subject->hasPermission('*') ||
 						$subject->hasPermission('compo.chat')) {
 						$toPush['admin'] = true;
 					} else {

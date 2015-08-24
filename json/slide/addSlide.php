@@ -29,8 +29,7 @@ $message = null;
 if (Session::isAuthenticated()) {
 	$user = Session::getCurrentUser();
 
-	if ($user->hasPermission('*') ||
-		$user->hasPermission('event.screen')) {
+	if ($user->hasPermission('event.screen')) {
 		if (isset($_GET['title']) &&
 			isset($_GET['content']) &&
 			isset($_GET['startTime']) &&

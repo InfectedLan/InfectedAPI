@@ -8,12 +8,12 @@
  * modify it under the terms of the GNU Lesser General Public
  * License as published by the Free Software Foundation; either
  * version 3.0 of the License, or (at your option) any later version.
- * 
+ *
  * This library is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
  * Lesser General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU Lesser General Public
  * License along with this library.  If not, see <http://www.gnu.org/licenses/>.
  */
@@ -29,9 +29,8 @@ $message = null;
 
 if (Session::isAuthenticated()) {
 	$user = Session::getCurrentUser();
-	
-	if ($user->hasPermission('*') ||
-		$user->hasPermission('chief.my-crew')) {
+
+	if ($user->hasPermission('chief.my-crew')) {
 		if (isset($_GET['id']) &&
 			isset($_GET['title']) &&
 			isset($_GET['content']) &&
@@ -39,7 +38,7 @@ if (Session::isAuthenticated()) {
 			!empty($_GET['title']) &&
 			!empty($_GET['content'])) {
 			$page = RestrictedPageHandler::getPage($_GET['id']);
-			
+
 			if ($page != null) {
 				if ($user->hasPermission('*') ||
 					$user->hasPermission('chief.my-crew') &&
@@ -48,7 +47,7 @@ if (Session::isAuthenticated()) {
 					$content = $_GET['content'];
 					$group = isset($_GET['groupId']) ? GroupHandler::getGroup($_GET['groupId']) : $page->getGroup();
 					$team = isset($_GET['teamId']) ? TeamHandler::getTeam($_GET['teamId']) : $page->getTeam();
-					
+
 					RestrictedPageHandler::updatePage($page, $title, $content, $group, $team);
 					$result = true;
 				} else {

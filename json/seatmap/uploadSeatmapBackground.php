@@ -28,8 +28,7 @@ $message = null;
 if (Session::isAuthenticated()) {
 	$user = Session::getCurrentUser();
 
-	if ($user->hasPermission('*') ||
-		$user->hasPermission('admin.seatmap')) {
+	if ($user->hasPermission('admin.seatmap')) {
 		if (isset($_POST['seatmapId'])) {
 			$seatmap = SeatmapHandler::getSeatmap($_POST['seatmapId']);
 
