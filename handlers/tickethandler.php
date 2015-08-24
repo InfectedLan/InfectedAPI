@@ -276,8 +276,7 @@ class TicketHandler {
 		$database = Database::open(Settings::db_name_infected_tickets);
 
 		$reuslt = $database->query('INSERT INTO `' . Settings::db_table_infected_tickets_checkedintickets . '` (`ticketId`, `userId`)
-																VALUES (\'' . $ticket->getId() . '\',
-																				\'' . $ticket->getUser()->getId() . '\');');
+																VALUES (\'' . $ticket->getId() . '\');');
 
 		$database->close();
 	}
