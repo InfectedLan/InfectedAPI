@@ -28,15 +28,14 @@ $message = null;
 if (Session::isAuthenticated()) {
 	$user = Session::getCurrentUser();
 
-	if ($user->hasPermission('*') ||
-		$user->hasPermission('admin.website')) {
+	if ($user->hasPermission('admin.website')) {
 		if (isset($_GET['id']) &&
 			is_numeric($_GET['id'])) {
 			$page = PageHandler::getPage($_GET['id']);
 
 			if ($page != null) {
 				PageHandler::removePage($page);
-				
+
 				$result = true;
 			} else {
 				$message = Localization::getLocale('this_page_does_not_exist');

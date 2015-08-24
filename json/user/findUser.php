@@ -8,12 +8,12 @@
  * modify it under the terms of the GNU Lesser General Public
  * License as published by the Free Software Foundation; either
  * version 3.0 of the License, or (at your option) any later version.
- * 
+ *
  * This library is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
  * Lesser General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU Lesser General Public
  * License along with this library.  If not, see <http://www.gnu.org/licenses/>.
  */
@@ -28,12 +28,12 @@ $users = array();
 
 if (Session::isAuthenticated()) {
 	$user = Session::getCurrentUser();
-	
+
 	if (isset($_GET['query']) &&
 		strlen($_GET['query']) >= 2) {
 		$query = preg_replace('/[^A-Za-z0-9]/', ' ', $_GET['query']);
 		$userList = UserHandler::search($query);
-		
+
 		if (!empty($userList)) {
 			foreach ($userList as $userValue) {
 				if ($userValue->isActivated() ||
@@ -46,7 +46,7 @@ if (Session::isAuthenticated()) {
 											 'nickname' => $userValue->getNickname()));
 				}
 			}
-			
+
 			$result = true;
 		} else {
 			$message = Localization::getLocale('no_results_found');

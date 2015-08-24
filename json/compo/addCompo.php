@@ -21,7 +21,6 @@
 require_once 'session.php';
 require_once 'localization.php';
 require_once 'handlers/compohandler.php';
-require_once 'handlers/eventhandler.php';
 
 $result = false;
 $message = null;
@@ -29,8 +28,7 @@ $message = null;
 if (Session::isAuthenticated()) {
 	$user = Session::getCurrentUser();
 
-	if ($user->hasPermission('*') ||
-		$user->hasPermission('event.agenda')) {
+	if ($user->hasPermission('event.compo')) {
 		if (isset($_GET['title']) &&
 			isset($_GET['tag']) &&
 			isset($_GET['startTime']) &&
