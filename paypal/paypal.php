@@ -24,8 +24,8 @@ require_once 'paypalsecret.php';
 
 class PayPal {
 	public static function getPaymentUrl($ticketType, $amount, $key, $user) {
-		$currencyCodeType="NOK";
-		$paymentType="Sale";
+		$currencyCodeType = "NOK";
+		$paymentType = "Sale";
 
 		//Set the return and cancel url
 		/*$returnURL =urlencode('https://tickets.infected.no/v2/index.php?page=reviewOrder');
@@ -35,11 +35,11 @@ class PayPal {
 		//$cancelURL = urlencode('https://tickets.infected.no/v2/index.php');
 
 		//Calculate total price
-		$itemamt = $amount * $ticketType->getPriceByUser($user);
+		$itemamt = $ticketType->getPriceByUser($user, $amount);
 		$amt = $itemamt;
 		$maxamt= $amt;
 
-		$nvpstr = "&_LITEMCATEGORY0=Digital&NOSHIPPING=1&L_NAME0=" . $ticketType->getTitle() . "&L_AMT0=" . $ticketType->getPriceByUser($user) .
+		$nvpstr = "&_LITEMCATEGORY0=Digital&NOSHIPPING=1&L_NAME0=" . $ticketType->getTitle() . "&L_AMT0=" . $ticketType->getPriceByUser($user, 1) .
 		"&L_QTY0=" . $amount . "&MAXAMT=" . (string)$maxamt . "&AMT=" . (string)$amt . "&ITEMAMT=" .
 		(string)$itemamt . "&CALLBACKTIMEOUT=4&L_NUMBER0=10001&L_DESC0=" . $ticketType->getTitle() .
 		"&ReturnUrl=" . PaypalSecret::ReturnUrl . "&CANCELURL=" . PaypalSecret::CancelUrl ."&CURRENCYCODE=" . $currencyCodeType .

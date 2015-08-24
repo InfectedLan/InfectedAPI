@@ -60,25 +60,53 @@ class TicketType extends Object {
 	/*
 	 * Returns the price of this ticket, taking discount into consideration
 	 */
+	 /*
 	public function getPriceByUser(User $user) {
-		$price = $this->getPrice();
-		$discount = 20;
 		$event = EventHandler::getCurrentEvent();
-		$ticketList = TicketHandler::getTicketsByUser($user);
+		$eventYear = date('Y', $event->getStartTime());
+		$price = $this->getPrice();
+		$discount = 20; // Radar event discount, membership goes per calender year.
 
-		foreach ($ticketList as $ticket) {
-			$year = date('Y', $event->getStartTime());
+		foreach (TicketHandler::getTicketsByUser($user) as $ticket) {
+			$ticketType = $ticket->getType();
 			$ticketYear = date('Y', $ticket->getEvent()->getStartTime());
 
 			// We'll check if this user has a ticket in the same calender year, if it has, then give the discount.
-			if ($year == $ticketYear) {
-				if ($event->equals($ticket->getEvent())) {
+			if ($ticketYear == $eventYear) {
+				// Only give discount to tickets that actually have a price greater than 0.
+				if ($ticketType->getPrice() > 0) {
 					$price -= $discount;
 				}
 			}
 		}
 
 		return $price;
+	}
+	*/
+
+	/*
+	 * Returns the price of this ticket, taking discount into consideration
+	 */
+	public function getPriceByUser(User $user, $amount = 1) {
+		$discount = 20; // Radar event discount, membership goes per calender year.
+
+		$eventYear = date('Y', EventHandler::getCurrentEvent()->getStartTime());
+		$fee = $discount; // By default the fee is the same as the discount, this will be added to the total price for this ticket/tickets.
+
+		foreach (TicketHandler::getTicketsByUserAndAllEvents($user) as $ticket) {
+			$ticketType = $ticket->getType();
+			$ticketYear = date('Y', $ticket->getEvent()->getStartTime());
+
+			// We'll check if this user has a ticket in the same calender year, if it has, then give the discount.
+			if ($ticketYear == $eventYear) {
+				// Only give discount to tickets that actually have a price greater than 0.
+				if ($ticketType->getPrice() > 0) {
+					$fee = 0;
+				}
+			}
+		}
+
+		return (($this->getPrice() - $discount) * $amount) + $fee;
 	}
 }
 ?>

@@ -54,7 +54,7 @@ if (Session::isAuthenticated()) {
 					if (($availableCount - $amount) >= 0) {
 						// Check that the user don't already has a reserved set of tickets.
 						if (!StoreSessionHandler::hasStoreSession($user)) {
-							$price = $ticketType->getPriceByUser($user) * $amount;
+							$price = $ticketType->getPriceByUser($user, $amount);
 							$code = StoreSessionHandler::createStoreSession($user, $ticketType, $amount, $price);
 							$url = PayPal::getPaymentUrl($ticketType, $amount, $code, $user);
 
