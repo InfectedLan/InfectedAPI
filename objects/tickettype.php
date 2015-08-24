@@ -66,7 +66,7 @@ class TicketType extends Object {
 		$eventYear = date('Y', EventHandler::getCurrentEvent()->getStartTime());
 		$ticketList = ($user);
 
-		foreach (TicketHandler::getTicketsByUserByAll as $ticket) {
+		foreach (TicketHandler::getTicketsByUserAndAllEvents() as $ticket) {
 			$ticketType = $ticket->getType();
 			$ticketYear = date('Y', $ticket->getEvent()->getStartTime());
 
