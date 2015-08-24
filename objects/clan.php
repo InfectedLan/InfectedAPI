@@ -90,8 +90,8 @@ class Clan extends EventObject {
 	/*
 	 * Set the step in state of a member.
 	 */
-	public static function setStepInMemberState(User $user, $state) {
- 		ClanHandler::setStepInMemberState($this, $user, $state);
+	public function setStepInMemberState(User $user, $state) {
+ 		ClanHandler::SetStepInClanMemberState($this, $user, $state);
 	}
 
 	/*
