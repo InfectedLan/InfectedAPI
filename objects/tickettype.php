@@ -63,16 +63,16 @@ class TicketType extends Object {
 	public function getPriceByUser(User $user) {
 		$price = $this->getPrice();
 		$discount = 20;
-		$event = EventHandler::getCurrentEvent();
-		$ticketList = TicketHandler::getTicketsByUser($user);
+		$eventYear = date('Y', EventHandler::getCurrentEvent()->getStartTime());
+		$ticketList = ($user);
 
-		foreach ($ticketList as $ticket) {
-			$year = date('Y', $event->getStartTime());
+		foreach (TicketHandler::getTicketsByUserByAll as $ticket) {
+			$ticketType = $ticket->getType();
 			$ticketYear = date('Y', $ticket->getEvent()->getStartTime());
 
 			// We'll check if this user has a ticket in the same calender year, if it has, then give the discount.
 			if ($year == $ticketYear) {
-				if ($event->equals($ticket->getEvent())) {
+				if ($ticketType->getPrice() > 0) {
 					$price -= $discount;
 				}
 			}
