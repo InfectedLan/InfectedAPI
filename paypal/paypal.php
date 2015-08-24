@@ -39,7 +39,7 @@ class PayPal {
 		$amt = $itemamt;
 		$maxamt= $amt;
 
-		$nvpstr = "&_LITEMCATEGORY0=Digital&NOSHIPPING=1&L_NAME0=" . $ticketType->getTitle() . "&L_AMT0=" . $ticketType->getPriceByUser($user, $amount) .
+		$nvpstr = "&_LITEMCATEGORY0=Digital&NOSHIPPING=1&L_NAME0=" . $ticketType->getTitle() . "&L_AMT0=" . $ticketType->getPriceByUser($user, 1) .
 		"&L_QTY0=" . $amount . "&MAXAMT=" . (string)$maxamt . "&AMT=" . (string)$amt . "&ITEMAMT=" .
 		(string)$itemamt . "&CALLBACKTIMEOUT=4&L_NUMBER0=10001&L_DESC0=" . $ticketType->getTitle() .
 		"&ReturnUrl=" . PaypalSecret::ReturnUrl . "&CANCELURL=" . PaypalSecret::CancelUrl ."&CURRENCYCODE=" . $currencyCodeType .
