@@ -89,7 +89,7 @@ class EmergencyContactHandler {
 	 * Create a new emergency contact.
 	 */
 	public static function createEmergencyContact(User $user, $phone) {
-		if (!self::hasEmergencyContact($user)) {
+		if (!self::hasEmergencyContactByUser($user)) {
 			$database = Database::open(Settings::db_name_infected);
 
 			$database->query('INSERT INTO `' . Settings::db_table_infected_emergencycontacts . '` (`userId`, `phone`)
