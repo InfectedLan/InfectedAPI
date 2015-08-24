@@ -66,13 +66,17 @@ class PaymentHandler {
 
 		$database->query('INSERT INTO `' . Settings::db_table_infected_tickets_payments . '` (`userId`, `ticketTypeId`, `price`, `totalPrice`, `transactionId`, `datetime`)
 										  VALUES (\'' . $user->getId() . '\',
-														  \'' . $ticketType->getId() . '\', 
+														  \'' . $ticketType->getId() . '\',
 														  \'' . $database->real_escape_string($price) . '\',
 														  \'' . $database->real_escape_string($totalPrice) . '\',
 														  \'' . $database->real_escape_string($transactionId) . '\',
 														  \'' . date('Y-m-d H:i:s') . '\');');
 
+		$payment = self::getPayment($database->insert_id);
+
 		$database->close();
+
+		return $payment;
 	}
 }
 ?>
