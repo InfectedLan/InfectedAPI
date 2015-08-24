@@ -181,8 +181,8 @@ class StoreSessionHandler {
 
 		$result = $database->query('SELECT * FROM `' . Settings::db_table_infected_users . '`
 																WHERE `id` = (SELECT `userId` FROM `' . Settings::db_name_infected_tickets . '`.`' . Settings::db_table_infected_tickets_storesessions . '`
-																			  WHERE `code`= \'' . $database->real_escape_string($code) . '\'
-																			  AND `datetime` > \'' . self::oldestValidTimestamp() . '\');');
+																			  			WHERE `code`= \'' . $database->real_escape_string($code) . '\'
+																			  			AND `datetime` > \'' . self::oldestValidTimestamp() . '\');');
 
 		$database->close();
 
@@ -196,7 +196,7 @@ class StoreSessionHandler {
 				TicketHandler::createTicket($storeSession->getUser(), $storeSession->getTicketType(), $payment);
 			}
 
-			self::deleteStoreSession($storeSession);
+			self::removeStoreSession($storeSession);
 
 			return true;
 		}
