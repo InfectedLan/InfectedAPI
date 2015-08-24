@@ -57,28 +57,33 @@ class TicketType extends Object {
 		return $this->refundable ? true : false;
 	}
 
-	/*
-	 * Returns the price of this ticket, taking discount into consideration
-	 */
-	public function getPriceByUser(User $user) {
-		$price = $this->getPrice();
-		$discount = 20;
-		$eventYear = date('Y', EventHandler::getCurrentEvent()->getStartTime());
-		$ticketList = ($user);
-
-		foreach (TicketHandler::getTicketsByUserAndAllEvents($user) as $ticket) {
+    public function isUserEligibleForDiscount(User $user) {
+        $eventYear = date('Y', EventHandler::getCurrentEvent()->getStartTime());
+        foreach (TicketHandler::getTicketsByUserAndAllEvents($user) as $ticket) {
 			$ticketType = $ticket->getType();
 			$ticketYear = date('Y', $ticket->getEvent()->getStartTime());
 
 			// We'll check if this user has a ticket in the same calender year, if it has, then give the discount.
 			if ($ticketYear == $eventYear) {
+				// Only give discount to tickets that actually have a price greater than 0.
 				if ($ticketType->getPrice() > 0) {
-					$price -= $discount;
+					return true;
 				}
 			}
 		}
+        return false;
+    }
 
-		return $price;
+	/*
+	 * Returns the price of this ticket, taking discount into consideration
+	 */
+	public function getPriceByUser(User $user, $amount = 1) {
+        //A better formula would be (ticketFee*amount)+radarMembership, but then we need to store ticket prices without the membership included. This will propabily confuse some people. Let's keep it this way :)
+        
+		$discount = Settings::radarFee; // Radar event discount, membership goes per calender year.
+        $fee = $this->isUserEligibleForDiscount($user) ? 0 : $discount;
+
+		return (($this->getPrice() - $discount) * $amount) + $fee;
 	}
 }
 ?>
