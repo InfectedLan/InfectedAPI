@@ -38,7 +38,7 @@ if (Session::isAuthenticated()) {
 		$newPassword = $_GET['newPassword'];
 		$confirmNewPassword = $_GET['confirmNewPassword'];
 
-		if (hash_equals($oldPassword, $user->getPassword()) {
+		if (hash_equals($oldPassword, $user->getPassword())) {
 			if ($newPassword == $confirmNewPassword) {
 				UserHandler::updateUserPassword($user, hash('sha256', $newPassword));
 
