@@ -29,15 +29,14 @@ $message = null;
 if (Session::isAuthenticated()) {
 	$user = Session::getCurrentUser();
 
-	if ($user->hasPermission('*') ||
-		$user->hasPermission('admin.permissions')) {
+	if ($user->hasPermission('admin.permissions')) {
 		if (isset($_GET['id']) &&
 			is_numeric($_GET['id'])) {
 			$permissionUser = UserHandler::getUser($_GET['id']);
 
 			if ($permissionUser != null) {
 				UserPermissionHandler::removeUserPermissions($permissionUser);
-				
+
 				$result = true;
 			} else {
 				$message = Localization::getLocale('this_user_does_not_exist');

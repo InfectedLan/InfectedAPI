@@ -28,8 +28,7 @@ $message = null;
 if (Session::isAuthenticated()) {
 	$user = Session::getCurrentUser();
 
-	if ($user->hasPermission('*') ||
-		$user->hasPermission('chief.avatars')) {
+	if ($user->hasPermission('chief.avatars')) {
 		if (isset($_GET['id']) &&
 			is_numeric($_GET['id'])) {
 			$avatar = AvatarHandler::getAvatar($_GET['id']);

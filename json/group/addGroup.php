@@ -8,12 +8,12 @@
  * modify it under the terms of the GNU Lesser General Public
  * License as published by the Free Software Foundation; either
  * version 3.0 of the License, or (at your option) any later version.
- * 
+ *
  * This library is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
  * Lesser General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU Lesser General Public
  * License along with this library.  If not, see <http://www.gnu.org/licenses/>.
  */
@@ -29,9 +29,8 @@ $message = null;
 
 if (Session::isAuthenticated()) {
 	$user = Session::getCurrentUser();
-	
-	if ($user->hasPermission('*') ||
-		$user->hasPermission('chief.groups')) {
+
+	if ($user->hasPermission('chief.groups')) {
 		if (isset($_GET['title']) &&
 			isset($_GET['description']) &&
 			isset($_GET['leader']) &&
@@ -43,7 +42,7 @@ if (Session::isAuthenticated()) {
 			$description = $_GET['description'];
 			$leaderUser = UserHandler::getUser($_GET['leader']);
 			$coleaderUser = UserHandler::getUser($_GET['leader']);
-			
+
 			GroupHandler::createGroup(EventHandler::getCurrentEvent(), $name, $title, $description, $leaderUser, $coleaderUser);
 			$result = true;
 		} else {

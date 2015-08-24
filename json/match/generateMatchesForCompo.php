@@ -8,12 +8,12 @@
  * modify it under the terms of the GNU Lesser General Public
  * License as published by the Free Software Foundation; either
  * version 3.0 of the License, or (at your option) any later version.
- * 
+ *
  * This library is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
  * Lesser General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU Lesser General Public
  * License along with this library.  If not, see <http://www.gnu.org/licenses/>.
  */
@@ -28,18 +28,16 @@ $result = false;
 // TODO: This should not be stored in the database as this is constant information, we'll have to move this to some static variable.
 if (Session::isAuthenticated()) {
 	$user = Session::getCurrentUser();
-	
-	if ($user->hasPermission('*') ||
-		$user->hasPermission('event.compo')) {
 
+	if ($user->hasPermission('event.compo')) {
 		if (isset($_GET['id']) &&
 			is_numeric($_GET['id'])) {
 			$compo = CompoHandler::getCompo($_GET['id']);
 
 			if ($compo != null) {
-				if (isset($_GET['startTime']) && 
-					!empty($_GET['startTime']) && 
-					isset($_GET['compoSpacing']) && 
+				if (isset($_GET['startTime']) &&
+					!empty($_GET['startTime']) &&
+					isset($_GET['compoSpacing']) &&
 					!empty($_GET['compoSpacing'])) {
 
 					if (!CompoHandler::hasGeneratedMatches($compo)) {

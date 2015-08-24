@@ -28,8 +28,7 @@ $message = null;
 if (Session::isAuthenticated()) {
 	$user = Session::getCurrentUser();
 
-	if ($user->hasPermission('*') ||
-		$user->hasPermission('admin.website')) {
+	if ($user->hasPermission('admin.website')) {
 		if (isset($_GET['title']) &&
 			isset($_GET['content']) &&
 			!empty($_GET['title']) &&

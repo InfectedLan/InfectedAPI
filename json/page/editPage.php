@@ -28,8 +28,7 @@ $message = null;
 if (Session::isAuthenticated()) {
 	$user = Session::getCurrentUser();
 
-	if ($user->hasPermission('*') ||
-		$user->hasPermission('admin.website')) {
+	if ($user->hasPermission('admin.website')) {
 		if (isset($_GET['id']) &&
 			isset($_GET['title']) &&
 			isset($_GET['content']) &&
@@ -42,7 +41,7 @@ if (Session::isAuthenticated()) {
 
 			if ($page != null) {
 				PageHandler::updatePage($page, $title, $content);
-				
+
 				$result = true;
 			} else {
 				$message = Localization::getLocale('this_page_does_not_exist');
