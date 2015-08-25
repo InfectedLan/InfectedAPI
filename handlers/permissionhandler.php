@@ -59,7 +59,7 @@ class PermissionHandler {
 
 		$result = $database->query('SELECT * FROM `' . Settings::db_table_infected_permissions . '`
 																ORDER BY `value` ASC;');
-		
+
 		$database->close();
 
 		$permissionList = array();

@@ -29,13 +29,14 @@ $message = null;
 if (Session::isAuthenticated()) {
 	$user = Session::getCurrentUser();
 
-	if ($user->hasPermission('chief.groups')) {
+	if ($user->hasPermission('chief.group')) {
 		if (isset($_GET['id']) &&
 			is_numeric($_GET['id'])) {
 			$groupUser = UserHandler::getUser($_GET['id']);
 
 			if ($groupUser != null) {
 				GroupHandler::removeUserFromGroup($groupUser);
+				
 				$result = true;
 			} else {
 				$message = Localization::getLocale('this_user_does_not_exist');

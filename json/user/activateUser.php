@@ -35,7 +35,7 @@ if (Session::isAuthenticated()) {
 
 			if ($activateUser != null) {
 				if (!$activateUser->isActivated()) {
-					RegistrationCodeHandler::removeRegistrationCodeByUser($user);
+					RegistrationCodeHandler::removeRegistrationCodeByUser($activateUser);
 
 					$result = true;
 				} else {

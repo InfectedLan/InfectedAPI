@@ -30,7 +30,7 @@ $message = null;
 if (Session::isAuthenticated()) {
 	$user = Session::getCurrentUser();
 
-	if ($user->hasPermission('chief.groups')) {
+	if ($user->hasPermission('chief.group')) {
 		if (isset($_GET['title']) &&
 			isset($_GET['description']) &&
 			isset($_GET['leader']) &&
@@ -41,9 +41,22 @@ if (Session::isAuthenticated()) {
 			$title = $_GET['title'];
 			$description = $_GET['description'];
 			$leaderUser = UserHandler::getUser($_GET['leader']);
-			$coleaderUser = UserHandler::getUser($_GET['leader']);
+			$coleaderUser = UserHandler::getUser($_GET['coleader']);
+
+			if (leaderUser != null) {
+				if (!$leaderUser->isGroupMember() && !leaderUser->equals($group->getLeader())) {
+					GroupHandler::changeGroupForUser($leaderUser, $group);
+				}
+			}
+
+			if (coleaderUser != null) {
+				if (!$coleaderUser->isGroupMember() && !coleaderUser->equals($group->getCoLeader())) {
+					GroupHandler::changeGroupForUser($leaderUser, $group);
+				}
+			}
 
 			GroupHandler::createGroup(EventHandler::getCurrentEvent(), $name, $title, $description, $leaderUser, $coleaderUser);
+
 			$result = true;
 		} else {
 			$message = Localization::getLocale('you_have_not_filled_out_the_required_fields');
