@@ -20,7 +20,7 @@
 
 require_once 'session.php';
 require_once 'localization.php';
-require_once 'handlers/componhandler.php';
+require_once 'handlers/compohandler.php';
 require_once 'handlers/clanhandler.php';
 require_once 'handlers/eventhandler.php';
 

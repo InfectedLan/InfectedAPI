@@ -92,7 +92,7 @@
    "an_internal_error_occurred_when_uploading_image":"En intern feil oppstod under opplasting av avataren. Feilkode: %s",
 
    "wrong_username_or_password":"Feil brukernavn eller passord.",
-   "you_must_activate_your_user_account_in_order_to_logg_in":"Du må aktivere brukeren din får å kan logge inn.",
+   "you_must_activate_your_user_account_in_order_to_logg_in":"Du må aktivere brukeren din for å kan logge inn.",
    "you_must_enter_a_username_and_password":"Du må skrive inn et brukernavn og passord.",
    "you_are_already_logged_in":"Du er allerede logget inn.",
 

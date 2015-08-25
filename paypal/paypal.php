@@ -39,8 +39,8 @@ class PayPal {
 		$amt = $itemamt;
 		$maxamt= $amt;
 
-		$nvpstr = "&_LITEMCATEGORY0=Digital&NOSHIPPING=1&L_NAME0=" . $ticketType->getTitle() . "&L_AMT0=" . $ticketType->getPriceByUser($user, 1) .
-		"&L_QTY0=" . $amount . "&MAXAMT=" . (string)$maxamt . "&AMT=" . (string)$amt . "&ITEMAMT=" .
+		$nvpstr = "&_LITEMCATEGORY0=Digital&NOSHIPPING=1&L_NAME0=" . $ticketType->getTitle() . "&L_AMT0=" . $itemamt .
+		"&L_QTY0=" . 1 . "&MAXAMT=" . (string)$itemamt . "&AMT=" . (string)$itemamt . "&ITEMAMT=" .
 		(string)$itemamt . "&CALLBACKTIMEOUT=4&L_NUMBER0=10001&L_DESC0=" . $ticketType->getTitle() .
 		"&ReturnUrl=" . PaypalSecret::ReturnUrl . "&CANCELURL=" . PaypalSecret::CancelUrl ."&CURRENCYCODE=" . $currencyCodeType .
 		"&PAYMENTACTION=" . $paymentType;
@@ -58,6 +58,14 @@ class PayPal {
 			$url = PaypalSecret::PaypalUrl . $token;
 			return $url;
 		} else  {
+            /*
+            //Report the error somewhere for debugging
+            $errorLog = "===BEGIN ERROR LOG===\n" . $nvpstr . "\n===BEGIN_RESPONSE===\n" . print_r($resArray, true) . "\n";
+            $file = "/home/infected.no/logs/paypalerror";
+            $current = file_get_contents($file);
+            $current .= $errorLog;
+            file_put_contents($file, $current);
+            */
 			return null;
 		}
 	}
