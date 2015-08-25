@@ -45,7 +45,20 @@ if (Session::isAuthenticated()) {
 			$coleaderUser = UserHandler::getUser($_GET['coleader']);
 
 			if ($group != null) {
+				if (leaderUser != null) {
+					if (!$leaderUser->isGroupMember() && !leaderUser->equals($group->getLeader())) {
+						GroupHandler::changeGroupForUser($leaderUser, $group);
+					}
+				}
+
+				if (coleaderUser != null) {
+					if (!$coleaderUser->isGroupMember() && !coleaderUser->equals($group->getCoLeader())) {
+						GroupHandler::changeGroupForUser($leaderUser, $group);
+					}
+				}
+
 				GroupHandler::updateGroup($group, $name, $title, $description, $leaderUser, $coleaderUser);
+
 				$result = true;
 			} else {
 				$message = Localization::getLocale('this_group_does_not_exist');
