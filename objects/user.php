@@ -204,28 +204,33 @@ class User extends Object {
 	public function hasPermission($value) {
 		// Match wildcard permissions, if value is admin.permissions and user has permission "admin.*" this would return true.
 		$wildcardValue = preg_replace('/[^\.]([^.]*)$/', '*', $value);
-		$parentValue = preg_replace('/[\.*](.*)/', '', $value);
 
-		// Accept permission if user has god permission or a equally wildcard.
+		// Accept permission if user has a god permission ("*") or a valid wildcard.
 		if (UserPermissionHandler::hasUserPermissionByValue($this, '*') ||
 			UserPermissionHandler::hasUserPermissionByValue($this, $wildcardValue)) {
 			return true;
 		}
 
-		// Check if user has parent of value.
-		if (!empty($parentValue)) {
-			foreach ($this->getPermissions() as $permission) {
-				return preg_match('/^' . $parentValue . '/', $permission->getValue());
+		// This makes sure that if user have a child permissions, that it also matches the parent.
+		// i.e "admin.permissions" would also match for just "admin"
+		foreach ($this->getPermissions() as $permission) {
+			$parentValue = preg_replace('/[\.*](.*)/', '', $permission->getValue());
+
+			if ($value == $parentValue) {
+				return true;
 			}
 		}
 
-		// If the user is a leader or co leader return true on chief permissions.
 		if ($this->isGroupMember() &&
 			($this->isGroupLeader() || $this->isGroupCoLeader())) {
 			$allowedList = array('chief');
 
-			foreach ($allowedList as $allowed) {
-				return preg_match('/^' . $allowed . '\./', $value);
+			foreach ($this->getPermissions() as $permission) {
+				foreach ($allowedList as $allowed) {
+					if (preg_match('/^' . $allowed . '/', $value)) {
+						return true;
+					}
+				}
 			}
 		}
 
