@@ -42,7 +42,7 @@ if (Session::isAuthenticated()) {
 
 					if ($compo != null) {
 						if (count($clan->getPlayingMembers()) < $compo->getTeamSize()) {
-							$clan->setMemberStepInState($targetUser, ClanHandler::STATE_MAIN_PLAYER);
+							$clan->setStepInMemberState($targetUser, ClanHandler::STATE_MAIN_PLAYER);
 							$result = true;
 						} else {
 							$message = Localization::getLocale('this_clan_is_full');
