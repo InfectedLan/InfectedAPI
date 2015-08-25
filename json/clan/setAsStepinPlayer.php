@@ -38,7 +38,7 @@ if (Session::isAuthenticated()) {
 			
 			if ($clan != null) {
 				if ($user->equals($clan->getChief())) {
-					$clan->setMemberStepInState($targetUser, ClanHandler::STATE_STEPIN_PLAYER);
+					$clan->setStepInMemberState($targetUser, ClanHandler::STATE_STEPIN_PLAYER);
 					$result = true;
 				} else {
 					$message = Localization::getLocale('you_are_not_the_leader_of_this_clan');
