@@ -58,12 +58,14 @@ class PayPal {
 			$url = PaypalSecret::PaypalUrl . $token;
 			return $url;
 		} else  {
+            /*
             //Report the error somewhere for debugging
             $errorLog = "===BEGIN ERROR LOG===\n" . $nvpstr . "\n===BEGIN_RESPONSE===\n" . print_r($resArray, true) . "\n";
             $file = "/home/infected.no/logs/paypalerror";
             $current = file_get_contents($file);
             $current .= $errorLog;
             file_put_contents($file, $current);
+            */
 			return null;
 		}
 	}
