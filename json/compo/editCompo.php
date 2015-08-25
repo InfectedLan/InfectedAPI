@@ -55,7 +55,6 @@ if (Session::isAuthenticated()) {
 
 			if ($compo != null) {
 				CompoHandler::updateCompo($compo, $name, $title, $tag, $description, $mode, $startTime, $registrationEndTime, $teamSize);
-
 				$result = true;
 			} else {
 				$message = Localization::getLocale('the_compo_you_are_trying_to_change_does_not_exist');
