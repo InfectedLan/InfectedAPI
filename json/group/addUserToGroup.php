@@ -29,7 +29,7 @@ $message = null;
 if (Session::isAuthenticated()) {
 	$user = Session::getCurrentUser();
 
-	if ($user->hasPermission('chief.groups')) {
+	if ($user->hasPermission('chief.group')) {
 		if (isset($_GET['userId']) &&
 			isset($_GET['groupId']) &&
 			is_numeric($_GET['userId']) &&

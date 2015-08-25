@@ -30,7 +30,7 @@ $message = null;
 if (Session::isAuthenticated()) {
 	$user = Session::getCurrentUser();
 
-	if ($user->hasPermission('chief.groups')) {
+	if ($user->hasPermission('chief.group')) {
 		if (isset($_GET['title']) &&
 			isset($_GET['description']) &&
 			isset($_GET['leader']) &&

@@ -51,7 +51,7 @@ class UserPermissionHandler {
 	/*
 	 * Returns true if user has the given permission value and event, otherwise false.
 	 */
-	public static function hasUserPermissionByValueByEvent(User $user, Event $event, $value) {
+	public static function hasUserPermissionByValueAndEvent(User $user, Event $event, $value) {
 		$database = Database::open(Settings::db_name_infected);
 
 		$result = $database->query('SELECT `id` FROM `' . Settings::db_table_infected_userpermissions . '`
@@ -69,7 +69,7 @@ class UserPermissionHandler {
 	 * Returns true if user has the given permission value, otherwise false.
 	 */
 	public static function hasUserPermissionByValue(User $user, $value) {
-		return self::hasUserPermissionByValueByEvent($user, EventHandler::getCurrentEvent(), $value);
+		return self::hasUserPermissionByValueAndEvent($user, EventHandler::getCurrentEvent(), $value);
 	}
 
 	/*

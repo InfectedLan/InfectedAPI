@@ -29,7 +29,7 @@ if (Session::isAuthenticated()) {
 	$user = Session::getCurrentUser();
 	
 	if ($user->hasPermission('*') ||
-		$user->hasPermission('chief.groups')) {
+		$user->hasPermission('chief.group')) {
 		if (isset($_GET['id']) &&
 			is_numeric($_GET['id'])) {
 			$group = GroupHandler::getGroup($_GET['id']);
