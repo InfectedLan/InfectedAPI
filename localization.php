@@ -25,7 +25,7 @@ class Localization {
 	 * Get locale by key.
 	 */
 	public static function getLocale($key, ...$arguments) {
-		$path = Settings::api_path . 'resources/lang/';
+		$path = Settings::api_path . 'languages/';
 		$language = isset($_SERVER['HTTP_ACCEPT_LANGUAGE']) ? Locale::acceptFromHttp($_SERVER['HTTP_ACCEPT_LANGUAGE']) : 'nb_NO';
 		$filename = $path . $language . '.json';
 
