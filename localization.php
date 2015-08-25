@@ -21,7 +21,6 @@
 require_once 'settings.php';
 
 class Localization {
-    const defaultLanguage = "nb_NO";
 	/*
 	 * Get locale by key.
 	 */
@@ -29,11 +28,6 @@ class Localization {
 		$path = Settings::api_path . 'resources/lang/';
 		$language = isset($_SERVER['HTTP_ACCEPT_LANGUAGE']) ? Locale::acceptFromHttp($_SERVER['HTTP_ACCEPT_LANGUAGE']) : 'nb_NO';
 		$filename = $path . $language . '.json';
-
-		// Check if language exists, if not fallback to default language.
-		if (!file_exists($filename)) {
-			$filename = $path . self::defaultLanguage . '.json';
-		}
 
 		// Fetch the language json file as an array.
 		$list = json_decode(file_get_contents($filename), true);
