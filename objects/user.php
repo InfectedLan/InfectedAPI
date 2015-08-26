@@ -32,6 +32,7 @@ require_once 'handlers/passwordresetcodehandler.php';
 require_once 'handlers/avatarhandler.php';
 require_once 'handlers/grouphandler.php';
 require_once 'handlers/teamhandler.php';
+require_once 'handlers/userhistoryhandler.php';
 require_once 'objects/object.php';
 
 class User extends Object {
@@ -517,6 +518,10 @@ class User extends Object {
 	 */
 	public function isTeamLeader() {
 		return TeamHandler::isTeamLeader($this);
+	}
+
+	public function getParticipatedEvents() {
+		return UserHistoryHandler::getUserParticipatedEvents($this);
 	}
 
 	public function hasSpecialRoleByEvent(Event $event) {
