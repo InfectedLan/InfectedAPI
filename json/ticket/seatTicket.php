@@ -37,7 +37,7 @@ if(Session::isAuthenticated()) {
 		if ($ticket != null) {
 			if ($seat != null) {
 				if ($user->hasPermission('*') || 
-					$user->hasPermission('chief.tickets') ||
+					$user->hasPermission('admin.tickets') ||
 					$ticket->canSeat($user)) {
 					
 					if (!$seat->hasTicket()) {
