@@ -61,14 +61,14 @@ class PaymentHandler {
 	/*
 	 * Create a new payment.
 	 */
-	public static function createPayment(User $user, TicketType $ticketType, $price, $totalPrice, $transactionId) {
+	public static function createPayment(User $user, TicketType $ticketType, $amount, $price, $transactionId) {
 		$database = Database::open(Settings::db_name_infected_tickets);
 
-		$database->query('INSERT INTO `' . Settings::db_table_infected_tickets_payments . '` (`userId`, `ticketTypeId`, `price`, `totalPrice`, `transactionId`, `datetime`)
+		$database->query('INSERT INTO `' . Settings::db_table_infected_tickets_payments . '` (`userId`, `ticketTypeId`, `amount`, `price`, `transactionId`, `datetime`)
 										  VALUES (\'' . $user->getId() . '\',
 														  \'' . $ticketType->getId() . '\',
+														  \'' . $database->real_escape_string($amount) . '\',
 														  \'' . $database->real_escape_string($price) . '\',
-														  \'' . $database->real_escape_string($totalPrice) . '\',
 														  \'' . $database->real_escape_string($transactionId) . '\',
 														  \'' . date('Y-m-d H:i:s') . '\');');
 

@@ -8,12 +8,12 @@
  * modify it under the terms of the GNU Lesser General Public
  * License as published by the Free Software Foundation; either
  * version 3.0 of the License, or (at your option) any later version.
- * 
+ *
  * This library is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
  * Lesser General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU Lesser General Public
  * License along with this library.  If not, see <http://www.gnu.org/licenses/>.
  */
@@ -25,8 +25,8 @@ require_once 'objects/object.php';
 class Payment extends Object{
 	private $userId;
 	private $ticketTypeId;
+	private $amount;
 	private $price;
-	private $totalPrice;
 	private $transactionId;
 	private $datetime;
 
@@ -45,17 +45,17 @@ class Payment extends Object{
 	}
 
 	/*
-	 * Returns the price for this payment.
+	 * Returns the amount for this payment.
 	 */
-	public function getPrice() {
-		return $this->price;
+	public function getAmount() {
+		return $this->amount;
 	}
 
 	/*
 	 * Returns the total price for this payment.
 	 */
-	public function getTotalPrice() {
-		return $this->totalPrice;
+	public function getPrice() {
+		return $this->price;
 	}
 
 	/*
@@ -64,7 +64,7 @@ class Payment extends Object{
 	public function getTransactionId() {
 		return $this->transactionId;
 	}
-	
+
 	/*
 	 * Returns the datetime of this payment.
 	 */
