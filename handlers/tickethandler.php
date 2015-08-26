@@ -203,7 +203,7 @@ class TicketHandler {
 	 * Returns true if the specified user is able to seat tickets.
 	 */
 	public static function getTicketsSeatableByUser(User $user) {
-		return self::getTicketsSeatableByUserAndEvent($user, EventHandler::getCurrentEvent/());
+		return self::getTicketsSeatableByUserAndEvent($user, EventHandler::getCurrentEvent());
 	}
 
 	/*
