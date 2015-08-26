@@ -62,7 +62,7 @@ class TeamHandler {
 	 * Returns the group of the specified user.
 	 */
 	public static function getTeamByUser(User $user) {
-		return self::getTeamByEventAndUser(EventHandler::getCurrentEvent(), $user);
+		return self::getTeamByUserAndEvent(EventHandler::getCurrentEvent(), $user);
 	}
 
 	 /*
