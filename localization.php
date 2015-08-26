@@ -21,31 +21,29 @@
 require_once 'settings.php';
 
 class Localization {
+	const defaultLanguage = 'en_US';
+
 	/*
 	 * Get locale by key.
 	 */
 	public static function getLocale($key, ...$arguments) {
 		$path = Settings::api_path . 'languages/';
-		$language = isset($_SERVER['HTTP_ACCEPT_LANGUAGE']) ? Locale::acceptFromHttp($_SERVER['HTTP_ACCEPT_LANGUAGE']) : 'nb_NO';
+		$language = isset($_SERVER['HTTP_ACCEPT_LANGUAGE']) ? Locale::acceptFromHttp($_SERVER['HTTP_ACCEPT_LANGUAGE']) : self::defaultLanguage;
 
 		// Fix for some browsers that is sending "nb" instead of "nb_NO".
-		if ($language == 'en') {
-			$language = 'en_US';
-		} else if ($language == 'nb') {
+		if ($language == 'nb' || $language == 'nb-NO') {
 			$language = 'nb_NO';
 		}
 
-		$filename = $path . $language . '.json';
+		// Use this language if we can verify that this language exists.
+		$filename = $path . (file_exists($filename) ? $language : self::defaultLanguage) . '.json';
 
-		// Verify that this language exists.
-		if (file_exists($filename)) {
-			// Fetch the language json file as an array.
-			$list = json_decode(file_get_contents($filename), true);
+		// Fetch the language json file as an array.
+		$list = json_decode(file_get_contents($filename), true);
 
-			// If key exists in array, return the value.
-			if (array_key_exists($key, $list)) {
-				return vsprintf($list[$key], $arguments);
-			}
+		// If key exists in array, return the value.
+		if (array_key_exists($key, $list)) {
+			return vsprintf($list[$key], $arguments);
 		}
 
 		// Otherwise, return an error string.
