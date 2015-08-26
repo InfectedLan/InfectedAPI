@@ -56,7 +56,6 @@ if (Session::isAuthenticated()) {
 			}
 
 			GroupHandler::createGroup(EventHandler::getCurrentEvent(), $name, $title, $description, $leaderUser, $coleaderUser);
-
 			$result = true;
 		} else {
 			$message = Localization::getLocale('you_have_not_filled_out_the_required_fields');

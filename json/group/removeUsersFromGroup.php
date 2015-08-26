@@ -35,7 +35,6 @@ if (Session::isAuthenticated()) {
 
 			if ($group != null) {
 				GroupHandler::removeUsersFromGroup($group);
-
 				$result = true;
 			} else {
 				$message = Localization::getLocale('this_group_does_not_exist');

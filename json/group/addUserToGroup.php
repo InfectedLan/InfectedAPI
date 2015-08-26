@@ -37,8 +37,7 @@ if (Session::isAuthenticated()) {
 			$groupUser = UserHandler::getUser($_GET['userId']);
 			$group = GroupHandler::getGroup($_GET['groupId']);
 
-			if ($group != null &&
-				$groupUser != null) {
+			if ($group != null && $groupUser != null) {
 				GroupHandler::changeGroupForUser($groupUser, $group);
 				$result = true;
 			} else {

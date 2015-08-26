@@ -58,7 +58,6 @@ if (Session::isAuthenticated()) {
 				}
 
 				GroupHandler::updateGroup($group, $name, $title, $description, $leaderUser, $coleaderUser);
-
 				$result = true;
 			} else {
 				$message = Localization::getLocale('this_group_does_not_exist');
