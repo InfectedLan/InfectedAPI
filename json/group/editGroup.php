@@ -45,14 +45,14 @@ if (Session::isAuthenticated()) {
 			$coleaderUser = UserHandler::getUser($_GET['coleader']);
 
 			if ($group != null) {
-				if (leaderUser != null) {
-					if (!$leaderUser->isGroupMember() && !leaderUser->equals($group->getLeader())) {
+				if ($leaderUser != null) {
+					if (!$leaderUser->isGroupMember() && !$leaderUser->equals($group->getLeader())) {
 						GroupHandler::changeGroupForUser($leaderUser, $group);
 					}
 				}
 
-				if (coleaderUser != null) {
-					if (!$coleaderUser->isGroupMember() && !coleaderUser->equals($group->getCoLeader())) {
+				if ($coleaderUser != null) {
+					if (!$coleaderUser->isGroupMember() && !$coleaderUser->equals($group->getCoLeader())) {
 						GroupHandler::changeGroupForUser($leaderUser, $group);
 					}
 				}
