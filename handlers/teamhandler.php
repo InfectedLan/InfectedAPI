@@ -44,7 +44,7 @@ class TeamHandler {
 	/*
 	 * Returns the group for the specified user and event.
 	 */
-	public static function getTeamByEventAndUser(Event $event, User $user) {
+	public static function getTeamByUserAndEvent(Event $event, User $user) {
 		$database = Database::open(Settings::db_name_infected_crew);
 
 		$result = $database->query('SELECT * FROM `' . Settings::db_table_infected_crew_teams . '`
@@ -200,7 +200,7 @@ class TeamHandler {
 	/*
 	 * Is member of a team in the given event.
 	 */
-	public static function isTeamMemberByEvent(Event $event, User $user) {
+	public static function isTeamMemberByEvent(User $user, Event $event) {
 		$database = Database::open(Settings::db_name_infected_crew);
 
 		$result = $database->query('SELECT `id` FROM `' . Settings::db_table_infected_crew_memberof. '`
@@ -217,7 +217,7 @@ class TeamHandler {
 	 * Is member of a team which means it's not a plain user.
 	 */
 	public static function isTeamMember(User $user) {
-		return self::isTeamMemberByEvent(EventHandler::getCurrentEvent(), $user);
+		return self::isTeamMemberByEvent($user, EventHandler::getCurrentEvent());
 	}
 
 	/*
@@ -246,7 +246,7 @@ class TeamHandler {
 	/*
 	 * Return true if user is leader for a team.
 	 */
-	public static function isTeamLeaderByEvent(Event $event, User $user) {
+	public static function isTeamLeaderByEvent(User $user, Event $event) {
 		$database = Database::open(Settings::db_name_infected_crew);
 
 		$result = $database->query('SELECT `id` FROM `' . Settings::db_table_infected_crew_teams . '`
@@ -262,7 +262,7 @@ class TeamHandler {
 	 * Return true if user is leader for a team.
 	 */
 	public static function isTeamLeader(User $user) {
-		return self::isTeamLeaderByEvent(EventHandler::getCurrentEvent(), $user);
+		return self::isTeamLeaderByEvent($user, EventHandler::getCurrentEvent());
 	}
 
 	/*

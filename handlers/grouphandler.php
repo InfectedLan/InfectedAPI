@@ -43,7 +43,7 @@ class GroupHandler {
 	/*
 	 * Get a group for the specified user from the given event.
 	 */
-	public static function getGroupByEventAndUser(Event $event, User $user) {
+	public static function getGroupByUserAndEvent(User $user, Event $event) {
 		$database = Database::open(Settings::db_name_infected_crew);
 
 		$result = $database->query('SELECT * FROM `' . Settings::db_table_infected_crew_groups . '`
@@ -61,7 +61,7 @@ class GroupHandler {
 	 * Get a group for the specified user.
 	 */
 	public static function getGroupByUser(User $user) {
-		return self::getGroupByEventAndUser(EventHandler::getCurrentEvent(), $user);
+		return self::getGroupByUserAndEvent($user, EventHandler::getCurrentEvent());
 	}
 
 	/*
@@ -176,7 +176,7 @@ class GroupHandler {
 	/*
 	 * Returns true of the specified user is member of a group in the given event.
 	 */
-	public static function isGroupMemberByEvent(Event $event, User $user) {
+	public static function isGroupMemberByEvent(User $user, Event $event) {
 		$database = Database::open(Settings::db_name_infected_crew);
 
 		$result = $database->query('SELECT `id` FROM `' . Settings::db_table_infected_crew_memberof . '`
@@ -192,7 +192,7 @@ class GroupHandler {
 	 * Returns true of the specified user is member of a group.
 	 */
 	public static function isGroupMember(User $user) {
-		return self::isGroupMemberByEvent(EventHandler::getCurrentEvent(), $user);
+		return self::isGroupMemberByEvent($user, EventHandler::getCurrentEvent());
 	}
 
 	/*
@@ -221,7 +221,7 @@ class GroupHandler {
 	/*
 	 * Return true if the specified user is leader of a group.
 	 */
-	public static function isGroupLeaderByEvent(Event $event, User $user) {
+	public static function isGroupLeaderByEvent(User $user, Event $event) {
 		$database = Database::open(Settings::db_name_infected_crew);
 
 		$result = $database->query('SELECT `id` FROM `' . Settings::db_table_infected_crew_groups . '`
@@ -236,7 +236,7 @@ class GroupHandler {
 	 * Return true if the specified user is leader of a group.
 	 */
 	public static function isGroupLeader(User $user) {
-		return self::isGroupLeaderByEvent(EventHandler::getCurrentEvent(), $user);
+		return self::isGroupLeaderByEvent($user, EventHandler::getCurrentEvent());
 	}
 
 	/*
@@ -265,7 +265,7 @@ class GroupHandler {
 	/*
 	 * Return true if user is co-leader for a group.
 	 */
-	public static function isGroupCoLeaderByEvent(Event $event, User $user) {
+	public static function isGroupCoLeaderByEvent(User $user, Event $event) {
 		$database = Database::open(Settings::db_name_infected_crew);
 
 		$result = $database->query('SELECT `id` FROM `' . Settings::db_table_infected_crew_groups . '`
@@ -281,7 +281,7 @@ class GroupHandler {
 	 * Return true if user is co-leader for a group.
 	 */
 	public static function isGroupCoLeader(User $user) {
-		return self::isGroupCoLeaderByEvent(EventHandler::getCurrentEvent(), $user);
+		return self::isGroupCoLeaderByEvent($user, EventHandler::getCurrentEvent());
 	}
 
 	/*
