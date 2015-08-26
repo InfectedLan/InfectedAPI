@@ -29,12 +29,15 @@ class Localization {
 		$language = isset($_SERVER['HTTP_ACCEPT_LANGUAGE']) ? Locale::acceptFromHttp($_SERVER['HTTP_ACCEPT_LANGUAGE']) : 'nb_NO';
 		$filename = $path . $language . '.json';
 
-		// Fetch the language json file as an array.
-		$list = json_decode(file_get_contents($filename), true);
+		// Verify that this language exists.
+		if (file_exists($filename)) {
+			// Fetch the language json file as an array.
+			$list = json_decode(file_get_contents($filename), true);
 
-		// If key exists in array, return the value.
-		if (array_key_exists($key, $list)) {
-			return vsprintf($list[$key], $arguments);
+			// If key exists in array, return the value.
+			if (array_key_exists($key, $list)) {
+				return vsprintf($list[$key], $arguments);
+			}
 		}
 
 		// Otherwise, return an error string.
