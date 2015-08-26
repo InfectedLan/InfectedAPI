@@ -386,10 +386,16 @@ class UserHandler {
 
 		// Build the word list, and add "+" and "*" to the start and end of every word.
 		foreach ($queryList as $value) {
-		  // TODO: The old way does match more in general, but have crashes if @ is at end or in beginning of a word.
-			// array_push($wordList, '+' . $value . '*');
+			// This is to prevent crashes caused by the word starting or ending with "@".
 
-			array_push($wordList, '"' . $value . '"');
+			// TODO: Get this regex to actually match, should work just fine.
+			/*
+			if (preg_match("/^@|@$/", $value)) {
+				echo 'Got a match for "@"';
+			}
+			*/
+
+			array_push($wordList, '+' . $value . '*');
 		}
 
 		// Query the database using a Full-Text Search.
