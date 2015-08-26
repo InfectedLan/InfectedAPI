@@ -35,8 +35,12 @@ class Localization {
 			$language = 'nb_NO';
 		}
 
-		// Use this language if we can verify that this language exists.
-		$filename = $path . (file_exists($filename) ? $language : self::defaultLanguage) . '.json';
+		$filename = $path . $language . '.json';
+
+		// If the requested language don't exist, use the default language.
+		if (!file_exists($filename)) {
+			$filename = $path . self::defaultLanguage . '.json';
+		}
 
 		// Fetch the language json file as an array.
 		$list = json_decode(file_get_contents($filename), true);
@@ -47,7 +51,7 @@ class Localization {
 		}
 
 		// Otherwise, return an error string.
-		return 'Locale not found in language \'' . $language . '\', this is a bug.';
+		return 'Locale file for language "\'' . $language . '\'" not found, this is a bug.';
 	}
 }
 ?>
