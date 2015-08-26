@@ -22,7 +22,7 @@ $(document).ready(function() {
 		e.preventDefault();
 		$.getJSON('../api/json/user/editUser.php' + '?' + $(this).serialize(), function(data){
 			if (data.result) {
-				$(location).attr('href', 'index.php?page=my-profile');
+				$(location).attr('href', 'index.php?page=user-profile');
 			} else {
 				error(data.message); 
 			}

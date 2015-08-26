@@ -7,7 +7,7 @@
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -22,9 +22,9 @@ $(document).ready(function() {
 		e.preventDefault();
 		$.getJSON('../api/json/user/editUserPassword.php' + '?' + $(this).serialize(), function(data){
 			if (data.result) {
-				$(location).attr('href', 'index.php?page=my-profile');
+				$(location).attr('href', 'index.php?page=user-profile');
 			} else {
-				error(data.message); 
+				error(data.message);
 			}
 		});
 	});
