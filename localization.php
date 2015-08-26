@@ -27,6 +27,14 @@ class Localization {
 	public static function getLocale($key, ...$arguments) {
 		$path = Settings::api_path . 'languages/';
 		$language = isset($_SERVER['HTTP_ACCEPT_LANGUAGE']) ? Locale::acceptFromHttp($_SERVER['HTTP_ACCEPT_LANGUAGE']) : 'nb_NO';
+
+		// Fix for some browsers that is sending "nb" instead of "nb_NO".
+		if ($language == 'en') {
+			$language = 'en_US';
+		} else if ($language == 'nb') {
+			$language = 'nb_NO';
+		}
+
 		$filename = $path . $language . '.json';
 
 		// Verify that this language exists.
