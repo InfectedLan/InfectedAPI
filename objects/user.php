@@ -33,6 +33,7 @@ require_once 'handlers/avatarhandler.php';
 require_once 'handlers/grouphandler.php';
 require_once 'handlers/teamhandler.php';
 require_once 'handlers/userhistoryhandler.php';
+require_once 'handlers/friendhandler.php';
 require_once 'objects/object.php';
 
 class User extends Object {
@@ -261,6 +262,18 @@ class User extends Object {
 	 */
 	public function getEmergencyContact() {
 		return EmergencyContactHandler::getEmergencyContactByUser($this);
+	}
+
+	public function isFriendsWith($friend) {
+		return FriendHandler::isUserFriendsWith($this, $friend);
+	}
+
+	public function addFriend(User $friend) {
+		FriendHandler::addUserFriend($this, $friend);
+	}
+
+	public function removeFriend(User $friend) {
+		FriendHandler::removeUserFriend($this, $friend);
 	}
 
 	/*

@@ -42,7 +42,7 @@ class FriendHandler {
 	/*
 	 * Create a new agenda entry.
 	 */
-	public static function addFriend(User $user, User $friend) {
+	public static function addUserFriend(User $user, User $friend) {
 		$database = Database::open(Settings::db_name_infected);
 
 		$database->query('INSERT INTO `' . Settings::db_table_infected_friends . '` (`userId`, `friendId`, `datetime`)
@@ -56,7 +56,7 @@ class FriendHandler {
 	/*
 	 * Remove an agenda entry.
 	 */
-	public static function removeFriend(User $user, User $friend) {
+	public static function removeUserFriend(User $user, User $friend) {
 		$database = Database::open(Settings::db_name_infected);
 
 		$database->query('DELETE FROM `' . Settings::db_table_infected_friends . '`
