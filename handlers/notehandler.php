@@ -102,6 +102,7 @@ class NoteHandler {
 
 		$result = $database->query('SELECT * FROM `' . Settings::db_table_infected_crew_notes . '`
 																WHERE `eventId` = \'' . $event->getId() . '\'
+																AND `groupId` = \'' . $team->getGroup()->getId() . '\'
 																AND `teamId` = \'' . $team->getId() . '\';');
 
 		$database->close();
@@ -143,13 +144,11 @@ class NoteHandler {
 	/*
 	 * Update a note.
 	 */
-	public static function updateNote(Note $note, Group $group = null, Team $team = null, User $user = null, $content, $done) {
+	public static function updateNote(Note $note, User $user = null, $content, $done) {
 		$database = Database::open(Settings::db_name_infected_crew);
 
 		$database->query('UPDATE `' . Settings::db_table_infected_crew_notes . '`
-										  SET `groupId` = \'' . ($group != null ? $group->getId() : 0) . '\',
-												  `teamId` = \'' . ($team != null ? $team->getId() : 0) . '\',
-													`userId` = \'' . ($user != null ? $user->getId() : 0) . '\',
+										  SET `userId` = \'' . ($user != null ? $user->getId() : 0) . '\',
 													`content` = \'' . $database->real_escape_string($content) . '\',
 													`done` = \'' . $database->real_escape_string($done) . '\'
 										  WHERE `id` = \'' . $note->getId() . '\';');
