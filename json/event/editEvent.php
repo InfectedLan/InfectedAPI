@@ -28,7 +28,7 @@ $message = null;
 if (Session::isAuthenticated()) {
 	$user = Session::getCurrentUser();
 
-	if ($user->hasPermission('admin-events')) {
+	if ($user->hasPermission('admin.events')) {
 		if (isset($_GET['id']) &&
 			isset($_GET['location']) &&
 			isset($_GET['participants']) &&
