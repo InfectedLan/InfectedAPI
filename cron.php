@@ -26,7 +26,7 @@ if (Utils::isCli()) {
 	require_once 'handlers/eventmigrationhandler.php';
 	require_once 'handlers/eventhandler.php';
 
-	/* Static tasks */
+	/* Event migration */
 	$previousEvent = EventHandler::getPreviousEvent();
 	$currentEvent = EventHandler::getCurrentEvent();
 
@@ -36,6 +36,9 @@ if (Utils::isCli()) {
 		// Migrates all information from the previous event to this one.
 		EventMigrationHandler::copy($previousEvent, $currentEvent);
 	}
+
+	/* Automatic e-mail notifications */
+	NotificationManager::checkForNotifications();
 
 	/* Dynamic tasks */
 	// Run all scheduled tasks.
