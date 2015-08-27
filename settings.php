@@ -61,6 +61,7 @@ class Settings {
 	const db_table_infected_compo_matches = 'matches';
 	const db_table_infected_compo_readyusers = 'readyusers';
 	const db_table_infected_compo_votes =  'votes';
+    const db_table_infected_compo_qualificationQueue = 'qualificationQueue';
 
 	// InfectedCrew
 	const db_table_infected_crew_applicationqueue = 'applicationqueue';
