@@ -46,7 +46,8 @@ class NoteHandler {
 		$database = Database::open(Settings::db_name_infected_crew);
 
 		$result = $database->query('SELECT * FROM `' . Settings::db_table_infected_crew_notes . '`
-																WHERE `eventId` = \'' . $event->getId() . '\';');
+																WHERE `eventId` = \'' . $event->getId() . '\'
+																ORDER BY `deadlineTime`;');
 
 		$database->close();
 
@@ -74,7 +75,8 @@ class NoteHandler {
 
 		$result = $database->query('SELECT * FROM `' . Settings::db_table_infected_crew_notes . '`
 																WHERE `eventId` = \'' . $event->getId() . '\'
-																AND `groupId` = \'' . $group->getId() . '\';');
+																AND `groupId` = \'' . $group->getId() . '\'
+																ORDER BY `deadlineTime`;');
 
 		$database->close();
 
@@ -95,6 +97,49 @@ class NoteHandler {
 	}
 
 	/*
+	 * Returns a list of all notes by the specified event.
+	 */
+	public static function getNotesByGroupAndUserAndEvent(Group $group, User $user, Event $event) {
+		$database = Database::open(Settings::db_name_infected_crew);
+
+		if ($user->isGroupLeader() || $user->isGroupCoLeader()) {
+			$result = $database->query('SELECT * FROM `' . Settings::db_table_infected_crew_notes . '`
+																	WHERE `eventId` = \'' . $event->getId() . '\'
+																	AND `groupId` = \'' . $group->getId() . '\'
+																	ORDER BY `deadlineTime`;');
+		} else if ($user->isTeamLeader()) {
+			$result = $database->query('SELECT * FROM `' . Settings::db_table_infected_crew_notes . '`
+																	WHERE `eventId` = \'' . $event->getId() . '\'
+																	AND `groupId` = \'' . $group->getId() . '\'
+																	AND `teamId` = \'' . $user->getTeam()->getId() . '\'
+																	ORDER BY `deadlineTime`;');
+		} else {
+			$result = $database->query('SELECT * FROM `' . Settings::db_table_infected_crew_notes . '`
+																	WHERE `eventId` = \'' . $event->getId() . '\'
+																	AND `groupId` = \'' . $group->getId() . '\'
+																	AND `userId` = \'' . $user->getId() . '\'
+																	ORDER BY `deadlineTime`;');
+		}
+
+		$database->close();
+
+		$noteList = array();
+
+		while ($object = $result->fetch_object('Note')) {
+			array_push($noteList, $object);
+		}
+
+		return $noteList;
+	}
+
+	/*
+	 * Returns a list of all notes by group and user.
+	 */
+	public static function getNotesByGroupAndUser(Group $group, User $user) {
+		return self::getNotesByGroupAndUserAndEvent($group, $user, EventHandler::getCurrentEvent());
+	}
+
+	/*
 	 * Returns a list of all notes by group for a specified event.
 	 */
 	public static function getNotesByTeamAndEvent(Team $team, Event $event) {
@@ -103,7 +148,8 @@ class NoteHandler {
 		$result = $database->query('SELECT * FROM `' . Settings::db_table_infected_crew_notes . '`
 																WHERE `eventId` = \'' . $event->getId() . '\'
 																AND `groupId` = \'' . $team->getGroup()->getId() . '\'
-																AND `teamId` = \'' . $team->getId() . '\';');
+																AND `teamId` = \'' . $team->getId() . '\'
+																ORDER BY `deadlineTime`;');
 
 		$database->close();
 
@@ -124,18 +170,50 @@ class NoteHandler {
 	}
 
 	/*
-	 * Create a new note.
+	 * Returns a list of all notes by user for a specified event.
 	 */
-	public static function createNote(Group $group = null, Team $team = null, User $user = null, $content, $done) {
+	public static function getNotesByUserAndEvent(User $user, Event $event) {
 		$database = Database::open(Settings::db_name_infected_crew);
 
-		$database->query('INSERT INTO `' . Settings::db_table_infected_crew_notes . '` (`eventId`, `groupId`, `teamId`, `userId`, `content`, `deadlineTime`, `done`)
+		$result = $database->query('SELECT * FROM `' . Settings::db_table_infected_crew_notes . '`
+																WHERE `eventId` = \'' . $event->getId() . '\'
+																AND `groupId` = \'0\'
+																AND `teamId` = \'0\'
+																AND `userId` = \'' . $user->getId() . '\'
+																ORDER BY `deadlineTime`;');
+
+		$database->close();
+
+		$noteList = array();
+
+		while ($object = $result->fetch_object('Note')) {
+			array_push($noteList, $object);
+		}
+
+		return $noteList;
+	}
+
+	/*
+	 * Returns a list of all notes by user.
+	 */
+	public static function getNotesByUser(User $user) {
+		return self::getNotesByUserAndEvent($user, EventHandler::getCurrentEvent());
+	}
+
+	/*
+	 * Create a new note.
+	 */
+	public static function createNote(Group $group = null, Team $team = null, User $user = null, $content, $deadlineTime, $notificationTimeBeforeOffset, $done) {
+		$database = Database::open(Settings::db_name_infected_crew);
+
+		$database->query('INSERT INTO `' . Settings::db_table_infected_crew_notes . '` (`eventId`, `groupId`, `teamId`, `userId`, `content`, `deadlineTime`, `notificationTimeBeforeOffset`, `done`)
 										  VALUES (\'' . EventHandler::getCurrentEvent()->getId() . '\',
 															\'' . ($group != null ? $group->getId() : 0) . '\',
 															\'' . ($team != null ? $team->getId() : 0) . '\',
 															\'' . ($user != null ? $user->getId() : 0) . '\',
 															\'' . $database->real_escape_string($content) . '\',
-															\'' . date('Y-m-d H:i:s') . '\',
+															\'' . $database->real_escape_string($deadlineTime) . '\',
+															\'' . $database->real_escape_string($notificationTimeBeforeOffset) . '\',
 															\'' . $database->real_escape_string($done) . '\')');
 
 		$database->close();
@@ -144,12 +222,14 @@ class NoteHandler {
 	/*
 	 * Update a note.
 	 */
-	public static function updateNote(Note $note, User $user = null, $content, $done) {
+	public static function updateNote(Note $note, User $user = null, $content, $deadlineTime, $notificationBeforeTimeOffset, $done) {
 		$database = Database::open(Settings::db_name_infected_crew);
 
 		$database->query('UPDATE `' . Settings::db_table_infected_crew_notes . '`
 										  SET `userId` = \'' . ($user != null ? $user->getId() : 0) . '\',
 													`content` = \'' . $database->real_escape_string($content) . '\',
+													`deadlineTime` = \'' . $database->real_escape_string($deadlineTime) . '\',
+													`notificationTimeBeforeOffset` = \'' . $database->real_escape_string($notificationBeforeTimeOffset) . '\',
 													`done` = \'' . $database->real_escape_string($done) . '\'
 										  WHERE `id` = \'' . $note->getId() . '\';');
 

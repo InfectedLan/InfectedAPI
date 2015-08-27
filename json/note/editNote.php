@@ -34,15 +34,22 @@ if (Session::isAuthenticated()) {
 	if ($user->hasPermission('chief.checklist')) {
 		if (isset($_GET['id']) &&
 			isset($_GET['content']) &&
+			isset($_GET['deadlineDate']) &&
+			isset($_GET['deadlineTime']) &&
+			isset($_GET['notificationTimeBeforeOffset']) &&
 			is_numeric($_GET['id']) &&
-			!empty($_GET['content'])) {
+			!empty($_GET['content']) &&
+			!empty($_GET['deadlineDate']) &&
+			!empty($_GET['deadlineTime'])) {
 			$note = NoteHandler::getNote($_GET['id']);
-			$user = isset($_GET['userId']) ? UserHandler::getUser($_GET['userId']) : null;
+			$user = isset($_GET['userId']) ? UserHandler::getUser($_GET['userId']) : $note->getUser();
 			$content = $_GET['content'];
+			$deadlineTime = $_GET['deadlineDate'] . ' ' . $_GET['deadlineTime'];
+			$notificationTimeBeforeOffset = $_GET['notificationTimeBeforeOffset'];
 			$done = isset($_GET['done']) ? $_GET['done'] : 0;
 
 			if ($note != null) {
-				NoteHandler::updateNote($note, $user, $content, $done);
+				NoteHandler::updateNote($note, $user, $content, $deadlineTime, $notificationTimeBeforeOffset, $done);
 				$result = true;
 			} else {
 				$message = Localization::getLocale('the_note_does_not_exist');

@@ -88,10 +88,21 @@ class Note extends EventObject {
 	}
 
 	/*
+	 * Returns the otificationTimeBeforeOffset of this note.
+	 */
+	public function getNotificationTimeBeforeOffset() {
+		return $this->notificationTimeBeforeOffset;
+	}
+
+	/*
 	 * Returns true if this note is done.
 	 */
 	public function isDone() {
 		return $this->done ? true : false;
+	}
+
+	public function isDelegated() {
+
 	}
 }
 ?>

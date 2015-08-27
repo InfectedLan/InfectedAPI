@@ -34,18 +34,24 @@ if (Session::isAuthenticated()) {
 	if ($user->hasPermission('event.notes')) {
 		if (isset($_GET['groupId']) &&
 			isset($_GET['content']) &&
-			isset($_GET['done']) &&
+			isset($_GET['deadlineDate']) &&
+			isset($_GET['deadlineTime']) &&
+			isset($_GET['notificationTimeBeforeOffset']) &&
 			is_numeric($_GET['groupId']) &&
 			!empty($_GET['content']) &&
-			is_numeric($_GET['done'])) {
+			!empty($_GET['deadlineDate']) &&
+			!empty($_GET['deadlineTime']) &&
+			is_numeric($_GET['notificationTimeBeforeOffset'])) {
 			$group = GroupHandler::getGroup($_GET['groupId']);
 			$team = isset($_GET['teamId']) ? TeamHandler::getTeam($_GET['teamId']) : null;
 			$user = isset($_GET['userId']) ? UserHandler::getUser($_GET['userId']) : null;
 			$content = $_GET['content'];
-			$done = $_GET['done'];
+			$deadlineTime = $_GET['deadlineDate'] . ' ' . $_GET['deadlineTime'];
+			$notificationTimeBeforeOffset = $_GET['notificationTimeBeforeOffset'];
+			$done = isset($_GET['done']) ? $_GET['done'] : 0;
 
 			if ($group != null) {
-				NoteHandler::createNote($group, $team, $user, $content, $done);
+				NoteHandler::createNote($group, $team, $user, $content, $deadlineTime, $notificationTimeBeforeOffset, $done);
 				$result = true;
 			} else {
 				$message = Localization::getLocale('the_note_does_not_exist');
