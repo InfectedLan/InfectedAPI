@@ -152,6 +152,8 @@
    "the_user_you_tried_to_switch_to_does_not_exist":"The user you tried to switch to does not exist.",
    "the_user_has_already_been_activated":"The user has already been activated.",
 
+   "the_note_does_not_exist":"The note does not exist."
+
    "your_account_is_now_activated_and_ready_for_use":"Your account is now activated and ready for use.",
    "your_account_has_already_been_activated":"Your account has already been activated.",
    "the_link_you_clicked_is_no_longer_valid":"The link you clicked is no longer valid.",
