@@ -316,7 +316,7 @@ class ClanHandler {
 
         $database = Database::open(Settings::db_name_infected_compo);
 
-        $database->query('INSERT INTO `' . Settings::db_table_infected_compo_qualificationQueue . '` (`clan`, `compo`, `time`) VALUES (\'' . $clan->getId() . '\', \'' . $compo->getId() . '\', \'' . time() . '\');');
+        $database->query('INSERT INTO `' . Settings::db_table_infected_compo_qualificationQueue . '` (`clan`, `compo`, `time`) VALUES (\'' . $clan->getId() . '\', \'' . $compo->getId() . '\', \'' . date('Y-m-d H:i:s') . '\');');
 
         $database->close();
     }
