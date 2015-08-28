@@ -97,49 +97,6 @@ class NoteHandler {
 	}
 
 	/*
-	 * Returns a list of all notes by the specified event.
-	 */
-	public static function getNotesByGroupAndUserAndEvent(Group $group, User $user, Event $event) {
-		$database = Database::open(Settings::db_name_infected_crew);
-
-		if ($user->isGroupLeader() || $user->isGroupCoLeader()) {
-			$result = $database->query('SELECT * FROM `' . Settings::db_table_infected_crew_notes . '`
-																	WHERE `eventId` = \'' . $event->getId() . '\'
-																	AND `groupId` = \'' . $group->getId() . '\'
-																	ORDER BY `deadlineTime`;');
-		} else if ($user->isTeamLeader()) {
-			$result = $database->query('SELECT * FROM `' . Settings::db_table_infected_crew_notes . '`
-																	WHERE `eventId` = \'' . $event->getId() . '\'
-																	AND `groupId` = \'' . $group->getId() . '\'
-																	AND `teamId` = \'' . $user->getTeam()->getId() . '\'
-																	ORDER BY `deadlineTime`;');
-		} else {
-			$result = $database->query('SELECT * FROM `' . Settings::db_table_infected_crew_notes . '`
-																	WHERE `eventId` = \'' . $event->getId() . '\'
-																	AND `groupId` = \'' . $group->getId() . '\'
-																	AND `userId` = \'' . $user->getId() . '\'
-																	ORDER BY `deadlineTime`;');
-		}
-
-		$database->close();
-
-		$noteList = array();
-
-		while ($object = $result->fetch_object('Note')) {
-			array_push($noteList, $object);
-		}
-
-		return $noteList;
-	}
-
-	/*
-	 * Returns a list of all notes by group and user.
-	 */
-	public static function getNotesByGroupAndUser(Group $group, User $user) {
-		return self::getNotesByGroupAndUserAndEvent($group, $user, EventHandler::getCurrentEvent());
-	}
-
-	/*
 	 * Returns a list of all notes by group for a specified event.
 	 */
 	public static function getNotesByTeamAndEvent(Team $team, Event $event) {
@@ -198,6 +155,52 @@ class NoteHandler {
 	 */
 	public static function getNotesByUser(User $user) {
 		return self::getNotesByUserAndEvent($user, EventHandler::getCurrentEvent());
+	}
+
+	/*
+	 * Returns a list of all notes by the specified event.
+	 */
+	public static function getNotesByGroupAndTeamAndUserAndEvent(User $user, Event $event) {
+		$database = Database::open(Settings::db_name_infected_crew);
+
+		if ($user->isGroupLeader() || $user->isGroupCoLeader()) {
+			$result = $database->query('SELECT * FROM `' . Settings::db_table_infected_crew_notes . '`
+																	WHERE `eventId` = \'' . $event->getId() . '\'
+																	AND `groupId` = \'' . $user->getGroup()->getId() . '\'
+																	ORDER BY `deadlineTime`;');
+
+
+		} else if ($user->isTeamMember() && $user->isTeamLeader()) {
+			$result = $database->query('SELECT * FROM `' . Settings::db_table_infected_crew_notes . '`
+																	WHERE `eventId` = \'' . $event->getId() . '\'
+																	AND `groupId` = \'' . $user->getGroup()->getId() . '\'
+																	AND ((`teamId` = \'' . $user->getTeam()->getId() . '\') OR
+																			 (`teamId` = \'0\' AND `userId` = \'' . $user->getId() . '\'))
+																	ORDER BY `deadlineTime`;');
+		} else {
+			$result = $database->query('SELECT * FROM `' . Settings::db_table_infected_crew_notes . '`
+																	WHERE `eventId` = \'' . $event->getId() . '\'
+																	AND `groupId` = \'' . $user->getGroup()->getId() . '\'
+																	AND `userId` = \'' . $user->getId() . '\'
+																	ORDER BY `deadlineTime`;');
+		}
+
+		$database->close();
+
+		$noteList = array();
+
+		while ($object = $result->fetch_object('Note')) {
+			array_push($noteList, $object);
+		}
+
+		return $noteList;
+	}
+
+	/*
+	 * Returns a list of all notes by user.
+	 */
+	public static function getNotesByGroupAndTeamAndUser(User $user) {
+		return self::getNotesByGroupAndTeamAndUserAndEvent($user, EventHandler::getCurrentEvent());
 	}
 
 	/*
