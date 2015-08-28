@@ -105,6 +105,13 @@ class Note extends EventObject {
 	/*
 	 * Returns true if this note is done.
 	 */
+	public function setNotified($notified) {
+		NoteHandler::updateNoteNotified($this, $notified);
+	}
+
+	/*
+	 * Returns true if this note is done.
+	 */
 	public function isDone() {
 		return $this->done ? true : false;
 	}
@@ -125,17 +132,10 @@ class Note extends EventObject {
 		return $this->getUser()->equals($user);
 	}
 
-	public function isAdmin(User $user) {
+	public function isOwner(User $user) {
 		return ($this->hasGroup() && ($user->isGroupLeader() || $user->isGroupCoLeader())) ||
 					 (($this->hasGroup() && $this->hasTeam()) && ($user->isTeamMember() && $user->isTeamLeader())) ||
 					 (!$this->hasGroup() && !$this->hasTeam() && $this->hasUser());
-	}
-
-	/*
-	 * Returns true if this note is done.
-	 */
-	public function setNotified($notified) {
-		NoteHandler::updateNoteNotified($this, $notified);
 	}
 }
 ?>

@@ -76,6 +76,7 @@ class NoteHandler {
 		$result = $database->query('SELECT * FROM `' . Settings::db_table_infected_crew_notes . '`
 																WHERE `eventId` = \'' . $event->getId() . '\'
 																AND FROM_UNIXTIME(UNIX_TIMESTAMP(`deadlineTime`) - `notificationTimeBeforeOffset`) <= NOW()
+																AND `notificationTimeBeforeOffset` > \'0\'
 																AND `notify` = \'0\'
 																ORDER BY `deadlineTime`;');
 
@@ -236,7 +237,7 @@ class NoteHandler {
 	/*
 	 * Create a new note.
 	 */
-	public static function createNote(Group $group = null, Team $team = null, User $user = null, $content, $deadlineTime, $notificationTimeBeforeOffset = 0, $notify = 0, $done = 0) {
+	public static function createNote(Group $group = null, Team $team = null, User $user = null, $content, $deadlineTime, $notificationTimeBeforeOffset = 0, $done = 0) {
 		$database = Database::open(Settings::db_name_infected_crew);
 
 		$database->query('INSERT INTO `' . Settings::db_table_infected_crew_notes . '` (`eventId`, `groupId`, `teamId`, `userId`, `content`, `deadlineTime`, `notificationTimeBeforeOffset`, `done`)
@@ -247,7 +248,6 @@ class NoteHandler {
 															\'' . $database->real_escape_string($content) . '\',
 															\'' . $database->real_escape_string($deadlineTime) . '\',
 															\'' . $database->real_escape_string($notificationTimeBeforeOffset) . '\',
-															\'' . $database->real_escape_string($notify) . '\',
 															\'' . $database->real_escape_string($done) . '\')');
 
 		$database->close();
