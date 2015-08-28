@@ -56,7 +56,7 @@ class Note extends EventObject {
 	 * Returns the team of this note.
 	 */
 	public function getTeam() {
-		return TeamHandler::getGroup($this->teamId);
+		return TeamHandler::getTeam($this->teamId);
 	}
 
 	/*
@@ -102,7 +102,13 @@ class Note extends EventObject {
 	}
 
 	public function isDelegated() {
+		return ($this->hasGroup() || ($this->hasGroup() && $this->hasTeam())) && $this->hasUser();
+	}
 
+	public function isAdmin(User $user) {
+		return ($this->hasGroup() && ($user->isGroupLeader() || $user->isGroupCoLeader())) ||
+					 (($this->hasGroup() && $this->hasTeam()) && ($user->isTeamMember() && $user->isTeamLeader())) ||
+					 (!$this->hasGroup() && !$this->hasTeam() && $this->hasUser());
 	}
 }
 ?>
