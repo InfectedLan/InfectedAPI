@@ -25,6 +25,13 @@ require_once 'objects/application.php';
 
 class NotificationManager {
 	/*
+	 * This function will be automatically called on an hourly basis, and should be used to send out automatic notifications.
+	 */
+	public static function checkForNotifications() {
+
+	}
+
+	/*
 	 * Sends an mail to the users e-mail address with status information.
 	 */
 	public function sendApplicationCreatedNotification(User $user, Group $group) {
