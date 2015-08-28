@@ -30,7 +30,7 @@ class TaskManager {
 		$database = Database::open(Settings::db_name_infected);
 
 		$result = $database->query('SELECT * FROM `'. Settings::db_table_infected_tasks . '`
-									WHERE `id` = \'' . $database->real_escape_string($id) . '\';');
+																WHERE `id` = \'' . $database->real_escape_string($id) . '\';');
 
 		$database->close();
 
@@ -65,7 +65,7 @@ class TaskManager {
 		$database = Database::open(Settings::db_name_infected);
 
 		$database->query('INSERT INTO `' . Settings::db_table_infected_tasks . '` (`object`)
-						  VALUES (\'' . serialize($task) . '\');');
+						  				VALUES (\'' . serialize($task) . '\');');
 
 		$database->close();
 	}
@@ -77,7 +77,7 @@ class TaskManager {
 		$database = Database::open(Settings::db_name_infected);
 
 		$database->query('DELETE FROM `' . Settings::db_table_infected_tasks . '`
-						  WHERE `id` = \'' . $id . '\';');
+						  				WHERE `id` = \'' . $id . '\';');
 
 		$database->close();
 	}
