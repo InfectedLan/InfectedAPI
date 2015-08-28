@@ -307,5 +307,29 @@ class ClanHandler {
 
 		$database->close();
 	}
+
+    /*
+     * Add a clan to the list of clans that are waiting for qualification(if a compo is full)
+     */
+    public static function addToQualificationQueue(Clan $clan) {
+        $compo = $clan->getCompo();
+
+        $database = Database::open(Settings::db_name_infected_compo);
+
+        $database->query('INSERT INTO `' . Settings::db_table_infected_compo_qualificationQueue . '` (`clan`, `compo`, `time`) VALUES (\'' . $clan->getId() . '\', \'' . $compo->getId() . '\', \'' . date('Y-m-d H:i:s') . '\');');
+
+        $database->close();
+    }
+
+    /*
+     * Remove a clan from the list of clans that are waiting for qualification
+     */
+    public static function removeFromQualificationQueue(Clan $clan) {
+        $database = Database::open(Settings::db_name_infected_compo);
+
+        $database->query('DELETE FROM `' . Settings::db_table_infected_compo_qualificationQueue . '` WHERE `clan` = \'' . $clan->getId() . '\';');
+
+        $database->close();
+    }
 }
 ?>
