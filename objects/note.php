@@ -113,6 +113,18 @@ class Note extends EventObject {
 		return ($this->hasGroup() || ($this->hasGroup() && $this->hasTeam())) && $this->hasUser();
 	}
 
+	public function isUser(User $user) {
+		if ($this->hasGroup() && !$this->hasUser()) {
+			if ($this->hasTeam()) {
+				return $this->getUser()->equals($this->getTeam()->getLeader());
+			} else {
+				return $this->getUser()->equals($this->getGroup()->getLeader());
+			}
+		}
+
+		return $this->getUser()->equals($user);
+	}
+
 	public function isAdmin(User $user) {
 		return ($this->hasGroup() && ($user->isGroupLeader() || $user->isGroupCoLeader())) ||
 					 (($this->hasGroup() && $this->hasTeam()) && ($user->isTeamMember() && $user->isTeamLeader())) ||
