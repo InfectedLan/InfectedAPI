@@ -51,7 +51,17 @@ class NotificationManager {
 	 * Sends an mail to the users e-mail address with status information.
 	 */
 	public function sendApplicationCreatedNotification(User $user, Group $group) {
-		if ($group->getLeader() != null) {
+		$userList = array();
+
+		if ($group->hasLeader()) {
+			array_push($userList, $group->getLeader());
+		}
+
+		if ($group->hasCoLeader()) {
+			array_push($userList, $group->getCoLeader());
+		}
+
+		if (!empty($userList)) {
 			$message = array();
 			$message[] = '<!DOCTYPE html>';
 			$message[] = '<html>';
@@ -63,7 +73,7 @@ class NotificationManager {
 				$message[] = '</body>';
 			$message[] = '</html>';
 
-			return MailManager::sendEmails(array($group->getLeader(), $group->getCoLeader()), 'Ny søknad til ' . $group->getTitle() . ' crew', implode("\r\n", $message));
+			return MailManager::sendEmails($userList, 'Ny søknad til ' . $group->getTitle() . ' crew', implode("\r\n", $message));
 		}
 	}
 
