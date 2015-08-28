@@ -70,6 +70,14 @@ class Note extends EventObject {
 	 * Returns the user of this note.
 	 */
 	public function getUser() {
+		if ($this->hasGroup() && !$this->hasUser()) {
+			if ($this->hasTeam()) {
+				return $this->getTeam()->getLeader();
+			} else {
+				return $this->getGroup()->getLeader();
+			}
+		}
+
 		return UserHandler::getUser($this->userId);
 	}
 
@@ -109,6 +117,13 @@ class Note extends EventObject {
 		return ($this->hasGroup() && ($user->isGroupLeader() || $user->isGroupCoLeader())) ||
 					 (($this->hasGroup() && $this->hasTeam()) && ($user->isTeamMember() && $user->isTeamLeader())) ||
 					 (!$this->hasGroup() && !$this->hasTeam() && $this->hasUser());
+	}
+
+	/*
+	 * Returns true if this note is done.
+	 */
+	public function setNotified($notified) {
+		NoteHandler::updateNoteNotified($this, $notified);
 	}
 }
 ?>

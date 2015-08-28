@@ -68,6 +68,36 @@ class NoteHandler {
 	}
 
 	/*
+	 * Returns a list of all notes that has reached the notification time, by event.
+	 */
+	public static function getNotesReachedNotificationTimeByEvent(Event $event) {
+		$database = Database::open(Settings::db_name_infected_crew);
+
+		$result = $database->query('SELECT * FROM `' . Settings::db_table_infected_crew_notes . '`
+																WHERE `eventId` = \'' . $event->getId() . '\'
+																AND FROM_UNIXTIME(UNIX_TIMESTAMP(`deadlineTime`) - `notificationTimeBeforeOffset`) <= NOW()
+																AND `notify` = \'0\'
+																ORDER BY `deadlineTime`;');
+
+		$database->close();
+
+		$noteList = array();
+
+		while ($object = $result->fetch_object('Note')) {
+			array_push($noteList, $object);
+		}
+
+		return $noteList;
+	}
+
+	/*
+	 * Returns a list of all notes that has reached the notification time.
+	 */
+	public static function getNotesReachedNotificationTime() {
+		return self::getNotesReachedNotificationTimeByEvent(EventHandler::getCurrentEvent());
+	}
+
+	/*
 	 * Returns a list of all notes by the specified event.
 	 */
 	public static function getNotesByGroupAndEvent(Group $group, Event $event) {
@@ -206,7 +236,7 @@ class NoteHandler {
 	/*
 	 * Create a new note.
 	 */
-	public static function createNote(Group $group = null, Team $team = null, User $user = null, $content, $deadlineTime, $notificationTimeBeforeOffset, $done) {
+	public static function createNote(Group $group = null, Team $team = null, User $user = null, $content, $deadlineTime, $notificationTimeBeforeOffset = 0, $notify = 0, $done = 0) {
 		$database = Database::open(Settings::db_name_infected_crew);
 
 		$database->query('INSERT INTO `' . Settings::db_table_infected_crew_notes . '` (`eventId`, `groupId`, `teamId`, `userId`, `content`, `deadlineTime`, `notificationTimeBeforeOffset`, `done`)
@@ -217,6 +247,7 @@ class NoteHandler {
 															\'' . $database->real_escape_string($content) . '\',
 															\'' . $database->real_escape_string($deadlineTime) . '\',
 															\'' . $database->real_escape_string($notificationTimeBeforeOffset) . '\',
+															\'' . $database->real_escape_string($notify) . '\',
 															\'' . $database->real_escape_string($done) . '\')');
 
 		$database->close();
@@ -225,16 +256,31 @@ class NoteHandler {
 	/*
 	 * Update a note.
 	 */
-	public static function updateNote(Note $note, User $user = null, $content, $deadlineTime, $notificationBeforeTimeOffset, $done) {
+	public static function updateNote(Note $note, Team $team = null, User $user = null, $content, $deadlineTime, $notificationBeforeTimeOffset = 0, $notify = 0, $done = 0) {
 		$database = Database::open(Settings::db_name_infected_crew);
 
 		$database->query('UPDATE `' . Settings::db_table_infected_crew_notes . '`
-										  SET `userId` = \'' . ($user != null ? $user->getId() : 0) . '\',
+										  SET `teamId` = \'' . ($team != null ? $team->getId() : 0) . '\',
+													`userId` = \'' . ($user != null ? $user->getId() : 0) . '\',
 													`content` = \'' . $database->real_escape_string($content) . '\',
 													`deadlineTime` = \'' . $database->real_escape_string($deadlineTime) . '\',
 													`notificationTimeBeforeOffset` = \'' . $database->real_escape_string($notificationBeforeTimeOffset) . '\',
+													`notify` = \'' . $database->real_escape_string($notify) . '\',
 													`done` = \'' . $database->real_escape_string($done) . '\'
 										  WHERE `id` = \'' . $note->getId() . '\';');
+
+		$database->close();
+	}
+
+	/*
+	 * Update a notes notified state.
+	 */
+	public static function updateNoteNotified(Note $note, $notified) {
+		$database = Database::open(Settings::db_name_infected_crew);
+
+		$database->query('UPDATE `' . Settings::db_table_infected_crew_notes . '`
+											SET `notify` = \'' . $database->real_escape_string($notified) . '\'
+											WHERE `id` = \'' . $note->getId() . '\';');
 
 		$database->close();
 	}

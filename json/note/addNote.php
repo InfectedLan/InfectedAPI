@@ -48,10 +48,11 @@ if (Session::isAuthenticated()) {
 			$content = $_GET['content'];
 			$deadlineTime = $_GET['deadlineDate'] . ' ' . $_GET['deadlineTime'];
 			$notificationTimeBeforeOffset = $_GET['notificationTimeBeforeOffset'];
+			$notify = isset($_GET['notify']) ? $_GET['notify'] : 0;
 			$done = isset($_GET['done']) ? $_GET['done'] : 0;
 
 			if ($group != null) {
-				NoteHandler::createNote($group, $team, $user, $content, $deadlineTime, $notificationTimeBeforeOffset, $done);
+				NoteHandler::createNote($group, $team, $user, $content, $deadlineTime, $notificationTimeBeforeOffset, $notify, $done);
 				$result = true;
 			} else {
 				$message = Localization::getLocale('the_note_does_not_exist');
