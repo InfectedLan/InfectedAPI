@@ -32,30 +32,24 @@ if (Session::isAuthenticated()) {
 	$user = Session::getCurrentUser();
 
 	if ($user->hasPermission('event.notes')) {
-		if (isset($_GET['groupId']) &&
-			isset($_GET['content']) &&
+		if (isset($_GET['content']) &&
 			isset($_GET['deadlineDate']) &&
 			isset($_GET['deadlineTime']) &&
 			isset($_GET['notificationTimeBeforeOffset']) &&
-			is_numeric($_GET['groupId']) &&
 			!empty($_GET['content']) &&
 			!empty($_GET['deadlineDate']) &&
-			!empty($_GET['deadlineTime']) &&
-			is_numeric($_GET['notificationTimeBeforeOffset'])) {
-			$group = GroupHandler::getGroup($_GET['groupId']);
-			$team = isset($_GET['teamId']) ? TeamHandler::getTeam($_GET['teamId']) : null;
-			$user = isset($_GET['userId']) ? UserHandler::getUser($_GET['userId']) : null;
+			!empty($_GET['deadlineTime'])) {
+			$private = isset($_GET['private']) ? ($_GET['private'] ? true  : false) : true;
+			$group = !$private && isset($_GET['groupId']) ? GroupHandler::getGroup($_GET['groupId']) : null;
+			$team = !$private && isset($_GET['teamId']) ? TeamHandler::getTeam($_GET['teamId']) : null;
+			$user = !$private ? (isset($_GET['userId']) ? UserHandler::getUser($_GET['userId']) : null) : $user;
 			$content = $_GET['content'];
 			$deadlineTime = $_GET['deadlineDate'] . ' ' . $_GET['deadlineTime'];
 			$notificationTimeBeforeOffset = $_GET['notificationTimeBeforeOffset'];
 			$done = isset($_GET['done']) ? $_GET['done'] : 0;
 
-			if ($group != null) {
-				NoteHandler::createNote($group, $team, $user, $content, $deadlineTime, $notificationTimeBeforeOffset, $done);
-				$result = true;
-			} else {
-				$message = Localization::getLocale('the_note_does_not_exist');
-			}
+			NoteHandler::createNote($group, $team, $user, $content, $deadlineTime, $notificationTimeBeforeOffset, $done);
+			$result = true;
 		} else {
 			$message = Localization::getLocale('you_have_not_filled_out_the_required_fields');
 		}
