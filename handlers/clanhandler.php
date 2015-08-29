@@ -119,6 +119,8 @@ class ClanHandler {
         $database = Database::open(Settings::db_name_infected_compo);
 
         $database->query('UPDATE `' . Settings::db_table_infected_compo_participantof . '` SET `qualified`=1  WHERE `clanId` = \'' . $clan->getId() . '\';');
+
+        $database->query('DELETE FROM `' . Settings::db_table_infected_compo_qualificationQueue . '` WHERE `clan` = \'' . $clan->getId() . '\';');
         
         $database->close();
     }
@@ -330,6 +332,16 @@ class ClanHandler {
         $database->query('DELETE FROM `' . Settings::db_table_infected_compo_qualificationQueue . '` WHERE `clan` = \'' . $clan->getId() . '\';');
 
         $database->close();
+    }
+
+    public static function isInQualificationQueue(Clan $clan) {
+        $database = Database::open(Settings::db_name_infected_compo);
+
+        $result = $database->query('SELECT * FROM `' . Settings::db_table_infected_compo_qualificationQueue . '` WHERE `clan` = \'' . $clan->getId() . '\';');
+
+        $database->close();
+
+        return $result->num_rows > 0;
     }
 }
 ?>

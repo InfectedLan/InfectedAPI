@@ -136,7 +136,7 @@ class InviteHandler {
             $playingClans = ClanHandler::getQualifiedClansByCompo($compo);
             if(count($playingClans) < $compo->getParticipantLimit() || $compo->getParticipantLimit() == 0) {
                 ClanHandler::setQualified($clan, true);
-            } else {
+            } else if(!ClanHandler::isInQualificationQueue($clan)){
                 ClanHandler::addToQualificationQueue($clan);
             }
             
