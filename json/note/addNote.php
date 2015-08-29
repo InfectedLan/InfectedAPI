@@ -40,7 +40,7 @@ if (Session::isAuthenticated()) {
 			!empty($_GET['deadlineDate']) &&
 			!empty($_GET['deadlineTime'])) {
 			$private = isset($_GET['private']) ? ($_GET['private'] ? true  : false) : true;
-			$group = !$private && isset($_GET['groupId']) ? GroupHandler::getGroup($_GET['groupId']) : null;
+			$group = !$private ? (isset($_GET['groupId']) ? GroupHandler::getGroup($_GET['groupId']) : $user->getGroup()) : null;
 			$team = !$private && isset($_GET['teamId']) ? TeamHandler::getTeam($_GET['teamId']) : null;
 			$user = !$private ? (isset($_GET['userId']) ? UserHandler::getUser($_GET['userId']) : null) : $user;
 			$content = $_GET['content'];
