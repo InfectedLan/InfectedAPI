@@ -60,7 +60,7 @@ class Group extends EventObject {
 	 * Returns if this group has a leader.
 	 */
 	public function hasLeader() {
-		return GroupHandler::hasGroupLeader($this);
+		return $this->leaderId > 0;
 	}
 
 	/*
@@ -74,7 +74,7 @@ class Group extends EventObject {
 	 * Returns if this group has a co-leader.
 	 */
 	public function hasCoLeader() {
-		return GroupHandler::hasGroupCoLeader($this);
+		return $this->coleaderId > 0;
 	}
 
 	/*

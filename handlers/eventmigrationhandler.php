@@ -49,6 +49,7 @@ class EventMigrationHandler {
 		self::copyTeams($fromEvent, $toEvent);
 		self::copyMembers($fromEvent, $toEvent);
 		self::copyRestrictedPages($fromEvent, $toEvent);
+		self::copyNotes($fromEvent, $toEvent);
 
 		// InfectedInfo
 		self::copySlides($fromEvent, $toEvent);
@@ -112,6 +113,13 @@ class EventMigrationHandler {
 	 */
 	public static function copyRestrictedPages(Event $fromEvent, Event $toEvent) {
 		self::copyTableByEvent($fromEvent, $toEvent, Settings::db_name_infected_crew, Settings::db_table_infected_crew_pages);
+	}
+
+	/*
+	 * Copies notes from given event to the new one, overwriting is forbidden so no entries for the new event can already exist.
+	 */
+	public static function copyNotes(Event $fromEvent, Event $toEvent) {
+		self::copyTableByEvent($fromEvent, $toEvent, Settings::db_name_infected_crew, Settings::db_table_infected_crew_notes);
 	}
 
 	/* InfectedInfo */

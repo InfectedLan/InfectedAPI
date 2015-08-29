@@ -19,6 +19,7 @@
  */
 
 require_once 'mailmanager.php';
+require_once 'handlers/notehandler.php';
 require_once 'objects/user.php';
 require_once 'objects/group.php';
 require_once 'objects/application.php';
@@ -28,14 +29,39 @@ class NotificationManager {
 	 * This function will be automatically called on an hourly basis, and should be used to send out automatic notifications.
 	 */
 	public static function checkForNotifications() {
+		// Check for notes notifications.
+		foreach (NoteHandler::getNotesReachedNotificationTime() as $note) {
+			$message = array();
+			$message[] = '<!DOCTYPE html>';
+			$message[] = '<html>';
+				$message[] = '<body>';
+					$message[] = '<h3>Hei!</h3>';
+					$message[] = '<p>Dette er en påmindelse for ditt gjøremål som nærmer seg fristen, dette må være ferdig ' . date('d.m.Y') . ' kl. ' . date('H:i') . '.<p>';
+					$message[] = '<p>Gjøremålet ditt er: ' . $note->getContent() . '</p>';
+					$message[] = '<p>Med vennlig hilsen <a href="http://infected.no/">Infected</a>.</p>';
+				$message[] = '</body>';
+			$message[] = '</html>';
 
+			MailManager::sendEmail($note->getUser(), 'Du har et gjøremål som nærmer seg fristen', implode("\r\n", $message));
+			$note->setNotified(true);
+		}
 	}
 
 	/*
 	 * Sends an mail to the users e-mail address with status information.
 	 */
 	public function sendApplicationCreatedNotification(User $user, Group $group) {
-		if ($group->getLeader() != null) {
+		$userList = array();
+
+		if ($group->hasLeader()) {
+			array_push($userList, $group->getLeader());
+		}
+
+		if ($group->hasCoLeader()) {
+			array_push($userList, $group->getCoLeader());
+		}
+
+		if (!empty($userList)) {
 			$message = array();
 			$message[] = '<!DOCTYPE html>';
 			$message[] = '<html>';
@@ -47,7 +73,7 @@ class NotificationManager {
 				$message[] = '</body>';
 			$message[] = '</html>';
 
-			return MailManager::sendEmails(array($group->getLeader(), $group->getCoLeader()), 'Ny søknad til ' . $group->getTitle() . ' crew', implode("\r\n", $message));
+			return MailManager::sendEmails($userList, 'Ny søknad til ' . $group->getTitle() . ' crew', implode("\r\n", $message));
 		}
 	}
 
