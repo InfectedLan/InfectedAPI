@@ -215,7 +215,7 @@ class User extends Object {
 
 		  // Give team leaders access to the chief.team permission by default.
 		  if ($this->isTeamMember() && $this->isTeamLeader()) {
-		    array_push($permissionList, PermissionHandler::getPermissionByValue('chief.team'));
+              array_push($permissionList, PermissionHandler::getPermissionByValue('chief.team'));
 		  }
 		}
 
