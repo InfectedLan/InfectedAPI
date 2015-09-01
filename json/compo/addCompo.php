@@ -36,13 +36,15 @@ if (Session::isAuthenticated()) {
 			isset($_GET['registrationEndTime']) &&
 			isset($_GET['registrationEndDate']) &&
 			isset($_GET['teamSize']) &&
+            isset($_GET['maxTeamCount']) &&
 			!empty($_GET['title']) &&
 			!empty($_GET['tag']) &&
 			!empty($_GET['startTime']) &&
 			!empty($_GET['startDate']) &&
 			!empty($_GET['registrationEndTime']) &&
 			!empty($_GET['registrationEndDate']) &&
-			is_numeric($_GET['teamSize'])) {
+			is_numeric($_GET['teamSize']) &&
+        	is_numeric($_GET['maxTeamCount'])) {
 			$name = strtolower(str_replace(' ', '-', $_GET['title']));
 			$title = $_GET['title'];
 			$tag = $_GET['tag'];
@@ -51,8 +53,9 @@ if (Session::isAuthenticated()) {
 			$startTime = $_GET['startDate'] . ' ' . $_GET['startTime'];
 			$registrationEndTime = $_GET['registrationEndDate'] . ' ' . $_GET['registrationEndTime'];
 			$teamSize = $_GET['teamSize'];
+            $maxTeamCount = $_GET['maxTeamCount'];
 
-			CompoHandler::createCompo($name, $title, $tag, $description, $mode, $startTime, $registrationEndTime, $teamSize);
+			CompoHandler::createCompo($name, $title, $tag, $description, $mode, $startTime, $registrationEndTime, $teamSize, $maxTeamCount);
 			$result = true;
 		} else {
 			$message = Localization::getLocale('you_have_not_filled_out_the_required_fields');
