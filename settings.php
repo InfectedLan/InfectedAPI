@@ -69,6 +69,7 @@ class Settings {
 	const db_table_infected_crew_avatars = 'avatars';
 	const db_table_infected_crew_groups = 'groups';
 	const db_table_infected_crew_memberof = 'memberof';
+	const db_table_infected_crew_notes = 'notes';
 	const db_table_infected_crew_pages = 'pages';
 	const db_table_infected_crew_teams = 'teams';
 
