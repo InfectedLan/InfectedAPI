@@ -69,10 +69,12 @@ class ChatHandler {
 		$database->query('INSERT INTO `' . Settings::db_table_infected_compo_chats . '` (`name`, `title`)
 						  				VALUES (\'' . $database->real_escape_string($name) . '\',
 															\'' . $database->real_escape_string($title) . '\');');
+        
+        $chat = self::getChat( $database->insert_id );
 
-		$database->close();
+        $database->close();       
 
-		return self::getChat($database->insert_id);
+		return $chat;
 	}
 
 	/*

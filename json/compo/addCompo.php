@@ -24,6 +24,7 @@ require_once 'handlers/compohandler.php';
 
 $result = false;
 $message = null;
+$id = 0;
 
 if (Session::isAuthenticated()) {
 	$user = Session::getCurrentUser();
@@ -55,7 +56,8 @@ if (Session::isAuthenticated()) {
 			$teamSize = $_GET['teamSize'];
             $maxTeamCount = $_GET['maxTeamCount'];
 
-			CompoHandler::createCompo($name, $title, $tag, $description, $mode, $startTime, $registrationEndTime, $teamSize, $maxTeamCount);
+			$id = CompoHandler::createCompo($name, $title, $tag, $description, $mode, $startTime, $registrationEndTime, $teamSize, $maxTeamCount);
+            
 			$result = true;
 		} else {
 			$message = Localization::getLocale('you_have_not_filled_out_the_required_fields');
@@ -68,5 +70,5 @@ if (Session::isAuthenticated()) {
 }
 
 header('Content-Type: text/plain');
-echo json_encode(array('result' => $result, 'message' => $message), JSON_PRETTY_PRINT);
+echo json_encode(array('result' => $result, 'message' => $message, 'id' => $id), JSON_PRETTY_PRINT);
 ?>
