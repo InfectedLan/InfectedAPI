@@ -30,9 +30,7 @@ if (Session::isAuthenticated()) {
 
 	if ($user->hasPermission('user.note')) {
 		if (isset($_GET['id']) &&
-			isset($_GET['content']) &&
-			is_numeric($_GET['id']) &&
-			!empty($_GET['content'])) {
+			is_numeric($_GET['id'])) {
 			$editUser = UserHandler::getUser($_GET['id']);
 			$content = $_GET['content'];
 
