@@ -55,6 +55,5 @@ class ReadyHandlerHandler {
 
 		return $readyHandlerList;
 	}
-
 }
 ?>
