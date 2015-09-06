@@ -77,11 +77,11 @@ class UserNoteHandler {
 		if (!self::hasUserNoteByUser($user)) {
 			$database->query('INSERT INTO `' . Settings::db_table_infected_usernotes . '` (`userId`, `content`)
 												VALUES (\'' . $user->getId() . '\',
-																\'' . $database->real_escape_string($content) . '\')');
+																\'' . $database->real_escape_string($content) . '\');');
 		} else {
 			$database->query('UPDATE `' . Settings::db_table_infected_usernotes . '`
-											  SET `content` = \'' . $database->real_escape_string($content) . '\',
-											  WHERE `userId` = \'' . $user->getId() . '\';');
+												SET `content` = \'' . $database->real_escape_string($content) . '\'
+												WHERE `userId` = \'' . $user->getId() . '\';');
 		}
 
 		$database->close();

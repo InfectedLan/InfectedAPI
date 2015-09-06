@@ -33,6 +33,7 @@ require_once 'handlers/avatarhandler.php';
 require_once 'handlers/grouphandler.php';
 require_once 'handlers/teamhandler.php';
 require_once 'handlers/userhistoryhandler.php';
+require_once 'handlers/usernotehandler.php';
 require_once 'objects/object.php';
 
 class User extends Object {
@@ -570,6 +571,13 @@ class User extends Object {
 	 */
 	public function getRole() {
 		return $this->getRoleByEvent(EventHandler::getCurrentEvent());
+	}
+
+	/*
+	 * Returns true if this user has a note.
+	 */
+	public function hasNote() {
+		return UserNoteHandler::hasUserNoteByUser($this);
 	}
 
 	/*
