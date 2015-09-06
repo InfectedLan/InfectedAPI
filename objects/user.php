@@ -573,6 +573,20 @@ class User extends Object {
 	}
 
 	/*
+	 * Returns the note for this user.
+	 */
+	public function getNote() {
+		return UserNoteHandler::getUserNoteByUser($this);
+	}
+
+	/*
+	 * Sets the note for this user.
+	 */
+	public function setNote($content) {
+		UserNoteHandler::setUserNote($this, $content);
+	}
+
+	/*
 	 * Returns true if user is eligible to play in a infected compo
 	 */
 	public function isEligibleForCompos() {
