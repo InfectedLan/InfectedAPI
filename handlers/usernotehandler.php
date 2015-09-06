@@ -74,15 +74,41 @@ class UserNoteHandler {
 	public static function setUserNote(User $user, $content) {
 		$database = Database::open(Settings::db_name_infected);
 
-		if (!self::hasUserNoteByUser($user)) {
-			$database->query('INSERT INTO `' . Settings::db_table_infected_usernotes . '` (`userId`, `content`)
-												VALUES (\'' . $user->getId() . '\',
-																\'' . $database->real_escape_string($content) . '\');');
+		if (!empty($content)) {
+			if (!self::hasUserNoteByUser($user)) {
+				self::createUserNote($user, $content);
+			} else {
+				self::updateUserNote($user, $content);
+			}
 		} else {
-			$database->query('UPDATE `' . Settings::db_table_infected_usernotes . '`
-												SET `content` = \'' . $database->real_escape_string($content) . '\'
-												WHERE `userId` = \'' . $user->getId() . '\';');
+			self::removeUserNote($user);
 		}
+
+		$database->close();
+	}
+
+	/*
+	 * Create a note for the the given user.
+	 */
+	public static function createUserNote(User $user, $content) {
+		$database = Database::open(Settings::db_name_infected);
+
+		$database->query('INSERT INTO `' . Settings::db_table_infected_usernotes . '` (`userId`, `content`)
+											VALUES (\'' . $user->getId() . '\',
+															\'' . $database->real_escape_string($content) . '\');');
+
+		$database->close();
+	}
+
+	/*
+	 * Updates a users note.
+	 */
+	public static function updateUserNote(User $user, $content) {
+		$database = Database::open(Settings::db_name_infected);
+
+		$database->query('UPDATE `' . Settings::db_table_infected_usernotes . '`
+											SET `content` = \'' . $database->real_escape_string($content) . '\'
+											WHERE `userId` = \'' . $user->getId() . '\';');
 
 		$database->close();
 	}
