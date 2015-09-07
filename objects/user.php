@@ -205,38 +205,19 @@ class User extends Object {
 	 * Returns true if user have specified permission, otherwise false.
 	 */
 	public function hasPermission($value) {
-		$permissionList = $this->getPermissions();
-
-		// Give access to default permission for certain users.
-		if ($this->isGroupMember()) {
-		  // Give leaders access to the chief.* permission by default.
-		  if ($this->isGroupLeader() || $this->isGroupCoLeader()) {
-		    array_push($permissionList, PermissionHandler::getPermissionByValue('chief.*'));
-		  }
-
-		  // Give team leaders access to the chief.team permission by default.
-		  if ($this->isTeamMember() && $this->isTeamLeader()) {
-		    array_push($permissionList, PermissionHandler::getPermissionByValue('chief.team'));
-				array_push($permissionList, PermissionHandler::getPermissionByValue('chief.checklist'));
-		  }
-		}
-
 		// Match wildcard permissions, if value is admin.permissions and user has permission "admin.*" this would return true.
 		$wildcardValue = preg_replace('/[^\.]([^.]*)$/', '*', $value);
 
 		// This makes sure that if user have a child permissions, that it also matches the parent.
 		// i.e "admin.permissions" would also match for just "admin"
-		foreach ($permissionList as $permission) {
+		foreach ($this->getPermissions() as $permission) {
+			$permissionValue = $permission->getValue();
+
 			// Accept permission if user has a god permission ("*") or a valid wildcard.
-			if ($permission->getValue() == '*' || $permission->getValue() == $wildcardValue) {
-				return true;
-			}
-
-			if (preg_replace('/[\.*](.*)/', '', $permission->getValue()) == $value) {
-				return true;
-			}
-
-			if ($permission->getValue() == $value) {
+			if ($permissionValue == '*' ||
+				$permissionValue == $wildcardValue ||
+				preg_replace('/[\.*](.*)/', '', $permissionValue) == $value ||
+				$permissionValue == $value) {
 				return true;
 			}
 		}
@@ -248,7 +229,23 @@ class User extends Object {
 	 * Returns the permissions assigned to this user.
 	 */
 	public function getPermissions() {
-		return UserPermissionHandler::getUserPermissions($this);
+		$permissionList = UserPermissionHandler::getUserPermissions($this);
+
+		// Give access to default permission for certain users.
+		if ($this->isGroupMember()) {
+		  // Give leaders access to permissions by default.
+		  if ($this->isGroupLeader() || $this->isGroupCoLeader()) {
+		    array_push($permissionList, PermissionHandler::getPermissionByValue('chief.*'));
+			// Give team leaders access to permissions by default.
+			}
+
+			if ($this->isTeamMember() && $this->isTeamLeader()) {
+		    array_push($permissionList, PermissionHandler::getPermissionByValue('chief.team'));
+				array_push($permissionList, PermissionHandler::getPermissionByValue('chief.checklist'));
+		  }
+		}
+
+		return $permissionList;
 	}
 
 	/*
