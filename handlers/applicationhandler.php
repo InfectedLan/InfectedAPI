@@ -227,6 +227,92 @@ class ApplicationHandler {
 	}
 
 	/*
+	 * Returns a list of all rejected applications.
+	 */
+	public static function getRejectedApplications() {
+		$database = Database::open(Settings::db_name_infected_crew);
+
+		$result = $database->query('SELECT * FROM `' . Settings::db_table_infected_crew_applications . '`
+																WHERE `state` = \'3\'
+																ORDER BY `openedTime` DESC;');
+
+		$database->close();
+
+		$rejectedApplicationList = array();
+
+		while ($object = $result->fetch_object('Application')) {
+			array_push($rejectedApplicationList, $object);
+		}
+
+		return $rejectedApplicationList;
+	}
+
+	/*
+	 * Returns a list of all rejected applications for a given group.
+	 */
+	public static function getRejectedApplicationsByGroup(Group $group) {
+		$database = Database::open(Settings::db_name_infected_crew);
+
+		$result = $database->query('SELECT * FROM `' . Settings::db_table_infected_crew_applications . '`
+																WHERE `groupId` = \'' . $group->getId() .  '\'
+																AND `state` = \'3\'
+																ORDER BY `openedTime` DESC;');
+
+		$database->close();
+
+		$rejectedApplicationList = array();
+
+		while ($object = $result->fetch_object('Application')) {
+			array_push($rejectedApplicationList, $object);
+		}
+
+		return $rejectedApplicationList;
+	}
+
+	/*
+	 * Returns a list of all previous applications.
+	 */
+	public static function getPreviousApplications() {
+		$database = Database::open(Settings::db_name_infected_crew);
+
+		$result = $database->query('SELECT * FROM `' . Settings::db_table_infected_crew_applications . '`
+																WHERE (`state` = \'2\' OR `state` = \'3\')
+																ORDER BY `openedTime` DESC;');
+
+		$database->close();
+
+		$rejectedApplicationList = array();
+
+		while ($object = $result->fetch_object('Application')) {
+			array_push($rejectedApplicationList, $object);
+		}
+
+		return $rejectedApplicationList;
+	}
+
+	/*
+	 * Returns a list of all previous applications for a given group.
+	 */
+	public static function getPreviousApplicationsByGroup(Group $group) {
+		$database = Database::open(Settings::db_name_infected_crew);
+
+		$result = $database->query('SELECT * FROM `' . Settings::db_table_infected_crew_applications . '`
+																WHERE `groupId` = \'' . $group->getId() .  '\'
+																AND (`state` = \'2\' OR `state` = \'3\')
+																ORDER BY `openedTime` DESC;');
+
+		$database->close();
+
+		$rejectedApplicationList = array();
+
+		while ($object = $result->fetch_object('Application')) {
+			array_push($rejectedApplicationList, $object);
+		}
+
+		return $rejectedApplicationList;
+	}
+
+	/*
 	 * Create a new application.
 	 */
 	public static function createApplication(Group $group, User $user, $content) {
