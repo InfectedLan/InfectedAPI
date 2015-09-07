@@ -296,8 +296,8 @@ class ApplicationHandler {
 	  			$applicationList = self::getUserApplications($applicationUser);
 
 	  			foreach ($applicationList as $applicationValue) {
-					if ($group->equals($applicationValue->getGroup())) {
-						self::closeApplication($applicationValue, $user);
+						if (!$group->equals($applicationValue->getGroup())) {
+							self::closeApplication($applicationValue, $user);
 	  				}
 	  			}
 
