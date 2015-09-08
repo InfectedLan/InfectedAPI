@@ -75,7 +75,7 @@ class NoteHandler {
 		$result = $database->query('SELECT * FROM `' . Settings::db_table_infected_crew_notes . '`
 																WHERE `eventId` = \'' . $event->getId() . '\'
 																AND `notify` = \'0\'
-																AND FROM_UNIXTIME(' . $event->getStartTime() . ' - `secondsBeforeOffset` - 604800) <= NOW();');
+																AND FROM_UNIXTIME(' . $event->getStartTime() . ' - `secondsOffset` - 604800) <= NOW();');
 
 		$database->close();
 
@@ -228,17 +228,17 @@ class NoteHandler {
 	/*
 	 * Create a new note.
 	 */
-	public static function createNote(Group $group = null, Team $team = null, User $user = null, $title, $content, $secondsBeforeOffset, $time = null, $done = 0) {
+	public static function createNote(Group $group = null, Team $team = null, User $user = null, $title, $content, $secondsOffset, $time = null, $done = 0) {
 		$database = Database::open(Settings::db_name_infected_crew);
 
-		$database->query('INSERT INTO `' . Settings::db_table_infected_crew_notes . '` (`eventId`, `groupId`, `teamId`, `userId`, `title`, `content`, `secondsBeforeOffset`, `time`, `done`)
+		$database->query('INSERT INTO `' . Settings::db_table_infected_crew_notes . '` (`eventId`, `groupId`, `teamId`, `userId`, `title`, `content`, `secondsOffset`, `time`, `done`)
 										  VALUES (\'' . EventHandler::getCurrentEvent()->getId() . '\',
 															\'' . ($group != null ? $group->getId() : 0) . '\',
 															\'' . ($team != null ? $team->getId() : 0) . '\',
 															\'' . ($user != null ? $user->getId() : 0) . '\',
 															\'' . $database->real_escape_string($title) . '\',
 															\'' . $database->real_escape_string($content) . '\',
-															\'' . $database->real_escape_string($secondsBeforeOffset) . '\',
+															\'' . $database->real_escape_string($secondsOffset) . '\',
 															\'' . $database->real_escape_string($deadlineTime) . '\',
 															\'' . $database->real_escape_string($done) . '\')');
 
@@ -248,7 +248,7 @@ class NoteHandler {
 	/*
 	 * Update a note.
 	 */
-	public static function updateNote(Note $note, Team $team = null, User $user = null, $title, $content, $secondsBeforeOffset, $time = null, $notify = 0, $done = 0) {
+	public static function updateNote(Note $note, Team $team = null, User $user = null, $title, $content, $secondsOffset, $time = null, $notify = 0, $done = 0) {
 		$database = Database::open(Settings::db_name_infected_crew);
 
 		$database->query('UPDATE `' . Settings::db_table_infected_crew_notes . '`
@@ -256,7 +256,7 @@ class NoteHandler {
 													`userId` = \'' . ($user != null ? $user->getId() : 0) . '\',
 													`title` = \'' . $database->real_escape_string($title) . '\',
 													`content` = \'' . $database->real_escape_string($content) . '\',
-													`secondsBeforeOffset` = \'' . $database->real_escape_string($secondsBeforeOffset) . '\',
+													`secondsOffset` = \'' . $database->real_escape_string($secondsOffset) . '\',
 													`time` = \'' . $database->real_escape_string($time) . '\',
 													`notify` = \'' . $database->real_escape_string($notify) . '\',
 													`done` = \'' . $database->real_escape_string($done) . '\'

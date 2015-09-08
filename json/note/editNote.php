@@ -36,7 +36,7 @@ if (Session::isAuthenticated()) {
 		if (isset($_GET['id']) &&
 			isset($_GET['title']) &&
 			isset($_GET['content']) &&
-			isset($_GET['secondsBeforeOffset']) &&
+			isset($_GET['secondsOffset']) &&
 			is_numeric($_GET['id']) &&
 			!empty($_GET['title']) &&
 			!empty($_GET['content'])) {
@@ -45,18 +45,22 @@ if (Session::isAuthenticated()) {
 			$user = isset($_GET['userId']) ? UserHandler::getUser($_GET['userId']) : null;
 			$title = $_GET['title'];
 			$content = $_GET['content'];
-			$secondsBeforeOffset = $_GET['secondsBeforeOffset'];
+			$secondsOffset = $_GET['secondsOffset'];
 
 			// This is the period we allow the time variable to be set, 86400 is the number of secounds in a day.
-			$eventTime = strtotime(date('Y-m-d', EventHandler::getCurrentEvent()->getStartTime()));
-			$time = isset($_GET['time']) && (($eventTime - $secondsBeforeOffset) >= ($eventTime - (1 * 86400)) && // 1 day before event start (Friday at 00:00)
-																			 ($eventTime + $secondsBeforeOffset) <= ($eventTime + (1 * 86400))) ? $_GET['time'] : null; // 1 day after event start (Saturday at 00:00)
+			$eventDateTimestamp = strtotime(date('Y-m-d', EventHandler::getCurrentEvent()->getStartTime()));
+			$newTimestamp = $secondsOffset >= 0 ? $eventDateTimestamp - $secondsOffset : $eventDateTimestamp + $secondsOffset;
+			$periodBefore = 1 * 86400; // 1 day.
+			$periodAfter = 2 * 86400; // 2 days.
+			$intersectsTimePeriod = $newTimestamp >= ($eventDateTimestamp - $periodBefore) && // Check if time offset is greather than periodBefore.
+															$newTimestamp <= ($eventDateTimestamp + $periodAfter); // Check if time offset is less than periodAfter.
 
-			$notified = $secondsBeforeOffset != $note->getSecondsBeforeOffset() && $time != $note->getTime();
+			$time = isset($_GET['time']) && $intersectsTimePeriod ? $_GET['time'] : null; // 1 day after event start  also Saturday at 00:00
+			$notified = $secondsOffset != $note->getSecondsOffset() && $time != $note->getTime();
 			$done = isset($_GET['done']) ? $_GET['done'] : 0;
 
 			if ($note != null) {
-				NoteHandler::updateNote($note, $team, $user, $title, $content, $secondsBeforeOffset, $time, $notified, $done);
+				NoteHandler::updateNote($note, $team, $user, $title, $content, $secondsOffset, $time, $notified, $done);
 				$result = true;
 			} else {
 				$message = Localization::getLocale('the_note_does_not_exist');
