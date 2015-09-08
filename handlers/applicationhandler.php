@@ -43,25 +43,6 @@ class ApplicationHandler {
 	}
 
 	/*
-	 * Returns a list of all applications (For all events)
-	 */
-	public static function getApplications() {
-		$database = Database::open(Settings::db_name_infected_crew);
-
-		$result = $database->query('SELECT * FROM `' . Settings::db_table_infected_crew_applications . '`;');
-
-		$database->close();
-
-		$applicationList = array();
-
-		while ($object = $result->fetch_object('Application')) {
-			array_push($applicationList, $object);
-		}
-
-		return $applicationList;
-	}
-
-	/*
 	 * Returns a list of all applications for that event.
 	 */
 	public static function getApplicationsByEvent(Event $event) {
@@ -79,6 +60,13 @@ class ApplicationHandler {
 		}
 
 		return $applicationList;
+	}
+
+	/*
+	 * Returns a list of all applications.
+	 */
+	public static function getApplications() {
+		return self::getApplicationsByEvent(EventHandler::getCurrentEvent());
 	}
 
 	/*
