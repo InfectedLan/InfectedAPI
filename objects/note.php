@@ -21,6 +21,7 @@
 require_once 'handlers/grouphandler.php';
 require_once 'handlers/teamhandler.php';
 require_once 'handlers/userhandler.php';
+require_once 'handlers/eventhandler.php';
 require_once 'objects/eventobject.php';
 
 class Note extends EventObject {
@@ -29,7 +30,7 @@ class Note extends EventObject {
 	private $userId;
 	private $title;
 	private $content;
-	private $secondsBeforeOffset;
+	private $secondsOffset;
 	private $time;
 	private $done;
 
@@ -98,10 +99,10 @@ class Note extends EventObject {
 	}
 
 	/*
-	 * Returns the secondsBeforeOffset of this note.
+	 * Returns the secondsOffset of this note.
 	 */
-	public function getSecondsBeforeOffset() {
-		return $this->secondsBeforeOffset;
+	public function getSecondsOffset() {
+		return $this->secondsOffset;
 	}
 
 	/*
@@ -109,6 +110,15 @@ class Note extends EventObject {
 	 */
 	public function getTime() {
 		return strtotime($this->time);
+	}
+
+	/*
+	 * Returns the start time of this note.
+	 */
+	public function getAbsoluteTime() {
+		$event = EventHandler::getCurrentEvent();
+
+		return (strtotime(date('Y-m-d', $event->getStartTime())) + $this->getSecondsOffset()) + ($this->getTime() - strtotime('today'));
 	}
 
 	/*
