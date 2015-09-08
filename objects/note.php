@@ -27,6 +27,7 @@ class Note extends EventObject {
 	private $groupId;
 	private $teamId;
 	private $userId;
+	private $title;
 	private $content;
 	private $deadlineTime;
 	private $done;
@@ -79,6 +80,13 @@ class Note extends EventObject {
 		}
 
 		return UserHandler::getUser($this->userId);
+	}
+
+	/*
+	 * Returns the title of this note.
+	 */
+	public function getTitle() {
+		return $this->title;
 	}
 
 	/*

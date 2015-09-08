@@ -31,11 +31,13 @@ $message = null;
 if (Session::isAuthenticated()) {
 	$user = Session::getCurrentUser();
 
-	if ($user->hasPermission('event.notes')) {
-		if (isset($_GET['content']) &&
+	if ($user->hasPermission('chief.checklist')) {
+		if (isset($_GET['title']) &&
+			isset($_GET['content']) &&
 			isset($_GET['deadlineDate']) &&
 			isset($_GET['deadlineTime']) &&
 			isset($_GET['notificationTimeBeforeOffset']) &&
+			!empty($_GET['title']) &&
 			!empty($_GET['content']) &&
 			!empty($_GET['deadlineDate']) &&
 			!empty($_GET['deadlineTime'])) {
@@ -43,12 +45,13 @@ if (Session::isAuthenticated()) {
 			$group = !$private ? (isset($_GET['groupId']) ? GroupHandler::getGroup($_GET['groupId']) : $user->getGroup()) : null;
 			$team = !$private && isset($_GET['teamId']) ? TeamHandler::getTeam($_GET['teamId']) : null;
 			$user = !$private ? (isset($_GET['userId']) ? UserHandler::getUser($_GET['userId']) : null) : $user;
+			$title = $_GET['title'];
 			$content = $_GET['content'];
 			$deadlineTime = $_GET['deadlineDate'] . ' ' . $_GET['deadlineTime'];
 			$notificationTimeBeforeOffset = $_GET['notificationTimeBeforeOffset'];
 			$done = isset($_GET['done']) ? $_GET['done'] : 0;
 
-			NoteHandler::createNote($group, $team, $user, $content, $deadlineTime, $notificationTimeBeforeOffset, $done);
+			NoteHandler::createNote($group, $team, $user, $title, $content, $deadlineTime, $notificationTimeBeforeOffset, $done);
 			$result = true;
 		} else {
 			$message = Localization::getLocale('you_have_not_filled_out_the_required_fields');

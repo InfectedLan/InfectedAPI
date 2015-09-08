@@ -237,14 +237,15 @@ class NoteHandler {
 	/*
 	 * Create a new note.
 	 */
-	public static function createNote(Group $group = null, Team $team = null, User $user = null, $content, $deadlineTime, $notificationTimeBeforeOffset = 0, $done = 0) {
+	public static function createNote(Group $group = null, Team $team = null, User $user = null, $title, $content, $deadlineTime, $notificationTimeBeforeOffset = 0, $done = 0) {
 		$database = Database::open(Settings::db_name_infected_crew);
 
-		$database->query('INSERT INTO `' . Settings::db_table_infected_crew_notes . '` (`eventId`, `groupId`, `teamId`, `userId`, `content`, `deadlineTime`, `notificationTimeBeforeOffset`, `done`)
+		$database->query('INSERT INTO `' . Settings::db_table_infected_crew_notes . '` (`eventId`, `groupId`, `teamId`, `userId`, `title`, `content`, `deadlineTime`, `notificationTimeBeforeOffset`, `done`)
 										  VALUES (\'' . EventHandler::getCurrentEvent()->getId() . '\',
 															\'' . ($group != null ? $group->getId() : 0) . '\',
 															\'' . ($team != null ? $team->getId() : 0) . '\',
 															\'' . ($user != null ? $user->getId() : 0) . '\',
+															\'' . $database->real_escape_string($title) . '\',
 															\'' . $database->real_escape_string($content) . '\',
 															\'' . $database->real_escape_string($deadlineTime) . '\',
 															\'' . $database->real_escape_string($notificationTimeBeforeOffset) . '\',
@@ -256,12 +257,13 @@ class NoteHandler {
 	/*
 	 * Update a note.
 	 */
-	public static function updateNote(Note $note, Team $team = null, User $user = null, $content, $deadlineTime, $notificationBeforeTimeOffset = 0, $notify = 0, $done = 0) {
+	public static function updateNote(Note $note, Team $team = null, User $user = null, $title, $content, $deadlineTime, $notificationBeforeTimeOffset = 0, $notify = 0, $done = 0) {
 		$database = Database::open(Settings::db_name_infected_crew);
 
 		$database->query('UPDATE `' . Settings::db_table_infected_crew_notes . '`
 										  SET `teamId` = \'' . ($team != null ? $team->getId() : 0) . '\',
 													`userId` = \'' . ($user != null ? $user->getId() : 0) . '\',
+													`title` = \'' . $database->real_escape_string($title) . '\',
 													`content` = \'' . $database->real_escape_string($content) . '\',
 													`deadlineTime` = \'' . $database->real_escape_string($deadlineTime) . '\',
 													`notificationTimeBeforeOffset` = \'' . $database->real_escape_string($notificationBeforeTimeOffset) . '\',
