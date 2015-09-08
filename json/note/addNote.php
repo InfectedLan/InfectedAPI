@@ -47,11 +47,12 @@ if (Session::isAuthenticated()) {
 			$user = !$private ? (isset($_GET['userId']) ? UserHandler::getUser($_GET['userId']) : null) : $user;
 			$title = $_GET['title'];
 			$content = $_GET['content'];
-			$deadlineTime = $_GET['deadlineDate'] . ' ' . $_GET['deadlineTime'];
+			$type = true;
 			$notificationTimeBeforeOffset = $_GET['notificationTimeBeforeOffset'];
+			$deadlineTime = $_GET['deadlineDate'] . ' ' . $_GET['deadlineTime'];
 			$done = isset($_GET['done']) ? $_GET['done'] : 0;
 
-			NoteHandler::createNote($group, $team, $user, $title, $content, $deadlineTime, $notificationTimeBeforeOffset, $done);
+			NoteHandler::createNote($group, $team, $user, $title, $content, $type, $notificationTimeBeforeOffset, $deadlineTime, $done);
 			$result = true;
 		} else {
 			$message = Localization::getLocale('you_have_not_filled_out_the_required_fields');

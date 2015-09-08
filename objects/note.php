@@ -29,7 +29,8 @@ class Note extends EventObject {
 	private $userId;
 	private $title;
 	private $content;
-	private $deadlineTime;
+	private $secondsBeforeOffset;
+	private $time;
 	private $done;
 
 	/*
@@ -97,17 +98,17 @@ class Note extends EventObject {
 	}
 
 	/*
-	 * Returns the deadlineTime of this note.
+	 * Returns the secondsBeforeOffset of this note.
 	 */
-	public function getDeadlineTime() {
-		return strtotime($this->deadlineTime);
+	public function getSecondsBeforeOffset() {
+		return $this->secondsBeforeOffset;
 	}
 
 	/*
-	 * Returns the otificationTimeBeforeOffset of this note.
+	 * Returns the time of this note.
 	 */
-	public function getNotificationTimeBeforeOffset() {
-		return $this->notificationTimeBeforeOffset;
+	public function getTime() {
+		return strtotime($this->time);
 	}
 
 	/*

@@ -20,6 +20,7 @@
 
 require_once 'session.php';
 require_once 'localization.php';
+require_once 'handlers/eventhandler.php';
 require_once 'handlers/notehandler.php';
 require_once 'handlers/grouphandler.php';
 require_once 'handlers/teamhandler.php';
@@ -35,26 +36,27 @@ if (Session::isAuthenticated()) {
 		if (isset($_GET['id']) &&
 			isset($_GET['title']) &&
 			isset($_GET['content']) &&
-			isset($_GET['deadlineDate']) &&
-			isset($_GET['deadlineTime']) &&
-			isset($_GET['notificationTimeBeforeOffset']) &&
+			isset($_GET['secondsBeforeOffset']) &&
 			is_numeric($_GET['id']) &&
 			!empty($_GET['title']) &&
-			!empty($_GET['content']) &&
-			!empty($_GET['deadlineDate']) &&
-			!empty($_GET['deadlineTime'])) {
+			!empty($_GET['content'])) {
 			$note = NoteHandler::getNote($_GET['id']);
 			$team = isset($_GET['teamId']) ? TeamHandler::getTeam($_GET['teamId']) : null;
 			$user = isset($_GET['userId']) ? UserHandler::getUser($_GET['userId']) : null;
 			$title = $_GET['title'];
 			$content = $_GET['content'];
-			$deadlineTime = $_GET['deadlineDate'] . ' ' . $_GET['deadlineTime'];
-			$notificationTimeBeforeOffset = $_GET['notificationTimeBeforeOffset'];
-			$notified = $deadlineTime != $note->getDeadlineTime();
+			$secondsBeforeOffset = $_GET['secondsBeforeOffset'];
+
+			// This is the period we allow the time variable to be set, 86400 is the number of secounds in a day.
+			$eventTime = strtotime(date('Y-m-d', EventHandler::getCurrentEvent()->getStartTime()));
+			$time = isset($_GET['time']) && (($eventTime - $secondsBeforeOffset) >= ($eventTime - (1 * 86400)) && // 1 day before event start (Friday at 00:00)
+																			 ($eventTime + $secondsBeforeOffset) <= ($eventTime + (1 * 86400))) ? $_GET['time'] : null; // 1 day after event start (Saturday at 00:00)
+
+			$notified = $secondsBeforeOffset != $note->getSecondsBeforeOffset() && $time != $note->getTime();
 			$done = isset($_GET['done']) ? $_GET['done'] : 0;
 
 			if ($note != null) {
-				NoteHandler::updateNote($note, $team, $user, $title, $content, $deadlineTime, $notificationTimeBeforeOffset, $notified, $done);
+				NoteHandler::updateNote($note, $team, $user, $title, $content, $secondsBeforeOffset, $time, $notified, $done);
 				$result = true;
 			} else {
 				$message = Localization::getLocale('the_note_does_not_exist');

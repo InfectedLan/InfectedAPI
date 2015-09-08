@@ -46,8 +46,7 @@ class NoteHandler {
 		$database = Database::open(Settings::db_name_infected_crew);
 
 		$result = $database->query('SELECT * FROM `' . Settings::db_table_infected_crew_notes . '`
-																WHERE `eventId` = \'' . $event->getId() . '\'
-																ORDER BY `deadlineTime`;');
+																WHERE `eventId` = \'' . $event->getId() . '\';');
 
 		$database->close();
 
@@ -75,10 +74,8 @@ class NoteHandler {
 
 		$result = $database->query('SELECT * FROM `' . Settings::db_table_infected_crew_notes . '`
 																WHERE `eventId` = \'' . $event->getId() . '\'
-																AND FROM_UNIXTIME(UNIX_TIMESTAMP(`deadlineTime`) - `notificationTimeBeforeOffset`) <= NOW()
-																AND `notificationTimeBeforeOffset` > \'0\'
 																AND `notify` = \'0\'
-																ORDER BY `deadlineTime`;');
+																AND FROM_UNIXTIME(' . $event->getStartTime() . ' - `secondsBeforeOffset` - 604800) <= NOW();');
 
 		$database->close();
 
@@ -106,8 +103,7 @@ class NoteHandler {
 
 		$result = $database->query('SELECT * FROM `' . Settings::db_table_infected_crew_notes . '`
 																WHERE `eventId` = \'' . $event->getId() . '\'
-																AND `groupId` = \'' . $group->getId() . '\'
-																ORDER BY `deadlineTime`;');
+																AND `groupId` = \'' . $group->getId() . '\';');
 
 		$database->close();
 
@@ -136,8 +132,7 @@ class NoteHandler {
 		$result = $database->query('SELECT * FROM `' . Settings::db_table_infected_crew_notes . '`
 																WHERE `eventId` = \'' . $event->getId() . '\'
 																AND `groupId` = \'' . $team->getGroup()->getId() . '\'
-																AND `teamId` = \'' . $team->getId() . '\'
-																ORDER BY `deadlineTime`;');
+																AND `teamId` = \'' . $team->getId() . '\';');
 
 		$database->close();
 
@@ -167,8 +162,7 @@ class NoteHandler {
 																WHERE `eventId` = \'' . $event->getId() . '\'
 																AND `groupId` = \'0\'
 																AND `teamId` = \'0\'
-																AND `userId` = \'' . $user->getId() . '\'
-																ORDER BY `deadlineTime`;');
+																AND `userId` = \'' . $user->getId() . '\';');
 
 		$database->close();
 
@@ -197,8 +191,7 @@ class NoteHandler {
 		if ($user->isGroupLeader() || $user->isGroupCoLeader()) {
 			$result = $database->query('SELECT * FROM `' . Settings::db_table_infected_crew_notes . '`
 																	WHERE `eventId` = \'' . $event->getId() . '\'
-																	AND `groupId` = \'' . $user->getGroup()->getId() . '\'
-																	ORDER BY `deadlineTime`;');
+																	AND `groupId` = \'' . $user->getGroup()->getId() . '\';');
 
 
 		} else if ($user->isTeamMember() && $user->isTeamLeader()) {
@@ -206,14 +199,12 @@ class NoteHandler {
 																	WHERE `eventId` = \'' . $event->getId() . '\'
 																	AND `groupId` = \'' . $user->getGroup()->getId() . '\'
 																	AND ((`teamId` = \'' . $user->getTeam()->getId() . '\') OR
-																			 (`teamId` = \'0\' AND `userId` = \'' . $user->getId() . '\'))
-																	ORDER BY `deadlineTime`;');
+																			 (`teamId` = \'0\' AND `userId` = \'' . $user->getId() . '\'));');
 		} else {
 			$result = $database->query('SELECT * FROM `' . Settings::db_table_infected_crew_notes . '`
 																	WHERE `eventId` = \'' . $event->getId() . '\'
 																	AND `groupId` = \'' . $user->getGroup()->getId() . '\'
-																	AND `userId` = \'' . $user->getId() . '\'
-																	ORDER BY `deadlineTime`;');
+																	AND `userId` = \'' . $user->getId() . '\';');
 		}
 
 		$database->close();
@@ -237,18 +228,18 @@ class NoteHandler {
 	/*
 	 * Create a new note.
 	 */
-	public static function createNote(Group $group = null, Team $team = null, User $user = null, $title, $content, $deadlineTime, $notificationTimeBeforeOffset = 0, $done = 0) {
+	public static function createNote(Group $group = null, Team $team = null, User $user = null, $title, $content, $secondsBeforeOffset, $time = null, $done = 0) {
 		$database = Database::open(Settings::db_name_infected_crew);
 
-		$database->query('INSERT INTO `' . Settings::db_table_infected_crew_notes . '` (`eventId`, `groupId`, `teamId`, `userId`, `title`, `content`, `deadlineTime`, `notificationTimeBeforeOffset`, `done`)
+		$database->query('INSERT INTO `' . Settings::db_table_infected_crew_notes . '` (`eventId`, `groupId`, `teamId`, `userId`, `title`, `content`, `secondsBeforeOffset`, `time`, `done`)
 										  VALUES (\'' . EventHandler::getCurrentEvent()->getId() . '\',
 															\'' . ($group != null ? $group->getId() : 0) . '\',
 															\'' . ($team != null ? $team->getId() : 0) . '\',
 															\'' . ($user != null ? $user->getId() : 0) . '\',
 															\'' . $database->real_escape_string($title) . '\',
 															\'' . $database->real_escape_string($content) . '\',
+															\'' . $database->real_escape_string($secondsBeforeOffset) . '\',
 															\'' . $database->real_escape_string($deadlineTime) . '\',
-															\'' . $database->real_escape_string($notificationTimeBeforeOffset) . '\',
 															\'' . $database->real_escape_string($done) . '\')');
 
 		$database->close();
@@ -257,7 +248,7 @@ class NoteHandler {
 	/*
 	 * Update a note.
 	 */
-	public static function updateNote(Note $note, Team $team = null, User $user = null, $title, $content, $deadlineTime, $notificationBeforeTimeOffset = 0, $notify = 0, $done = 0) {
+	public static function updateNote(Note $note, Team $team = null, User $user = null, $title, $content, $secondsBeforeOffset, $time = null, $notify = 0, $done = 0) {
 		$database = Database::open(Settings::db_name_infected_crew);
 
 		$database->query('UPDATE `' . Settings::db_table_infected_crew_notes . '`
@@ -265,8 +256,8 @@ class NoteHandler {
 													`userId` = \'' . ($user != null ? $user->getId() : 0) . '\',
 													`title` = \'' . $database->real_escape_string($title) . '\',
 													`content` = \'' . $database->real_escape_string($content) . '\',
-													`deadlineTime` = \'' . $database->real_escape_string($deadlineTime) . '\',
-													`notificationTimeBeforeOffset` = \'' . $database->real_escape_string($notificationBeforeTimeOffset) . '\',
+													`secondsBeforeOffset` = \'' . $database->real_escape_string($secondsBeforeOffset) . '\',
+													`time` = \'' . $database->real_escape_string($time) . '\',
 													`notify` = \'' . $database->real_escape_string($notify) . '\',
 													`done` = \'' . $database->real_escape_string($done) . '\'
 										  WHERE `id` = \'' . $note->getId() . '\';');
@@ -282,7 +273,8 @@ class NoteHandler {
 
 		$database->query('UPDATE `' . Settings::db_table_infected_crew_notes . '`
 											SET `notify` = \'' . $database->real_escape_string($notified) . '\'
-											WHERE `id` = \'' . $note->getId() . '\';');
+											WHERE `id` = \'' . $note->getId() . '\'
+											AND `type` = \'0\';');
 
 		$database->close();
 	}
