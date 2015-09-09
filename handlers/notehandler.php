@@ -228,7 +228,7 @@ class NoteHandler {
 	/*
 	 * Create a new note.
 	 */
-	public static function createNote(Group $group = null, Team $team = null, User $user = null, $title, $content, $secondsOffset, $time = null, $done = 0) {
+	public static function createNote(Group $group = null, Team $team = null, User $user = null, $title, $content, $secondsOffset = 0, $time = null, $done = 0) {
 		$database = Database::open(Settings::db_name_infected_crew);
 
 		$database->query('INSERT INTO `' . Settings::db_table_infected_crew_notes . '` (`eventId`, `groupId`, `teamId`, `userId`, `title`, `content`, `secondsOffset`, `time`, `done`)
@@ -240,7 +240,7 @@ class NoteHandler {
 															\'' . $database->real_escape_string($content) . '\',
 															\'' . $database->real_escape_string($secondsOffset) . '\',
 															\'' . $database->real_escape_string($time) . '\',
-															\'' . $database->real_escape_string($done) . '\')');
+															\'' . $database->real_escape_string($done) . '\');');
 
 		$database->close();
 	}
@@ -248,7 +248,7 @@ class NoteHandler {
 	/*
 	 * Update a note.
 	 */
-	public static function updateNote(Note $note, Team $team = null, User $user = null, $title, $content, $secondsOffset, $time = null, $done = 0) {
+	public static function updateNote(Note $note, Team $team = null, User $user = null, $title, $content, $secondsOffset = 0, $time = null, $notified = 0, $done = 0) {
 		$database = Database::open(Settings::db_name_infected_crew);
 
 		$database->query('UPDATE `' . Settings::db_table_infected_crew_notes . '`
@@ -258,6 +258,7 @@ class NoteHandler {
 													`content` = \'' . $database->real_escape_string($content) . '\',
 													`secondsOffset` = \'' . $database->real_escape_string($secondsOffset) . '\',
 													`time` = \'' . $database->real_escape_string($time) . '\',
+													`notified` = \'' . $database->real_escape_string($notified) . '\',
 													`done` = \'' . $database->real_escape_string($done) . '\'
 										  WHERE `id` = \'' . $note->getId() . '\';');
 
