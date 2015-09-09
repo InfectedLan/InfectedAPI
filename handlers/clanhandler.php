@@ -146,6 +146,21 @@ class ClanHandler {
 		return $memberList;
 	}
 
+    /*
+	 * Faster way of getting amount of clam members
+	 */
+	public static function getClanMemberCount(Clan $clan) {
+		$database = Database::open(Settings::db_name_infected);
+
+		$result = $database->query('SELECT * FROM `' . Settings::db_table_infected_users . '`
+																WHERE `id` IN (SELECT `userId` FROM `' . Settings::db_name_infected_compo . '`.`' . Settings::db_table_infected_compo_memberof . '`
+																			   			 WHERE `clanId` = \'' . $clan->getId() . '\');');
+
+		$database->close();
+
+		return $result->row_count;
+	}
+
 	/*
 	 * Get playing members for specified clan.
 	 */
@@ -284,6 +299,12 @@ class ClanHandler {
 
 		$database->close();
 	}
+
+    public static function deleteClan(Clan $clan) {
+        $database = Database::open(Settings::db_name_infected_compo);
+
+        
+    }
 
 	/*
 	 * Remove the specified clan.
