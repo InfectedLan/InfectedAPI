@@ -125,7 +125,7 @@ class Note extends EventObject {
 	 * Returns true if this note is done.
 	 */
 	public function setNotified($notified) {
-		NoteHandler::updateNoteNotified($this, $notified);
+		NoteHandler::updateNoteNotify($this, $notified);
 	}
 
 	/*
@@ -133,6 +133,13 @@ class Note extends EventObject {
 	 */
 	public function isDone() {
 		return $this->done ? true : false;
+	}
+
+	/*
+	 * Sets a note to be done or not.
+	 */
+	public function setDone($done) {
+		NoteHandler::updateNoteDone($this, $done);
 	}
 
 	public function isDelegated() {
