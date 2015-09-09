@@ -7,7 +7,7 @@
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -20,11 +20,11 @@
 $(document).ready(function() {
 	$('.login').submit(function(e) {
 		e.preventDefault();
-		$.getJSON('../api/json/user/loginUser.php' + '?' + $(this).serialize(), function(data){
+		$.getJSON('../api/json/user/loginUser.php' + '?' + $(this).serialize(), function(data) {
 			if (data.result) {
 				location.reload();
 			} else {
-				error(data.message); 
+				error(data.message);
 			}
 		});
 	});

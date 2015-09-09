@@ -265,7 +265,7 @@ class ApplicationHandler {
 
 		$result = $database->query('SELECT * FROM `' . Settings::db_table_infected_crew_applications . '`
 																WHERE (`state` = \'2\' OR `state` = \'3\')
-																ORDER BY `openedTime` DESC;');
+																ORDER BY `closedTime` DESC, `openedTime` DESC;');
 
 		$database->close();
 
@@ -287,7 +287,7 @@ class ApplicationHandler {
 		$result = $database->query('SELECT * FROM `' . Settings::db_table_infected_crew_applications . '`
 																WHERE `groupId` = \'' . $group->getId() .  '\'
 																AND (`state` = \'2\' OR `state` = \'3\')
-																ORDER BY `openedTime` DESC;');
+																ORDER BY `closedTime` DESC, `openedTime` DESC;');
 
 		$database->close();
 
