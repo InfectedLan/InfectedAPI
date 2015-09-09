@@ -61,7 +61,6 @@ if (Session::isAuthenticated()) {
 
 			if ($note != null) {
 				NoteHandler::updateNote($note, $team, $user, $title, $content, $secondsOffset, $time, $notified, $done);
-
 				$result = true;
 			} else {
 				$message = Localization::getLocale('the_note_does_not_exist');

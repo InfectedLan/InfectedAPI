@@ -228,10 +228,10 @@ class NoteHandler {
 	/*
 	 * Create a new note.
 	 */
-	public static function createNote(Group $group = null, Team $team = null, User $user = null, $title, $content, $secondsOffset = 0, $time = null, $done = 0) {
+	public static function createNote(Group $group = null, Team $team = null, User $user = null, $title, $content, $secondsOffset = 0, $time = null) {
 		$database = Database::open(Settings::db_name_infected_crew);
 
-		$database->query('INSERT INTO `' . Settings::db_table_infected_crew_notes . '` (`eventId`, `groupId`, `teamId`, `userId`, `title`, `content`, `secondsOffset`, `time`, `done`)
+		$database->query('INSERT INTO `' . Settings::db_table_infected_crew_notes . '` (`eventId`, `groupId`, `teamId`, `userId`, `title`, `content`, `secondsOffset`, `time`)
 										  VALUES (\'' . EventHandler::getCurrentEvent()->getId() . '\',
 															\'' . ($group != null ? $group->getId() : 0) . '\',
 															\'' . ($team != null ? $team->getId() : 0) . '\',
@@ -239,8 +239,7 @@ class NoteHandler {
 															\'' . $database->real_escape_string($title) . '\',
 															\'' . $database->real_escape_string($content) . '\',
 															\'' . $database->real_escape_string($secondsOffset) . '\',
-															\'' . $database->real_escape_string($time) . '\',
-															\'' . $database->real_escape_string($done) . '\');');
+															\'' . $database->real_escape_string($time) . '\');');
 
 		$database->close();
 	}
