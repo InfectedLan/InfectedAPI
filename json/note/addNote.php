@@ -34,25 +34,28 @@ if (Session::isAuthenticated()) {
 	if ($user->hasPermission('chief.checklist')) {
 		if (isset($_GET['title']) &&
 			isset($_GET['content']) &&
-			isset($_GET['deadlineDate']) &&
-			isset($_GET['deadlineTime']) &&
-			isset($_GET['notificationTimeBeforeOffset']) &&
+			isset($_GET['secondsOffset']) &&
 			!empty($_GET['title']) &&
-			!empty($_GET['content']) &&
-			!empty($_GET['deadlineDate']) &&
-			!empty($_GET['deadlineTime'])) {
+			!empty($_GET['content'])) {
 			$private = isset($_GET['private']) ? ($_GET['private'] ? true  : false) : true;
 			$group = !$private ? (isset($_GET['groupId']) ? GroupHandler::getGroup($_GET['groupId']) : $user->getGroup()) : null;
-			$team = !$private && isset($_GET['teamId']) ? TeamHandler::getTeam($_GET['teamId']) : null;
+			$team = !$private ? (isset($_GET['teamId']) ? TeamHandler::getTeam($_GET['teamId']) : ($user->isTeamMember() && $user->isTeamMember() ? $user->getTeam() : null)) : null;
 			$user = !$private ? (isset($_GET['userId']) ? UserHandler::getUser($_GET['userId']) : null) : $user;
 			$title = $_GET['title'];
 			$content = $_GET['content'];
-			$type = true;
-			$notificationTimeBeforeOffset = $_GET['notificationTimeBeforeOffset'];
-			$deadlineTime = $_GET['deadlineDate'] . ' ' . $_GET['deadlineTime'];
-			$done = isset($_GET['done']) ? $_GET['done'] : 0;
+			$secondsOffset = $_GET['secondsOffset'];
 
-			NoteHandler::createNote($group, $team, $user, $title, $content, $type, $notificationTimeBeforeOffset, $deadlineTime, $done);
+			// This is the period we allow the time variable to be set, 86400 is the number of secounds in a day.
+			$eventDateTimestamp = strtotime(date('Y-m-d', EventHandler::getCurrentEvent()->getStartTime()));
+			$newTimestamp = $eventDateTimestamp + $secondsOffset;
+			$periodBefore = 1 * 86400; // 1 day before.
+			$periodAfter = 2 * 86400; // 2 days after.
+			$intersectsTimePeriod = $newTimestamp >= ($eventDateTimestamp - $periodBefore) && // Check if time offset is greather than periodBefore.
+															$newTimestamp <= ($eventDateTimestamp + $periodAfter); // Check if time offset is less than periodAfter.
+
+			$time = isset($_GET['time']) && $intersectsTimePeriod ? $_GET['time'] : null;
+
+			NoteHandler::createNote($group, $team, $user, $title, $content, $secondsOffset, $time);
 			$result = true;
 		} else {
 			$message = Localization::getLocale('you_have_not_filled_out_the_required_fields');
