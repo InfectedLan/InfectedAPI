@@ -239,7 +239,7 @@ class NoteHandler {
 															\'' . $database->real_escape_string($title) . '\',
 															\'' . $database->real_escape_string($content) . '\',
 															\'' . $database->real_escape_string($secondsOffset) . '\',
-															\'' . $database->real_escape_string($deadlineTime) . '\',
+															\'' . $database->real_escape_string($time) . '\',
 															\'' . $database->real_escape_string($done) . '\')');
 
 		$database->close();
@@ -268,13 +268,25 @@ class NoteHandler {
 	/*
 	 * Update a notes notified state.
 	 */
-	public static function updateNoteNotified(Note $note, $notified) {
+	public static function updateNoteNotify(Note $note, $notified) {
 		$database = Database::open(Settings::db_name_infected_crew);
 
 		$database->query('UPDATE `' . Settings::db_table_infected_crew_notes . '`
 											SET `notify` = \'' . $database->real_escape_string($notified) . '\'
-											WHERE `id` = \'' . $note->getId() . '\'
-											AND `type` = \'0\';');
+											WHERE `id` = \'' . $note->getId() . '\';');
+
+		$database->close();
+	}
+
+	/*
+	 * Update a notes done state.
+	 */
+	public static function updateNoteDone(Note $note, $done) {
+		$database = Database::open(Settings::db_name_infected_crew);
+
+		$database->query('UPDATE `' . Settings::db_table_infected_crew_notes . '`
+											SET `done` = \'' . $database->real_escape_string($done) . '\'
+											WHERE `id` = \'' . $note->getId() . '\';');
 
 		$database->close();
 	}

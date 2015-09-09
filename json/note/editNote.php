@@ -49,18 +49,19 @@ if (Session::isAuthenticated()) {
 
 			// This is the period we allow the time variable to be set, 86400 is the number of secounds in a day.
 			$eventDateTimestamp = strtotime(date('Y-m-d', EventHandler::getCurrentEvent()->getStartTime()));
-			$newTimestamp = $secondsOffset >= 0 ? $eventDateTimestamp - $secondsOffset : $eventDateTimestamp + $secondsOffset;
-			$periodBefore = 1 * 86400; // 1 day.
-			$periodAfter = 2 * 86400; // 2 days.
+			$newTimestamp = $eventDateTimestamp + $secondsOffset;
+			$periodBefore = 1 * 86400; // 1 day before.
+			$periodAfter = 2 * 86400; // 2 days after.
 			$intersectsTimePeriod = $newTimestamp >= ($eventDateTimestamp - $periodBefore) && // Check if time offset is greather than periodBefore.
 															$newTimestamp <= ($eventDateTimestamp + $periodAfter); // Check if time offset is less than periodAfter.
 
-			$time = isset($_GET['time']) && $intersectsTimePeriod ? $_GET['time'] : null; // 1 day after event start  also Saturday at 00:00
-			$notified = $secondsOffset != $note->getSecondsOffset() && $time != $note->getTime();
+			$time = isset($_GET['time']) && $intersectsTimePeriod ? $_GET['time'] : null;
+			$notify = $secondsOffset != $note->getSecondsOffset() && $time != $note->getTime();
 			$done = isset($_GET['done']) ? $_GET['done'] : 0;
 
 			if ($note != null) {
-				NoteHandler::updateNote($note, $team, $user, $title, $content, $secondsOffset, $time, $notified, $done);
+				NoteHandler::updateNote($note, $team, $user, $title, $content, $secondsOffset, $time, $notify, $done);
+
 				$result = true;
 			} else {
 				$message = Localization::getLocale('the_note_does_not_exist');
