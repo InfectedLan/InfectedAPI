@@ -23,6 +23,7 @@ require_once 'handlers/notehandler.php';
 require_once 'objects/user.php';
 require_once 'objects/group.php';
 require_once 'objects/application.php';
+require_once 'utils/dateutils.php';
 
 class NotificationManager {
 	/*
@@ -36,7 +37,7 @@ class NotificationManager {
 			$message[] = '<html>';
 				$message[] = '<body>';
 					$message[] = '<h3>Hei!</h3>';
-					$message[] = '<p>Dette er en påmindelse for ditt gjøremål som nærmer seg fristen, dette må være ferdig ' . date('d.m.Y') . ' kl. ' . date('H:i') . '.<p>';
+					$message[] = '<p>Dette er en påmindelse for ditt gjøremål som nærmer seg fristen, dette må være ferdig ' . DateUtils::getDayFromInt(date('w', $note->getAbsoluteTime())) . ' den ' . date('d', $note->getAbsoluteTime()) . '. kl. ' . date('H:i', $note->getAbsoluteTime()) . '.<p>';
 					$message[] = '<p>Gjøremålet ditt er: ' . $note->getContent() . '</p>';
 					$message[] = '<p>Med vennlig hilsen <a href="http://infected.no/">Infected</a>.</p>';
 				$message[] = '</body>';
