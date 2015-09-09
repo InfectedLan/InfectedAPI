@@ -74,8 +74,8 @@ class NoteHandler {
 
 		$result = $database->query('SELECT * FROM `' . Settings::db_table_infected_crew_notes . '`
 																WHERE `eventId` = \'' . $event->getId() . '\'
-																AND `notify` = \'0\'
-																AND FROM_UNIXTIME(' . $event->getStartTime() . ' - `secondsOffset` - 604800) <= NOW();');
+																AND `notified` = \'0\'
+																AND DATE_SUB(FROM_UNIXTIME(UNIX_TIMESTAMP(\'2015-09-09 00:00\') + `secondsOffset`), INTERVAL 1 WEEK) <= NOW();'); // ' . $event->getStartTime() . '
 
 		$database->close();
 
@@ -248,7 +248,7 @@ class NoteHandler {
 	/*
 	 * Update a note.
 	 */
-	public static function updateNote(Note $note, Team $team = null, User $user = null, $title, $content, $secondsOffset, $time = null, $notify = 0, $done = 0) {
+	public static function updateNote(Note $note, Team $team = null, User $user = null, $title, $content, $secondsOffset, $time = null, $done = 0) {
 		$database = Database::open(Settings::db_name_infected_crew);
 
 		$database->query('UPDATE `' . Settings::db_table_infected_crew_notes . '`
@@ -258,7 +258,6 @@ class NoteHandler {
 													`content` = \'' . $database->real_escape_string($content) . '\',
 													`secondsOffset` = \'' . $database->real_escape_string($secondsOffset) . '\',
 													`time` = \'' . $database->real_escape_string($time) . '\',
-													`notify` = \'' . $database->real_escape_string($notify) . '\',
 													`done` = \'' . $database->real_escape_string($done) . '\'
 										  WHERE `id` = \'' . $note->getId() . '\';');
 
@@ -268,11 +267,11 @@ class NoteHandler {
 	/*
 	 * Update a notes notified state.
 	 */
-	public static function updateNoteNotify(Note $note, $notified) {
+	public static function updateNoteNotified(Note $note, $notified) {
 		$database = Database::open(Settings::db_name_infected_crew);
 
 		$database->query('UPDATE `' . Settings::db_table_infected_crew_notes . '`
-											SET `notify` = \'' . $database->real_escape_string($notified) . '\'
+											SET `notified` = \'' . $database->real_escape_string($notified) . '\'
 											WHERE `id` = \'' . $note->getId() . '\';');
 
 		$database->close();

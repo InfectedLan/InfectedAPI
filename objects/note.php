@@ -125,7 +125,7 @@ class Note extends EventObject {
 	 * Returns true if this note is done.
 	 */
 	public function setNotified($notified) {
-		NoteHandler::updateNoteNotify($this, $notified);
+		NoteHandler::updateNoteNotified($this, $notified);
 	}
 
 	/*
