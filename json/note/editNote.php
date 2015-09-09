@@ -41,8 +41,8 @@ if (Session::isAuthenticated()) {
 			!empty($_GET['title']) &&
 			!empty($_GET['content'])) {
 			$note = NoteHandler::getNote($_GET['id']);
-			$team = isset($_GET['teamId']) ? TeamHandler::getTeam($_GET['teamId']) : null;
-			$user = isset($_GET['userId']) ? UserHandler::getUser($_GET['userId']) : null;
+			$team = isset($_GET['teamId']) ? TeamHandler::getTeam($_GET['teamId']) : ($note->hasTeam() ? $note->getTeam() : null);
+			$user = isset($_GET['userId']) ? UserHandler::getUser($_GET['userId']) : ($note->hasUser() ? $note->getUser() : null);
 			$title = $_GET['title'];
 			$content = $_GET['content'];
 			$secondsOffset = $_GET['secondsOffset'];
