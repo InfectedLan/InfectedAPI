@@ -37,8 +37,10 @@ class NotificationManager {
 			$message[] = '<html>';
 				$message[] = '<body>';
 					$message[] = '<h3>Hei!</h3>';
-					$message[] = '<p>Dette er en påmindelse for ditt gjøremål som nærmer seg fristen, dette må være ferdig ' . DateUtils::getDayFromInt(date('w', $note->getAbsoluteTime())) . ' den ' . date('d', $note->getAbsoluteTime()) . '. kl. ' . date('H:i', $note->getAbsoluteTime()) . '.<p>';
-					$message[] = '<p>Gjøremålet ditt er: ' . $note->getContent() . '</p>';
+					$message[] = '<p>Dette er en påmindelse for ditt gjøremål som nærmer seg fristen, dette må være ferdig ' . DateUtils::getDayFromInt(date('w', $note->getAbsoluteTime())) . ' den ' . date('d', $note->getAbsoluteTime()) . '. ' . DateUtils::getMonthFromInt(date('m', $note->getAbsoluteTime())) . ' kl. ' . date('H:i', $note->getAbsoluteTime()) . '.<p>';
+					$message[] = '<p><b>Navn på gjøremålet:</b> ' . $note->getTitle() . '</p>';
+					$message[] = '<p><b>Detaljer:</b> <br>';
+					$message[] = wordwrap($note->getContent(), 75, '<br>') . '</p>';
 					$message[] = '<p>Med vennlig hilsen <a href="http://infected.no/">Infected</a>.</p>';
 				$message[] = '</body>';
 			$message[] = '</html>';
