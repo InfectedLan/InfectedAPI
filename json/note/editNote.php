@@ -57,10 +57,9 @@ if (Session::isAuthenticated()) {
 
 			$time = isset($_GET['time']) && $intersectsTimePeriod ? $_GET['time'] : null;
 			$notified = $secondsOffset != $note->getSecondsOffset() && $time != $note->getTime();
-			$done = isset($_GET['done']) ? $_GET['done'] : 0;
 
 			if ($note != null) {
-				NoteHandler::updateNote($note, $team, $user, $title, $content, $secondsOffset, $time, $notified, $done);
+				NoteHandler::updateNote($note, $team, $user, $title, $content, $secondsOffset, $time, $notified);
 				$result = true;
 			} else {
 				$message = Localization::getLocale('the_note_does_not_exist');

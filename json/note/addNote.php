@@ -37,7 +37,7 @@ if (Session::isAuthenticated()) {
 			isset($_GET['secondsOffset']) &&
 			!empty($_GET['title']) &&
 			!empty($_GET['content'])) {
-			$private = isset($_GET['private']) ? ($_GET['private'] ? true  : false) : true;
+			$private = isset($_GET['private']) ? ($_GET['private'] ? true : false) : true;
 			$group = !$private ? (isset($_GET['groupId']) ? GroupHandler::getGroup($_GET['groupId']) : $user->getGroup()) : null;
 			$team = !$private ? (isset($_GET['teamId']) ? TeamHandler::getTeam($_GET['teamId']) : ($user->isTeamMember() && $user->isTeamMember() ? $user->getTeam() : null)) : null;
 			$user = !$private ? (isset($_GET['userId']) ? UserHandler::getUser($_GET['userId']) : null) : $user;
