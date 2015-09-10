@@ -8,12 +8,12 @@
  * modify it under the terms of the GNU Lesser General Public
  * License as published by the Free Software Foundation; either
  * version 3.0 of the License, or (at your option) any later version.
- * 
+ *
  * This library is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
  * Lesser General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU Lesser General Public
  * License along with this library.  If not, see <http://www.gnu.org/licenses/>.
  */
@@ -33,7 +33,7 @@ echo '<html>';
 			$user = Session::getCurrentUser();
 			$format = isset($_GET['format']) ? $_GET['format'] : 'html';
 
-			if ($user->hasPermission('*') || 
+			if ($user->hasPermission('*') ||
 				$user->hasPermission('event.memberlist')) {
 				if (isset($_GET['year']) &&
 					is_numeric($_GET['year'])) {
@@ -43,7 +43,7 @@ echo '<html>';
 
 						if (!empty($eventList)) {
 							$userList = EventHandler::getMembersAndParticipantsByEvents($eventList, $_GET['ageLimit']);
-								
+
 							if (!empty($userList)) {
 								if ($format == 'html') {
 									outputText($userList);
@@ -81,11 +81,11 @@ echo '</html>';
  */
 function outputText(array $userList) {
 	echo '<p>Fant ' . count($userList) . ' brukere i databasen.</p>';
-	
+
 	if (date('Y') <= $_GET['year']) {
 		echo '<p>Året er ikke omme enda, det kan hende du ikke får den komplette medlemslisten om du henter den ut nå.</p>';
 	}
-		
+
 	echo '<table>';
 		echo '<tr>';
 			echo '<th>Navn:</th>';
@@ -96,7 +96,7 @@ function outputText(array $userList) {
 			echo '<th>Alder:</th>';
 			echo '<th>Rolle:</th>';
 		echo '</tr>';
-	
+
 		foreach ($userList as $value) {
 			echo '<tr>';
 				echo '<td>' . $value->getFullName() . '</td>';
@@ -115,14 +115,19 @@ function outputText(array $userList) {
  * Returns the member list as CSV, which is compatible with Excel.
  */
 function outputCsv(array $userList) {
+	// Tell the browser it's going to be a csv file.
+	header('Content-Type: application/csv; charset=UTF-8');
+	// Tell the browser we want to save it instead of displaying it.
+	header('Content-Disposition: attachement; filename=' . 'Medlemsliste_' .  $_GET['year'] . '.csv');
+
 	$fp = fopen('php://output', 'w');
 
 	$rowList = array(array('Navn:', 'E-post:', 'Telefon:', 'Adresse:', 'Fødselsdato:', 'Alder:', 'Rolle:'));
 
 	// Add each user to the row list.
 	foreach ($userList as $userValue) {
-		array_push($rowList, array($userValue->getFullName(), 
-								   $userValue->getEmail(), 
+		array_push($rowList, array($userValue->getFullName(),
+								   $userValue->getEmail(),
 								   $userValue->getPhoneAsString(),
 								   $userValue->getAddress() . ', ' . $userValue->getPostalCode() . ' ' . $userValue->getCity(),
 								   date('d.m.Y', $userValue->getBirthdate()),
@@ -138,10 +143,6 @@ function outputCsv(array $userList) {
 		fputcsv($fp, $row, ';');
 	}
 
-	// Tell the browser it's going to be a csv file.
-	header('Content-Type: application/csv; charset=UTF-8');
-	// Tell the browser we want to save it instead of displaying it.
-	header('Content-Disposition: attachement; filename=' . 'Medlemmsliste ' .  $_GET['year'] . '.csv');
 	fclose($fp);
 }
 ?>
