@@ -162,7 +162,8 @@ class NoteHandler {
 																WHERE `eventId` = \'' . $event->getId() . '\'
 																AND `groupId` = \'0\'
 																AND `teamId` = \'0\'
-																AND `userId` = \'' . $user->getId() . '\';');
+																AND `userId` = \'' . $user->getId() . '\'
+																ORDER BY `secondsOffset`;');
 
 		$database->close();
 
@@ -191,7 +192,8 @@ class NoteHandler {
 		if ($user->isGroupLeader() || $user->isGroupCoLeader()) {
 			$result = $database->query('SELECT * FROM `' . Settings::db_table_infected_crew_notes . '`
 																	WHERE `eventId` = \'' . $event->getId() . '\'
-																	AND `groupId` = \'' . $user->getGroup()->getId() . '\';');
+																	AND `groupId` = \'' . $user->getGroup()->getId() . '\'
+																	ORDER BY `secondsOffset`;');
 
 
 		} else if ($user->isTeamMember() && $user->isTeamLeader()) {
@@ -199,12 +201,14 @@ class NoteHandler {
 																	WHERE `eventId` = \'' . $event->getId() . '\'
 																	AND `groupId` = \'' . $user->getGroup()->getId() . '\'
 																	AND ((`teamId` = \'' . $user->getTeam()->getId() . '\') OR
-																			 (`teamId` = \'0\' AND `userId` = \'' . $user->getId() . '\'));');
+																			 (`teamId` = \'0\' AND `userId` = \'' . $user->getId() . '\'))
+																	ORDER BY `secondsOffset`;');
 		} else {
 			$result = $database->query('SELECT * FROM `' . Settings::db_table_infected_crew_notes . '`
 																	WHERE `eventId` = \'' . $event->getId() . '\'
 																	AND `groupId` = \'' . $user->getGroup()->getId() . '\'
-																	AND `userId` = \'' . $user->getId() . '\';');
+																	AND `userId` = \'' . $user->getId() . '\'
+																	ORDER BY `secondsOffset`;');
 		}
 
 		$database->close();
