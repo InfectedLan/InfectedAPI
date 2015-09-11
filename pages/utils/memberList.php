@@ -34,7 +34,7 @@ echo '<html>';
 			$format = isset($_GET['format']) ? $_GET['format'] : 'html';
 
 			if ($user->hasPermission('*') ||
-				$user->hasPermission('event.memberlist')) {
+				$user->hasPermission('admin.memberlist')) {
 				if (isset($_GET['year']) &&
 					is_numeric($_GET['year'])) {
 					if (isset($_GET['ageLimit']) &&
