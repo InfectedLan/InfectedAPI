@@ -31,7 +31,7 @@ $message = null;
 if (Session::isAuthenticated()) {
 	$user = Session::getCurrentUser();
 
-	if ($user->hasPermission('chief.checklist')) {
+	if ($user->hasPermission('event.checklist')) {
 		if (isset($_GET['title']) &&
 			isset($_GET['content']) &&
 			isset($_GET['secondsOffset']) &&

@@ -241,7 +241,7 @@ class User extends Object {
 
 			if ($this->isTeamMember() && $this->isTeamLeader()) {
 		    array_push($permissionList, PermissionHandler::getPermissionByValue('chief.team'));
-				array_push($permissionList, PermissionHandler::getPermissionByValue('chief.checklist'));
+				array_push($permissionList, PermissionHandler::getPermissionByValue('event.checklist'));
 		  }
 		}
 

@@ -28,7 +28,7 @@ $message = null;
 if (Session::isAuthenticated()) {
 	$user = Session::getCurrentUser();
 
-	if ($user->hasPermission('chief.checklist')) {
+	if ($user->hasPermission('event.checklist')) {
 		if (isset($_GET['id']) &&
 			is_numeric($_GET['id'])) {
 			$note = NoteHandler::getNote($_GET['id']);
