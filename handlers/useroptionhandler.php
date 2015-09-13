@@ -24,6 +24,20 @@ require_once 'objects/user.php';
 
 class UserOptionHandler {
 	/*
+	 * Returns true if this user has a option.
+	 */
+	public static function hasUserOption(User $user) {
+		$database = Database::open(Settings::db_name_infected);
+
+		$result = $database->query('SELECT `id` FROM `' . Settings::db_table_infected_useroptions . '`
+																WHERE `userId` = \'' . $user->getId() . '\';');
+
+		$database->close();
+
+		return $result->num_rows > 0;
+	}
+
+	/*
 	 * Returns true is the phone number is set to private for the specified user.
 	 */
 	public static function hasUserPrivatePhone(User $user) {
@@ -51,6 +65,40 @@ class UserOptionHandler {
 		$database->close();
 
 		return $result->num_rows > 0;
+	}
+
+	/*
+	 * Returns true is the user is set to go on swimming.
+	 */
+	public static function isUserSwimming(User $user) {
+		$database = Database::open(Settings::db_name_infected);
+
+		$result = $database->query('SELECT `id` FROM `' . Settings::db_table_infected_useroptions . '`
+																WHERE `userId` = \'' . $user->getId() . '\'
+																AND `swimming` = \'1\';');
+
+		$database->close();
+
+		return $result->num_rows > 0;
+	}
+
+	/*
+	 * Set a users note.
+	 */
+	public static function setUserSwimming(User $user, $swimming) {
+		$database = Database::open(Settings::db_name_infected);
+
+		if (!self::hasUserOption($user)) {
+			$database->query('INSERT INTO `' . Settings::db_table_infected_useroptions . '` (`userId`, `swimming`)
+												VALUES (\'' . $user->getId() . '\',
+																\'' . $database->real_escape_string($swimming) . '\');');
+		} else {
+			$database->query('UPDATE `' . Settings::db_table_infected_useroptions . '`
+												SET `swimming` = \'' . $database->real_escape_string($swimming) . '\'
+												WHERE `userId` = \'' . $user->getId() . '\';');
+		}
+
+		$database->close();
 	}
 }
 ?>

@@ -202,6 +202,20 @@ class User extends Object {
 	}
 
 	/*
+	 * Returns true the user is set for swimming.
+	 */
+	public function isSwimming() {
+		return UserOptionHandler::isUserSwimming($this);
+	}
+
+	/*
+	 * Set whether user is swimming or not.
+	 */
+	public function setSwimming($swimming) {
+		UserOptionHandler::setUserSwimming($this, $swimming);
+	}
+
+	/*
 	 * Returns true if user have specified permission, otherwise false.
 	 */
 	public function hasPermission($value) {
