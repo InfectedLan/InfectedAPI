@@ -38,6 +38,7 @@ class MatchHandler {
 	const participantof_state_clan = 0;
 	const participantof_state_winner = 1;
 	const participantof_state_looser = 2;
+    const participantof_state_stepin = 3;
 
 	/*
 	 * Get a match by the internal id.
@@ -486,5 +487,34 @@ class MatchHandler {
 
 		$database->close();
 	}
+
+    public static function getMetadata(Match $match) {
+        $database = Database::open(Settings::db_name_infected_compo);
+
+        $result = $database->query('SELECT * FROM `' . Settings::db_table_infected_compo_matchmetadata . '` WHERE `match` = \'' . $match->getId() . '\';');
+
+        $metadata = array();
+        while ($row = $result->fetch_array()) {
+            $metadata[$row["key"]] = $row["value"];
+        }
+    }
+
+    public static function setMetadata(Match $match, $key, $value) {
+        $database = Database::open(Settings::db_name_infected_compo);
+        
+        if(self::hasKey($key)) {
+            $result = $database->query('UPDATE `' . Settings::db_table_infected_compo_matchmetadata . '` SET `value` = \'' . $database->real_escape_string($value) .'\' WHERE `key` = \'' . $database->real_escape_string($key) . '\';');
+        } else {
+            $result = $database->query('INSERT INTO `' . Settings::db_table_infected_compo_matchmetadata . '` (`match`, `key`, `value`) VALUES (\'' . $match->getId() . '\', \'' . $database->real_escape_string($key) . '\', \'' . $database->real_escape_string($value) . '\');');
+        }
+    }
+
+    public static function hasKey(Match $match, $key) {
+        $database = Database::open(Settings::db_name_infected_compo);
+
+        $result = $database->query('SELECT * FROM `' . Settings::db_table_infected_compo_matchmetadata . '` WHERE `match` = \'' . $match->getId() . '\' AND `key` = \'' . $database->real_escape_string($key) . '\';');
+
+        return $result->num_rows > 0;
+    }
 }
 ?>

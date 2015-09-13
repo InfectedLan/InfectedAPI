@@ -88,18 +88,18 @@ class CompoHandler {
 	/*
 	 * Create a new compo entry.
 	 */
-	public static function createCompo($name, $title, $tag, $description, $mode, $startTime, $registrationEndTime, $teamSize, $participantLimit) {
+	public static function createCompo($name, $title, $tag, $description, $pluginName, $startTime, $registrationEndTime, $teamSize, $participantLimit) {
         //First, create a compo chat
         $chat = ChatHandler::createChat($name . '-compo-chat', $title . ' compo chat');
         $database = Database::open(Settings::db_name_infected_compo);
         
-		$database->query('INSERT INTO `' . Settings::db_table_infected_compo_compos . '` (`eventId`, `name`, `title`, `tag`, `description`, `mode`, `startTime`, `registrationEndTime`, `teamSize`, `chatId`, `participantLimit`)
+		$database->query('INSERT INTO `' . Settings::db_table_infected_compo_compos . '` (`eventId`, `name`, `title`, `tag`, `description`, `pluginName`, `startTime`, `registrationEndTime`, `teamSize`, `chatId`, `participantLimit`)
 										  VALUES (\'' . EventHandler::getCurrentEvent()->getId() . '\',
 														  \'' . $database->real_escape_string($name) . '\',
 														  \'' . $database->real_escape_string($title) . '\',
 															\'' . $database->real_escape_string($tag) . '\',
 															\'' . $database->real_escape_string($description) . '\',
-															\'' . $database->real_escape_string($mode) . '\',
+															\'' . $database->real_escape_string($pluginName) . '\',
 															\'' . $database->real_escape_string($startTime) . '\',
 															\'' . $database->real_escape_string($registrationEndTime) . '\',
 														  \'' . $database->real_escape_string($teamSize) . '\',
@@ -115,7 +115,7 @@ class CompoHandler {
 	/*
 	 * Update a compo.
 	 */
-	public static function updateCompo(Compo $compo, $name, $title, $tag, $description, $mode, $startTime, $registrationEndTime, $teamSize, $participantLimit) {
+	public static function updateCompo(Compo $compo, $name, $title, $tag, $description, $pluginName, $startTime, $registrationEndTime, $teamSize, $participantLimit) {
 		$database = Database::open(Settings::db_name_infected_compo);
 
 		$database->query('UPDATE `' . Settings::db_table_infected_compo_compos . '`
@@ -123,7 +123,7 @@ class CompoHandler {
 													`title` = \'' . $database->real_escape_string($title) . '\',
 													`tag` = \'' . $database->real_escape_string($tag) . '\',
 												  `description` = \'' . $database->real_escape_string($description) . '\',
-													`mode` = \'' . $database->real_escape_string($mode) . '\',
+													`pluginName` = \'' . $database->real_escape_string($pluginName) . '\',
 												  `startTime` = \'' . $database->real_escape_string($startTime) . '\',
 													`registrationEndTime` = \'' . $database->real_escape_string($registrationEndTime) . '\',
 												  `teamSize` = \'' . $database->real_escape_string($teamSize) . '\',
