@@ -142,6 +142,16 @@ class Note extends EventObject {
 		NoteHandler::updateNoteDone($this, $done);
 	}
 
+	public function isExpired() {
+		$event = EventHandler::getCurrentEvent();
+
+		return ($event->getStartTime() + $this->getSecondsOffset()) <= time();
+	}
+
+	public function isPrivate() {
+		return !$this->hasGroup() && !$this->hasTeam() && $this->hasUser();
+	}
+
 	public function isDelegated() {
 		return ($this->hasGroup() || ($this->hasGroup() && $this->hasTeam())) && $this->hasUser();
 	}
