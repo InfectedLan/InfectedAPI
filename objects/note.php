@@ -148,10 +148,16 @@ class Note extends EventObject {
 		return ($event->getStartTime() + $this->getSecondsOffset()) <= time();
 	}
 
+	/*
+	 * Returns true if this note is private.
+	 */
 	public function isPrivate() {
 		return !$this->hasGroup() && !$this->hasTeam() && $this->hasUser();
 	}
 
+	/*
+	 * Returns true if this note is delagated to a user, this returns false if the note is private.
+	 */
 	public function isDelegated() {
 		return ($this->hasGroup() || ($this->hasGroup() && $this->hasTeam())) && $this->hasUser();
 	}
