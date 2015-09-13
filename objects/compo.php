@@ -26,12 +26,12 @@ class Compo extends EventObject {
 	private $title;
 	private $tag;
 	private $description;
-	private $mode;
+	private $pluginName;
 	private $startTime;
 	private $registrationEndTime;
 	private $teamSize;
     private $participantLimit;
-  private $chatId;
+    private $chatId;
 
 	/*
 	 * Returns the name of this compo.
@@ -62,10 +62,10 @@ class Compo extends EventObject {
 	}
 
 	/*
-	 * Returns the gamemode for this compo.
+	 * Returns the gamemode for this compo. Note we are not returning the object, as this is done on request depending on if it is JS or php we want.
 	 */
-	public function getMode() {
-		return $this->mode;
+	public function getPluginName() {
+		return $this->pluginName;
 	}
 
 	/*
