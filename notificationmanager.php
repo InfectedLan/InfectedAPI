@@ -32,21 +32,23 @@ class NotificationManager {
 	public static function checkForNotifications() {
 		// Check for notes notifications.
 		foreach (NoteHandler::getNotesReachedNotificationTime() as $note) {
-			$message = array();
-			$message[] = '<!DOCTYPE html>';
-			$message[] = '<html>';
-				$message[] = '<body>';
-					$message[] = '<h3>Hei!</h3>';
-					$message[] = '<p>Dette er en påmindelse for ditt gjøremål som nærmer seg fristen, dette må være ferdig ' . DateUtils::getDayFromInt(date('w', $note->getAbsoluteTime())) . ' den ' . date('d', $note->getAbsoluteTime()) . '. ' . DateUtils::getMonthFromInt(date('m', $note->getAbsoluteTime())) . ' kl. ' . date('H:i', $note->getAbsoluteTime()) . '.<p>';
-					$message[] = '<p><b>Navn på gjøremålet:</b> ' . $note->getTitle() . '</p>';
-					$message[] = '<p><b>Detaljer:</b> <br>';
-					$message[] = wordwrap($note->getContent(), 75, '<br>') . '</p>';
-					$message[] = '<p>Med vennlig hilsen <a href="http://infected.no/">Infected</a>.</p>';
-				$message[] = '</body>';
-			$message[] = '</html>';
+			if ($note->hasOwner() || $note->hasUser()) {
+				$message = array();
+				$message[] = '<!DOCTYPE html>';
+				$message[] = '<html>';
+					$message[] = '<body>';
+						$message[] = '<h3>Hei!</h3>';
+						$message[] = '<p>Dette er en påmindelse for ditt gjøremål som nærmer seg fristen, dette må være ferdig ' . DateUtils::getDayFromInt(date('w', $note->getAbsoluteTime())) . ' den ' . date('d', $note->getAbsoluteTime()) . '. ' . DateUtils::getMonthFromInt(date('m', $note->getAbsoluteTime())) . ' kl. ' . date('H:i', $note->getAbsoluteTime()) . '.<p>';
+						$message[] = '<p><b>Navn på gjøremålet:</b> ' . $note->getTitle() . '</p>';
+						$message[] = '<p><b>Detaljer:</b> <br>';
+						$message[] = wordwrap($note->getContent(), 75, '<br>') . '</p>';
+						$message[] = '<p>Med vennlig hilsen <a href="http://infected.no/">Infected</a>.</p>';
+					$message[] = '</body>';
+				$message[] = '</html>';
 
-			MailManager::sendEmail($note->getUser(), 'Du har et gjøremål som nærmer seg fristen', implode("\r\n", $message));
-			$note->setNotified(true);
+				MailManager::sendEmail($note->getUser(), 'Du har et gjøremål som nærmer seg fristen', implode("\r\n", $message));
+				$note->setNotified(true);
+			}
 		}
 	}
 
