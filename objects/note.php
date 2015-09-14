@@ -74,10 +74,18 @@ class Note extends EventObject {
 	 */
 	public function getUser() {
 		if ($this->hasGroup() && !$this->hasUser()) {
+			$group = $this->getGroup();
+
 			if ($this->hasTeam()) {
-				return $this->getTeam()->getLeader();
+				$team = $this->getTeam();
+
+				if ($team->hasLeader()) {
+					return $this->getTeam()->getLeader();
+				}
 			} else {
-				return $this->getGroup()->getLeader();
+				if ($group->hasLeader()) {
+					return $this->getGroup()->getLeader();
+				}
 			}
 		}
 
@@ -163,21 +171,27 @@ class Note extends EventObject {
 	}
 
 	public function isUser(User $user) {
-		if ($this->hasGroup() && !$this->hasUser()) {
-			$group = $this->getGroup();
+		if ($this->hasUser()) {
+			return $this->getUser()->equals($user);
+		} else {
+			if ($this->hasGroup()) {
+				$group = $this->getGroup();
 
-			if ($group->hasLeader()) {
-				return $this->getUser()->equals($group->getLeader());
-			} else if ($this->hasTeam()) {
-				$team = $this->getTeam();
+				if ($this->hasTeam()) {
+					$team = $this->getTeam();
 
-				if ($team->hasLeader()) {
-					return $this->getUser()->equals($team->getLeader());
+					if ($team->hasLeader()) {
+						return $this->getUser()->equals($team->getLeader());
+					}
+				} else {
+					if ($group->hasLeader()) {
+						return $this->getUser()->equals($group->getLeader());
+					}
 				}
 			}
 		}
-
-		return $this->getUser()->equals($user);
+		
+		return false;
 	}
 
 	public function isOwner(User $user) {
