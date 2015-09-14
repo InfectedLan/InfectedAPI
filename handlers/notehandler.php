@@ -46,7 +46,8 @@ class NoteHandler {
 		$database = Database::open(Settings::db_name_infected_crew);
 
 		$result = $database->query('SELECT * FROM `' . Settings::db_table_infected_crew_notes . '`
-																WHERE `eventId` = \'' . $event->getId() . '\';');
+																WHERE `eventId` = \'' . $event->getId() . '\'
+																ORDER BY `secondsOffset`, `time`;');
 
 		$database->close();
 
@@ -76,7 +77,8 @@ class NoteHandler {
 																WHERE `eventId` = \'' . $event->getId() . '\'
 																AND `done` = \'0\'
 																AND `notified` = \'0\'
-																AND DATE_SUB(FROM_UNIXTIME(' . $event->getStartTime() . ' + `secondsOffset`), INTERVAL 3 DAY) <= NOW();');
+																AND DATE_SUB(FROM_UNIXTIME(' . $event->getStartTime() . ' + `secondsOffset`), INTERVAL 3 DAY) <= NOW()
+																ORDER BY `secondsOffset`, `time`;');
 
 		$database->close();
 
@@ -104,7 +106,8 @@ class NoteHandler {
 
 		$result = $database->query('SELECT * FROM `' . Settings::db_table_infected_crew_notes . '`
 																WHERE `eventId` = \'' . $event->getId() . '\'
-																AND `groupId` = \'' . $group->getId() . '\';');
+																AND `groupId` = \'' . $group->getId() . '\'
+																ORDER BY `secondsOffset`, `time`;');
 
 		$database->close();
 
@@ -133,7 +136,8 @@ class NoteHandler {
 		$result = $database->query('SELECT * FROM `' . Settings::db_table_infected_crew_notes . '`
 																WHERE `eventId` = \'' . $event->getId() . '\'
 																AND `groupId` = \'' . $team->getGroup()->getId() . '\'
-																AND `teamId` = \'' . $team->getId() . '\';');
+																AND `teamId` = \'' . $team->getId() . '\'
+																ORDER BY `secondsOffset`, `time`;');
 
 		$database->close();
 
@@ -164,7 +168,7 @@ class NoteHandler {
 																AND `groupId` = \'0\'
 																AND `teamId` = \'0\'
 																AND `userId` = \'' . $user->getId() . '\'
-																ORDER BY `secondsOffset`;');
+																ORDER BY `secondsOffset`, `time`;');
 
 		$database->close();
 
@@ -194,7 +198,7 @@ class NoteHandler {
 			$result = $database->query('SELECT * FROM `' . Settings::db_table_infected_crew_notes . '`
 																	WHERE `eventId` = \'' . $event->getId() . '\'
 																	AND `groupId` = \'' . $user->getGroup()->getId() . '\'
-																	ORDER BY `secondsOffset`;');
+																	ORDER BY `secondsOffset`, `time`;');
 
 
 		} else if ($user->isTeamMember() && $user->isTeamLeader()) {
@@ -203,13 +207,13 @@ class NoteHandler {
 																	AND `groupId` = \'' . $user->getGroup()->getId() . '\'
 																	AND ((`teamId` = \'' . $user->getTeam()->getId() . '\') OR
 																			 (`teamId` = \'0\' AND `userId` = \'' . $user->getId() . '\'))
-																	ORDER BY `secondsOffset`;');
+																	ORDER BY `secondsOffset`, `time`;');
 		} else {
 			$result = $database->query('SELECT * FROM `' . Settings::db_table_infected_crew_notes . '`
 																	WHERE `eventId` = \'' . $event->getId() . '\'
 																	AND `groupId` = \'' . $user->getGroup()->getId() . '\'
 																	AND `userId` = \'' . $user->getId() . '\'
-																	ORDER BY `secondsOffset`;');
+																	ORDER BY `secondsOffset`, `time`;');
 		}
 
 		$database->close();
@@ -252,11 +256,12 @@ class NoteHandler {
 	/*
 	 * Update a note.
 	 */
-	public static function updateNote(Note $note, Team $team = null, User $user = null, $title, $content, $secondsOffset = 0, $time = null, $notified = 0) {
+	public static function updateNote(Note $note, Group $group = null, Team $team = null, User $user = null, $title, $content, $secondsOffset = 0, $time = null, $notified = 0) {
 		$database = Database::open(Settings::db_name_infected_crew);
 
 		$database->query('UPDATE `' . Settings::db_table_infected_crew_notes . '`
-										  SET `teamId` = \'' . ($team != null ? $team->getId() : 0) . '\',
+										  SET `groupId` = \'' . ($group != null ? $group->getId() : 0) . '\',
+													`teamId` = \'' . ($team != null ? $team->getId() : 0) . '\',
 													`userId` = \'' . ($user != null ? $user->getId() : 0) . '\',
 													`title` = \'' . $database->real_escape_string($title) . '\',
 													`content` = \'' . $database->real_escape_string($content) . '\',
