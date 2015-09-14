@@ -247,6 +247,8 @@ class User extends Object {
 
 		// Give access to default permission for certain users.
 		if ($this->isGroupMember()) {
+			array_push($permissionList, PermissionHandler::getPermissionByValue('event.checklist'));
+
 		  // Give leaders access to permissions by default.
 		  if ($this->isGroupLeader() || $this->isGroupCoLeader()) {
 		    array_push($permissionList, PermissionHandler::getPermissionByValue('chief.*'));
