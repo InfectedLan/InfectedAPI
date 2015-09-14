@@ -190,13 +190,13 @@ class Note extends EventObject {
 				}
 			}
 		}
-		
+
 		return false;
 	}
 
 	public function isOwner(User $user) {
 		return ($this->hasGroup() && ($user->isGroupLeader() || $user->isGroupCoLeader())) ||
-					 (($this->hasGroup() && $this->hasTeam()) && ($user->isTeamMember() && $user->isTeamLeader())) ||
+					 ($this->hasGroup() && $this->hasTeam() && $user->isTeamMember() && $user->isTeamLeader()) ||
 					 $this->isPrivate();
 	}
 }

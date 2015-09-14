@@ -74,6 +74,7 @@ class NoteHandler {
 
 		$result = $database->query('SELECT * FROM `' . Settings::db_table_infected_crew_notes . '`
 																WHERE `eventId` = \'' . $event->getId() . '\'
+																AND `done` = \'0\'
 																AND `notified` = \'0\'
 																AND DATE_SUB(FROM_UNIXTIME(' . $event->getStartTime() . ' + `secondsOffset`), INTERVAL 3 DAY) <= NOW();');
 
