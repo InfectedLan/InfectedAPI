@@ -170,23 +170,20 @@ class Note extends EventObject {
 		return ($this->hasGroup() || ($this->hasGroup() && $this->hasTeam())) && $this->hasUser();
 	}
 
+	/*
+	 * Returns true if the given user is user of this note.
+	 */
 	public function isUser(User $user) {
-		if ($this->hasUser()) {
-			return $this->getUser()->equals($user);
-		} else {
-			if ($this->hasGroup()) {
-				$group = $this->getGroup();
+		if (!$this->isOwner($user)) {
+			if ($this->hasUser() && $user->equals($this->getUser())) {
+				return true;
+			}
 
-				if ($this->hasTeam()) {
-					$team = $this->getTeam();
+			if ($this->hasGroup() && $this->hasTeam()) {
+				$team = $this->getTeam();
 
-					if ($team->hasLeader()) {
-						return $this->getUser()->equals($team->getLeader());
-					}
-				} else {
-					if ($group->hasLeader()) {
-						return $this->getUser()->equals($group->getLeader());
-					}
+				if ($team->hasLeader() && $user->equals($team->getLeader())) {
+					return true;
 				}
 			}
 		}
@@ -194,10 +191,55 @@ class Note extends EventObject {
 		return false;
 	}
 
+	/*
+	 * Returns true if this note has a owner.
+	 */
+	public function hasOwner() {
+		if ($this->hasGroup() && !$this->hasUser()) {
+			$group = $this->getGroup();
+
+			if ($this->hasTeam()) {
+				$team = $this->getTeam();
+
+				if ($team->hasLeader()) {
+					return true;
+				}
+			} else {
+				if ($group->hasLeader()) {
+					return true;
+				}
+			}
+		}
+
+		return false;
+	}
+
+	/*
+	 * Returns true if the given user is owner of this note.
+	 */
 	public function isOwner(User $user) {
-		return ($this->hasGroup() && ($user->isGroupLeader() || $user->isGroupCoLeader())) ||
-					 ($this->hasGroup() && $this->hasTeam() && $user->isTeamMember() && $user->isTeamLeader()) ||
-					 $this->isPrivate();
+		if ($this->isPrivate()) {
+			return true;
+		}
+
+		if ($this->hasGroup()) {
+			$group = $this->getGroup();
+
+			if (($group->hasLeader() && $user->equals($group->getLeader())) ||
+				($group->hasCoLeader() && $user->equals($group->getCoLeader()))) {
+				return true;
+			}
+
+			if ($this->hasTeam()) {
+				$team = $this->getTeam();
+
+				if ($team->hasLeader() && $user->equals($team->getLeader())) {
+					return true;
+				}
+			}
+		}
+
+		return false;
 	}
 }
 ?>
