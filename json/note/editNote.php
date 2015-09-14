@@ -41,7 +41,12 @@ if (Session::isAuthenticated()) {
 			!empty($_GET['title']) &&
 			!empty($_GET['content'])) {
 			$note = NoteHandler::getNote($_GET['id']);
-			$team = isset($_GET['teamId']) ? TeamHandler::getTeam($_GET['teamId']) : ($note->hasTeam() ? $note->getTeam() : null);
+			$group = isset($_GET['groupId']) ? GroupHandler::getGroup($_GET['groupId']) : ($note->hasGroup() ? $note->getGroup() : null);
+
+			if (!isset($_GET['groupId'])) {
+				$team = isset($_GET['teamId']) ? TeamHandler::getTeam($_GET['teamId']) : ($note->hasTeam() ? $note->getTeam() : null);
+			}
+
 			$user = isset($_GET['userId']) ? UserHandler::getUser($_GET['userId']) : ($note->hasUser() ? $note->getUser() : null);
 			$title = $_GET['title'];
 			$content = $_GET['content'];
@@ -59,7 +64,7 @@ if (Session::isAuthenticated()) {
 			$notified = $secondsOffset != $note->getSecondsOffset() && $time != $note->getTime();
 
 			if ($note != null) {
-				NoteHandler::updateNote($note, $team, $user, $title, $content, $secondsOffset, $time, $notified);
+				NoteHandler::updateNote($note, $group, $team, $user, $title, $content, $secondsOffset, $time, $notified);
 				$result = true;
 			} else {
 				$message = Localization::getLocale('the_note_does_not_exist');
