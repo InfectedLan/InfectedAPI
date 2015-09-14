@@ -72,7 +72,7 @@ class UserHandler {
 		$database = Database::open(Settings::db_name_infected);
 
 		$result = $database->query('SELECT * FROM `' . Settings::db_table_infected_users . '`
-																ORDER BY `firstname` ASC;');
+																ORDER BY `firstname`, `lastname`;');
 
 		$database->close();
 
@@ -95,7 +95,7 @@ class UserHandler {
 																LEFT JOIN `' . Settings::db_table_infected_userpermissions . '` ON `' . Settings::db_table_infected_users . '`.`id` = `' . Settings::db_table_infected_userpermissions . '`.`userId`
 																WHERE `' . Settings::db_table_infected_userpermissions . '`.`id` IS NOT NULL
 																AND `' . Settings::db_table_infected_userpermissions . '`.`eventId` = \'' . $event->getId() . '\'
-																ORDER BY `' . Settings::db_table_infected_users . '`.`firstname` ASC;');
+																ORDER BY `' . Settings::db_table_infected_users . '`.`firstname`, `' . Settings::db_table_infected_users . '`.`lastname`;');
 
 		$database->close();
 
@@ -127,7 +127,7 @@ class UserHandler {
 																WHERE `' . Settings::db_table_infected_userpermissions . '`.`id` IS NOT NULL
 																AND (`' . Settings::db_table_infected_userpermissions . '`.`eventId` = \'' . $event->getId() . '\' OR `' . Settings::db_table_infected_userpermissions . '`.`eventId` = \'0\')
 																AND `' . Settings::db_table_infected_crew_memberof . '`.`groupId` ' . ($group != null ? '= \'' . $group->getId() . '\'' : 'IS NULL') . '
-																ORDER BY `' . Settings::db_table_infected_users . '`.`firstname` ASC;');
+																ORDER BY `' . Settings::db_table_infected_users . '`.`firstname`, `' . Settings::db_table_infected_users . '`.`lastname`;');
 
 		$database->close();
 
@@ -157,7 +157,7 @@ class UserHandler {
 																LEFT JOIN `' . Settings::db_name_infected_crew . '`.`' . Settings::db_table_infected_crew_memberof . '` ON `' . Settings::db_table_infected_users . '`.`id` = `' . Settings::db_table_infected_crew_memberof . '`.`userId`
 																WHERE `eventId` = \'' . EventHandler::getCurrentEvent()->getId() . '\'
 																AND `' . Settings::db_table_infected_crew_memberof . '`.`groupId` IS NOT NULL
-																ORDER BY `' . Settings::db_table_infected_users . '`.`firstname` ASC;');
+															  ORDER BY `' . Settings::db_table_infected_users . '`.`firstname`, `' . Settings::db_table_infected_users . '`.`lastname`;');
 
 		$database->close();
 
@@ -180,7 +180,7 @@ class UserHandler {
 																LEFT JOIN `' . Settings::db_name_infected_crew . '`.`' . Settings::db_table_infected_crew_memberof . '` ON `' . Settings::db_table_infected_users . '`.`id` = `' . Settings::db_table_infected_crew_memberof . '`.`userId`
 																WHERE `' . Settings::db_table_infected_crew_memberof . '`.`eventId` IS NULL
 																OR `' . Settings::db_table_infected_crew_memberof . '`.`eventId` != \'' . EventHandler::getCurrentEvent()->getId() . '\'
-																ORDER BY `' . Settings::db_table_infected_users . '`.`firstname` ASC;');
+																ORDER BY `' . Settings::db_table_infected_users . '`.`firstname`, `' . Settings::db_table_infected_users . '`.`lastname`;');
 
 		$database->close();
 
@@ -203,7 +203,7 @@ class UserHandler {
 																LEFT JOIN `' . Settings::db_name_infected_tickets . '`.`' . Settings::db_table_infected_tickets_tickets . '` ON `' . Settings::db_table_infected_users . '`.`id` = `' . Settings::db_table_infected_tickets_tickets . '`.`userId`
 																WHERE `' . Settings::db_table_infected_tickets_tickets . '`.`eventId` = ' . $event->getId() . '
 																AND `' . Settings::db_table_infected_tickets_tickets . '`.`id` IS NOT NULL
-																ORDER BY `' . Settings::db_table_infected_users . '`.`firstname` ASC;');
+																ORDER BY `' . Settings::db_table_infected_users . '`.`firstname`, `' . Settings::db_table_infected_users . '`.`lastname`;');
 
 		$database->close();
 
@@ -232,7 +232,7 @@ class UserHandler {
 							  										LEFT JOIN `' . Settings::db_name_infected_tickets . '`.`' . Settings::db_table_infected_tickets_tickets . '` ON `' . Settings::db_table_infected_users . '`.`id` = `' . Settings::db_table_infected_tickets_tickets . '`.`userId`
 							  										WHERE `' . Settings::db_table_infected_tickets_tickets . '`.`eventId` >= ' . $previousEvent->getId() . '
 							  										AND `' . Settings::db_table_infected_tickets_tickets . '`.`eventId` <= ' . $currentEvent->getId() . '
-							  										ORDER BY `' . Settings::db_table_infected_users . '`.`firstname` ASC;');
+							  										ORDER BY `' . Settings::db_table_infected_users . '`.`firstname`, `' . Settings::db_table_infected_users . '`.`lastname`;');
 
   			$database->close();
 
