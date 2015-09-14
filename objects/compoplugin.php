@@ -18,7 +18,7 @@
 require_once 'handlers/matchhandler.php';
 class CompoPlugin {
     public function getCustomMatchInformation(Match $match) { //Called for each current match on the crew page
-        return "";
+        return null;
     }
     
 }

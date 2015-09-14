@@ -341,6 +341,9 @@ class MatchHandler {
 		return $stringArray;
 	}
 
+    /**
+     * Returns an array with "hunan readable" string representations of the participants
+     */
 	public static function getParticipantsJsonByMatch(Match $match) {
 		$database = Database::open(Settings::db_name_infected_compo);
 
@@ -355,8 +358,14 @@ class MatchHandler {
 			if ($row['type'] == Settings::compo_match_participant_type_clan) {
 				$clan = ClanHandler::getClan($row['participantId']);
 				array_push($jsonArray, array('type' => $row['type'], 'value' => $clan->getName() . ' - ' . $clan->getTag() . ''));
+            } elseif ($row['type'] == Settings::compo_match_participant_type_match_winner) {
+                array_push($jsonArray, array('type' => $row['type'], 'value' => "Winner of match " . $row['participantId']));
+            } elseif ($row['type'] == Settings::compo_match_participant_type_match_looser) {
+				array_push($jsonArray, array('type' => $row['type'], 'value' => "Looser of match " . $row['participantId']));
+            } elseif ($row['type'] == Settings::compo_match_participant_type_match_walkover) {
+                array_push($jsonArray, array('type' => $row['type'], 'value' => "Walkover"));
 			} else {
-				array_push($jsonArray, array('type' => $row['type'], 'value' => $row['participantId']));
+				array_push($jsonArray, array('type' => $row['type'], 'value' => $row['participantId'] . "(error)"));
 			}
 		}
 

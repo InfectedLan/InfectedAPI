@@ -20,7 +20,7 @@ class CompoPluginHandler {
      * Returns object for the plugin, or the default if none existing
      */
     public static function getPluginOrDefault($pluginName) {
-        if(!file_exists("plugins/compo/" . $pluginName . ".php")) {
+        if(!file_exists("plugins/compo/" . $pluginName . ".json")) {
             return self::loadPlugin($pluginName);
         } else {
             return self::loadPlugin($pluginName);
@@ -31,7 +31,7 @@ class CompoPluginHandler {
      * Returns javascripts for the plugin, or the default if none existing
      */
     public static function getPluginJavascriptOrDefault($pluginName) {
-        if(!file_exists("plugins/compo/" . $pluginName . ".php")) {
+        if(!file_exists("plugins/compo/" . $pluginName . ".json")) {
             return self::getPluginScripts($pluginName);
         } else {
             return self::getPluginScripts($pluginName);
@@ -42,14 +42,14 @@ class CompoPluginHandler {
      * Returns true if plugin exists
      */
     public static function pluginExists($pluginName) {
-        return file_exists("plugins/compo/" . $pluginName . ".php");
+        return file_exists("plugins/compo/" . $pluginName . ".json");
     }
 
     /**
      * Returns an object with the plugin
      */
     public static function loadPluginObject($pluginName) {
-        $string = file_get_contents("plugins/compo/" . $pluginName . ".php");
+        $string = file_get_contents("plugins/compo/" . $pluginName . ".json");
         $json = json_decode($string, true);
 
         foreach($json["plugin"] as $pluginFile) {

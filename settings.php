@@ -62,6 +62,7 @@ class Settings {
 	const db_table_infected_compo_readyusers = 'readyusers';
 	const db_table_infected_compo_votes =  'votes';
     const db_table_infected_compo_qualificationQueue = 'qualificationQueue';
+    const db_table_infected_compo_matchmetadata = 'matchmetadata';
 
 	// InfectedCrew
 	const db_table_infected_crew_applicationqueue = 'applicationqueue';
@@ -112,6 +113,7 @@ class Settings {
 	const compo_match_participant_type_clan = 0;
 	const compo_match_participant_type_match_winner = 1;
 	const compo_match_participant_type_match_looser = 2;
+    const compo_match_participant_type_match_walkover = 3;
 
 	/* Crew */
 	// Avatar sizes.
