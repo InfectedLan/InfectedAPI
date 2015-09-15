@@ -25,6 +25,7 @@ require_once 'handlers/notehandler.php';
 require_once 'handlers/grouphandler.php';
 require_once 'handlers/teamhandler.php';
 require_once 'handlers/userhandler.php';
+require_once 'utils/userutils.php';
 
 $result = false;
 $message = null;
@@ -43,11 +44,11 @@ if (Session::isAuthenticated()) {
 			$note = NoteHandler::getNote($_GET['id']);
 			$group = isset($_GET['groupId']) ? GroupHandler::getGroup($_GET['groupId']) : ($note->hasGroup() ? $note->getGroup() : null);
 
-			if (!isset($_GET['groupId'])) {
+			if (!isset($_GET['groupId']) || $group->equals($note->getGroup())) {
 				$team = isset($_GET['teamId']) ? TeamHandler::getTeam($_GET['teamId']) : ($note->hasTeam() ? $note->getTeam() : null);
 			}
 
-			$user = isset($_GET['userId']) ? UserHandler::getUser($_GET['userId']) : ($note->hasUser() ? $note->getUser() : null);
+			$delegatedUser = isset($_GET['userId']) ? UserHandler::getUser($_GET['userId']) : ($note->hasUser() ? $note->getUser() : null);
 			$title = $_GET['title'];
 			$content = $_GET['content'];
 			$secondsOffset = $_GET['secondsOffset'];
@@ -61,10 +62,21 @@ if (Session::isAuthenticated()) {
 															$newTimestamp <= ($eventDateTimestamp + $periodAfter); // Check if time offset is less than periodAfter.
 
 			$time = isset($_GET['time']) && $intersectsTimePeriod ? $_GET['time'] : null;
+
+			$watchingUserList = UserUtils::fromUserIds(explode(',', $_GET['watchingUserIdList']));
+
+			foreach ($watchingUserList as $watchingUser) {
+				if ($watchingUser->isWatchingNote($note)) {
+
+				} else {
+					NoteHandler::watchNote($note, $watchingUser);
+				}
+			}
+
 			$notified = $secondsOffset != $note->getSecondsOffset() && $time != $note->getTime();
 
 			if ($note != null) {
-				NoteHandler::updateNote($note, $group, $team, $user, $title, $content, $secondsOffset, $time, $notified);
+				NoteHandler::updateNote($note, $group, $team, $delegatedUser, $title, $content, $secondsOffset, $time, $notified);
 				$result = true;
 			} else {
 				$message = Localization::getLocale('the_note_does_not_exist');

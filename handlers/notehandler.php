@@ -209,8 +209,7 @@ class NoteHandler {
 																	WHERE `eventId` = \'' . $event->getId() . '\'
 																	AND (`groupId` = \'' . $user->getGroup()->getId() . '\'
 																		   AND (`teamId` = \'' . $user->getTeam()->getId() . '\'
-																			      OR (`teamId` = \'0\'
-																						    AND `' . Settings::db_table_infected_crew_notes . '`.`userId` = \'' . $user->getId() . '\')))
+																			      OR (`teamId` = \'0\' AND `' . Settings::db_table_infected_crew_notes . '`.`userId` = \'' . $user->getId() . '\')))
 																	OR `' . Settings::db_table_infected_crew_notewatches . '`.`userId` = \'' . $user->getId() . '\'
 																	ORDER BY `secondsOffset`, `time`;');
 		} else {
@@ -363,9 +362,11 @@ class NoteHandler {
 	public static function watchNote(Note $note, User $user) {
 		$database = Database::open(Settings::db_name_infected_crew);
 
-		$database->query('INSERT INTO `' . Settings::db_table_infected_crew_notewatches . '` (`noteId`, `userId`)
-										  VALUES (\'' . $note->getId() . '\',
-															\'' . $user->getId() . '\');');
+		if (!self::isWatchingNote($note, $user)) {
+			$database->query('INSERT INTO `' . Settings::db_table_infected_crew_notewatches . '` (`noteId`, `userId`)
+											  VALUES (\'' . $note->getId() . '\',
+																\'' . $user->getId() . '\');');
+		}
 
 		$database->close();
 	}
