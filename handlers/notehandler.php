@@ -383,5 +383,27 @@ class NoteHandler {
 
 		$database->close();
 	}
+
+	/*
+	 * Update watching users of a note.
+	 */
+	public static function updateWatchingUsers(Note $note, array $userList) {
+		$database = Database::open(Settings::db_name_infected_crew);
+		$watchingUserList = self::getWatchingUsers($note);
+
+		foreach ($userList as $user) {
+			if (!in_array($user, $watchingUserList)) {
+				self::watchNote($note, $user);
+			}
+		}
+
+		foreach ($watchingUserList as $watchingUser) {
+			if (!in_array($watchingUser, $userList)) {
+				self::unwatchNote($note, $watchingUser);
+			}
+		}
+
+		$database->close();
+	}
 }
 ?>

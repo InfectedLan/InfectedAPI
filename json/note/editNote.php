@@ -62,21 +62,11 @@ if (Session::isAuthenticated()) {
 															$newTimestamp <= ($eventDateTimestamp + $periodAfter); // Check if time offset is less than periodAfter.
 
 			$time = isset($_GET['time']) && $intersectsTimePeriod ? $_GET['time'] : null;
-
-			$watchingUserList = UserUtils::fromUserIds(explode(',', $_GET['watchingUserIdList']));
-
-			foreach ($watchingUserList as $watchingUser) {
-				if ($watchingUser->isWatchingNote($note)) {
-
-				} else {
-					NoteHandler::watchNote($note, $watchingUser);
-				}
-			}
-
 			$notified = $secondsOffset != $note->getSecondsOffset() && $time != $note->getTime();
 
 			if ($note != null) {
 				NoteHandler::updateNote($note, $group, $team, $delegatedUser, $title, $content, $secondsOffset, $time, $notified);
+				NoteHandler::updateWatchingUsers($note, UserUtils::fromUserIds(explode(',', $_GET['watchingUserIdList'])));
 				$result = true;
 			} else {
 				$message = Localization::getLocale('the_note_does_not_exist');
