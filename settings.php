@@ -62,7 +62,7 @@ class Settings {
 	const db_table_infected_compo_matches = 'matches';
 	const db_table_infected_compo_readyusers = 'readyusers';
 	const db_table_infected_compo_votes =  'votes';
-    const db_table_infected_compo_qualificationQueue = 'qualificationQueue';
+  const db_table_infected_compo_qualificationQueue = 'qualificationQueue';
 
 	// InfectedCrew
 	const db_table_infected_crew_applicationqueue = 'applicationqueue';
@@ -71,6 +71,7 @@ class Settings {
 	const db_table_infected_crew_groups = 'groups';
 	const db_table_infected_crew_memberof = 'memberof';
 	const db_table_infected_crew_notes = 'notes';
+	const db_table_infected_crew_notewatches = 'notewatches';
 	const db_table_infected_crew_pages = 'pages';
 	const db_table_infected_crew_teams = 'teams';
 

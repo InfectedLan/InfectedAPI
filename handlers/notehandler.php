@@ -165,9 +165,9 @@ class NoteHandler {
 
 		$result = $database->query('SELECT * FROM `' . Settings::db_table_infected_crew_notes . '`
 																WHERE `eventId` = \'' . $event->getId() . '\'
-																AND `groupId` = \'0\'
-																AND `teamId` = \'0\'
-																AND `userId` = \'' . $user->getId() . '\'
+																AND (`groupId` = \'0\'
+																		 AND `teamId` = \'0\'
+																		 AND `userId` = \'' . $user->getId() . '\')
 																ORDER BY `secondsOffset`, `time`;');
 
 		$database->close();
@@ -191,29 +191,37 @@ class NoteHandler {
 	/*
 	 * Returns a list of all notes by the specified event.
 	 */
-	public static function getNotesByGroupAndTeamAndUserAndEvent(User $user, Event $event) {
+	public static function getNotesByGroupAndTeamAndUserAndEvent(User $user, Event $event) { // TODO: Join this.
 		$database = Database::open(Settings::db_name_infected_crew);
 
 		if ($user->isGroupLeader() || $user->isGroupCoLeader()) {
-			$result = $database->query('SELECT * FROM `' . Settings::db_table_infected_crew_notes . '`
+			$result = $database->query('SELECT `' . Settings::db_table_infected_crew_notes . '`.* FROM `' . Settings::db_table_infected_crew_notes . '`
+																	LEFT JOIN `' . Settings::db_table_infected_crew_notewatches . '`
+																	ON `' . Settings::db_table_infected_crew_notes . '`.`id` = `' . Settings::db_table_infected_crew_notewatches . '`.`noteId`
 																	WHERE `eventId` = \'' . $event->getId() . '\'
 																	AND `groupId` = \'' . $user->getGroup()->getId() . '\'
+																	OR `' . Settings::db_table_infected_crew_notewatches . '`.`userId` = \'' . $user->getId() . '\'
 																	ORDER BY `secondsOffset`, `time`;');
-
-
 		} else if ($user->isTeamMember() && $user->isTeamLeader()) {
-			$result = $database->query('SELECT * FROM `' . Settings::db_table_infected_crew_notes . '`
+			$result = $database->query('SELECT `' . Settings::db_table_infected_crew_notes . '`.* FROM `' . Settings::db_table_infected_crew_notes . '`
+																	LEFT JOIN `' . Settings::db_table_infected_crew_notewatches . '`
+																	ON `' . Settings::db_table_infected_crew_notes . '`.`id` = `' . Settings::db_table_infected_crew_notewatches . '`.`noteId`
 																	WHERE `eventId` = \'' . $event->getId() . '\'
-																	AND `groupId` = \'' . $user->getGroup()->getId() . '\'
-																	AND ((`teamId` = \'' . $user->getTeam()->getId() . '\') OR
-																			 (`teamId` = \'0\' AND `userId` = \'' . $user->getId() . '\'))
+																	AND (`groupId` = \'' . $user->getGroup()->getId() . '\'
+																		   AND (`teamId` = \'' . $user->getTeam()->getId() . '\'
+																			      OR (`teamId` = \'0\'
+																						    AND `' . Settings::db_table_infected_crew_notes . '`.`userId` = \'' . $user->getId() . '\')))
+																	OR `' . Settings::db_table_infected_crew_notewatches . '`.`userId` = \'' . $user->getId() . '\'
 																	ORDER BY `secondsOffset`, `time`;');
 		} else {
-			$result = $database->query('SELECT * FROM `' . Settings::db_table_infected_crew_notes . '`
+			$result = $database->query('SELECT `' . Settings::db_table_infected_crew_notes . '`.* FROM `' . Settings::db_table_infected_crew_notes . '`
+																	LEFT JOIN `' . Settings::db_table_infected_crew_notewatches . '`
+																	ON `' . Settings::db_table_infected_crew_notes . '`.`id` = `' . Settings::db_table_infected_crew_notewatches . '`.`noteId`
 																	WHERE `eventId` = \'' . $event->getId() . '\'
-																	AND `groupId` = \'' . $user->getGroup()->getId() . '\'
-																	AND `userId` = \'' . $user->getId() . '\'
-																	ORDER BY `secondsOffset`, `time`;');
+																	AND (`groupId` = \'' . $user->getGroup()->getId() . '\'
+																	     AND `' . Settings::db_table_infected_crew_notes . '`.`userId` = \'' . $user->getId() . '\')
+																	OR `' . Settings::db_table_infected_crew_notewatches . '`.`userId` = \'' . $user->getId() . '\'
+		 															ORDER BY `secondsOffset`, `time`;');
 		}
 
 		$database->close();
@@ -307,6 +315,70 @@ class NoteHandler {
 
 		$database->query('DELETE FROM `' . Settings::db_table_infected_crew_notes . '`
 						  				WHERE `id` = \'' . $note->getId() . '\';');
+
+		$database->close();
+	}
+
+	/* Notes watchlist */
+	/*
+	 * Returns true if this user has a option.
+	 */
+	public static function isWatchingNote(Note $note, User $user) {
+		$database = Database::open(Settings::db_name_infected_crew);
+
+		$result = $database->query('SELECT `id` FROM `' . Settings::db_table_infected_crew_notewatches . '`
+																WHERE `noteId` = \'' . $note->getId() . '\'
+																AND `userId` = \'' . $user->getId() . '\';');
+
+		$database->close();
+
+		return $result->num_rows > 0;
+	}
+
+	/*
+	 * Returns a list of all users watching the specified note.
+	 */
+	public static function getWatchingUsers(Note $note) {
+		$database = Database::open(Settings::db_name_infected);
+
+		$result = $database->query('SELECT * FROM `' . Settings::db_table_infected_users . '`
+																WHERE `id` IN (SELECT `userId` FROM `' . Settings::db_name_infected_crew . '`.`' . Settings::db_table_infected_crew_notewatches . '`
+																							 WHERE `noteId` = \'' . $note->getId() . '\')
+																ORDER BY `firstname`, `lastname`;');
+
+		$database->close();
+
+		$userList = array();
+
+		while ($object = $result->fetch_object('User')) {
+			array_push($userList, $object);
+		}
+
+		return $userList;
+	}
+
+	/*
+	 * Watch a note.
+	 */
+	public static function watchNote(Note $note, User $user) {
+		$database = Database::open(Settings::db_name_infected_crew);
+
+		$database->query('INSERT INTO `' . Settings::db_table_infected_crew_notewatches . '` (`noteId`, `userId`)
+										  VALUES (\'' . $note->getId() . '\',
+															\'' . $user->getId() . '\');');
+
+		$database->close();
+	}
+
+	/*
+	 * Unwatch a note.
+	 */
+	public static function unwatchNote(Note $note, User $user) {
+		$database = Database::open(Settings::db_name_infected_crew);
+
+		$database->query('DELETE FROM `' . Settings::db_table_infected_crew_notewatches . '`
+						  				WHERE `noteId` = \'' . $note->getId() . '\'
+											AND `userId` = \'' . $user->getId() . '\';');
 
 		$database->close();
 	}
