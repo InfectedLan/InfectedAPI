@@ -24,6 +24,20 @@ class Settings {
 	const description = 'Infected er et av Akershus største datatreff (LAN-party), og holder til i kulturhuset i Asker kommune.';
 	const keywords = 'infected, lan, party, asker, kulturhus, ungdom, gaming';
 
+	/* Configuration */
+	const domain = 'test.infected.no';
+
+	// Email information.
+	const emailName = self::name;
+	const email = 'no-reply@' . self::domain;
+
+	// Full path to the API location.
+	const api_path = '/home/' . self::domain . '/public_html/api/';
+
+	// Tells where images should be stored.
+	const qr_path = '../api/content/qrcache/';
+	const avatar_path = '../api/content/avatars/';
+
 	/* Database */
 	const db_host = 'localhost';
 	const db_name_infected = 'test_infected_no';
@@ -95,20 +109,6 @@ class Settings {
 	const db_table_infected_tickets_tickets = 'tickets';
 	const db_table_infected_tickets_tickettransfers = 'tickettransfers';
 	const db_table_infected_tickets_tickettypes = 'tickettypes';
-
-	/* Configuration */
-
-	/* InfectedAPI */
-	// Full path to the API location.
-	const api_path = '/home/test.infected.no/public_html/api/';
-
-	// Email information.
-	const emailName = 'Infected';
-	const email = 'no-reply@infected.no';
-
-	// Tells where QR images should be stored.
-	const qr_path = '../api/content/qrcache/';
-	const avatar_path = '../api/content/avatars/';
 
 	/* Compo */
 	// Match participant of state.
