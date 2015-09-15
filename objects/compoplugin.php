@@ -1,3 +1,4 @@
+<?php
 /*
 * This file is part of InfectedCrew.
 *
@@ -22,3 +23,4 @@ class CompoPlugin {
     }
     
 }
+?>
