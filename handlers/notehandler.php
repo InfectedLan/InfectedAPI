@@ -191,7 +191,7 @@ class NoteHandler {
 	/*
 	 * Returns a list of all notes by the specified event.
 	 */
-	public static function getNotesByGroupAndTeamAndUserAndEvent(User $user, Event $event) { // TODO: Join this.
+	public static function getNotesByGroupAndTeamAndUserAndEvent(User $user, Event $event) {
 		$database = Database::open(Settings::db_name_infected_crew);
 
 		if ($user->isGroupLeader() || $user->isGroupCoLeader()) {
