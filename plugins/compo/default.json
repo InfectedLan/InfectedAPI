@@ -18,7 +18,7 @@
 {
     "name": "Default compo plugin",
     "description": "Gives you the default behaviour of the compo system",
-    "javascript": ["default.js"],
-    "plugin": ["default.php"],
-    "classname": "DefaultCompoPlugin"
+    "javascript": [],
+    "plugin": [],
+    "classname": "CompoPlugin"
 }
