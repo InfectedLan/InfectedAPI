@@ -19,7 +19,17 @@
  */
 
 class UserUtils {
-	public static function fromUserIds(array $userIdList) {
+	public static function toUserIdList(array $userList) {
+		$userIdList = array();
+
+		foreach ($userList as $user) {
+			array_push($userIdList, $user->getId());
+		}
+
+		return $userIdList;
+	}
+
+	public static function fromUserIdList(array $userIdList) {
 		$userList = array();
 
 		foreach ($userIdList as $userId) {

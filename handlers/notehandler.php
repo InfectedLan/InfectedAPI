@@ -23,6 +23,7 @@ require_once 'database.php';
 require_once 'handlers/eventhandler.php';
 require_once 'objects/note.php';
 require_once 'objects/event.php';
+require_once 'utils/userutils.php';
 
 class NoteHandler {
 	/*
@@ -389,19 +390,18 @@ class NoteHandler {
 	 */
 	public static function updateWatchingUsers(Note $note, array $userList) {
 		$database = Database::open(Settings::db_name_infected_crew);
-		$watchingUserList = self::getWatchingUsers($note);
 
 		foreach ($userList as $user) {
-			if (!in_array($user, $watchingUserList)) {
-				self::watchNote($note, $user);
-			}
+			if (!self::isWatchingNote($note, $user)) {
+				$database->query('INSERT INTO `' . Settings::db_table_infected_crew_notewatches . '` (`noteId`, `userId`)
+													VALUES (\'' . $note->getId() . '\',
+																	\'' . $user->getId() . '\');');
+		  }
 		}
-
-		foreach ($watchingUserList as $watchingUser) {
-			if (!in_array($watchingUser, $userList)) {
-				self::unwatchNote($note, $watchingUser);
-			}
-		}
+		
+		$database->query('DELETE FROM `' . Settings::db_table_infected_crew_notewatches . '`
+						  				WHERE `noteId` = \'' . $note->getId() . '\'
+											AND `userId` NOT IN (' . implode(', ', UserUtils::toUserIdList($userList)) . ');');
 
 		$database->close();
 	}

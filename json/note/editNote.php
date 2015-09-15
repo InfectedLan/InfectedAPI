@@ -44,7 +44,7 @@ if (Session::isAuthenticated()) {
 			$note = NoteHandler::getNote($_GET['id']);
 			$group = isset($_GET['groupId']) ? GroupHandler::getGroup($_GET['groupId']) : ($note->hasGroup() ? $note->getGroup() : null);
 
-			if (!isset($_GET['groupId']) || $group->equals($note->getGroup())) {
+			if (!isset($_GET['groupId']) || ($group != null && $group->equals($note->getGroup()))) {
 				$team = isset($_GET['teamId']) ? TeamHandler::getTeam($_GET['teamId']) : ($note->hasTeam() ? $note->getTeam() : null);
 			}
 
@@ -64,9 +64,11 @@ if (Session::isAuthenticated()) {
 			$time = isset($_GET['time']) && $intersectsTimePeriod ? $_GET['time'] : null;
 			$notified = $secondsOffset != $note->getSecondsOffset() && $time != $note->getTime();
 
+			$watchingUserIdList = isset($_GET['watchingUserIdList']) ? explode(',', $_GET['watchingUserIdList']) : null;
+
 			if ($note != null) {
 				NoteHandler::updateNote($note, $group, $team, $delegatedUser, $title, $content, $secondsOffset, $time, $notified);
-				NoteHandler::updateWatchingUsers($note, UserUtils::fromUserIds(explode(',', $_GET['watchingUserIdList'])));
+				NoteHandler::updateWatchingUsers($note, UserUtils::fromUserIdList($watchingUserIdList));
 				$result = true;
 			} else {
 				$message = Localization::getLocale('the_note_does_not_exist');
