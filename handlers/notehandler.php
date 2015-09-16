@@ -196,16 +196,15 @@ class NoteHandler {
 		$database = Database::open(Settings::db_name_infected_crew);
 
 		if ($user->isGroupLeader() || $user->isGroupCoLeader()) {
-			$result = $database->query('SELECT `' . Settings::db_table_infected_crew_notes . '`.* FROM `' . Settings::db_table_infected_crew_notes . '`
+			$result = $database->query('SELECT DISTINCT `' . Settings::db_table_infected_crew_notes . '`.* FROM `' . Settings::db_table_infected_crew_notes . '`
 																	LEFT JOIN `' . Settings::db_table_infected_crew_notewatches . '`
 																	ON `' . Settings::db_table_infected_crew_notes . '`.`id` = `' . Settings::db_table_infected_crew_notewatches . '`.`noteId`
 																	WHERE `eventId` = \'' . $event->getId() . '\'
 																	AND `groupId` = \'' . $user->getGroup()->getId() . '\'
 																	OR `' . Settings::db_table_infected_crew_notewatches . '`.`userId` = \'' . $user->getId() . '\'
-																	GROUP BY `' . Settings::db_table_infected_crew_notes . '`.`id`
 																	ORDER BY `secondsOffset`, `time`;');
 		} else if ($user->isTeamMember() && $user->isTeamLeader()) {
-			$result = $database->query('SELECT `' . Settings::db_table_infected_crew_notes . '`.* FROM `' . Settings::db_table_infected_crew_notes . '`
+			$result = $database->query('SELECT DISTINCT `' . Settings::db_table_infected_crew_notes . '`.* FROM `' . Settings::db_table_infected_crew_notes . '`
 																	LEFT JOIN `' . Settings::db_table_infected_crew_notewatches . '`
 																	ON `' . Settings::db_table_infected_crew_notes . '`.`id` = `' . Settings::db_table_infected_crew_notewatches . '`.`noteId`
 																	WHERE `eventId` = \'' . $event->getId() . '\'
@@ -213,17 +212,15 @@ class NoteHandler {
 																		   AND (`teamId` = \'' . $user->getTeam()->getId() . '\'
 																			      OR (`teamId` = \'0\' AND `' . Settings::db_table_infected_crew_notes . '`.`userId` = \'' . $user->getId() . '\')))
 																	OR `' . Settings::db_table_infected_crew_notewatches . '`.`userId` = \'' . $user->getId() . '\'
-																	GROUP BY `' . Settings::db_table_infected_crew_notes . '`.`id`
 																	ORDER BY `secondsOffset`, `time`;');
 		} else {
-			$result = $database->query('SELECT `' . Settings::db_table_infected_crew_notes . '`.* FROM `' . Settings::db_table_infected_crew_notes . '`
+			$result = $database->query('SELECT DISTINCT `' . Settings::db_table_infected_crew_notes . '`.* FROM `' . Settings::db_table_infected_crew_notes . '`
 																	LEFT JOIN `' . Settings::db_table_infected_crew_notewatches . '`
 																	ON `' . Settings::db_table_infected_crew_notes . '`.`id` = `' . Settings::db_table_infected_crew_notewatches . '`.`noteId`
 																	WHERE `eventId` = \'' . $event->getId() . '\'
 																	AND (`groupId` = \'' . $user->getGroup()->getId() . '\'
 																	     AND `' . Settings::db_table_infected_crew_notes . '`.`userId` = \'' . $user->getId() . '\')
 																	OR `' . Settings::db_table_infected_crew_notewatches . '`.`userId` = \'' . $user->getId() . '\'
-																	GROUP BY `' . Settings::db_table_infected_crew_notes . '`.`id`
 		 															ORDER BY `secondsOffset`, `time`;');
 		}
 
