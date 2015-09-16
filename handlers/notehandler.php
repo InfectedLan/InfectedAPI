@@ -202,6 +202,7 @@ class NoteHandler {
 																	WHERE `eventId` = \'' . $event->getId() . '\'
 																	AND `groupId` = \'' . $user->getGroup()->getId() . '\'
 																	OR `' . Settings::db_table_infected_crew_notewatches . '`.`userId` = \'' . $user->getId() . '\'
+																	GROUP BY `' . Settings::db_table_infected_crew_notes . '`.`id`
 																	ORDER BY `secondsOffset`, `time`;');
 		} else if ($user->isTeamMember() && $user->isTeamLeader()) {
 			$result = $database->query('SELECT `' . Settings::db_table_infected_crew_notes . '`.* FROM `' . Settings::db_table_infected_crew_notes . '`
@@ -212,6 +213,7 @@ class NoteHandler {
 																		   AND (`teamId` = \'' . $user->getTeam()->getId() . '\'
 																			      OR (`teamId` = \'0\' AND `' . Settings::db_table_infected_crew_notes . '`.`userId` = \'' . $user->getId() . '\')))
 																	OR `' . Settings::db_table_infected_crew_notewatches . '`.`userId` = \'' . $user->getId() . '\'
+																	GROUP BY `' . Settings::db_table_infected_crew_notes . '`.`id`
 																	ORDER BY `secondsOffset`, `time`;');
 		} else {
 			$result = $database->query('SELECT `' . Settings::db_table_infected_crew_notes . '`.* FROM `' . Settings::db_table_infected_crew_notes . '`
@@ -221,6 +223,7 @@ class NoteHandler {
 																	AND (`groupId` = \'' . $user->getGroup()->getId() . '\'
 																	     AND `' . Settings::db_table_infected_crew_notes . '`.`userId` = \'' . $user->getId() . '\')
 																	OR `' . Settings::db_table_infected_crew_notewatches . '`.`userId` = \'' . $user->getId() . '\'
+																	GROUP BY `' . Settings::db_table_infected_crew_notes . '`.`id`
 		 															ORDER BY `secondsOffset`, `time`;');
 		}
 
@@ -398,7 +401,7 @@ class NoteHandler {
 																	\'' . $user->getId() . '\');');
 		  }
 		}
-		
+
 		$database->query('DELETE FROM `' . Settings::db_table_infected_crew_notewatches . '`
 						  				WHERE `noteId` = \'' . $note->getId() . '\'
 											AND `userId` NOT IN (' . implode(', ', UserUtils::toUserIdList($userList)) . ');');
