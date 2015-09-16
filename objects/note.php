@@ -195,7 +195,11 @@ class Note extends EventObject {
 	 * Returns true if this note has a owner.
 	 */
 	public function hasOwner() {
-		if ($this->hasGroup() && !$this->hasUser()) {
+		if ($this->isPrivate()) {
+			return true;
+		}
+
+		if ($this->hasGroup()) {
 			$group = $this->getGroup();
 
 			if ($this->hasTeam()) {

@@ -64,7 +64,7 @@ if (Session::isAuthenticated()) {
 			$time = isset($_GET['time']) && $intersectsTimePeriod ? $_GET['time'] : null;
 			$notified = $secondsOffset != $note->getSecondsOffset() && $time != $note->getTime();
 
-			$watchingUserIdList = isset($_GET['watchingUserIdList']) ? explode(',', $_GET['watchingUserIdList']) : array();
+			$watchingUserIdList = isset($_GET['watchingUserIdList']) ? $_GET['watchingUserIdList'] : array();
 
 			if ($note != null) {
 				NoteHandler::updateNote($note, $group, $team, $delegatedUser, $title, $content, $secondsOffset, $time, $notified);
