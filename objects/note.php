@@ -174,16 +174,28 @@ class Note extends EventObject {
 	 * Returns true if the given user is user of this note.
 	 */
 	public function isUser(User $user) {
-		if (!$this->isOwner($user)) {
-			if ($this->hasUser() && $user->equals($this->getUser())) {
+		if ($this->isPrivate()) {
+			return true;
+		}
+
+		if ($this->hasUser()) {
+			if ($user->equals($this->getUser())) {
 				return true;
 			}
+		} else {
+			if ($this->hasGroup()) {
+				if ($this->hasTeam()) {
+					$team = $this->getTeam();
 
-			if ($this->hasGroup() && $this->hasTeam()) {
-				$team = $this->getTeam();
+					if ($team->isLeader($user)) {
+						return true;
+					}
+				} else {
+					$group = $this->getGroup();
 
-				if ($team->hasLeader() && $user->equals($team->getLeader())) {
-					return true;
+					if ($group->isLeader($user)) {
+						return true;
+					}
 				}
 			}
 		}
@@ -229,15 +241,15 @@ class Note extends EventObject {
 		if ($this->hasGroup()) {
 			$group = $this->getGroup();
 
-			if (($group->hasLeader() && $user->equals($group->getLeader())) ||
-				($group->hasCoLeader() && $user->equals($group->getCoLeader()))) {
+			if ($group->isLeader($user) ||
+				$group->isCoLeader($user)) {
 				return true;
 			}
 
 			if ($this->hasTeam()) {
 				$team = $this->getTeam();
 
-				if ($team->hasLeader() && $user->equals($team->getLeader())) {
+				if ($team->isLeader($user)) {
 					return true;
 				}
 			}
