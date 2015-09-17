@@ -100,5 +100,20 @@ class UserOptionHandler {
 
 		$database->close();
 	}
+
+	/*
+	 * Returns true if the user has the prank option set.
+	 */
+	public static function hasUserEasterEgg(User $user) {
+		$database = Database::open(Settings::db_name_infected);
+
+		$result = $database->query('SELECT `id` FROM `' . Settings::db_table_infected_useroptions . '`
+																WHERE `userId` = \'' . $user->getId() . '\'
+																AND `easterEgg` = \'1\';');
+
+		$database->close();
+
+		return $result->num_rows > 0;
+	}
 }
 ?>

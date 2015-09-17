@@ -216,6 +216,13 @@ class User extends Object {
 	}
 
 	/*
+	 * Returns true if user has easter egg.
+	 */
+	public function hasEasterEgg() {
+		return UserOptionHandler::hasUserEasterEgg($this);
+	}
+
+	/*
 	 * Returns true if user have specified permission, otherwise false.
 	 */
 	public function hasPermission($value) {
