@@ -177,7 +177,10 @@ class User extends Object {
 	 * Returns the users age.
 	 */
 	public function getAge() {
-		return date_diff(date_create(date('Y-m-d', $this->getBirthdate())), date_create('now'))->y;
+		$birthdate = new DateTime(date('Y-m-d', $this->getBirthdate()));
+		$now = new DateTime('now');
+
+		return $birthdate->diff($now)->y;
 	}
 
 	/*
