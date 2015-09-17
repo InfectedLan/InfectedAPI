@@ -48,7 +48,7 @@ class NoteHandler {
 
 		$result = $database->query('SELECT * FROM `' . Settings::db_table_infected_crew_notes . '`
 																WHERE `eventId` = \'' . $event->getId() . '\'
-																ORDER BY `groupId`, `teamId`, `secondsOffset`, `time`;');
+																ORDER BY `secondsOffset`, `time`;');
 
 		$database->close();
 
@@ -79,7 +79,7 @@ class NoteHandler {
 																AND `done` = \'0\'
 																AND `notified` = \'0\'
 																AND DATE_SUB(FROM_UNIXTIME(' . $event->getStartTime() . ' + `secondsOffset`), INTERVAL 3 DAY) <= NOW()
-																ORDER BY `groupId`, `teamId`, `secondsOffset`, `time`;');
+																ORDER BY `secondsOffset`, `time`;');
 
 		$database->close();
 
@@ -108,7 +108,7 @@ class NoteHandler {
 		$result = $database->query('SELECT * FROM `' . Settings::db_table_infected_crew_notes . '`
 																WHERE `eventId` = \'' . $event->getId() . '\'
 																AND `groupId` = \'' . $group->getId() . '\'
-																ORDER BY `groupId`, `teamId`, `secondsOffset`, `time`;');
+																ORDER BY `secondsOffset`, `time`;');
 
 		$database->close();
 
@@ -138,7 +138,7 @@ class NoteHandler {
 																WHERE `eventId` = \'' . $event->getId() . '\'
 																AND `groupId` = \'' . $team->getGroup()->getId() . '\'
 																AND `teamId` = \'' . $team->getId() . '\'
-																ORDER BY `groupId`, `teamId`, `secondsOffset`, `time`;');
+																ORDER BY `secondsOffset`, `time`;');
 
 		$database->close();
 
@@ -169,7 +169,7 @@ class NoteHandler {
 																AND (`groupId` = \'0\'
 																		 AND `teamId` = \'0\'
 																		 AND `userId` = \'' . $user->getId() . '\')
-																ORDER BY `groupId`, `teamId`, `secondsOffset`, `time`;');
+																ORDER BY `secondsOffset`, `time`;');
 
 		$database->close();
 
@@ -202,7 +202,7 @@ class NoteHandler {
 																	WHERE `eventId` = \'' . $event->getId() . '\'
 																	AND `groupId` = \'' . $user->getGroup()->getId() . '\'
 																	OR `' . Settings::db_table_infected_crew_notewatches . '`.`userId` = \'' . $user->getId() . '\'
-																	ORDER BY `groupId`, `teamId`, `secondsOffset`, `time`;');
+																	ORDER BY `secondsOffset`, `time`;');
 		} else if ($user->isTeamMember() && $user->isTeamLeader()) {
 			$result = $database->query('SELECT DISTINCT `' . Settings::db_table_infected_crew_notes . '`.* FROM `' . Settings::db_table_infected_crew_notes . '`
 																	LEFT JOIN `' . Settings::db_table_infected_crew_notewatches . '`
@@ -212,7 +212,7 @@ class NoteHandler {
 																		   AND (`teamId` = \'' . $user->getTeam()->getId() . '\'
 																			      OR (`teamId` = \'0\' AND `' . Settings::db_table_infected_crew_notes . '`.`userId` = \'' . $user->getId() . '\')))
 																	OR `' . Settings::db_table_infected_crew_notewatches . '`.`userId` = \'' . $user->getId() . '\'
-																	ORDER BY `groupId`, `teamId`, `secondsOffset`, `time`;');
+																	ORDER BY `secondsOffset`, `time`;');
 		} else {
 			$result = $database->query('SELECT DISTINCT `' . Settings::db_table_infected_crew_notes . '`.* FROM `' . Settings::db_table_infected_crew_notes . '`
 																	LEFT JOIN `' . Settings::db_table_infected_crew_notewatches . '`
@@ -221,7 +221,7 @@ class NoteHandler {
 																	AND (`groupId` = \'' . $user->getGroup()->getId() . '\'
 																	     AND `' . Settings::db_table_infected_crew_notes . '`.`userId` = \'' . $user->getId() . '\')
 																	OR `' . Settings::db_table_infected_crew_notewatches . '`.`userId` = \'' . $user->getId() . '\'
-		 															ORDER BY `groupId`, `teamId`, `secondsOffset`, `time`;');
+		 															ORDER BY `secondsOffset`, `time`;');
 		}
 
 		$database->close();
