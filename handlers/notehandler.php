@@ -211,6 +211,8 @@ class NoteHandler {
 																	ON `' . Settings::db_table_infected_crew_notes . '`.`id` = `' . Settings::db_table_infected_crew_notewatches . '`.`noteId`
 																	WHERE `eventId` = \'' . $event->getId() . '\'
 																	AND `groupId` IN (' . implode(',', $leaderInGroups) . ')
+																	OR (`groupId` != \'0\'
+																	     AND `' . Settings::db_table_infected_crew_notes . '`.`userId` = \'' . $user->getId() . '\')
 																	OR `' . Settings::db_table_infected_crew_notewatches . '`.`userId` = \'' . $user->getId() . '\'
 																	ORDER BY `secondsOffset`, `time`;');
 		} else if ($user->isTeamMember() && $user->isTeamLeader()) {
@@ -219,8 +221,9 @@ class NoteHandler {
 																	ON `' . Settings::db_table_infected_crew_notes . '`.`id` = `' . Settings::db_table_infected_crew_notewatches . '`.`noteId`
 																	WHERE `eventId` = \'' . $event->getId() . '\'
 																	AND (`groupId` = \'' . $user->getGroup()->getId() . '\'
-																		   AND (`teamId` = \'' . $user->getTeam()->getId() . '\'
-																			      OR (`teamId` = \'0\' AND `' . Settings::db_table_infected_crew_notes . '`.`userId` = \'' . $user->getId() . '\')))
+																		   AND (`teamId` = \'' . $user->getTeam()->getId() . '\'))
+																	OR (`groupId` != \'0\'
+		 																	 AND `' . Settings::db_table_infected_crew_notes . '`.`userId` = \'' . $user->getId() . '\')
 																	OR `' . Settings::db_table_infected_crew_notewatches . '`.`userId` = \'' . $user->getId() . '\'
 																	ORDER BY `secondsOffset`, `time`;');
 		} else {
@@ -228,7 +231,7 @@ class NoteHandler {
 																	LEFT JOIN `' . Settings::db_table_infected_crew_notewatches . '`
 																	ON `' . Settings::db_table_infected_crew_notes . '`.`id` = `' . Settings::db_table_infected_crew_notewatches . '`.`noteId`
 																	WHERE `eventId` = \'' . $event->getId() . '\'
-																	AND (`groupId` = \'' . $user->getGroup()->getId() . '\'
+																	AND (`groupId` != \'0\'
 																	     AND `' . Settings::db_table_infected_crew_notes . '`.`userId` = \'' . $user->getId() . '\')
 																	OR `' . Settings::db_table_infected_crew_notewatches . '`.`userId` = \'' . $user->getId() . '\'
 		 															ORDER BY `secondsOffset`, `time`;');
