@@ -168,7 +168,17 @@ class Note extends EventObject {
 	 * Returns true if this note is delagated to a user, this returns false if the note is private.
 	 */
 	public function isDelegated() {
-		return ($this->hasGroup() || ($this->hasGroup() && $this->hasTeam())) && $this->hasUser();
+		if ($this->hasGroup()) {
+			if ($this->hasUser()) {
+				return true;
+			} else {
+				if ($this->hasTeam()) {
+					return true;
+				}
+			}
+		}
+
+		return false;
 	}
 
 	/*
