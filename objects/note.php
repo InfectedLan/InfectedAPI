@@ -152,7 +152,7 @@ class Note extends EventObject {
 
 	public function isExpired() {
 		$event = EventHandler::getCurrentEvent();
-		$delay = 30 * 60 // 30 minutes.
+		$delay = 30 * 60; // 30 minutes.
 
 		return ($event->getStartTime() + $this->getSecondsOffset() + $delay) <= time();
 	}
