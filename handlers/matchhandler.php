@@ -105,7 +105,7 @@ class MatchHandler {
 		$result = $database->query('SELECT * FROM `' . Settings::db_table_infected_compo_matches . '`
 																WHERE `id` = (SELECT `matchId` FROM `' . Settings::db_table_infected_compo_participantOfMatch . '`
 																						  WHERE `type` = \'' . Settings::compo_match_participant_type_clan . '\'
-																						  AND `participantId` = \'' . $clan->getId() . '\');');
+																						  AND `participantId` = \'' . $clan-getId() . '\');');
 
 		$database->close();
 
@@ -305,6 +305,27 @@ class MatchHandler {
 		}
 
 		return $clanList;
+	}
+
+    /*
+     * Some times, you want low level data on the participants.
+     */
+
+	public static function getParticipantData(Match $match) {
+	       $database = Database::open(Settings::db_name_infected_compo);
+
+		$result = $database->query('SELECT * FROM `' . Settings::db_table_infected_compo_participantOfMatch . '`
+																WHERE `matchId` = \'' . $match->getId() . '\';');
+
+		$database->close();
+
+		$rawData = array();
+
+		while($row = $result->fetch_array()) {
+            array_push($rawData, array("id" => $row['id'], "type" => $row['type'], "participantId" => $row['participantId'], "matchId" => $row['matchId']));
+		}
+
+		return $rawData;
 	}
 
 	public static function getParticipantStringByMatch(Match $match) {

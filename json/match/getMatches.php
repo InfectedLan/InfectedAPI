@@ -48,7 +48,7 @@ if (Session::isAuthenticated()) {
 					$item["bracketOffset"] = $match->getBracketOffset();
 					$item["state"] = $match->getState();
 					$item["winner"] = $match->getWinnerId();
-					$item["participants"] = MatchHandler::getParticipantsJsonByMatch($match);
+					$item["participants"] = MatchHandler::getParticipantData($match);
 					//$matchArray[] = $item;
 					array_push($matchArray, $item);
 				}
