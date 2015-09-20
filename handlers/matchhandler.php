@@ -307,12 +307,21 @@ class MatchHandler {
 		return $clanList;
 	}
 
+    public static function removeParticipantEntry($id) {
+        //First, we need to fetch it, as there are some extra steps we need to take in some situations
+        $database = Database::open(Settings::db_name_infected_compo);
+
+        $result = $database->query('SELECT `type` FROM `' . Settings::db_table_infected_compo_participantOfMatch . '` WHERE `id` = \'' . $database->real_escape_string($id) . '\';');
+
+        
+        
+    }
+
     /*
      * Some times, you want low level data on the participants.
      */
-
 	public static function getParticipantData(Match $match) {
-	       $database = Database::open(Settings::db_name_infected_compo);
+        $database = Database::open(Settings::db_name_infected_compo);
 
 		$result = $database->query('SELECT * FROM `' . Settings::db_table_infected_compo_participantOfMatch . '`
 																WHERE `matchId` = \'' . $match->getId() . '\';');
