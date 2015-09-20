@@ -60,7 +60,11 @@ class Match extends Object {
 	}
 
 	public function getWinner() {
-		return UserHandler::getUser($this->winnerId);
+		return ClanHandler::getClan($this->winnerId);
+	}
+
+	public function getWinnerId() {
+	       return $this->winnerId;
 	}
 
 	public function getState() {
