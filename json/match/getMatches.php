@@ -33,7 +33,7 @@ $matchArray = array();
 if (Session::isAuthenticated()) {
 	$user = Session::getCurrentUser();
 
-	if ($user->hasPermission('event.compo')) {
+	if ($user->hasPermission('compo.bracketmanagement')) {
 		if (isset($_GET['id']) &&
 			is_numeric($_GET['id'])) {
 			$compo = CompoHandler::getCompo($_GET['id']);
