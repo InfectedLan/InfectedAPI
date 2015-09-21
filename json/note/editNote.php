@@ -43,6 +43,7 @@ if (Session::isAuthenticated()) {
 			!empty($_GET['content'])) {
 			$note = NoteHandler::getNote($_GET['id']);
 			$group = isset($_GET['groupId']) ? GroupHandler::getGroup($_GET['groupId']) : ($note->hasGroup() ? $note->getGroup() : null);
+			$team = null;
 
 			if (!isset($_GET['groupId']) || ($group != null && $group->equals($note->getGroup()))) {
 				$team = isset($_GET['teamId']) ? TeamHandler::getTeam($_GET['teamId']) : ($note->hasTeam() ? $note->getTeam() : null);
