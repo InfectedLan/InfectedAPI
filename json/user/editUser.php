@@ -34,7 +34,7 @@ if (Session::isAuthenticated()) {
 		$editUser = UserHandler::getUser($_GET['id']);
 
 		if ($editUser != null) {
-			if ($user->hasPermission('*') ||
+			if ($user->hasPermission('user.edit') ||
 				$user->equals($editUser)) {
 				if (isset($_GET['firstname']) &&
 					isset($_GET['lastname']) &&
