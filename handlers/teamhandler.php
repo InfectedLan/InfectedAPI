@@ -72,7 +72,8 @@ class TeamHandler {
 		$database = Database::open(Settings::db_name_infected_crew);
 
 		$result = $database->query('SELECT * FROM `' . Settings::db_table_infected_crew_teams . '`
-																WHERE `eventId` = \'' . $event->getId() . '\';');
+																WHERE `eventId` = \'' . $event->getId() . '\'
+																ORDER BY `groupId`, `name`;');
 
 		$database->close();
 
@@ -100,7 +101,8 @@ class TeamHandler {
 
 		$result = $database->query('SELECT * FROM `' . Settings::db_table_infected_crew_teams . '`
 																WHERE `eventId` = \'' . $event->getId() . '\'
-																AND `groupId` = \'' . $group->getId() . '\';');
+																AND `groupId` = \'' . $group->getId() . '\'
+																ORDER BY `groupId`, `name`;');
 
 		$database->close();
 

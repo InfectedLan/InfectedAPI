@@ -72,7 +72,7 @@ class GroupHandler {
 
 		$result = $database->query('SELECT * FROM `' . Settings::db_table_infected_crew_groups . '`
 																WHERE `eventId` = \'' . $event->getId() . '\'
-																ORDER BY `name`;');
+																ORDER BY `id`, `name`;');
 
 		$database->close();
 
