@@ -116,14 +116,14 @@ class Clan extends EventObject {
 	/*
 	 * Returns true of the specified user is member of this clan.
 	 */
-	public static function isMember(User $user) {
+	public function isMember(User $user) {
 		return ClanHandler::isClanMember($this, $user);
 	}
 
 	/*
 	 * Return true if the specified user is a stepin member of this clan.
 	 */
-	public static function isStepInMember(User $user) {
+	public function isStepInMember(User $user) {
 		return ClanHandler::isStepInClanMember($this, $user);
 	}
 

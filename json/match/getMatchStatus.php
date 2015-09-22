@@ -54,7 +54,7 @@ if (Session::isAuthenticated()) {
 					$match->isReady()) {
 					$readyData = array();
 
-					foreach (MatchHandler::getParticipants($match) as $clan) {
+					foreach (MatchHandler::getParticipantsByMatch($match) as $clan) {
 						$memberData = array();
 
 						foreach ($clan->getMembers() as $member) {
