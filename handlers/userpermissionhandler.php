@@ -110,7 +110,7 @@ class UserPermissionHandler {
 		$permissionList = [];
 
 		while ($object = $result->fetch_object('Permission')) {
-			array_push($permissionList, $object);
+			$permissionList[] = $object;
 		}
 
 		return $permissionList;

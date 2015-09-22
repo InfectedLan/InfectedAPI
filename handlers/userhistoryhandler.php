@@ -44,7 +44,7 @@ class UserHistoryHandler {
 	  $eventList = [];
 
 	  while ($object = $result->fetch_object('Event')) {
-		  array_push($eventList, $object);
+			$eventList[] = $object;
 	  }
 
 	  return $eventList;

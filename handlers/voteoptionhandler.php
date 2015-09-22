@@ -53,7 +53,7 @@ class VoteOptionHandler {
 		$voteOptionList = [];
 
 		while ($object = $result->fetch_object('VoteOption')) {
-			array_push($voteOptionList, $object);
+			$voteOptionList[] = $object;
 		}
 
 		return $voteOptionList;

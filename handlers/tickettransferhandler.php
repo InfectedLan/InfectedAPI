@@ -61,7 +61,7 @@ class TicketTransferHandler {
 		$transferList = [];
 
 		while ($object = $result->fetch_object('TicketTransfer')) {
-			array_push($transferList, $object);
+			$transferList[] = $object;
 		}
 
 		return $transferList;

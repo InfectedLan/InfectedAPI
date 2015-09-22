@@ -79,7 +79,7 @@ class UserHandler {
 		$userList = [];
 
 		while ($object = $result->fetch_object('User')) {
-			array_push($userList, $object);
+			$userList[] = $object;
 		}
 
 		return $userList;
@@ -102,7 +102,7 @@ class UserHandler {
 		$userList = [];
 
 		while ($object = $result->fetch_object('User')) {
-			array_push($userList, $object);
+			$userList[] = $object;
 		}
 
 		return $userList;
@@ -134,7 +134,7 @@ class UserHandler {
 		$userList = [];
 
 		while ($object = $result->fetch_object('User')) {
-			array_push($userList, $object);
+			$userList[] = $object;
 		}
 
 		return $userList;
@@ -164,7 +164,7 @@ class UserHandler {
 		$userList = [];
 
 		while ($object = $result->fetch_object('User')) {
-			array_push($userList, $object);
+			$userList[] = $object;
 		}
 
 		return $userList;
@@ -187,7 +187,7 @@ class UserHandler {
 		$userList = [];
 
 		while ($object = $result->fetch_object('User')) {
-			array_push($userList, $object);
+			$userList[] = $object;
 		}
 
 		return $userList;
@@ -210,7 +210,7 @@ class UserHandler {
 		$userList = [];
 
 		while ($object = $result->fetch_object('User')) {
-			array_push($userList, $object);
+			$userList[] = $object;
 		}
 
 		return $userList;
@@ -226,18 +226,18 @@ class UserHandler {
 
 		// Just checking that we're not out of bounds in this array.
 		if (count(EventHandler::getEvents()) >= $previousEvent->getId()) {
-  			$database = Database::open(Settings::db_name_infected);
+  		$database = Database::open(Settings::db_name_infected);
 
-  			$result = $database->query('SELECT DISTINCT `' . Settings::db_table_infected_users . '`.* FROM `' . Settings::db_table_infected_users . '`
-							  										LEFT JOIN `' . Settings::db_name_infected_tickets . '`.`' . Settings::db_table_infected_tickets_tickets . '` ON `' . Settings::db_table_infected_users . '`.`id` = `' . Settings::db_table_infected_tickets_tickets . '`.`userId`
-							  										WHERE `' . Settings::db_table_infected_tickets_tickets . '`.`eventId` >= ' . $previousEvent->getId() . '
-							  										AND `' . Settings::db_table_infected_tickets_tickets . '`.`eventId` <= ' . $currentEvent->getId() . '
-							  										ORDER BY `' . Settings::db_table_infected_users . '`.`firstname`, `' . Settings::db_table_infected_users . '`.`lastname`;');
+  		$result = $database->query('SELECT DISTINCT `' . Settings::db_table_infected_users . '`.* FROM `' . Settings::db_table_infected_users . '`
+							  									LEFT JOIN `' . Settings::db_name_infected_tickets . '`.`' . Settings::db_table_infected_tickets_tickets . '` ON `' . Settings::db_table_infected_users . '`.`id` = `' . Settings::db_table_infected_tickets_tickets . '`.`userId`
+							  									WHERE `' . Settings::db_table_infected_tickets_tickets . '`.`eventId` >= ' . $previousEvent->getId() . '
+							  									AND `' . Settings::db_table_infected_tickets_tickets . '`.`eventId` <= ' . $currentEvent->getId() . '
+							  									ORDER BY `' . Settings::db_table_infected_users . '`.`firstname`, `' . Settings::db_table_infected_users . '`.`lastname`;');
 
-  			$database->close();
+  		$database->close();
 
 			while ($object = $result->fetch_object('User')) {
-				array_push($userList, $object);
+				$userList[] = $object;
 			}
 		}
 
@@ -395,7 +395,7 @@ class UserHandler {
 			}
 			*/
 
-			array_push($wordList, '+' . $value . '*');
+			$wordList[] = '+' . $value . '*');
 		}
 
 		// Query the database using a Full-Text Search.
@@ -409,7 +409,7 @@ class UserHandler {
 		$userList = [];
 
 		while ($object = $result->fetch_object('User')) {
-			array_push($userList, $object);
+			$userList[] = $object;
 		}
 
 		return $userList;
