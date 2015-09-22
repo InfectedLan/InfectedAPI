@@ -20,7 +20,7 @@
 
 class UserUtils {
 	public static function toUserIdList(array $userList) {
-		$userIdList = array();
+		$userIdList = [];
 
 		foreach ($userList as $user) {
 			array_push($userIdList, $user->getId());
@@ -30,7 +30,7 @@ class UserUtils {
 	}
 
 	public static function fromUserIdList(array $userIdList) {
-		$userList = array();
+		$userList = [];
 
 		foreach ($userIdList as $userId) {
 			array_push($userList, UserHandler::getUser($userId));
