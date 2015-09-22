@@ -354,7 +354,7 @@ class User extends Object {
 
 		// Send an email to the user with a link for resetting the password.
 		$url = 'https://' . $_SERVER['HTTP_HOST'] . '/v2/index.php?page=activation&code=' . $code;
-		$message = array();
+		$message = [];
 		$message[] = '<!DOCTYPE html>';
 		$message[] = '<html>';
 			$message[] = '<body>';
@@ -376,7 +376,7 @@ class User extends Object {
 
 		// Send an email to the user with a link for resetting the password.
 		$url = 'https://' . $_SERVER['HTTP_HOST'] . '/v2/index.php?page=reset-password&code=' . $code;
-		$message = array();
+		$message = [];
 		$message[] = '<!DOCTYPE html>';
 		$message[] = '<html>';
 			$message[] = '<body>';
@@ -399,7 +399,7 @@ class User extends Object {
 			$text = 'Din avatar på <a href="' . $_SERVER['HTTP_HOST'] . '">' . $_SERVER['HTTP_HOST'] . '</a> ble ikke godkjent, vennligst last opp en ny en.';
 		}
 
-		$message = array();
+		$message = [];
 		$message[] = '<!DOCTYPE html>';
 		$message[] = '<html>';
 			$message[] = '<body>';

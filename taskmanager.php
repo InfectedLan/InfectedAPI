@@ -49,7 +49,7 @@ class TaskManager {
 
 		$database->close();
 
-		$taskList = array();
+		$taskList = [];
 
 		while ($row = $result->fetch_row()) {
 			array_push($taskList, unserialize($row['object']));

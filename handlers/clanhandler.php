@@ -58,7 +58,7 @@ class ClanHandler {
 
 		$database->close();
 
-		$clanList = array();
+		$clanList = [];
 
 		while ($object = $result->fetch_object('Clan')) {
 			if ($event->equals($object->getEvent())) {
@@ -81,7 +81,7 @@ class ClanHandler {
 
 		$database->close();
 
-		$clanList = array();
+		$clanList = [];
 
 		while ($object = $result->fetch_object('Clan')) {
 			array_push($clanList, $object);
@@ -94,7 +94,7 @@ class ClanHandler {
         return self::getQualifiedClansByCompo($compo);
     }
 	public static function getQualifiedClansByCompo(Compo $compo) {
-		$clanList = array();
+		$clanList = [];
 
 		foreach (self::getClansByCompo($compo) as $clan) {
 			if (self::isQualified($clan, $compo)) {
@@ -135,7 +135,7 @@ class ClanHandler {
 
 		$database->close();
 
-		$memberList = array();
+		$memberList = [];
 
 		while ($object = $result->fetch_object('User')) {
 			array_push($memberList, $object);
@@ -157,7 +157,7 @@ class ClanHandler {
 
 		$database->close();
 
-		$memberList = array();
+		$memberList = [];
 
 		while ($object = $result->fetch_object('User')) {
 			array_push($memberList, $object);
@@ -179,7 +179,7 @@ class ClanHandler {
 
 		$database->close();
 
-		$memberList = array();
+		$memberList = [];
 
 		while ($object = $result->fetch_object('User')) {
 			array_push($memberList, $object);

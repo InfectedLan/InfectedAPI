@@ -51,7 +51,7 @@ class RowHandler {
 
 		$database->close();
 
-		$rowList = array();
+		$rowList = [];
 
 		while ($object = $result->fetch_object('Row')) {
 			array_push($rowList, $object);
@@ -71,7 +71,7 @@ class RowHandler {
 
 		$database->close();
 
-		$rowList = array();
+		$rowList = [];
 
 		while ($object = $result->fetch_object('Row')) {
 			array_push($rowList, $object);

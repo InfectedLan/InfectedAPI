@@ -47,7 +47,7 @@ class LocationHandler {
 
 		$database->close();
 
-		$locationList = array();
+		$locationList = [];
 
 		while ($object = $result->fetch_object('Location')) {
 			array_push($locationList, $object);

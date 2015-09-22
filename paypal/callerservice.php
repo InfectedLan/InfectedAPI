@@ -177,7 +177,7 @@ function deformatNVP($nvpstr)
 {
 
 	$intial=0;
- 	$nvpArray = array();
+ 	$nvpArray = [];
 
 
 	while(strlen($nvpstr)){

@@ -21,7 +21,7 @@
 require_once 'handlers/agendahandler.php';
 require_once 'utils/dateutils.php';
 
-$agendaList = array();
+$agendaList = [];
 
 foreach (AgendaHandler::getPublishedNotHappendAgendas() as $agenda) {
 	array_push($agendaList, array('id' => $agenda->getId(),

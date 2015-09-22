@@ -52,7 +52,7 @@ class NoteHandler {
 
 		$database->close();
 
-		$noteList = array();
+		$noteList = [];
 
 		while ($object = $result->fetch_object('Note')) {
 			array_push($noteList, $object);
@@ -83,7 +83,7 @@ class NoteHandler {
 
 		$database->close();
 
-		$noteList = array();
+		$noteList = [];
 
 		while ($object = $result->fetch_object('Note')) {
 			array_push($noteList, $object);
@@ -112,7 +112,7 @@ class NoteHandler {
 
 		$database->close();
 
-		$noteList = array();
+		$noteList = [];
 
 		while ($object = $result->fetch_object('Note')) {
 			array_push($noteList, $object);
@@ -142,7 +142,7 @@ class NoteHandler {
 
 		$database->close();
 
-		$noteList = array();
+		$noteList = [];
 
 		while ($object = $result->fetch_object('Note')) {
 			array_push($noteList, $object);
@@ -173,7 +173,7 @@ class NoteHandler {
 
 		$database->close();
 
-		$noteList = array();
+		$noteList = [];
 
 		while ($object = $result->fetch_object('Note')) {
 			array_push($noteList, $object);
@@ -195,7 +195,7 @@ class NoteHandler {
 	public static function getNotesByGroupAndTeamAndUserAndEvent(User $user, Event $event) {
 		$database = Database::open(Settings::db_name_infected_crew);
 
-		$leaderInGroups = array();
+		$leaderInGroups = [];
 
 		foreach (GroupHandler::getGroups() as $group) {
 			if ($group->isMember($user) ||
@@ -239,7 +239,7 @@ class NoteHandler {
 
 		$database->close();
 
-		$noteList = array();
+		$noteList = [];
 
 		while ($object = $result->fetch_object('Note')) {
 			array_push($noteList, $object);
@@ -361,7 +361,7 @@ class NoteHandler {
 
 		$database->close();
 
-		$userList = array();
+		$userList = [];
 
 		while ($object = $result->fetch_object('User')) {
 			array_push($userList, $object);

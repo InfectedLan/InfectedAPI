@@ -102,7 +102,7 @@ class EventHandler {
 
 		$database->close();
 
-		$eventList = array();
+		$eventList = [];
 
 		while ($object = $result->fetch_object('Event')) {
 			array_push($eventList, $object);
@@ -122,7 +122,7 @@ class EventHandler {
 
 		$database->close();
 
-		$eventList = array();
+		$eventList = [];
 
 		while ($object = $result->fetch_object('Event')) {
 			array_push($eventList, $object);
@@ -188,7 +188,7 @@ class EventHandler {
 
 		// Extract event id's from the event list.
 		$dateLimit = date('Y-m-d', end($eventList)->getStartTime());
-		$eventIdList = array();
+		$eventIdList = [];
 
 		foreach ($eventList as $event) {
 			array_push($eventIdList, '\'' . $event->getId() . '\'');
@@ -210,7 +210,7 @@ class EventHandler {
 
 		$database->close();
 
-		$userList = array();
+		$userList = [];
 
 		while ($object = $result->fetch_object('User')) {
 			array_push($userList, $object);

@@ -37,7 +37,7 @@ if (Session::isAuthenticated()) {
 				ChatHandler::isChatMember($user, $chat) ||
 				$chat->getId() == 1) {
 				$messageList = $chat->getLastMessages($_GET['count']);
-				$result = array();
+				$result = [];
 
 				foreach ($messageList as $message) {
 					$subject = $message->getUser();

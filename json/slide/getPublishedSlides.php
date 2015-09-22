@@ -21,7 +21,7 @@
 require_once 'localization.php';
 require_once 'handlers/slidehandler.php';
 
-$slideList = array();
+$slideList = [];
 
 foreach (SlideHandler::getPublishedSlides() as $slide) {
 	array_push($slideList, array('id' => $slide->getId(),

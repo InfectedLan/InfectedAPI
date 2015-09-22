@@ -32,8 +32,8 @@ $compoStatusArray = null;
 if (Session::isAuthenticated()) {
 	$user = Session::getCurrentUser();
 
-	$clanList = array();
-	$inviteList = array();
+	$clanList = [];
+	$inviteList = [];
 	
 	foreach (ClanHandler::getClansByUser($user) as $clan) {
 		$compo = $clan->getCompo();

@@ -50,7 +50,7 @@ class InviteHandler {
 
 		$database->close();
 
-		$inviteList = array();
+		$inviteList = [];
 
 		while ($object = $result->fetch_object('Invite')) {
 			array_push($inviteList, $object);
@@ -70,7 +70,7 @@ class InviteHandler {
 
 		$database->close();
 
-		$inviteList = array();
+		$inviteList = [];
 
 		while ($object = $result->fetch_object('Invite')) {
 			array_push($inviteList, $object);
@@ -90,7 +90,7 @@ class InviteHandler {
 
 		$database->close();
 
-		$inviteList = array();
+		$inviteList = [];
 
 		while ($object = $result->fetch_object('Invite')) {
 			array_push($inviteList, $object);

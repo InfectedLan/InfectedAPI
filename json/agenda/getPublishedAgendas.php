@@ -21,7 +21,7 @@
 require_once 'handlers/agendahandler.php';
 require_once 'utils/dateutils.php';
 
-$agendaList = array();
+$agendaList = [];
 
 foreach (AgendaHandler::getPublishedAgendas() as $agenda) {
 	array_push($agendaList, array('id' => $agenda->getId(),

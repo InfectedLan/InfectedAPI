@@ -24,7 +24,7 @@ require_once 'handlers/userhandler.php';
 
 $result = false;
 $message = null;
-$users = array();
+$users = [];
 
 if (Session::isAuthenticated()) {
 	$user = Session::getCurrentUser();

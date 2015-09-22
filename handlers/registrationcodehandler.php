@@ -49,7 +49,7 @@ class RegistrationCodeHandler {
 
 		$database->close();
 
-		$codeList = array();
+		$codeList = [];
 
 		while ($row = $result->fetch_array()) {
 			array_push($codeList, $row['code']);

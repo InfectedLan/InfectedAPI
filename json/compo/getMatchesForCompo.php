@@ -26,7 +26,7 @@ require_once 'utils/dateutils.php';
 
 $result = false;
 $message = null;
-$data = array();
+$data = [];
 
 if (Session::isAuthenticated()) {
 	if (isset($_GET['id']) &&
@@ -35,7 +35,7 @@ if (Session::isAuthenticated()) {
 
 		if ($compo != null) {
 			foreach ($compo->getMatches() as $match) {
-				$parentMatchIds = array();
+				$parentMatchIds = [];
 				
 				foreach ($match->getParents() as $parentMatch) {
 					array_push($parentMatchIds, $parentMatch->getId());

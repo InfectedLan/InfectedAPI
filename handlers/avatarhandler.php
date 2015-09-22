@@ -62,7 +62,7 @@ class AvatarHandler {
 
 		$database->close();
 
-		$avatarList = array();
+		$avatarList = [];
 
 		while ($object = $result->fetch_object('Avatar')) {
 			array_push($avatarList, $object);
@@ -82,7 +82,7 @@ class AvatarHandler {
 
 		$database->close();
 
-		$avatarList = array();
+		$avatarList = [];
 
 		while ($object = $result->fetch_object('Avatar')) {
 			array_push($avatarList, $object);

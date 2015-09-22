@@ -107,7 +107,7 @@ class UserPermissionHandler {
 
 		$database->close();
 
-		$permissionList = array();
+		$permissionList = [];
 
 		while ($object = $result->fetch_object('Permission')) {
 			array_push($permissionList, $object);

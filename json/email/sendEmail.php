@@ -38,7 +38,7 @@ if (Session::isAuthenticated()) {
 			!empty($_GET['subject']) &&
 			!empty($_GET['message'])) {
 			$userIdList = explode(',', $_GET['userIdList']);
-			$userList = array();
+			$userList = [];
 
 			// If the id's in user list is lower or equal to 0, we have to do something special here.
 			if (count($userIdList) >= 1) {

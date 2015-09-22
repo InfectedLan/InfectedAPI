@@ -48,7 +48,7 @@ class SeatmapHandler {
 
 		$database->close();
 
-		$seatmapList = array();
+		$seatmapList = [];
 
 		while ($object = $result->fetch_object('Seatmap')) {
 			array_push($seatmapList, $object);

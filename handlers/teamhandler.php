@@ -77,7 +77,7 @@ class TeamHandler {
 
 		$database->close();
 
-		$teamList = array();
+		$teamList = [];
 
 		while ($object = $result->fetch_object('Team')) {
 			array_push($teamList, $object);
@@ -106,7 +106,7 @@ class TeamHandler {
 
 		$database->close();
 
-		$teamList = array();
+		$teamList = [];
 
 		while ($object = $result->fetch_object('Team')) {
 			array_push($teamList, $object);
@@ -183,7 +183,7 @@ class TeamHandler {
 
 		$database->close();
 
-		$memberList = array();
+		$memberList = [];
 
 		while ($object = $result->fetch_object('User')) {
 			array_push($memberList, $object);

@@ -36,11 +36,11 @@ if (Session::isAuthenticated()) {
 		$seatmap = SeatmapHandler::getSeatmap($_GET['id']);
 
 		if ($seatmap != null) {
-			$seatmapData = array();
+			$seatmapData = [];
 			$backgroundImage = $seatmap->getBackgroundImage();
 
 			foreach ($seatmap->getRows() as $row) {
-				$seatData = array();
+				$seatData = [];
 
 				foreach ($row->getSeats() as $seat) {
 					array_push($seatData, array('id' => $seat->getId(),

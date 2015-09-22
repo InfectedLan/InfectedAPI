@@ -76,7 +76,7 @@ class GroupHandler {
 
 		$database->close();
 
-		$groupList = array();
+		$groupList = [];
 
 		while ($object = $result->fetch_object('Group')) {
 			array_push($groupList, $object);
@@ -157,7 +157,7 @@ class GroupHandler {
 
 		$database->close();
 
-		$memberList = array();
+		$memberList = [];
 
 		while ($object = $result->fetch_object('User')) {
 			array_push($memberList, $object);

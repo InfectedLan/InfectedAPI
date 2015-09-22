@@ -63,7 +63,7 @@ class MatchHandler {
 
 		$database->close();
 
-		$matchList = array();
+		$matchList = [];
 
 		while ($object = $result->fetch_object('Match')) {
 			array_push($matchList, $object);
@@ -112,7 +112,7 @@ class MatchHandler {
 
 		$database->close();
 
-		$matchList = array();
+		$matchList = [];
 
 		while ($object = $result->fetch_object('Match')) {
 			if ($object->getScheduledTime() > time()) {
@@ -136,7 +136,7 @@ class MatchHandler {
 
 		$database->close();
 
-		$matchList = array();
+		$matchList = [];
 
 		while ($object = $result->fetch_object('Match')) {
 			if (self::isReady($object)) {
@@ -157,7 +157,7 @@ class MatchHandler {
 
 		$database->close();
 
-		$matchList = array();
+		$matchList = [];
 
 		while ($object = $result->fetch_object('Match')) {
 			array_push($matchList, $object);
@@ -174,7 +174,7 @@ class MatchHandler {
 
 		$database->close();
 
-		$matchList = array();
+		$matchList = [];
 
 		while ($object = $result->fetch_object('Match')) {
 			array_push($matchList, $object);
@@ -284,7 +284,7 @@ class MatchHandler {
 
 		$database->close();
 
-		$clanList = array();
+		$clanList = [];
 
 		while ($object = $result->fetch_object('Clan')) {
 			array_push($clanList, $object);
@@ -301,7 +301,7 @@ class MatchHandler {
 
 		$database->close();
 
-		$stringArray = array();
+		$stringArray = [];
 
 		while ($row = $result->fetch_array()) {
 			if ($row['type'] == Settings::compo_match_participant_type_match_winner) {
@@ -325,7 +325,7 @@ class MatchHandler {
 
 		$database->close();
 
-		$stringArray = array();
+		$stringArray = [];
 
 		while ($row = $result->fetch_array()) {
 			if ($row['type'] == Settings::compo_match_participant_type_match_winner ||
@@ -348,7 +348,7 @@ class MatchHandler {
 
 		$database->close();
 
-		$jsonArray = array();
+		$jsonArray = [];
 
 		while ($row = $result->fetch_array()) {
 			if ($row['type'] == Settings::compo_match_participant_type_clan) {
@@ -371,7 +371,7 @@ class MatchHandler {
 
 		$database->close();
 
-		$matchList = array();
+		$matchList = [];
 
 		while ($object = $result->fetch_object('Match')) {
 			array_push($matchList, $object);

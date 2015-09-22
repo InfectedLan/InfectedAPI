@@ -33,7 +33,7 @@ class NotificationManager {
 		// Check for notes notifications.
 		foreach (NoteHandler::getNotesReachedNotificationTime() as $note) {
 			if ($note->hasOwner() || $note->hasUser()) {
-				$message = array();
+				$message = [];
 				$message[] = '<!DOCTYPE html>';
 				$message[] = '<html>';
 					$message[] = '<body>';
@@ -57,7 +57,7 @@ class NotificationManager {
 	 */
 	public function sendApplicationCreatedNotification(Application $application) {
 		$group = $application->getGroup();
-		$userList = array();
+		$userList = [];
 
 		if ($group->hasLeader()) {
 			array_push($userList, $group->getLeader());
@@ -68,7 +68,7 @@ class NotificationManager {
 		}
 
 		if (!empty($userList)) {
-			$message = array();
+			$message = [];
 			$message[] = '<!DOCTYPE html>';
 			$message[] = '<html>';
 				$message[] = '<body>';
@@ -87,7 +87,7 @@ class NotificationManager {
 	 * Sends an mail to the users e-mail address with status information.
 	 */
 	public function sendApplicationAccpetedNotification(Application $application) {
-		$message = array();
+		$message = [];
 		$message[] = '<!DOCTYPE html>';
 		$message[] = '<html>';
 			$message[] = '<body>';
@@ -106,7 +106,7 @@ class NotificationManager {
 	 * Sends an mail to the users e-mail address with status information.
 	 */
 	public function sendApplicationRejectedNotification(Application $application, $comment) {
-		$message = array();
+		$message = [];
 		$message[] = '<!DOCTYPE html>';
 		$message[] = '<html>';
 			$message[] = '<body>';
@@ -125,7 +125,7 @@ class NotificationManager {
 	 * Sends an mail to the users e-mail address with status information.
 	 */
 	public function sendApplicationQueuedNotification(Application $application) {
-		$message = array();
+		$message = [];
 		$message[] = '<!DOCTYPE html>';
 		$message[] = '<html>';
 			$message[] = '<body>';
@@ -145,7 +145,7 @@ class NotificationManager {
 	 * Sends a notification to the users e-mail address with purchase information.
 	 */
 	public function sendPurchaseCompleteNotification(User $user, $reference) {
-		$message = array();
+		$message = [];
 		$message[] = '<!DOCTYPE html>';
 		$message[] = '<html>';
 			$message[] = '<body>';

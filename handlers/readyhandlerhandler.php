@@ -47,7 +47,7 @@ class ReadyHandlerHandler {
 
 		$database->close();
 
-		$readyHandlerList = array();
+		$readyHandlerList = [];
 
 		while ($object = $result->fetch_object('ReadyHandler')) {
 			array_push($readyHandlerList, $object);

@@ -76,7 +76,7 @@ class UserHandler {
 
 		$database->close();
 
-		$userList = array();
+		$userList = [];
 
 		while ($object = $result->fetch_object('User')) {
 			array_push($userList, $object);
@@ -99,7 +99,7 @@ class UserHandler {
 
 		$database->close();
 
-		$userList = array();
+		$userList = [];
 
 		while ($object = $result->fetch_object('User')) {
 			array_push($userList, $object);
@@ -131,7 +131,7 @@ class UserHandler {
 
 		$database->close();
 
-		$userList = array();
+		$userList = [];
 
 		while ($object = $result->fetch_object('User')) {
 			array_push($userList, $object);
@@ -161,7 +161,7 @@ class UserHandler {
 
 		$database->close();
 
-		$userList = array();
+		$userList = [];
 
 		while ($object = $result->fetch_object('User')) {
 			array_push($userList, $object);
@@ -184,7 +184,7 @@ class UserHandler {
 
 		$database->close();
 
-		$userList = array();
+		$userList = [];
 
 		while ($object = $result->fetch_object('User')) {
 			array_push($userList, $object);
@@ -207,7 +207,7 @@ class UserHandler {
 
 		$database->close();
 
-		$userList = array();
+		$userList = [];
 
 		while ($object = $result->fetch_object('User')) {
 			array_push($userList, $object);
@@ -222,7 +222,7 @@ class UserHandler {
 	public static function getPreviousParticipantUsers() {
 		$currentEvent = EventHandler::getCurrentEvent();
 		$previousEvent = EventHandler::getEvent($currentEvent->getId() - 3);
-		$userList = array();
+		$userList = [];
 
 		// Just checking that we're not out of bounds in this array.
 		if (count(EventHandler::getEvents()) >= $previousEvent->getId()) {
@@ -382,7 +382,7 @@ class UserHandler {
 
 		// Sanitize the input and split the query string into an array.
 		$queryList = explode(' ', $query);
-		$wordList = array();
+		$wordList = [];
 
 		// Build the word list, and add "+" and "*" to the start and end of every word.
 		foreach ($queryList as $value) {
@@ -406,7 +406,7 @@ class UserHandler {
 
 		$database->close();
 
-		$userList = array();
+		$userList = [];
 
 		while ($object = $result->fetch_object('User')) {
 			array_push($userList, $object);

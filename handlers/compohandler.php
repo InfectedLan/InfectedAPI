@@ -53,7 +53,7 @@ class CompoHandler {
 
 		$database->close();
 
-		$compoList = array();
+		$compoList = [];
 
 		while ($object = $result->fetch_object('Compo')) {
 			array_push($compoList, $object);
@@ -244,7 +244,7 @@ class CompoHandler {
 		 * Returns matches that should carry on in the winners and loosers bracket.
 		*/
 		$clans = self::getCompleteClans($compo);
-		$newClanList = array();
+		$newClanList = [];
 
 		//Randomize participant list to avoid any cheating
 		while (count($clans) > 0) {

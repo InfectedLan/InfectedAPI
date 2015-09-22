@@ -49,7 +49,7 @@ class PaymentHandler {
 
 		$database->close();
 
-		$paymentList = array();
+		$paymentList = [];
 
 		while ($object = $result->fetch_object('Payment')) {
 			array_push($paymentList, $object);

@@ -51,7 +51,7 @@ class ChatHandler {
 
 		$database->close();
 
-		$chatList = array();
+		$chatList = [];
 
 		while ($object = $result->fetch_object('Chat')) {
 			array_push($chatList, $object);
@@ -120,7 +120,7 @@ class ChatHandler {
 
 		$database->close();
 
-		$chatMemberList = array();
+		$chatMemberList = [];
 
 		while ($object = $result->fetch_object('User')) {
 			array_push($chatMemberList, $object);
@@ -206,7 +206,7 @@ class ChatHandler {
 
 		$database->close();
 
-		$chatMessageList = array();
+		$chatMessageList = [];
 
 		while ($object = $result->fetch_object('ChatMessage')) {
 			array_push($chatMessageList, $object);
@@ -244,7 +244,7 @@ class ChatHandler {
 
 		$database->close();
 
-		$chatMessageList = array();
+		$chatMessageList = [];
 
 		while ($object = $result->fetch_object('ChatMessage')) {
 			array_push($chatMessageList, $object);

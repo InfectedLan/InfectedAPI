@@ -101,7 +101,7 @@ class TicketHandler {
 
 		$database->close();
 
-		$ticketList = array();
+		$ticketList = [];
 
 		while ($object = $result->fetch_object('Ticket')) {
 			array_push($ticketList, $object);
@@ -128,7 +128,7 @@ class TicketHandler {
 
 		$database->close();
 
-		$ticketList = array();
+		$ticketList = [];
 
 		while ($object = $result->fetch_object('Ticket')) {
 			array_push($ticketList, $object);
@@ -169,7 +169,7 @@ class TicketHandler {
 
 		$database->close();
 
-		$ticketList = array();
+		$ticketList = [];
 
 		while ($object = $result->fetch_object('Ticket')) {
 			array_push($ticketList, $object);
@@ -190,7 +190,7 @@ class TicketHandler {
 
 		$database->close();
 
-		$ticketList = array();
+		$ticketList = [];
 
 		while ($object = $result->fetch_object('Ticket')) {
 			array_push($ticketList, $object);

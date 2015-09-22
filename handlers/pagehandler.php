@@ -61,7 +61,7 @@ class PageHandler {
 
 		$database->close();
 
-		$pageList = array();
+		$pageList = [];
 
 		while ($object = $result->fetch_object('Page')) {
 			array_push($pageList, $object);

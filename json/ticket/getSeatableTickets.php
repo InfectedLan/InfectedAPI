@@ -25,7 +25,7 @@ require_once 'handlers/tickethandler.php';
 
 $result = false;
 $message = null;
-$ticketData = array();
+$ticketData = [];
 
 if (Session::isAuthenticated()) {
 	if (isset($_GET['seatmap'])) {

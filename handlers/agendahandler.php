@@ -51,7 +51,7 @@ class AgendaHandler {
 
 		$database->close();
 
-		$agendaList = array();
+		$agendaList = [];
 
 		while ($object = $result->fetch_object('Agenda')) {
 			array_push($agendaList, $object);
@@ -73,7 +73,7 @@ class AgendaHandler {
 
 		$database->close();
 
-		$agendaList = array();
+		$agendaList = [];
 
 		while ($object = $result->fetch_object('Agenda')) {
 		  array_push($agendaList, $object);
@@ -96,7 +96,7 @@ class AgendaHandler {
 
 		$database->close();
 
-		$agendaList = array();
+		$agendaList = [];
 
 		while ($object = $result->fetch_object('Agenda')) {
 			array_push($agendaList, $object);
