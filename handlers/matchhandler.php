@@ -38,7 +38,7 @@ class MatchHandler {
 	const participantof_state_clan = 0;
 	const participantof_state_winner = 1;
 	const participantof_state_looser = 2;
-    const participantof_state_stepin = 3;
+	const participantof_state_stepin = 3;
 
 	/*
 	 * Get a match by the internal id.
@@ -52,6 +52,19 @@ class MatchHandler {
 		$database->close();
 
 		return $result->fetch_object('Match');
+	}
+
+	/*
+	 * Remove a match
+	 */
+	public static function deleteMatch($match) {
+	       $database = Database::open(Settings::db_name_infected_compo);
+	       $database->query('DELETE FROM `' . Settings::db_table_infected_compo_matches . '` WHERE `id` = \'' . $match->getId() . '\';');
+	       $database->query('DELETE FROM `' . Settings::db_table_infected_compo_participantof . '` WHERE `matchId` = \'' . $match->getId() . '\';');
+	       $database->query('DELETE FROM `' . Settings::db_table_infected_compo_matchrelationships . '` WHERE `fromCompo` = \'' . $match->getId() . '\';');
+	       $database->query('DELETE FROM `' . Settings::db_table_infected_compo_matchrelationships . '` WHERE `toCompo` = \'' . $match->getId() . '\';');
+
+	       $database->close();
 	}
 
 	/*
@@ -92,7 +105,7 @@ class MatchHandler {
 		$result = $database->query('SELECT * FROM `' . Settings::db_table_infected_compo_matches . '`
 																WHERE `id` = (SELECT `matchId` FROM `' . Settings::db_table_infected_compo_participantOfMatch . '`
 																						  WHERE `type` = \'' . Settings::compo_match_participant_type_clan . '\'
-																						  AND `participantId` = \'' . $clan->getId() . '\');');
+																						  AND `participantId` = \'' . $clan-getId() . '\');');
 
 		$database->close();
 
@@ -295,6 +308,36 @@ class MatchHandler {
 		return $clanList;
 	}
 
+    public static function removeParticipantEntry($id) {
+        //First, we need to fetch it, as there are some extra steps we need to take in some situations
+        $database = Database::open(Settings::db_name_infected_compo);
+
+        $result = $database->query('SELECT `type` FROM `' . Settings::db_table_infected_compo_participantOfMatch . '` WHERE `id` = \'' . $database->real_escape_string($id) . '\';');
+
+        
+        
+    }
+
+    /*
+     * Some times, you want low level data on the participants.
+     */
+	public static function getParticipantData(Match $match) {
+        $database = Database::open(Settings::db_name_infected_compo);
+
+		$result = $database->query('SELECT * FROM `' . Settings::db_table_infected_compo_participantOfMatch . '`
+																WHERE `matchId` = \'' . $match->getId() . '\';');
+
+		$database->close();
+
+		$rawData = array();
+
+		while($row = $result->fetch_array()) {
+            array_push($rawData, array("id" => $row['id'], "type" => $row['type'], "participantId" => $row['participantId'], "matchId" => $row['matchId']));
+		}
+
+		return $rawData;
+	}
+
 	public static function getParticipantStringByMatch(Match $match) {
 		$database = Database::open(Settings::db_name_infected_compo);
 
@@ -358,11 +401,11 @@ class MatchHandler {
 		while ($row = $result->fetch_array()) {
 			if ($row['type'] == Settings::compo_match_participant_type_clan) {
 				$clan = ClanHandler::getClan($row['participantId']);
-				array_push($jsonArray, array('type' => $row['type'], 'value' => $clan->getName() . ' - ' . $clan->getTag() . ''));
+				array_push($jsonArray, array('type' => $row['type'], 'id' => $row['participantId'], 'value' => $clan->getName() . ' - ' . $clan->getTag() . ''));
             } elseif ($row['type'] == Settings::compo_match_participant_type_match_winner) {
-                array_push($jsonArray, array('type' => $row['type'], 'value' => "Winner of match " . $row['participantId']));
+                array_push($jsonArray, array('type' => $row['type'], 'id' => $row['participantId'], 'value' => "Winner of match " . $row['participantId']));
             } elseif ($row['type'] == Settings::compo_match_participant_type_match_looser) {
-				array_push($jsonArray, array('type' => $row['type'], 'value' => "Looser of match " . $row['participantId']));
+				array_push($jsonArray, array('type' => $row['type'], 'id' => $row['participantId'], 'value' => "Looser of match " . $row['participantId']));
             } elseif ($row['type'] == Settings::compo_match_participant_type_match_walkover) {
                 array_push($jsonArray, array('type' => $row['type'], 'value' => "Walkover"));
 			} else {
@@ -404,7 +447,7 @@ class MatchHandler {
 
 		while ($row = $result->fetch_array()) {
 			$hasParticipants = true;
-
+ 
 			if ($row['type'] == Settings::compo_match_participant_type_match_winner ||
 				$row['type'] == Settings::compo_match_participant_type_match_looser) {
 				return false;
