@@ -49,7 +49,8 @@ class ApplicationHandler {
 		$database = Database::open(Settings::db_name_infected_crew);
 
 		$result = $database->query('SELECT * FROM `' . Settings::db_table_infected_crew_applications . '`
-																WHERE `eventId` = \'' . $event->getId() . '\';');
+																WHERE `eventId` = \'' . $event->getId() . '\'
+																ORDER BY `openedTime`;');
 
 		$database->close();
 
@@ -314,17 +315,17 @@ class ApplicationHandler {
 														  \'1\',
 														  \'' . $database->real_escape_string($content) . '\');');
 
+		$application = self::getApplication($database->insert_id);
+
 		$database->close();
 
 		// If the group is set to queue applications, do so automatically.
 		if ($group->isQueuing()) {
-			$application = self::getUserApplicationForGroup($user, $group);
-
 			self::queueApplication($application, Session::getCurrentUser());
 		}
 
 		// Notify the group leader by email.
-		NotificationManager::sendApplicationCreatedNotification($user, $group);
+		NotificationManager::sendApplicationCreatedNotification($application);
 	}
 
 	/*
