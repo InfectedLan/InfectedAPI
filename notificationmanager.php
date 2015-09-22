@@ -55,7 +55,8 @@ class NotificationManager {
 	/*
 	 * Sends an mail to the users e-mail address with status information.
 	 */
-	public function sendApplicationCreatedNotification(User $user, Group $group) {
+	public function sendApplicationCreatedNotification(Application $application) {
+		$group = $application->getGroup();
 		$userList = array();
 
 		if ($group->hasLeader()) {
@@ -72,8 +73,8 @@ class NotificationManager {
 			$message[] = '<html>';
 				$message[] = '<body>';
 					$message[] = '<h3>Hei!</h3>';
-					$message[] = '<p>Du har fått en ny søknad til crewet ditt (' . $group->getTitle() . ') fra ' . $user->getFullName() . '<p>';
-					$message[] = '<p>Klikk <a href="https://crew.infected.no/v2/index.php?page=chief-applications">her</a> for å se den.</p>';
+					$message[] = '<p>Du har fått en ny søknad til crewet ditt (' . $group->getTitle() . ') fra ' . $application->getUser()->getFullName() . '<p>';
+					$message[] = '<p>Klikk <a href="https://crew.infected.no/v2/index.php?page=application&id=' . $application->getId() . '">her</a> for å se den.</p>';
 					$message[] = '<p>Med vennlig hilsen <a href="http://infected.no/">Infected</a>.</p>';
 				$message[] = '</body>';
 			$message[] = '</html>';
