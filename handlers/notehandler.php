@@ -404,6 +404,7 @@ class NoteHandler {
 	public static function updateWatchingUsers(Note $note, array $userList) {
 		$database = Database::open(Settings::db_name_infected_crew);
 
+		// Add watching users that's not already watching.
 		foreach ($userList as $user) {
 			if (!self::isWatchingNote($note, $user)) {
 				$database->query('INSERT INTO `' . Settings::db_table_infected_crew_notewatches . '` (`noteId`, `userId`)
@@ -412,9 +413,10 @@ class NoteHandler {
 		  }
 		}
 
+		// Remove all users that was watching before, but is not watching anymore.
 		$database->query('DELETE FROM `' . Settings::db_table_infected_crew_notewatches . '`
-						  				WHERE `noteId` = \'' . $note->getId() . '\'
-											AND `userId` NOT IN (' . implode(', ', UserUtils::toUserIdList($userList)) . ');');
+											WHERE `noteId` = \'' . $note->getId() . '\'
+											AND `userId` NOT IN (\'' . implode('\', \'', UserUtils::toUserIdList($userList)) . '\');');
 
 		$database->close();
 	}
