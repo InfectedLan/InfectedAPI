@@ -278,9 +278,9 @@ class MatchHandler {
 		$database = Database::open(Settings::db_name_infected_compo);
 
 		$result = $database->query('SELECT * FROM `' . Settings::db_table_infected_compo_clans . '`
-																WHERE `id` = (SELECT `participantId` FROM `' . Settings::db_table_infected_compo_participantOfMatch . '`
-																						  WHERE `matchId` = \'' . $match->getId() . '\'
-																						  AND `type` = \'' . Settings::compo_match_participant_type_clan . '\');');
+																WHERE `id` IN (SELECT `participantId` FROM `' . Settings::db_table_infected_compo_participantOfMatch . '`
+																						   WHERE `matchId` = \'' . $match->getId() . '\'
+																						   AND `type` = \'' . Settings::compo_match_participant_type_clan . '\');');
 
 		$database->close();
 
