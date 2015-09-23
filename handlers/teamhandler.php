@@ -80,7 +80,7 @@ class TeamHandler {
 		$teamList = [];
 
 		while ($object = $result->fetch_object('Team')) {
-			array_push($teamList, $object);
+			$teamList[] = $object;
 		}
 
 		return $teamList;
@@ -109,7 +109,7 @@ class TeamHandler {
 		$teamList = [];
 
 		while ($object = $result->fetch_object('Team')) {
-			array_push($teamList, $object);
+			$teamList[] = $object;
 		}
 
 		return $teamList;
@@ -186,7 +186,7 @@ class TeamHandler {
 		$memberList = [];
 
 		while ($object = $result->fetch_object('User')) {
-			array_push($memberList, $object);
+			$memberList[] = $object;
 		}
 
 		return $memberList;

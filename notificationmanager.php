@@ -60,11 +60,11 @@ class NotificationManager {
 		$userList = [];
 
 		if ($group->hasLeader()) {
-			array_push($userList, $group->getLeader());
+			$userList[] = $group->getLeader();
 		}
 
 		if ($group->hasCoLeader()) {
-			array_push($userList, $group->getCoLeader());
+			$userList[] = $group->getCoLeader();
 		}
 
 		if (!empty($userList)) {

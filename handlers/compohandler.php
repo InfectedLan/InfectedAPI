@@ -56,7 +56,7 @@ class CompoHandler {
 		$compoList = [];
 
 		while ($object = $result->fetch_object('Compo')) {
-			array_push($compoList, $object);
+			$compoList[] = $object;
 		}
 
 		return $compoList;

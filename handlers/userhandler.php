@@ -395,7 +395,7 @@ class UserHandler {
 			}
 			*/
 
-			$wordList[] = '+' . $value . '*');
+			$wordList[] = '+' . $value . '*';
 		}
 
 		// Query the database using a Full-Text Search.

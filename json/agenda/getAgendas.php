@@ -24,12 +24,12 @@ require_once 'utils/dateutils.php';
 $agendaList = [];
 
 foreach (AgendaHandler::getAgendas() as $agenda) {
-	array_push($agendaList, ['id' => $agenda->getId(),
-													 'name' => $agenda->getName(),
-												 	 'title' => $agenda->getTitle(),
-												 	 'description' => $agenda->getDescription(),
-													 'startTime' => DateUtils::getDayFromInt(date('w', $agenda->getStartTime())) . ' ' . date('H:i', $agenda->getStartTime()),
-													 'isHappening' => $agenda->isHappening()]);
+	$agendaList[] = ['id' => $agenda->getId(),
+									 'name' => $agenda->getName(),
+								 	 'title' => $agenda->getTitle(),
+								 	 'description' => $agenda->getDescription(),
+									 'startTime' => DateUtils::getDayFromInt(date('w', $agenda->getStartTime())) . ' ' . date('H:i', $agenda->getStartTime()),
+									 'isHappening' => $agenda->isHappening()];
 }
 
 header('Content-Type: text/plain');

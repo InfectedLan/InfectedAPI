@@ -52,7 +52,7 @@ class TaskManager {
 		$taskList = [];
 
 		while ($row = $result->fetch_row()) {
-			array_push($taskList, unserialize($row['object']));
+			$taskList[] = unserialize($row['object']);
 		}
 
 		return $taskList;

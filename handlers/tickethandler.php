@@ -104,7 +104,7 @@ class TicketHandler {
 		$ticketList = [];
 
 		while ($object = $result->fetch_object('Ticket')) {
-			array_push($ticketList, $object);
+			$ticketList[] = $object;
 		}
 
 		return $ticketList;
@@ -131,7 +131,7 @@ class TicketHandler {
 		$ticketList = [];
 
 		while ($object = $result->fetch_object('Ticket')) {
-			array_push($ticketList, $object);
+			$ticketList[] = $object;
 		}
 
 		return $ticketList;
@@ -172,7 +172,7 @@ class TicketHandler {
 		$ticketList = [];
 
 		while ($object = $result->fetch_object('Ticket')) {
-			array_push($ticketList, $object);
+			$ticketList[] = $object;
 		}
 
 		return $ticketList;
@@ -193,7 +193,7 @@ class TicketHandler {
 		$ticketList = [];
 
 		while ($object = $result->fetch_object('Ticket')) {
-			array_push($ticketList, $object);
+			$ticketList[] = $object;
 		}
 
 		return $ticketList;

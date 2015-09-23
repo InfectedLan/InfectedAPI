@@ -38,12 +38,12 @@ if (Session::isAuthenticated()) {
 			foreach ($userList as $userValue) {
 				if ($userValue->isActivated() ||
 					!$userValue->isActivated() && $user->hasPermission('*')) {
-					array_push($users, array('id' => $userValue->getId(),
-											 'firstname' => $userValue->getFirstname(),
-											 'lastname' => $userValue->getLastname(),
-											 'username' => $userValue->getUsername(),
-											 'email' => $userValue->getEmail(),
-											 'nickname' => $userValue->getNickname()));
+					$users[] = ['id' => $userValue->getId(),
+											'firstname' => $userValue->getFirstname(),
+											'lastname' => $userValue->getLastname(),
+											'username' => $userValue->getUsername(),
+											'email' => $userValue->getEmail(),
+											'nickname' => $userValue->getNickname()];
 				}
 			}
 

@@ -52,7 +52,7 @@ class PaymentHandler {
 		$paymentList = [];
 
 		while ($object = $result->fetch_object('Payment')) {
-			array_push($paymentList, $object);
+			$paymentList[] = $object;
 		}
 
 		return $paymentList;

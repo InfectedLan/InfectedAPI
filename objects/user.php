@@ -257,17 +257,17 @@ class User extends Object {
 
 		// Give access to default permission for certain users.
 		if ($this->isGroupMember()) {
-			array_push($permissionList, PermissionHandler::getPermissionByValue('event.checklist'));
+			$permissionList[] = PermissionHandler::getPermissionByValue('event.checklist');
 
 		  // Give leaders access to permissions by default.
 		  if ($this->isGroupLeader() || $this->isGroupCoLeader()) {
-		    array_push($permissionList, PermissionHandler::getPermissionByValue('chief.*'));
+		    $permissionList[] = PermissionHandler::getPermissionByValue('chief.*');
 			// Give team leaders access to permissions by default.
 			}
 
 			if ($this->isTeamMember() && $this->isTeamLeader()) {
-		    array_push($permissionList, PermissionHandler::getPermissionByValue('chief.team'));
-				array_push($permissionList, PermissionHandler::getPermissionByValue('event.checklist'));
+		    $permissionList[] = PermissionHandler::getPermissionByValue('chief.team');
+				$permissionList[] = PermissionHandler::getPermissionByValue('event.checklist');
 		  }
 		}
 

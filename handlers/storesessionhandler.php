@@ -54,7 +54,7 @@ class StoreSessionHandler {
 		$storeSessionList = [];
 
 		while ($object = $result->fetch_object('StoreSession')) {
-			array_push($storeSessionList, $object);
+			$storeSessionList[] = $object;
 		}
 
 		return $storeSessionList;

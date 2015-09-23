@@ -23,7 +23,7 @@ class UserUtils {
 		$userIdList = [];
 
 		foreach ($userList as $user) {
-			array_push($userIdList, $user->getId());
+			$userIdList[] = $user->getId();
 		}
 
 		return $userIdList;
@@ -33,7 +33,7 @@ class UserUtils {
 		$userList = [];
 
 		foreach ($userIdList as $userId) {
-			array_push($userList, UserHandler::getUser($userId));
+			$userList[] = UserHandler::getUser($userId);
 		}
 
 		return $userList;

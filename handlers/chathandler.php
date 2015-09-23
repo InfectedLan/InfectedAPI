@@ -54,7 +54,7 @@ class ChatHandler {
 		$chatList = [];
 
 		while ($object = $result->fetch_object('Chat')) {
-			array_push($chatList, $object);
+			$chatList[] = $object;
 		}
 
 		return $chatList;
@@ -123,7 +123,7 @@ class ChatHandler {
 		$chatMemberList = [];
 
 		while ($object = $result->fetch_object('User')) {
-			array_push($chatMemberList, $object);
+			$chatMemberList[] = $object;
 		}
 
 		return $chatMemberList;
@@ -209,7 +209,7 @@ class ChatHandler {
 		$chatMessageList = [];
 
 		while ($object = $result->fetch_object('ChatMessage')) {
-			array_push($chatMessageList, $object);
+			$chatMessageList[] = $object;
 		}
 
 		return $chatMessageList;
@@ -247,7 +247,7 @@ class ChatHandler {
 		$chatMessageList = [];
 
 		while ($object = $result->fetch_object('ChatMessage')) {
-			array_push($chatMessageList, $object);
+			$chatMessageList[] = $object;
 		}
 
 		return $chatMessageList;
@@ -285,19 +285,20 @@ class ChatHandler {
             $user->hasPermission('compo.chat') ||
             $chat->isMember($user)) {
             return true;
-        } else {
-            return false;
         }
+
+				return false;
     }
 
     public static function canRead(Chat $chat, User $user) {
-        if(self::canChat($chat, $user)) {
-            return true;
+        if (self::canChat($chat, $user)) {
+          return true;
         } else {
             //You can also read the chat if it is a compo chat for a compo you are currently participating in. Soooo....
-            $clans = ClanHandler::getClansByUser($user);
-            foreach($clans as $clan) {
-                if($clan->isQualified() && $clan->getCompo()->getChat()->getId() == $chat->getId()) {
+            $clanList = ClanHandler::getClansByUser($user);
+
+						foreach ($clanList as $clan) {
+                if ($clan->isQualified() && $clan->getCompo()->getChat()->getId() == $chat->getId()) {
                     return true;
                 }
             }
