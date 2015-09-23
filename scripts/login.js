@@ -25,7 +25,7 @@ $(document).ready(function() {
 });
 
 function login(form) {
-	$.post('../api/json/user/logoutUser.php', $(form).serialize(), function(data) {
+	$.post('../api/json/user/loginUser.php', $(form).serialize(), function(data) {
 		if (data.result) {
 			location.reload();
 		} else {
