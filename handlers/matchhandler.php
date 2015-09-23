@@ -66,7 +66,7 @@ class MatchHandler {
 		$matchList = [];
 
 		while ($object = $result->fetch_object('Match')) {
-			array_push($matchList, $object);
+			$matchList[] = $object;
 		}
 
 		return $matchList;
@@ -115,10 +115,9 @@ class MatchHandler {
 		$matchList = [];
 
 		while ($object = $result->fetch_object('Match')) {
-			if ($object->getScheduledTime() > time()) {
-				array_push($matchList, $object);
-			} else if(!self::isReady($object)) {
-				array_push($matchList, $object);
+			if ($object->getScheduledTime() > time() ||
+				!self::isReady($object)) {
+				$matchList[] = $object;
 			}
 		}
 
@@ -140,7 +139,7 @@ class MatchHandler {
 
 		while ($object = $result->fetch_object('Match')) {
 			if (self::isReady($object)) {
-				array_push($matchList, $object);
+				$matchList[] = $object;
 			}
 		}
 
@@ -160,7 +159,7 @@ class MatchHandler {
 		$matchList = [];
 
 		while ($object = $result->fetch_object('Match')) {
-			array_push($matchList, $object);
+			$matchList[] = $object;
 		}
 
 		return $matchList;
@@ -177,7 +176,7 @@ class MatchHandler {
 		$matchList = [];
 
 		while ($object = $result->fetch_object('Match')) {
-			array_push($matchList, $object);
+			$matchList[] = $object;
 		}
 
 		return $matchList;
@@ -287,7 +286,7 @@ class MatchHandler {
 		$clanList = [];
 
 		while ($object = $result->fetch_object('Clan')) {
-			array_push($clanList, $object);
+			$clanList[] = $object;
 		}
 
 		return $clanList;
@@ -305,12 +304,12 @@ class MatchHandler {
 
 		while ($row = $result->fetch_array()) {
 			if ($row['type'] == Settings::compo_match_participant_type_match_winner) {
-				array_push($stringArray, 'Winner of match ' . $row['participantId']);
+				$stringArray[] = 'Winner of match ' . $row['participantId'];
 			} else if ($row['type'] == Settings::compo_match_participant_type_match_looser) {
-				array_push($stringArray, 'Looser of match ' . $row['participantId']);
+				$stringArray[] = 'Looser of match ' . $row['participantId'];
 			} else if ($row['type'] == Settings::compo_match_participant_type_clan) {
 				$clan = ClanHandler::getClan($row['participantId']);
-				array_push($stringArray, $clan->getName() . ' - ' . $clan->getTag() . ' (id ' . $clan->getId() . ')');
+				$stringArray[] = $clan->getName() . ' - ' . $clan->getTag() . ' (id ' . $clan->getId() . ')';
 			}
 		}
 
@@ -330,10 +329,10 @@ class MatchHandler {
 		while ($row = $result->fetch_array()) {
 			if ($row['type'] == Settings::compo_match_participant_type_match_winner ||
 				$row['type'] == Settings::compo_match_participant_type_match_looser) {
-				array_push($stringArray, 'TBA');
+				$stringArray[] = 'TBA';
 			} else if ($row['type'] == Settings::compo_match_participant_type_clan) {
 				$clan = ClanHandler::getClan($row['participantId']);
-				array_push($stringArray, $clan->getTag());
+				$stringArray[] = $clan->getTag();
 			}
 		}
 
@@ -353,9 +352,9 @@ class MatchHandler {
 		while ($row = $result->fetch_array()) {
 			if ($row['type'] == Settings::compo_match_participant_type_clan) {
 				$clan = ClanHandler::getClan($row['participantId']);
-				array_push($jsonArray, array('type' => $row['type'], 'value' => $clan->getName() . ' - ' . $clan->getTag() . ''));
+				$jsonArray[] = ['type' => $row['type'], 'value' => $clan->getName() . ' - ' . $clan->getTag() . ''];
 			} else {
-				array_push($jsonArray, array('type' => $row['type'], 'value' => $row['participantId']));
+				$jsonArray[] = ['type' => $row['type'], 'value' => $row['participantId']];
 			}
 		}
 
@@ -374,7 +373,7 @@ class MatchHandler {
 		$matchList = [];
 
 		while ($object = $result->fetch_object('Match')) {
-			array_push($matchList, $object);
+			$matchList[] = $object;
 		}
 
 		return $matchList;

@@ -35,7 +35,7 @@ if (Session::isAuthenticated()) {
 			if ($seatmap != null) {
 				//TODO cleanup if the upload 'overwrites' another image
 				//Validate image
-				$allowedExts = array('jpeg', 'jpg', 'png');
+				$allowedExts = ['jpeg', 'jpg', 'png'];
 				$temp = explode('.', $_FILES['bgImageFile']['name']);
 				$extension = strtolower(end($temp));
 
@@ -81,6 +81,6 @@ header('Content-Type: text/plain');
 if ($result) {
 	echo json_encode(array('result' => $result), JSON_PRETTY_PRINT);
 } else {
-	echo json_encode(array('result' => $result, 'message' => $message), JSON_PRETTY_PRINT);
+	echo json_encode(['result' => $result, 'message' => $message], JSON_PRETTY_PRINT);
 }
 ?>

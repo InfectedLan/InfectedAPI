@@ -34,9 +34,9 @@ if (Session::isAuthenticated()) {
 		if ($chat != null) {
 			if ($user->hasPermission('compo.chat') ||
 				$chat->isMember($user)) {
-				$result = array('response' => true);
+				$result = ['response' => true];
 			} else {
-				$result = array('response' => false);
+				$result = ['response' => false];
 			}
 		} else {
 			$message = Localization::getLocale('this_chat_does_not_exist');
@@ -49,5 +49,5 @@ if (Session::isAuthenticated()) {
 }
 
 header('Content-Type: text/plain');
-echo json_encode(array('result' => $result, 'message' => $message), JSON_PRETTY_PRINT);
+echo json_encode(['result' => $result, 'message' => $message], JSON_PRETTY_PRINT);
 ?>

@@ -62,7 +62,7 @@ class ClanHandler {
 
 		while ($object = $result->fetch_object('Clan')) {
 			if ($event->equals($object->getEvent())) {
-				array_push($clanList, $object);
+				$clanList[] = $object;
 			}
 		}
 
@@ -84,7 +84,7 @@ class ClanHandler {
 		$clanList = [];
 
 		while ($object = $result->fetch_object('Clan')) {
-			array_push($clanList, $object);
+			$clanList[] = $object;
 		}
 
 		return $clanList;
@@ -98,7 +98,7 @@ class ClanHandler {
 
 		foreach (self::getClansByCompo($compo) as $clan) {
 			if (self::isQualified($clan, $compo)) {
-				array_push($clanList, $clan);
+				$clanList[] = $clan;
 			}
 		}
 
@@ -111,7 +111,7 @@ class ClanHandler {
         $result = $database->query('SELECT * FROM `' . Settings::db_table_infected_compo_participantof . '` WHERE `clanId` = \'' . $clan->getId() . '\' AND `compoId` = \'' . $compo->getId() . '\' AND `qualified` = 1;');
 
         $database->close();
-        
+
         return $result->num_rows > 0;
     }
 
@@ -119,7 +119,7 @@ class ClanHandler {
         $database = Database::open(Settings::db_name_infected_compo);
 
         $database->query('UPDATE `' . Settings::db_table_infected_compo_participantof . '` SET `qualified`=1  WHERE `clanId` = \'' . $clan->getId() . '\';');
-        
+
         $database->close();
     }
 
@@ -138,7 +138,7 @@ class ClanHandler {
 		$memberList = [];
 
 		while ($object = $result->fetch_object('User')) {
-			array_push($memberList, $object);
+			$memberList[] = $object;
 		}
 
 		return $memberList;
@@ -160,7 +160,7 @@ class ClanHandler {
 		$memberList = [];
 
 		while ($object = $result->fetch_object('User')) {
-			array_push($memberList, $object);
+			$memberList[] = $object;
 		}
 
 		return $memberList;
@@ -182,7 +182,7 @@ class ClanHandler {
 		$memberList = [];
 
 		while ($object = $result->fetch_object('User')) {
-			array_push($memberList, $object);
+			$memberList[] = $object;
 		}
 
 		return $memberList;

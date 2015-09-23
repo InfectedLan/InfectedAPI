@@ -111,7 +111,7 @@ if (Session::isAuthenticated()) {
 }
 
 header('Content-Type: text/plain');
-echo json_encode(array('result' => $result, 'message' => $message), JSON_PRETTY_PRINT);
+echo json_encode(['result' => $result, 'message' => $message], JSON_PRETTY_PRINT);
 
 function str_replace_last($search, $replace, $str) {
 	if (($pos = strrpos($str, $search)) !== false) {

@@ -148,16 +148,16 @@ class CompoHandler {
 		$numberOfObjects = count($carryMatches) + count($carryClans); //The amount of objects we are going to handle
 		$match_start_index = $numberOfObjects % 2; // 0 if even number of objects, 1 if uneven
 
-		$carryObjects = array('matches' => array(),
-												  'clans' => array(),
-												  'looserMatches' => array(),
-												  'carryMatches' => array()); // Prepare all the info to return back
+		$carryObjects = ['matches' => [],
+									   'clans' => [],
+									   'looserMatches' => [],
+									   'carryMatches' => []]; // Prepare all the info to return back
 
 		if ($match_start_index == 1) { // If there is an uneven amount of objects
 			if (count($carryMatches) > 0 ) { // Prioritize carrying matches
-				array_push($carryObjects['carryMatches'], array_shift($carryMatches));
+				$carryObjects['carryMatches'][] = array_shift($carryMatches);
 			} else { // No matches to carry, carry a clan
-				array_push($carryObjects['clans'], array_shift($carryClans));
+				$carryObjects['clans'][] = array_shift($carryClans);
 			}
 		}
 
@@ -165,7 +165,7 @@ class CompoHandler {
 			// Create match
 			$chat = ChatHandler::createChat('match-chat', 'Match chat');
 			$match = MatchHandler::createMatch($time, '', $compo, $iteration, $chat->getId(), Match::BRACKET_WINNER); // TODO: connectData
-			array_push($carryObjects['matches'], $match);
+			$carryObjects['matches'][] = $match;
 
 			// Assign participants
 			for ($a = 0; $a < 2; $a++) {
@@ -203,11 +203,11 @@ class CompoHandler {
 			if (count($currentMatches) > 0) {
 				$matchToPush = array_shift($currentMatches);
 				//echo ';we have to carry a looser match. Carrying a current match: ' . $matchToPush->getId() . '.';
-				array_push($carryObjects['looserMatches'], $matchToPush);
+				$carryObjects['looserMatches'][] = $matchToPush;
 			} else if (count($oldLooserCarry) > 0) {
 				$matchToPush = array_shift($oldLooserCarry);
 				//echo ';we have to carry a looser match. Carrying a old match: ' . $matchToPush->getId() . '.';
-				array_push($carryObjects['looserMatches'], $matchToPush);
+				$carryObjects['looserMatches'][] = $matchToPush;
 			}
 		}
 
@@ -228,7 +228,7 @@ class CompoHandler {
 				MatchHandler::addMatchParticipant(MatchHandler::participantof_state_winner, array_shift($oldLooserCarry)->getId(), $match);
 			}
 
-			array_push($carryObjects['looserMatches'], $match);
+			$carryObjects['looserMatches'][] = $match;
 			$looserCount = count($oldLooserCarry) + count($currentMatches);
 		}
 
@@ -249,13 +249,13 @@ class CompoHandler {
 		//Randomize participant list to avoid any cheating
 		while (count($clans) > 0) {
 			$toRemove = rand(0, count($clans) - 1);
-			array_push($newClanList, $clans[$toRemove]);
+			$newClanList[] = $clans[$toRemove];
 			array_splice($clans, $toRemove, 1);
 		}
 
-		$carryData = array('matches' => array(),
-						   'clans' => $newClanList,
-						   'looserMatches' => array());
+		$carryData = ['matches' => [],
+							    'clans' => $newClanList,
+							    'looserMatches' => []];
 		$iteration = 0;
 
 		while (true) { // Um. Memory leak here? We should have some objects that we could iterate instead?...
@@ -265,7 +265,7 @@ class CompoHandler {
 											   $iteration, $compo, $startTime + ($iteration * $compoSpacing), $compoSpacing);
 
 			foreach ($carryData['carryMatches'] as $match) {
-				array_push($carryData['matches'], $match);
+				$carryData['matches'][] = $match;
 			}
 			//echo ', looser matches:';
 			/*foreach($carryData['looserMatches'] as $looserMatches) {
