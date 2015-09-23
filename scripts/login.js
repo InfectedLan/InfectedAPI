@@ -18,8 +18,8 @@
  */
 
 $(document).ready(function() {
-	$('.login').submit(function(e) {
-		e.preventDefault();
+	$('.login').on('submit', function(event) {
+		event.preventDefault();
 		login(this);
 	});
 });
