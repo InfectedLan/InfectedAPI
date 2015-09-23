@@ -29,49 +29,49 @@ $message = null;
 if (Session::isAuthenticated()) {
 	$user = Session::getCurrentUser();
 
-	if (isset($_GET['id']) &&
-		is_numeric($_GET['id'])) {
-		$editUser = UserHandler::getUser($_GET['id']);
+	if (isset($_POST['id']) &&
+		is_numeric($_POST['id'])) {
+		$editUser = UserHandler::getUser($_POST['id']);
 
 		if ($editUser != null) {
 			if ($user->hasPermission('user.edit') ||
 				$user->equals($editUser)) {
-				if (isset($_GET['firstname']) &&
-					isset($_GET['lastname']) &&
-					isset($_GET['username']) &&
-					isset($_GET['email']) &&
-					isset($_GET['confirmemail']) &&
-					isset($_GET['gender']) &&
-					isset($_GET['birthday']) &&
-					isset($_GET['birthmonth']) &&
-					isset($_GET['birthyear']) &&
-					isset($_GET['phone']) &&
-					isset($_GET['address']) &&
-					isset($_GET['postalcode']) &&
-					!empty($_GET['firstname']) &&
-					!empty($_GET['lastname']) &&
-					!empty($_GET['username']) &&
-					!empty($_GET['email']) &&
-					!empty($_GET['confirmemail']) &&
-					is_numeric($_GET['gender']) &&
-					is_numeric($_GET['birthday']) &&
-					is_numeric($_GET['birthmonth']) &&
-					is_numeric($_GET['birthyear']) &&
-					is_numeric($_GET['phone']) &&
-					!empty($_GET['address']) &&
-					is_numeric($_GET['postalcode'])) {
-					$firstname = ucfirst($_GET['firstname']);
-					$lastname = ucfirst($_GET['lastname']);
-					$username = $_GET['username'];
-					$email = $_GET['email'];
-					$confirmEmail = $_GET['confirmemail'];
-					$gender = $_GET['gender'];
-					$birthdate = $_GET['birthyear'] . '-' . $_GET['birthmonth'] . '-' . $_GET['birthday'];
-					$phone = str_replace('+47', '', str_replace(' ', '', $_GET['phone']));
-					$address = ucfirst($_GET['address']);
-					$postalcode = $_GET['postalcode'];
-					$nickname = !empty($_GET['nickname']) ? $_GET['nickname'] : $editUser->getUsername();
-					$emergencyContactPhone = isset($_GET['emergencycontactphone']) ? str_replace('+47', '', str_replace(' ', '', $_GET['emergencycontactphone'])) : 0;
+				if (isset($_POST['firstname']) &&
+					isset($_POST['lastname']) &&
+					isset($_POST['username']) &&
+					isset($_POST['email']) &&
+					isset($_POST['confirmemail']) &&
+					isset($_POST['gender']) &&
+					isset($_POST['birthday']) &&
+					isset($_POST['birthmonth']) &&
+					isset($_POST['birthyear']) &&
+					isset($_POST['phone']) &&
+					isset($_POST['address']) &&
+					isset($_POST['postalcode']) &&
+					!empty($_POST['firstname']) &&
+					!empty($_POST['lastname']) &&
+					!empty($_POST['username']) &&
+					!empty($_POST['email']) &&
+					!empty($_POST['confirmemail']) &&
+					is_numeric($_POST['gender']) &&
+					is_numeric($_POST['birthday']) &&
+					is_numeric($_POST['birthmonth']) &&
+					is_numeric($_POST['birthyear']) &&
+					is_numeric($_POST['phone']) &&
+					!empty($_POST['address']) &&
+					is_numeric($_POST['postalcode'])) {
+					$firstname = ucfirst($_POST['firstname']);
+					$lastname = ucfirst($_POST['lastname']);
+					$username = $_POST['username'];
+					$email = $_POST['email'];
+					$confirmEmail = $_POST['confirmemail'];
+					$gender = $_POST['gender'];
+					$birthdate = $_POST['birthyear'] . '-' . $_POST['birthmonth'] . '-' . $_POST['birthday'];
+					$phone = str_replace('+47', '', str_replace(' ', '', $_POST['phone']));
+					$address = ucfirst($_POST['address']);
+					$postalcode = $_POST['postalcode'];
+					$nickname = !empty($_POST['nickname']) ? $_POST['nickname'] : $editUser->getUsername();
+					$emergencyContactPhone = isset($_POST['emergencycontactphone']) ? str_replace('+47', '', str_replace(' ', '', $_POST['emergencycontactphone'])) : 0;
 
 					if ($username != $editUser->getUsername() && UserHandler::hasUser($username)) {
 						$message = Localization::getLocale('the_username_is_already_in_use_by_someone_else');
@@ -99,7 +99,7 @@ if (Session::isAuthenticated()) {
 						$message = Localization::getLocale('the_postcode_is_not_valid_the_postcode_consists_of_4_characters');
 					} else if (!preg_match('/^[a-zæøåA-ZÆØÅ0-9_-]{2,16}$/', $nickname)) {
 						$message = Localization::getLocale('the_nickname_is_not_valid_it_must_consist_of_at_least_2_characters_and_maximum_16_characters');
-					} else if (date_diff(date_create($birthdate), date_create('now'))->y < 18 && (!isset($_GET['emergencycontactphone']) || !is_numeric($emergencyContactPhone) || strlen($emergencyContactPhone) < 8 || strlen($emergencyContactPhone) > 8)) {
+					} else if (date_diff(date_create($birthdate), date_create('now'))->y < 18 && (!isset($_POST['emergencycontactphone']) || !is_numeric($emergencyContactPhone) || strlen($emergencyContactPhone) < 8 || strlen($emergencyContactPhone) > 8)) {
 						if (!is_numeric($emergencyContactPhone)) {
 							$message = Localization::getLocale('parent_phone_must_be_a_number');
 						} else if (strlen($emergencyContactPhone) < 8) {
@@ -121,7 +121,7 @@ if (Session::isAuthenticated()) {
 																		$nickname);
 
 						if (($editUser->hasEmergencyContact() ||
-							isset($_GET['emergencycontactphone'])) &&
+							isset($_POST['emergencycontactphone'])) &&
 							is_numeric($emergencyContactPhone) &&
 							strlen($emergencyContactPhone) >= 8) {
 							EmergencyContactHandler::createEmergencyContact($editUser, $emergencyContactPhone);
