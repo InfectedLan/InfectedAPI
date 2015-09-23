@@ -26,17 +26,45 @@ var bracketTopExtraMargin = 35;
 var bracketWidth = 110;
 var bracketWidthMargin = 20;
 
-function DataSource(matchId) {
+function DataSource(compoId) {
     this.data = [];
-    $.getJSON("../api/json/match/getMatches.php?id=" + matchId, function(data) {
-	
-    });
+    this.compoId = compoId;
+    this.derivedBrackets = [];
+    var me = this;
+    this.refresh = function() {
+	$.getJSON("../api/json/match/getMatches.php?id=" + compoId, function(data) {
+	    if(data.result) {
+		me.data = data;
+	    } else {
+		error("Noe gikk galt da vi hentet match-dataen: " + data.message);
+	    }
+	});
+	for(var i = 0; i < me.derivedBrackets.length; i++) {
+	    me.derivedBrackets[i].updateData(me.data);
+	}
+    }
+    this.derive = function(regex) {
+	var bracket = new Bracket(compoId, regex);
+	me.derivedBrackets.push(bracket);
+	return bracket;
+    }
+
+    this.refresh();
 }
 
-function Bracket(matchId, typeId) { //typeId is metadata set by bracket creator
+function Bracket(compoId, regex) { //typeId is metadata set by bracket creator
     this.matches = [];
     this.render = function(callback) {
 
+    }
+
+    this.updateData = function(matchData) {
+	this.matches = [];
+	for(var i = 0; i < matchData.length; i++) {
+	    if(matchData[i].metadata.tag != null && matchData[i].metadata.tag.match(regex) != null) {
+		this.matches.push(matchData[i]);
+	    }
+	}
     }
 
     //Load data
