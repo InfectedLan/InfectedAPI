@@ -49,6 +49,14 @@ if (Session::isAuthenticated()) {
 					$item["state"] = $match->getState();
 					$item["winner"] = $match->getWinnerId();
 					$item["participants"] = MatchHandler::getParticipantData($match);
+                    $item["metadata"] = MatchHandler::getMetadata($match);
+                    
+                    $parents = array();
+                    $parent_matches = MatchHandler::getMatchParents($match);
+                    foreach($parent_matches as $parent) {
+                        array_push($parents, $parent->getId());
+                    }
+                    $item["parents"] = $parents;
 					//$matchArray[] = $item;
 					array_push($matchArray, $item);
 				}

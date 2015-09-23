@@ -61,8 +61,8 @@ class MatchHandler {
 	       $database = Database::open(Settings::db_name_infected_compo);
 	       $database->query('DELETE FROM `' . Settings::db_table_infected_compo_matches . '` WHERE `id` = \'' . $match->getId() . '\';');
 	       $database->query('DELETE FROM `' . Settings::db_table_infected_compo_participantof . '` WHERE `matchId` = \'' . $match->getId() . '\';');
-	       $database->query('DELETE FROM `' . Settings::db_table_infected_compo_matchrelationships . '` WHERE `fromCompo` = \'' . $match->getId() . '\';');
-	       $database->query('DELETE FROM `' . Settings::db_table_infected_compo_matchrelationships . '` WHERE `toCompo` = \'' . $match->getId() . '\';');
+	       $database->query('DELETE FROM `' . Settings::db_table_infected_compo_matchrelationships . '` WHERE `fromCompoId` = \'' . $match->getId() . '\';');
+	       $database->query('DELETE FROM `' . Settings::db_table_infected_compo_matchrelationships . '` WHERE `toCompoId` = \'' . $match->getId() . '\';');
 
 	       $database->close();
 	}
@@ -220,7 +220,7 @@ class MatchHandler {
 
 		if ($type != self::participantof_state_clan &&
 			$type != self::participantof_state_looser) {
-			$database->query('INSERT INTO `' . Settings::db_table_infected_compo_matchrelationships . '` (`fromCompo`, `toCompo`)
+			$database->query('INSERT INTO `' . Settings::db_table_infected_compo_matchrelationships . '` (`fromCompoId`, `toCompoId`)
 											  VALUES (\'' . $database->real_escape_string($participantId) . '\',
 													  		\'' . $match->getId() . '\');');
 		}
@@ -420,16 +420,16 @@ class MatchHandler {
 		$database = Database::open(Settings::db_name_infected_compo);
 
 		$result = $database->query('SELECT * FROM `' . Settings::db_table_infected_compo_matches . '`
-																WHERE `id` = (SELECT `fromCompo` FROM `' . Settings::db_table_infected_compo_matchrelationships . '`
-																			  			WHERE `toCompo` = \'' . $match->getId() . '\');');
-
-		$database->close();
+																WHERE `id` IN (SELECT `fromCompoId` FROM `' . Settings::db_table_infected_compo_matchrelationships . '`
+																			  			WHERE `toCompoId` = \'' . $match->getId() . '\');');
 
 		$matchList = array();
 
 		while ($object = $result->fetch_object('Match')) {
 			array_push($matchList, $object);
 		}
+
+        $database->close();
 
 		return $matchList;
 	}
@@ -550,6 +550,7 @@ class MatchHandler {
         while ($row = $result->fetch_array()) {
             $metadata[$row["key"]] = $row["value"];
         }
+        return $metadata;
     }
 
     public static function setMetadata(Match $match, $key, $value) {
