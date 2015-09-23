@@ -38,12 +38,12 @@ if (Session::isAuthenticated()) {
 			foreach ($userList as $userValue) {
 				if ($userValue->isActivated() ||
 					!$userValue->isActivated() && $user->hasPermission('*')) {
-					array_push($users, array('id' => $userValue->getId(),
-											 'firstname' => $userValue->getFirstname(),
-											 'lastname' => $userValue->getLastname(),
-											 'username' => $userValue->getUsername(),
-											 'email' => $userValue->getEmail(),
-											 'nickname' => $userValue->getNickname()));
+					$users[] = ['id' => $userValue->getId(),
+											'firstname' => $userValue->getFirstname(),
+											'lastname' => $userValue->getLastname(),
+											'username' => $userValue->getUsername(),
+											'email' => $userValue->getEmail(),
+											'nickname' => $userValue->getNickname()];
 				}
 			}
 
@@ -57,5 +57,5 @@ if (Session::isAuthenticated()) {
 }
 
 header('Content-Type: text/plain');
-echo json_encode(array('result' => $result, 'message' => $message, 'users' => $users), JSON_PRETTY_PRINT);
+echo json_encode(['result' => $result, 'message' => $message, 'users' => $users], JSON_PRETTY_PRINT);
 ?>

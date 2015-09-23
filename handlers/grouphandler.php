@@ -79,7 +79,7 @@ class GroupHandler {
 		$groupList = [];
 
 		while ($object = $result->fetch_object('Group')) {
-			array_push($groupList, $object);
+			$groupList[] = $object;
 		}
 
 		return $groupList;
@@ -160,7 +160,7 @@ class GroupHandler {
 		$memberList = [];
 
 		while ($object = $result->fetch_object('User')) {
-			array_push($memberList, $object);
+			$memberList[] = $object;
 		}
 
 		return $memberList;

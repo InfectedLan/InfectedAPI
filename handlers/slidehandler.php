@@ -54,7 +54,7 @@ class SlideHandler {
 		$slideList = [];
 
 		while ($object = $result->fetch_object('Slide')) {
-			array_push($slideList, $object);
+			$slideList[] = $object;
 		}
 
 		return $slideList;
@@ -78,7 +78,7 @@ class SlideHandler {
 		$slideList = [];
 
 		while ($object = $result->fetch_object('Slide')) {
-			array_push($slideList, $object);
+			$slideList[] = $object;
 		}
 
 		return $slideList;

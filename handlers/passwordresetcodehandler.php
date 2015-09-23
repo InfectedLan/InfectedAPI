@@ -36,9 +36,7 @@ class PasswordResetCodeHandler {
 
 		$row = $result->fetch_array();
 
-		if ($row) {
-			return $row['code'];
-		}
+		return $row['code'];
 	}
 
 	/*
@@ -54,7 +52,7 @@ class PasswordResetCodeHandler {
 		$codeList = [];
 
 		while ($row = $result->fetch_array()) {
-			array_push($codeList, $row['code']);
+			$codeList[] = $row['code'];
 		}
 
 		return $codeList;

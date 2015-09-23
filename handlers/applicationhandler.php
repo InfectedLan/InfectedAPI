@@ -57,7 +57,7 @@ class ApplicationHandler {
 		$applicationList = [];
 
 		while ($object = $result->fetch_object('Application')) {
-			array_push($applicationList, $object);
+			$applicationList[] = $object;
 		}
 
 		return $applicationList;
@@ -89,7 +89,7 @@ class ApplicationHandler {
 		$applicationList = [];
 
 		while ($object = $result->fetch_object('Application')) {
-			array_push($applicationList, $object);
+			$applicationList[] = $object;
 		}
 
 		return $applicationList;
@@ -115,7 +115,7 @@ class ApplicationHandler {
 		$applicationList = [];
 
 		while ($object = $result->fetch_object('Application')) {
-			array_push($applicationList, $object);
+			$applicationList[] = $object;
 		}
 
 		return $applicationList;
@@ -140,7 +140,7 @@ class ApplicationHandler {
 		$applicationList = [];
 
 		while ($object = $result->fetch_object('Application')) {
-			array_push($applicationList, $object);
+			$applicationList[] = $object;
 		}
 
 		return $applicationList;
@@ -166,7 +166,7 @@ class ApplicationHandler {
 		$applicationList = [];
 
 		while ($object = $result->fetch_object('Application')) {
-			array_push($applicationList, $object);
+			$applicationList[] = $object;
 		}
 
 		return $applicationList;
@@ -184,13 +184,13 @@ class ApplicationHandler {
 
 		$database->close();
 
-		$acceptedApplicationList = [];
+		$applicationList = [];
 
 		while ($object = $result->fetch_object('Application')) {
-			array_push($acceptedApplicationList, $object);
+			$applicationList[] = $object;
 		}
 
-		return $acceptedApplicationList;
+		return $applicationList;
 	}
 
 	/*
@@ -206,13 +206,13 @@ class ApplicationHandler {
 
 		$database->close();
 
-		$acceptedApplicationList = [];
+		$applicationList = [];
 
 		while ($object = $result->fetch_object('Application')) {
-			array_push($acceptedApplicationList, $object);
+			$applicationList[] = $object;
 		}
 
-		return $acceptedApplicationList;
+		return $applicationList;
 	}
 
 	/*
@@ -227,13 +227,13 @@ class ApplicationHandler {
 
 		$database->close();
 
-		$rejectedApplicationList = [];
+		$applicationList = [];
 
 		while ($object = $result->fetch_object('Application')) {
-			array_push($rejectedApplicationList, $object);
+			$applicationList[] = $object;
 		}
 
-		return $rejectedApplicationList;
+		return $applicationList;
 	}
 
 	/*
@@ -249,13 +249,13 @@ class ApplicationHandler {
 
 		$database->close();
 
-		$rejectedApplicationList = [];
+		$applicationList = [];
 
 		while ($object = $result->fetch_object('Application')) {
-			array_push($rejectedApplicationList, $object);
+			$applicationList[] = $object;
 		}
 
-		return $rejectedApplicationList;
+		return $applicationList;
 	}
 
 	/*
@@ -270,13 +270,13 @@ class ApplicationHandler {
 
 		$database->close();
 
-		$rejectedApplicationList = [];
+		$applicationList = [];
 
 		while ($object = $result->fetch_object('Application')) {
-			array_push($rejectedApplicationList, $object);
+			$applicationList[] = $object;
 		}
 
-		return $rejectedApplicationList;
+		return $applicationList;
 	}
 
 	/*
@@ -292,13 +292,13 @@ class ApplicationHandler {
 
 		$database->close();
 
-		$rejectedApplicationList = [];
+		$applicationList = [];
 
 		while ($object = $result->fetch_object('Application')) {
-			array_push($rejectedApplicationList, $object);
+			$applicationList[] = $object;
 		}
 
-		return $rejectedApplicationList;
+		return $applicationList;
 	}
 
 	/*
@@ -555,7 +555,7 @@ class ApplicationHandler {
 		$applicationList = [];
 
 		while ($object = $result->fetch_object('Application')) {
-			array_push($applicationList, $object);
+			$applicationList[] = $object;
 		}
 
 		return $applicationList;

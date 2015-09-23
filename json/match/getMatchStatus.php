@@ -8,12 +8,12 @@
  * modify it under the terms of the GNU Lesser General Public
  * License as published by the Free Software Foundation; either
  * version 3.0 of the License, or (at your option) any later version.
- * 
+ *
  * This library is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
  * Lesser General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU Lesser General Public
  * License along with this library.  If not, see <http://www.gnu.org/licenses/>.
  */
@@ -49,8 +49,8 @@ if (Session::isAuthenticated()) {
 				$matchData['currentTime'] = time();
 				$matchData['startTime'] = $match->getScheduledTime();
 				$matchData['chatId'] = $match->getChat();
-				
-				if ($match->getState() == Match::STATE_READYCHECK && 
+
+				if ($match->getState() == Match::STATE_READYCHECK &&
 					$match->isReady()) {
 					$readyData = [];
 
@@ -66,24 +66,24 @@ if (Session::isAuthenticated()) {
 								$avatarFile = AvatarHandler::getDefaultAvatar($member);
 							}
 
-							$memberReadyStatus = array('userId' => $member->getId(),
-													   'nick' => $member->getNickname(),
-													   'avatarUrl' => $avatarFile,
-													   'ready' => MatchHandler::isUserReady($member, $match));
+							$memberReadyStatus = ['userId' => $member->getId(),
+																    'nick' => $member->getNickname(),
+																    'avatarUrl' => $avatarFile,
+																    'ready' => MatchHandler::isUserReady($member, $match)];
 
-							array_push($memberData, $memberReadyStatus);
+							$memberData[] = $memberReadyStatus;
 						}
 
-						$clanData = array('clanName' => $clan->getName(),
-										  'clanTag' => $clan->getTag(),
-										  'members' => $memberData);
-						
-						array_push($readyData, $clanData);
+						$clanData = ['clanName' => $clan->getName(),
+										     'clanTag' => $clan->getTag(),
+										  	 'members' => $memberData];
+
+						$readyData[] = $clanData;
 					}
 
 					$matchData['readyData'] = $readyData;
 					$result = true;
-				} else if ($match->getState() == Match::STATE_CUSTOM_PREGAME && 
+				} else if ($match->getState() == Match::STATE_CUSTOM_PREGAME &&
 						   $match->isReady()) {
 					$banData = [];
 					$bannableMapsArray = [];
@@ -94,7 +94,7 @@ if (Session::isAuthenticated()) {
 						$optionData['thumbnailUrl'] = $voteOption->getThumbnailUrl();
 						$optionData['id'] = $voteOption->getId();
 						$optionData['isBanned'] = VoteOptionHandler::isVoted($voteOption, $match);
-						array_push($bannableMapsArray, $optionData);
+						$bannableMapsArray[] = $optionData;
 					}
 
 					$banData['options'] = $bannableMapsArray;
@@ -104,29 +104,29 @@ if (Session::isAuthenticated()) {
 					$clanList = [];
 
 					foreach (MatchHandler::getParticipants($match) as $clan) {
-						$clanData = array('clanName' => $clan->getName(),
-										  'clanTag' => $clan->getTag());
+						$clanData = ['clanName' => $clan->getName(),
+										  	 'clanTag' => $clan->getTag()];
 
 						$memberData = [];
 
 						foreach ($clan->getMembers() as $member) {
-							$userData = array('userId' => $member->getId(),
-											  'nick' => $member->getNickname(),
-											  'chief' => $member->equals($clan->getChief()));
+							$userData = ['userId' => $member->getId(),
+											  	 'nick' => $member->getNickname(),
+											  	 'chief' => $member->equals($clan->getChief())];
 
-							array_push($memberData, $userData);
+							$memberData[] = $userData;
 						}
 
 						$clanData['members'] = $memberData;
-						array_push($clanList, $clanData);
+						$clanList[] = $clanData;
 					}
 
 					$banData['clans'] = $clanArray;
 
 					$matchData['banData'] = $banData;
 					$result = true;
-				} else if ($match->getState() == Match::STATE_JOIN_GAME && 
-						   $match->isReady()) {
+				} else if ($match->getState() == Match::STATE_JOIN_GAME &&
+					$match->isReady()) {
 					$gameData = [];
 					$gameData['connectDetails'] = $match->getConnectDetails();
 
@@ -146,11 +146,11 @@ if (Session::isAuthenticated()) {
 							$userData['nick'] = $member->getNickname();
 							$userData['chief'] = $member->equals($clan->getChief());
 
-							array_push($memberData, $userData);
+							$memberData[] = $userData;
 						}
 
 						$clanData['members'] = $memberData;
-						array_push($clanList, $clanData);
+						$clanList[] = $clanData;
 					}
 
 					$gameData['clans'] = $clanList;
@@ -189,8 +189,8 @@ if (Session::isAuthenticated()) {
 header('Content-Type: text/plain');
 
 if ($result) {
-	echo json_encode(array('result' => $result, 'matchData' => $matchData), JSON_PRETTY_PRINT);
+	echo json_encode(['result' => $result, 'matchData' => $matchData], JSON_PRETTY_PRINT);
 } else {
-	echo json_encode(array('result' => $result, 'message' => $message), JSON_PRETTY_PRINT);
+	echo json_encode(['result' => $result, 'message' => $message], JSON_PRETTY_PRINT);
 }
 ?>

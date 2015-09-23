@@ -55,7 +55,7 @@ class NoteHandler {
 		$noteList = [];
 
 		while ($object = $result->fetch_object('Note')) {
-			array_push($noteList, $object);
+			$noteList[] = $object;
 		}
 
 		return $noteList;
@@ -86,7 +86,7 @@ class NoteHandler {
 		$noteList = [];
 
 		while ($object = $result->fetch_object('Note')) {
-			array_push($noteList, $object);
+			$noteList[] = $object;
 		}
 
 		return $noteList;
@@ -115,7 +115,7 @@ class NoteHandler {
 		$noteList = [];
 
 		while ($object = $result->fetch_object('Note')) {
-			array_push($noteList, $object);
+			$noteList[] = $object;
 		}
 
 		return $noteList;
@@ -145,7 +145,7 @@ class NoteHandler {
 		$noteList = [];
 
 		while ($object = $result->fetch_object('Note')) {
-			array_push($noteList, $object);
+			$noteList[] = $object;
 		}
 
 		return $noteList;
@@ -176,7 +176,7 @@ class NoteHandler {
 		$noteList = [];
 
 		while ($object = $result->fetch_object('Note')) {
-			array_push($noteList, $object);
+			$noteList[] = $object;
 		}
 
 		return $noteList;
@@ -201,7 +201,7 @@ class NoteHandler {
 			if ($group->isMember($user) ||
 				$group->isLeader($user) ||
 				$group->isCoLeader($user)) {
-			  array_push($leaderInGroups, $group->getId());
+			  $leaderInGroups[] = $group->getId();
 			}
 		}
 
@@ -242,7 +242,7 @@ class NoteHandler {
 		$noteList = [];
 
 		while ($object = $result->fetch_object('Note')) {
-			array_push($noteList, $object);
+			$noteList[] = $object;
 		}
 
 		return $noteList;
@@ -364,7 +364,7 @@ class NoteHandler {
 		$userList = [];
 
 		while ($object = $result->fetch_object('User')) {
-			array_push($userList, $object);
+			$userList[] = $object;
 		}
 
 		return $userList;

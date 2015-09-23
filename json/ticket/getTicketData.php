@@ -37,17 +37,17 @@ if (Session::isAuthenticated()) {
 				if (!$ticket->isCheckedIn()) {
 					$ticketUser = $ticket->getUser();
 
-					$userData = array('id' => $ticketUser->getId(),
-									  'firstname' => $ticketUser->getFirstname(),
-									  'lastname' => $ticketUser->getLastname(),
-								 	  'username' => $ticketUser->getUsername(),
-								 	  'email' => $ticketUser->getEmail(),
-									  'birthdate' => date('d.m.Y', $ticketUser->getBirthdate()),
-								 	  'gender' => $ticketUser->getGenderAsString(),
-								 	  'age' => $ticketUser->getAge(),
-								 	  'phone' => $ticketUser->getPhone(),
-								 	  'address' => $ticketUser->getAddress(),
-									  'city' => $ticketUser->getPostalCode() . ', ' . $ticketUser->getCity());
+					$userData = ['id' => $ticketUser->getId(),
+										   'firstname' => $ticketUser->getFirstname(),
+										   'lastname' => $ticketUser->getLastname(),
+									 	   'username' => $ticketUser->getUsername(),
+									 	   'email' => $ticketUser->getEmail(),
+										   'birthdate' => date('d.m.Y', $ticketUser->getBirthdate()),
+									 	   'gender' => $ticketUser->getGenderAsString(),
+									 	   'age' => $ticketUser->getAge(),
+									 	   'phone' => $ticketUser->getPhone(),
+									 	   'address' => $ticketUser->getAddress(),
+										   'city' => $ticketUser->getPostalCode() . ', ' . $ticketUser->getCity()];
 
 					$result = true;
 				} else {
@@ -69,8 +69,8 @@ if (Session::isAuthenticated()) {
 header('Content-Type: text/plain');
 
 if ($result) {
-	echo json_encode(array('result' => $result, 'userData' => $userData), JSON_PRETTY_PRINT);
+	echo json_encode(['result' => $result, 'userData' => $userData], JSON_PRETTY_PRINT);
 } else {
-	echo json_encode(array('result' => $result, 'message' => $message), JSON_PRETTY_PRINT);
+	echo json_encode(['result' => $result, 'message' => $message], JSON_PRETTY_PRINT);
 }
 ?>

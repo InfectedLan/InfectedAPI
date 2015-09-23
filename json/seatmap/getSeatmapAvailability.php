@@ -52,20 +52,20 @@ if (Session::isAuthenticated()) {
 						$ticket = $seat->getTicket();
 
 						$data['occupied'] = true;
-						$data['occupiedTicket'] = array('id' => $ticket->getId(),
-																						'owner' => htmlspecialchars($ticket->getUser()->getDisplayName()));
+						$data['occupiedTicket'] = ['id' => $ticket->getId(),
+																			 'owner' => htmlspecialchars($ticket->getUser()->getDisplayName())];
 					} else {
 						$data['occupied'] = false;
 					}
 
-					array_push($seatData, $data);
+					$seatData[] = $data;
 				}
 
-				array_push($seatmapData, array('seats' => $seatData,
-											   'id' => $row->getId(),
-											   'x' => $row->getX(),
-											   'y' => $row->getY(),
-											   'number' => $row->getNumber()));
+				$seatmapData[] = ['seats' => $seatData,
+												  'id' => $row->getId(),
+												  'x' => $row->getX(),
+												  'y' => $row->getY(),
+												  'number' => $row->getNumber()];
 
 				$result = true;
 			}
@@ -84,6 +84,6 @@ header('Content-Type: text/plain');
 if ($result) {
 	echo json_encode(array('result' => $result, 'rows' => $seatmapData, 'backgroundImage' => $backgroundImage), JSON_PRETTY_PRINT);
 } else {
-	echo json_encode(array('result' => $result, 'message' => $message), JSON_PRETTY_PRINT);
+	echo json_encode(['result' => $result, 'message' => $message], JSON_PRETTY_PRINT);
 }
 ?>

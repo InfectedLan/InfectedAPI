@@ -122,17 +122,21 @@ function outputCsv(array $userList) {
 
 	$fp = fopen('php://output', 'w');
 
-	$rowList = array(array('Navn:', 'E-post:', 'Telefon:', 'Adresse:', 'Fødselsdato:', 'Alder:', 'Rolle:'));
+	$rowList = [
+		['Navn:', 'E-post:', 'Telefon:', 'Adresse:', 'Fødselsdato:', 'Alder:', 'Rolle:']
+	];
+
+	array(array('Navn:', 'E-post:', 'Telefon:', 'Adresse:', 'Fødselsdato:', 'Alder:', 'Rolle:'));
 
 	// Add each user to the row list.
 	foreach ($userList as $userValue) {
-		array_push($rowList, array($userValue->getFullName(),
-								   $userValue->getEmail(),
-								   $userValue->getPhoneAsString(),
-								   $userValue->getAddress() . ', ' . $userValue->getPostalCode() . ' ' . $userValue->getCity(),
-								   date('d.m.Y', $userValue->getBirthdate()),
-								   $userValue->getAge() . ' år',
-								   $userValue->isGroupMember() ? 'Crew' : 'Deltaker'));
+		$rowList[], [$userValue->getFullName(),
+								 $userValue->getEmail(),
+								 $userValue->getPhoneAsString(),
+								 $userValue->getAddress() . ', ' . $userValue->getPostalCode() . ' ' . $userValue->getCity(),
+								 date('d.m.Y', $userValue->getBirthdate()),
+								 $userValue->getAge() . ' år',
+								 $userValue->isGroupMember() ? 'Crew' : 'Deltaker'];
 	}
 
 	// Fix UTF-8 charset in excel.

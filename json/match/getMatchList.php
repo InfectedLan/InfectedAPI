@@ -49,7 +49,7 @@ if (Session::isAuthenticated()) {
 					$matchData['connectData'] = $match->getConnectDetails();
 					$matchData['participants'] = MatchHandler::getParticipantStringByMatch($match);
 
-					array_push($pendingArray, $matchData);
+					$pendingArray[] = $matchData;
 				}
 
 				$matchArray['pending'] = $pendingArray;
@@ -71,12 +71,11 @@ if (Session::isAuthenticated()) {
 
 					foreach ($participantObjects as $participant) {
 						$data = [];
-
 						$data['name'] = $participant->getName();
 						$data['id'] = $participant->getId();
 						$data['tag'] = $participant->getTag();
 
-						array_push($participantData['list'], $data);
+						$participantData['list'][] = $data;
 					}
 
 
@@ -99,12 +98,12 @@ if (Session::isAuthenticated()) {
 							}
 						}
 
-						if(!$hasVotedMaps) {
-							$matchData['mapData'] = array('name' => 'pending');
+						if (!$hasVotedMaps) {
+							$matchData['mapData'] = ['name' => 'pending'];
 						}
 					}
 
-					array_push($currentArray, $matchData);
+					$currentArray[] = $matchData;
 				}
 
 				$matchArray['current'] = $currentArray;
@@ -112,7 +111,6 @@ if (Session::isAuthenticated()) {
 
 				foreach (MatchHandler::getFinishedMatchesByCompo($compo) as $match) {
 					$matchData = [];
-
 					$matchData['id'] = $match->getId();
 					$matchData['startTime'] = $match->getScheduledTime();
 					$matchData['startString'] = date('d F H:i', $match->getScheduledTime());
@@ -133,16 +131,15 @@ if (Session::isAuthenticated()) {
 
 					foreach ($participantObjects as $participant) {
 						$data = [];
-
 						$data['name'] = $participant->getName();
 						$data['id'] = $participant->getId();
 						$data['tag'] = $participant->getTag();
 
-						array_push($participantData['list'], $data);
+						$participantData['list'][] = $data;
 					}
 
 					$matchData['participants'] = $participantData;
-					array_push($finishedArray, $matchData);
+					$finishedArray[] = $matchData;
 				}
 
 				$matchArray['finished'] = $finishedArray;
@@ -164,8 +161,8 @@ if (Session::isAuthenticated()) {
 header('Content-Type: text/plain');
 
 if ($result) {
-	echo json_encode(array('result' => $result, 'data' => $matchArray), JSON_PRETTY_PRINT);
+	echo json_encode(['result' => $result, 'data' => $matchArray], JSON_PRETTY_PRINT);
 } else {
-	echo json_encode(array('result' => $result, 'message' => $message), JSON_PRETTY_PRINT);
+	echo json_encode(['result' => $result, 'message' => $message], JSON_PRETTY_PRINT);
 }
 ?>

@@ -50,7 +50,7 @@ class ReadyHandlerHandler {
 		$readyHandlerList = [];
 
 		while ($object = $result->fetch_object('ReadyHandler')) {
-			array_push($readyHandlerList, $object);
+			$readyHandlerList[] = $object;
 		}
 
 		return $readyHandlerList;
