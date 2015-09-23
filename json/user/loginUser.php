@@ -26,12 +26,12 @@ $result = false;
 $message = null;
 
 if (!Session::isAuthenticated()) {
-	if (isset($_GET['identifier']) &&
-		isset($_GET['password']) &&
-		!empty($_GET['identifier']) &&
-		!empty($_GET['password'])) {
-		$identifier = $_GET['identifier'];
-		$password = hash('sha256', $_GET['password']);
+	if (isset($_POST['identifier']) &&
+		isset($_POST['password']) &&
+		!empty($_POST['identifier']) &&
+		!empty($_POST['password'])) {
+		$identifier = $_POST['identifier'];
+		$password = hash('sha256', $_POST['password']);
 
 		if (UserHandler::hasUser($identifier)) {
 			$user = UserHandler::getUserByIdentifier($identifier);
