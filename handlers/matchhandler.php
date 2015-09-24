@@ -434,6 +434,24 @@ class MatchHandler {
 		return $matchList;
 	}
 
+    	public static function getMatchChildren(Match $match) {
+		$database = Database::open(Settings::db_name_infected_compo);
+
+		$result = $database->query('SELECT * FROM `' . Settings::db_table_infected_compo_matches . '`
+																WHERE `id` IN (SELECT `toCompoId` FROM `' . Settings::db_table_infected_compo_matchrelationships . '`
+																			  			WHERE `fromCompoId` = \'' . $match->getId() . '\');');
+
+		$matchList = array();
+
+		while ($object = $result->fetch_object('Match')) {
+			array_push($matchList, $object);
+		}
+
+        $database->close();
+
+		return $matchList;
+	}
+
 	// Checks if the match can run(If we have enough participants. Returns false if we have to wait for earlier matches to complete)
 	public static function isReady(Match $match) {
 		$database = Database::open(Settings::db_name_infected_compo);

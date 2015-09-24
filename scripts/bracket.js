@@ -28,15 +28,33 @@ var bracketWidthMargin = 20;
 
 function DataSource(compoId) {
     this.data = [];
+    this.clans = [];
     this.compoId = compoId;
     this.derivedBrackets = [];
     var me = this;
     this.refresh = function() {
+	var progress = 0;
+	$.getJSON("../api/json/clan/getClans.php?id=" + compoId, function(data){
+	    if(data.result) {
+		progress++;
+		me.clans = data.data;
+		if(progress>1) {
+		    for(var i = 0; i < me.derivedBrackets.length; i++) {
+			me.derivedBrackets[i].updateData(me.data, me.clans);
+		    }
+		}
+	    } else {
+		error(data.message);
+	    }
+	});
 	$.getJSON("../api/json/match/getMatches.php?id=" + compoId, function(data) {
 	    if(data.result) {
+		progress++;
 		me.data = data.data;
-		for(var i = 0; i < me.derivedBrackets.length; i++) {
-		    me.derivedBrackets[i].updateData(me.data);
+		if(progress>1) {
+		    for(var i = 0; i < me.derivedBrackets.length; i++) {
+			me.derivedBrackets[i].updateData(me.data, me.clans);
+		    }
 		}
 	    } else {
 		error("Noe gikk galt da vi hentet match-dataen: " + data.message);
@@ -54,9 +72,25 @@ function DataSource(compoId) {
 }
 
 function Bracket(compoId, divId, regex, bracketWidth, bracketHeight, customRenderer, onRenderFinished, onOffsetRender, onOffsetHeaderRender) { //compoId is metadata set by bracket creator
+    
+    this.getParticipantString = function(participant, clans) {
+	if(participant.type == participant_type_clan) {
+	    for(var i = 0; i < clans.length; i++) {
+		if(clans[i].id == participant.id) {
+		    return clans[i].tag;
+		}
+	    }
+	} else if(participant.type == participant_type_winner) {
+	    return "TBD";
+	} else if(participant.type == participant_type_looser) {
+	    return "TBD";
+	} else if(participant.type == participant_type_walkover) {
+	    return "Walkover";
+	}
+    }
     this.bracketWidth = typeof bracketWidth !== 'undefined' ? bracketWidth : 100;
     this.bracketHeight = typeof bracketHeight !== 'undefined' ? bracketHeight : 100;
-    this.customRenderer = typeof customRenderer === 'function' ? customRenderer : function(match) {
+    this.customRenderer = typeof customRenderer === 'function' ? customRenderer : function(match, clans) {
 	var html = [];
 	//html.push('<div class="bracket_header">Match id ' + match.id + '</div>');
 	
@@ -64,7 +98,7 @@ function Bracket(compoId, divId, regex, bracketWidth, bracketHeight, customRende
 	    if(i != 0) {
 		html.push('<div class="bracket_vs">vs</div>');
 	    }
-	    html.push('<div class="bracket_participant">' +  data.data[x].participants[0] +'</div>');
+	    html.push('<div class="bracket_participant">' +  this.getParticipantString(match.participants[i], clans) +'</div>');
 	}
 	return html.join("");
     };
@@ -82,6 +116,8 @@ function Bracket(compoId, divId, regex, bracketWidth, bracketHeight, customRende
     this.divId = divId;
     
     this.matches = [];
+    this.clans = [];
+
     this.render = function() {
 	//For this, we will use a three part strategy:
 	//1. Sort by bracket offset
@@ -125,8 +161,8 @@ function Bracket(compoId, divId, regex, bracketWidth, bracketHeight, customRende
 	for(var i = 0; i < offsets.length; i++) {
 	    newOffsets.push({offset: offsets[i].offset, scheduledTime: offsets[i].scheduledTime, items: []});
 	}
-	//Iterate backwards
-	for(var i = offsets.length-1; i >= 0; i--) {
+	//Iterate forwards to sort stuff.
+	for(var i = 0; i < offsets.length; i++) {
 	    var nonSorted = [];
 	    for(var x = 0; x < offsets[i].items.length; x++) {
 		var item = offsets[i].items[x];
@@ -136,8 +172,8 @@ function Bracket(compoId, divId, regex, bracketWidth, bracketHeight, customRende
 			wasPriorityMatch = true;
 			newOffsets[i].items.push(item);
 			priorityTable.splice(y, 1);
-			for(var z = 0; z < item.parents.length; z++) {
-			    priorityTable.push(item.parents[z]);
+			for(var z = 0; z < item.children.length; z++) {
+			    priorityTable.push(item.children[z]);
 			}
 			break;
 		    }
@@ -150,8 +186,8 @@ function Bracket(compoId, divId, regex, bracketWidth, bracketHeight, customRende
 	    for(var x = 0; x < nonSorted.length; x++) {
 		var item = nonSorted[x];
 		newOffsets[i].items.push(item);
-		for(var z = 0; z < item.parents.length; z++) {
-		    priorityTable.push(item.parents[z]);
+		for(var z = 0; z < item.children.length; z++) {
+		    priorityTable.push(item.children[z]);
 		}
 	    }
 	}
@@ -185,6 +221,7 @@ function Bracket(compoId, divId, regex, bracketWidth, bracketHeight, customRende
 			lastPosition += (this.bracketHeight*1.2);
 		    } else {
 			item.y = parentYTotal/parentCount;
+			lastPosition = item.y + (this.bracketHeight*1.2);
 		    }
 		} else {
 		    item.y = lastPosition;
@@ -207,6 +244,8 @@ function Bracket(compoId, divId, regex, bracketWidth, bracketHeight, customRende
 		var yMargin = 0;
 		if(x != 0) {
 		    yMargin = offsets[i].items[x].y - offsets[i].items[x-1].y - this.bracketHeight;
+		} else {
+		    yMargin = offsets[i].items[x].y;
 		}
 		html.push('<div class="bracket" style="margin-top: ' + yMargin + 'px; width: ' +this.bracketWidth  + 'px; height: ' + this.bracketHeight + 'px;">');
 		html.push(this.customRenderer(offsets[i].items[x]));
@@ -221,8 +260,9 @@ function Bracket(compoId, divId, regex, bracketWidth, bracketHeight, customRende
 	this.generatedOffsets = offsets;
     }
 
-    this.updateData = function(matchData) {
+    this.updateData = function(matchData, clanData) {
 	this.matches = [];
+	this.clans = clanData;
 	for(var i = 0; i < matchData.length; i++) {
 	    console.log("Iteration " + i );
 	    console.log(matchData[i]);

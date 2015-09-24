@@ -51,6 +51,13 @@ if (Session::isAuthenticated()) {
 					$item["participants"] = MatchHandler::getParticipantData($match);
                     $item["metadata"] = MatchHandler::getMetadata($match);
                     
+                    $children = array();
+                    $child_matches = MatchHandler::getMatchChildren($match);
+                    foreach($child_matches as $child) {
+                        array_push($children, $child->getId());
+                    }
+                    $item["children"] = $children;
+
                     $parents = array();
                     $parent_matches = MatchHandler::getMatchParents($match);
                     foreach($parent_matches as $parent) {
