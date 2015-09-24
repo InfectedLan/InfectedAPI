@@ -117,7 +117,9 @@ class Note extends EventObject {
 	 * Returns the time of this note.
 	 */
 	public function getTime() {
-		return strtotime($this->time);
+		list($h, $m, $s) = explode (":", $this->time);
+
+		return ($h * 3600) + ($m * 60);
 	}
 
 	/*
@@ -126,7 +128,7 @@ class Note extends EventObject {
 	public function getAbsoluteTime() {
 		$event = EventHandler::getCurrentEvent();
 
-		return (strtotime(date('Y-m-d', $event->getStartTime())) + $this->getSecondsOffset()) + ($this->getTime() - strtotime('today'));
+		return (strtotime(date('Y-m-d', $event->getStartTime())) + $this->getSecondsOffset() + $this->getTime());
 	}
 
 	/*
@@ -152,9 +154,10 @@ class Note extends EventObject {
 
 	public function isExpired() {
 		$event = EventHandler::getCurrentEvent();
-		$delay = 30 * 60; // 30 minutes.
+		$eventDate = strtotime(date('Y-m-d', $event->getStartTime()));
+		$delay = 30 * 60; // 30 minutes delay.
 
-		return ($event->getStartTime() + $this->getSecondsOffset() + $delay) <= time();
+		return ($eventDate + $this->getSecondsOffset() + $this->getTime() + $delay) <= time();
 	}
 
 	/*
