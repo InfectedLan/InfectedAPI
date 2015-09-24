@@ -43,8 +43,8 @@ function DataSource(compoId) {
 	    }
 	});
     }
-    this.derive = function(divId, regex, bracketWidth, bracketHeight, customRenderer) {
-	var bracket = new Bracket(compoId, divId, regex, bracketWidth, bracketHeight, customRenderer);
+    this.derive = function(divId, regex, bracketWidth, bracketHeight, customRenderer, onRenderFinished, onOffsetRender) {
+	var bracket = new Bracket(compoId, divId, regex, bracketWidth, bracketHeight, customRenderer, onRenderFinished, onOffsetRender);
 	bracket.updateData(this.data);
 	this.derivedBrackets.push(bracket);
 	return bracket;
@@ -53,17 +53,32 @@ function DataSource(compoId) {
     this.refresh();
 }
 
-function Bracket(compoId, divId, regex, bracketWidth, bracketHeight, customRenderer) { //compoId is metadata set by bracket creator
+function Bracket(compoId, divId, regex, bracketWidth, bracketHeight, customRenderer, onRenderFinished, onOffsetRender, onOffsetHeaderRender) { //compoId is metadata set by bracket creator
     this.bracketWidth = typeof bracketWidth !== 'undefined' ? bracketWidth : 100;
     this.bracketHeight = typeof bracketHeight !== 'undefined' ? bracketHeight : 100;
     this.customRenderer = typeof customRenderer === 'function' ? customRenderer : function(match) {
 	var html = [];
-	html.push("<h4>Match " + match.id + "</h4><b>Spillere:</b>");
+	//html.push('<div class="bracket_header">Match id ' + match.id + '</div>');
+	
 	for(var i = 0; i < match.participants.length; i++) {
-	    html.push("<b>Match " + match.participants[i].participantId  + "</b>");
+	    if(i != 0) {
+		html.push('<div class="bracket_vs">vs</div>');
+	    }
+	    html.push('<div class="bracket_participant">' +  data.data[x].participants[0] +'</div>');
 	}
 	return html.join("");
     };
+    this.onRenderFinished = typeof onRenderFinished === 'function' ? onRenderFinished : function() {
+
+    };
+    this.onOffsetRender = typeof onOffsetRender === 'function' ? onOffsetRender : function() {
+
+    };
+    this.onOffsetHeaderRender = typeof onOffsetHeaderRender === 'function' ? onOffsetHeaderRender : function() {
+
+    };
+    
+    
     this.divId = divId;
     
     this.matches = [];
@@ -96,7 +111,7 @@ function Bracket(compoId, divId, regex, bracketWidth, bracketHeight, customRende
 			break;
 		    }
 		}
-		offsets.splice(positionTarget, 0, {offset: offset, items: [this.matches[i]]});
+		offsets.splice(positionTarget, 0, {offset: offset, scheduledTime: this.matches[i].scheduledTime, items: [this.matches[i]]});
 	    }
 	}
 
@@ -108,7 +123,7 @@ function Bracket(compoId, divId, regex, bracketWidth, bracketHeight, customRende
 	var newOffsets = [];
 	//Initialize empty new offset table
 	for(var i = 0; i < offsets.length; i++) {
-	    newOffsets.push({offset: offsets[i].offset, items: []});
+	    newOffsets.push({offset: offsets[i].offset, scheduledTime: offsets[i].scheduledTime, items: []});
 	}
 	//Iterate backwards
 	for(var i = offsets.length-1; i >= 0; i--) {
@@ -183,16 +198,27 @@ function Bracket(compoId, divId, regex, bracketWidth, bracketHeight, customRende
 	//Render!
 	var html = [];
 	for(var i = 0; i < offsets.length; i++) {
-	    html.push('<div class="bracketOffset">');
+	    html.push('<div class="bracketOffset" width="' + (this.bracketWidth*1.2) + '">');
+	    html.push('<div class="bracketOffsetHeader">');
+	    var date = new Date(offsets[i].scheduledTime);
+	    html.push(date.toLocaleString());
+	    html.push('</div>');
 	    for(var x = 0; x < offsets[i].items.length; x++) {
-		html.push('<div class="match">');
+		var yMargin = 0;
+		if(x != 0) {
+		    yMargin = offsets[i].items[x].y - offsets[i].items[x-1].y - this.bracketHeight;
+		}
+		html.push('<div class="bracket" style="margin-top: ' + yMargin + 'px; width: ' +this.bracketWidth  + 'px; height: ' + this.bracketHeight + 'px;">');
 		html.push(this.customRenderer(offsets[i].items[x]));
 		html.push('</div>');
 	    }
+	    html.push(this.onOffsetRender(offsets, i));
 	    html.push('</div>');
 	}
 	console.log(html.join(""));
 	$("#" + this.divId).html(html.join(""));
+	this.onRenderFinished(offsets);
+	this.generatedOffsets = offsets;
     }
 
     this.updateData = function(matchData) {
