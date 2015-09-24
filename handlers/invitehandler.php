@@ -110,7 +110,11 @@ class InviteHandler {
 														  \'' . $user->getId() . '\',
 														  \'' . $clan->getId() . '\');');
 
+		$invite = self::getInvite($database->insert_id);
+
 		$database->close();
+
+		return $invite;
 	}
 
 	/*

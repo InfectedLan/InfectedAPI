@@ -99,7 +99,11 @@ class SlideHandler {
 														  \'' . $database->real_escape_string($endTime) . '\',
 														  \'' . $database->real_escape_string($published) . '\');');
 
+		$slide = self::getSlide($database->insert_id);
+
 		$database->close();
+
+		return $slide;
 	}
 
 	/*

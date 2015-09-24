@@ -106,7 +106,11 @@ class CompoHandler {
 															\'' . $database->real_escape_string($chat->getId()) . '\',
 		   												\'' . $database->real_escape_string($participantLimit) . '\');');
 
+		$compo = self::getCompo($database->insert_id);
+
 		$database->close();
+
+		return $compo;
 	}
 
 	/*

@@ -271,7 +271,11 @@ class NoteHandler {
 															\'' . $database->real_escape_string($secondsOffset) . '\',
 															\'' . $database->real_escape_string($time) . '\');');
 
+		$note = self::getNote($database->insert_id);
+
 		$database->close();
+
+		return $note;
 	}
 
 	/*

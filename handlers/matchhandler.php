@@ -437,12 +437,12 @@ class MatchHandler {
 			$users = $database->query('SELECT * FROM `' . Settings::db_table_infected_compo_memberof . '`
 															   WHERE `clanId` = \'' . $row['participantId'] . '\';');
 
-			while ($userRow = mysqli_fetch_array($users)) {
+			while ($userRow = $users->fetch_array()) {
 				$userCheck = $database->query('SELECT * FROM `' . Settings::db_table_infected_compo_readyusers . '`
 																		   WHERE `userId` = \'' . $userRow['userId'] . '\'
 																		   AND `matchId` = \'' . $match->getId() . '\';');
 
-			 	$row = mysqli_fetch_array($userCheck);
+			 	$row = $userCheck->fetch_array();
 
 				if (!$row) {
 					return false;
@@ -468,12 +468,11 @@ class MatchHandler {
 															\'' . $chat->getId() . '\',
 															\'' . $database->real_escape_string($bracket) . '\');');
 
-		$result = $database->query('SELECT * FROM `' . Settings::db_table_infected_compo_matches . '`
-																WHERE `id` = \'' . $database->insert_id . '\';');
+		$match = self::getMatch($database->insert_id);
 
 		$database->close();
 
-		return $result->fetch_object('Match');
+		return $match;
 	}
 
 	public static function updateMatch(Match $match, $state) {

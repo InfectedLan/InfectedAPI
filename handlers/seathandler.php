@@ -91,14 +91,17 @@ class SeatHandler {
 																				LIMIT 1;');
 
 		$seatRow = $result->fetch_array();
-
 		$newSeatNumber = $seatRow['number'] + 1;
 
 		$database->query('INSERT INTO `' . Settings::db_table_infected_tickets_seats . '` (`rowId`, `number`)
 										  VALUES (\'' . $row->getId() . '\',
 												  		\'' . $database->real_escape_string($newSeatNumber) . '\');');
 
+		$seat = self::getSeat($database->insert_id);
+
 		$database->close();
+
+		return $seat;
 	}
 
 	/*

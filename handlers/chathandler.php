@@ -70,9 +70,11 @@ class ChatHandler {
 						  				VALUES (\'' . $database->real_escape_string($name) . '\',
 															\'' . $database->real_escape_string($title) . '\');');
 
+		$chat = self::getChat($database->insert_id);
+
 		$database->close();
 
-		return self::getChat($database->insert_id);
+		return $chat;
 	}
 
 	/*

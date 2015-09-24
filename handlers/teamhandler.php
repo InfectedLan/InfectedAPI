@@ -136,7 +136,11 @@ class TeamHandler {
 														  \'' . $database->real_escape_string($description) . '\',
 														  \'' . ($leaderUser != null ? $leaderUser->getId() : 0) . '\')');
 
+		$team = self::getTeam($database->insert_id);
+
 		$database->close();
+
+		return $team;
 	}
 
 	/*

@@ -278,5 +278,12 @@ class Note extends EventObject {
 	public function isWatching(User $user) {
 		return NoteHandler::isWatchingNote($this, $user);
 	}
+
+	/*
+	 * Returns a list of users watching this note.
+	 */
+	public function getWatchingUsers() {
+		return NoteHandler::getWatchingUsers($this);
+	}
 }
 ?>

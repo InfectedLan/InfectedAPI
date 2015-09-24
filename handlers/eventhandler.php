@@ -148,7 +148,11 @@ class EventHandler {
 														  \'' . $seatmap->getId() . '\',
 														  \'1\');');
 
+		$event = self::getEvent($database->insert_id);
+
 		$database->close();
+
+		return $event;
 	}
 
 	/*

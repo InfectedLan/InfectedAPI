@@ -80,7 +80,11 @@ class TicketTransferHandler {
 														  \'' . date('Y-m-d H:i:s') . '\',
 														  \'' . $revertable . '\');');
 
+		$ticketTransfer = self::getTicketTransfer($database->insert_id);
+
 		$database->close();
+
+		return $ticketTransfer;
 	}
 
 	/*
