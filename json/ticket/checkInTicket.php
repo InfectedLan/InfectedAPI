@@ -21,7 +21,6 @@
 require_once 'session.php';
 require_once 'localization.php';
 require_once 'handlers/tickethandler.php';
-require_once 'handlers/checkinstatehandler.php';
 
 $result = false;
 $message = null;
@@ -36,9 +35,9 @@ if (Session::isAuthenticated()) {
 
 			if ($ticket != null) {
 				if (!$ticket->isCheckedIn()) {
-					$ticket->checkIn();
+                    TicketHandler::checkInTicket($ticket);
 
-					$message = Localization::getLocale('value_ticket_is_now_checked_in', $ticket->getUser()->getName());
+					$message = Localization::getLocale('value_ticket_is_now_checked_in', $ticket->getBuyer()->getFirstname());
 					$result = true;
 				} else {
 					$message = Localization::getLocale('this_ticket_is_already_checked_in');

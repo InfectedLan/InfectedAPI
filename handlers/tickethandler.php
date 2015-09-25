@@ -286,7 +286,7 @@ class TicketHandler {
 	public static function checkInTicket(Ticket $ticket) {
 		$database = Database::open(Settings::db_name_infected_tickets);
 
-		$reuslt = $database->query('INSERT INTO `' . Settings::db_table_infected_tickets_checkedintickets . '` (`ticketId`, `userId`)
+		$reuslt = $database->query('INSERT INTO `' . Settings::db_table_infected_tickets_checkedintickets . '` (`ticketId`)
 																VALUES (\'' . $ticket->getId() . '\');');
 
 		$database->close();
