@@ -61,8 +61,8 @@ function DataSource(compoId) {
 	    }
 	});
     }
-    this.derive = function(divId, regex, bracketWidth, bracketHeight, customRenderer, onRenderFinished, onOffsetRender) {
-	var bracket = new Bracket(compoId, divId, regex, bracketWidth, bracketHeight, customRenderer, onRenderFinished, onOffsetRender);
+    this.derive = function(divId, regex, bracketWidth, bracketHeight, customRenderer, onRenderFinished, onOffsetRender,  onOffsetHeaderRender, customTimeFormatter) {
+	var bracket = new Bracket(compoId, divId, regex, bracketWidth, bracketHeight, customRenderer, onRenderFinished, onOffsetRender, onOffsetHeaderRender, customTimeFormatter);
 	bracket.updateData(this.data);
 	this.derivedBrackets.push(bracket);
 	return bracket;
@@ -71,7 +71,7 @@ function DataSource(compoId) {
     this.refresh();
 }
 
-function Bracket(compoId, divId, regex, bracketWidth, bracketHeight, customRenderer, onRenderFinished, onOffsetRender, onOffsetHeaderRender) { //compoId is metadata set by bracket creator
+function Bracket(compoId, divId, regex, bracketWidth, bracketHeight, customRenderer, onRenderFinished, onOffsetRender, onOffsetHeaderRender, customTimeFormatter) { //compoId is metadata set by bracket creator
     
     this.getParticipantString = function(participant, clans) {
 	if(participant.type == participant_type_clan) {
@@ -104,6 +104,9 @@ function Bracket(compoId, divId, regex, bracketWidth, bracketHeight, customRende
     };
     this.onRenderFinished = typeof onRenderFinished === 'function' ? onRenderFinished : function() {
 
+    };
+    this.customTimeFormatter = typeof customTimeFormatter === 'function' ? customTimeFormatter : function(time, offsetId) {
+	return time;
     };
     this.onOffsetRender = typeof onOffsetRender === 'function' ? onOffsetRender : function() {
 
@@ -237,8 +240,8 @@ function Bracket(compoId, divId, regex, bracketWidth, bracketHeight, customRende
 	for(var i = 0; i < offsets.length; i++) {
 	    html.push('<div class="bracketOffset" width="' + (this.bracketWidth*1.2) + '">');
 	    html.push('<div class="bracketOffsetHeader">');
-	    var date = new Date(offsets[i].scheduledTime);
-	    html.push(date.toLocaleString());
+	    var date = new Date(offsets[i].scheduledTime*1000);
+	    html.push(this.customTimeFormatter(date.toLocaleString(), i));
 	    html.push('</div>');
 	    for(var x = 0; x < offsets[i].items.length; x++) {
 		var yMargin = 0;

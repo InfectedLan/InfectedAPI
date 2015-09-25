@@ -61,6 +61,8 @@ class MatchHandler {
 	       $database = Database::open(Settings::db_name_infected_compo);
 	       $database->query('DELETE FROM `' . Settings::db_table_infected_compo_matches . '` WHERE `id` = \'' . $match->getId() . '\';');
 	       $database->query('DELETE FROM `' . Settings::db_table_infected_compo_participantof . '` WHERE `matchId` = \'' . $match->getId() . '\';');
+           $database->query('DELETE FROM `' . Settings::db_table_infected_compo_participantOfMatch . '` WHERE `participantId` = \'' . $match->getId() . '\' AND (`type` = \'' . Settings::compo_match_participant_type_match_winner . '\' OR `type` = \'' . Settings::compo_match_participant_type_match_looser . '\');');
+           $database->query('DELETE FROM `' . Settings::db_table_infected_compo_participantOfMatch . '` WHERE `matchId` = \'' . $match->getId() . '\';');
 	       $database->query('DELETE FROM `' . Settings::db_table_infected_compo_matchrelationships . '` WHERE `fromCompoId` = \'' . $match->getId() . '\';');
 	       $database->query('DELETE FROM `' . Settings::db_table_infected_compo_matchrelationships . '` WHERE `toCompoId` = \'' . $match->getId() . '\';');
 
@@ -531,15 +533,18 @@ class MatchHandler {
 	public static function createMatch($scheduledTime, $connectData, Compo $compo, $bracketOffset, Chat $chat, $bracket) {
 		$database = Database::open(Settings::db_name_infected_compo);
 
-		$database->query('INSERT INTO `' . Settings::db_table_infected_compo_matches . '` (`scheduledTime`, `connectDetails`, `state`, `winnerId`, `compoId`, `bracketOffset`, `chatId`, `bracket`)
-											VALUES (\'' . $database->real_escape_string($scheduledTime) . '\',
+        $query = 'INSERT INTO `' . Settings::db_table_infected_compo_matches . '` (`scheduledTime`, `connectDetails`, `state`, `winnerId`, `compoId`, `bracketOffset`, `chatId`, `bracket`)
+											VALUES (\'' . date('Y-m-d H:i:s', $scheduledTime) . '\',
 															\'' . $database->real_escape_string($connectData) . '\',
 															\'' . Match::STATE_READYCHECK . '\',
 															\'0\',
 															\'' . $compo->getId() . '\',
 															\'' . $database->real_escape_string($bracketOffset) . '\',
 															\'' . $chat->getId() . '\',
-															\'' . $database->real_escape_string($bracket) . '\');');
+															\'' . $database->real_escape_string($bracket) . '\');';
+        //echo $query;
+
+		$database->query($query);
 
 		$result = $database->query('SELECT * FROM `' . Settings::db_table_infected_compo_matches . '`
 																WHERE `id` = \'' . $database->insert_id . '\';');
@@ -548,6 +553,14 @@ class MatchHandler {
 
 		return $result->fetch_object('Match');
 	}
+
+    public static function setTime(Match $match, $time) {
+        $database = Database::open(Settings::db_name_infected_compo);
+
+        $database->query('UPDATE `' . Settings::db_table_infected_compo_matches . '` SET `scheduledTime` = \'' . date('Y-m-d H:i:s', $time) . '\' WHERE `id` = \'' . $match->getId() . '\';');
+
+        $database->close();
+    }
 
 	public static function updateMatch(Match $match, $state) {
 		$database = Database::open(Settings::db_name_infected_compo);
@@ -574,7 +587,7 @@ class MatchHandler {
     public static function setMetadata(Match $match, $key, $value) {
         $database = Database::open(Settings::db_name_infected_compo);
         
-        if(self::hasKey($key)) {
+        if(self::hasKey($match, $key)) {
             $result = $database->query('UPDATE `' . Settings::db_table_infected_compo_matchmetadata . '` SET `value` = \'' . $database->real_escape_string($value) .'\' WHERE `key` = \'' . $database->real_escape_string($key) . '\';');
         } else {
             $result = $database->query('INSERT INTO `' . Settings::db_table_infected_compo_matchmetadata . '` (`match`, `key`, `value`) VALUES (\'' . $match->getId() . '\', \'' . $database->real_escape_string($key) . '\', \'' . $database->real_escape_string($value) . '\');');
