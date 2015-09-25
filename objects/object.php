@@ -33,10 +33,12 @@ class Object {
 	 * It returns true if the specified object is equal to this one.
 	 */
 	public function equals(Object $object) {
-		// Check that the specified object is an instance of this one.
-		if ($object instanceof $this) {
-			// Logically compare these two objects against each other.
-			return $object == $this;
+		if ($object != null) {
+			// Check that the specified object is an instance of this one.
+			if ($object instanceof $this) {
+				// Logically compare these two objects against each other.
+				return $object == $this;
+			}
 		}
 
 		return false;
@@ -47,10 +49,12 @@ class Object {
 	 * It returns true if the specified object is less than this one.
 	 */
 	public function isLessThan(Object $object) {
-		// Check that the specified object is an instance of this one.
-		if ($object instanceof $this) {
-			// Logically compare these two objects against each other.
-			return $this->getId() < $object->getId();
+		if ($object != null) {
+			// Check that the specified object is an instance of this one.
+			if ($object instanceof $this) {
+				// Logically compare these two objects against each other.
+				return $this->getId() < $object->getId();
+			}
 		}
 
 		return false;

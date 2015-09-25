@@ -38,7 +38,7 @@ if (Session::isAuthenticated()) {
 			!empty($_GET['subject']) &&
 			!empty($_GET['message'])) {
 			$userIdList = explode(',', $_GET['userIdList']);
-			$userList = array();
+			$userList = [];
 
 			// If the id's in user list is lower or equal to 0, we have to do something special here.
 			if (count($userIdList) >= 1) {
@@ -60,7 +60,7 @@ if (Session::isAuthenticated()) {
 						foreach (UserHandler::getParticipantUsers($event) as $participant) {
 							// If the participant user have more than 1 ticket, add him/her to the user list.
 							if (count($participant->getTickets()) > 1) {
-								array_push($userList, $participant);
+								$userList[] = $participant;
 							}
 						}
 					} else if ($value == 'allWithTicketLast3') {
@@ -77,7 +77,7 @@ if (Session::isAuthenticated()) {
 				// Build the userList from the given id's
 				if (is_numeric($value)) {
 					foreach ($userIdList as $userId) {
-						array_push($userList, UserHandler::getUser($userId));
+						$userList[] = UserHandler::getUser($userId);
 					}
 				}
 			}
@@ -106,5 +106,5 @@ if (Session::isAuthenticated()) {
 }
 
 header('Content-Type: text/plain');
-echo json_encode(array('result' => $result, 'message' => $message), JSON_PRETTY_PRINT);
+echo json_encode(['result' => $result, 'message' => $message], JSON_PRETTY_PRINT);
 ?>

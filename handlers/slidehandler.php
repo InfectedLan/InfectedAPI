@@ -51,10 +51,10 @@ class SlideHandler {
 
 		$database->close();
 
-		$slideList = array();
+		$slideList = [];
 
 		while ($object = $result->fetch_object('Slide')) {
-			array_push($slideList, $object);
+			$slideList[] = $object;
 		}
 
 		return $slideList;
@@ -75,10 +75,10 @@ class SlideHandler {
 
 		$database->close();
 
-		$slideList = array();
+		$slideList = [];
 
 		while ($object = $result->fetch_object('Slide')) {
-			array_push($slideList, $object);
+			$slideList[] = $object;
 		}
 
 		return $slideList;

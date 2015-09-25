@@ -50,10 +50,10 @@ class VoteOptionHandler {
 
 		$database->close();
 
-		$voteOptionList = array();
+		$voteOptionList = [];
 
 		while ($object = $result->fetch_object('VoteOption')) {
-			array_push($voteOptionList, $object);
+			$voteOptionList[] = $object;
 		}
 
 		return $voteOptionList;

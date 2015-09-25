@@ -50,10 +50,10 @@ class InviteHandler {
 
 		$database->close();
 
-		$inviteList = array();
+		$inviteList = [];
 
 		while ($object = $result->fetch_object('Invite')) {
-			array_push($inviteList, $object);
+			$inviteList[] = $object;
 		}
 
 		return $inviteList;
@@ -70,10 +70,10 @@ class InviteHandler {
 
 		$database->close();
 
-		$inviteList = array();
+		$inviteList = [];
 
 		while ($object = $result->fetch_object('Invite')) {
-			array_push($inviteList, $object);
+			$inviteList[] = $object;
 		}
 
 		return $inviteList;
@@ -90,10 +90,10 @@ class InviteHandler {
 
 		$database->close();
 
-		$inviteList = array();
+		$inviteList = [];
 
 		while ($object = $result->fetch_object('Invite')) {
-			array_push($inviteList, $object);
+			$inviteList[] = $object;
 		}
 
 		return $inviteList;
@@ -124,9 +124,9 @@ class InviteHandler {
 
 		$clan = $invite->getClan();
 		$memberList = ClanHandler::getPlayingClanMembers($clan);
-        $compo = $clan->getCompo();
+    $compo = $clan->getCompo();
 		$stepInId = count($memberList) < $compo->getTeamSize() ? 0 : 1;
-        
+
 		$database->query('INSERT INTO `' . Settings::db_table_infected_compo_memberof . '` (`userId`, `clanId`, `stepInId`)
 											VALUES (\'' . $invite->getUser()->getId() . '\',
 															\'' . $clan->getId() . '\',

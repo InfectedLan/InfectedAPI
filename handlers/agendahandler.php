@@ -51,10 +51,10 @@ class AgendaHandler {
 
 		$database->close();
 
-		$agendaList = array();
+		$agendaList = [];
 
 		while ($object = $result->fetch_object('Agenda')) {
-			array_push($agendaList, $object);
+			$agendaList[] = $object;
 		}
 
 		return $agendaList;
@@ -73,10 +73,10 @@ class AgendaHandler {
 
 		$database->close();
 
-		$agendaList = array();
+		$agendaList = [];
 
 		while ($object = $result->fetch_object('Agenda')) {
-		  array_push($agendaList, $object);
+		  $agendaList[] = $object;
 		}
 
 		return $agendaList;
@@ -96,10 +96,10 @@ class AgendaHandler {
 
 		$database->close();
 
-		$agendaList = array();
+		$agendaList = [];
 
 		while ($object = $result->fetch_object('Agenda')) {
-			array_push($agendaList, $object);
+			$agendaList[] = $object;
 		}
 
 		return $agendaList;
@@ -145,7 +145,7 @@ class AgendaHandler {
 
 		$database->query('DELETE FROM `' . Settings::db_table_infected_main_agenda . '`
 						  				WHERE `id` = \'' . $agenda->getId() . '\';');
-											
+
 		$database->close();
 	}
 }

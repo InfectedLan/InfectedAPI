@@ -51,10 +51,10 @@ class StoreSessionHandler {
 
 		$database->close();
 
-		$storeSessionList = array();
+		$storeSessionList = [];
 
 		while ($object = $result->fetch_object('StoreSession')) {
-			array_push($storeSessionList, $object);
+			$storeSessionList[] = $object;
 		}
 
 		return $storeSessionList;

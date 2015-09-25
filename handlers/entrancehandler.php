@@ -61,10 +61,10 @@ class EntranceHandler {
 
 		$database->close();
 
-		$entranceList = array();
+		$entranceList = [];
 
 		while ($object = $result->fetch_object('Entrance')) {
-			array_push($entranceList, $object);
+			$entranceList[] = $object;
 		}
 
 		return $entranceList;

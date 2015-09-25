@@ -151,6 +151,8 @@
    "the_user_you_tried_to_switch_to_does_not_exist":"Brukeren du prøvde å bytte til eksisterer ikke.",
    "the_user_has_already_been_activated":"Brukeren har allerede blitt aktivert.",
 
+   "the_note_does_not_exist":"Notatet finnes ikke.",
+
    "your_account_is_now_activated_and_ready_for_use":"Brukeren din er nå aktivert og klar for bruk.",
    "your_account_has_already_been_activated":"Brukeren din er allerede aktivert.",
    "the_link_you_clicked_is_no_longer_valid":"Linken du trykket på er ikke lengre gyldig.",

@@ -35,7 +35,7 @@ if (Session::isAuthenticated()) {
 			if ($seatmap != null) {
 				//TODO cleanup if the upload 'overwrites' another image
 				//Validate image
-				$allowedExts = array('jpeg', 'jpg', 'png');
+				$allowedExts = ['jpeg', 'jpg', 'png'];
 				$temp = explode('.', $_FILES['bgImageFile']['name']);
 				$extension = strtolower(end($temp));
 
@@ -47,8 +47,8 @@ if (Session::isAuthenticated()) {
 					if (($_FILES['bgImageFile']['size'] < 7000000)) {
 						if (in_array($extension, $allowedExts)) {
 							if ($_FILES['bgImageFile']['error'] == 0) {
-								$name = md5(time() . 'yoloswag'); // TODO: Refactor this shitty, messy, and terible petterroea code.
-								move_uploaded_file($_FILES['bgImageFile']['tmp_name'], '../content/seatmapBackground/' . $name . '.' . $extension);
+								$name = md5(time()); //Randomly generate filename
+								move_uploaded_file($_FILES['bgImageFile']['tmp_name'], '../../content/seatmapBackground/' . $name . '.' . $extension);
 								SeatmapHandler::setBackground($seatmap, $name . '.' . $extension);
 
 								$result = true;
@@ -81,6 +81,6 @@ header('Content-Type: text/plain');
 if ($result) {
 	echo json_encode(array('result' => $result), JSON_PRETTY_PRINT);
 } else {
-	echo json_encode(array('result' => $result, 'message' => $message), JSON_PRETTY_PRINT);
+	echo json_encode(['result' => $result, 'message' => $message], JSON_PRETTY_PRINT);
 }
 ?>

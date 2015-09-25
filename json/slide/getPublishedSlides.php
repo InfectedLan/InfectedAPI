@@ -21,18 +21,18 @@
 require_once 'localization.php';
 require_once 'handlers/slidehandler.php';
 
-$slideList = array();
+$slideList = [];
 
 foreach (SlideHandler::getPublishedSlides() as $slide) {
-	array_push($slideList, array('id' => $slide->getId(),
-														   'name' => $slide->getName(),
-														   'title' => $slide->getTitle(),
-														   'content' => $slide->getContent(),
-														   'startTime' => $slide->getStartTime(),
-														   'endTime' => $slide->getEndTime(),
-														   'isPublished' => $slide->isPublished()));
+	$slideList[] = ['id' => $slide->getId(),
+							    'name' => $slide->getName(),
+						  	  'title' => $slide->getTitle(),
+					  		  'content' => $slide->getContent(),
+							    'startTime' => $slide->getStartTime(),
+							    'endTime' => $slide->getEndTime(),
+							    'isPublished' => $slide->isPublished()];
 }
 
 header('Content-Type: text/plain');
-echo json_encode(array('slides' => $slideList), JSON_PRETTY_PRINT);
+echo json_encode(['slideList' => $slideList], JSON_PRETTY_PRINT);
 ?>

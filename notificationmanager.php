@@ -19,35 +19,67 @@
  */
 
 require_once 'mailmanager.php';
+require_once 'handlers/notehandler.php';
 require_once 'objects/user.php';
 require_once 'objects/group.php';
 require_once 'objects/application.php';
+require_once 'utils/dateutils.php';
 
 class NotificationManager {
 	/*
 	 * This function will be automatically called on an hourly basis, and should be used to send out automatic notifications.
 	 */
 	public static function checkForNotifications() {
+		// Check for notes notifications.
+		foreach (NoteHandler::getNotesReachedNotificationTime() as $note) {
+			if ($note->hasOwner() || $note->hasUser()) {
+				$message = [];
+				$message[] = '<!DOCTYPE html>';
+				$message[] = '<html>';
+					$message[] = '<body>';
+						$message[] = '<h3>Hei!</h3>';
+						$message[] = '<p>Dette er en påmindelse for ditt gjøremål som nærmer seg fristen, dette må være ferdig ' . DateUtils::getDayFromInt(date('w', $note->getAbsoluteTime())) . ' den ' . date('d', $note->getAbsoluteTime()) . '. ' . DateUtils::getMonthFromInt(date('m', $note->getAbsoluteTime())) . ' kl. ' . date('H:i', $note->getAbsoluteTime()) . '.<p>';
+						$message[] = '<p><b>Navn på gjøremålet:</b> ' . $note->getTitle() . '</p>';
+						$message[] = '<p><b>Detaljer:</b> <br>';
+						$message[] = wordwrap($note->getContent(), 75, '<br>') . '</p>';
+						$message[] = '<p>Med vennlig hilsen <a href="http://infected.no/">Infected</a>.</p>';
+					$message[] = '</body>';
+				$message[] = '</html>';
 
+				MailManager::sendEmail($note->getUser(), 'Du har et gjøremål som nærmer seg fristen', implode("\r\n", $message));
+				$note->setNotified(true);
+			}
+		}
 	}
 
 	/*
 	 * Sends an mail to the users e-mail address with status information.
 	 */
-	public function sendApplicationCreatedNotification(User $user, Group $group) {
-		if ($group->getLeader() != null) {
-			$message = array();
+	public function sendApplicationCreatedNotification(Application $application) {
+		$group = $application->getGroup();
+		$userList = [];
+
+		if ($group->hasLeader()) {
+			$userList[] = $group->getLeader();
+		}
+
+		if ($group->hasCoLeader()) {
+			$userList[] = $group->getCoLeader();
+		}
+
+		if (!empty($userList)) {
+			$message = [];
 			$message[] = '<!DOCTYPE html>';
 			$message[] = '<html>';
 				$message[] = '<body>';
 					$message[] = '<h3>Hei!</h3>';
-					$message[] = '<p>Du har fått en ny søknad til crewet ditt (' . $group->getTitle() . ') fra ' . $user->getFullName() . '<p>';
-					$message[] = '<p>Klikk <a href="https://crew.infected.no/v2/index.php?page=chief-applications">her</a> for å se den.</p>';
+					$message[] = '<p>Du har fått en ny søknad til crewet ditt (' . $group->getTitle() . ') fra ' . $application->getUser()->getFullName() . '<p>';
+					$message[] = '<p>Klikk <a href="https://crew.infected.no/v2/index.php?page=application&id=' . $application->getId() . '">her</a> for å se den.</p>';
 					$message[] = '<p>Med vennlig hilsen <a href="http://infected.no/">Infected</a>.</p>';
 				$message[] = '</body>';
 			$message[] = '</html>';
 
-			return MailManager::sendEmails(array($group->getLeader(), $group->getCoLeader()), 'Ny søknad til ' . $group->getTitle() . ' crew', implode("\r\n", $message));
+			return MailManager::sendEmails($userList, 'Ny søknad til ' . $group->getTitle() . ' crew', implode("\r\n", $message));
 		}
 	}
 
@@ -55,7 +87,7 @@ class NotificationManager {
 	 * Sends an mail to the users e-mail address with status information.
 	 */
 	public function sendApplicationAccpetedNotification(Application $application) {
-		$message = array();
+		$message = [];
 		$message[] = '<!DOCTYPE html>';
 		$message[] = '<html>';
 			$message[] = '<body>';
@@ -74,7 +106,7 @@ class NotificationManager {
 	 * Sends an mail to the users e-mail address with status information.
 	 */
 	public function sendApplicationRejectedNotification(Application $application, $comment) {
-		$message = array();
+		$message = [];
 		$message[] = '<!DOCTYPE html>';
 		$message[] = '<html>';
 			$message[] = '<body>';
@@ -93,7 +125,7 @@ class NotificationManager {
 	 * Sends an mail to the users e-mail address with status information.
 	 */
 	public function sendApplicationQueuedNotification(Application $application) {
-		$message = array();
+		$message = [];
 		$message[] = '<!DOCTYPE html>';
 		$message[] = '<html>';
 			$message[] = '<body>';
@@ -113,7 +145,7 @@ class NotificationManager {
 	 * Sends a notification to the users e-mail address with purchase information.
 	 */
 	public function sendPurchaseCompleteNotification(User $user, $reference) {
-		$message = array();
+		$message = [];
 		$message[] = '<!DOCTYPE html>';
 		$message[] = '<html>';
 			$message[] = '<body>';

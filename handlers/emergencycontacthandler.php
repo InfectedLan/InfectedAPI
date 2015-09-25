@@ -62,10 +62,10 @@ class EmergencyContactHandler {
 
 		$database->close();
 
-		$emergencyContactsList = array();
+		$emergencyContactsList = [];
 
 		while ($object = $result->fetch_object('EmergencyContact')) {
-			array_push($emergenctContactList, $object);
+			$emergenctContactList[] = $object;
 		}
 
 		return $emergencyContactsList;

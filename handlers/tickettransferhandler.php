@@ -58,10 +58,10 @@ class TicketTransferHandler {
 
 		$database->close();
 
-		$transferList = array();
+		$transferList = [];
 
 		while ($object = $result->fetch_object('TicketTransfer')) {
-			array_push($transferList, $object);
+			$transferList[] = $object;
 		}
 
 		return $transferList;

@@ -93,10 +93,10 @@ class RestrictedPageHandler {
 
 		$database->close();
 
-		$restrictedPageList = array();
+		$restrictedPageList = [];
 
 		while ($object = $result->fetch_object('RestrictedPage')) {
-			array_push($restrictedPageList, $object);
+			$restrictedPageList[] = $object;
 		}
 
 		return $restrictedPageList;
@@ -115,10 +115,10 @@ class RestrictedPageHandler {
 
 		$database->close();
 
-		$restrictedPageList = array();
+		$restrictedPageList = [];
 
 		while ($object = $result->fetch_object('RestrictedPage')) {
-			array_push($restrictedPageList, $object);
+			$restrictedPageList[] = $object;
 		}
 
 		return $restrictedPageList;
@@ -136,10 +136,10 @@ class RestrictedPageHandler {
 
 		$database->close();
 
-		$restrictedPageList = array();
+		$restrictedPageList = [];
 
 		while ($object = $result->fetch_object('RestrictedPage')) {
-			array_push($restrictedPageList, $object);
+			$restrictedPageList[] = $object;
 		}
 
 		return $restrictedPageList;
@@ -158,10 +158,10 @@ class RestrictedPageHandler {
 
 		$database->close();
 
-		$restrictedPageList = array();
+		$restrictedPageList = [];
 
 		while ($object = $result->fetch_object('RestrictedPage')) {
-			array_push($restrictedPageList, $object);
+			$restrictedPageList[] = $object;
 		}
 
 		return $restrictedPageList;

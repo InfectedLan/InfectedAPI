@@ -122,10 +122,10 @@ class Event extends Object {
 	 */
 	public function getAvailableTickets() {
 		$ticketCount = $this->getTicketCount();
-		$numLeft = $this->getParticipants() - $ticketCount;
-		$numLeft -= StoreSessionHandler::getReservedTicketCount($this->getTicketType());
+		$ticketsLeft = $this->getParticipants() - $ticketCount;
+		$ticketsLeft -= StoreSessionHandler::getReservedTicketCount($this->getTicketType());
 
-		return $numLeft;
+		return max(0, $ticketsLeft);
 	}
 }
 ?>

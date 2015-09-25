@@ -72,14 +72,14 @@ class GroupHandler {
 
 		$result = $database->query('SELECT * FROM `' . Settings::db_table_infected_crew_groups . '`
 																WHERE `eventId` = \'' . $event->getId() . '\'
-																ORDER BY `name`;');
+																ORDER BY `id`, `name`;');
 
 		$database->close();
 
-		$groupList = array();
+		$groupList = [];
 
 		while ($object = $result->fetch_object('Group')) {
-			array_push($groupList, $object);
+			$groupList[] = $object;
 		}
 
 		return $groupList;
@@ -157,10 +157,10 @@ class GroupHandler {
 
 		$database->close();
 
-		$memberList = array();
+		$memberList = [];
 
 		while ($object = $result->fetch_object('User')) {
-			array_push($memberList, $object);
+			$memberList[] = $object;
 		}
 
 		return $memberList;

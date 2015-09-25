@@ -23,6 +23,7 @@ require_once 'handlers/grouphandler.php';
 require_once 'handlers/userhandler.php';
 require_once 'handlers/teamhandler.php';
 require_once 'objects/eventobject.php';
+require_once 'objects/user.php';
 
 /*
  * Used to store information about a group.
@@ -60,7 +61,7 @@ class Group extends EventObject {
 	 * Returns if this group has a leader.
 	 */
 	public function hasLeader() {
-		return GroupHandler::hasGroupLeader($this);
+		return $this->leaderId > 0;
 	}
 
 	/*
@@ -74,7 +75,7 @@ class Group extends EventObject {
 	 * Returns if this group has a co-leader.
 	 */
 	public function hasCoLeader() {
-		return GroupHandler::hasGroupCoLeader($this);
+		return $this->coleaderId > 0;
 	}
 
 	/*
@@ -89,6 +90,27 @@ class Group extends EventObject {
 	 */
 	public function isQueuing() {
 		return $this->queuing ? true : false;
+	}
+
+	/*
+	 * Return true if the specified user is member of this group.
+	 */
+	public function isMember(User $user) {
+		return $user->isGroupMember() && $this->equals($user->getGroup());
+	}
+
+	/*
+	 * Return true if the specified user is leader of this group.
+	 */
+	public function isLeader(User $user) {
+		return $this->hasLeader() && $user->equals($this->getLeader());
+	}
+
+	/*
+	 * Return true if the specified user is co-leader of this group.
+	 */
+	public function isCoLeader(User $user) {
+		return $this->hasCoLeader() && $user->equals($this->getCoLeader());
 	}
 
 	/*

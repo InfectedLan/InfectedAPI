@@ -79,10 +79,10 @@ class MatchHandler {
 
 		$database->close();
 
-		$matchList = array();
+		$matchList = [];
 
 		while ($object = $result->fetch_object('Match')) {
-			array_push($matchList, $object);
+			$matchList[] = $object;
 		}
 
 		return $matchList;
@@ -128,13 +128,12 @@ class MatchHandler {
 
 		$database->close();
 
-		$matchList = array();
+		$matchList = [];
 
 		while ($object = $result->fetch_object('Match')) {
-			if ($object->getScheduledTime() > time()) {
-				array_push($matchList, $object);
-			} else if(!self::isReady($object)) {
-				array_push($matchList, $object);
+			if ($object->getScheduledTime() > time() ||
+				!self::isReady($object)) {
+				$matchList[] = $object;
 			}
 		}
 
@@ -152,11 +151,11 @@ class MatchHandler {
 
 		$database->close();
 
-		$matchList = array();
+		$matchList = [];
 
 		while ($object = $result->fetch_object('Match')) {
 			if (self::isReady($object)) {
-				array_push($matchList, $object);
+				$matchList[] = $object;
 			}
 		}
 
@@ -173,10 +172,10 @@ class MatchHandler {
 
 		$database->close();
 
-		$matchList = array();
+		$matchList = [];
 
 		while ($object = $result->fetch_object('Match')) {
-			array_push($matchList, $object);
+			$matchList[] = $object;
 		}
 
 		return $matchList;
@@ -190,10 +189,10 @@ class MatchHandler {
 
 		$database->close();
 
-		$matchList = array();
+		$matchList = [];
 
 		while ($object = $result->fetch_object('Match')) {
-			array_push($matchList, $object);
+			$matchList[] = $object;
 		}
 
 		return $matchList;
@@ -295,14 +294,14 @@ class MatchHandler {
 
 		$result = $database->query('SELECT * FROM `' . Settings::db_table_infected_compo_clans . '`
 																WHERE `id` IN (SELECT `participantId` FROM `' . Settings::db_table_infected_compo_participantOfMatch . '`
-																						  WHERE `matchId` = \'' . $match->getId() . '\'
-																						  AND `type` = \'' . Settings::compo_match_participant_type_clan . '\');');
+																						   WHERE `matchId` = \'' . $match->getId() . '\'
+																						   AND `type` = \'' . Settings::compo_match_participant_type_clan . '\');');
 
 
-		$clanList = array();
+		$clanList = [];
 
 		while ($object = $result->fetch_object('Clan')) {
-			array_push($clanList, $object);
+			$clanList[] = $object;
 		}
 
         $database->close();
@@ -348,16 +347,16 @@ class MatchHandler {
 
 		$database->close();
 
-		$stringArray = array();
+		$stringArray = [];
 
 		while ($row = $result->fetch_array()) {
 			if ($row['type'] == Settings::compo_match_participant_type_match_winner) {
-				array_push($stringArray, 'Winner of match ' . $row['participantId']);
+				$stringArray[] = 'Winner of match ' . $row['participantId'];
 			} else if ($row['type'] == Settings::compo_match_participant_type_match_looser) {
-				array_push($stringArray, 'Looser of match ' . $row['participantId']);
+				$stringArray[] = 'Looser of match ' . $row['participantId'];
 			} else if ($row['type'] == Settings::compo_match_participant_type_clan) {
 				$clan = ClanHandler::getClan($row['participantId']);
-				array_push($stringArray, $clan->getName() . ' - ' . $clan->getTag() . ' (id ' . $clan->getId() . ')');
+				$stringArray[] = $clan->getName() . ' - ' . $clan->getTag() . ' (id ' . $clan->getId() . ')';
 			}
 		}
 
@@ -372,15 +371,15 @@ class MatchHandler {
 
 		$database->close();
 
-		$stringArray = array();
+		$stringArray = [];
 
 		while ($row = $result->fetch_array()) {
 			if ($row['type'] == Settings::compo_match_participant_type_match_winner ||
 				$row['type'] == Settings::compo_match_participant_type_match_looser) {
-				array_push($stringArray, 'TBA');
+				$stringArray[] = 'TBA';
 			} else if ($row['type'] == Settings::compo_match_participant_type_clan) {
 				$clan = ClanHandler::getClan($row['participantId']);
-				array_push($stringArray, $clan->getTag());
+				$stringArray[] = $clan->getTag();
 			}
 		}
 
@@ -398,7 +397,7 @@ class MatchHandler {
 
 		$database->close();
 
-		$jsonArray = array();
+		$jsonArray = [];
 
 		while ($row = $result->fetch_array()) {
 			if ($row['type'] == Settings::compo_match_participant_type_clan) {
@@ -443,10 +442,10 @@ class MatchHandler {
 																WHERE `id` IN (SELECT `toCompoId` FROM `' . Settings::db_table_infected_compo_matchrelationships . '`
 																			  			WHERE `fromCompoId` = \'' . $match->getId() . '\');');
 
-		$matchList = array();
+		$matchList = [];
 
 		while ($object = $result->fetch_object('Match')) {
-			array_push($matchList, $object);
+			$matchList[] = $object;
 		}
 
         $database->close();

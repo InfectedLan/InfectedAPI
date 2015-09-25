@@ -58,11 +58,11 @@ class ClanHandler {
 
 		$database->close();
 
-		$clanList = array();
+		$clanList = [];
 
 		while ($object = $result->fetch_object('Clan')) {
 			if ($event->equals($object->getEvent())) {
-				array_push($clanList, $object);
+				$clanList[] = $object;
 			}
 		}
 
@@ -81,10 +81,10 @@ class ClanHandler {
 
 		$database->close();
 
-		$clanList = array();
+		$clanList = [];
 
 		while ($object = $result->fetch_object('Clan')) {
-			array_push($clanList, $object);
+			$clanList[] = $object;
 		}
 
 		return $clanList;
@@ -94,11 +94,11 @@ class ClanHandler {
         return self::getQualifiedClansByCompo($compo);
     }
 	public static function getQualifiedClansByCompo(Compo $compo) {
-		$clanList = array();
+		$clanList = [];
 
 		foreach (self::getClansByCompo($compo) as $clan) {
 			if (self::isQualified($clan, $compo)) {
-				array_push($clanList, $clan);
+				$clanList[] = $clan;
 			}
 		}
 
@@ -111,7 +111,7 @@ class ClanHandler {
         $result = $database->query('SELECT * FROM `' . Settings::db_table_infected_compo_participantof . '` WHERE `clanId` = \'' . $clan->getId() . '\' AND `compoId` = \'' . $compo->getId() . '\' AND `qualified` = 1;');
 
         $database->close();
-        
+
         return $result->num_rows > 0;
     }
 
@@ -121,7 +121,6 @@ class ClanHandler {
         $database->query('UPDATE `' . Settings::db_table_infected_compo_participantof . '` SET `qualified`=1  WHERE `clanId` = \'' . $clan->getId() . '\';');
 
         $database->query('DELETE FROM `' . Settings::db_table_infected_compo_qualificationQueue . '` WHERE `clan` = \'' . $clan->getId() . '\';');
-        
         $database->close();
     }
 
@@ -137,10 +136,10 @@ class ClanHandler {
 
 		$database->close();
 
-		$memberList = array();
+		$memberList = [];
 
 		while ($object = $result->fetch_object('User')) {
-			array_push($memberList, $object);
+			$memberList[] = $object;
 		}
 
 		return $memberList;
@@ -174,10 +173,10 @@ class ClanHandler {
 
 		$database->close();
 
-		$memberList = array();
+		$memberList = [];
 
 		while ($object = $result->fetch_object('User')) {
-			array_push($memberList, $object);
+			$memberList[] = $object;
 		}
 
 		return $memberList;
@@ -196,10 +195,10 @@ class ClanHandler {
 
 		$database->close();
 
-		$memberList = array();
+		$memberList = [];
 
 		while ($object = $result->fetch_object('User')) {
-			array_push($memberList, $object);
+			$memberList[] = $object;
 		}
 
 		return $memberList;

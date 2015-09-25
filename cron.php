@@ -22,9 +22,10 @@ require_once 'utils/utils.php';
 
 // Only run this if we are running in a CLI enviroment.
 if (Utils::isCli()) {
+	require_once 'notificationmanager.php';
 	require_once 'taskmanager.php';
-	require_once 'handlers/eventmigrationhandler.php';
 	require_once 'handlers/eventhandler.php';
+	require_once 'handlers/eventmigrationhandler.php';
 
 	/* Event migration */
 	$previousEvent = EventHandler::getPreviousEvent();

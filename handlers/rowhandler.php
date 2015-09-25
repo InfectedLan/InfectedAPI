@@ -51,10 +51,10 @@ class RowHandler {
 
 		$database->close();
 
-		$rowList = array();
+		$rowList = [];
 
 		while ($object = $result->fetch_object('Row')) {
-			array_push($rowList, $object);
+			$rowList[] = $object;
 		}
 
 		return $rowList;
@@ -71,10 +71,10 @@ class RowHandler {
 
 		$database->close();
 
-		$rowList = array();
+		$rowList = [];
 
 		while ($object = $result->fetch_object('Row')) {
-			array_push($rowList, $object);
+			$rowList[] = $object;
 		}
 
 		return $rowList;
@@ -144,7 +144,7 @@ class RowHandler {
 	public static function safeToDelete(Row $row) {
 		$seatList = SeatHandler::getSeatsByRow($row);
 
-		foreach($seatList as $seat) {
+		foreach ($seatList as $seat) {
 			if (SeatHandler::hasOwner($seat)) {
 				return false;
 			}

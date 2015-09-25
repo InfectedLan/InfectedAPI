@@ -27,7 +27,7 @@ require_once 'handlers/voteoptionhandler.php';
 
 $result = false;
 $message = null;
-$matchArray = array();
+$matchArray = [];
 
 if (Session::isAuthenticated()) {
 	$user = Session::getCurrentUser();
@@ -38,10 +38,10 @@ if (Session::isAuthenticated()) {
 			$compo = CompoHandler::getCompo($_GET['id']);
 
 			if ($compo != null) {
-				$pendingArray = array();
+				$pendingArray = [];
 
 				foreach (MatchHandler::getPendingMatchesByCompo($compo) as $match) {
-					$matchData = array();
+					$matchData = [];
 
 					$matchData['id'] = $match->getId();
 					$matchData['startTime'] = $match->getScheduledTime();
@@ -49,14 +49,14 @@ if (Session::isAuthenticated()) {
 					$matchData['connectData'] = $match->getConnectDetails();
 					$matchData['participants'] = MatchHandler::getParticipantStringByMatch($match);
 
-					array_push($pendingArray, $matchData);
+					$pendingArray[] = $matchData;
 				}
 
 				$matchArray['pending'] = $pendingArray;
-				$currentArray = array();
+				$currentArray = [];
 
 				foreach (MatchHandler::getCurrentMatchesByCompo($compo) as $match) {
-					$matchData = array();
+					$matchData = [];
 
 					$matchData['id'] = $match->getId();
 					$matchData['startTime'] = $match->getScheduledTime();
@@ -64,19 +64,18 @@ if (Session::isAuthenticated()) {
 					$matchData['connectData'] = $match->getConnectDetails();
 					$matchData['state'] = $match->getState();
 
-					$participantData = array();
+					$participantData = [];
 					$participantData['strings'] = MatchHandler::getParticipantStringByMatch($match);
 					$participantObjects = MatchHandler::getParticipantsByMatch($match);
-					$participantData['list'] = array();
+					$participantData['list'] = [];
 
 					foreach ($participantObjects as $participant) {
-						$data = array();
-
+						$data = [];
 						$data['name'] = $participant->getName();
 						$data['id'] = $participant->getId();
 						$data['tag'] = $participant->getTag();
 
-						array_push($participantData['list'], $data);
+						$participantData['list'][] = $data;
 					}
 
 
@@ -88,7 +87,7 @@ if (Session::isAuthenticated()) {
 
 						foreach (VoteOptionHandler::getVoteOptionsByCompo($compo) as $option) {
 							if (!VoteOptionHandler::isVoted($option, $match)) {
-								$mapData = array();
+								$mapData = [];
 
 								$mapData['name'] = $option->getName();
 
@@ -99,27 +98,26 @@ if (Session::isAuthenticated()) {
 							}
 						}
 
-						if(!$hasVotedMaps) {
-							$matchData['mapData'] = array('name' => 'pending');
+						if (!$hasVotedMaps) {
+							$matchData['mapData'] = ['name' => 'pending'];
 						}
 					}
 
-					array_push($currentArray, $matchData);
+					$currentArray[] = $matchData;
 				}
 
 				$matchArray['current'] = $currentArray;
-				$finishedArray = array();
+				$finishedArray = [];
 
 				foreach (MatchHandler::getFinishedMatchesByCompo($compo) as $match) {
-					$matchData = array();
-
+					$matchData = [];
 					$matchData['id'] = $match->getId();
 					$matchData['startTime'] = $match->getScheduledTime();
 					$matchData['startString'] = date('d F H:i', $match->getScheduledTime());
 					$matchData['connectData'] = $match->getConnectDetails();
 
 					//Winner stuff
-					$winnerArray = array();
+					$winnerArray = [];
 					$winnerArray['id'] = $match->getWinner();
 					$clan = ClanHandler::getClan($match->getWinner());
 					$winnerArray['name'] = $clan->getName() . ' - ' . $clan->getTag();
@@ -128,21 +126,20 @@ if (Session::isAuthenticated()) {
 
 					//$matchData['participants'] = MatchHandler::getParticipantString($match);
 
-					$participantData = array();
-					$participantData['list'] = array();
+					$participantData = [];
+					$participantData['list'] = [];
 
 					foreach ($participantObjects as $participant) {
-						$data = array();
-
+						$data = [];
 						$data['name'] = $participant->getName();
 						$data['id'] = $participant->getId();
 						$data['tag'] = $participant->getTag();
 
-						array_push($participantData['list'], $data);
+						$participantData['list'][] = $data;
 					}
 
 					$matchData['participants'] = $participantData;
-					array_push($finishedArray, $matchData);
+					$finishedArray[] = $matchData;
 				}
 
 				$matchArray['finished'] = $finishedArray;
@@ -164,8 +161,8 @@ if (Session::isAuthenticated()) {
 header('Content-Type: text/plain');
 
 if ($result) {
-	echo json_encode(array('result' => $result, 'data' => $matchArray), JSON_PRETTY_PRINT);
+	echo json_encode(['result' => $result, 'data' => $matchArray], JSON_PRETTY_PRINT);
 } else {
-	echo json_encode(array('result' => $result, 'message' => $message), JSON_PRETTY_PRINT);
+	echo json_encode(['result' => $result, 'message' => $message], JSON_PRETTY_PRINT);
 }
 ?>

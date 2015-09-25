@@ -34,7 +34,7 @@ class EventHandler {
 																WHERE `id` = \'' . $database->real_escape_string($id) . '\';');
 
 		$database->close();
-		
+
 		return $result->fetch_object('Event');
 	}
 
@@ -102,10 +102,10 @@ class EventHandler {
 
 		$database->close();
 
-		$eventList = array();
+		$eventList = [];
 
 		while ($object = $result->fetch_object('Event')) {
-			array_push($eventList, $object);
+			$eventList[] = $object;
 		}
 
 		return $eventList;
@@ -122,10 +122,10 @@ class EventHandler {
 
 		$database->close();
 
-		$eventList = array();
+		$eventList = [];
 
 		while ($object = $result->fetch_object('Event')) {
-			array_push($eventList, $object);
+			$eventList[] = $object;
 		}
 
 		return $eventList;
@@ -155,7 +155,7 @@ class EventHandler {
 	 * Update an event
 	 */
 	public static function updateEvent(Event $event, $location, $participants, $bookingTime, $startTime, $endTime) {
-	  	$database = Database::open(Settings::db_name_infected);
+	  $database = Database::open(Settings::db_name_infected);
 
 		$database->query('UPDATE `' . Settings::db_table_infected_events . '`
 										  SET `locationId` = \'' . $database->real_escape_string($location) . '\',
@@ -188,10 +188,10 @@ class EventHandler {
 
 		// Extract event id's from the event list.
 		$dateLimit = date('Y-m-d', end($eventList)->getStartTime());
-		$eventIdList = array();
+		$eventIdList = [];
 
 		foreach ($eventList as $event) {
-			array_push($eventIdList, '\'' . $event->getId() . '\'');
+			$eventIdList[] = $event->getId();
 		}
 
 		$result = $database->query('SELECT * FROM (SELECT `' . Settings::db_table_infected_users . '`.*, `eventId` FROM `' . Settings::db_table_infected_users . '`
@@ -203,17 +203,17 @@ class EventHandler {
 																				   	   LEFT JOIN `' . Settings::db_name_infected_tickets . '`.`' . Settings::db_table_infected_tickets_tickets . '`
 																					     ON `' . Settings::db_table_infected_users . '`.`id` = `userId`
 																					     WHERE `userId` IS NOT NULL) AS `users`
-																WHERE `eventId` IN (' . implode(', ', $eventIdList) . ')
+																WHERE `eventId` IN (\'' . implode(', ', $eventIdList) . '\')
 																AND TIMESTAMPDIFF(YEAR, `birthdate`, \'' . $dateLimit . '\') <= \'' . $ageLimit . '\'
 																GROUP BY `users`.`id`
 																ORDER BY `firstname` ASC;');
 
 		$database->close();
 
-		$userList = array();
+		$userList = [];
 
 		while ($object = $result->fetch_object('User')) {
-			array_push($userList, $object);
+			$userList[] = $object;
 		}
 
 		return $userList;

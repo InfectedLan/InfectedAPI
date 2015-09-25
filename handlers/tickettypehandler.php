@@ -47,10 +47,10 @@ class TicketTypeHandler {
 
 		$database->close();
 
-		$ticketTypeList = array();
+		$ticketTypeList = [];
 
 		while ($object = $result->fetch_object('TicketType')) {
-			array_push($ticketTypeList, $object);
+			$ticketTypeList[] = $object;
 		}
 
 		return $ticketTypeList;

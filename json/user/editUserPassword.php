@@ -28,15 +28,15 @@ $message = null;
 if (Session::isAuthenticated()) {
 	$user = Session::getCurrentUser();
 
-	if (isset($_GET['oldPassword']) &&
-		isset($_GET['newPassword']) &&
-		isset($_GET['confirmNewPassword']) &&
-		!empty($_GET['oldPassword']) &&
-		!empty($_GET['newPassword']) &&
-		!empty($_GET['confirmNewPassword'])) {
-		$oldPassword = hash('sha256', $_GET['oldPassword']);
-		$newPassword = $_GET['newPassword'];
-		$confirmNewPassword = $_GET['confirmNewPassword'];
+	if (isset($_POST['oldPassword']) &&
+		isset($_POST['newPassword']) &&
+		isset($_POST['confirmNewPassword']) &&
+		!empty($_POST['oldPassword']) &&
+		!empty($_POST['newPassword']) &&
+		!empty($_POST['confirmNewPassword'])) {
+		$oldPassword = hash('sha256', $_POST['oldPassword']);
+		$newPassword = $_POST['newPassword'];
+		$confirmNewPassword = $_POST['confirmNewPassword'];
 
 		if (hash_equals($oldPassword, $user->getPassword())) {
 			if ($newPassword == $confirmNewPassword) {
@@ -57,5 +57,5 @@ if (Session::isAuthenticated()) {
 }
 
 header('Content-Type: text/plain');
-echo json_encode(array('result' => $result, 'message' => $message), JSON_PRETTY_PRINT);
+echo json_encode(['result' => $result, 'message' => $message], JSON_PRETTY_PRINT);
 ?>

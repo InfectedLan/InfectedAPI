@@ -8,12 +8,12 @@
  * modify it under the terms of the GNU Lesser General Public
  * License as published by the Free Software Foundation; either
  * version 3.0 of the License, or (at your option) any later version.
- * 
+ *
  * This library is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
  * Lesser General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU Lesser General Public
  * License along with this library.  If not, see <http://www.gnu.org/licenses/>.
  */
@@ -26,7 +26,7 @@ require_once 'utils/dateutils.php';
 
 $result = false;
 $message = null;
-$data = array();
+$data = [];
 
 if (Session::isAuthenticated()) {
 	if (isset($_GET['id']) &&
@@ -35,19 +35,19 @@ if (Session::isAuthenticated()) {
 
 		if ($compo != null) {
 			foreach ($compo->getMatches() as $match) {
-				$parentMatchIds = array();
-				
+				$parentMatchIds = [];
+
 				foreach ($match->getParents() as $parentMatch) {
-					array_push($parentMatchIds, $parentMatch->getId());
+					$parentMatchIds[] = $parentMatch->getId();
 				}
 
-				array_push($data, array('matchId' => $match->getId(),
-					  					'participants' => MatchHandler::getParticipantTags($match),
-					  					'parents' => $parentMatchIds,
-					  					'startTime' => DateUtils::getDayFromInt(date('w', $match->getScheduledTime())) . ' ' . date('H:i', $match->getScheduledTime()),
-					  					'bracketOffset' => $match->getBracketOffset(),
-					  					'bracket' => $match->getBracket(),
-					  					'state' => $match->getState()));
+				$data[] = ['matchId' => $match->getId(),
+				  				 'participants' => MatchHandler::getParticipantTags($match),
+				  				 'parents' => $parentMatchIds,
+				  				 'startTime' => DateUtils::getDayFromInt(date('w', $match->getScheduledTime())) . ' ' . date('H:i', $match->getScheduledTime()),
+				  				 'bracketOffset' => $match->getBracketOffset(),
+				  				 'bracket' => $match->getBracket(),
+				  				 'state' => $match->getState()];
 			}
 
 			$result = true;
@@ -62,5 +62,5 @@ if (Session::isAuthenticated()) {
 }
 
 header('Content-Type: text/plain');
-echo json_encode(array('result' => $result, 'message' => $message, 'data' => $data), JSON_PRETTY_PRINT);
+echo json_encode(['result' => $result, 'message' => $message, 'data' => $data], JSON_PRETTY_PRINT);
 ?>

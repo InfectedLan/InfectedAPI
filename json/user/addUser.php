@@ -26,48 +26,48 @@ require_once 'handlers/citydictionary.php';
 $result = false;
 $message = null;
 
-if (isset($_GET['firstname']) &&
-	isset($_GET['lastname']) &&
-	isset($_GET['username']) &&
-	isset($_GET['password']) &&
-	isset($_GET['confirmpassword']) &&
-	isset($_GET['email']) &&
-	isset($_GET['confirmemail']) &&
-	isset($_GET['gender']) &&
-	isset($_GET['birthday']) &&
-	isset($_GET['birthmonth']) &&
-	isset($_GET['birthyear']) &&
-	isset($_GET['phone']) &&
-	isset($_GET['address']) &&
-	isset($_GET['postalcode']) &&
-	!empty($_GET['firstname']) &&
-	!empty($_GET['lastname']) &&
-	!empty($_GET['username']) &&
-	!empty($_GET['password']) &&
-	!empty($_GET['confirmpassword']) &&
-	!empty($_GET['email']) &&
-	!empty($_GET['confirmemail']) &&
-	is_numeric($_GET['gender']) &&
-	is_numeric($_GET['birthday']) &&
-	is_numeric($_GET['birthmonth']) &&
-	is_numeric($_GET['birthyear']) &&
-	is_numeric($_GET['phone']) &&
-	!empty($_GET['address']) &&
-	is_numeric($_GET['postalcode'])) {
-	$firstname = ucfirst($_GET['firstname']);
-	$lastname = ucfirst($_GET['lastname']);
-	$username = $_GET['username'];
-	$password = hash('sha256', $_GET['password']);
-	$confirmPassword = hash('sha256', $_GET['confirmpassword']);
-	$email = $_GET['email'];
-	$confirmEmail = $_GET['confirmemail'];
-	$gender = $_GET['gender'];
-	$birthdate = $_GET['birthyear'] . '-' . $_GET['birthmonth'] . '-' . $_GET['birthday'];
-	$phone = str_replace('+47', '', str_replace(' ', '', $_GET['phone']));
-	$address = ucfirst($_GET['address']);
-	$postalcode = $_GET['postalcode'];
-	$nickname = !empty($_GET['nickname']) ? $_GET['nickname'] : $username;
-	$emergencyContactPhone = isset($_GET['emergencycontactphone']) ? str_replace('+47', '', str_replace(' ', '', $_GET['emergencycontactphone'])) : null;
+if (isset($_POST['firstname']) &&
+	isset($_POST['lastname']) &&
+	isset($_POST['username']) &&
+	isset($_POST['password']) &&
+	isset($_POST['confirmpassword']) &&
+	isset($_POST['email']) &&
+	isset($_POST['confirmemail']) &&
+	isset($_POST['gender']) &&
+	isset($_POST['birthday']) &&
+	isset($_POST['birthmonth']) &&
+	isset($_POST['birthyear']) &&
+	isset($_POST['phone']) &&
+	isset($_POST['address']) &&
+	isset($_POST['postalcode']) &&
+	!empty($_POST['firstname']) &&
+	!empty($_POST['lastname']) &&
+	!empty($_POST['username']) &&
+	!empty($_POST['password']) &&
+	!empty($_POST['confirmpassword']) &&
+	!empty($_POST['email']) &&
+	!empty($_POST['confirmemail']) &&
+	is_numeric($_POST['gender']) &&
+	is_numeric($_POST['birthday']) &&
+	is_numeric($_POST['birthmonth']) &&
+	is_numeric($_POST['birthyear']) &&
+	is_numeric($_POST['phone']) &&
+	!empty($_POST['address']) &&
+	is_numeric($_POST['postalcode'])) {
+	$firstname = ucfirst($_POST['firstname']);
+	$lastname = ucfirst($_POST['lastname']);
+	$username = $_POST['username'];
+	$password = hash('sha256', $_POST['password']);
+	$confirmPassword = hash('sha256', $_POST['confirmpassword']);
+	$email = $_POST['email'];
+	$confirmEmail = $_POST['confirmemail'];
+	$gender = $_POST['gender'];
+	$birthdate = $_POST['birthyear'] . '-' . $_POST['birthmonth'] . '-' . $_POST['birthday'];
+	$phone = str_replace('+47', '', str_replace(' ', '', $_POST['phone']));
+	$address = ucfirst($_POST['address']);
+	$postalcode = $_POST['postalcode'];
+	$nickname = !empty($_POST['nickname']) ? $_POST['nickname'] : $username;
+	$emergencyContactPhone = isset($_POST['emergencycontactphone']) ? str_replace('+47', '', str_replace(' ', '', $_POST['emergencycontactphone'])) : null;
 
 	if (UserHandler::hasUser($username)) {
 		$message = Localization::getLocale('the_username_is_already_in_use_by_someone_else');
@@ -83,9 +83,9 @@ if (isset($_GET['firstname']) &&
 		$message = Localization::getLocale('the_username_is_not_valid_it_must_consist_of_at_least_2_characters_and_a_maximum_of_16_characters');
 	} else if (empty($password)) {
 		$message = Localization::getLocale('you_must_enter_a_password');
-	} else if (strlen($_GET['password']) < 8) {
+	} else if (strlen($_POST['password']) < 8) {
 		$message = Localization::getLocale('the_password_is_too_short_it_must_consist_of_at_least_8_characters');
-	} else if (strlen($_GET['password']) > 32) {
+	} else if (strlen($_POST['password']) > 32) {
 		$message = Localization::getLocale('the_password_is_too_long_it_can_not_exceed_16_characters');
 	} else if ($password != $confirmPassword) {
 		$message = Localization::getLocale('passwords_does_not_match');
@@ -103,7 +103,7 @@ if (isset($_GET['firstname']) &&
 		$message = Localization::getLocale('the_postcode_is_not_valid_the_postcode_consists_of_4_characters');
 	} else if (!preg_match('/^[a-zæøåA-ZÆØÅ0-9_-]{2,16}$/', $nickname) && !empty($nickname)) {
 		$message = Localization::getLocale('the_nickname_is_not_valid_it_must_consist_of_at_least_2_characters_and_maximum_16_characters');
-	} else if (date_diff(date_create($birthdate), date_create('now'))->y < 18 && (!isset($_GET['emergencycontactphone']) || !is_numeric($emergencyContactPhone) || strlen($emergencyContactPhone) < 8 || strlen($emergencyContactPhone) > 8)) {
+	} else if (date_diff(date_create($birthdate), date_create('now'))->y < 18 && (!isset($_POST['emergencycontactphone']) || !is_numeric($emergencyContactPhone) || strlen($emergencyContactPhone) < 8 || strlen($emergencyContactPhone) > 8)) {
 		if (!is_numeric($emergencyContactPhone)) {
 			$message = Localization::getLocale('parent_phone_must_be_a_number');
 		} else if (strlen($emergencyContactPhone) < 8) {
@@ -125,7 +125,7 @@ if (isset($_GET['firstname']) &&
 																		$postalcode,
 																		$nickname);
 
-		if (isset($_GET['emergencycontactphone']) &&
+		if (isset($_POST['emergencycontactphone']) &&
 			is_numeric($emergencyContactPhone) &&
 			strlen($emergencyContactPhone) >= 8) {
 			EmergencyContactHandler::createEmergencyContact($user, $emergencyContactPhone);
@@ -141,5 +141,5 @@ if (isset($_GET['firstname']) &&
 }
 
 header('Content-Type: text/plain');
-echo json_encode(array('result' => $result, 'message' => $message), JSON_PRETTY_PRINT);
+echo json_encode(['result' => $result, 'message' => $message], JSON_PRETTY_PRINT);
 ?>

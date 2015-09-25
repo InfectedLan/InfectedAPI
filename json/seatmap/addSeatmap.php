@@ -49,6 +49,6 @@ header('Content-Type: text/plain');
 if ($result) {
 	echo json_encode(array('result' => $result, 'id' => $id), JSON_PRETTY_PRINT);
 } else {
-	echo json_encode(array('result' => $result, 'message' => $message), JSON_PRETTY_PRINT);
+	echo json_encode(['result' => $result, 'message' => $message], JSON_PRETTY_PRINT);
 }
 ?>

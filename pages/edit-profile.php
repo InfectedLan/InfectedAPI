@@ -30,7 +30,7 @@ if (Session::isAuthenticated()) {
 	$editUser = UserHandler::getUser($id);
 
 	if ($editUser != null) {
-		if ($user->hasPermission('*') ||
+		if ($user->hasPermission('user.edit') ||
 			$user->equals($editUser)) {
 			echo '<script src="../api/scripts/edit-profile.js"></script>';
 			echo '<script src="../api/scripts/lookupCity.js"></script>';

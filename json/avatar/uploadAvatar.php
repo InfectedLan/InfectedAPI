@@ -36,7 +36,7 @@ try {
 
         $temp = explode('.', $_FILES['file']['name']);
         $extension = strtolower(end($temp));
-        $allowedExts = array('jpeg', 'jpg', 'png');
+        $allowedExts = ['jpeg', 'jpg', 'png'];
 
         if (($_FILES['file']['size'] < 15 * 1024 * 1024)) {
             if (in_array($extension, $allowedExts)) {
@@ -75,5 +75,5 @@ try {
     $message = Localization::getLocale('an_exception_occurred', $e);
 }
 header('Content-Type: text/plain');
-echo json_encode(array('result' => $result, 'message' => $message), JSON_PRETTY_PRINT);
+echo json_encode(['result' => $result, 'message' => $message], JSON_PRETTY_PRINT);
 ?>

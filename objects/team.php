@@ -74,6 +74,20 @@ class Team extends EventObject {
 	}
 
 	/*
+	 * Return true if the specified user is member of this team.
+	 */
+	public function isMember(User $user) {
+		return $user->isTeamMember() && $this->equals($user->getTeam());
+	}
+
+	/*
+	 * Return true if the specified user is leader of this team.
+	 */
+	public function isLeader(User $user) {
+		return $this->hasLeader() && $user->equals($this->getLeader());
+	}
+
+	/*
 	 * Returns an array of users that are members of this group.
 	 */
 	public function getMembers() {

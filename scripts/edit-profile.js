@@ -7,7 +7,7 @@
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -18,14 +18,18 @@
  */
 
 $(document).ready(function() {
-	$('.edit-profile').submit(function(e) {
-		e.preventDefault();
-		$.getJSON('../api/json/user/editUser.php' + '?' + $(this).serialize(), function(data){
-			if (data.result) {
-				$(location).attr('href', 'index.php?page=user-profile');
-			} else {
-				error(data.message); 
-			}
-		});
+	$('.edit-profile').on('submit', function(event) {
+		event.preventDefault();
+		editUser(this);
 	});
 });
+
+function editUser(form) {
+	$.post('../api/json/user/editUser.php', $(form).serialize(), function(data) {
+		if (data.result) {
+			$(location).attr('href', 'index.php?page=user-profile');
+		} else {
+			error(data.message);
+		}
+	}, 'json');
+}

@@ -72,14 +72,15 @@ class TeamHandler {
 		$database = Database::open(Settings::db_name_infected_crew);
 
 		$result = $database->query('SELECT * FROM `' . Settings::db_table_infected_crew_teams . '`
-																WHERE `eventId` = \'' . $event->getId() . '\';');
+																WHERE `eventId` = \'' . $event->getId() . '\'
+																ORDER BY `groupId`, `name`;');
 
 		$database->close();
 
-		$teamList = array();
+		$teamList = [];
 
 		while ($object = $result->fetch_object('Team')) {
-			array_push($teamList, $object);
+			$teamList[] = $object;
 		}
 
 		return $teamList;
@@ -100,14 +101,15 @@ class TeamHandler {
 
 		$result = $database->query('SELECT * FROM `' . Settings::db_table_infected_crew_teams . '`
 																WHERE `eventId` = \'' . $event->getId() . '\'
-																AND `groupId` = \'' . $group->getId() . '\';');
+																AND `groupId` = \'' . $group->getId() . '\'
+																ORDER BY `groupId`, `name`;');
 
 		$database->close();
 
-		$teamList = array();
+		$teamList = [];
 
 		while ($object = $result->fetch_object('Team')) {
-			array_push($teamList, $object);
+			$teamList[] = $object;
 		}
 
 		return $teamList;
@@ -181,10 +183,10 @@ class TeamHandler {
 
 		$database->close();
 
-		$memberList = array();
+		$memberList = [];
 
 		while ($object = $result->fetch_object('User')) {
-			array_push($memberList, $object);
+			$memberList[] = $object;
 		}
 
 		return $memberList;

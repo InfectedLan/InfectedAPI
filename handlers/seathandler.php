@@ -49,10 +49,10 @@ class SeatHandler {
 
 		$database->close();
 
-		$seatList = array();
+		$seatList = [];
 
 		while ($object = $result->fetch_object('Seat')) {
-			array_push($seatList, $object);
+			$seatList[] = $object;
 		}
 
 		return $seatList;
@@ -69,10 +69,10 @@ class SeatHandler {
 
 		$database->close();
 
-		$seatList = array();
+		$seatList = [];
 
 		while ($object = $result->fetch_object('Seat')) {
-			array_push($seatList, $object);
+			$seatList[] = $object;
 		}
 
 		return $seatList;

@@ -43,42 +43,31 @@ class ApplicationHandler {
 	}
 
 	/*
-	 * Returns a list of all applications (For all events)
-	 */
-	public static function getApplications() {
-		$database = Database::open(Settings::db_name_infected_crew);
-
-		$result = $database->query('SELECT * FROM `' . Settings::db_table_infected_crew_applications . '`;');
-
-		$database->close();
-
-		$applicationList = array();
-
-		while ($object = $result->fetch_object('Application')) {
-			array_push($applicationList, $object);
-		}
-
-		return $applicationList;
-	}
-
-	/*
 	 * Returns a list of all applications for that event.
 	 */
 	public static function getApplicationsByEvent(Event $event) {
 		$database = Database::open(Settings::db_name_infected_crew);
 
 		$result = $database->query('SELECT * FROM `' . Settings::db_table_infected_crew_applications . '`
-																WHERE `eventId` = \'' . $event->getId() . '\';');
+																WHERE `eventId` = \'' . $event->getId() . '\'
+																ORDER BY `openedTime`;');
 
 		$database->close();
 
-		$applicationList = array();
+		$applicationList = [];
 
 		while ($object = $result->fetch_object('Application')) {
-			array_push($applicationList, $object);
+			$applicationList[] = $object;
 		}
 
 		return $applicationList;
+	}
+
+	/*
+	 * Returns a list of all applications.
+	 */
+	public static function getApplications() {
+		return self::getApplicationsByEvent(EventHandler::getCurrentEvent());
 	}
 
 	/*
@@ -97,10 +86,10 @@ class ApplicationHandler {
 
 		$database->close();
 
-		$applicationList = array();
+		$applicationList = [];
 
 		while ($object = $result->fetch_object('Application')) {
-			array_push($applicationList, $object);
+			$applicationList[] = $object;
 		}
 
 		return $applicationList;
@@ -123,10 +112,10 @@ class ApplicationHandler {
 
 		$database->close();
 
-		$applicationList = array();
+		$applicationList = [];
 
 		while ($object = $result->fetch_object('Application')) {
-			array_push($applicationList, $object);
+			$applicationList[] = $object;
 		}
 
 		return $applicationList;
@@ -148,10 +137,10 @@ class ApplicationHandler {
 
 		$database->close();
 
-		$applicationList = array();
+		$applicationList = [];
 
 		while ($object = $result->fetch_object('Application')) {
-			array_push($applicationList, $object);
+			$applicationList[] = $object;
 		}
 
 		return $applicationList;
@@ -174,10 +163,10 @@ class ApplicationHandler {
 
 		$database->close();
 
-		$applicationList = array();
+		$applicationList = [];
 
 		while ($object = $result->fetch_object('Application')) {
-			array_push($applicationList, $object);
+			$applicationList[] = $object;
 		}
 
 		return $applicationList;
@@ -195,13 +184,13 @@ class ApplicationHandler {
 
 		$database->close();
 
-		$acceptedApplicationList = array();
+		$applicationList = [];
 
 		while ($object = $result->fetch_object('Application')) {
-			array_push($acceptedApplicationList, $object);
+			$applicationList[] = $object;
 		}
 
-		return $acceptedApplicationList;
+		return $applicationList;
 	}
 
 	/*
@@ -217,13 +206,99 @@ class ApplicationHandler {
 
 		$database->close();
 
-		$acceptedApplicationList = array();
+		$applicationList = [];
 
 		while ($object = $result->fetch_object('Application')) {
-			array_push($acceptedApplicationList, $object);
+			$applicationList[] = $object;
 		}
 
-		return $acceptedApplicationList;
+		return $applicationList;
+	}
+
+	/*
+	 * Returns a list of all rejected applications.
+	 */
+	public static function getRejectedApplications() {
+		$database = Database::open(Settings::db_name_infected_crew);
+
+		$result = $database->query('SELECT * FROM `' . Settings::db_table_infected_crew_applications . '`
+																WHERE `state` = \'3\'
+																ORDER BY `openedTime` DESC;');
+
+		$database->close();
+
+		$applicationList = [];
+
+		while ($object = $result->fetch_object('Application')) {
+			$applicationList[] = $object;
+		}
+
+		return $applicationList;
+	}
+
+	/*
+	 * Returns a list of all rejected applications for a given group.
+	 */
+	public static function getRejectedApplicationsByGroup(Group $group) {
+		$database = Database::open(Settings::db_name_infected_crew);
+
+		$result = $database->query('SELECT * FROM `' . Settings::db_table_infected_crew_applications . '`
+																WHERE `groupId` = \'' . $group->getId() .  '\'
+																AND `state` = \'3\'
+																ORDER BY `openedTime` DESC;');
+
+		$database->close();
+
+		$applicationList = [];
+
+		while ($object = $result->fetch_object('Application')) {
+			$applicationList[] = $object;
+		}
+
+		return $applicationList;
+	}
+
+	/*
+	 * Returns a list of all previous applications.
+	 */
+	public static function getPreviousApplications() {
+		$database = Database::open(Settings::db_name_infected_crew);
+
+		$result = $database->query('SELECT * FROM `' . Settings::db_table_infected_crew_applications . '`
+																WHERE (`state` = \'2\' OR `state` = \'3\')
+																ORDER BY `closedTime` DESC, `openedTime` DESC;');
+
+		$database->close();
+
+		$applicationList = [];
+
+		while ($object = $result->fetch_object('Application')) {
+			$applicationList[] = $object;
+		}
+
+		return $applicationList;
+	}
+
+	/*
+	 * Returns a list of all previous applications for a given group.
+	 */
+	public static function getPreviousApplicationsByGroup(Group $group) {
+		$database = Database::open(Settings::db_name_infected_crew);
+
+		$result = $database->query('SELECT * FROM `' . Settings::db_table_infected_crew_applications . '`
+																WHERE `groupId` = \'' . $group->getId() .  '\'
+																AND (`state` = \'2\' OR `state` = \'3\')
+																ORDER BY `closedTime` DESC, `openedTime` DESC;');
+
+		$database->close();
+
+		$applicationList = [];
+
+		while ($object = $result->fetch_object('Application')) {
+			$applicationList[] = $object;
+		}
+
+		return $applicationList;
 	}
 
 	/*
@@ -240,17 +315,17 @@ class ApplicationHandler {
 														  \'1\',
 														  \'' . $database->real_escape_string($content) . '\');');
 
+		$application = self::getApplication($database->insert_id);
+
 		$database->close();
 
 		// If the group is set to queue applications, do so automatically.
 		if ($group->isQueuing()) {
-			$application = self::getUserApplicationForGroup($user, $group);
-
 			self::queueApplication($application, Session::getCurrentUser());
 		}
 
 		// Notify the group leader by email.
-		NotificationManager::sendApplicationCreatedNotification($user, $group);
+		NotificationManager::sendApplicationCreatedNotification($application);
 	}
 
 	/*
@@ -296,8 +371,8 @@ class ApplicationHandler {
 	  			$applicationList = self::getUserApplications($applicationUser);
 
 	  			foreach ($applicationList as $applicationValue) {
-					if ($group->equals($applicationValue->getGroup())) {
-						self::closeApplication($applicationValue, $user);
+						if (!$group->equals($applicationValue->getGroup())) {
+							self::closeApplication($applicationValue, $user);
 	  				}
 	  			}
 
@@ -477,10 +552,10 @@ class ApplicationHandler {
 
 		$database->close();
 
-		$applicationList = array();
+		$applicationList = [];
 
 		while ($object = $result->fetch_object('Application')) {
-			array_push($applicationList, $object);
+			$applicationList[] = $object;
 		}
 
 		return $applicationList;

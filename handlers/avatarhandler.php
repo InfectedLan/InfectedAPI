@@ -62,10 +62,10 @@ class AvatarHandler {
 
 		$database->close();
 
-		$avatarList = array();
+		$avatarList = [];
 
 		while ($object = $result->fetch_object('Avatar')) {
-			array_push($avatarList, $object);
+			$avatarList[] = $object;
 		}
 
 		return $avatarList;
@@ -82,10 +82,10 @@ class AvatarHandler {
 
 		$database->close();
 
-		$avatarList = array();
+		$avatarList = [];
 
 		while ($object = $result->fetch_object('Avatar')) {
-			array_push($avatarList, $object);
+			$avatarList[] = $object;
 		}
 
 		return $avatarList;

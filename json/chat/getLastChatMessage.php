@@ -40,10 +40,10 @@ if (Session::isAuthenticated()) {
 				if ($message != null) {
 					$subject = $message->getUser();
 
-					$result = array('id' => $message->getId(),
-									'user' => $subject->getNickname(),
-									'time' => date('H:i:s', $message->getTime()),
-									'message' => $message->getMessage());
+					$result = ['id' => $message->getId(),
+										 'user' => $subject->getNickname(),
+										 'time' => date('H:i:s', $message->getTime()),
+										 'message' => $message->getMessage()];
 
 					//Tell chat if admin or not
 					if ($subject->hasPermission('*') ||
@@ -53,7 +53,7 @@ if (Session::isAuthenticated()) {
 						$result['admin'] = false;
 					}
 				} else {
-					$result = array('id' => -1);
+					$result = ['id' => -1];
 					$message = Localization::getLocale('this_chat_does_not_contain_any_messages');
 				}
 			} else {
@@ -70,5 +70,5 @@ if (Session::isAuthenticated()) {
 }
 
 header('Content-Type: text/plain');
-echo json_encode(array('result' => $result, 'message' => $message), JSON_PRETTY_PRINT);
+echo json_encode(['result' => $result, 'message' => $message], JSON_PRETTY_PRINT);
 ?>

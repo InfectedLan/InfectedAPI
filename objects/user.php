@@ -33,6 +33,7 @@ require_once 'handlers/avatarhandler.php';
 require_once 'handlers/grouphandler.php';
 require_once 'handlers/teamhandler.php';
 require_once 'handlers/userhistoryhandler.php';
+require_once 'handlers/usernotehandler.php';
 require_once 'objects/object.php';
 
 class User extends Object {
@@ -176,7 +177,10 @@ class User extends Object {
 	 * Returns the users age.
 	 */
 	public function getAge() {
-		return date_diff(date_create(date('Y-m-d', $this->getBirthdate())), date_create('now'))->y;
+		$birthdate = new DateTime(date('Y-m-d', $this->getBirthdate()));
+		$now = new DateTime('now');
+
+		return $birthdate->diff($now)->y;
 	}
 
 	/*
@@ -201,40 +205,43 @@ class User extends Object {
 	}
 
 	/*
+	 * Returns true the user is set for swimming.
+	 */
+	public function isSwimming() {
+		return UserOptionHandler::isUserSwimming($this);
+	}
+
+	/*
+	 * Set whether user is swimming or not.
+	 */
+	public function setSwimming($swimming) {
+		UserOptionHandler::setUserSwimming($this, $swimming);
+	}
+
+	/*
+	 * Returns true if user has easter egg.
+	 */
+	public function hasEasterEgg() {
+		return UserOptionHandler::hasUserEasterEgg($this);
+	}
+
+	/*
 	 * Returns true if user have specified permission, otherwise false.
 	 */
 	public function hasPermission($value) {
-		$permissionList = $this->getPermissions();
-
-		// Give access to default permission for certain users.
-		if ($this->isGroupMember()) {
-		  // Give leaders access to the chief.* permission by default.
-		  if ($this->isGroupLeader() || $this->isGroupCoLeader()) {
-		    array_push($permissionList, PermissionHandler::getPermissionByValue('chief.*'));
-		  }
-
-		  // Give team leaders access to the chief.team permission by default.
-		  if ($this->isTeamMember() && $this->isTeamLeader()) {
-              array_push($permissionList, PermissionHandler::getPermissionByValue('chief.team'));
-		  }
-		}
-
 		// Match wildcard permissions, if value is admin.permissions and user has permission "admin.*" this would return true.
 		$wildcardValue = preg_replace('/[^\.]([^.]*)$/', '*', $value);
 
 		// This makes sure that if user have a child permissions, that it also matches the parent.
 		// i.e "admin.permissions" would also match for just "admin"
-		foreach ($permissionList as $permission) {
+		foreach ($this->getPermissions() as $permission) {
+			$permissionValue = $permission->getValue();
+
 			// Accept permission if user has a god permission ("*") or a valid wildcard.
-			if ($permission->getValue() == '*' || $permission->getValue() == $wildcardValue) {
-				return true;
-			}
-
-			if (preg_replace('/[\.*](.*)/', '', $permission->getValue()) == $value) {
-				return true;
-			}
-
-			if ($permission->getValue() == $value) {
+			if ($permissionValue == '*' ||
+				$permissionValue == $wildcardValue ||
+				preg_replace('/[\.*](.*)/', '', $permissionValue) == $value ||
+				$permissionValue == $value) {
 				return true;
 			}
 		}
@@ -246,7 +253,25 @@ class User extends Object {
 	 * Returns the permissions assigned to this user.
 	 */
 	public function getPermissions() {
-		return UserPermissionHandler::getUserPermissions($this);
+		$permissionList = UserPermissionHandler::getUserPermissions($this);
+
+		// Give access to default permission for certain users.
+		if ($this->isGroupMember()) {
+			$permissionList[] = PermissionHandler::getPermissionByValue('event.checklist');
+
+		  // Give leaders access to permissions by default.
+		  if ($this->isGroupLeader() || $this->isGroupCoLeader()) {
+		    $permissionList[] = PermissionHandler::getPermissionByValue('chief.*');
+			// Give team leaders access to permissions by default.
+			}
+
+			if ($this->isTeamMember() && $this->isTeamLeader()) {
+		    $permissionList[] = PermissionHandler::getPermissionByValue('chief.team');
+				$permissionList[] = PermissionHandler::getPermissionByValue('event.checklist');
+		  }
+		}
+
+		return $permissionList;
 	}
 
 	/*
@@ -329,7 +354,7 @@ class User extends Object {
 
 		// Send an email to the user with a link for resetting the password.
 		$url = 'https://' . $_SERVER['HTTP_HOST'] . '/v2/index.php?page=activation&code=' . $code;
-		$message = array();
+		$message = [];
 		$message[] = '<!DOCTYPE html>';
 		$message[] = '<html>';
 			$message[] = '<body>';
@@ -351,7 +376,7 @@ class User extends Object {
 
 		// Send an email to the user with a link for resetting the password.
 		$url = 'https://' . $_SERVER['HTTP_HOST'] . '/v2/index.php?page=reset-password&code=' . $code;
-		$message = array();
+		$message = [];
 		$message[] = '<!DOCTYPE html>';
 		$message[] = '<html>';
 			$message[] = '<body>';
@@ -374,7 +399,7 @@ class User extends Object {
 			$text = 'Din avatar på <a href="' . $_SERVER['HTTP_HOST'] . '">' . $_SERVER['HTTP_HOST'] . '</a> ble ikke godkjent, vennligst last opp en ny en.';
 		}
 
-		$message = array();
+		$message = [];
 		$message[] = '<!DOCTYPE html>';
 		$message[] = '<html>';
 			$message[] = '<body>';
@@ -569,6 +594,27 @@ class User extends Object {
 	 */
 	public function getRole() {
 		return $this->getRoleByEvent(EventHandler::getCurrentEvent());
+	}
+
+	/*
+	 * Returns true if this user has a note.
+	 */
+	public function hasNote() {
+		return UserNoteHandler::hasUserNoteByUser($this);
+	}
+
+	/*
+	 * Returns the note for this user.
+	 */
+	public function getNote() {
+		return UserNoteHandler::getUserNoteByUser($this);
+	}
+
+	/*
+	 * Sets the note for this user.
+	 */
+	public function setNote($content) {
+		UserNoteHandler::setUserNote($this, $content);
 	}
 
 	/*
