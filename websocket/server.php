@@ -237,7 +237,7 @@ class Server extends WebSocketServer {
   }
 }
 
-$server = new CompoServer("0.0.0.0", "1337");
+$server = new Server("0.0.0.0", "1337");
 echo "Whoami: " . exec("whoami") . "\n";
 //phpinfo();
 echo "\n";
