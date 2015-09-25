@@ -46,7 +46,7 @@
  *     - Consistency.
  *
  */
-set_include_path(get_include_path() . PATH_SEPARATOR . '/home/test.infected.no/public_html/api');
+set_include_path(get_include_path() . PATH_SEPARATOR . '/home/infected.no/public_html/api');
 set_time_limit(0); //Make sure the script runs forever
 
 require_once 'session.php';

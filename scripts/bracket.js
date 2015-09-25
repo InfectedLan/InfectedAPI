@@ -76,7 +76,7 @@ function Bracket(compoId, divId, regex, bracketWidth, bracketHeight, customRende
     this.getParticipantString = function(participant, clans) {
 	if(participant.type == participant_type_clan) {
 	    for(var i = 0; i < clans.length; i++) {
-		if(clans[i].id == participant.id) {
+		if(clans[i].id == participant.participantId) {
 		    return clans[i].tag;
 		}
 	    }
@@ -95,9 +95,6 @@ function Bracket(compoId, divId, regex, bracketWidth, bracketHeight, customRende
 	//html.push('<div class="bracket_header">Match id ' + match.id + '</div>');
 	
 	for(var i = 0; i < match.participants.length; i++) {
-	    if(i != 0) {
-		html.push('<div class="bracket_vs">vs</div>');
-	    }
 	    html.push('<div class="bracket_participant">' +  this.getParticipantString(match.participants[i], clans) +'</div>');
 	}
 	return html.join("");

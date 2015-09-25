@@ -1,0 +1,7 @@
+{
+    "name": "Default compo plugin",
+    "description": "Gives you the default behaviour of the compo system",
+    "javascript": [],
+    "plugin": ["csgoplugin.php"],
+    "classname": "CsgoPlugin"
+}

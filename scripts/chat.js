@@ -35,6 +35,7 @@ Chat.sendQueue = [];
 
 // Public functions
 Chat.bindChat = function(divId, chatId, height) {
+    return;
   for (var i = 0; i < this.chatList.length; i++) {
     if (this.chatList[i].divId == divId) {
   	  console.log("WARNING: Trying to bind a div twice");

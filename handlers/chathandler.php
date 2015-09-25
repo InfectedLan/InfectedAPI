@@ -300,7 +300,7 @@ class ChatHandler {
             $clanList = ClanHandler::getClansByUser($user);
 
 						foreach ($clanList as $clan) {
-                if ($clan->isQualified() && $clan->getCompo()->getChat()->getId() == $chat->getId()) {
+                            if ($clan->isQualified($clan->getCompo()) && $clan->getCompo()->getChat()->getId() == $chat->getId()) {
                     return true;
                 }
             }
