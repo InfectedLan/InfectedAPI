@@ -107,7 +107,7 @@ class MatchHandler {
 		$result = $database->query('SELECT * FROM `' . Settings::db_table_infected_compo_matches . '`
 																WHERE `id` = (SELECT `matchId` FROM `' . Settings::db_table_infected_compo_participantOfMatch . '`
 																						  WHERE `type` = \'' . Settings::compo_match_participant_type_clan . '\'
-																						  AND `participantId` = \'' . $clan-getId() . '\');');
+																						  AND `participantId` = \'' . $clan->getId() . '\');');
 
 		$database->close();
 
@@ -147,9 +147,7 @@ class MatchHandler {
 		$result = $database->query('SELECT * FROM `' . Settings::db_table_infected_compo_matches . '`
 																WHERE `compoId` = \'' . $compo->getId() . '\'
 																AND `winnerId` = \'0\'
-																AND `scheduledTime` < \'' . time() . '\';');
-
-		$database->close();
+																AND `scheduledTime` < \'' . date('Y-m-d H:i:s') . '\';');
 
 		$matchList = [];
 
@@ -158,7 +156,8 @@ class MatchHandler {
 				$matchList[] = $object;
 			}
 		}
-
+        $database->close();
+        
 		return $matchList;
 	}
 

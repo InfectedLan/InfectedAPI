@@ -68,6 +68,10 @@
 	color: #FFFFFF;
 	padding: 3px;
 }
+.bracket_container {
+    width: 100%;
+    min-height: 800px;
+}
 .bracket_participant {
 	width: 100%;
 	text-align: center;

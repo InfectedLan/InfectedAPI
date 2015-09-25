@@ -88,8 +88,8 @@ function Bracket(compoId, divId, regex, bracketWidth, bracketHeight, customRende
 	    return "Walkover";
 	}
     }
-    this.bracketWidth = typeof bracketWidth !== 'undefined' ? bracketWidth : 100;
-    this.bracketHeight = typeof bracketHeight !== 'undefined' ? bracketHeight : 100;
+    this.bracketWidth = typeof bracketWidth !== 'undefined' ? bracketWidth : 110;
+    this.bracketHeight = typeof bracketHeight !== 'undefined' ? bracketHeight : 47;
     this.customRenderer = typeof customRenderer === 'function' ? customRenderer : function(match, clans) {
 	var html = [];
 	//html.push('<div class="bracket_header">Match id ' + match.id + '</div>');
@@ -251,7 +251,7 @@ function Bracket(compoId, divId, regex, bracketWidth, bracketHeight, customRende
 		    yMargin = offsets[i].items[x].y;
 		}
 		html.push('<div class="bracket" style="margin-top: ' + yMargin + 'px; width: ' +this.bracketWidth  + 'px; height: ' + this.bracketHeight + 'px;">');
-		html.push(this.customRenderer(offsets[i].items[x]));
+		html.push(this.customRenderer(offsets[i].items[x], this.clans));
 		html.push('</div>');
 	    }
 	    html.push(this.onOffsetRender(offsets, i));

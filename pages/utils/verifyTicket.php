@@ -40,7 +40,7 @@ echo '<html>';
 							if (!$ticket->isCheckedIn()) {
 								echo '$.getJSON(\'../../json/ticket/getTicketData.php?id=' . htmlentities($_GET['id'], ENT_QUOTES, 'UTF-8') . '\', function(data) {';
 									echo 'if (data.result) {';
-										echo 'var user = data.userData[0];';
+										echo 'var user = data.userData;';
 										echo 'if (confirm(\'Sjekk at disse detaljene er riktige:\\nNavn: \' + user.firstname + \' \' + user.lastname + \'\\nKjønn: \' + user.gender + \'\\nFødt: \' + user.birthdate + \'\\nAlder: \' + user.age + \'\\nAddresse: \' + user.address)) {';
 											echo '$.getJSON(\'../../json/ticket/checkInTicket.php?id=' . htmlentities($_GET['id'], ENT_QUOTES, 'UTF-8') . '\', function(data) {';
 												echo 'if(data.result) {';

@@ -265,15 +265,15 @@ class ClanHandler {
 		$clan = self::getClan($database->insert_id);
 
 		$database->query('INSERT INTO `' . Settings::db_table_infected_compo_participantof . '` (`clanId`, `compoId`, `qualified`)
-										  VALUES (\'' . $database->real_escape_string($id) . '\',
+										  VALUES (\'' . $database->real_escape_string($clan->getId()) . '\',
 												  		\'' . $compo->getId() . '\', \'0\');');
 
 		$database->query('INSERT INTO `' . Settings::db_table_infected_compo_memberof . '` (`clanId`, `userId`)
-										  VALUES (\'' . $database->real_escape_string($id) . '\',
+										  VALUES (\'' . $database->real_escape_string($clan->getId()) . '\',
 												  		\'' . $user->getId() . '\');');
 
 		$result = $database->query('SELECT * FROM `' . Settings::db_table_infected_compo_clans . '`
-																WHERE `id` = \'' . $database->real_escape_string($id) . '\';');
+																WHERE `id` = \'' . $database->real_escape_string($clan->getId()) . '\';');
 
 		$database->close();
 

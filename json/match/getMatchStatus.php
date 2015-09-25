@@ -48,7 +48,7 @@ if (Session::isAuthenticated()) {
 				$matchData['compoId'] = $match->getCompo()->getId();
 				$matchData['currentTime'] = time();
 				$matchData['startTime'] = $match->getScheduledTime();
-				$matchData['chatId'] = $match->getChat();
+				$matchData['chatId'] = $match->getChat()->getId();
 
 				if ($match->getState() == Match::STATE_READYCHECK &&
 					$match->isReady()) {
@@ -132,7 +132,7 @@ if (Session::isAuthenticated()) {
 
 					$clanList = [];
 
-					foreach (MatchHandler::getParticipants($match) as $clan) {
+					foreach (MatchHandler::getParticipantsByMatch($match) as $clan) {
 						$clanData = [];
 						$clanData['clanName'] = $clan->getName();
 						$clanData['clanTag'] = $clan->getTag();

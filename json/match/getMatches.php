@@ -33,7 +33,7 @@ $matchArray = array();
 if (Session::isAuthenticated()) {
 	$user = Session::getCurrentUser();
 
-	if ($user->hasPermission('compo.bracketmanagement')) {
+	if (/*$user->hasPermission('compo.bracketmanagement')*/true) {
 		if (isset($_GET['id']) &&
 			is_numeric($_GET['id'])) {
 			$compo = CompoHandler::getCompo($_GET['id']);
@@ -48,6 +48,9 @@ if (Session::isAuthenticated()) {
 					$item["bracketOffset"] = $match->getBracketOffset();
 					$item["state"] = $match->getState();
 					$item["winner"] = $match->getWinnerId();
+                    if($user->hasPermission('compo.bracketmanagement')) {
+                        $item["connectDetails"] = $match->getConnectDetails();
+                    }
 					$item["participants"] = MatchHandler::getParticipantData($match);
                     $item["metadata"] = MatchHandler::getMetadata($match);
                     

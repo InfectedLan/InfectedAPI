@@ -49,6 +49,15 @@ Chat.bindChat = function(divId, chatId, height) {
   $("#" + divId).html('<div class="chatArea" style="height: ' + (height-25-5-10 - 7 - 5) + 'px;"></div><div class="chatTextfield" style="padding-right:27px;padding-left:0px;margin-right:0px;"></div>');
 };
 
+Chat.unbindChat = function(divId) {
+    for(var i = 0; i < this.chatList.length; i++) {
+	if(this.chatList[i].divId == divId) {
+	    Chat.sendMessage({intent: "unsubscribeChatroom", data: [this.chatList[i].chatId]});
+	    this.chatList.splice(i, 1);
+	}
+    }
+}
+
 Chat.sendMessage = function(message) {
   if (!this.connected && message.intent != "auth") {
     this.sendQueue.push(message);
