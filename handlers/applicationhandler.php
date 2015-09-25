@@ -326,6 +326,8 @@ class ApplicationHandler {
 
 		// Notify the group leader by email.
 		NotificationManager::sendApplicationCreatedNotification($application);
+
+		return $application;
 	}
 
 	/*

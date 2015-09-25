@@ -81,7 +81,11 @@ class PageHandler {
 														  \'' . $database->real_escape_string($title) . '\',
 														  \'' . $database->real_escape_string($content) . '\')');
 
+		$page = self::getPage($database->insert_id);
+
 		$database->close();
+
+		return $page;
 	}
 
 	/*

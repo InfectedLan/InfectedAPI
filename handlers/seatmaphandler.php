@@ -67,12 +67,11 @@ class SeatmapHandler {
 						  				VALUES (\'' . $database->real_escape_string($name) . '\',
 								  						\'' . $database->real_escape_string($backgroundImage) . '\')');
 
-		$result = $database->query('SELECT * FROM `' .  Settings::db_table_infected_tickets_seatmaps . '`
-																WHERE `id` = \'' . $database->insert_id . '\';');
+		$seatmap = self::getSeatmap($database->insert_id);
 
 		$database->close();
 
-		return $result->fetch_object('Seatmap');
+		return $seatmap;
 	}
 
 	/*

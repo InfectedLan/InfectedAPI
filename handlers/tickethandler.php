@@ -219,7 +219,11 @@ class TicketHandler {
 																				\'' . $payment->getId() . '\',
 																				\'' . $user->getId() . '\');');
 
+		$ticket = self::getTicket($database->insert_id);
+
 		$database->close();
+
+		return $ticket;
 	}
 
 	/*

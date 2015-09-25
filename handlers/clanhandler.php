@@ -262,8 +262,7 @@ class ClanHandler {
 														  \'' . $database->real_escape_string(htmlentities($tag, ENT_QUOTES, 'UTF-8')) . '\');');
 
 		// Fetch the id of the clan we just added.
-		$id = $database->insert_id;
-		$clan = self::getClan($id);
+		$clan = self::getClan($database->insert_id);
 
 		$database->query('INSERT INTO `' . Settings::db_table_infected_compo_participantof . '` (`clanId`, `compoId`, `qualified`)
 										  VALUES (\'' . $database->real_escape_string($id) . '\',

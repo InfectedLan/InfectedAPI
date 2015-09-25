@@ -90,22 +90,20 @@ class RowHandler {
 		$result = $database->query('SELECT COUNT(*) FROM `' . Settings::db_table_infected_tickets_rows . '`
 																WHERE `seatmapId` = \'' . $seatmap->getId() . '\';');
 
-		$newRowNumber = $result->num_rows + 1;
-		$entrance = EntranceHandler::getEntrance(1); // TODO: Set this somewere else?
+		$row = self::getRow($database->insert_id);
 
 		$database->query('INSERT INTO `' . Settings::db_table_infected_tickets_rows . '` (`seatmapId`, `entranceId`, `number`, `x`, `y`)
-										  VALUES (\'' . $seatmap->getId() . '\',
+											VALUES (\'' . $seatmap->getId() . '\',
 															\'' . $entrance->getId() . '\',
-															\'' . $database->real_escape_string($newRowNumber) . '\',
-														  \'' . $database->real_escape_string($x) . '\',
-														  \'' . $database->real_escape_string($y) . '\');');
-
-		$result = $database->query('SELECT * FROM `' .  Settings::db_table_infected_tickets_rows . '`
-																WHERE `id` = \'' . $database->insert_id . '\';');
+															\'' . $database->real_escape_string($row->getId()) . '\',
+															\'' . $database->real_escape_string($x) . '\',
+															\'' . $database->real_escape_string($y) . '\');');
 
 		$database->close();
 
-		return $result->fetch_object('Row');
+		$entrance = EntranceHandler::getEntrance(1); // TODO: Set this somewere else?
+
+		return $row;
 	}
 
 	/*

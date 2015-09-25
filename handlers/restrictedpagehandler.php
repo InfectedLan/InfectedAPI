@@ -181,7 +181,11 @@ class RestrictedPageHandler {
 														  \'' . ($group != null ? $group->getId() : '0') . '\',
 														  \'' . ($team != null ? $team->getId() : '0') . '\')');
 
+		$restrictedPage = self::getRestrictedPage($database->insert_id);
+
 		$database->close();
+
+		return $restrictedPage;
 	}
 
 	  /*
