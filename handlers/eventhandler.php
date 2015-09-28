@@ -49,7 +49,7 @@ class EventHandler {
 																						  WHERE `endTime` > NOW()
 																						  ORDER BY `startTime` ASC
 																						  LIMIT 1)
-																ORDER BY `startTime` ASC
+																ORDER BY `startTime`
 																LIMIT 1;');
 
 		$database->close();
@@ -58,14 +58,14 @@ class EventHandler {
 	}
 
 	/*
-	 * Returns the event that is closest in time, which means the next or goiong event.
+	 * Returns the event that is closest in time, which means the next or on-going event.
 	 */
 	public static function getCurrentEvent() {
 		$database = Database::open(Settings::db_name_infected);
 
 		$result = $database->query('SELECT * FROM `' . Settings::db_table_infected_events . '`
-																WHERE `endTime` >= NOW()
-																ORDER BY `startTime` ASC
+																WHERE DATE_ADD(DATE(`endTime`), INTERVAL 1 DAY) >= NOW()
+																ORDER BY `startTime`
 																LIMIT 1;');
 
 		$database->close();
@@ -82,7 +82,7 @@ class EventHandler {
 		$result = $database->query('SELECT * FROM `' . Settings::db_table_infected_events . '`
 																WHERE `id` < (SELECT `id` FROM `' . Settings::db_table_infected_events . '`
 																						  WHERE `endTime` > NOW()
-																						  ORDER BY `startTime` ASC
+																						  ORDER BY `startTime`
 																						  LIMIT 1)
 																ORDER BY `startTime` DESC
 																LIMIT 1;');
@@ -210,7 +210,7 @@ class EventHandler {
 																WHERE `eventId` IN (\'' . implode(', ', $eventIdList) . '\')
 																AND TIMESTAMPDIFF(YEAR, `birthdate`, \'' . $dateLimit . '\') <= \'' . $ageLimit . '\'
 																GROUP BY `users`.`id`
-																ORDER BY `firstname` ASC;');
+																ORDER BY `firstname`;');
 
 		$database->close();
 
