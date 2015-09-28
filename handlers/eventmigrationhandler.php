@@ -24,7 +24,7 @@ require_once 'objects/event.php';
 require_once 'utils/databaseutils.php';
 
 class EventMigrationHandler {
-		/*
+	/*
 	 * Copies all information from the given event to the new one.
 	 */
 	public static function copyTableByEvent(Event $fromEvent, Event $toEvent, $databaseName, $tableName) {
@@ -50,7 +50,7 @@ class EventMigrationHandler {
 		self::copyMembers($fromEvent, $toEvent);
 		self::copyRestrictedPages($fromEvent, $toEvent);
 		self::copyNotes($fromEvent, $toEvent);
-		self::copyNoteWatches(($fromEvent, $toEvent);
+		self::copyNoteWatches($fromEvent, $toEvent);
 
 		// InfectedInfo
 		self::copySlides($fromEvent, $toEvent);
