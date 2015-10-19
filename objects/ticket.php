@@ -83,7 +83,7 @@ class Ticket extends EventObject {
 	/*
 	 * Returns a string representation of the ticket.
 	 */
-	public function getString() {
+	public function toString() {
 		$event = $this->getEvent();
 		$season = date('m', $event->getStartTime()) == 2 ? 'VINTER' : 'HØST';
 		$eventName = !empty($event->getTheme()) ? $event->getTheme() : $season;
