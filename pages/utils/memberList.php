@@ -33,8 +33,7 @@ echo '<html>';
 			$user = Session::getCurrentUser();
 			$format = isset($_GET['format']) ? $_GET['format'] : 'html';
 
-			if ($user->hasPermission('*') ||
-				$user->hasPermission('admin.memberlist')) {
+			if ($user->hasPermission('admin.memberlist')) {
 				if (isset($_GET['year']) &&
 					is_numeric($_GET['year'])) {
 					if (isset($_GET['ageLimit']) &&
