@@ -36,7 +36,7 @@ class ChatPlugin extends WebSocketPlugin {
 
         $this->followingChatChannels = array(); // Fun fact, PHP arrays are not arrays! It is if you do [] instead...
     }
-
+    
     public function handleIntent($intent, $args, $connection) {
         switch($intent) {
         case 'subscribeChatroom':

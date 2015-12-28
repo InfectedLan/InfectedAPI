@@ -57,6 +57,7 @@ require_once 'session.php';
 require_once 'libraries/phpwebsockets/websockets.php';
 
 require_once 'chatplugin.php';
+require_once 'matchplugin.php';
 
 class Server extends WebSocketServer {
     private $authenticatedUsers;
@@ -147,16 +148,28 @@ class Server extends WebSocketServer {
     }
 
     protected function tick() {
-
+        foreach($this->plugins as $plugin) {
+            $plugin->tick();
+        }
     }
+}
+
+//Command line helpers
+function println($string) {
+    echo $string . "\n";
+}
+function readln() {
+    return fgetc(STDIN);
 }
 
 $server = new Server("0.0.0.0", "1337");
 //Plugins
 $chatPlugin = new ChatPlugin($server);
+$matchPlugin = new MatchPlugin($server);
 
 //Print some information to debug sanity of the server
 echo "Whoami: " . exec("whoami") . "\n";
+echo "Session store: " . session_save_path() . "\n";
 //phpinfo();
 echo "\n";
 

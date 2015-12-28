@@ -18,14 +18,24 @@
  * License along with this library.  If not, see <http://www.gnu.org/licenses/>.
  */
 require_once 'server.php';
+require_once 'websocketplugin.php';
 
-class WebSocketPlugin {
+class MatchPlugin extends WebSocketPlugin {
+    private $server;
     function __construct(Server $server) {
-        //Register intents here
+        parent::__construct($server);
+        $server->registerIntent("subscribeMatches", $this);
+        $server->registerPlugin($this);
+
+        $this->server = $server;
     }
 
     public function handleIntent($intent, $args, $connection) {
-        
+        switch($intent) {
+        case "subscribeMatches":
+
+            break;
+        }
     }
 
     public function onConnect($connection) {
@@ -37,7 +47,7 @@ class WebSocketPlugin {
     }
 
     public function tick() {
-        //Please note that this is not strictly well-timed, but ticks about every second. "around" is a nice word in programming. It means "prepare for unexpected shit"
+        
     }
 }
 ?>
