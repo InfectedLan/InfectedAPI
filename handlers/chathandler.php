@@ -299,11 +299,13 @@ class ChatHandler {
             //You can also read the chat if it is a compo chat for a compo you are currently participating in. Soooo....
             $clanList = ClanHandler::getClansByUser($user);
 
-						foreach ($clanList as $clan) {
-                            if ($clan->isQualified($clan->getCompo()) && $clan->getCompo()->getChat()->getId() == $chat->getId()) {
+            foreach ($clanList as $clan) {
+                if (($clan->isQualified($clan->getCompo()) && $clan->getCompo()->getChat()->getId() == $chat->getId() )) {
                     return true;
                 }
             }
+            //You can also read from a match you are a part of
+            
         }
     }
 }

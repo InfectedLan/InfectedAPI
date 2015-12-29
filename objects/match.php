@@ -101,5 +101,9 @@ class Match extends Object {
 	public function getParents() {
 		return MatchHandler::getMatchParents($this);
 	}
+
+    public function getJsonableData() {
+        return MatchHandler::getJsonableData($this);
+    }
 }
 ?>

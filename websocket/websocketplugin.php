@@ -24,15 +24,15 @@ class WebSocketPlugin {
         //Register intents here
     }
 
-    public function handleIntent($intent, $args, $connection) {
+    public function handleIntent($intent, $args, WebSocketUser $connection) {
         
     }
 
-    public function onConnect($connection) {
+    public function onConnect(WebSocketUser $connection) {
 
     }
 
-    public function onDisconnect($connection) {
+    public function onDisconnect(WebSocketUser $connection) {
 
     }
 

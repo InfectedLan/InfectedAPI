@@ -33,6 +33,7 @@
  *     subscribeChatroom - data[0] contains the chatroom the client wants to subscribe to.
  *     chatMessage - data[0] is the channel, data[1] is the message.
  *     unsubscribeChatroom - data[0] is the chatroom to unsubscribe from
+ *     subscribeMatches - tells the server that we want to get updates on matches for the logged in user
  *
  * Server -> Client intents:
  *     authResult - data[0] containts the result of the authentication
@@ -40,6 +41,7 @@
  *     chatMessageResult - data[0] is if the chatmessage was success or not, data[1] is the channel the message was sendt to, data[2] is either the new chat line(handle it same way as newChat[1], or an error message
  *     chat - data[0] is the channel, data[1]  is a formatted chat message
  *     unsubscribeChatroomResult - data[0] is if it was successful or not, data[1] is an error message(or an empty string if none)
+ *     matchUpdate - updates the client about the users current match. data[0] is an object with information on the match
  *
  * FAQ:
  *  * Why all the result packets? Why not reuse the name back?
@@ -55,6 +57,7 @@ set_time_limit(0); //Make sure the script runs forever
 
 require_once 'session.php';
 require_once 'libraries/phpwebsockets/websockets.php';
+require_once 'libraries/phpwebsockets/users.php';
 
 require_once 'chatplugin.php';
 require_once 'matchplugin.php';
@@ -72,7 +75,7 @@ class Server extends WebSocketServer {
         $this->plugins = array();
     }
 
-	protected function process($connection, $message) {
+	protected function process(WebSocketUser $connection, $message) {
 		//$this->send($connection, "You sendt" . $message);
 		echo $message . "\n";
 
@@ -112,14 +115,14 @@ class Server extends WebSocketServer {
     }
 
 
-	protected function connected($connection) {
+	protected function connected(WebSocketUser $connection) {
 		echo "Got connection\n";
         foreach($this->plugins as $plugin) {
             $plugin->onConnect($connection);
         }
 	}
 
-	protected function closed($connection) {
+	protected function closed(WebSocketUser $connection) {
 		echo "Lost connection\n";
 
         foreach($this->plugins as $plugin) {
@@ -129,21 +132,21 @@ class Server extends WebSocketServer {
         $this->unregisterUser($connection);
 	}
     
-    protected function unregisterUser($connection) {
+    protected function unregisterUser(WebSocketUser $connection) {
         unset($this->authenticatedUsers[$connection]);
     }
 
-    protected function registerUser($user, $connection){
+    protected function registerUser(User $user, WebSocketUser $connection){
         echo "Got user: " . $user->getUsername() . ".\n";
 
         $this->authenticatedUsers[$connection] = $user;
     }
 
-    public function isAuthenticated($connection) {
+    public function isAuthenticated(WebSocketUser $connection) {
         return $this->authenticatedUsers[$connection] != null;
     }
 
-    public function getUser($connecton) {
+    public function getUser(WebSocketUser $connecton) {
         return $this->authenticatedUsers[$connection];
     }
 

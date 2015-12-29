@@ -28,9 +28,9 @@ abstract class WebSocketServer {
 
   }
 
-  abstract protected function process($user,$message); // Called immediately when the data is recieved.
-  abstract protected function connected($user);        // Called after the handshake response is sent to the client.
-  abstract protected function closed($user);           // Called after the connection is closed.
+  abstract protected function process(WebSocketUser $user,$message); // Called immediately when the data is recieved.
+  abstract protected function connected(WebSocketUser $user);        // Called after the handshake response is sent to the client.
+  abstract protected function closed(WebSocketUser $user);           // Called after the connection is closed.
 
   protected function connecting($user) {
     // Override to handle a connecting user, after the instance of the User is created, but before
