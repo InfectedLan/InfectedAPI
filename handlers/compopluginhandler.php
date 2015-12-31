@@ -20,26 +20,43 @@
 require_once 'objects/compoplugin.php'; //Not really required, but is used in a hack to make the default plugin use the baseclass for compo plugins
 
 class CompoPluginHandler {
-	/**
-     * Returns object for the plugin, or the default if none existing
+
+    private static $cachedPlugins = array();
+    private static $cachedJavascripts = array();
+    /**
+     * Returns object for the plugin, or the default if none existing. Will cache.
      */
     public static function getPluginObjectOrDefault($pluginName) {
-		if(!file_exists(Settings::api_path . "plugins/compo/" . $pluginName . ".json")) {
-            return self::loadPluginObject("default");
-        } else {
-            return self::loadPluginObject($pluginName);
-        }
+	if(!isset(self::$cachedPlugins[$pluginName])) { //please note isset will return false if the key exists, but the value is null. This is not a case we need to care for in this example.
+	    $obj = null;
+	    if(!file_exists(Settings::api_path . "plugins/compo/" . $pluginName . ".json")) {
+		$obj = self::loadPluginObject("default");
+	    } else {
+		$obj = self::loadPluginObject($pluginName);
+	    }
+	    self::$cachedPlugins[$pluginName] = $obj;
+	    return $obj;
+	} else {
+	    return self::$cachedPlugins[$pluginName];
+	}
     }
 
     /**
-     * Returns javascripts for the plugin, or the default if none existing
+     * Returns javascripts for the plugin, or the default if none existing. Will cache.
      */
     public static function getPluginJavascriptOrDefault($pluginName) {
-        if(!file_exists(Settings::api_path . "plugins/compo/" . $pluginName . ".json")) {
-            return self::getPluginScripts("default");
-        } else {
-            return self::getPluginScripts($pluginName);
-        }
+	if(!isset(self::$cachedJavascripts[$pluginName])) { //please note isset will return false if the key exists, but the value is null. This is not a case we need to care for in this example.
+	    $arr = null;
+	    if(!file_exists(Settings::api_path . "plugins/compo/" . $pluginName . ".json")) {
+		$arr = self::loadPluginScripts("default");
+	    } else {
+		$arr = self::loadPluginScripts($pluginName);
+	    }
+	    self::$cachedJavascripts[$pluginName] = $arr;
+	    return $arr;
+	} else {
+	    return self::$cachedJavascripts[$pluginName];
+	}
     }
 
     /**
@@ -61,7 +78,7 @@ class CompoPluginHandler {
         }
 
         //This is a cool feature about php
-        return new $json["classname"]; //yes, this works!
+	return new $json["classname"]; //yes, this works!
     }
 
     /**
