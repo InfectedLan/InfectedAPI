@@ -42,6 +42,7 @@
  *     chat - data[0] is the channel, data[1]  is a formatted chat message
  *     unsubscribeChatroomResult - data[0] is if it was successful or not, data[1] is an error message(or an empty string if none)
  *     matchUpdate - updates the client about the users current match. data[0] is an object with information on the match
+ *     error - data[0] is a general purpose error message
  *
  * FAQ:
  *  * Why all the result packets? Why not reuse the name back?
@@ -63,98 +64,98 @@ require_once 'chatplugin.php';
 require_once 'matchplugin.php';
 
 class Server extends WebSocketServer {
-    private $authenticatedUsers;
-    private $intentHandlers;
-    private $plugins;
+  private $authenticatedUsers;
+  private $intentHandlers;
+  private $plugins;
 
-    function __construct($addr, $port, $bufferLength = 2048) {
-        parent::__construct($addr, $port, $bufferLength);
+  function __construct($addr, $port, $bufferLength = 2048) {
+    parent::__construct($addr, $port, $bufferLength);
 
-        $this->authenticatedUsers = new SplObjectStorage();
-        $this->intentHandlers = array();
-        $this->plugins = array();
+    $this->authenticatedUsers = new SplObjectStorage();
+    $this->intentHandlers = array();
+    $this->plugins = array();
+  }
+
+  protected function process(WebSocketUser $connection, $message) {
+    //$this->send($connection, "You sendt" . $message);
+    echo $message . "\n";
+
+    $parsedJson = json_decode($message);
+
+    switch ($parsedJson->intent) {
+    case 'auth':
+      $user = Session::getUserFromSessionId($parsedJson->data[0]);
+
+      if ($user != null) {
+	$this->registerUser($user, $connection);
+	$this->send($connection, '{"intent": "authResult", "data": [true]}');
+	echo "Authenticated user: " . $user->getId() . "\n";
+      } else {
+	echo "Disconnecting user due to failure to authenticate\n";
+
+	$this->send($connection, '{"intent": "authResult", "data": [false]}');
+	$this->disconnect($connection);
+      }
+      break;
+
+    default:
+      if(isset($this->intentHandlers[$parsedJson->intent])) {
+	$this->intentHandlers[$parsedJson]->handleIntent($parsedJson->intent, $parsedJson->data);
+      } else {
+	echo 'Got unhandled intent: ' . $parsedJson->intent . '\n';
+      }
+    }
+  }
+
+  public function registerIntent($intent, $handler) {
+    $intentHandlers[$intent] = $handler;
+  }
+
+  public function registerPlugin($plugin) {
+    array_push($this->plugins, $plugin);
+  }
+
+
+  protected function connected(WebSocketUser $connection) {
+    echo "Got connection\n";
+    foreach($this->plugins as $plugin) {
+      $plugin->onConnect($connection);
+    }
+  }
+
+  protected function closed(WebSocketUser $connection) {
+    echo "Lost connection\n";
+
+    foreach($this->plugins as $plugin) {
+      $plugin->onConnect($connection);
     }
 
-	protected function process(WebSocketUser $connection, $message) {
-		//$this->send($connection, "You sendt" . $message);
-		echo $message . "\n";
-
-        $parsedJson = json_decode($message);
-
-        switch ($parsedJson->intent) {
-        case 'auth':
-            $user = Session::getUserFromSessionId($parsedJson->data[0]);
-
-            if ($user != null) {
-                $this->registerUser($user, $connection);
-                $this->send($connection, '{"intent": "authResult", "data": [true]}');
-                echo "Authenticated user: " . $user->getId() . "\n";
-            } else {
-                echo "Disconnecting user due to failure to authenticate\n";
-
-                $this->send($connection, '{"intent": "authResult", "data": [false]}');
-                $this->disconnect($connection);
-            }
-            break;
-
-        default:
-            if(isset($this->intentHandlers[$parsedJson->intent])) {
-                $this->intentHandlers[$parsedJson]->handleIntent($parsedJson->intent, $parsedJson->data);
-            } else {
-                echo 'Got unhandled intent: ' . $parsedJson->intent . '\n';
-            }
-		}
-	}
-
-    public function registerIntent($intent, $handler) {
-        $intentHandlers[$intent] = $handler;
-    }
-
-    public function registerPlugin($plugin) {
-        array_push($this->plugins, $plugin);
-    }
-
-
-	protected function connected(WebSocketUser $connection) {
-		echo "Got connection\n";
-        foreach($this->plugins as $plugin) {
-            $plugin->onConnect($connection);
-        }
-	}
-
-	protected function closed(WebSocketUser $connection) {
-		echo "Lost connection\n";
-
-        foreach($this->plugins as $plugin) {
-            $plugin->onConnect($connection);
-        }
-
-        $this->unregisterUser($connection);
-	}
+    $this->unregisterUser($connection);
+  }
     
-    protected function unregisterUser(WebSocketUser $connection) {
-        unset($this->authenticatedUsers[$connection]);
-    }
+  protected function unregisterUser(WebSocketUser $connection) {
+    unset($this->authenticatedUsers[$connection]);
+  }
 
-    protected function registerUser(User $user, WebSocketUser $connection){
-        echo "Got user: " . $user->getUsername() . ".\n";
+  protected function registerUser(User $user, WebSocketUser $connection){
+    echo "Got user: " . $user->getUsername() . ".\n";
 
-        $this->authenticatedUsers[$connection] = $user;
-    }
+    $this->authenticatedUsers[$connection] = $user;
+  }
 
-    public function isAuthenticated(WebSocketUser $connection) {
-        return $this->authenticatedUsers[$connection] != null;
-    }
+  public function isAuthenticated(WebSocketUser $connection) {
+    return $this->authenticatedUsers[$connection] != null;
+  }
 
-    public function getUser(WebSocketUser $connecton) {
-        return $this->authenticatedUsers[$connection];
-    }
+  public function getUser(WebSocketUser $connecton) {
+    return $this->authenticatedUsers[$connection];
+  }
 
-    protected function tick() {
-        foreach($this->plugins as $plugin) {
-            $plugin->tick();
-        }
+  protected function tick() {
+    foreach($this->plugins as $plugin) {
+      $plugin->tick();
     }
+  }
 }
 
 //Command line helpers

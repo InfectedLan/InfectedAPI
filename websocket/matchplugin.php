@@ -27,11 +27,15 @@ class MatchPlugin extends WebSocketPlugin {
     private $server;
     private $subscribedUsers;
     private $lastUpdate;
-    private $upcomingMatches;
+    private $upcomingMatches; //Matches that will start soon
+
+    private $watchingMatches; //Matches that we are watching
     
     function __construct(Server $server) {
         parent::__construct($server);
         $server->registerIntent("subscribeMatches", $this);
+	$server->registerIntent("voteMap", $this);
+	$server->registerIntent("ready", $this);
         $server->registerPlugin($this);
 
         $this->server = $server;
@@ -53,8 +57,103 @@ class MatchPlugin extends WebSocketPlugin {
                     $this->sendMatchData($connection, $match);
                 }
             }
+	    return true;
             break;
+	case "voteMap":
+	    if($this->server->isAuthenticated($connection)) {
+		$user = $this->server->getUser($connection);
+		$match = MatchHandler::getMatch($args["match"]);
+		
+		$result = $this->attemptMapVote($args["id"], $match, $user);
+		if($result != true) {
+		    $this->server->send($connection, '{"intent": "error", "data": ' . json_encode(array($result)) . '}');
+		} else {
+		    $this->handleMatchUpdate($match);
+		}
+	    }
+	    return true;
+	    break;
+	case "ready":
+	    if($this->server->isAuthenticated($connection)) {
+		$user = $this->server->getUser($connection);
+		$match = MatchHandler::getMatch($args["matchId"]);
+		
+		$result = $this->attemptAcceptMatch($match, $user);
+		if($result != true) {
+		    $this->server->send($connection, '{"intent": "error", "data": ' . json_encode(array($result)) . '}');
+		} else {
+		    $this->handleMatchUpdate($match);
+		}
+	    }
+	    return true;
+	    break;
         }
+    }
+
+    public function attemptAcceptMatch(Match $match, User $user) {
+	if ($match != null) {
+	    if ($match->isParticipant($user)) {
+		MatchHandler::acceptMatch($user, $match);
+		
+		if (MatchHandler::allHasAccepted($match)) {
+		    $plugin = CompoPluginHandler::getPluginObjectOrDefault($compo->getPluginName());
+
+		    if ($plugin->hasVoteScreen()) {
+			$match->setState(Match::STATE_CUSTOM_PREGAME);
+		    } else {
+			$match->setState(Match::STATE_JOIN_GAME);
+		    }
+		}
+
+		return true;
+	    } else {
+		return Localization::getLocale('you_are_not_a_participant_of_this_match');
+	    }
+	} else {
+	    return Localization::getLocale('this_match_does_not_exist');
+	}
+    }
+
+    public function attemptMapVote($optionId, Match $match, $user) {
+	$numBanned = VoteHandler::getNumBanned($match->getId());
+	$turn = VoteHandler::getCurrentBanner($numBanned);
+
+	if ($match != null) {
+	    if ($turn != 2) {
+		$participants = MatchHandler::getParticipantsByMatch($match);
+		$clan = $participants[$turn];
+				
+		if ($user->equals($clan->getChief())) {
+		    $voteOption = VoteOptionHandler::getVoteOption($_GET['id']);
+					
+		    if ($voteOption != null) {
+			$compo = $voteOption->getCompo();
+			if ($compo->equals($match->getCompo())) {
+			    VoteHandler::banMap($voteOption, $match->getId());
+			    $options = VoteOptionHandler::getVoteOptionsByCompo($compo);
+							
+			    if ($numBanned == count($options)-1) {
+				$match->setState(2);
+			    }
+
+			    return true;
+			}
+		    } else {
+			return Localization::getLocale('this_map_does_not_exist');
+		    }
+		}  else {
+		    return Localization::getLocale('you_do_not_have_permission_to_do_that');
+		}
+	    } else {
+		return Localization::getLocale('this_match_is_currently_starting');
+	    }
+	} else {
+	    return Localization::getLocale('this_match_does_not_exist');
+	}
+    }
+
+    public function handleMatchUpdate(Match $match) {
+	
     }
 
     public function onConnect(WebSocketUser $connection) {

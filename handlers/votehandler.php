@@ -23,6 +23,7 @@ require_once 'database.php';
 require_once 'objects/vote.php';
 require_once 'objects/voteoption.php';
 require_once 'objects/user.php';
+require_once 'objects/compo.php';
 
 class VoteHandler {
 	/*

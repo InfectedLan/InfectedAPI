@@ -664,45 +664,7 @@ AND `scheduledTime` < NOW() + INTERVAL ' . $database->real_escape_string($interv
             $result = true;
         } else if ($match->getState() == Match::STATE_CUSTOM_PREGAME &&
                    $match->isReady()) {
-            $banData = [];
-            $bannableMapsArray = [];
-
-            foreach (VoteOptionHandler::getVoteOptionsByCompo($match->getCompo()) as $voteOption) {
-                $optionData = [];
-                $optionData['name'] = $voteOption->getName();
-                $optionData['thumbnailUrl'] = $voteOption->getThumbnailUrl();
-                $optionData['id'] = $voteOption->getId();
-                $optionData['isBanned'] = VoteOptionHandler::isVoted($voteOption, $match);
-                $bannableMapsArray[] = $optionData;
-            }
-
-            $banData['options'] = $bannableMapsArray;
-            $numBanned = VoteHandler::getNumBanned($match->getId());
-            $banData['turn'] = VoteHandler::getCurrentBanner($numBanned);
-
-            $clanList = [];
-
-            foreach (MatchHandler::getParticipants($match) as $clan) {
-                $clanData = ['clanName' => $clan->getName(),
-                             'clanTag' => $clan->getTag()];
-
-                $memberData = [];
-
-                foreach ($clan->getMembers() as $member) {
-                    $userData = ['userId' => $member->getId(),
-                                 'nick' => $member->getNickname(),
-                                 'chief' => $member->equals($clan->getChief())];
-
-                    $memberData[] = $userData;
-                }
-
-                $clanData['members'] = $memberData;
-                $clanList[] = $clanData;
-            }
-
-            $banData['clans'] = $clanArray;
-
-            $matchData['banData'] = $banData;
+            $matchData['banData'] = self::getBanData($match);
             $result = true;
         } else if ($match->getState() == Match::STATE_JOIN_GAME &&
                    $match->isReady()) {
@@ -734,8 +696,9 @@ AND `scheduledTime` < NOW() + INTERVAL ' . $database->real_escape_string($interv
 
             $gameData['clans'] = $clanList;
             $compo = $match->getCompo();
+	    $plugin = CompoPluginHandler::getPluginObjectOrDefault($compo->getPluginName());
 
-            if ($compo->getId() == 5) { // Only CS:GO TODO: Change to plugin handled
+            if ($plugin->hasVoteScreen()) {
                 foreach (VoteOptionHandler::getVoteOptionsByCompo($compo) as $option) {
                     if (!VoteOptionHandler::isVoted($option, $match)) {
                         $mapData = [];
@@ -752,6 +715,47 @@ AND `scheduledTime` < NOW() + INTERVAL ' . $database->real_escape_string($interv
             $matchData['gameData'] = $gameData;
             return $matchData;
         }
+    }
+
+    public static function getBanData(Match $match) {
+	$banData = [];
+	$bannableMapsArray = [];
+
+	foreach (VoteOptionHandler::getVoteOptionsByCompo($match->getCompo()) as $voteOption) {
+	    $optionData = [];
+	    $optionData['name'] = $voteOption->getName();
+	    $optionData['thumbnailUrl'] = $voteOption->getThumbnailUrl();
+	    $optionData['id'] = $voteOption->getId();
+	    $optionData['isBanned'] = VoteOptionHandler::isVoted($voteOption, $match);
+	    $bannableMapsArray[] = $optionData;
+	}
+
+	$banData['options'] = $bannableMapsArray;
+	$numBanned = VoteHandler::getNumBanned($match->getId());
+	$banData['turn'] = VoteHandler::getCurrentBanner($numBanned);
+
+	$clanList = [];
+	/*
+	foreach (MatchHandler::getParticipants($match) as $clan) {
+	    $clanData = ['clanName' => $clan->getName(),
+			 'clanTag' => $clan->getTag()];
+
+	    $memberData = [];
+
+	    foreach ($clan->getMembers() as $member) {
+		$userData = ['userId' => $member->getId(),
+			     'nick' => $member->getNickname(),
+			     'chief' => $member->equals($clan->getChief())];
+
+		$memberData[] = $userData;
+	    }
+
+	    $clanData['members'] = $memberData;
+	    $clanList[] = $clanData;
+	}
+	*/
+	$banData['clans'] = $clanArray;
+	return $banData;
     }
 }
 ?>
