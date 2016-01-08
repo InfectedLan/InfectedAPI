@@ -6,12 +6,7 @@ class SyslogEntry extends Object {
     private $message;
     private $metadata;
     private $date;
-    private $user;
-
-    const SEVERITY_INFO = 1; //Not dangerous, but informational
-    const SEVERITY_ISSUE = 2; //Someone should check out this
-    const SEVERITY_WARNING = 3; //Calm before the storm
-    const SEVERITY_CRITICAL = 4; //HOLY FUCK THE SERVERS ARE BURNING
+    private $userId;
 
     public function getSource() {
 	return $this->source;
@@ -22,7 +17,7 @@ class SyslogEntry extends Object {
     }
 
     public function getMessage() {
-	return $this->getMessage;
+	return $this->message;
     }
 
     public function getMetadata() {
@@ -34,10 +29,10 @@ class SyslogEntry extends Object {
     }
 
     public function getUser() {
-	if($this->user == 0) {
+	if($this->userId == 0) {
 	    return null;
 	}
-	return UserHandler::getUser($this->user);
+	return UserHandler::getUser($this->userId);
     }
 }
 ?>

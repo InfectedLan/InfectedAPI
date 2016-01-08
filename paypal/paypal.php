@@ -21,6 +21,7 @@
 require_once 'session.php';
 require_once 'paypal/callerservice.php';
 require_once 'paypalsecret.php';
+require_once 'handlers/sysloghandler.php';
 
 class PayPal {
 	public static function getPaymentUrl($ticketType, $amount, $key, $user) {
@@ -58,6 +59,7 @@ class PayPal {
 			$url = PaypalSecret::PaypalUrl . $token;
 			return $url;
 		} else  {
+		    SyslogHandler::log("Error fetching paypal token", "paypal", $user, SyslogHandler::SEVERITY_WARNING, $resArray);
             /*
             //Report the error somewhere for debugging
             $errorLog = "===BEGIN ERROR LOG===\n" . $nvpstr . "\n===BEGIN_RESPONSE===\n" . print_r($resArray, true) . "\n";

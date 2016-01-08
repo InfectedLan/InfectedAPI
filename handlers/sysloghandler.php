@@ -3,6 +3,12 @@ require_once 'settings.php';
 require_once 'database.php';
 require_once 'objects/syslogentry.php';
 class SyslogHandler {
+    
+    const SEVERITY_INFO = 1; //Not dangerous, but informational
+    const SEVERITY_ISSUE = 2; //Someone should check out this
+    const SEVERITY_WARNING = 3; //Calm before the storm
+    const SEVERITY_CRITICAL = 4; //HOLY FUCK THE SERVERS ARE BURNING
+
     public static function getSyslogEntry($id) {
 	$database = Database::open(Settings::db_name_infected);
 
@@ -46,7 +52,7 @@ class SyslogHandler {
 	return $syslogList;
     }
 
-    public static function log($message, $source, $user = null, $severity = SyslogEntry::SEVERITY_INFO, $metadata = array()) {
+    public static function log($message, $source, $user = null, $severity = self::SEVERITY_INFO, $metadata = array()) {
 	$date = date('Y-m-d H:i:s');
 	$database = Database::open(Settings::db_name_infected);
 	$userId = ($user == null ? 0 : $user->getId());
@@ -57,8 +63,20 @@ class SyslogHandler {
 				   $database->real_escape_string(json_encode($metadata)) . '\', \'' .
 				   $database->real_escape_string($date) . '\', \'' .
 	    $database->real_escape_string($userId) . '\');';
-	echo $query;
 	$result = $database->query($query);
+    }
+
+    public static function getSeverityString($severity) {
+	switch($severity) {
+	case self::SEVERITY_INFO:
+	    return "Info";
+	case self::SEVERITY_ISSUE:
+	    return "Issue";
+	case self::SEVERITY_WARNING:
+	    return "Warning";
+	case self::SEVERITY_CRITICAL:
+	    return "Critical";
+	}
     }
 }
 ?>
