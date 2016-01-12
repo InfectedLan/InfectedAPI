@@ -21,6 +21,7 @@
 require_once 'session.php';
 require_once 'localization.php';
 require_once 'handlers/userhandler.php';
+require_once 'handlers/sysloghandler.php';
 
 $result = false;
 $message = null;
@@ -40,7 +41,7 @@ if (!Session::isAuthenticated()) {
 			if ($user->isActivated()) {
 				if (hash_equals($password, $storedPassword)) {
 					$_SESSION['userId'] = $user->getId();
-
+					SyslogHandler::log("User logged in", "loginUser", $user);
 					$result = true;
 				} else {
 					$message = Localization::getLocale('wrong_username_or_password');

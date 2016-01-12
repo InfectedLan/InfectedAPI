@@ -56,10 +56,12 @@ class Settings {
 	const db_table_infected_postalcodes = 'postalcodes';
 	const db_table_infected_registrationcodes = 'registrationcodes';
 	const db_table_infected_tasks = 'tasks';
+	const db_table_infected_userfriends = 'userfriends';
 	const db_table_infected_usernotes = 'usernotes';
 	const db_table_infected_useroptions = 'useroptions';
 	const db_table_infected_userpermissions = 'userpermissions';
 	const db_table_infected_users = 'users';
+	const db_table_infected_syslogs = 'syslogs';
 
 	// InfectedCompo
 	const db_table_infected_compo_matchrelationships = 'matchrelationships';
@@ -76,8 +78,8 @@ class Settings {
 	const db_table_infected_compo_matches = 'matches';
 	const db_table_infected_compo_readyusers = 'readyusers';
 	const db_table_infected_compo_votes =  'votes';
-    const db_table_infected_compo_qualificationQueue = 'qualificationQueue';
-    const db_table_infected_compo_matchmetadata = 'matchmetadata';
+  const db_table_infected_compo_qualificationQueue = 'qualificationQueue';
+  const db_table_infected_compo_matchmetadata = 'matchmetadata';
 
 	// InfectedCrew
 	const db_table_infected_crew_applicationqueue = 'applicationqueue';
@@ -116,7 +118,7 @@ class Settings {
 	const compo_match_participant_type_clan = 0;
 	const compo_match_participant_type_match_winner = 1;
 	const compo_match_participant_type_match_looser = 2;
-    const compo_match_participant_type_match_walkover = 3;
+  const compo_match_participant_type_match_walkover = 3;
 
 	/* Crew */
 	// Avatar sizes.

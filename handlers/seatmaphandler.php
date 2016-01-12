@@ -21,6 +21,8 @@
 require_once 'settings.php';
 require_once 'database.php';
 require_once 'handlers/eventhandler.php';
+require_once 'handlers/rowhandler.php';
+require_once 'handlers/seathandler.php';
 require_once 'objects/seatmap.php';
 
 class SeatmapHandler {
@@ -75,10 +77,42 @@ class SeatmapHandler {
 	}
 
 	/*
-	 * Duplicate a seatmap.
+	 * Creates a new seatmap with the contents of another seatmap
 	 */
-	public static function cloneSeatmap(Seatmap $seatmap) {
-		return self::createSeatmap('Clone of ' . $seatmap->getHumanName(), $seatmap->getBackgroundImage());
+	public static function cloneSeatmap(Seatmap $sourceSeatmap) {
+	    $targetSeatmap = self::createSeatmap('Clone of ' . $sourceSeatmap->getHumanName(), $sourceSeatmap->getBackgroundImage());
+
+	    self::copySeatmap($sourceSeatmap, $targetSeatmap);
+	    
+	    return $targetSeatmap;
+	}
+
+	/*
+	 * Copies a seatmap, destroying the old seatmap in the process
+	 */
+	public static function copySeatmap(Seatmap $sourceSeatmap, Seatmap $targetSeatmap) {
+	    $preExistingRows = RowHandler::getRowsBySeatmap($targetSeatmap);
+	    $isSafeToDelete = true;
+	    foreach($preExistingRows as $row) {
+		if(!RowHandler::safeToDelete($row)) {
+		    $isSafeToDelete = false;
+		    break;
+		}
+	    }
+	    if(!$isSafeToDelete) {
+		return false;
+	    }
+
+	    $sourceRows = RowHandler::getRowsBySeatmap($sourceSeatmap);
+	    foreach($sourceRows as $sourceRow) {
+		$targetRow = RowHandler::createRow($targetSeatmap, $sourceRow->getX(), $sourceRow->getY());
+		$sourceSeats = SeatHandler::getSeatsByRow($sourceRow);
+		foreach($sourceSeats as $sourceSeat) {
+		    $targetSeat = SeatHandler::createSeat($targetRow, $sourceSeat->getNumber());
+		}
+	    }
+
+	    return true;
 	}
 
 	/*
