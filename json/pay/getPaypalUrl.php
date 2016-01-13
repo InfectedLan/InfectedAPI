@@ -66,6 +66,7 @@ if (Session::isAuthenticated()) {
 							}
 						} else {
 							$message = Localization::getLocale('you_already_got_a_session');
+							SyslogHandler::log("User tried to get a new a new session", "getPaypalUrl", $user, SyslogHandler::SEVERITY_INFO);
 						}
 					} else {
 						$message = Localization::getLocale('there_are_no_more_tickets_left');
