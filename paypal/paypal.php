@@ -96,8 +96,13 @@ class PayPal {
 
 			if($paymentstatus == "COMPLETED") {
 				$transid = strtoupper($resArray["TRANSACTIONID"]);
+				SyslogHandler::log("Payment completion success", "paypal", $user, SyslogHandler::SEVERITY_INFO, array("price" => $paymentAmount, "token" => $token, "paypalResponse" => $resArray));
 				return $transid;
+			} else {
+			    SyslogHandler::log("Payment status not completed! Error?", "paypal", $user, SyslogHandler::SEVERITY_WARNING, array("price" => $paymentAmount, "token" => $token, "paypalResponse" => $resArray));
 			}
+		} else {
+		    SyslogHandler::log("Payment completion failed!", "paypal", $user, SyslogHandler::SEVERITY_WARNING, array("price" => $paymentAmount, "token" => $token, "paypalResponse" => $resArray));
 		}
 		return null;
 		/*
