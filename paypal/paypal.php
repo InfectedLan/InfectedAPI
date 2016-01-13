@@ -74,7 +74,7 @@ class PayPal {
 	}
 
 	public static function completePurchase($token, $paymentAmount, $currCodeType, $payerID, $serverName) {
-	    $user = SessionHandler::getCurrentUser();
+	    $user = Session::getCurrentUser();
 		ini_set('session.bug_compat_42',0);
 		ini_set('session.bug_compat_warn',0);
 
