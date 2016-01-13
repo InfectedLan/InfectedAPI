@@ -53,15 +53,13 @@ class SyslogHandler {
     }
 
     public static function log($message, $source, $user = null, $severity = self::SEVERITY_INFO, $metadata = array()) {
-	$date = date('Y-m-d H:i:s');
 	$database = Database::open(Settings::db_name_infected);
 	$userId = ($user == null ? 0 : $user->getId());
 	$query = 'INSERT INTO `' . Settings::db_table_infected_syslogs . '`(`source`, `severity`, `message`, `metadata`, `date`, `userId`)  VALUES (\'' .
 				   $database->real_escape_string($source) . '\', \'' .
 				   $database->real_escape_string($severity) . '\', \'' .
 				   $database->real_escape_string($message) . '\', \'' .
-				   $database->real_escape_string(json_encode($metadata)) . '\', \'' .
-				   $database->real_escape_string($date) . '\', \'' .
+				   $database->real_escape_string(json_encode($metadata)) . '\', NOW(), \'' .
 	    $database->real_escape_string($userId) . '\');';
 	$result = $database->query($query);
     }
