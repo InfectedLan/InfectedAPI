@@ -76,7 +76,7 @@ if (Session::isAuthenticated()) {
 				}
 			} else {
 				$message = Localization::getLocale('you_have_selected_an_invalid_ticket_type');
-				SyslogHandler::log("User tried to buy an invalid ticket type", "getPaypalUrl", $user, SyslogHandler::SEVERITY_ISSUE, array("ticketType" => ($ticketType != null ? $ticketType : "null")));
+				SyslogHandler::log("User tried to buy an invalid ticket type", "getPaypalUrl", $user, SyslogHandler::SEVERITY_ISSUE, array("ticketType" => ($ticketType != null ? $ticketType->getId() : "null")));
 			}
 		} else {
 			$message = Localization::getLocale('the_ticket_sale_is_not_open_yet');

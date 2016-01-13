@@ -57,6 +57,7 @@ class PayPal {
 		if($ack=="SUCCESS"){
 			$token = urldecode($resArray["TOKEN"]);
 			$url = PaypalSecret::PaypalUrl . $token;
+			SyslogHandler::log("Got payment url from paypal", "paypal", $user, SyslogHandler::SEVERITY_INFO, array("ticketType" => ($ticketType != null ? $ticketType->getId() : "null"), "amount" => $amount, "session" => $key, "paypalResponse" => $resArray));
 			return $url;
 		} else  {
 		    SyslogHandler::log("Error fetching paypal token", "paypal", $user, SyslogHandler::SEVERITY_WARNING, $resArray);
