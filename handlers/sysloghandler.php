@@ -23,7 +23,7 @@ class SyslogHandler {
     public static function getLastEntries($count) {
 	$database = Database::open(Settings::db_name_infected);
 
-	$result = $database->query('SELECT * FROM `' . Settings::db_table_infected_syslogs . '` ORDER BY `id` ASC LIMIT ' . $database->real_escape_string($count) . ';');
+	$result = $database->query('SELECT * FROM `' . Settings::db_table_infected_syslogs . '` ORDER BY `id` DESC LIMIT ' . $database->real_escape_string($count) . ';');
 
 	$database->close();
 
@@ -39,7 +39,7 @@ class SyslogHandler {
     public static function getLastEntriesBySource($source, $count) {
 	$database = Database::open(Settings::db_name_infected);
 
-	$result = $database->query('SELECT * FROM `' . Settings::db_table_infected_syslogs . '` WHERE `source` LIKE \'' . $database->real_escape_string($source) . '\' ORDER BY `id` ASC LIMIT ' . $database->real_escape_string($count) . ';');
+	$result = $database->query('SELECT * FROM `' . Settings::db_table_infected_syslogs . '` WHERE `source` LIKE \'' . $database->real_escape_string($source) . '\' ORDER BY `id` DESC LIMIT ' . $database->real_escape_string($count) . ';');
 
 	$database->close();
 
