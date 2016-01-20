@@ -71,7 +71,7 @@ function doRow($row, $image) {
     $i = 0;
     foreach($seats as $seat) {
 	$xTr = $x;
-	$yTr = $y + ($i*(img_height+(img_margin*2)));
+	$yTr = $y + ($i*(img_height+(img_margin)));
 	doSeat($seat, $image, $xTr, $yTr, $row);
 	$i++;
     }
@@ -79,9 +79,9 @@ function doRow($row, $image) {
 
 function doSeat($seat, $image, $x, $y, $row) {
     if($seat->hasTicket()) {
-	imagefilledrectangle($image, $x, $y, $x+img_width, $y+img_height, imagecolorallocate($image, 255, 0, 0));
+	imagefilledrectangle($image, $x, $y, $x+img_width-1, $y+img_height-1, imagecolorallocate($image, 255, 0, 0));
     } else {
-	imagefilledrectangle($image, $x, $y, $x+img_width, $y+img_height, imagecolorallocate($image, 0, 128, 0));
+	imagefilledrectangle($image, $x, $y, $x+img_width-1, $y+img_height-1, imagecolorallocate($image, 0, 128, 0));
     }
     imagestring($image, 3, $x+5, $y+2, "R" . $row->getNumber(), imagecolorallocate($image, 255, 255, 255));
     imagestring($image, 3, $x+5, $y+16, "S" . $row->getNumber(), imagecolorallocate($image, 255, 255, 255));
