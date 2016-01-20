@@ -62,10 +62,11 @@ if (Session::isAuthenticated()) {
 				}
 
 				$seatmapData[] = ['seats' => $seatData,
-												  'id' => $row->getId(),
-												  'x' => $row->getX(),
-												  'y' => $row->getY(),
-												  'number' => $row->getNumber()];
+						  'id' => $row->getId(),
+						  'x' => $row->getX(),
+						  'y' => $row->getY(),
+						  'number' => $row->getNumber(),
+						  'horizontal' => $row->isHorizontal()];
 
 				$result = true;
 			}

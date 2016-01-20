@@ -39,7 +39,7 @@ function renderSeatmap(target, seatHandlerFunction, callback) {
 	{
 		var returnData = [];
 
-		returnData.push('<div class="row" style="top: ' + seatmapData.rows[i].y + 'px; left: ' + seatmapData.rows[i].x + 'px;" id="row' + seatmapData.rows[i].id + '">');
+	    returnData.push('<div class="row" style="top: ' + seatmapData.rows[i].y + 'px; left: ' + seatmapData.rows[i].x + 'px;" id="row' + seatmapData.rows[i].id + '">');
 		for(var s = 0; s < seatmapData.rows[i].seats.length; s++)
 		{
 			var title = "Ledig sete";
@@ -62,7 +62,7 @@ function renderSeatmap(target, seatHandlerFunction, callback) {
 					customClass = customClassCheck;
 				}
 			}
-			returnData.push('<div title="' + title + '" class="seat ' + customClass + '" id="seat' + seatmapData.rows[i].seats[s].id + '">');
+			returnData.push('<div title="' + title + '" class="' + (seatmapData.rows[i].horizontal ? "seat_horizontal" : "seat") + ' ' + customClass + '" id="seat' + seatmapData.rows[i].seats[s].id + '">');
 			//Push rest of stuff
 			returnData.push(seatmapData.rows[i].seats[s].humanName.split(" ").join("<br />"));
 			returnData.push('</div>');
