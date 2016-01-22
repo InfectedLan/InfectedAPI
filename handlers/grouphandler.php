@@ -134,6 +134,8 @@ class GroupHandler {
 	 * Remove the specified group
 	 */
 	public static function removeGroup(Group $group) {
+		self::removeUsersFromGroup($group);
+
 		$database = Database::open(Settings::db_name_infected_crew);
 
 		$database->query('DELETE FROM `' . Settings::db_table_infected_crew_groups . '`

@@ -164,6 +164,8 @@ class TeamHandler {
 	 * Remove a team.
 	 */
 	public static function removeTeam(Team $team) {
+		self::removeUsersFromTeam($team);
+
 		$database = Database::open(Settings::db_name_infected_crew);
 
 		$database->query('DELETE FROM `' . Settings::db_table_infected_crew_teams . '`
