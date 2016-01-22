@@ -28,6 +28,11 @@ require_once 'objects/user.php';
 require_once 'objects/event.php';
 
 class ApplicationHandler {
+
+    const STATUS_NEW = 1;
+    const STATUS_ACCEPTED = 2;
+    const STATUS_REJECTED = 3;
+    const STATUS_CLOSED = 4;
 	/*
 	 * Get an application by the internal id.
 	 */
