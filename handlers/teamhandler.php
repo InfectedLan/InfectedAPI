@@ -175,6 +175,18 @@ class TeamHandler {
 	}
 
 	/*
+	 * Remove all teams linked to a specified group.
+	 */
+	public static function removeTeamsByGroup(Group $group) {
+		$database = Database::open(Settings::db_name_infected_crew);
+
+		$database->query('DELETE FROM `' . Settings::db_table_infected_crew_teams . '`
+						  				WHERE `groupId` = \'' . $group->getId() . '\';');
+
+		$database->close();
+	}
+
+	/*
 	 * Returns an array of users that are members of this team in the given event.
 	 */
 	public static function getMembersByEvent(Event $event, Team $team) {

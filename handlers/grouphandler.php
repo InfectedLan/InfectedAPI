@@ -135,6 +135,7 @@ class GroupHandler {
 	 */
 	public static function removeGroup(Group $group) {
 		self::removeUsersFromGroup($group);
+		TeamHandler::removeTeamsByGroup($group);
 
 		$database = Database::open(Settings::db_name_infected_crew);
 
