@@ -122,6 +122,8 @@ function outputCsv(array $userList) {
 	$fp = fopen('php://output', 'w');
 
 	$rowList = [
+		['Fant ' . count($userList) . ' brukere i databasen.'],
+		[''],
 		['Navn:', 'E-post:', 'Telefon:', 'Adresse:', 'Fødselsdato:', 'Alder:', 'Rolle:']
 	];
 
