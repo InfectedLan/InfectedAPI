@@ -33,9 +33,15 @@ if (Session::isAuthenticated()) {
 			is_numeric($_GET['id'])) {
 			$note = NoteHandler::getNote($_GET['id']);
 			$done = isset($_GET['done']) ? $_GET['done'] : 0;
+			$inProgress = isset($_GET['inProgress']) ? $_GET['inProgress'] : 0;
 
 			if ($note != null) {
-				$note->setDone($done);
+				if ($done > 0) {
+					$note->setDone($done);
+				} else {
+					$note->setInProgress($inProgress);
+				}
+
 				$result = true;
 			} else {
 				$message = Localization::getLocale('the_note_does_not_exist');
