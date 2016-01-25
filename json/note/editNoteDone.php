@@ -24,6 +24,7 @@ require_once 'handlers/notehandler.php';
 
 $result = false;
 $message = null;
+$done = false;
 
 if (Session::isAuthenticated()) {
 	$user = Session::getCurrentUser();
@@ -32,7 +33,7 @@ if (Session::isAuthenticated()) {
 		if (isset($_GET['id']) &&
 			is_numeric($_GET['id'])) {
 			$note = NoteHandler::getNote($_GET['id']);
-			$done = isset($_GET['done']) ? $_GET['done'] : 0;
+			$done = isset($_GET['done']) && $_GET['done'] > 0 ? true : false;
 
 			if ($note != null) {
 				$note->setDone($done);
@@ -51,5 +52,5 @@ if (Session::isAuthenticated()) {
 }
 
 header('Content-Type: text/plain');
-echo json_encode(['result' => $result, 'message' => $message], JSON_PRETTY_PRINT);
+echo json_encode(['result' => $result, 'message' => $message, 'done' => $done], JSON_PRETTY_PRINT);
 ?>
