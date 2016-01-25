@@ -33,6 +33,7 @@ class Note extends EventObject {
 	private $secondsOffset;
 	private $time;
 	private $done;
+	private $inProgress;
 
 	/*
 	 * Returns true if this note has a group.
@@ -150,6 +151,20 @@ class Note extends EventObject {
 	 */
 	public function setDone($done) {
 		NoteHandler::updateNoteDone($this, $done);
+	}
+
+	/*
+	 * Returns true if this note is in progress.
+	 */
+	public function isInProgress() {
+		return $this->inProgress ? true : false;
+	}
+
+	/*
+	 * Sets a note to be in progress or not.
+	 */
+	public function setInProgress($inProgress) {
+		NoteHandler::updateNoteInProgress($this, $inProgress);
 	}
 
 	public function isExpired() {

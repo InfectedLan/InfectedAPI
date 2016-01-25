@@ -319,7 +319,22 @@ class NoteHandler {
 		$database = Database::open(Settings::db_name_infected_crew);
 
 		$database->query('UPDATE `' . Settings::db_table_infected_crew_notes . '`
-											SET `done` = \'' . $database->real_escape_string($done) . '\'
+											SET `done` = \'' . $database->real_escape_string($done) . '\',
+													`inProgress` = \'0\'
+											WHERE `id` = \'' . $note->getId() . '\';');
+
+		$database->close();
+	}
+
+	/*
+	 * Update a notes in progress state.
+	 */
+	public static function updateNoteInProgress(Note $note, $inProgress) {
+		$database = Database::open(Settings::db_name_infected_crew);
+
+		$database->query('UPDATE `' . Settings::db_table_infected_crew_notes . '`
+											SET `done` = \'0\',
+													`inProgress` = \'' . $database->real_escape_string($inProgress) . '\'
 											WHERE `id` = \'' . $note->getId() . '\';');
 
 		$database->close();
