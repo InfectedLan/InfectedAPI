@@ -86,24 +86,26 @@ class RowHandler {
 	public static function createRow(Seatmap $seatmap, $x, $y) {
 		$database = Database::open(Settings::db_name_infected_tickets);
 
+		$entrance = EntranceHandler::getEntrance(2); // TODO: Make it not statically set entrance
+
 		// Find out what row is max row
-		$result = $database->query('SELECT COUNT(*) FROM `' . Settings::db_table_infected_tickets_rows . '`
+		$result = $database->query('SELECT COUNT(*) FROM `' . Settings::db_table_infected_tickets_rows . '` as count
 																WHERE `seatmapId` = \'' . $seatmap->getId() . '\';');
 
-		$row = self::getRow($database->insert_id);
+		$newRowNumber = $result->fetch_array()['COUNT(*)']+1;
 
-		$database->query('INSERT INTO `' . Settings::db_table_infected_tickets_rows . '` (`seatmapId`, `entranceId`, `number`, `x`, `y`)
+		$result = $database->query('INSERT INTO `' . Settings::db_table_infected_tickets_rows . '` (`seatmapId`, `entranceId`, `number`, `x`, `y`)
 											VALUES (\'' . $seatmap->getId() . '\',
 															\'' . $entrance->getId() . '\',
-															\'' . $database->real_escape_string($row->getId()) . '\',
+															\'' . $database->real_escape_string($newRowNumber) . '\',
 															\'' . $database->real_escape_string($x) . '\',
 															\'' . $database->real_escape_string($y) . '\');');
 
+		$insert_id = $database->insert_id;
+		
 		$database->close();
 
-		$entrance = EntranceHandler::getEntrance(1); // TODO: Set this somewere else?
-
-		return $row;
+		return self::getRow($insert_id);
 	}
 
 	/*

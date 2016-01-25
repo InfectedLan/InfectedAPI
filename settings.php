@@ -61,6 +61,7 @@ class Settings {
 	const db_table_infected_useroptions = 'useroptions';
 	const db_table_infected_userpermissions = 'userpermissions';
 	const db_table_infected_users = 'users';
+	const db_table_infected_syslogs = 'syslogs';
 
 	// InfectedCompo
 	const db_table_infected_compo_matchrelationships = 'matchrelationships';

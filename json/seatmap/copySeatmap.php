@@ -20,7 +20,7 @@
 
 require_once 'session.php';
 require_once 'localization.php';
-require_once 'handlers/grouphandler.php';
+require_once 'handlers/seatmaphandler.php';
 
 $result = false;
 $message = null;
@@ -28,19 +28,18 @@ $message = null;
 if (Session::isAuthenticated()) {
 	$user = Session::getCurrentUser();
 
-	if ($user->hasPermission('*')) {
-		if (isset($_GET['id']) &&
-			is_numeric($_GET['id'])) {
-			$group = GroupHandler::getGroup($_GET['id']);
-
-			if ($group != null) {
-				GroupHandler::removeGroup($group);
-				$result = true;
-			} else {
-				$message = Localization::getLocale('this_group_does_not_exist');
-			}
+	if ($user->hasPermission('admin.seatmap')) {
+	    if (isset($_GET['to']) && isset($_GET['from'])) {
+		    $sourceSeatmap = SeatmapHandler::getSeatmap($_GET['from']);
+		    $targetSeatmap = SeatmapHandler::getSeatmap($_GET['to']);
+		    if($sourceSeatmap != null && $targetSeatmap != null) {
+			$seatmap = SeatmapHandler::copySeatmap($sourceSeatmap, $targetSeatmap);
+			$result = true;
+		    } else {
+			$message = Localization::getLocale('this_seatmap_does_not_exist');
+		    }
 		} else {
-			$message = Localization::getLocale('no_group_specified');
+			$message = Localization::getLocale('you_have_not_filled_out_the_required_fields');
 		}
 	} else {
 		$message = Localization::getLocale('you_do_not_have_permission_to_do_that');
@@ -50,5 +49,10 @@ if (Session::isAuthenticated()) {
 }
 
 header('Content-Type: text/plain');
-echo json_encode(['result' => $result, 'message' => $message], JSON_PRETTY_PRINT);
+
+if ($result) {
+	echo json_encode(array('result' => $result), JSON_PRETTY_PRINT);
+} else {
+	echo json_encode(['result' => $result, 'message' => $message], JSON_PRETTY_PRINT);
+}
 ?>
