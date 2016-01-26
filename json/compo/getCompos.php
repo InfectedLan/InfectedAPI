@@ -38,6 +38,7 @@ if(Session::isAuthenticated()) {
                    "title" => $compo->getTitle(),
                    "tag" => $compo->getTag(),
                    "description" => $compo->getDescription(),
+		   "teamSize" => $compo->getTeamSize(),
                    "pluginJavascript" => CompoPluginHandler::getPluginJavascriptOrDefault($compo->getPluginName())];
     }
     $result = true;
