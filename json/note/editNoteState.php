@@ -39,6 +39,7 @@ if (Session::isAuthenticated()) {
 			if ($note != null) {
 				if ($done > 0) {
 					$note->setDone($done);
+					$inProgress = false;
 				} else {
 					$note->setInProgress($inProgress);
 				}
