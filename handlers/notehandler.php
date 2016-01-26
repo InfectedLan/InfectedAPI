@@ -262,7 +262,7 @@ class NoteHandler {
 	public static function createNote(User $creatorUser = null, Group $group = null, Team $team = null, User $user = null, $title, $content, $secondsOffset = 0, $time = null) {
 		$database = Database::open(Settings::db_name_infected_crew);
 
-		$database->query('INSERT INTO `' . Settings::db_table_infected_crew_notes . '` (`creatorId`, `eventId`, `groupId`, `teamId`, `userId`, `title`, `content`, `secondsOffset`, `time`)
+		$database->query('INSERT INTO `' . Settings::db_table_infected_crew_notes . '` (`eventId`, `creatorId`, `groupId`, `teamId`, `userId`, `title`, `content`, `secondsOffset`, `time`)
 										  VALUES (\'' . EventHandler::getCurrentEvent()->getId() . '\',
 															\'' . ($creatorUser != null ? $creatorUser->getId() : 0) . '\',
 															\'' . ($group != null ? $group->getId() : 0) . '\',
