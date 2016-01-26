@@ -25,6 +25,7 @@ require_once 'handlers/eventhandler.php';
 require_once 'objects/eventobject.php';
 
 class Note extends EventObject {
+	private $creatorId;
 	private $groupId;
 	private $teamId;
 	private $userId;
@@ -34,6 +35,20 @@ class Note extends EventObject {
 	private $time;
 	private $done;
 	private $inProgress;
+
+	/*
+	 * Returns true if this note has a creator.
+	 */
+	public function hasCreatorUser() {
+		return $this->creatorId > 0;
+	}
+
+	/*
+	 * Returns the creator of this note.
+	 */
+	public function getCreatorUser() {
+		return UserHandler::getUser($this->creatorId);
+	}
 
 	/*
 	 * Returns true if this note has a group.
