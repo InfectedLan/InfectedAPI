@@ -24,7 +24,7 @@ require_once 'handlers/notehandler.php';
 
 $result = false;
 $message = null;
-$done = false;
+$data = null;
 
 if (Session::isAuthenticated()) {
 	$user = Session::getCurrentUser();
