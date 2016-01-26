@@ -34,10 +34,18 @@ if (Session::isAuthenticated()) {
 			is_numeric($_GET['id'])) {
 			$note = NoteHandler::getNote($_GET['id']);
 			$done = isset($_GET['done']) && $_GET['done'] > 0 ? true : false;
+			$inProgress = isset($_GET['inProgress']) && $_GET['inProgress'] > 0 ? true : false;
 
 			if ($note != null) {
-				$note->setDone($done);
+				if ($done > 0) {
+					$note->setDone($done);
+				} else {
+					$note->setInProgress($inProgress);
+				}
+
 				$result = true;
+				$data = ['done' => $done,
+								 'inProgress' => $inProgress];
 			} else {
 				$message = Localization::getLocale('the_note_does_not_exist');
 			}
@@ -52,5 +60,5 @@ if (Session::isAuthenticated()) {
 }
 
 header('Content-Type: text/plain');
-echo json_encode(['result' => $result, 'message' => $message, 'done' => $done], JSON_PRETTY_PRINT);
+echo json_encode(['result' => $result, 'message' => $message, 'data' => $data], JSON_PRETTY_PRINT);
 ?>
