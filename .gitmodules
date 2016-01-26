@@ -7,6 +7,3 @@
 [submodule "libraries/jcrop"]
 	path = libraries/jcrop
 	url = git://github.com/tapmodo/Jcrop
-[submodule "phpqrcode-git"]
-	path = phpqrcode-git
-	url = git://git.code.sf.net/p/phpqrcode/git
