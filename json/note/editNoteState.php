@@ -24,7 +24,7 @@ require_once 'handlers/notehandler.php';
 
 $result = false;
 $message = null;
-$data = null;
+$data = [];
 
 if (Session::isAuthenticated()) {
 	$user = Session::getCurrentUser();
@@ -45,8 +45,8 @@ if (Session::isAuthenticated()) {
 				}
 
 				$result = true;
-				$data = ['done' => $done,
-								 'inProgress' => $inProgress];
+				$data[] = ['done' => $done,
+								   'inProgress' => $inProgress];
 			} else {
 				$message = Localization::getLocale('the_note_does_not_exist');
 			}
