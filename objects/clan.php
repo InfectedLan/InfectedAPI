@@ -52,6 +52,13 @@ class Clan extends EventObject {
 		return UserHandler::getUser($this->chiefId);
 	}
 
+    /*
+     * Return the user id of the chief of this clan
+     */
+    public function getChiefId() {
+        return $this->chiefId;
+    }
+
 	/*
 	 * Return the compo of this clan.
 	 */

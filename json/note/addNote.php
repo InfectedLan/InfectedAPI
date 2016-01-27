@@ -40,7 +40,7 @@ if (Session::isAuthenticated()) {
 			$private = isset($_GET['private']) ? ($_GET['private'] ? true : false) : true;
 			$group = !$private ? (isset($_GET['groupId']) ? GroupHandler::getGroup($_GET['groupId']) : $user->getGroup()) : null;
 			$team = !$private ? (isset($_GET['teamId']) ? TeamHandler::getTeam($_GET['teamId']) : ($user->isTeamMember() && $user->isTeamMember() ? $user->getTeam() : null)) : null;
-			$user = !$private ? (isset($_GET['userId']) ? UserHandler::getUser($_GET['userId']) : null) : $user;
+			$noteUser = !$private ? (isset($_GET['userId']) ? UserHandler::getUser($_GET['userId']) : null) : $user;
 			$title = $_GET['title'];
 			$content = $_GET['content'];
 			$secondsOffset = $_GET['secondsOffset'];
@@ -55,7 +55,7 @@ if (Session::isAuthenticated()) {
 
 			$time = isset($_GET['time']) && $intersectsTimePeriod ? $_GET['time'] : null;
 
-			NoteHandler::createNote($group, $team, $user, $title, $content, $secondsOffset, $time);
+			NoteHandler::createNote($user, $group, $team, $noteUser, $title, $content, $secondsOffset, $time);
 			$result = true;
 		} else {
 			$message = Localization::getLocale('you_have_not_filled_out_the_required_fields');

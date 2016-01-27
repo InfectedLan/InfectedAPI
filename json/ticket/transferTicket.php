@@ -23,6 +23,7 @@ require_once 'localization.php';
 require_once 'handlers/tickethandler.php';
 require_once 'handlers/userhandler.php';
 require_once 'handlers/tickettransferhandler.php';
+require_once 'handlers/sysloghandler.php';
 
 $result = false;
 $message = null;
@@ -41,7 +42,7 @@ if (Session::isAuthenticated()) {
 
 				if ($targetUser != null) {
 					$ticket->transfer($targetUser);
-
+					SyslogHandler::log("Ticket transferred", "transferTicket", $user, SyslogHandler::SEVERITY_INFO, array("from" => $user->getId(), "to" => $targetUser->getId(), "ticketId" => $ticket->getId()));
 					$result = true;
 					$message = Localization::getLocale('the_ticket_is_now_transferred');
 				} else {

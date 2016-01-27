@@ -33,8 +33,7 @@ echo '<html>';
 			$user = Session::getCurrentUser();
 			$format = isset($_GET['format']) ? $_GET['format'] : 'html';
 
-			if ($user->hasPermission('*') ||
-				$user->hasPermission('admin.memberlist')) {
+			if ($user->hasPermission('admin.memberlist')) {
 				if (isset($_GET['year']) &&
 					is_numeric($_GET['year'])) {
 					if (isset($_GET['ageLimit']) &&
@@ -123,6 +122,8 @@ function outputCsv(array $userList) {
 	$fp = fopen('php://output', 'w');
 
 	$rowList = [
+		['Fant ' . count($userList) . ' brukere i databasen.'],
+		[''],
 		['Navn:', 'E-post:', 'Telefon:', 'Adresse:', 'Fødselsdato:', 'Alder:', 'Rolle:']
 	];
 
@@ -130,13 +131,13 @@ function outputCsv(array $userList) {
 
 	// Add each user to the row list.
 	foreach ($userList as $userValue) {
-		$rowList[], [$userValue->getFullName(),
-								 $userValue->getEmail(),
-								 $userValue->getPhoneAsString(),
-								 $userValue->getAddress() . ', ' . $userValue->getPostalCode() . ' ' . $userValue->getCity(),
-								 date('d.m.Y', $userValue->getBirthdate()),
-								 $userValue->getAge() . ' år',
-								 $userValue->isGroupMember() ? 'Crew' : 'Deltaker'];
+		$rowList[] = [$userValue->getFullName(),
+									$userValue->getEmail(),
+									$userValue->getPhoneAsString(),
+									$userValue->getAddress() . ', ' . $userValue->getPostalCode() . ' ' . $userValue->getCity(),
+									date('d.m.Y', $userValue->getBirthdate()),
+									$userValue->getAge() . ' år',
+									$userValue->isGroupMember() ? 'Crew' : 'Deltaker'];
 	}
 
 	// Fix UTF-8 charset in excel.

@@ -39,7 +39,7 @@ if (Session::isAuthenticated()) {
 				$ticketUser = $ticket->getUser();
 
 				$ticketData[] = ['id' => $ticket->getId(),
-											   'humanName' => $ticket->getString(),
+											   'humanName' => $ticket->toString(),
 											   'owner' => $ticketUser->getDisplayName()];
 			}
 

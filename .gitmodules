@@ -4,9 +4,9 @@
 [submodule "libraries/phpqrcode"]
 	path = libraries/phpqrcode
 	url = git://github.com/t0k4rt/phpqrcode
-[submodule "libraries/jcrop"]
-	path = libraries/jcrop
-	url = git://github.com/tapmodo/Jcrop
-[submodule "phpqrcode-git"]
-	path = phpqrcode-git
-	url = git://git.code.sf.net/p/phpqrcode/git
+[submodule "libraries/phpwebsockets"]
+	path = libraries/phpwebsockets
+	url = git@github.com:ghedipunk/PHP-Websockets.git
+[submodule "libraries/ckeditor"]
+	path = libraries/ckeditor
+	url = git@github.com:ckeditor/ckeditor-releases.git

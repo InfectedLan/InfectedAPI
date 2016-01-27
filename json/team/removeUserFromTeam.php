@@ -30,9 +30,9 @@ if (Session::isAuthenticated()) {
 	$user = Session::getCurrentUser();
 
 	if ($user->hasPermission('chief.team')) {
-		if (isset($_GET['id']) &&
-			is_numeric($_GET['id'])) {
-			$groupUser = UserHandler::getUser($_GET['id']);
+		if (isset($_GET['teamId']) &&
+			is_numeric($_GET['teamId'])) {
+			$groupUser = UserHandler::getUser($_GET['teamId']);
 
 			if ($groupUser != null) {
 				TeamHandler::removeUserFromTeam($groupUser);

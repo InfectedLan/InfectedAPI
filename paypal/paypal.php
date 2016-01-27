@@ -21,6 +21,7 @@
 require_once 'session.php';
 require_once 'paypal/callerservice.php';
 require_once 'paypalsecret.php';
+require_once 'handlers/sysloghandler.php';
 
 class PayPal {
 	public static function getPaymentUrl($ticketType, $amount, $key, $user) {
@@ -56,8 +57,10 @@ class PayPal {
 		if($ack=="SUCCESS"){
 			$token = urldecode($resArray["TOKEN"]);
 			$url = PaypalSecret::PaypalUrl . $token;
+			SyslogHandler::log("Got payment url from paypal", "paypal", $user, SyslogHandler::SEVERITY_INFO, array("ticketType" => ($ticketType != null ? $ticketType->getId() : "null"), "amount" => $amount, "session" => $key, "paypalResponse" => $resArray));
 			return $url;
 		} else  {
+		    SyslogHandler::log("Error fetching paypal token", "paypal", $user, SyslogHandler::SEVERITY_WARNING, $resArray);
             /*
             //Report the error somewhere for debugging
             $errorLog = "===BEGIN ERROR LOG===\n" . $nvpstr . "\n===BEGIN_RESPONSE===\n" . print_r($resArray, true) . "\n";
@@ -71,6 +74,7 @@ class PayPal {
 	}
 
 	public static function completePurchase($token, $paymentAmount, $currCodeType, $payerID, $serverName) {
+	    $user = Session::getCurrentUser();
 		ini_set('session.bug_compat_42',0);
 		ini_set('session.bug_compat_warn',0);
 
@@ -93,8 +97,13 @@ class PayPal {
 
 			if($paymentstatus == "COMPLETED") {
 				$transid = strtoupper($resArray["TRANSACTIONID"]);
+				SyslogHandler::log("Payment completion success", "paypal", $user, SyslogHandler::SEVERITY_INFO, array("price" => $paymentAmount, "token" => $token, "paypalResponse" => $resArray));
 				return $transid;
+			} else {
+			    SyslogHandler::log("Payment status not completed! Error?", "paypal", $user, SyslogHandler::SEVERITY_WARNING, array("price" => $paymentAmount, "token" => $token, "paypalResponse" => $resArray));
 			}
+		} else {
+		    SyslogHandler::log("Payment completion failed!", "paypal", $user, SyslogHandler::SEVERITY_WARNING, array("price" => $paymentAmount, "token" => $token, "paypalResponse" => $resArray));
 		}
 		return null;
 		/*

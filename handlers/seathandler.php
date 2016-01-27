@@ -81,21 +81,23 @@ class SeatHandler {
 	/*
 	 * Add a seat to the specified row.
 	 */
-	public static function createSeat(Row $row) {
+	public static function createSeat(Row $row, $number = null) {
 		$database = Database::open(Settings::db_name_infected_tickets);
 
-		// Find out what seat number we are at.
-		$result = $database->query('SELECT `number` FROM `' . Settings::db_table_infected_tickets_seats . '`
+		if($number == null) {
+		    // Find out what seat number we are at.
+		    $result = $database->query('SELECT `number` FROM `' . Settings::db_table_infected_tickets_seats . '`
 																				WHERE `rowId` = \'' . $row->getId() . '\'
 																				ORDER BY `number` DESC
 																				LIMIT 1;');
 
-		$seatRow = $result->fetch_array();
-		$newSeatNumber = $seatRow['number'] + 1;
+		    $seatRow = $result->fetch_array();
+		    $number = $seatRow['number'] + 1;
+		}
 
 		$database->query('INSERT INTO `' . Settings::db_table_infected_tickets_seats . '` (`rowId`, `number`)
 										  VALUES (\'' . $row->getId() . '\',
-												  		\'' . $database->real_escape_string($newSeatNumber) . '\');');
+												  		\'' . $database->real_escape_string($number) . '\');');
 
 		$seat = self::getSeat($database->insert_id);
 
