@@ -31,25 +31,45 @@ $message = "";
 $data = null;
 
 if(Session::isAuthenticated()) {
+    $user = Session::getCurrentUser();
     if(isset($_GET["id"])) {
-        $compo = CompoHandler::getCompo($_GET["id"]);
-        if($compo != null) {
-            //Return some info on the compo, to be used when displaying the compo
+        $clan = ClanHandler::getClan($_GET["id"]);
+        if($clan != null) {
+            //Return some info on the clan
             $data = [];
-            //First up: Clan data
-            $clanData = [];
-            $clans = ClanHandler::getClansByCompo($compo);
-            foreach($clans as $clan) {
-                $clanData[] = ["name" => $clan->getName(),
-                               "tag" => $clan->getTag(),
-                               "id" => $clan->getId(),
-			       "qualified" => $clan->isQualified($compo)];
-            }
-            $data["clans"] = $clanData;
-	    $data["hasMatches"] = CompoHandler::hasGeneratedMatches($compo);
+	    $data["name"] = $clan->getName();
+	    $data["tag"] = $clan->getTag();
+	    $data["chief"] = $clan->getChiefId();
+	    $compo = CompoHandler::getCompoByClan($clan);
+	    $data["compo"] = $compo->getId();
+	    $data["qualified"] = ClanHandler::isQualified($clan, $compo);
+	    $data["playingMembers"] = [];
+	    $playing = ClanHandler::getPlayingClanMembers($clan);
+	    foreach($playing as $person) {
+		$data["playingMembers"][] = ["id" => $person->getId(),
+					     "displayName" => $person->getDisplayName()];
+	    }
+	    $data["stepinMembers"] = [];
+	    $stepin = ClanHandler::getStepinClanMembers($clan);
+	    foreach($stepin as $person) {
+		$data["stepinMembers"][] = ["id" => $person->getId(),
+					     "displayName" => $person->getDisplayName()];
+	    }
+
+	    $data["invitedMembers"] = [];
+	    $invited = InviteHandler::getInvitesByClan($clan);
+	    foreach($invited as $invitee) {
+		if($clan->getChiefId() == $user->getId()) {
+		    $data["invitedMembers"][] = ["displayName" => $invitee->getUser()->getCompoDisplayName(),
+						 "inviteId" => $invitee->getId()];
+		} else {
+		    $data["invitedMembers"][] = ["displayName" => $invitee->getUser()->getCompoDisplayName()];
+		}
+	    }
+            
             $result = true;
         } else {
-            $message = Localization::getLocale("this_compo_does_not_exist");
+            $message = Localization::getLocale("this_clan_does_not_exist");
         }
     } else {
         $message = Localization::getLocale("you_have_not_filled_out_the_required_fields");
