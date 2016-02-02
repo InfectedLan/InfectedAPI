@@ -22,6 +22,7 @@ require_once 'localization.php';
 require_once 'handlers/userhandler.php';
 require_once 'handlers/emergencycontacthandler.php';
 require_once 'handlers/citydictionary.php';
+require_once 'handlers/sysloghandler.php';
 
 $result = false;
 $message = null;
@@ -133,8 +134,13 @@ if (isset($_POST['firstname']) &&
 
 		$user->sendRegistrationEmail();
 		$message = Localization::getLocale('your_account_is_now_successfully_registered_you_will_now_receive_an_activation_link_per_email_remember_to_check_spam_folder_if_you_should_not_find_it');
-
+		SyslogHandler::log("User registered", "addUser", $user, SyslogHandler::SEVERITY_INFO, array("user_agent" => $_SERVER['HTTP_USER_AGENT']));
 		$result = true;
+	}
+	if($result != true) {
+	    //We are NOT getting raw post data because it would make the password visible in the log. 
+	    $registrationData = array("username" => $username, "email" => $email, "phone" => $phone, "firstname" => $firstname, "lastname" => $lastname, "gender" => $gender, "address" => $address, "postalcode" => $postalcode, "nickname" => $nickname);
+	    SyslogHandler::log("Failed to register!", "addUser", null, SyslogHandler::SEVERITY_INFO, array("message" => $message, "user_agent" => $_SERVER['HTTP_USER_AGENT'], "registrationData" => $registrationData));
 	}
 } else {
 	$message = Localization::getLocale('you_have_not_filled_out_the_required_fields');

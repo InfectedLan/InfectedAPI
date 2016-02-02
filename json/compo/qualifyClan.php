@@ -26,23 +26,21 @@ $result = false;
 $message = null;
 
 if (Session::isAuthenticated()) {
-	$user = Session::getCurrentUser();
+    $user = Session::getCurrentUser();
 
-	if ($user->hasPermission('event.compo')) {
-		$clan = ClanHandler::getClan($_GET["id"]);
+    if ($user->hasPermission('event.compo')) {
+	$clan = ClanHandler::getClan($_GET["id"]);
         if($clan != null) {
-            if(ChanHandler::isInQualificationQueue($clan)) {
-                ChanHandler::removeFromQualificationQueue($clan);
-            }
             ClanHandler::setQualified($clan, true);
+	    $result = true;
         } else {
             $message = Localization::getLocale('this_clan_does_not_exist');
         }
-	} else {
-		$message = Localization::getLocale('you_do_not_have_permission_to_do_that');
-	}
+    } else {
+	$message = Localization::getLocale('you_do_not_have_permission_to_do_that');
+    }
 } else {
-	$message = Localization::getLocale('you_are_not_logged_in');
+    $message = Localization::getLocale('you_are_not_logged_in');
 }
 
 header('Content-Type: text/plain');

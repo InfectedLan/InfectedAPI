@@ -18,18 +18,18 @@
  */
 
 $(document).ready(function() {
-	$('.login').on('submit', function(event) {
-		event.preventDefault();
-		login(this);
-	});
+    $('.login').on('submit', function(event) {
+	event.preventDefault();
+	login(this);
+    });
 });
 
-function login(form) {
-	$.post('../api/json/user/loginUser.php', $(form).serialize(), function(data) {
-		if (data.result) {
-			location.reload();
-		} else {
-			error(data.message);
-		}
-	}, 'json');
+function login(form, customHandler) {
+    $.post('../api/json/user/loginUser.php', $(form).serialize(), function(data) {
+	if (data.result) {
+	    location.reload();
+	} else {
+	    error(data.message);
+	}
+    }, 'json');
 }

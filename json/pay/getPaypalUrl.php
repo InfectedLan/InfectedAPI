@@ -24,6 +24,7 @@ require_once 'handlers/tickettypehandler.php';
 require_once 'handlers/eventhandler.php';
 require_once 'handlers/storesessionhandler.php';
 require_once 'paypal/paypal.php';
+require_once 'handlers/sysloghandler.php';
 
 $result = false;
 $message = null;
@@ -65,6 +66,7 @@ if (Session::isAuthenticated()) {
 							}
 						} else {
 							$message = Localization::getLocale('you_already_got_a_session');
+							SyslogHandler::log("User tried to get a new a new session", "getPaypalUrl", $user, SyslogHandler::SEVERITY_INFO);
 						}
 					} else {
 						$message = Localization::getLocale('there_are_no_more_tickets_left');
@@ -74,9 +76,11 @@ if (Session::isAuthenticated()) {
 				}
 			} else {
 				$message = Localization::getLocale('you_have_selected_an_invalid_ticket_type');
+				SyslogHandler::log("User tried to buy an invalid ticket type", "getPaypalUrl", $user, SyslogHandler::SEVERITY_ISSUE, array("ticketType" => ($ticketType != null ? $ticketType->getId() : "null")));
 			}
 		} else {
 			$message = Localization::getLocale('the_ticket_sale_is_not_open_yet');
+			
 		}
 	} else {
 		$message = Localization::getLocale('you_do_not_have_permission_to_do_that');

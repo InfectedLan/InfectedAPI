@@ -21,6 +21,7 @@
 require_once 'session.php';
 require_once 'localization.php';
 require_once 'handlers/avatarhandler.php';
+require_once 'handlers/sysloghandler.php';
 
 $result = false;
 $message = Localization::getLocale('an_unknown_error_occurred');
@@ -56,6 +57,7 @@ try {
                         $path = AvatarHandler::createAvatar($name . '.' . $extension, $user);
                         move_uploaded_file($_FILES['file']['tmp_name'], $path);
                         $result = true;
+			SyslogHandler::log("Avatar uploaded", "uploadAvatar", $user, SyslogHandler::SEVERITY_INFO, array("filename" => $name, "width" => imagesx($image), "height" => imagesy($image), "extension" => $extension));
                     } else {
                         $message = Localization::getLocale('the_image_is_too_small_it_must_be_at_least_value_pixels', Settings::avatar_minimum_width . ' x ' . Settings::avatar_minimum_height);
                     }

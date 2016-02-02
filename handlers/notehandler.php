@@ -210,30 +210,31 @@ class NoteHandler {
 																	LEFT JOIN `' . Settings::db_table_infected_crew_notewatches . '`
 																	ON `' . Settings::db_table_infected_crew_notes . '`.`id` = `' . Settings::db_table_infected_crew_notewatches . '`.`noteId`
 																	WHERE `eventId` = \'' . $event->getId() . '\'
-																	AND `groupId` IN (' . implode(',', $leaderInGroups) . ')
-																	OR (`groupId` != \'0\'
-																	     AND `' . Settings::db_table_infected_crew_notes . '`.`userId` = \'' . $user->getId() . '\')
-																	OR `' . Settings::db_table_infected_crew_notewatches . '`.`userId` = \'' . $user->getId() . '\'
+																	AND (`groupId` IN (' . implode(',', $leaderInGroups) . ')
+																				OR (`groupId` != \'0\'
+																	    			AND `' . Settings::db_table_infected_crew_notes . '`.`userId` = \'' . $user->getId() . '\')
+																				OR `' . Settings::db_table_infected_crew_notewatches . '`.`userId` = \'' . $user->getId() . '\')
 																	ORDER BY `secondsOffset`, `time`;');
+
 		} else if ($user->isTeamMember() && $user->isTeamLeader()) {
 			$result = $database->query('SELECT DISTINCT `' . Settings::db_table_infected_crew_notes . '`.* FROM `' . Settings::db_table_infected_crew_notes . '`
 																	LEFT JOIN `' . Settings::db_table_infected_crew_notewatches . '`
 																	ON `' . Settings::db_table_infected_crew_notes . '`.`id` = `' . Settings::db_table_infected_crew_notewatches . '`.`noteId`
 																	WHERE `eventId` = \'' . $event->getId() . '\'
-																	AND (`groupId` != \'0\'
-	 			 															AND `teamId` = \'' . $user->getTeam()->getId() . '\')
-																	OR (`groupId` != \'0\'
-		 																	 AND `' . Settings::db_table_infected_crew_notes . '`.`userId` = \'' . $user->getId() . '\')
-																	OR `' . Settings::db_table_infected_crew_notewatches . '`.`userId` = \'' . $user->getId() . '\'
+																	AND ((`groupId` != \'0\'
+	 			 																AND `teamId` = \'' . $user->getTeam()->getId() . '\')
+																				OR (`groupId` != \'0\'
+		 																	 			AND `' . Settings::db_table_infected_crew_notes . '`.`userId` = \'' . $user->getId() . '\')
+																				OR `' . Settings::db_table_infected_crew_notewatches . '`.`userId` = \'' . $user->getId() . '\')
 																	ORDER BY `secondsOffset`, `time`;');
 		} else {
 			$result = $database->query('SELECT DISTINCT `' . Settings::db_table_infected_crew_notes . '`.* FROM `' . Settings::db_table_infected_crew_notes . '`
 																	LEFT JOIN `' . Settings::db_table_infected_crew_notewatches . '`
 																	ON `' . Settings::db_table_infected_crew_notes . '`.`id` = `' . Settings::db_table_infected_crew_notewatches . '`.`noteId`
 																	WHERE `eventId` = \'' . $event->getId() . '\'
-																	AND (`groupId` != \'0\'
-																	     AND `' . Settings::db_table_infected_crew_notes . '`.`userId` = \'' . $user->getId() . '\')
-																	OR `' . Settings::db_table_infected_crew_notewatches . '`.`userId` = \'' . $user->getId() . '\'
+																	AND ((`groupId` != \'0\'
+																				AND `' . Settings::db_table_infected_crew_notes . '`.`userId` = \'' . $user->getId() . '\')
+																				OR `' . Settings::db_table_infected_crew_notewatches . '`.`userId` = \'' . $user->getId() . '\')
 		 															ORDER BY `secondsOffset`, `time`;');
 		}
 
@@ -258,11 +259,12 @@ class NoteHandler {
 	/*
 	 * Create a new note.
 	 */
-	public static function createNote(Group $group = null, Team $team = null, User $user = null, $title, $content, $secondsOffset = 0, $time = null) {
+	public static function createNote(User $creatorUser = null, Group $group = null, Team $team = null, User $user = null, $title, $content, $secondsOffset = 0, $time = null) {
 		$database = Database::open(Settings::db_name_infected_crew);
 
-		$database->query('INSERT INTO `' . Settings::db_table_infected_crew_notes . '` (`eventId`, `groupId`, `teamId`, `userId`, `title`, `content`, `secondsOffset`, `time`)
+		$database->query('INSERT INTO `' . Settings::db_table_infected_crew_notes . '` (`eventId`, `creatorId`, `groupId`, `teamId`, `userId`, `title`, `content`, `secondsOffset`, `time`)
 										  VALUES (\'' . EventHandler::getCurrentEvent()->getId() . '\',
+															\'' . ($creatorUser != null ? $creatorUser->getId() : 0) . '\',
 															\'' . ($group != null ? $group->getId() : 0) . '\',
 															\'' . ($team != null ? $team->getId() : 0) . '\',
 															\'' . ($user != null ? $user->getId() : 0) . '\',
@@ -318,7 +320,22 @@ class NoteHandler {
 		$database = Database::open(Settings::db_name_infected_crew);
 
 		$database->query('UPDATE `' . Settings::db_table_infected_crew_notes . '`
-											SET `done` = \'' . $database->real_escape_string($done) . '\'
+											SET `done` = \'' . $database->real_escape_string($done) . '\',
+													`inProgress` = \'0\'
+											WHERE `id` = \'' . $note->getId() . '\';');
+
+		$database->close();
+	}
+
+	/*
+	 * Update a notes in progress state.
+	 */
+	public static function updateNoteInProgress(Note $note, $inProgress) {
+		$database = Database::open(Settings::db_name_infected_crew);
+
+		$database->query('UPDATE `' . Settings::db_table_infected_crew_notes . '`
+											SET `done` = \'0\',
+													`inProgress` = \'' . $database->real_escape_string($inProgress) . '\'
 											WHERE `id` = \'' . $note->getId() . '\';');
 
 		$database->close();
