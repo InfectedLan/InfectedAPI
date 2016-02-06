@@ -57,14 +57,16 @@ echo "Set include path to " . get_include_path() . "\n";
 set_time_limit(0); //Make sure the script runs forever
 
 require_once 'session.php';
-require_once 'libraries/phpwebsockets/websockets.php';
-require_once 'libraries/phpwebsockets/users.php';
+require_once 'phpwebsockets/websockets.php';
+require_once 'phpwebsockets/users.php';
 
 require_once 'chatplugin.php';
 require_once 'matchplugin.php';
+require_once 'adminplugin.php';
 
 class Server extends WebSocketServer {
-  private $authenticatedUsers;
+  public $authenticatedUsers;
+  
   private $intentHandlers;
   private $plugins;
 
@@ -77,38 +79,41 @@ class Server extends WebSocketServer {
   }
 
   protected function process(WebSocketUser $connection, $message) {
-    //$this->send($connection, "You sendt" . $message);
-    echo $message . "\n";
+      //$this->send($connection, "You sendt" . $message);
+      echo $message . "\n";
 
-    $parsedJson = json_decode($message);
+      $parsedJson = json_decode($message);
 
-    switch ($parsedJson->intent) {
-    case 'auth':
-      $user = Session::getUserFromSessionId($parsedJson->data[0]);
+      switch ($parsedJson->intent) {
+      case 'auth':
+	  $user = Session::getUserFromSessionId($parsedJson->data[0]);
 
-      if ($user != null) {
-	$this->registerUser($user, $connection);
-	$this->send($connection, '{"intent": "authResult", "data": [true]}');
-	echo "Authenticated user: " . $user->getId() . "\n";
-      } else {
-	echo "Disconnecting user due to failure to authenticate\n";
+	  if ($user != null) {
+	      $this->registerUser($user, $connection);
+	      $this->send($connection, '{"intent": "authResult", "data": [true]}');
+	      echo "Authenticated user: " . $user->getId() . "\n";
+	  } else {
+	      echo "Disconnecting user due to failure to authenticate\n";
 
-	$this->send($connection, '{"intent": "authResult", "data": [false]}');
-	$this->disconnect($connection);
+	      $this->send($connection, '{"intent": "authResult", "data": [false]}');
+	      $this->disconnect($connection);
+	  }
+	  break;
+
+      default:
+	  if(isset($this->intentHandlers[$parsedJson->intent])) {
+
+	      $this->intentHandlers[$parsedJson->intent]->handleIntent($parsedJson->intent, $parsedJson->data, $connection);
+	  } else {
+	      echo 'Got unhandled intent: ' . $parsedJson->intent . "\n";
+	  }
+
+	  break;
       }
-      break;
-
-    default:
-      if(isset($this->intentHandlers[$parsedJson->intent])) {
-	$this->intentHandlers[$parsedJson]->handleIntent($parsedJson->intent, $parsedJson->data);
-      } else {
-	echo 'Got unhandled intent: ' . $parsedJson->intent . '\n';
-      }
-    }
   }
 
   public function registerIntent($intent, $handler) {
-    $intentHandlers[$intent] = $handler;
+    $this->intentHandlers[$intent] = $handler;
   }
 
   public function registerPlugin($plugin) {
@@ -147,14 +152,20 @@ class Server extends WebSocketServer {
     return $this->authenticatedUsers[$connection] != null;
   }
 
-  public function getUser(WebSocketUser $connecton) {
+  public function getUser(WebSocketUser $connection) {
     return $this->authenticatedUsers[$connection];
   }
 
   protected function tick() {
-    foreach($this->plugins as $plugin) {
-      $plugin->tick();
-    }
+      $start = microtime(true);
+      foreach($this->plugins as $plugin) {
+	  $plugin->tick();
+      }
+      $stop = microtime(true);
+      $diff = ($stop-$start)/1000;
+      //if($diff>100) {
+      //logAdmin("WARNING: tick() is taking more than 100ms");
+	  //}
   }
 }
 
@@ -168,8 +179,17 @@ function readln() {
 
 $server = new Server("0.0.0.0", "1337");
 //Plugins
+$adminPlugin = new AdminPlugin($server);
 $chatPlugin = new ChatPlugin($server);
 $matchPlugin = new MatchPlugin($server);
+
+//Same as println, but should be used for more important stuff.
+/*
+function logAdmin($string) {
+    $adminPlugin->log($string);
+    println($string);
+}
+*/
 
 //Print some information to debug sanity of the server
 echo "Whoami: " . exec("whoami") . "\n";

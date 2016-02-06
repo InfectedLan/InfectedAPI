@@ -37,7 +37,7 @@ abstract class WebSocketServer {
     // the handshake has completed.
   }
 
-  protected function send($user, $message) {
+  public function send($user, $message) {
     if ($user->handshake) {
       $message = $this->frame($message,$user);
       $result = @socket_write($user->socket, $message, strlen($message));
@@ -155,7 +155,7 @@ abstract class WebSocketServer {
     $this->connecting($user);
   }
 
-  protected function disconnect($socket, $triggerClosed = true, $sockErrNo = null) {
+  public function disconnect($socket, $triggerClosed = true, $sockErrNo = null) {
     $disconnectedUser = $this->getUserBySocket($socket);
 
     if ($disconnectedUser !== null) {

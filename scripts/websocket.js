@@ -28,22 +28,25 @@ Websocket = (function() {
 
     var packetQueue = []; 
 
-    var customOpenHandler = null;
-    var customCloseHandler = null;
     //Public variables
-    
+    wsObject.onOpen = null;
+    wsObject.onClose = null;
+    wsObject.onAuthenticate = null;
 
     //Private functions
-    var onOpen = function() {
+    var _onOpen = function() {
 	console.log("WebSocket connected");
-	if(customOpenHandler != null) {
-	    customOpenHandler();
+	connected = true;
+	if(wsObject.onOpen != null) {
+	    wsObject.onOpen();
 	}
     };
-    var onClose = function() {
+    var _onClose = function() {
 	console.log("WebSocket disconnected");
-	if(customCloseHandler != null) {
-	    customCloseHandler();
+	error("Vi mistet tilkoblingen til serveren. Prøv igjen om et par minutter, det kan hende vi jobber på saken :)");
+	connected = false;
+	if(wsObject.onClose != null) {
+	    wsObject.onClose();
 	}
     };
     var onMessage = function(msg) {
@@ -115,11 +118,11 @@ Websocket = (function() {
     wsObject.connect = function(url) {
 	url = (typeof(url) === "undefined" ? this.getDefaultConnectUrl() : url);
 	
-	Console.log("WebSocket connecting to " + url);
+	console.log("WebSocket connecting to " + url);
 	socket = new WebSocket(url);
-	socket.onopen = onOpen;
+	socket.onopen = _onOpen;
 	socket.onmessage = onMessage;
-	socket.onclose = onClose;
+	socket.onclose = _onClose;
     };
     wsObject.addHandler = function(intent, handler) {
 	if(typeof(listeners[intent]) === "undefined") {
@@ -152,6 +155,10 @@ Websocket = (function() {
     wsObject.addHandler("authResult", function(data) {
 	if(data[0]) {
 	    authenticated = true;
+	    console.log("Authentication successfull");
+	    if(wsObject.onAuthenticate != null) {
+		wsObject.onAuthenticate();
+	    }
 	    for(var i = 0; i < packetQueue.length; i++) {
 		sendPacket(packetQueue[i]);
 	    }
@@ -160,6 +167,15 @@ Websocket = (function() {
 	    error("Vi fikk ikke logget inn på websocket-serveren!");
 	    socket.close();
 	}
+    });
+
+    wsObject.addHandler("refresh", function(data){
+	info("En admin har bedt om at alle på siden oppdaterer. Siden vil auto-oppdatere om " + (Math.round(data[0]/1000)) + " sekunder");
+	setTimeout(function() {location.reload();}, data[0]);
+    });
+
+    wsObject.addHandler("error", function(data) {
+	error(data[0]);
     });
     
     return wsObject;

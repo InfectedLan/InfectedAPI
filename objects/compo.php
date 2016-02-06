@@ -101,6 +101,13 @@ class Compo extends EventObject {
 	return ChatHandler::getChat($this->chatId);
     }
 
+    /*
+     * Returns the chat id used by this compo
+     */
+    public function getChatId() {
+	return $this->chatId;
+    }
+
     public function getParticipantLimit() {
         return $this->participantLimit;
     }

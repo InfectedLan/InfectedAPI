@@ -41,7 +41,7 @@ class ChatPlugin extends WebSocketPlugin {
         switch($intent) {
         case 'subscribeChatroom':
             if ($this->server->isAuthenticated($connection)) {
-                $chat = ChatHandler::getChat($parsedJson->data[0]);
+                $chat = ChatHandler::getChat($args[0]);
 
                 if ($chat != null) {
                     $this->subscribeChatroom($chat, $connection);
@@ -56,7 +56,7 @@ class ChatPlugin extends WebSocketPlugin {
 
         case 'chatMessage':
             if ($this->server->isAuthenticated($connection)) {
-                $this->server->sendChatMessage($connection, $parsedJson->data[0], $parsedJson->data[1]);
+                $this->sendChatMessage($connection, $args[0], $args[1]);
             } else {
                 echo "Disconnecting user due to no authentication: " . $this->server->getUser($connection)->getUsername() . "\n";
 
@@ -67,7 +67,7 @@ class ChatPlugin extends WebSocketPlugin {
 
         case 'unsubscribeChatroom':
             if ($this->server->isAuthenticated($connection)) {
-                $this->unsubscribeChatroom($parsedJson->data[0], $connection);
+                $this->unsubscribeChatroom($args[0], $connection);
             } else {
                 echo "Disconnecting user due to no authentication: " . $this->server->getUser($connection)->getUsername() . "\n";
 

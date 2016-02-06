@@ -37,6 +37,7 @@ if(Session::isAuthenticated()) {
                    "name" => $compo->getName(),
                    "title" => $compo->getTitle(),
                    "tag" => $compo->getTag(),
+		   "chat" => $compo->getChatId(),
                    "description" => $compo->getDescription(),
 		   "teamSize" => $compo->getTeamSize(),
 		   "participantLimit" => $compo->getParticipantLimit(),
