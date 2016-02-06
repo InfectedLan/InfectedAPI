@@ -108,15 +108,15 @@ class AgendaHandler {
 	/*
 	 * Create a new agenda entry.
 	 */
-	public static function createAgenda(Event $event, $name, $title, $description, $startTime) {
+	public static function createAgenda(Event $event, $name, $title, $description, $secondsOffset) {
 		$database = Database::open(Settings::db_name_infected_main);
 
-		$database->query('INSERT INTO `' . Settings::db_table_infected_main_agenda . '` (`eventId`, `name`, `title`, `description`, `startTime`)
+		$database->query('INSERT INTO `' . Settings::db_table_infected_main_agenda . '` (`eventId`, `name`, `title`, `description`, `secondsOffset`)
 										  VALUES (\'' . $event->getId() . '\',
 														  \'' . $database->real_escape_string($name) . '\',
 														  \'' . $database->real_escape_string($title) . '\',
 														  \'' . $database->real_escape_string($description) . '\',
-														  \'' . $database->real_escape_string($startTime) . '\');');
+														  \'' . $database->real_escape_string($secondsOffset) . '\');');
 
 		$agenda = self::getAgenda($database->insert_id);
 
@@ -128,13 +128,13 @@ class AgendaHandler {
 	/*
 	 * Update an agenda.
 	 */
-	public static function updateAgenda(Agenda $agenda, $title, $description, $startTime, $published) {
+	public static function updateAgenda(Agenda $agenda, $title, $description, $secondsOffset, $published) {
 		$database = Database::open(Settings::db_name_infected_main);
 
 		$database->query('UPDATE `' . Settings::db_table_infected_main_agenda . '`
 										  SET `title` = \'' . $database->real_escape_string($title) . '\',
 												  `description` = \'' . $database->real_escape_string($description) . '\',
-												  `startTime` = \'' . $database->real_escape_string($startTime) . '\',
+												  `secondsOffset` = \'' . $database->real_escape_string($secondsOffset) . '\',
 												  `published` = \'' . $database->real_escape_string($published) . '\'
 										  WHERE `id` = \'' . $agenda->getId() . '\';');
 
