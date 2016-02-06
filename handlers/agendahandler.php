@@ -100,16 +100,16 @@ class AgendaHandler {
 	/*
 	 * Create a new agenda entry.
 	 */
-	public static function createAgenda(Event $event, string $name, string $title, string $description, string $startTime): Agenda {
-		$database = Database::getConnection(Settings::db_name_infected_main);
+	public static function createAgenda(Event $event, string $name, string $title, string $description, int $secondsOffset) {
+		$database = Database::open(Settings::db_name_infected_main);
 
-		$database->query('INSERT INTO `' . Settings::db_table_infected_main_agenda . '` (`eventId`, `name`, `title`, `description`, `startTime`, `published`)
+		$database->query('INSERT INTO `' . Settings::db_table_infected_main_agenda . '` (`eventId`, `name`, `title`, `description`, `secondsOffset`, `published`)
 										  VALUES (\'' . $event->getId() . '\',
 														  \'' . $database->real_escape_string($name) . '\',
 														  \'' . $database->real_escape_string($title) . '\',
 														  \'' . $database->real_escape_string($description) . '\',
-														  \'' . $database->real_escape_string($startTime) . '\',
-															\'1\');');
+														  \'' . $database->real_escape_string($secondsOffset) . '\',
+														  \'1\');');
 
 		return self::getAgenda($database->insert_id);
 	}
@@ -117,13 +117,13 @@ class AgendaHandler {
 	/*
 	 * Update an agenda.
 	 */
-	public static function updateAgenda(Agenda $agenda, string $title, string $description, string $startTime, bool $published) {
-		$database = Database::getConnection(Settings::db_name_infected_main);
+	public static function updateAgenda(Agenda $agenda, string $title, string $description, int $secondsOffset, bool $published) {
+		$database = Database::open(Settings::db_name_infected_main);
 
 		$database->query('UPDATE `' . Settings::db_table_infected_main_agenda . '`
 										  SET `title` = \'' . $database->real_escape_string($title) . '\',
 												  `description` = \'' . $database->real_escape_string($description) . '\',
-												  `startTime` = \'' . $database->real_escape_string($startTime) . '\',
+												  `secondsOffset` = \'' . $database->real_escape_string($secondsOffset) . '\',
 												  `published` = \'' . $database->real_escape_string($published) . '\'
 										  WHERE `id` = \'' . $agenda->getId() . '\';');
 	}

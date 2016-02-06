@@ -33,18 +33,16 @@ if (Session::isAuthenticated()) {
 	if ($user->hasPermission('event.agenda')) {
 		if (isset($_GET['title']) &&
 			isset($_GET['description']) &&
-			isset($_GET['startTime']) &&
-			isset($_GET['startDate']) &&
+			isset($_GET['secondsOffset']) &&
 			!empty($_GET['title']) &&
 			!empty($_GET['description']) &&
-			!empty($_GET['startTime']) &&
-			!empty($_GET['startDate'])) {
+			!empty($_GET['secondsOffset'])) {
 			$name = strtolower(str_replace(' ', '-', $_GET['title']));
 			$title = $_GET['title'];
 			$description = $_GET['description'];
-			$startTime = $_GET['startDate'] . ' ' . $_GET['startTime'];
+			$secondsOffset = $_GET['secondsOffset'];
 
-			AgendaHandler::createAgenda(EventHandler::getCurrentEvent(), $name, $title, $description, $startTime);
+			AgendaHandler::createAgenda(EventHandler::getCurrentEvent(), $name, $title, $description, $secondsOffset);
 			$result = true;
 		} else {
 			$message = Localization::getLocale('you_have_not_filled_out_the_required_fields');
