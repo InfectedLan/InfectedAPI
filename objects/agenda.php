@@ -24,7 +24,7 @@ class Agenda extends EventObject {
 	private $name;
 	private $title;
 	private $description;
-	private $startTime;
+	private $secondsOffset;
 	private $published;
 
 	/*
@@ -49,10 +49,20 @@ class Agenda extends EventObject {
 	}
 
 	/*
+	 * Returns the seconds offset of this agenda.
+	 */
+	public function getSecondsOffset(): int {
+		return $this->secondsOffset;
+	}
+
+	/*
 	 * Returns the startTime of this agenda.
 	 */
-	public function getStartTime(): int {
-		return strtotime($this->startTime);
+	public function getStartTime() {
+	    $event = EventHandler::getCurrentEvent();
+		$eventDate = strtotime(date('Y-m-d', $event->getStartTime()));
+
+		return $eventDate + $this->getSecondsOffset();
 	}
 
 	/*
