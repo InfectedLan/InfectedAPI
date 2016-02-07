@@ -132,11 +132,11 @@ class ChatPlugin extends WebSocketPlugin {
     }
 
     protected function getFormattedChatMessage($user, $message, $timestamp) {
-        $time = date('H:i:s', $timestamp);
+        $time = date('H:i', $timestamp);
         $username = ($user->hasPermission('*') || $user->hasPermission('compo.chat') ? "<b>[Admin] " . $user->getUsername() . "</b>" : $user->getUsername());
         $message = htmlspecialchars($message, ENT_QUOTES, 'UTF-8');
 
-        return $time . $username . ": " . $message;
+        return $time . ' ' . $username . ": " . $message;
     }
 
     protected function subscribeChatroom($chat, $connection) {
