@@ -42,6 +42,7 @@ class MatchPlugin extends WebSocketPlugin {
         $this->subscribedUsers = new SplObjectStorage();
         $this->lastUpdate = 0;
         $this->upcomingMatches = array();
+	$this->watchingMatches = array();
     }
 
     public function handleIntent($intent, $args, WebSocketUser $connection) {
@@ -153,7 +154,16 @@ class MatchPlugin extends WebSocketPlugin {
     }
 
     public function handleMatchUpdate(Match $match) {
-	
+	//TODO
+    }
+
+    public function calculateStateProgress(Match $match) {
+	if($match->getState() == Match::STATE_CUSTOM_PREGAME) {
+	    return VoteHandler::getNumBanned($match->getId());
+	} else if($match->getState() == Match::STATE_READYCHECK) {
+	    return MatchHandler::getReadyCount($match);
+	}
+	return 0;
     }
 
     public function onConnect(WebSocketUser $connection) {
@@ -183,22 +193,51 @@ class MatchPlugin extends WebSocketPlugin {
                         }
                     }
                 }
-                
+                //Add to "current matches"
+		$this->watchingMatches[] = ["id" => $match->getId(), "state" => $match->getState(), "stateProgress" => 0];
                 //Remove the match from the list as we have used it
                 unset($this->upcomingMatches[$key]);
             }
         }
-        //Check for new matches to inform about starting
+	//Things we check every now and then for compatability reasons
         if(time()-$this->lastUpdate > 60) {
+	    //Check for new matches to inform about starting
             $matches = MatchHandler::getUpcomingMatches(60);
             if(count($matches) > 0) {
                 echo "Scheduling " . count($matches) . " for the next 60 seconds\n";
                 $this->upcomingMatches = $matches;
             }
+	    //Check if matches we are currently watching are done
+	    foreach($this->watchingMatches as $key => $matchData) {
+		$match = MatchHandler::getMatch($matchData["id"]);
+		if(!isset($match)) {
+		    echo "Match " . $match->getId() . " dissapeared! Removing\n";
+		    unset($this->watchingMatches[$key]);
+		    continue;
+		}
+		if($match->getWinnerId() != 0) {
+		    echo "Match " . $match->getId() . " is done! Removing\n";
+		    unset($this->watchingMatches[$key]);
+		    continue;
+		}
+		if($match->getState() != $matchData["state"]) {
+		    $this->handleMatchUpdate($match);
+		    echo "Match " . $match->getId() . " got an outside state change\n";
+		    continue;
+		}
+		if($this->calculateStateProgress($match) != $matchData["stateProgress"]) {
+		    $this->handleMatchUpdate($match);
+		    echo "Match " . $match->getId() . " got an outside progress change\n";
+		    continue;
+		}
+	    }
             $this->lastUpdate = time();
         }
     }
 
+    /*
+     * Sends all match data. Not the fastest.
+     */
     public function sendMatchData(WebSocketUser $connection, Match $match) {
         $this->server->send($connection, '{"intent": "matchUpdate", "data": [' . json_encode($match->getJsonableData()) . ']}'); //Pretty snazzy, sends a shitload of info in 1-2-3. This is what killed the servers.
     }

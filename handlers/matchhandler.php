@@ -510,6 +510,20 @@ AND `scheduledTime` < NOW() + INTERVAL ' . $database->real_escape_string($interv
 		return $result->num_rows > 0;
 	}
 
+	public static function getReadyCount(Match $match) {
+	    $count = 0;
+	    $participantClans = self::getParticipantsByMatch($match);
+	    foreach($participantClans as $clan) {
+		$members = $clan->getMembers();
+		foreach($members as $member) {
+		    if(self::isUserReady($member, $match)) {
+			$count++;
+		    }
+		}
+	    }
+	    return $count;
+	}
+
 	public static function acceptMatch(User $user, Match $match) {
 		$database = Database::open(Settings::db_name_infected_compo);
 

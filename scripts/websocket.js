@@ -51,6 +51,7 @@ Websocket = (function() {
     };
     var onMessage = function(msg) {
 	var packet = JSON.parse(msg.data);
+	console.log("[WEBSOCKET_DBG]: Recieved: " + JSON.stringify(packet));
 	if(typeof(packet.intent) !== "undefined" && typeof(packet.data) !== "undefined") {
 	    var wasHandler = false;
 	    if(typeof(listeners[packet.intent]) !== "undefined" && listeners[packet.intent].length > 0) {
@@ -75,6 +76,7 @@ Websocket = (function() {
     var sendPacket = function(packet) {
 	if(connected) {
 	    socket.send(JSON.stringify(packet));
+	    console.log("[WEBSOCKET_DBG]: Sending: " + JSON.stringify(packet));
 	} else {
 	    console.log("Tried to send packet without a connection:");
 	    console.log(packet);
