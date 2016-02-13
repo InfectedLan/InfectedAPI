@@ -68,8 +68,12 @@ module = (function(){
 	});
     };
 
-    pluginObj.decorateCompoPage = function() {
-	$("#mainContent").append("<h1>Placeholder for brackets</h1>");
+    pluginObj.decorateCompoPage = function(compo) {
+	if(compo.hasMatches) {
+	    $("#mainContent").append("<h1>Placeholder for brackets</h1>");
+	} else {
+	    console.log("Compo has no matches... yet");
+	}
     };
 
     return pluginObj;
