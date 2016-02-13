@@ -27,7 +27,7 @@ $data = null;
 
 if(Session::isAuthenticated()) {
     $user = Session::getCurrentUser();
-    if($_GET["id"] == null) {
+    if(!isset($_GET["id"])) {
         $target = $user;
     }
     $message = Localization::getLocale('this_user_does_not_exist');
