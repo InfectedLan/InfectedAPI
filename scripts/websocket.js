@@ -21,6 +21,7 @@ Websocket = (function() {
     var wsObject = {};
     //Private variables
     var connected = false;
+    var connecting = false;
     var authenticated = false;
     var socket = null;
     var listeners = {};
@@ -37,6 +38,7 @@ Websocket = (function() {
     var _onOpen = function() {
 	console.log("WebSocket connected");
 	connected = true;
+	connecting = false;
 	if(wsObject.onOpen != null) {
 	    wsObject.onOpen();
 	}
@@ -108,6 +110,9 @@ Websocket = (function() {
     wsObject.isAuthenticated = function() {
 	return authenticated;
     };
+    wsObject.isConnecting = function() {
+	return connecting;
+    };
     wsObject.getDefaultConnectUrl = function() {
 	var url = window.location.href;
 	//Autodetect magic: Let's convert http to ws, and https to wss
@@ -125,6 +130,7 @@ Websocket = (function() {
 	socket.onopen = _onOpen;
 	socket.onmessage = onMessage;
 	socket.onclose = _onClose;
+	connecting = true;
     };
     wsObject.addHandler = function(intent, handler) {
 	if(typeof(listeners[intent]) === "undefined") {

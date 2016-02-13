@@ -636,6 +636,7 @@ AND `scheduledTime` < NOW() + INTERVAL ' . $database->real_escape_string($interv
     }
 
     public static function getJsonableData(Match $match) {
+	$matchData['id'] = $match->getId();
         $matchData['state'] = $match->getState();
         $matchData['ready'] = $match->isReady();
         $matchData['compoId'] = $match->getCompo()->getId();

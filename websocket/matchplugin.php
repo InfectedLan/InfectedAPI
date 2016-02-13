@@ -63,9 +63,9 @@ class MatchPlugin extends WebSocketPlugin {
 	case "voteMap":
 	    if($this->server->isAuthenticated($connection)) {
 		$user = $this->server->getUser($connection);
-		$match = MatchHandler::getMatch($args["match"]);
+		$match = MatchHandler::getMatch($args[0]);
 		
-		$result = $this->attemptMapVote($args["id"], $match, $user);
+		$result = $this->attemptMapVote($args[1], $match, $user);
 		if($result != true) {
 		    $this->server->send($connection, '{"intent": "error", "data": ' . json_encode(array($result)) . '}');
 		} else {
@@ -77,7 +77,7 @@ class MatchPlugin extends WebSocketPlugin {
 	case "ready":
 	    if($this->server->isAuthenticated($connection)) {
 		$user = $this->server->getUser($connection);
-		$match = MatchHandler::getMatch($args["matchId"]);
+		$match = MatchHandler::getMatch($args[0]);
 		
 		$result = $this->attemptAcceptMatch($match, $user);
 		if($result != true) {
@@ -155,6 +155,35 @@ class MatchPlugin extends WebSocketPlugin {
 
     public function handleMatchUpdate(Match $match) {
 	//TODO
+	$matchData = null;
+	$matchKey = null;
+	foreach($this->watchingMatches as $key => $data) {
+	    if($data["id"] == $match->getId()) {
+		$matchData = $data["id"];
+		$matchKey = $key;
+	    }
+	}
+	//For now, we are just sending everything as we need all the data anyways
+	if($matchData["state"] != $match->getState() || $matchData["stateProgress"] != self::calculateStateProgress($match)) {
+	    $clans = MatchHandler::getParticipantsByMatch($match);
+	    $people = array();
+	    foreach($clans as $clan) {
+		$members = clanHandler::getPlayingClanMembers($clan);
+		array_merge($people, $members);
+	    }
+	    foreach($people as $person) {
+		foreach($this->subscribedUsers as $connection => $user) {
+		    if($user->getId() == $person->getId()) {
+			sendMatchData($connection, $match);
+			break;
+		    }
+		}
+	    }
+	    $matchData["state"] = $match->getState();
+	    $matchData["stateProgress"] = self::calculateProgress($match);
+	    $this->watchingMatches[$key] = $matchData;
+	}
+	
     }
 
     public function calculateStateProgress(Match $match) {
@@ -239,7 +268,11 @@ class MatchPlugin extends WebSocketPlugin {
      * Sends all match data. Not the fastest.
      */
     public function sendMatchData(WebSocketUser $connection, Match $match) {
-        $this->server->send($connection, '{"intent": "matchUpdate", "data": [' . json_encode($match->getJsonableData()) . ']}'); //Pretty snazzy, sends a shitload of info in 1-2-3. This is what killed the servers.
+	if($match == null) {
+	    $this->server->send($connection, '{"intent": "matchUpdate", "data": []}'); //If there is no match, just send an empty array to indicate the match is over.
+	} else {
+	    $this->server->send($connection, '{"intent": "matchUpdate", "data": [' . json_encode($match->getJsonableData()) . ']}'); //Pretty snazzy, sends a shitload of info in 1-2-3. This is what killed the servers.
+	}
     }
 }
 ?>

@@ -85,7 +85,7 @@ class CompoPluginHandler {
      * Returns a list of scripts used by this plugin
      */
     public static function loadPluginScripts($pluginName) {
-        $string = file_get_contents(Settings::api_path . "plugins/compo/" . $pluginName . ".php");
+        $string = file_get_contents(Settings::api_path . "plugins/compo/" . $pluginName . ".json");
         $json = json_decode($string, true);
 
         return $json["javascript"];

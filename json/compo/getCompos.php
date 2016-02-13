@@ -41,6 +41,7 @@ if(Session::isAuthenticated()) {
                    "description" => $compo->getDescription(),
 		   "teamSize" => $compo->getTeamSize(),
 		   "participantLimit" => $compo->getParticipantLimit(),
+		   "pluginName" => $compo->getPluginName(),
                    "pluginJavascript" => CompoPluginHandler::getPluginJavascriptOrDefault($compo->getPluginName())];
     }
     $result = true;

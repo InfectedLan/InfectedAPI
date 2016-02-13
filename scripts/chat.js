@@ -135,7 +135,7 @@ Chat.chatWrite = function(chatId, msg) {
 
 Chat.init = function() {
     console.log("Initializing chat");
-    if(!Websocket.isConnected()) {
+    if(!Websocket.isConnected() && !Websocket.isConnecting()) {
 	Websocket.connect(Websocket.getDefaultConnectUrl());
 	Websocket.onOpen = function() {
 	    Websocket.authenticate();
