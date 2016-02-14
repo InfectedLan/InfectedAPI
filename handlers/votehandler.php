@@ -39,12 +39,12 @@ class VoteHandler {
 
 		return $result->fetch_object('Vote');
 	}
-
-	public static function getNumBanned(User $consumer) {
+	//$consumer is a match id
+	public static function getNumBanned($matchId) {
 		$database = Database::open(Settings::db_name_infected_compo);
 
 		$result = $database->query('SELECT `id` FROM `' . Settings::db_table_infected_compo_votes . '`
-																WHERE `consumerId` = ' . $consumer->getId() . ';');
+																WHERE `consumerId` = ' . $database->real_escape_string($matchId) . ';');
 
 		$database->close();
 
@@ -57,11 +57,12 @@ class VoteHandler {
 		return $turnArray[$numBanned];
 	}
 
-	public static function banMap(VoteOption $voteOption, User $consumer) {
+	//Again, consumer is a match id
+	public static function banMap(VoteOption $voteOption, $consumer) {
 		$database = Database::open(Settings::db_name_infected_compo);
 
 		$result = $database->query('INSERT INTO `' . Settings::db_table_infected_compo_votes . '` (`consumerId`, `voteOptionId`)
-																VALUES (\'' . $consumer->getId() . '\',
+																VALUES (\'' . $database->real_escape_string($consumer) . '\',
 																				\'' . $voteOption->getId() . '\');');
 
 		$database->close();

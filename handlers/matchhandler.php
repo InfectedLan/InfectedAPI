@@ -21,6 +21,8 @@
 require_once 'settings.php';
 require_once 'database.php';
 require_once 'handlers/clanhandler.php';
+require_once 'handlers/votehandler.php';
+require_once 'handlers/voteoptionhandler.php';
 require_once 'objects/match.php';
 require_once 'objects/compo.php';
 require_once 'objects/chat.php';
@@ -131,6 +133,8 @@ AND `scheduledTime` < NOW() + INTERVAL ' . $database->real_escape_string($interv
 																						  WHERE `type` = \'' . Settings::compo_match_participant_type_clan . '\'
 																						  AND `participantId` = \'' . $clan->getId() . '\');');
 
+		//echo "Got error " . $database->error . "\n";
+		
 		$database->close();
 
 		// TODO: Do this stuff in SQL query instead? Reply: Propabily smart.
@@ -239,6 +243,13 @@ AND `scheduledTime` < NOW() + INTERVAL ' . $database->real_escape_string($interv
 										  VALUES (\'' . $database->real_escape_string($type) . '\',
 														  \'' . $database->real_escape_string($participantId) . '\',
 														  \'' . $match->getId() . '\');');
+		//Add members of clan to chat(if clan)
+		if($type == self::participantof_state_clan) {
+		    $result = $database->query('SELECT `userId` FROM `' . Settings::db_table_infected_compo_memberof . '` WHERE clanId = (SELECT `id` FROM `' . Settings::db_table_infected_compo_participantOfMatch . '` WHERE `id` = \'' . $database->insert_id . '\');');
+		    while($row = $result->fetch_array()) {
+			ChatHandler::addChatMemberById($match->getChatId(), $row["userId"]);
+		    }
+		}
 
 		if ($type != self::participantof_state_clan &&
 			$type != self::participantof_state_looser) {
@@ -281,7 +292,7 @@ AND `scheduledTime` < NOW() + INTERVAL ' . $database->real_escape_string($interv
 		*/
 		$looser = null;
 
-		$participantList = self::getParticipants($match);
+		$participantList = self::getParticipantsByMatch($match);
 
 		foreach ($participantList as $participant) {
 			if ($participant->getId() != $clan->getId()) {
@@ -535,33 +546,33 @@ AND `scheduledTime` < NOW() + INTERVAL ' . $database->real_escape_string($interv
 	}
 
 	public static function allHasAccepted(Match $match) {
-		$database = Database::open(Settings::db_name_infected_compo);
+	    $database = Database::open(Settings::db_name_infected_compo);
 
-		$result = $database->query('SELECT * FROM `' . Settings::db_table_infected_compo_participantOfMatch . '`
+	    $result = $database->query('SELECT * FROM `' . Settings::db_table_infected_compo_participantOfMatch . '`
 																WHERE `type` = \'0\'
 																AND `matchId` = \'' . $match->getId() . '\';');
 
-		// Iterate through clans
-		while ($row = $result->fetch_array()) {
-			$users = $database->query('SELECT * FROM `' . Settings::db_table_infected_compo_memberof . '`
+	    // Iterate through clans
+	    while ($row = $result->fetch_array()) {
+		$users = $database->query('SELECT * FROM `' . Settings::db_table_infected_compo_memberof . '`
 															   WHERE `clanId` = \'' . $row['participantId'] . '\';');
 
-			while ($userRow = $users->fetch_array()) {
-				$userCheck = $database->query('SELECT * FROM `' . Settings::db_table_infected_compo_readyusers . '`
+		while ($userRow = $users->fetch_array()) {
+		    $userCheck = $database->query('SELECT * FROM `' . Settings::db_table_infected_compo_readyusers . '`
 																		   WHERE `userId` = \'' . $userRow['userId'] . '\'
 																		   AND `matchId` = \'' . $match->getId() . '\';');
 
-			 	$row = $userCheck->fetch_array();
+		    $row = $userCheck->fetch_array();
 
-				if (!$row) {
-					return false;
-				}
-			}
+		    if (!$row) {
+			return false;
+		    }
 		}
+	    }
 
-		$database->close();
+	    $database->close();
 
-		return true;
+	    return true;
 	}
 
 	public static function createMatch($scheduledTime, $connectData, Compo $compo, $bracketOffset, Chat $chat, $bracket) {
@@ -676,11 +687,9 @@ AND `scheduledTime` < NOW() + INTERVAL ' . $database->real_escape_string($interv
             }
 
             $matchData['readyData'] = $readyData;
-            $result = true;
         } else if ($match->getState() == Match::STATE_CUSTOM_PREGAME &&
                    $match->isReady()) {
             $matchData['banData'] = self::getBanData($match);
-            $result = true;
         } else if ($match->getState() == Match::STATE_JOIN_GAME &&
                    $match->isReady()) {
             $gameData = [];
@@ -728,8 +737,8 @@ AND `scheduledTime` < NOW() + INTERVAL ' . $database->real_escape_string($interv
             }
 
             $matchData['gameData'] = $gameData;
-            return $matchData;
         }
+	return $matchData;
     }
 
     public static function getBanData(Match $match) {
@@ -750,11 +759,11 @@ AND `scheduledTime` < NOW() + INTERVAL ' . $database->real_escape_string($interv
 	$banData['turn'] = VoteHandler::getCurrentBanner($numBanned);
 
 	$clanList = [];
-	/*
-	foreach (MatchHandler::getParticipants($match) as $clan) {
-	    $clanData = ['clanName' => $clan->getName(),
-			 'clanTag' => $clan->getTag()];
-
+	
+	foreach (self::getParticipantsByMatch($match) as $clan) {
+	    $clanData = ['name' => $clan->getName(),
+			 'tag' => $clan->getTag()];
+	    /*
 	    $memberData = [];
 
 	    foreach ($clan->getMembers() as $member) {
@@ -765,11 +774,10 @@ AND `scheduledTime` < NOW() + INTERVAL ' . $database->real_escape_string($interv
 		$memberData[] = $userData;
 	    }
 
-	    $clanData['members'] = $memberData;
+	    $clanData['members'] = $memberData;*/
 	    $clanList[] = $clanData;
 	}
-	*/
-	$banData['clans'] = $clanArray;
+	$banData['clans'] = $clanList;
 	return $banData;
     }
 }

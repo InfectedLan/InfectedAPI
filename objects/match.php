@@ -51,6 +51,11 @@ class Match extends Object {
     public function getChat() {
 	return ChatHandler::getChat($this->chatId);
     }
+
+    public function getChatId() {
+	return $this->chatId;
+    }
+    
     public function getScheduledTime() {
 	return strtotime($this->scheduledTime);
     }
@@ -91,6 +96,7 @@ class Match extends Object {
     }
 
     public function setState($state) {
+	$this->state = $state;
 	MatchHandler::updateMatch($this, $state);
     }
 

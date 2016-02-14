@@ -143,6 +143,19 @@ class ChatHandler {
 
 		$database->close();
 	}
+	
+	/*
+	 * Same as above, but with id's to save 2 queries
+	 */
+	public static function addChatMemberById($chatId, $userId) {
+	    $database = Database::open(Settings::db_name_infected_compo);
+
+	    $database->query('INSERT INTO `' . Settings::db_table_infected_compo_memberofchat . '` (`userId`, `chatId`)
+										  VALUES (\'' . $database->real_escape_string($userId) . '\',
+												  		\'' . $database->real_escape_string($chatId) . '\');');
+
+	    $database->close();
+	}
 
 	/*
 	 * Remove the given user from the specified chat.
