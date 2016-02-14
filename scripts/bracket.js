@@ -26,6 +26,11 @@ var bracketTopExtraMargin = 35;
 var bracketWidth = 110;
 var bracketWidthMargin = 20;
 
+var participant_type_clan = 0;
+var participant_type_winner = 1;
+var participant_type_looser = 2;
+var participant_type_stepin = 3;
+
 function DataSource(compoId) {
     this.data = [];
     this.clans = [];
