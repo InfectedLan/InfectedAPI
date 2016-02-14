@@ -20,6 +20,10 @@
 require_once 'server.php';
 require_once 'websocketplugin.php';
 require_once 'handlers/matchhandler.php';
+require_once 'handlers/compopluginhandler.php';
+require_once 'handlers/voteoptionhandler.php';
+require_once 'handlers/votehandler.php';
+require_once 'localization.php';
 require_once 'objects/user.php';
 require_once 'objects/match.php';
 
@@ -43,20 +47,35 @@ class MatchPlugin extends WebSocketPlugin {
         $this->lastUpdate = 0;
         $this->upcomingMatches = array();
 	$this->watchingMatches = array();
+
+	//Listen to matches that are currently happening
+	$compos = CompoHandler::getCompos();
+	foreach($compos as $compo) {
+	    $happeningMatches = MatchHandler::getCurrentMatchesByCompo($compo);
+	    foreach($happeningMatches as $match) {
+		$this->watchingMatches[] = ["id" => $match->getId(), "state" => $match->getState(), "stateProgress" => $this->calculateStateProgress($match)];
+	    }
+	}
+	
     }
 
     public function handleIntent($intent, $args, WebSocketUser $connection) {
         switch($intent) {
         case "subscribeMatches":
             if($this->server->isAuthenticated($connection)) {
-                $user = $this->server->getUser($connection);
-                $this->subscribedUsers[$connection] = $user;
+		if(!isset($this->subscribedUsers[$connection])) {
+		    $user = $this->server->getUser($connection);
+		    echo "Subscribing user " . $user->getId() . " to matches\n";
+		    $this->subscribedUsers[$connection] = $user;
 
-                //If the user is in a match, tell that user.
-                $match = MatchHandler::getMatchByUser($user);
-                if($match != null && $match->isReady()) {
-                    $this->sendMatchData($connection, $match);
-                }
+		    //If the user is in a match, tell that user.
+		    $match = MatchHandler::getMatchByUser($user);
+		    if($match != null && $match->isReady()) {
+			$this->sendMatchData($connection, $match);
+		    }
+		} else {
+		    echo "User tried to subscribe twice!\n";
+		}
             }
 	    return true;
             break;
@@ -66,10 +85,11 @@ class MatchPlugin extends WebSocketPlugin {
 		$match = MatchHandler::getMatch($args[0]);
 		
 		$result = $this->attemptMapVote($args[1], $match, $user);
-		if($result != true) {
-		    $this->server->send($connection, '{"intent": "error", "data": ' . json_encode(array($result)) . '}');
-		} else {
+		if($result === true) {
 		    $this->handleMatchUpdate($match);
+		} else {
+		    print_r($result);
+		    $this->server->send($connection, '{"intent": "error", "data": ' . json_encode(array($result)) . '}');
 		}
 	    }
 	    return true;
@@ -97,12 +117,15 @@ class MatchPlugin extends WebSocketPlugin {
 		MatchHandler::acceptMatch($user, $match);
 		
 		if (MatchHandler::allHasAccepted($match)) {
+		    $compo = $match->getCompo();
 		    $plugin = CompoPluginHandler::getPluginObjectOrDefault($compo->getPluginName());
 
 		    if ($plugin->hasVoteScreen()) {
 			$match->setState(Match::STATE_CUSTOM_PREGAME);
+			$this->handleMatchUpdate($match);
 		    } else {
 			$match->setState(Match::STATE_JOIN_GAME);
+			$this->handleMatchUpdate($match);
 		    }
 		}
 
@@ -115,29 +138,34 @@ class MatchPlugin extends WebSocketPlugin {
 	}
     }
 
-    public function attemptMapVote($optionId, Match $match, $user) {
+    public function attemptMapVote($optionId, Match $match, User $user) {
 	$numBanned = VoteHandler::getNumBanned($match->getId());
 	$turn = VoteHandler::getCurrentBanner($numBanned);
+	echo "User voting " . $optionId . " for match " . $match->getId(). "\n";
 
 	if ($match != null) {
 	    if ($turn != 2) {
+		echo "Turn: " . $turn . "\n";
 		$participants = MatchHandler::getParticipantsByMatch($match);
 		$clan = $participants[$turn];
-				
+		
 		if ($user->equals($clan->getChief())) {
-		    $voteOption = VoteOptionHandler::getVoteOption($_GET['id']);
-					
+		    $voteOption = VoteOptionHandler::getVoteOption($optionId);
+		    
 		    if ($voteOption != null) {
 			$compo = $voteOption->getCompo();
+			
 			if ($compo->equals($match->getCompo())) {
 			    VoteHandler::banMap($voteOption, $match->getId());
 			    $options = VoteOptionHandler::getVoteOptionsByCompo($compo);
-							
-			    if ($numBanned == count($options)-1) {
+			    echo "There are " . count($options) . " vote options. " . $numBanned . " are banned.\n";
+			    if ($numBanned+1 == count($options)-1) {
 				$match->setState(2);
 			    }
 
 			    return true;
+			} else {
+			    echo "...compo mismatch?\n";
 			}
 		    } else {
 			return Localization::getLocale('this_map_does_not_exist');
@@ -159,29 +187,34 @@ class MatchPlugin extends WebSocketPlugin {
 	$matchKey = null;
 	foreach($this->watchingMatches as $key => $data) {
 	    if($data["id"] == $match->getId()) {
-		$matchData = $data["id"];
+		$matchData = $data;
 		$matchKey = $key;
 	    }
 	}
+	//print_r($matchData);
 	//For now, we are just sending everything as we need all the data anyways
-	if($matchData["state"] != $match->getState() || $matchData["stateProgress"] != self::calculateStateProgress($match)) {
+	if($matchData["state"] != $match->getState() || $matchData["stateProgress"] != $this->calculateStateProgress($match)) {
+	    //echo "Match " . $match->getId() . " needs an update!\n";
+
 	    $clans = MatchHandler::getParticipantsByMatch($match);
 	    $people = array();
 	    foreach($clans as $clan) {
-		$members = clanHandler::getPlayingClanMembers($clan);
-		array_merge($people, $members);
+		$members = ClanHandler::getPlayingClanMembers($clan);
+		$people = array_merge($people, $members);
 	    }
+	    
+	    //echo "Clans have " . count($people) . " total members.\n";
 	    foreach($people as $person) {
-		foreach($this->subscribedUsers as $connection => $user) {
-		    if($user->getId() == $person->getId()) {
-			sendMatchData($connection, $match);
+		foreach($this->subscribedUsers as $key) {
+		    if($this->subscribedUsers[$key]->getId() == $person->getId()) {
+			$this->sendMatchData($key, $match);
 			break;
 		    }
 		}
 	    }
 	    $matchData["state"] = $match->getState();
-	    $matchData["stateProgress"] = self::calculateProgress($match);
-	    $this->watchingMatches[$key] = $matchData;
+	    $matchData["stateProgress"] = $this->calculateStateProgress($match);
+	    $this->watchingMatches[$matchKey] = $matchData;
 	}
 	
     }
@@ -200,12 +233,13 @@ class MatchPlugin extends WebSocketPlugin {
     }
 
     public function onDisconnect(WebSocketUser $connection) {
+	echo "Connection disconnected, removing data\n";
         unset($this->subscribedUsers[$connection]);
     }
 
     public function tick() {
         //Iterate though matches starting in the next 60 seconds, to find out if we want to notify
-        foreach($this->upcomingMatches as $key => $match) {
+        foreach($this->upcomingMatches as $index => $match) {
             if($match->getScheduledTime() <= time()) {
                 $clans = MatchHandler::getParticipantsByMatch($match);
                 $people = array();
@@ -213,11 +247,13 @@ class MatchPlugin extends WebSocketPlugin {
                     $members = ClanHandler::getPlayingClanMembers($clan);
                     $people = array_merge($people, $members);
                 }
+		echo "Upcoming match contains " . count($people) . " members.\n";
+		//print_r($this->subscribedUsers);
                 //We have everyone involved in the match, iterate through subscribed people and notify them
                 foreach($people as $person) {
-                    foreach($this->subscribedUsers as $connection => $user) {
-                        if($user->getId() == $person->getId()) {
-                            sendMatchData($connection, $match);
+                    foreach($this->subscribedUsers as $key) {
+                        if($this->subscribedUsers[$key]->getId() == $person->getId()) {
+			    self::sendMatchData($key, $match);
                             break;
                         }
                     }
@@ -225,7 +261,7 @@ class MatchPlugin extends WebSocketPlugin {
                 //Add to "current matches"
 		$this->watchingMatches[] = ["id" => $match->getId(), "state" => $match->getState(), "stateProgress" => 0];
                 //Remove the match from the list as we have used it
-                unset($this->upcomingMatches[$key]);
+                unset($this->upcomingMatches[$index]);
             }
         }
 	//Things we check every now and then for compatability reasons
@@ -233,20 +269,20 @@ class MatchPlugin extends WebSocketPlugin {
 	    //Check for new matches to inform about starting
             $matches = MatchHandler::getUpcomingMatches(60);
             if(count($matches) > 0) {
-                echo "Scheduling " . count($matches) . " for the next 60 seconds\n";
+                echo "Scheduling " . count($matches) . " matches for the next 60 seconds\n";
                 $this->upcomingMatches = $matches;
             }
 	    //Check if matches we are currently watching are done
-	    foreach($this->watchingMatches as $key => $matchData) {
+	    foreach($this->watchingMatches as $index => $matchData) {
 		$match = MatchHandler::getMatch($matchData["id"]);
 		if(!isset($match)) {
-		    echo "Match " . $match->getId() . " dissapeared! Removing\n";
-		    unset($this->watchingMatches[$key]);
+		    echo "Match " . $matchData["id"] . " dissapeared! Removing\n";
+		    unset($this->watchingMatches[$index]);
 		    continue;
 		}
 		if($match->getWinnerId() != 0) {
 		    echo "Match " . $match->getId() . " is done! Removing\n";
-		    unset($this->watchingMatches[$key]);
+		    unset($this->watchingMatches[$index]);
 		    continue;
 		}
 		if($match->getState() != $matchData["state"]) {
