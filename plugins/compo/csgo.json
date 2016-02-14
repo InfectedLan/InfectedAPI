@@ -2,6 +2,6 @@
     "name": "Default compo plugin",
     "description": "Gives you the default behaviour of the compo system",
     "javascript": {"compoPlugin": "csgo/compoPlugin.js"},
-    "plugin": ["csgoplugin.php"],
+    "plugin": ["csgo/csgoplugin.php"],
     "classname": "CsgoPlugin"
 }

@@ -7,8 +7,19 @@ module = (function(){
 	window.location = connectUrl;
     };
 
+    var getCurrentPicker = function(banData) {
+	var turn = banData.turn;
+	return banData.clans[turn].tag + " " + banData.clans[turn].name;/*
+	for(var i = 0; i < banData.clans[turn].members.length; i++) {
+	    if(banData.clans[turn].members[i].chief) {
+		return banData.clans[turn].members[i].nick;
+	    }
+	}
+	*/
+    };
+
     pluginObj.renderCustomScreen = function(currMatchData) {
-	var banData = currMatchData.matchData.banData;
+	var banData = currMatchData.banData;
 	var banHtml = [];
 	banHtml.push('<div class="voteScreen">');
 	banHtml.push('<div class="banBoxText">');
@@ -19,13 +30,13 @@ module = (function(){
 	    banHtml.push('<p style="font-size: 30px; margin-top: 0px; text-align:right;"></p>');
 	} else {
 	    banHtml.push('<p style="text-align:right; margin:30px 0px 0px;">Klikk et map når det er din tur til å banne map</p>');
-	    banHtml.push('<p style="font-size: 30px; margin-top: 0px; text-align:right;">Det er <span class="playerNameBanning">"'+ getCurrentPicker(data) + '" </span> sin tur til å banne</p>');
+	    banHtml.push('<p style="font-size: 30px; margin-top: 0px; text-align:right;">Det er <span class="playerNameBanning">"'+ getCurrentPicker(banData) + '" </span> sin tur til å banne</p>');
 	}
 	banHtml.push('<br>');
 	banHtml.push('</div>');
 	for(var i = 0; i < banData.options.length; i++) {
 	    banHtml.push('<div id="banBoxId' + i + '" class="banBox">');
-	    if(banHtml.options[i].isBanned) {
+	    if(banData.options[i].isBanned) {
 	        banHtml.push('<img src="images/' + banData.options[i].thumbnailUrl + '_banned.png"/>');
 	    } else {
 		banHtml.push('<img src="images/' + banData.options[i].thumbnailUrl + '.png"/>');
@@ -70,7 +81,21 @@ module = (function(){
 
     pluginObj.decorateCompoPage = function(compo) {
 	if(compo.hasMatches) {
-	    $("#mainContent").append("<h1>Placeholder for brackets</h1>");
+	    $("#mainContent").append('<h2>Lagspill 1</h2><div id="bracket_container_1"></div>');
+	    var source = new DataSource(compo.id);
+	    var bracket = source.derive("bracket_container_1", "grp_1");
+	    
+	    $("#mainContent").append('<h2>Lagspill 2</h2><div id="bracket_container_2"></div>');
+	    var source = new DataSource(compo.id);
+	    var bracket = source.derive("bracket_container_2", "grp_2");
+
+	    $("#mainContent").append('<h2>Lagspill 3</h2><div id="bracket_container_3"></div>');
+	    var source = new DataSource(compo.id);
+	    var bracket = source.derive("bracket_container_3", "grp_3");
+
+	    $("#mainContent").append('<h2>Lagspill 4</h2><div id="bracket_container_4"></div>');
+	    var source = new DataSource(compo.id);
+	    var bracket = source.derive("bracket_container_4", "grp_4");
 	} else {
 	    console.log("Compo has no matches... yet");
 	}
