@@ -84,12 +84,14 @@ class ChatPlugin extends WebSocketPlugin {
     }
 
     public function onDisconnect($connection) {
-        foreach ($this->followingChatChannels as &$chatroom) {
-            if (($key = array_search($connection, $chatroom)) !== false) {
-                echo "Removing from one chatroom\n";
-
-                unset($chatroom[$key]);
-            }
+	echo "Handling chat disconnect\n";
+        foreach ($this->followingChatChannels as $chatKey => $chatroom) {
+	    foreach($chatroom as $key => $value) {
+		if($connection == $connection) {
+		    echo "Removing from one chatroom\n";		    
+		    unset($this->followingChatChannels[$chatKey][$key]);
+		}
+	    }
         }
     }
     
@@ -109,7 +111,7 @@ class ChatPlugin extends WebSocketPlugin {
     protected function sendChatMessage($connection, $channel, $message) {
         $chat = ChatHandler::getChat($channel);
         $user = $this->server->getUser($connection);
-        echo "User " . $user->getId() . " chatted " . $message;
+        echo "User " . $user->getId() . " chatted " . $message . "\n";
 
         if ($chat != null) {
             if (ChatHandler::canChat($chat, $user)) {

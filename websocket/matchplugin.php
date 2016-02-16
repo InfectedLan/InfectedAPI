@@ -191,9 +191,25 @@ class MatchPlugin extends WebSocketPlugin {
 		$matchKey = $key;
 	    }
 	}
-	//print_r($matchData);
-	//For now, we are just sending everything as we need all the data anyways
-	if($matchData["state"] != $match->getState() || $matchData["stateProgress"] != $this->calculateStateProgress($match)) {
+	if($match->getWinnerId() != 0) {
+	    $clans = MatchHandler::getParticipantsByMatch($match);
+	    $people = array();
+	    foreach($clans as $clan) {
+		$members = ClanHandler::getPlayingClanMembers($clan);
+		$people = array_merge($people, $members);
+	    }
+	    
+	    //echo "Clans have " . count($people) . " total members.\n";
+	    foreach($people as $person) {
+		foreach($this->subscribedUsers as $key) {
+		    if($this->subscribedUsers[$key]->getId() == $person->getId()) {
+			$this->sendMatchData($key, null);
+			break;
+		    }
+		}
+	    }
+	}
+	else if($matchData["state"] != $match->getState() || $matchData["stateProgress"] != $this->calculateStateProgress($match)) {
 	    //echo "Match " . $match->getId() . " needs an update!\n";
 
 	    $clans = MatchHandler::getParticipantsByMatch($match);
@@ -281,6 +297,7 @@ class MatchPlugin extends WebSocketPlugin {
 		    continue;
 		}
 		if($match->getWinnerId() != 0) {
+		    $this->handleMatchUpdate($match);
 		    echo "Match " . $match->getId() . " is done! Removing\n";
 		    unset($this->watchingMatches[$index]);
 		    continue;
@@ -301,9 +318,9 @@ class MatchPlugin extends WebSocketPlugin {
     }
 
     /*
-     * Sends all match data. Not the fastest.
+     * Sends all match data. Not the fastest. $match is null if we are sending an empty message.
      */
-    public function sendMatchData(WebSocketUser $connection, Match $match) {
+    public function sendMatchData(WebSocketUser $connection, $match) {
 	if($match == null) {
 	    $this->server->send($connection, '{"intent": "matchUpdate", "data": []}'); //If there is no match, just send an empty array to indicate the match is over.
 	} else {
