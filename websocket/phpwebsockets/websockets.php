@@ -16,7 +16,7 @@ abstract class WebSocketServer {
   protected $headerSecWebSocketProtocolRequired   = false;
   protected $headerSecWebSocketExtensionsRequired = false;
 
-  function __construct($addr, $port, $bufferLength = 2048) {
+  function __construct($addr, $port, $bufferLength = 10240) {
     $this->maxBufferSize = $bufferLength;
     $this->master = socket_create(AF_INET, SOCK_STREAM, SOL_TCP)  or die("Failed: socket_create()");
     socket_set_option($this->master, SOL_SOCKET, SO_REUSEADDR, 1) or die("Failed: socket_option()");
@@ -38,6 +38,7 @@ abstract class WebSocketServer {
   }
 
   public function send($user, $message) {
+      echo "OUTGOING: " . $message . "\n";
     if ($user->handshake) {
       $message = $this->frame($message,$user);
       $result = @socket_write($user->socket, $message, strlen($message));
