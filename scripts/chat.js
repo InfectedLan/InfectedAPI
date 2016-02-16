@@ -84,11 +84,11 @@ Chat.bindChat = function(divId, chatId, height) {
 };
 
 Chat.unbindChat = function(divId) {
-    for(var i = 0; i < this.chatList.length; i++) {
-	if(this.chatList[i].divId == divId) {
+    for(var i = 0; i < Chat.chatList.length; i++) {
+	if(Chat.chatList[i].divId == divId) {
 	    //Chat.sendMessage({intent: "unsubscribeChatroom", data: [this.chatList[i].chatId]});
-	    Websocket.sendIntent("unsubscribeChatroom", [this.chatlist[i].chatId]);
-	    this.chatList.splice(i, 1);
+	    Websocket.sendIntent("unsubscribeChatroom", [Chat.chatList[i].chatId]);
+	    Chat.chatList.splice(i, 1);
 	}
     }
 }
