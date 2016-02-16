@@ -80,7 +80,7 @@ class Server extends WebSocketServer {
 
   protected function process(WebSocketUser $connection, $message) {
       //$this->send($connection, "You sendt" . $message);
-      echo $message . "\n";
+      echo "INCOMING: " . $message . "\n";
 
       $parsedJson = json_decode($message);
 
@@ -132,7 +132,7 @@ class Server extends WebSocketServer {
     echo "Lost connection\n";
 
     foreach($this->plugins as $plugin) {
-      $plugin->onConnect($connection);
+      $plugin->onDisconnect($connection);
     }
 
     $this->unregisterUser($connection);
@@ -163,9 +163,9 @@ class Server extends WebSocketServer {
       }
       $stop = microtime(true);
       $diff = ($stop-$start)/1000;
-      //if($diff>100) {
-      //logAdmin("WARNING: tick() is taking more than 100ms");
-	  //}
+      if($diff>100) {
+	  echo "WARNING: tick() is taking more than 100ms\n";
+      }
   }
 }
 
