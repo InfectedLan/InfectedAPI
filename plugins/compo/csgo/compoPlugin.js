@@ -81,19 +81,19 @@ module = (function(){
 
     pluginObj.decorateCompoPage = function(compo) {
 	if(compo.hasMatches) {
-	    $("#mainContent").append('<h2>Lagspill 1</h2><div id="bracket_container_1"></div>');
+	    $("#mainContent").append('<h2>Gruppe A</h2><div id="bracket_container_1"></div>');
 	    var source = new DataSource(compo.id);
 	    var bracket = source.derive("bracket_container_1", "grp_1");
 	    
-	    $("#mainContent").append('<h2>Lagspill 2</h2><div id="bracket_container_2"></div>');
+	    $("#mainContent").append('<h2>Gruppe B</h2><div id="bracket_container_2"></div>');
 	    var source = new DataSource(compo.id);
 	    var bracket = source.derive("bracket_container_2", "grp_2");
 
-	    $("#mainContent").append('<h2>Lagspill 3</h2><div id="bracket_container_3"></div>');
+	    $("#mainContent").append('<h2>Gruppe C</h2><div id="bracket_container_3"></div>');
 	    var source = new DataSource(compo.id);
 	    var bracket = source.derive("bracket_container_3", "grp_3");
 
-	    $("#mainContent").append('<h2>Lagspill 4</h2><div id="bracket_container_4"></div>');
+	    $("#mainContent").append('<h2>Gruppe D</h2><div id="bracket_container_4"></div>');
 	    var source = new DataSource(compo.id);
 	    var bracket = source.derive("bracket_container_4", "grp_4");
 	} else {
