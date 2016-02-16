@@ -24,5 +24,8 @@ class CompoPlugin {
     public function hasVoteScreen() {
 	return false;
     }
+    public function onMatchFinished(Match $match) {
+	
+    }
 }
 ?>

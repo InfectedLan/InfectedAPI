@@ -23,12 +23,14 @@ require_once 'database.php';
 require_once 'handlers/clanhandler.php';
 require_once 'handlers/votehandler.php';
 require_once 'handlers/voteoptionhandler.php';
+require_once 'handlers/compopluginhandler.php';
 require_once 'objects/match.php';
 require_once 'objects/compo.php';
 require_once 'objects/chat.php';
 require_once 'objects/clan.php';
 require_once 'objects/user.php';
 require_once 'objects/event.php';
+require_once 'objects/compoplugin.php';
 
 /*
  * EPIC WARNING:
@@ -245,7 +247,7 @@ AND `scheduledTime` < NOW() + INTERVAL ' . $database->real_escape_string($interv
 														  \'' . $match->getId() . '\');');
 		//Add members of clan to chat(if clan)
 		if($type == self::participantof_state_clan) {
-		    $result = $database->query('SELECT `userId` FROM `' . Settings::db_table_infected_compo_memberof . '` WHERE clanId = (SELECT `id` FROM `' . Settings::db_table_infected_compo_participantOfMatch . '` WHERE `id` = \'' . $database->insert_id . '\');');
+		    $result = $database->query('SELECT `userId` FROM `' . Settings::db_table_infected_compo_memberof . '` WHERE clanId = ' . $database->real_escape_string($participantId) . ';');
 		    while($row = $result->fetch_array()) {
 			ChatHandler::addChatMemberById($match->getChatId(), $row["userId"]);
 		    }
@@ -260,8 +262,8 @@ AND `scheduledTime` < NOW() + INTERVAL ' . $database->real_escape_string($interv
 
 		$database->close();
 	}
-
-	public static function setWinner(Match $match, Clan $clan) {
+	
+	public static function setWinner(Match $match, Clan $clan, CompoPlugin $compoPlugin = null) {
 		$database = Database::open(Settings::db_name_infected_compo);
 
 		// Set winner of match
@@ -319,6 +321,12 @@ AND `scheduledTime` < NOW() + INTERVAL ' . $database->real_escape_string($interv
 							WHERE `type` = 2 AND `participantId` = ' . $database->real_escape_string($match->getId()) . ';');*/
 
 		$database->close();
+
+		//Notify the compo plugin that the match is over.
+		if($compoPlugin == null) {
+		    $compoPlugin = CompoPluginHandler::getPluginObjectOrDefault($match->getCompo()->getPluginName());
+		}
+		$compoPlugin->onMatchFinished($match);
 	}
 
 	public static function getParticipantsByMatch(Match $match) {

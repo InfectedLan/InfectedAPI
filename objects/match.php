@@ -35,6 +35,10 @@ class Match extends Object {
     const BRACKET_WINNER = 1;
     const BRACKET_LOOSER = 0;
 
+    const CONNECTION_TYPE_NONE = 0;
+    const CONNECTION_TYPE_SERVER = 1;
+    const CONNECTION_TYPE_CUSTOM = 2;
+
     private $scheduledTime;
     private $connectDetails;
     private $winnerId;
@@ -43,6 +47,7 @@ class Match extends Object {
     private $bracketOffset;
     private $chatId;
     private $bracket;
+    private $connectionType;
 
     public function getBracket() {
 	return $this->bracket;
@@ -110,6 +115,10 @@ class Match extends Object {
 
     public function getJsonableData() {
         return MatchHandler::getJsonableData($this);
+    }
+
+    public function getConnectionType() {
+	return $this->connectionType;
     }
 }
 ?>
