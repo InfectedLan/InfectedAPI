@@ -7,5 +7,8 @@ class CsgoPlugin extends CompoPlugin {
     public function hasVoteScreen() {
 	return true;
     }
+    public function onMatchFinished(Match $match) {
+
+    }
 }
 ?>
