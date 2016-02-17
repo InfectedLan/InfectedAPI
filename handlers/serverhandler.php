@@ -59,13 +59,29 @@ class ServerHandler {
 		return $serverList;
 	}
 
+    /*
+     * Creates a new server entry
+     */
 	public static function createServer(Compo $compo, $humanName, $connectionDetails) {
 	    $database = Database::open(Settings::db_name_infected_compo);
 
 	    $database->query('INSERT INTO `' . Settings::db_table_infected_compo_servers . '`(`compoId`, `humanName`, `connectionDetails`) VALUES (' . $compo->getId() . ', \'' . $database->real_escape_string($humanName) . '\', \'' . $database->real_escape_string($connectionDetails) . '\');');
 
+        $return_id = $database->insert_id;
+        
 	    $database->close();
+        
+        return $return_id;
 	}
+
+    /*
+     * Deletes a server entry
+     */
+    public static function deleteServer(Server $server) {
+        $database = Database::open(Settings::db_name_infected_compo);
+
+        $database->query('DELETE FROM `' . Settings::db_table_infected_compo_servers . '` WHERE `id` = \'' . $server->getId() . '\';');
+    }
 
 	/*
 	 * Sets the connection details of a server

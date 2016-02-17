@@ -68,5 +68,12 @@ class Server extends Object{
 	public function setHumanName($humanName) {
 	    ServerHandler::setHumanName($this, $humanName);
 	}
+
+    /*
+     * Deletes the server entry
+     */
+    public function delete() {
+        ServerHandler::deleteServer($this);
+    }
 }
 ?>
