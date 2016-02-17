@@ -22,6 +22,11 @@ require_once 'handlers/matchhandler.php';
 require_once 'objects/eventobject.php';
 
 class Compo extends EventObject {
+
+    const CONNECTION_TYPE_NONE = 0;
+    const CONNECTION_TYPE_SERVER = 1;
+    const CONNECTION_TYPE_CUSTOM = 2;
+    
     private $name;
     private $title;
     private $tag;
@@ -32,6 +37,7 @@ class Compo extends EventObject {
     private $teamSize;
     private $participantLimit;
     private $chatId;
+    private $connectionType;
 
     /*
      * Returns the name of this compo.
@@ -117,6 +123,11 @@ class Compo extends EventObject {
      */
     public function getMatches() {
 	return MatchHandler::getMatchesByCompo($this);
+    }
+
+    
+    public function getConnectionType() {
+	return $this->connectionType;
     }
 }
 ?>

@@ -50,7 +50,7 @@ class ServerHandler {
 
 		$database->close();
 
-		$server = [];
+		$serverList = [];
 
 		while ($object = $result->fetch_object('Server')) {
 			$serverList[] = $object;
