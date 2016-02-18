@@ -92,6 +92,7 @@ class Settings {
 	const db_table_infected_crew_notewatches = 'notewatches';
 	const db_table_infected_crew_pages = 'pages';
 	const db_table_infected_crew_teams = 'teams';
+    const db_table_infected_crew_castingpages = 'castingPages';
 
 	// InfectedInfo
 	const db_table_infected_info_slides = 'slides';
