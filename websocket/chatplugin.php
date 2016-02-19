@@ -36,12 +36,12 @@ class ChatPlugin extends WebSocketPlugin {
 
         $this->followingChatChannels = array(); // Fun fact, PHP arrays are not arrays! It is if you do [] instead...
     }
-
+    
     public function handleIntent($intent, $args, $connection) {
         switch($intent) {
         case 'subscribeChatroom':
             if ($this->server->isAuthenticated($connection)) {
-                $chat = ChatHandler::getChat($parsedJson->data[0]);
+                $chat = ChatHandler::getChat($args[0]);
 
                 if ($chat != null) {
                     $this->subscribeChatroom($chat, $connection);
@@ -56,7 +56,7 @@ class ChatPlugin extends WebSocketPlugin {
 
         case 'chatMessage':
             if ($this->server->isAuthenticated($connection)) {
-                $this->server->sendChatMessage($connection, $parsedJson->data[0], $parsedJson->data[1]);
+                $this->sendChatMessage($connection, $args[0], $args[1]);
             } else {
                 echo "Disconnecting user due to no authentication: " . $this->server->getUser($connection)->getUsername() . "\n";
 
@@ -67,7 +67,7 @@ class ChatPlugin extends WebSocketPlugin {
 
         case 'unsubscribeChatroom':
             if ($this->server->isAuthenticated($connection)) {
-                $this->unsubscribeChatroom($parsedJson->data[0], $connection);
+                $this->unsubscribeChatroom($args[0], $connection);
             } else {
                 echo "Disconnecting user due to no authentication: " . $this->server->getUser($connection)->getUsername() . "\n";
 
@@ -84,12 +84,14 @@ class ChatPlugin extends WebSocketPlugin {
     }
 
     public function onDisconnect($connection) {
-        foreach ($this->followingChatChannels as &$chatroom) {
-            if (($key = array_search($connection, $chatroom)) !== false) {
-                echo "Removing from one chatroom\n";
-
-                unset($chatroom[$key]);
-            }
+	echo "Handling chat disconnect\n";
+        foreach ($this->followingChatChannels as $chatKey => $chatroom) {
+	    foreach($chatroom as $key => $value) {
+		if($connection == $connection) {
+		    echo "Removing from one chatroom\n";		    
+		    unset($this->followingChatChannels[$chatKey][$key]);
+		}
+	    }
         }
     }
     
@@ -109,7 +111,7 @@ class ChatPlugin extends WebSocketPlugin {
     protected function sendChatMessage($connection, $channel, $message) {
         $chat = ChatHandler::getChat($channel);
         $user = $this->server->getUser($connection);
-        echo "User " . $user->getId() . " chatted " . $message;
+        echo "User " . $user->getId() . " chatted " . $message . "\n";
 
         if ($chat != null) {
             if (ChatHandler::canChat($chat, $user)) {
@@ -132,11 +134,11 @@ class ChatPlugin extends WebSocketPlugin {
     }
 
     protected function getFormattedChatMessage($user, $message, $timestamp) {
-        $time = date('H:i:s', $timestamp);
+        $time = date('H:i', $timestamp);
         $username = ($user->hasPermission('*') || $user->hasPermission('compo.chat') ? "<b>[Admin] " . $user->getUsername() . "</b>" : $user->getUsername());
         $message = htmlspecialchars($message, ENT_QUOTES, 'UTF-8');
 
-        return $time . $username . ": " . $message;
+        return $time . ' ' . $username . ": " . $message;
     }
 
     protected function subscribeChatroom($chat, $connection) {

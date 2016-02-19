@@ -24,10 +24,10 @@ $(document).ready(function() {
     });
 });
 
-function login(form, customHandler = function(){location.reload()}) {
+function login(form, customHandler) {
     $.post('../api/json/user/loginUser.php', $(form).serialize(), function(data) {
 	if (data.result) {
-	    customHandler();
+	    location.reload();
 	} else {
 	    error(data.message);
 	}

@@ -39,7 +39,8 @@ if (Session::isAuthenticated()) {
 		$compo = $clan->getCompo();
 
 		$compoData = ['name' => $compo->getName(),
-						   		'tag' => $compo->getTag()];
+			      'tag' => $compo->getTag(),
+			      'id' => $compo->getId()];
 
 		$clanData = ['id' => $clan->getId(),
 							   'name' => $clan->getName(),

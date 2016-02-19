@@ -24,16 +24,20 @@ class WebSocketPlugin {
         //Register intents here
     }
 
-    public function handleIntent($intent, $args, $connection) {
+    public function handleIntent($intent, $args, WebSocketUser $connection) {
         
     }
 
-    public function onConnect($connection) {
+    public function onConnect(WebSocketUser $connection) {
 
     }
 
-    public function onDisconnect($connection) {
+    public function onDisconnect(WebSocketUser $connection) {
 
+    }
+
+    public function tick() {
+        //Please note that this is not strictly well-timed, but ticks about every second. "around" is a nice word in programming. It means "prepare for unexpected shit"
     }
 }
 ?>

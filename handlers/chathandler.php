@@ -143,6 +143,19 @@ class ChatHandler {
 
 		$database->close();
 	}
+	
+	/*
+	 * Same as above, but with id's to save 2 queries
+	 */
+	public static function addChatMemberById($chatId, $userId) {
+	    $database = Database::open(Settings::db_name_infected_compo);
+
+	    $database->query('INSERT INTO `' . Settings::db_table_infected_compo_memberofchat . '` (`userId`, `chatId`)
+										  VALUES (\'' . $database->real_escape_string($userId) . '\',
+												  		\'' . $database->real_escape_string($chatId) . '\');');
+
+	    $database->close();
+	}
 
 	/*
 	 * Remove the given user from the specified chat.
@@ -299,11 +312,13 @@ class ChatHandler {
             //You can also read the chat if it is a compo chat for a compo you are currently participating in. Soooo....
             $clanList = ClanHandler::getClansByUser($user);
 
-						foreach ($clanList as $clan) {
-                            if ($clan->isQualified($clan->getCompo()) && $clan->getCompo()->getChat()->getId() == $chat->getId()) {
+            foreach ($clanList as $clan) {
+                if (($clan->isQualified($clan->getCompo()) && $clan->getCompo()->getChat()->getId() == $chat->getId() )) {
                     return true;
                 }
             }
+            //You can also read from a match you are a part of
+            
         }
     }
 }

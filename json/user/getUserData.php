@@ -27,7 +27,7 @@ $data = null;
 
 if(Session::isAuthenticated()) {
     $user = Session::getCurrentUser();
-    if($_GET["id"] == null) {
+    if(!isset($_GET["id"])) {
         $target = $user;
     }
     $message = Localization::getLocale('this_user_does_not_exist');
@@ -51,13 +51,18 @@ if(Session::isAuthenticated()) {
                       "displayName" => $target->getDisplayName(),
                       "age" => $target->getAge());
         //Get avatar info
-        if($target->hasAvatar()) {
-            $avatar = $target->getAvatar();
+	if ($target->hasValidAvatar()) {
+	    $avatar = $target->getAvatar();
             $avatar_dat = array("hd" => $avatar->getHd(),
                                 "sd" => $avatar->getSd(),
                                 "thumb" => $avatar->getThumbnail());
             $data['avatar'] = $avatar_dat;
-        }
+	} else {
+	    $avatarFile = AvatarHandler::getDefaultAvatar($target);
+	    $data['avatar'] = array("hd" => $avatarFile,
+				    "sd" => $avatarFile,
+				    "thumb" => $avatarFile);
+	}
         $result = true;
     } else {
         $result = false;

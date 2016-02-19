@@ -42,9 +42,11 @@ if(Session::isAuthenticated()) {
             foreach($clans as $clan) {
                 $clanData[] = ["name" => $clan->getName(),
                                "tag" => $clan->getTag(),
-                               "id" => $clan->getId()];
+                               "id" => $clan->getId(),
+			       "qualified" => $clan->isQualified($compo)];
             }
             $data["clans"] = $clanData;
+	    $data["hasMatches"] = CompoHandler::hasGeneratedMatches($compo);
             $result = true;
         } else {
             $message = Localization::getLocale("this_compo_does_not_exist");

@@ -21,12 +21,16 @@
 require_once 'settings.php';
 require_once 'database.php';
 require_once 'handlers/clanhandler.php';
+require_once 'handlers/votehandler.php';
+require_once 'handlers/voteoptionhandler.php';
+require_once 'handlers/compopluginhandler.php';
 require_once 'objects/match.php';
 require_once 'objects/compo.php';
 require_once 'objects/chat.php';
 require_once 'objects/clan.php';
 require_once 'objects/user.php';
 require_once 'objects/event.php';
+require_once 'objects/compoplugin.php';
 
 /*
  * EPIC WARNING:
@@ -70,7 +74,7 @@ class MatchHandler {
 	}
 
 	/*
-	 * Returns a list of all matches.
+	 * Returns a list of all matches. Matches are completely naive of what they are connected to, so this will have little use.
 	 */
 	public static function getMatches() {
 		$database = Database::open(Settings::db_name_infected_compo);
@@ -88,7 +92,29 @@ class MatchHandler {
 		return $matchList;
 	}
 
-	// Unstable if user has multiple matches happening
+    /*
+     * Returns upcoming matches within the next $time period(seconds)
+     */
+
+    public static function getUpcomingMatches($interval) {
+		$database = Database::open(Settings::db_name_infected_compo);
+
+		$result = $database->query('SELECT * FROM `' . Settings::db_table_infected_compo_matches . '`
+WHERE `scheduledTime` >= NOW() 
+AND `scheduledTime` < NOW() + INTERVAL ' . $database->real_escape_string($interval) . ' SECOND;');
+
+		$database->close();
+
+		$matchList = [];
+
+		while ($object = $result->fetch_object('Match')) {
+			$matchList[] = $object;
+		}
+
+		return $matchList;
+	}
+
+	// Unstable if user has multiple matches happening. Returns the "current match", current being the first match with a scheduled time before now, and without a winner.
 	public static function getMatchByUser(User $user) {
 		$clanList = ClanHandler::getClansByUser($user);
 
@@ -109,9 +135,11 @@ class MatchHandler {
 																						  WHERE `type` = \'' . Settings::compo_match_participant_type_clan . '\'
 																						  AND `participantId` = \'' . $clan->getId() . '\');');
 
+		//echo "Got error " . $database->error . "\n";
+		
 		$database->close();
 
-		// TODO: Do this stuff in SQL query instead?
+		// TODO: Do this stuff in SQL query instead? Reply: Propabily smart.
 		while ($object = $result->fetch_object('Match')) {
 			if ($object->getWinner() == 0 &&
 				$object->getScheduledTime() < time()) {
@@ -217,6 +245,13 @@ class MatchHandler {
 										  VALUES (\'' . $database->real_escape_string($type) . '\',
 														  \'' . $database->real_escape_string($participantId) . '\',
 														  \'' . $match->getId() . '\');');
+		//Add members of clan to chat(if clan)
+		if($type == self::participantof_state_clan) {
+		    $result = $database->query('SELECT `userId` FROM `' . Settings::db_table_infected_compo_memberof . '` WHERE clanId = ' . $database->real_escape_string($participantId) . ';');
+		    while($row = $result->fetch_array()) {
+			ChatHandler::addChatMemberById($match->getChatId(), $row["userId"]);
+		    }
+		}
 
 		if ($type != self::participantof_state_clan &&
 			$type != self::participantof_state_looser) {
@@ -227,8 +262,8 @@ class MatchHandler {
 
 		$database->close();
 	}
-
-	public static function setWinner(Match $match, Clan $clan) {
+	
+	public static function setWinner(Match $match, Clan $clan, CompoPlugin $compoPlugin = null) {
 		$database = Database::open(Settings::db_name_infected_compo);
 
 		// Set winner of match
@@ -259,7 +294,7 @@ class MatchHandler {
 		*/
 		$looser = null;
 
-		$participantList = self::getParticipants($match);
+		$participantList = self::getParticipantsByMatch($match);
 
 		foreach ($participantList as $participant) {
 			if ($participant->getId() != $clan->getId()) {
@@ -286,6 +321,12 @@ class MatchHandler {
 							WHERE `type` = 2 AND `participantId` = ' . $database->real_escape_string($match->getId()) . ';');*/
 
 		$database->close();
+
+		//Notify the compo plugin that the match is over.
+		if($compoPlugin == null) {
+		    $compoPlugin = CompoPluginHandler::getPluginObjectOrDefault($match->getCompo()->getPluginName());
+		}
+		$compoPlugin->onMatchFinished($match);
 	}
 
 	public static function getParticipantsByMatch(Match $match) {
@@ -488,6 +529,20 @@ class MatchHandler {
 		return $result->num_rows > 0;
 	}
 
+	public static function getReadyCount(Match $match) {
+	    $count = 0;
+	    $participantClans = self::getParticipantsByMatch($match);
+	    foreach($participantClans as $clan) {
+		$members = $clan->getMembers();
+		foreach($members as $member) {
+		    if(self::isUserReady($member, $match)) {
+			$count++;
+		    }
+		}
+	    }
+	    return $count;
+	}
+
 	public static function acceptMatch(User $user, Match $match) {
 		$database = Database::open(Settings::db_name_infected_compo);
 
@@ -499,33 +554,33 @@ class MatchHandler {
 	}
 
 	public static function allHasAccepted(Match $match) {
-		$database = Database::open(Settings::db_name_infected_compo);
+	    $database = Database::open(Settings::db_name_infected_compo);
 
-		$result = $database->query('SELECT * FROM `' . Settings::db_table_infected_compo_participantOfMatch . '`
+	    $result = $database->query('SELECT * FROM `' . Settings::db_table_infected_compo_participantOfMatch . '`
 																WHERE `type` = \'0\'
 																AND `matchId` = \'' . $match->getId() . '\';');
 
-		// Iterate through clans
-		while ($row = $result->fetch_array()) {
-			$users = $database->query('SELECT * FROM `' . Settings::db_table_infected_compo_memberof . '`
+	    // Iterate through clans
+	    while ($row = $result->fetch_array()) {
+		$users = $database->query('SELECT * FROM `' . Settings::db_table_infected_compo_memberof . '`
 															   WHERE `clanId` = \'' . $row['participantId'] . '\';');
 
-			while ($userRow = $users->fetch_array()) {
-				$userCheck = $database->query('SELECT * FROM `' . Settings::db_table_infected_compo_readyusers . '`
+		while ($userRow = $users->fetch_array()) {
+		    $userCheck = $database->query('SELECT * FROM `' . Settings::db_table_infected_compo_readyusers . '`
 																		   WHERE `userId` = \'' . $userRow['userId'] . '\'
 																		   AND `matchId` = \'' . $match->getId() . '\';');
 
-			 	$row = $userCheck->fetch_array();
+		    $row = $userCheck->fetch_array();
 
-				if (!$row) {
-					return false;
-				}
-			}
+		    if (!$row) {
+			return false;
+		    }
 		}
+	    }
 
-		$database->close();
+	    $database->close();
 
-		return true;
+	    return true;
 	}
 
 	public static function createMatch($scheduledTime, $connectData, Compo $compo, $bracketOffset, Chat $chat, $bracket) {
@@ -597,6 +652,141 @@ class MatchHandler {
         $result = $database->query('SELECT * FROM `' . Settings::db_table_infected_compo_matchmetadata . '` WHERE `match` = \'' . $match->getId() . '\' AND `key` = \'' . $database->real_escape_string($key) . '\';');
 
         return $result->num_rows > 0;
+    }
+
+    public static function getJsonableData(Match $match) {
+	$matchData['id'] = $match->getId();
+        $matchData['state'] = $match->getState();
+        $matchData['ready'] = $match->isReady();
+        $matchData['compoId'] = $match->getCompo()->getId();
+        $matchData['currentTime'] = time();
+        $matchData['startTime'] = $match->getScheduledTime();
+        $matchData['chatId'] = $match->getChat()->getId();
+
+        if ($match->getState() == Match::STATE_READYCHECK &&
+            $match->isReady()) {
+            $readyData = [];
+
+            foreach (MatchHandler::getParticipantsByMatch($match) as $clan) {
+                $memberData = [];
+
+                foreach ($clan->getMembers() as $member) {
+                    $avatarFile = null;
+
+                    if ($member->hasValidAvatar()) {
+                        $avatarFile = $member->getAvatar()->getThumbnail();
+                    } else {
+                        $avatarFile = AvatarHandler::getDefaultAvatar($member);
+                    }
+
+                    $memberReadyStatus = ['userId' => $member->getId(),
+                                          'nick' => $member->getNickname(),
+                                          'avatarUrl' => $avatarFile,
+                                          'ready' => MatchHandler::isUserReady($member, $match)];
+
+                    $memberData[] = $memberReadyStatus;
+                }
+
+                $clanData = ['clanName' => $clan->getName(),
+                             'clanTag' => $clan->getTag(),
+                             'members' => $memberData];
+
+                $readyData[] = $clanData;
+            }
+
+            $matchData['readyData'] = $readyData;
+        } else if ($match->getState() == Match::STATE_CUSTOM_PREGAME &&
+                   $match->isReady()) {
+            $matchData['banData'] = self::getBanData($match);
+        } else if ($match->getState() == Match::STATE_JOIN_GAME &&
+                   $match->isReady()) {
+            $gameData = [];
+            $gameData['connectDetails'] = $match->getConnectDetails();
+
+            $clanList = [];
+
+            foreach (MatchHandler::getParticipantsByMatch($match) as $clan) {
+                $clanData = [];
+                $clanData['clanName'] = $clan->getName();
+                $clanData['clanTag'] = $clan->getTag();
+
+                $memberData = [];
+
+                foreach ($clan->getMembers() as $member) {
+                    $userData = [];
+
+                    $userData['userId'] = $member->getId();
+                    $userData['nick'] = $member->getNickname();
+                    $userData['chief'] = $member->equals($clan->getChief());
+
+                    $memberData[] = $userData;
+                }
+
+                $clanData['members'] = $memberData;
+                $clanList[] = $clanData;
+            }
+
+            $gameData['clans'] = $clanList;
+            $compo = $match->getCompo();
+	    $plugin = CompoPluginHandler::getPluginObjectOrDefault($compo->getPluginName());
+
+            if ($plugin->hasVoteScreen()) {
+                foreach (VoteOptionHandler::getVoteOptionsByCompo($compo) as $option) {
+                    if (!VoteOptionHandler::isVoted($option, $match)) {
+                        $mapData = [];
+
+                        $mapData['name'] = $option->getName();
+                        $mapData['thumbnail'] = $option->getThumbnailUrl();
+
+                        $gameData['mapData'] = $mapData;
+                        break;
+                    }
+                }
+            }
+
+            $matchData['gameData'] = $gameData;
+        }
+	return $matchData;
+    }
+
+    public static function getBanData(Match $match) {
+	$banData = [];
+	$bannableMapsArray = [];
+
+	foreach (VoteOptionHandler::getVoteOptionsByCompo($match->getCompo()) as $voteOption) {
+	    $optionData = [];
+	    $optionData['name'] = $voteOption->getName();
+	    $optionData['thumbnailUrl'] = $voteOption->getThumbnailUrl();
+	    $optionData['id'] = $voteOption->getId();
+	    $optionData['isBanned'] = VoteOptionHandler::isVoted($voteOption, $match);
+	    $bannableMapsArray[] = $optionData;
+	}
+
+	$banData['options'] = $bannableMapsArray;
+	$numBanned = VoteHandler::getNumBanned($match->getId());
+	$banData['turn'] = VoteHandler::getCurrentBanner($numBanned);
+
+	$clanList = [];
+	
+	foreach (self::getParticipantsByMatch($match) as $clan) {
+	    $clanData = ['name' => $clan->getName(),
+			 'tag' => $clan->getTag()];
+	    /*
+	    $memberData = [];
+
+	    foreach ($clan->getMembers() as $member) {
+		$userData = ['userId' => $member->getId(),
+			     'nick' => $member->getNickname(),
+			     'chief' => $member->equals($clan->getChief())];
+
+		$memberData[] = $userData;
+	    }
+
+	    $clanData['members'] = $memberData;*/
+	    $clanList[] = $clanData;
+	}
+	$banData['clans'] = $clanList;
+	return $banData;
     }
 }
 ?>
