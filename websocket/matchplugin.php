@@ -30,6 +30,7 @@ require_once 'objects/match.php';
 class MatchPlugin extends WebSocketPlugin {
     private $server;
     private $subscribedUsers;
+    private $spectatedMatches;
     private $lastUpdate;
     private $upcomingMatches; //Matches that will start soon
 
@@ -38,6 +39,7 @@ class MatchPlugin extends WebSocketPlugin {
     function __construct(Server $server) {
         parent::__construct($server);
         $server->registerIntent("subscribeMatches", $this);
+	$server->registerIntent("spectateMatch", $this);
 	$server->registerIntent("voteMap", $this);
 	$server->registerIntent("ready", $this);
         $server->registerPlugin($this);
@@ -47,6 +49,7 @@ class MatchPlugin extends WebSocketPlugin {
         $this->lastUpdate = 0;
         $this->upcomingMatches = array();
 	$this->watchingMatches = array();
+	$this->spectatedMatches = array();
 
 	//Listen to matches that are currently happening
 	$compos = CompoHandler::getCompos();
@@ -79,6 +82,31 @@ class MatchPlugin extends WebSocketPlugin {
             }
 	    return true;
             break;
+
+	case "spectateMatch":
+	    if($this->server->isAuthenticated($connection)) {
+		$user = $this->server->getUser($connection);
+		if($user->hasPermission("compo.casting")) {
+		    $matchId = $args[0];
+		    if(!isset($this->spectatedMatches[$matchId])) {
+			$this->spectatedMatches[$matchId] = [];
+		    }
+		    foreach($this->spectatedMatches[$matchId] as $spectatingConn) {
+			if($spectatingConn == $connection) {
+			    echo "User tried to spectate match twice\n";
+			    return true;
+			}
+		    }
+		    $this->spectatedMatches[$matchId][] = $connection;
+		    $match = MatchHandler::getMatch($matchId);
+		    if($match != null && $match->isReady()) {
+			$this->sendMatchData($connection, $match);
+		    }
+		} else {
+		    $this->server->send($connection, '{"intent": "error", "data": "Du har ikke tillatelse!"}');
+		}
+            }
+	    break;
 	case "voteMap":
 	    if($this->server->isAuthenticated($connection)) {
 		$user = $this->server->getUser($connection);
@@ -140,7 +168,7 @@ class MatchPlugin extends WebSocketPlugin {
 
     public function attemptMapVote($optionId, Match $match, User $user) {
 	$numBanned = VoteHandler::getNumBanned($match->getId());
-	$turn = VoteHandler::getCurrentBanner($numBanned);
+	$turn = VoteHandler::getCurrentBanner($numBanned, $match);
 	echo "User voting " . $optionId . " for match " . $match->getId(). "\n";
 
 	if ($match != null) {
@@ -156,7 +184,9 @@ class MatchPlugin extends WebSocketPlugin {
 			$compo = $voteOption->getCompo();
 			
 			if ($compo->equals($match->getCompo())) {
-			    VoteHandler::banMap($voteOption, $match->getId());
+			    $turnMask = VoteHandler::getCurrentTurnMask($numBanned, $match);
+			    echo "Turn mask: " . $turnMask . "\n";
+			    VoteHandler::banMap($voteOption, $match->getId(), $turnMask);
 			    $options = VoteOptionHandler::getVoteOptionsByCompo($compo);
 			    echo "There are " . count($options) . " vote options. " . $numBanned . " are banned.\n";
 			    if ($numBanned+1 == count($options)-1) {
@@ -231,6 +261,11 @@ class MatchPlugin extends WebSocketPlugin {
 	    $matchData["state"] = $match->getState();
 	    $matchData["stateProgress"] = $this->calculateStateProgress($match);
 	    $this->watchingMatches[$matchKey] = $matchData;
+	    if(isset($this->spectatedMatches[$match->getId()])) {
+		foreach($this->spectatedMatches[$match->getId()] as $conn) {
+		    $this->sendMatchData($conn, $match);
+		}
+	    }
 	}
 	
     }

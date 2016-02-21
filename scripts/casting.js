@@ -33,8 +33,8 @@ CsgoUserTemplate.prototype.render = function() {
     var contentHtml = [];
     contentHtml.push('<div class="split">');
 
-    contentHtml.push('<div style="float: left; position: relative; width: 40%;"><img src="../content/castingAssets/' + castingPageData.avatar + '" /><div class="imageComment"><span><p>' + castingPageData.userRole + '</p><p>' + castingPageData.userName + '</p></div></span></div>');
-    contentHtml.push('<div class="greyedBox" style="float: right; width: 40%; ">');
+    contentHtml.push('<div class="solo" style="float: left; position: relative; top: 290px; left: 300px;"><img src="../content/castingAssets/' + castingPageData.avatar + '" /><div class="imageComment"><span><p>' + castingPageData.userRole + '</p><p>' + castingPageData.userName + '</p></div></span></div>');
+    contentHtml.push('<div class="greyedBox solo" style="float: right; position:relative; top: 290px; right: 300px; ">');
     contentHtml.push('<ul>');
 
     contentHtml.push('<li>Kills: ' + castingPageData.kills + '</li>');
@@ -86,11 +86,31 @@ CsgoUserTemplate.prototype.getData = function() {
 	    teamName: $("#teamName").val()};
 };
 
+//new thing
+var CastingCamTemplate = function() {};
+CastingCamTemplate.prototype = Object.create(Template.prototype);
+CastingCamTemplate.prototype.constructor = CastingCamTemplate;
+CastingCamTemplate.prototype.render = function() {
+    var contentHtml = [];
+    contentHtml.push('<div class="agendaBox"><div class="spacerr"></div>' + castingPageData.agendaData + '</div>');
+    $("#content").html(contentHtml.join(""));
+};
+
+CastingCamTemplate.prototype.renderCreateFields = function() {
+    var preferenceHtml = [];
+    preferenceHtml.push('<textarea id="agendaData" rows="10" cols="50" />');
+    $("#customPreferences").html(preferenceHtml.join(""));
+};
+CastingCamTemplate.prototype.getData = function() {
+     return {agendaData: $("#agendaData").val()};
+};
+
 var CsgoTeamTemplate = function() {};
 CsgoTeamTemplate.prototype = Object.create(Template.prototype);
 CsgoTeamTemplate.prototype.constructor = CsgoTeamTemplate;
 CsgoTeamTemplate.prototype.render = function() {
     var contentHtml = [];
+    contentHtml.push('<div class="spacer"></div>');
     contentHtml.push('<div class="tripleSplit">');
 
     contentHtml.push('<div class="tripleImg"><img src="../content/castingAssets/' + castingPageData.user1Image + '" /><div class="imageComment"><span><p>' + castingPageData.user1Role + '</p><p>' + castingPageData.user1Name + '</p></div></span></div>');
@@ -102,7 +122,7 @@ CsgoTeamTemplate.prototype.render = function() {
 
     contentHtml.push('<div class="tripleImg"><img src="../content/castingAssets/' + castingPageData.user4Image + '" /><div class="imageComment"><span><p>' + castingPageData.user4Role + '</p><p>' + castingPageData.user4Name + '</p></div></span></div>');
 
-    contentHtml.push('<div class="teamDiv tripleImg">' + castingPageData.teamName + '</div>');
+    contentHtml.push('<div class="teamDivv tripleImg">' + castingPageData.teamName + '</div>');
     contentHtml.push('<div class="tripleImg"><img src="../content/castingAssets/' + castingPageData.user5Image + '" /><div class="imageComment"><span><p>' + castingPageData.user5Role + '</p><p>' + castingPageData.user5Name + '</p></div></span></div>');
     
     contentHtml.push('</div>');
@@ -164,7 +184,7 @@ CsgoTeamTemplate.prototype.getData = function() {
 };
 
 var templates = {
-    default: new Template(), csgoUserTemplate: new CsgoUserTemplate(), csgoTeamTemplate: new CsgoTeamTemplate()
+    default: new Template(), csgoUserTemplate: new CsgoUserTemplate(), csgoTeamTemplate: new CsgoTeamTemplate(), castingCamTemplate: new CastingCamTemplate()
 };
 $(document).ready(function() {
     templates.default.renderCreateFields();

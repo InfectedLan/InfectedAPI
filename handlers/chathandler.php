@@ -99,6 +99,7 @@ class ChatHandler {
 	 * Returns true if the given user is member of the given chat.
 	 */
 	public static function isChatMember(Chat $chat, User $user) {
+	    return true; //Remove later
 		$database = Database::open(Settings::db_name_infected_compo);
 
 		$result = $database->query('SELECT `id` FROM `' . Settings::db_table_infected_compo_memberofchat . '`

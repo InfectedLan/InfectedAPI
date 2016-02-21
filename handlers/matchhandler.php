@@ -130,22 +130,21 @@ AND `scheduledTime` < NOW() + INTERVAL ' . $database->real_escape_string($interv
 	public static function getMatchByClan(Clan $clan) {
 		$database = Database::open(Settings::db_name_infected_compo);
 
-		$result = $database->query('SELECT * FROM `' . Settings::db_table_infected_compo_matches . '`
-																WHERE `id` = (SELECT `matchId` FROM `' . Settings::db_table_infected_compo_participantOfMatch . '`
+		$result = $database->query('SELECT `matchId` FROM `' . Settings::db_table_infected_compo_participantOfMatch . '`
 																						  WHERE `type` = \'' . Settings::compo_match_participant_type_clan . '\'
-																						  AND `participantId` = \'' . $clan->getId() . '\');');
+																						  AND `participantId` = \'' . $clan->getId() . '\';');
 
 		//echo "Got error " . $database->error . "\n";
+
 		
 		$database->close();
 
-		// TODO: Do this stuff in SQL query instead? Reply: Propabily smart.
-		while ($object = $result->fetch_object('Match')) {
-			if ($object->getWinner() == 0 &&
-				$object->getScheduledTime() < time()) {
-				return $object;
+		        while ($row = $result->fetch_array()) {
+			    $match = self::getMatch($row['matchId']);
+			    if ($match->getWinner() == 0 && $match->getScheduledTime() < time()) {
+				return $match;
+			    }
 			}
-		}
 	}
 
 	public static function getPendingMatchesByCompo(Compo $compo) {
@@ -153,6 +152,8 @@ AND `scheduledTime` < NOW() + INTERVAL ' . $database->real_escape_string($interv
 
 		$result = $database->query('SELECT * FROM `' . Settings::db_table_infected_compo_matches . '`
 																WHERE `compoId` = ' . $compo->getId() . ';');
+
+		//echo "got sql error: " . $database->error . "\n";
 
 		$database->close();
 
@@ -284,8 +285,9 @@ AND `scheduledTime` < NOW() + INTERVAL ' . $database->real_escape_string($interv
 											  WHERE `id` = \'' . $row['id'] . '\';');
 
 			$checkingMatchId = MatchHandler::getMatch($row['matchId']);
-			ChatHandler::addChatMembers(ChatHandler::getChat($checkingMatchId->getChat()), $clan->getMembers());
+			ChatHandler::addChatMembers($checkingMatchId->getChat(), $clan->getMembers());
 		}
+		
 		/*
 		$database->query('UPDATE `' . Settings::db_table_infected_compo_participantOfMatch . '`
 							SET `type` = 0, `participantId` = ' . $database->real_escape_string($clan->getId()) . '
@@ -309,11 +311,11 @@ AND `scheduledTime` < NOW() + INTERVAL ' . $database->real_escape_string($interv
 		while ($row = $toLooseList->fetch_array()) {
 			$database->query('UPDATE `' . Settings::db_table_infected_compo_participantOfMatch . '`
 											  SET `type` = \'0\',
-												  	`participantId` = \'' . $clan->getId() . '\'
+												  	`participantId` = \'' . $looser->getId() . '\'
 											  WHERE `id` = \'' . $row['id'] . '\';');
 
 			$checkingMatchId = MatchHandler::getMatch($row['matchId']);
-			ChatHandler::addChatMembers(ChatHandler::getChat($checkingMatchId->getChat()), $clan->getMembers());
+			ChatHandler::addChatMembers($checkingMatchId->getChat(), $looser->getMembers());
 		}
 
 		/*$database->query('UPDATE `' . Settings::db_table_infected_compo_participantOfMatch . '`
@@ -563,7 +565,7 @@ AND `scheduledTime` < NOW() + INTERVAL ' . $database->real_escape_string($interv
 	    // Iterate through clans
 	    while ($row = $result->fetch_array()) {
 		$users = $database->query('SELECT * FROM `' . Settings::db_table_infected_compo_memberof . '`
-															   WHERE `clanId` = \'' . $row['participantId'] . '\';');
+															   WHERE `clanId` = \'' . $row['participantId'] . '\' AND `stepinId` = 0;');
 
 		while ($userRow = $users->fetch_array()) {
 		    $userCheck = $database->query('SELECT * FROM `' . Settings::db_table_infected_compo_readyusers . '`
@@ -640,7 +642,7 @@ AND `scheduledTime` < NOW() + INTERVAL ' . $database->real_escape_string($interv
         $database = Database::open(Settings::db_name_infected_compo);
         
         if(self::hasKey($match, $key)) {
-            $result = $database->query('UPDATE `' . Settings::db_table_infected_compo_matchmetadata . '` SET `value` = \'' . $database->real_escape_string($value) .'\' WHERE `key` = \'' . $database->real_escape_string($key) . '\';');
+            $result = $database->query('UPDATE `' . Settings::db_table_infected_compo_matchmetadata . '` SET `value` = \'' . $database->real_escape_string($value) .'\' WHERE `key` = \'' . $database->real_escape_string($key) . '\' AND `match`=\'' . $match->getId() . '\';');
         } else {
             $result = $database->query('INSERT INTO `' . Settings::db_table_infected_compo_matchmetadata . '` (`match`, `key`, `value`) VALUES (\'' . $match->getId() . '\', \'' . $database->real_escape_string($key) . '\', \'' . $database->real_escape_string($value) . '\');');
         }
@@ -670,7 +672,7 @@ AND `scheduledTime` < NOW() + INTERVAL ' . $database->real_escape_string($interv
             foreach (MatchHandler::getParticipantsByMatch($match) as $clan) {
                 $memberData = [];
 
-                foreach ($clan->getMembers() as $member) {
+                foreach ($clan->getPlayingMembers() as $member) {
                     $avatarFile = null;
 
                     if ($member->hasValidAvatar()) {
@@ -729,20 +731,34 @@ AND `scheduledTime` < NOW() + INTERVAL ' . $database->real_escape_string($interv
             $gameData['clans'] = $clanList;
             $compo = $match->getCompo();
 	    $plugin = CompoPluginHandler::getPluginObjectOrDefault($compo->getPluginName());
-
+	    $tempMapData = [];
             if ($plugin->hasVoteScreen()) {
-                foreach (VoteOptionHandler::getVoteOptionsByCompo($compo) as $option) {
+		$options = VoteOptionHandler::getVoteOptionsByCompo($compo);
+                foreach ($options as $option) {
+		    $type = VoteOptionHandler::getVoteType($option, $match);
+		    //echo "Type: " . $type . "\n";
+                    if ($type == 1) {
+			//echo "Preparing map";
+                        $mapData = [];
+
+                        $mapData['name'] = $option->getName();
+                        $mapData['thumbnail'] = $option->getThumbnailUrl();
+
+                        array_push($tempMapData, $mapData);
+                    }
+                }
+		foreach ($options as $option) {
                     if (!VoteOptionHandler::isVoted($option, $match)) {
                         $mapData = [];
 
                         $mapData['name'] = $option->getName();
                         $mapData['thumbnail'] = $option->getThumbnailUrl();
 
-                        $gameData['mapData'] = $mapData;
-                        break;
+                        array_push($tempMapData, $mapData);
                     }
                 }
             }
+	    $gameData['mapData'] = $tempMapData;
 
             $matchData['gameData'] = $gameData;
         }
@@ -758,13 +774,15 @@ AND `scheduledTime` < NOW() + INTERVAL ' . $database->real_escape_string($interv
 	    $optionData['name'] = $voteOption->getName();
 	    $optionData['thumbnailUrl'] = $voteOption->getThumbnailUrl();
 	    $optionData['id'] = $voteOption->getId();
-	    $optionData['isBanned'] = VoteOptionHandler::isVoted($voteOption, $match);
+	    $optionData['isSelected'] = VoteOptionHandler::isVoted($voteOption, $match);
+	    $optionData['selectionType'] = VoteOptionHandler::getVoteType($voteOption, $match);
 	    $bannableMapsArray[] = $optionData;
 	}
 
 	$banData['options'] = $bannableMapsArray;
 	$numBanned = VoteHandler::getNumBanned($match->getId());
-	$banData['turn'] = VoteHandler::getCurrentBanner($numBanned);
+	$banData['turn'] = VoteHandler::getCurrentBanner($numBanned, $match);
+	$banData['selectType'] = VoteHandler::getCurrentTurnMask($numBanned, $match) == 0 ? "banne" : "picke";
 
 	$clanList = [];
 	

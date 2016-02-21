@@ -16,8 +16,13 @@ module = (function(){
 	$("#matchArea").html(matchData.join(""));
     };
 
-    pluginObj.decorateCompoPage = function() {
-
+    pluginObj.decorateCompoPage = function(compo) {
+	$("#mainContent").append('<h2>Playoff-bracket</h2><div style="display: block;" class="bracket_container" id="playoffBracket"></div><br />');
+	var source = new DataSource(compo.id);
+	var bracket = source.derive("playoffBracket", "playoff");
+	$("#mainContent").append('<h2>Looser playoff-bracket</h2><div style="display: block;" class="bracket_container" id="playoffLooserBracket"></div><br />');
+	var source = new DataSource(compo.id);
+	var bracket = source.derive("playoffLooserBracket", "play_looser");
     };
 
     return pluginObj;

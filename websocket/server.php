@@ -83,7 +83,10 @@ class Server extends WebSocketServer {
       echo "INCOMING: " . $message . "\n";
 
       $parsedJson = json_decode($message);
-
+      if(empty($message) || !isset($message)) {
+	  echo "Got empty packet!?!\n";
+	  return;
+      }
       switch ($parsedJson->intent) {
       case 'auth':
 	  $user = Session::getUserFromSessionId($parsedJson->data[0]);
@@ -99,7 +102,9 @@ class Server extends WebSocketServer {
 	      $this->disconnect($connection);
 	  }
 	  break;
-
+      case 'keepAlive':
+	  
+	  break;
       default:
 	  if(isset($this->intentHandlers[$parsedJson->intent])) {
 

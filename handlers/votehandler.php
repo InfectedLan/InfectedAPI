@@ -24,6 +24,7 @@ require_once 'objects/vote.php';
 require_once 'objects/voteoption.php';
 require_once 'objects/user.php';
 require_once 'objects/compo.php';
+require_once 'handlers/compopluginhandler.php';
 
 class VoteHandler {
 	/*
@@ -51,19 +52,29 @@ class VoteHandler {
 		return $result->num_rows;
 	}
 
-	public static function getCurrentBanner($numBanned) {
-		$turnArray = [0, 1, 0, 1, 1, 0, 2];
+	public static function getCurrentBanner($numBanned, Match $match) {
+	    $plugin = CompoPluginHandler::getPluginObjectOrDefault($match->getCompo()->getPluginName());
+	    
+	    $turnArray = $plugin->getTurnArray($match);
 
-		return $turnArray[$numBanned];
+	    return $turnArray[$numBanned];
+	}
+
+	public static function getCurrentTurnMask($numBanned, Match $match) {
+	    $plugin = CompoPluginHandler::getPluginObjectOrDefault($match->getCompo()->getPluginName());
+	    
+	    $turnArray = $plugin->getTurnMask($match);
+
+	    return $turnArray[$numBanned];
 	}
 
 	//Again, consumer is a match id
-	public static function banMap(VoteOption $voteOption, $consumer) {
+	public static function banMap(VoteOption $voteOption, $consumer, $type) {
 		$database = Database::open(Settings::db_name_infected_compo);
 
-		$result = $database->query('INSERT INTO `' . Settings::db_table_infected_compo_votes . '` (`consumerId`, `voteOptionId`)
+		$result = $database->query('INSERT INTO `' . Settings::db_table_infected_compo_votes . '` (`consumerId`, `voteOptionId`,`type`)
 																VALUES (\'' . $database->real_escape_string($consumer) . '\',
-																				\'' . $voteOption->getId() . '\');');
+																				\'' . $voteOption->getId() . '\', \'' . $database->real_escape_string($type) . '\');');
 
 		$database->close();
 	}

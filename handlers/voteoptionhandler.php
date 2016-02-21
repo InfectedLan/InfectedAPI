@@ -73,5 +73,25 @@ class VoteOptionHandler {
 
 		return $result->num_rows > 0;
 	}
+
+	/*
+	 * Returns the vote type of the vote option, if any
+	 */
+	public static function getVoteType(VoteOption $voteOption, Match $match) {
+		$database = Database::open(Settings::db_name_infected_compo);
+
+		$result = $database->query('SELECT `type` FROM `' . Settings::db_table_infected_compo_votes . '`
+																WHERE `voteOptionId` = \'' . $voteOption->getId() . '\'
+																AND `consumerId` = \'' . $match->getId() . '\';');
+
+		if($result->num_rows == 0) {
+		    $database->close();
+		    return null;
+		}
+		$row = $result->fetch_row();
+		$database->close();
+		//echo "Vote type: " . $row[0] . "\n";
+		return $row[0];
+	}
 }
 ?>

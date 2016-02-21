@@ -38,6 +38,7 @@ if (Session::isAuthenticated()) {
             echo '<link rel="stylesheet" href="../styles/cast.css">';
             echo '</head>';
             echo '<body>';
+	    echo '<div class="fullscreen-bg"><video width="100%" height="100%" autoplay loop><source src="../content/static/casting_vid.mp4" type="video/mp4" /></video></div>';
             echo '<script>var castingPageData = ' . $castingPage->getData() . '; var template = "' . $castingPage->getTemplate() . '";$(document).ready(function(){renderCasting();});</script>';
             echo '<div id="content"></div>';
             echo '</body>';

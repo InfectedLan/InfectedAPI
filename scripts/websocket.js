@@ -131,6 +131,9 @@ Websocket = (function() {
 	socket.onmessage = onMessage;
 	socket.onclose = _onClose;
 	connecting = true;
+	window.setTimeout(function(){
+	    Websocket.sendIntent("keepAlive", []);
+	}, 1000*120);
     };
     wsObject.addHandler = function(intent, handler) {
 	if(typeof(listeners[intent]) === "undefined") {
