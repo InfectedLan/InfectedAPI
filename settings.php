@@ -64,6 +64,7 @@ class Settings {
 	const db_table_infected_syslogs = 'syslogs';
 
 	// InfectedCompo
+	const db_table_infected_compo_servers = 'servers';
 	const db_table_infected_compo_matchrelationships = 'matchrelationships';
 	const db_table_infected_compo_chatmessages =  'chatmessages';
 	const db_table_infected_compo_chats =  'chats';
@@ -78,8 +79,8 @@ class Settings {
 	const db_table_infected_compo_matches = 'matches';
 	const db_table_infected_compo_readyusers = 'readyusers';
 	const db_table_infected_compo_votes =  'votes';
-  const db_table_infected_compo_qualificationQueue = 'qualificationQueue';
-  const db_table_infected_compo_matchmetadata = 'matchmetadata';
+	const db_table_infected_compo_qualificationQueue = 'qualificationQueue';
+	const db_table_infected_compo_matchmetadata = 'matchmetadata';
 
 	// InfectedCrew
 	const db_table_infected_crew_applicationqueue = 'applicationqueue';
@@ -91,6 +92,7 @@ class Settings {
 	const db_table_infected_crew_notewatches = 'notewatches';
 	const db_table_infected_crew_pages = 'pages';
 	const db_table_infected_crew_teams = 'teams';
+    const db_table_infected_crew_castingpages = 'castingPages';
 
 	// InfectedInfo
 	const db_table_infected_info_slides = 'slides';

@@ -37,9 +37,12 @@ if(Session::isAuthenticated()) {
                    "name" => $compo->getName(),
                    "title" => $compo->getTitle(),
                    "tag" => $compo->getTag(),
+		   "chat" => $compo->getChatId(),
                    "description" => $compo->getDescription(),
 		   "teamSize" => $compo->getTeamSize(),
 		   "participantLimit" => $compo->getParticipantLimit(),
+		   "hasMatches" => CompoHandler::hasGeneratedMatches($compo),
+		   "pluginName" => $compo->getPluginName(),
                    "pluginJavascript" => CompoPluginHandler::getPluginJavascriptOrDefault($compo->getPluginName())];
     }
     $result = true;

@@ -4,9 +4,6 @@
 [submodule "libraries/phpqrcode"]
 	path = libraries/phpqrcode
 	url = git://github.com/t0k4rt/phpqrcode
-[submodule "libraries/phpwebsockets"]
-	path = libraries/phpwebsockets
-	url = git@github.com:ghedipunk/PHP-Websockets.git
 [submodule "libraries/ckeditor"]
 	path = libraries/ckeditor
 	url = git@github.com:ckeditor/ckeditor-releases.git

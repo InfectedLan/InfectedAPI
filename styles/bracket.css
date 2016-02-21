@@ -72,8 +72,9 @@
 }
 .bracket_container {
     width: 100%;
-    min-height: 800px;
-    background: #0c273a;
+    min-height: 200px;
+    overflow:auto;
+    /*background: #0c273a;*/
 }
 .bracket_participant {
     width: 100%;
