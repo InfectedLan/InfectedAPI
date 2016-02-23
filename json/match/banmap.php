@@ -39,7 +39,7 @@ if (Session::isAuthenticated()) {
 		
 		if ($match != null) {
 			$numBanned = VoteHandler::getNumBanned($match->getId());
-			$turn = VoteHandler::getCurrentBanner($numBanned);
+			$turn = VoteHandler::getCurrentBanner($numBanned, $match);
 			
 			if ($turn != 2) {
 				$participants = MatchHandler::getParticipantsByMatch($match);

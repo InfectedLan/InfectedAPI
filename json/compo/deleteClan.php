@@ -31,7 +31,8 @@ if (Session::isAuthenticated()) {
 	if ($user->hasPermission('event.compo')) {
 		$clan = ClanHandler::getClan($_GET["id"]);
         if($clan != null) {
-            ClanHandler::deleteClan($clan);
+            ClanHandler::removeClan($clan);
+	    $result = true;
         } else {
             $message = Localization::getLocale('this_clan_does_not_exist');
         }

@@ -1,0 +1,672 @@
+.fullscreen-bg {
+    position: fixed;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    overflow: hidden;
+    z-index: -100;
+}
+
+.fullscreen-bg video {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+}
+
+#mainContent {
+    width:915px;
+    position: relative;
+    left: 470px;
+    top: 260px;
+}
+
+body {
+    background-image: url('../content/static/casting_bg.png');
+    overflow: hidden;
+    color:white;
+    font-family:arial;
+}
+
+#allContent {
+    width: 1920px;
+    height: 1080px;
+    /*background-color: rgb(255,0,0);*/
+    /*padding: 10%;
+    padding-left: 15%;
+    padding-right: 15%;*/
+    top: 0px;
+    left: 0px;
+    position: absolute;
+    background-image: url('../content/static/casting_lines.png');
+    background-size: 100% auto;
+
+}
+
+.acceptScreen{
+	display:none;
+
+	}
+
+.voteScreen{
+	margin-top:10px;
+	}
+
+.voteScreen:after {
+    content: ".";
+    display: block;
+    height: 0;
+    clear: both;
+    visibility: hidden;
+}
+
+/*.playScreen{
+	display:none;
+	}
+*/
+
+.map img {
+	width: 100%;
+	height: 100%;
+}
+
+/*
+body{
+	background-image:url('../images/CompoHP01.jpg');
+	-webkit-background-size: cover;
+	-moz-background-size: cover;
+	-o-background-size: cover;
+	background-size: cover;
+	background-repeat: no-repeat;
+	background-color:#4e688f;
+	margin-top:50px;
+
+	color:white;
+	font-family:arial;
+}
+*/
+table {
+	padding: 5px;
+	vertical-align:top;
+}
+td {
+	vertical-align: top;
+}
+
+input {
+	margin: 2px;
+	padding-left:4px;
+	/*width: 100%;*/
+	min-height: 21px;
+	width: 146px;
+	color:#bbbbc0;
+
+	border: 1px solid rgb(15, 42, 59);
+
+	background: rgb(0, 22, 39);
+}
+
+ul {
+	float: center;
+	list-style: none;
+	padding: 0px;
+	margin: auto;
+	/* width: 80%; */
+	width: 95%;
+	margin-top: 10px;
+}
+
+.teamEntry {
+	cursor: pointer;
+}
+
+h1 {
+	font-size: 26px;
+	display: inline;
+}
+
+h3 {
+	font-size: 17px;
+	display: inline;
+	font-weight: normal;
+}
+
+#editUserLabel {
+	color: #FFF !important;
+	position: absolute;
+	width: 100px;
+	right: 115px;
+	top: 35px;
+	font-size: 90%;
+	text-decoration: none;
+}
+
+#logOutLabel {
+	color: #FFF !important;
+	position: absolute;
+	width: 70px;
+	right: -12px;
+	top: 35px;
+	font-size: 90%;
+	text-decoration: none;
+}
+
+a {
+	color: #FFF !important;
+}
+
+.boxTitle {
+	width: 100%;
+	height: 40px;
+	background-color: #041520;
+}
+
+.boxTitle p {
+	padding: 10px;
+}
+
+.boxTitleText {
+
+}
+
+#loginInput {
+
+}
+
+#loginbox i {
+	margin: 4px, 10px, 4px, 4px;
+}
+
+#loginbox {
+	width: 200px;
+	height: 200px;
+	margin: auto;
+	overflow: auto;
+	background-color: rgba(5, 32, 49, 0.9);
+}
+#content{
+	width:1350px;
+	overflow:auto;
+	margin:auto;
+}
+
+/*	#profileBox, #teamBox, #chatBox, #mainContent, .gameType, #bannerFiller, #bannerFiller2, #Box{
+		background-color: rgba(12, 23, 26, 0.75);
+	}*/
+
+	#canvasHolder {
+	    z-index: -100;
+	    width: 100%;
+	    height: 100%;
+	    position: absolute;
+	    left: 0px;
+	    top: 0px;
+	}
+
+#leftColumn{
+	float:left;
+	width:300px;
+	min-height:500px;
+
+}
+
+	#profileBox{
+		position:relative;
+		height:60px;
+		margin-bottom:15px;
+	}
+		#userProfilePic{
+			float:left;
+			height:40px;
+			margin:10px;
+			width:60px;
+			/*background-color:#3CC;*/
+		}
+			#userProfilePic img{
+				width:100%;
+				height:100%;
+				margin:0;
+			}
+
+		#userName{
+			float:left;
+			width:220px;
+			margin:10px 0;
+		}
+			#userName p{
+				font-size:12px;
+				margin:5px;
+			}
+
+	#teamBox{
+		border-top: 40px solid rgb(4, 21, 32);
+		height:60px;
+		position:relative;
+		width:auto;
+		padding:10px;
+		padding-bottom:35px;
+
+	}
+		#teamBox h1{
+			margin:0px;
+			font-size: 25px;
+			clear:both;
+			font-weight:lighter;
+		}
+
+		#addTeam{
+			position:absolute;
+			right:10px;
+			padding:0px 5px 5px;
+			bottom:-10px;
+			-webkit-user-select: none; /* Chrome/Safari */
+			-moz-user-select: none; /* Firefox */
+			-ms-user-select: none; /* IE10+ */
+			cursor:pointer;
+			transition: all 0.1s ease-in;
+		}
+			#addTeam:hover{
+				background-color: rgb(12, 23, 26);
+			}
+			#addTeam:active{
+				bottom:-11px;;
+			}
+	#chatBox{
+		height:455px;
+		/* margin-top:20px; */
+	}
+	#Box{
+		margin-top:15px;
+		height:440px;
+
+	}
+#rightColumn{
+	margin-left:15px;
+	float:left;
+	width:1000px;
+	min-height:500px;
+}
+
+	#banner{
+		width:auto;
+		height:60px;
+		margin-bottom:15px;
+		clear:both;
+	}
+		.gameType{
+			float:left;
+			height:58px;
+			min-width: 100px;
+			padding-top:2px;
+			margin-right:15px;
+			-webkit-user-select: none; /* Chrome/Safari */
+			-moz-user-select: none; /* Firefox */
+			-ms-user-select: none; /* IE10+ */
+			transition: all 0.1s ease-in;
+		}
+			.gameType:hover{
+				background-color: rgba(18, 35, 41, 0.75);
+				cursor:pointer;
+			}
+			.gameType:active{
+				margin-top:1px;
+			}
+			.gameType p{
+				margin:18px auto;
+				text-align:center;
+				font-size:20px;
+			}
+
+		.selected{
+			border-bottom: 10px solid rgb(4, 21, 32);
+			height:50px;
+			padding-top:0px;
+		}
+
+		#bannerFiller{
+		 width:615px;
+		 height:100%;
+		 float:left;
+
+		}
+
+		#bannerFiller2{
+			width: 800px;
+		 height:100%;
+		 float:left;
+			}
+
+	#mainContent{
+		min-height:600px;
+		padding: 10px;
+		overflow: scroll-y;
+	}
+
+
+	#vsBox{
+		padding:0px 60px;
+	}
+
+	#vsBox:after {
+	    content: ".";
+	    display: block;
+	    height: 0;
+	    clear: both;
+	    visibility: hidden;
+	}
+		#vsTitle{
+			margin:20px; 0px; 0px;
+			text-align:center;
+			font-weight:bold;
+			clear:both;
+		}
+		#vsLeft, #vsRight{
+			width:360px;
+			min-height:50px;
+		}
+		#vsLeft{
+			float:left;
+		}
+
+		#vsRight{
+			float:right;
+		}
+
+		.leftPlayer, .rightPlayer{
+			height:50px;
+			margin:0px 0px 20px;
+
+		}
+
+		.leftPlayer{
+		}
+
+		.rightPlayer{
+
+		}
+		.playerImg{
+			height:50px;
+			width:66px;
+			background:none;
+		}
+
+		.playerImg img{
+				width:100%;
+				height:100%;
+				margin:0;
+			}
+
+		.playerName{
+			line-height: 50px;
+			margin:0px 20px;
+		}
+
+		.rdyBtn{
+			height:24px;
+			width:110px;
+
+			margin:10px 0px;
+			color:white;
+
+
+			text-align::center;
+			-webkit-user-select: none; /* Chrome/Safari */
+			-moz-user-select: none; /* Firefox */
+			-ms-user-select: none; /* IE10+ */
+		}
+			.rdyBtn p {
+				margin:0px;
+				font-size: 14px;
+				text-align:center;
+				line-height:24px;
+			}
+
+			.NOrdy{
+				background: linear-gradient(rgb(122, 28, 29), rgb(66, 18, 16));
+				border: 1px solid rgb(145, 11, 12);
+			}
+
+			.YESrdy{
+				background: linear-gradient(rgb(30, 121, 86),rgb(21,62,48));
+				border: 1px solid rgb(15, 143, 92);
+			}
+
+			.GOrdy{
+				background: linear-gradient(rgb(30, 121, 86),rgb(21,62,48));
+				border: 1px solid rgb(15, 143, 92);
+			}
+
+
+		#vsLeft .playerImg{
+			float:left;
+		}
+		#vsLeft .playerName{
+			float:left
+		}
+		#vsLeft .rdyBtn{
+			float:right;
+		}
+
+		#vsRight .playerImg{
+			float:right;
+		}
+		#vsRight .playerName{
+			float:right;
+		}
+		#vsRight .rdyBtn{
+			float:left;
+		}
+
+
+
+
+	/*BUTTONS n shit*/
+	.go{
+		background: linear-gradient(#FC3, #C60) !important;
+		border: 2px solid #CC3 !important;
+		margin:auto !important;
+		font-size: 100px !important;
+		width:290px !important;
+		padding: 0px 120px  0 150px!important;
+	}
+
+	.acpt{
+		background: linear-gradient(rgb(30, 121, 86),rgb(21,62,48));
+		border: 2px solid rgb(15, 143, 92);
+		margin:0px;
+		color:white;
+		text-align::center;
+		-webkit-user-select: none; /* Chrome/Safari */
+		-moz-user-select: none; /* Firefox */
+		-ms-user-select: none; /* IE10+ */
+		cursor:pointer;
+
+		transition:         backgroundColor 0.05s ease-in-out;
+	}
+
+		.acpt:hover{
+				background: linear-gradient(rgb(45, 136, 101),rgb(36,77,63));
+			}
+
+		.acptBlink{
+				background: linear-gradient(rgb(40, 131, 96),rgb(31,72,58));
+		}
+
+	.acptLarge{
+		font-size: 90px;
+		padding-left:36px;
+		width:400px;
+		margin:auto;
+	}
+	.acptSmall{
+		font-size: 40px;
+		padding-left:30px;
+		width:200px;
+		margin:auto;
+	}
+
+.info {
+	background-color: rgba(5, 32, 49, 0.9);
+	width: 500px;
+	height: 300px;
+	/*
+	border: 3px solid;
+    border-color: rgb(15, 105, 168);*/
+}
+
+/********************************************/
+/*				vote screen  				*/
+/********************************************/
+
+.banBoxText{
+	background:none !important;
+	width: 545px !important;
+	height:170px;
+	float:left;
+	margin:10px 0px 10px 65px;
+
+	position:relative;
+	}
+	.playerNameBanning{
+		color:#336d93;
+	}
+.banBox{
+	width:240px;
+	height:170px;
+	background: #041520;
+	float:left;
+	margin:10px 0px 10px 65px;
+
+	position:relative;
+
+	cursor:pointer;
+	}
+
+	.banBox img{
+		width: 220px;
+		height:122px;
+		margin:10px auto;
+		margin-bottom:10px;
+		background:green;
+		display:block;
+
+		}
+
+
+		.banBox p{
+			margin: 0 auto;
+			text-align:center;
+		}
+
+
+/********************************************/
+/*				PLAY screen  				*/
+/********************************************/
+.map{
+	width:200px;
+	height:112px;
+	position:absolute;
+	bottom:0px;
+	left:0px;
+	background:green;
+	}
+
+
+.ippw{
+	margin:30px auto;
+	text-align:center;
+	font-size: 20px;
+	}
+
+
+/********************************************/
+/*				LOGG INN STYLE				*/
+/********************************************/
+#loginInput {
+
+}
+
+#loginbox p {
+	margin: 4px;
+}
+
+#loginbox {
+	width: 450px;
+	height: 140px;
+	margin: 200px auto 0;
+	overflow: auto;
+	background-color: rgba(5, 32, 49, 0.9);
+
+}
+
+
+.div1{
+		float:left;
+		width:200px;
+	}
+
+.div2{
+	float:right;
+	width:250px;
+	margin-top:50px;
+}
+
+#content{
+	width:1350px;
+	overflow:auto;
+	margin:auto;
+}
+
+
+
+/* Error stuff */
+#errorbox {
+	width: 700px;
+	height: 400px;
+
+	display: none;
+	/*padding: 5px; */
+	position: fixed;
+    top:0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+
+    margin: auto;
+}
+#errorTitle {
+	background-color: #041520;
+	font-weight: bold;
+	font-size: 25px;
+}
+#errorMsg {
+	padding-left: 5px;
+	padding-top: 10px;
+	font-size: 15px;
+}
+.errorClose {
+	cursor: pointer;
+	right: 2px;
+	top: 2px;
+	position: absolute;
+	font-size: 19px;
+}
+.error {
+	background-color: rgba(5, 32, 49, 0.9);
+	width: 300px;
+	height: 150px;
+	/*
+	border: 2px solid;
+    border-radius: 10px;
+    border-color: rgb(179, 60, 60);*/
+}
+.info {
+	background-color: rgba(5, 32, 49, 0.9);
+	width: 500px;
+	height: 300px;
+	/*
+	border: 3px solid;
+    border-color: rgb(15, 105, 168);*/
+}

@@ -29,7 +29,7 @@ $message = null;
 if (Session::isAuthenticated()) {
 	$user = Session::getCurrentUser();
 
-	if ($user->hasPermission('event.compo')) {
+	if ($user->hasPermission('compo.management')) {
 		if (isset($_GET['matchId']) &&
 			isset($_GET['winnerId'])) {
 			$match = MatchHandler::getMatch($_GET['matchId']);
