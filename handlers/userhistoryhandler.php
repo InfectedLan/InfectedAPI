@@ -36,16 +36,16 @@ class UserHistoryHandler {
 										  												 UNION ALL
 										  												 SELECT `' . Settings::db_table_infected_events . '`.* FROM `' . Settings::db_table_infected_events . '`
 										  												 WHERE `' . Settings::db_table_infected_events . '`.`id` IN (SELECT `eventId` FROM `' . Settings::db_name_infected_tickets . '`.`' . Settings::db_table_infected_tickets_tickets . '`
-										  																														 												 WHERE `userId` = \'' . $user->getId() . '\')) AS `' . Settings::db_table_infected_events . '`
-																GROUP BY `' . Settings::db_table_infected_events . '`.`id`;');
+										  																														 												 WHERE `userId` = \'' . $user->getId() . '\')
+																							 ) AS `' . Settings::db_table_infected_events . '`;');
 
 	  $database->close();
 
 	  $eventList = [];
 
-	  while ($object = $result->fetch_object('Event')) {
+		while ($object = $result->fetch_object('Event')) {
 			$eventList[] = $object;
-	  }
+		}
 
 	  return $eventList;
 	}
