@@ -26,6 +26,11 @@ var bracketTopExtraMargin = 35;
 var bracketWidth = 110;
 var bracketWidthMargin = 20;
 
+var participant_type_clan = 0;
+var participant_type_winner = 1;
+var participant_type_looser = 2;
+var participant_type_walkover = 3;
+
 function DataSource(compoId) {
     this.data = [];
     this.clans = [];
@@ -81,9 +86,9 @@ function Bracket(compoId, divId, regex, bracketWidth, bracketHeight, customRende
 		}
 	    }
 	} else if(participant.type == participant_type_winner) {
-	    return "TBD";
+	    return "TBA";
 	} else if(participant.type == participant_type_looser) {
-	    return "TBD";
+	    return "TBA";
 	} else if(participant.type == participant_type_walkover) {
 	    return "Walkover";
 	}
@@ -238,7 +243,7 @@ function Bracket(compoId, divId, regex, bracketWidth, bracketHeight, customRende
 	    html.push('<div class="bracketOffset" width="' + (this.bracketWidth*1.2) + '">');
 	    html.push('<div class="bracketOffsetHeader">');
 	    var date = new Date(offsets[i].scheduledTime*1000);
-	    html.push(this.customTimeFormatter(date.toLocaleString(), i));
+	    html.push(this.customTimeFormatter(date.getHours() + ":" + date.getMinutes(), i));
 	    html.push('</div>');
 	    for(var x = 0; x < offsets[i].items.length; x++) {
 		var yMargin = 0;

@@ -99,7 +99,7 @@ if (Session::isAuthenticated()) {
 
 					$banData['options'] = $bannableMapsArray;
 					$numBanned = VoteHandler::getNumBanned($match->getId());
-					$banData['turn'] = VoteHandler::getCurrentBanner($numBanned);
+					$banData['turn'] = VoteHandler::getCurrentBanner($numBanned, $match);
 
 					$clanList = [];
 

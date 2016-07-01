@@ -20,6 +20,7 @@
 
 require_once 'handlers/userhandler.php';
 require_once 'objects/user.php';
+require_once 'handlers/sysloghandler.php';
 
 session_start();
 
@@ -55,14 +56,19 @@ class Session {
    * Returns the user by the given session id.
    */
   public function getUserFromSessionId($sessionId) {
+      if(!preg_match("/^[a-zA-Z0-9]+$/", $sessionId)) {
+	  SyslogHandler::log("Hack attack! ", "getUserFromSessionId", null, SyslogHandler::SEVERITY_CRITICAL);
+	  return null;
+      }
+
       $sessionData = exec("cat /var/lib/php5/sessions/sess_" . $sessionId); //I am not debugging regex at 0:35 in the morning, and it is temp anyways
       $regex = '/userId\|s:\d+:"(.+)";/';
 
-      echo "Got session data: " . $sessionData . "\n";
+      //echo "Got session data: " . $sessionData . "\n";
 
       preg_match($regex, $sessionData, $matches);
 
-      echo "Got match data: " . print_r($matches) . "\n";
+      //echo "Got match data: " . print_r($matches) . "\n";
 
       $id = $matches[1]; //$matches[0] returns the entire regex, $matches[1] returns the first subgroup.
 

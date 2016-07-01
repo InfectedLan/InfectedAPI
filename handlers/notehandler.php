@@ -196,12 +196,18 @@ class NoteHandler {
 		$database = Database::open(Settings::db_name_infected_crew);
 
 		$leaderInGroups = [];
+		$leaderInTeams = [];
 
 		foreach (GroupHandler::getGroups() as $group) {
-			if ($group->isMember($user) ||
-				$group->isLeader($user) ||
+			if ($group->isLeader($user) ||
 				$group->isCoLeader($user)) {
 			  $leaderInGroups[] = $group->getId();
+			}
+		}
+
+		foreach (TeamHandler::getTeams() as $team) {
+			if ($team->isLeader($user)) {
+			  $leaderInTeams[] = $team->getId();
 			}
 		}
 
@@ -222,7 +228,7 @@ class NoteHandler {
 																	ON `' . Settings::db_table_infected_crew_notes . '`.`id` = `' . Settings::db_table_infected_crew_notewatches . '`.`noteId`
 																	WHERE `eventId` = \'' . $event->getId() . '\'
 																	AND ((`groupId` != \'0\'
-	 			 																AND `teamId` = \'' . $user->getTeam()->getId() . '\')
+	 			 																AND `teamId` IN (' . implode(',', $leaderInTeams) . '))
 																				OR (`groupId` != \'0\'
 		 																	 			AND `' . Settings::db_table_infected_crew_notes . '`.`userId` = \'' . $user->getId() . '\')
 																				OR `' . Settings::db_table_infected_crew_notewatches . '`.`userId` = \'' . $user->getId() . '\')
