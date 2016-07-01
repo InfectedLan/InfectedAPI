@@ -39,6 +39,20 @@ class EventHandler {
 	}
 
 	/*
+	 * Returns true if we got an event with the given id.
+	 */
+	public static function hasEvent($id) {
+		$database = Database::open(Settings::db_name_infected);
+
+		$result = $database->query('SELECT * FROM `'. Settings::db_table_infected_events . '`
+																WHERE `id` = \'' . $database->real_escape_string($id) . '\';');
+
+		$database->close();
+
+		return $result->num_rows > 0;
+	}
+
+	/*
 	 * Returns the event after the current event.
 	 */
 	public static function getNextEvent() {
