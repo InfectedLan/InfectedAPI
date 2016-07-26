@@ -8,6 +8,7 @@ install:
   - 'git clone https://github.com/InfectedLan/InfectedDeployment.git deployment'
   - 'echo "<?php class Secret { const db_username = \"travis\"; const db_password= \"\";  } ?>" > secret.php'
   - 'cat secret.php'
+  - 'chmod +x tests/install/installDb.sh'
   - 'tests/install/installDb.sh deployment/test_infected_no.sql test_infected_no'
 script:
   - 'phpunit --version'
