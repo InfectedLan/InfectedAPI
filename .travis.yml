@@ -2,8 +2,12 @@ language: php
 php:
 #  - '5.5.9'
   - '7.0'
+services:
+  - mysql
 install:
   - 'git clone https://github.com/InfectedLan/InfectedDeployment.git deployment'
+  - 'echo "<?php class Secret { const db_username = \"travis\"; const db_password= \"\";  } ?>" > secret.php'
+  - 'cat secret.php'
 script:
   - 'phpunit --version'
   - 'phpunit tests/tests'
