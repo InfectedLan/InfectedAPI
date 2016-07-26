@@ -1,4 +1,5 @@
 <?php
+require_once 'PHPUnit/Autoload.php';
 use PHPUnit\Framework\TestCase;
 
 class DummyTest extends TestCase {

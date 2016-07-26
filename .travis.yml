@@ -5,4 +5,5 @@ php:
 install:
   - 'git clone https://github.com/InfectedLan/InfectedDeployment.git deployment'
 script:
+  - 'phpunit --version'
   - 'phpunit tests/tests'
