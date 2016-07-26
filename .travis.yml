@@ -1,0 +1,6 @@
+language: php
+php:
+  - '5.4'
+  - '7.0'
+install:
+  - 'git clone https://github.com/InfectedLan/InfectedDeployment.git deployment'
