@@ -1,3 +1,6 @@
 # Don't commit secret files
 secret.php
 paypalsecret.php
+
+# Emacs is an ass
+*~
