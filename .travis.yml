@@ -14,7 +14,7 @@ services:
   - mysql
 install:
   - 'git clone https://github.com/InfectedLan/InfectedDeployment.git deployment'
-  - 'echo "<?php class Secret { const db_username = \"travis\"; const db_password= \"\";  } ?>" > secret.php'
+  - 'echo "<?php class Secret { const db_username = \"root\"; const db_password= \"\";  } ?>" > secret.php'
   - 'cat secret.php'
   - 'mysql --version'
   - 'tests/install/installDb.sh deployment/test_infected_no.sql test_infected_no'
