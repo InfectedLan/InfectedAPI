@@ -13,6 +13,7 @@ addons:
 services:
   - mysql
 install:
+  - 'time'
   - 'git clone https://github.com/InfectedLan/InfectedDeployment.git deployment'
   - 'echo "<?php class Secret { const db_username = \"root\"; const db_password= \"\";  } ?>" > secret.php'
   - 'cat secret.php'
