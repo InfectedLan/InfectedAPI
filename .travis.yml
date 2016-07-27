@@ -24,7 +24,7 @@ install:
   - 'tests/install/installDb.sh deployment/test_infected_no_info.sql test_infected_no_info'
   - 'tests/install/installDb.sh deployment/test_infected_no_main.sql test_infected_no_main'
   - 'tests/install/installDb.sh deployment/test_infected_no_tickets.sql test_infected_no_tickets'
-  - 'wget http://phpdoc.org/phpDocumentor.phar'
+  - 'curl -L --output phpDocumentor.phar http://phpdoc.org/phpDocumentor.phar'
   - 'chmod +x phpDocumentor.phar'
   - 'mkdir docs_build'
 script:
