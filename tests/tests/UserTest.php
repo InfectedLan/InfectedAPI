@@ -41,32 +41,32 @@ class UserTest extends TestCase {
 											   1337, 
 											   "AssertNick");
 
-		$this->assertNotEquals($createdUser, null);
+		$this->assertNotEquals(null, $createdUser);
 		//Check that we can get the user by username
 		$user = UserHandler::getUserByIdentifier("assertUser");
-		$this->assertNotEquals($user, null);
+		$this->assertNotEquals(null, $user);
 		//Check that we can get the user by email
 		$email_user = UserHandler::getUserByIdentifier("assertUser@infected.no");
-		$this->assertNotEquals($email_user, null);
+		$this->assertNotEquals(null, $email_user);
 
 		//Check if the two accounts are the same account
-		$this->assertEquals($user->getId(), $email_user->getId());
+		$this->assertEquals($email_user->getId(), $user->getId());
 		//Check if this is the user we inserted
-		$this->assertEquals($user->getId(), $createdUser->getId());
+		$this->assertEquals($createdUser->getId(), $user->getId());
 
 		//Check that the fields we inserted are intact
-		$this->assertEquals($user->getFirstname(), "assertionFirstname");
-		$this->assertEquals($user->getLastname(), "assertionLastname");
-		$this->assertEquals($user->getUsername(), "assertUser");
-		$this->assertEquals($user->getPassword(), "32cdb619196200050ab0af581a10fb83cfc63b1a20f58d4bafb6313d55a3f0e9");
-		$this->assertEquals($user->getEmail(), "assertUser@infected.no");
-		$this->assertEquals($user->getBirthdate(), 890953200);
-		$this->assertEquals($user->getGenderAsString(), "Gutt");
-		$this->assertEquals($user->getPhoneAsString(), "12 34 56 78");
-		$this->assertEquals($user->getPhone(), 12345678);
-		$this->assertEquals($user->getAddress(), "Test address");
-		$this->assertEquals($user->getPostalCode(), "1337");
-		$this->assertEquals($user->getNickname(), "AssertNick");
+		$this->assertEquals("assertionFirstname", $user->getFirstname());
+		$this->assertEquals("assertionLastname", $user->getLastname());
+		$this->assertEquals("assertUser", $user->getUsername());
+		$this->assertEquals("32cdb619196200050ab0af581a10fb83cfc63b1a20f58d4bafb6313d55a3f0e9", $user->getPassword());
+		$this->assertEquals("assertUser@infected.no", $user->getEmail());
+		$this->assertEquals(890956800, $user->getBirthdate());
+		$this->assertEquals("Gutt", $user->getGenderAsString());
+		$this->assertEquals("12 34 56 78", $user->getPhoneAsString());
+		$this->assertEquals(12345678, $user->getPhone());
+		$this->assertEquals("Test address", $user->getAddress());
+		$this->assertEquals("1337", $user->getPostalCode());
+		$this->assertEquals("AssertNick", $user->getNickname());
 
 		//One last thing, check if girl string also works
 		$createdUser = UserHandler::createUser("assertionGirlFirst", 
@@ -81,12 +81,12 @@ class UserTest extends TestCase {
 											   1337, 
 											   "AssertGirl");
 		
-		$this->assertNotEquals($createdUser, null);
+		$this->assertNotEquals(null, $createdUser);
 		$user = UserHandler::getUserByIdentifier("assertGirl");
 
-		$this->assertNotEquals($user, null);
+		$this->assertNotEquals(null, $user);
 
-		$this->assertEquals($user->getGenderAsString(), "Jente");
+		$this->assertEquals("Jente", $user->getGenderAsString());
 	}
 }
 ?>
