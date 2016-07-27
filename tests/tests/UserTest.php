@@ -23,10 +23,10 @@ class UserTest extends TestCase {
 
 		//Check that the user does not exist. This is done to test that the function does not return bogus data, and is a reccomended thing to test. Test everything, basically.
 		$user = UserHandler::getUserByIdentifier("assertUser");
-		$this->assertEquals($user, null);
+		$this->assertEquals(null, $user);
 		//Check that we can get the user by email
 		$user = UserHandler::getUserByIdentifier("assertUser@infected.no");
-		$this->assertEquals($user, null);
+		$this->assertEquals(null, $user);
 
 		//Let's create another user
 		$createdUser = UserHandler::createUser("assertionFirstname", 
