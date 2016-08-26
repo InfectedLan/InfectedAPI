@@ -222,7 +222,7 @@ class NoteHandler {
 																				OR `' . Settings::db_table_infected_crew_notewatches . '`.`userId` = \'' . $user->getId() . '\')
 																	ORDER BY `secondsOffset`, `time`;');
 
-		} else if ($user->isTeamMember() && $user->isTeamLeader()) {
+		} else if ($user->isTeamLeader()) {
 			$result = $database->query('SELECT DISTINCT `' . Settings::db_table_infected_crew_notes . '`.* FROM `' . Settings::db_table_infected_crew_notes . '`
 																	LEFT JOIN `' . Settings::db_table_infected_crew_notewatches . '`
 																	ON `' . Settings::db_table_infected_crew_notes . '`.`id` = `' . Settings::db_table_infected_crew_notewatches . '`.`noteId`
