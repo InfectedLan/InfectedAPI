@@ -31,7 +31,7 @@ if (Session::isAuthenticated()) {
 
 	if (isset($_GET['query']) &&
 		strlen($_GET['query']) >= 2) {
-		$query = preg_replace('/[^A-Za-z0-9]/', ' ', $_GET['query']);
+		$query = $_GET['query'];
 		$userList = UserHandler::search($query);
 
 		if (!empty($userList)) {

@@ -378,30 +378,25 @@ class UserHandler {
 	 * Lookup users by set values and return a list of users as result.
 	 */
 	public static function search($query) {
-		$database = Database::open(Settings::db_name_infected);
-
 		// Sanitize the input and split the query string into an array.
 		$queryList = explode(' ', $query);
-		$wordList = [];
+		$keywordList = [];
 
 		// Build the word list, and add "+" and "*" to the start and end of every word.
-		foreach ($queryList as $value) {
+		foreach ($queryList as $keyword) {
 			// This is to prevent crashes caused by the word starting or ending with "@".
+			$sanitizedKeyword = preg_replace('/[^\p{L}\p{N}_]+/u', ' ', $keyword);
 
-			// TODO: Get this regex to actually match, should work just fine.
-			/*
-			if (preg_match("/^@|@$/", $value)) {
-				echo 'Got a match for "@"';
-			}
-			*/
-
-			$wordList[] = '+' . $value . '*';
+			// Wrapping the sanitized keyword with SQL match perameters.
+			$keywordList[] = '+' . $sanitizedKeyword . '*';
 		}
 
-		// Query the database using a Full-Text Search.
+		$database = Database::open(Settings::db_name_infected);
+
+		// Query the database using a "full-text" search.
 		$result = $database->query('SELECT * FROM `' . Settings::db_table_infected_users . '`
 																WHERE MATCH (`firstname`, `lastname`, `username`, `email`, `nickname`)
-																AGAINST (\'' . $database->real_escape_string(implode(' ', $wordList)) . '\' IN BOOLEAN MODE)
+																AGAINST (\'' . $database->real_escape_string(implode(' ', $keywordList)) . '\' IN BOOLEAN MODE)
 																LIMIT 15;');
 
 		$database->close();
