@@ -289,19 +289,18 @@ class NoteHandler {
 	/*
 	 * Update a note.
 	 */
-	public static function updateNote(Note $note, Group $group = null, Team $team = null, User $user = null, $title, $content, $secondsOffset = 0, $time = null, $notified = 0) {
+	public static function updateNote(Note $note, Group $group = null, Team $team = null, User $user = null, $title, $content, $secondsOffset = 0, $time = 0) {
 		$database = Database::open(Settings::db_name_infected_crew);
 
 		$database->query('UPDATE `' . Settings::db_table_infected_crew_notes . '`
-										  SET `groupId` = \'' . ($group != null ? $group->getId() : 0) . '\',
+											SET `groupId` = \'' . ($group != null ? $group->getId() : 0) . '\',
 													`teamId` = \'' . ($team != null ? $team->getId() : 0) . '\',
 													`userId` = \'' . ($user != null ? $user->getId() : 0) . '\',
 													`title` = \'' . $database->real_escape_string($title) . '\',
 													`content` = \'' . $database->real_escape_string($content) . '\',
 													`secondsOffset` = \'' . $database->real_escape_string($secondsOffset) . '\',
-													`time` = \'' . $database->real_escape_string($time) . '\',
-													`notified` = \'' . $database->real_escape_string($notified) . '\'
-										  WHERE `id` = \'' . $note->getId() . '\';');
+													`time` = \'' . $database->real_escape_string($time) . '\'
+											WHERE `id` = \'' . $note->getId() . '\';');
 
 		$database->close();
 	}
