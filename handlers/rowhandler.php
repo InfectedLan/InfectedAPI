@@ -91,17 +91,18 @@ class RowHandler {
 		// Find out what row is max row
 		$result = $database->query('SELECT COUNT(*) FROM `' . Settings::db_table_infected_tickets_rows . '` as count
 																WHERE `seatmapId` = \'' . $seatmap->getId() . '\';');
-
+		
 		$newRowNumber = $result->fetch_array()['COUNT(*)']+1;
 
-		$result = $database->query('INSERT INTO `' . Settings::db_table_infected_tickets_rows . '` (`seatmapId`, `entranceId`, `number`, `x`, `y`)
+		$result = $database->query('INSERT INTO `' . Settings::db_table_infected_tickets_rows . '` (`seatmapId`, `entranceId`, `number`, `x`, `y`, `isHorizontal`)
 											VALUES (\'' . $seatmap->getId() . '\',
 															\'' . $entrance->getId() . '\',
 															\'' . $database->real_escape_string($newRowNumber) . '\',
 															\'' . $database->real_escape_string($x) . '\',
-															\'' . $database->real_escape_string($y) . '\');');
+															\'' . $database->real_escape_string($y) . '\', \'0\');');
 
 		$insert_id = $database->insert_id;
+
 		
 		$database->close();
 

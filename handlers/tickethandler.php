@@ -212,12 +212,14 @@ class TicketHandler {
 	public static function createTicket(User $user, TicketType $ticketType, Payment $payment) {
 		$database = Database::open(Settings::db_name_infected_tickets);
 
-		$result = $database->query('INSERT INTO `' . Settings::db_table_infected_tickets_tickets . '` (`eventId`, `typeId`, `buyerId`, `paymentId`, `userId`)
+		$result = $database->query('INSERT INTO `' . Settings::db_table_infected_tickets_tickets . '` (`eventId`, `typeId`, `buyerId`, `paymentId`, `userId`, `seaterId`, `seatId`)
 																VALUES (\'' . EventHandler::getCurrentEvent()->getId() . '\',
 																				\'' . $ticketType->getId() . '\',
 																				\'' . $user->getId() . '\',
 																				\'' . $payment->getId() . '\',
-																				\'' . $user->getId() . '\');');
+																				\'' . $user->getId() . '\',
+
+		     \'' . $user->getId() . '\', \'0\');');
 
 		$ticket = self::getTicket($database->insert_id);
 
