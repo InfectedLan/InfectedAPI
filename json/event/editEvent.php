@@ -34,6 +34,10 @@ if (Session::isAuthenticated()) {
 			isset($_GET['participants']) &&
 			isset($_GET['bookingDate']) &&
 			isset($_GET['bookingTime']) &&
+		    	isset($_GET['prioritySeatingDate']) &&
+		    	isset($_GET['prioritySeatingTime']) &&
+		    	isset($_GET['seatingDate']) &&
+		    	isset($_GET['seatingTime']) &&
 			isset($_GET['startDate']) &&
 			isset($_GET['startTime']) &&
 			isset($_GET['endDate']) &&
@@ -43,6 +47,10 @@ if (Session::isAuthenticated()) {
 			is_numeric($_GET['participants'])) {
 			!empty($_GET['bookingDate']) &&
 			!empty($_GET['bookingTime']) &&
+			!empty($_GET['prioritySeatingDate']) &&
+			!empty($_GET['prioritySeatingTime']) &&
+			!empty($_GET['seatingDate']) &&
+			!empty($_GET['seatingTime']) &&
 			!empty($_GET['startDate']) &&
 			!empty($_GET['startTime']) &&
 			!empty($_GET['endDate']) &&
@@ -51,11 +59,13 @@ if (Session::isAuthenticated()) {
 			$location = $_GET['location'];
 			$participants = $_GET['participants'];
 			$bookingTime = $_GET['bookingDate'] . ' ' . $_GET['bookingTime'];
+			$prioritySeatingTime = $_GET['prioritySeatingDate'] . ' ' . $_GET['prioritySeatingTime'];
+			$seatingTime = $_GET['seatingDate'] . ' ' . $_GET['seatingTime'];
 			$startTime = $_GET['startDate'] . ' ' . $_GET['startTime'];
 			$endTime = $_GET['endDate'] . ' ' . $_GET['endTime'];
 
 			if ($event != null) {
-				EventHandler::updateEvent($event, $location, $participants, $bookingTime, $startTime, $endTime);
+			    EventHandler::updateEvent($event, $location, $participants, $bookingTime, $prioritySeatingTime , $seatingTime , $startTime, $endTime);
 				$result = true;
 			} else {
 				$message = Localization::getLocale('the_event_does_not_exist');

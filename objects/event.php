@@ -31,6 +31,8 @@ class Event extends Object {
 	private $locationId;
 	private $participants;
 	private $bookingTime;
+	private $prioritySeatingTime;
+	private $seatingTime;
 	private $startTime;
 	private $endTime;
 	private $seatmapId;
@@ -62,6 +64,20 @@ class Event extends Object {
 	 */
 	public function getBookingTime() {
 		return strtotime($this->bookingTime);
+	}
+
+	/*
+	 * Returns the time when priority seating starts(See settings.php)
+	 */
+	public function getPrioritySeatingTime() {
+		return strtotime($this->prioritySeatingTime);
+	}
+
+	/*
+	 * Returns the time when normal seating starts
+	 */
+	public function getSeatingTime() {
+		return strtotime($this->seatingTime);
 	}
 
 	/*

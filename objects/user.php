@@ -647,5 +647,9 @@ class User extends Object {
 	public function getCompoDisplayName() {
 		return $this->getFirstname() . ' "' . $this->getNickname() . '" ' . $this->getLastname();
 	}
+
+	public function isEligibleForPreSeating() {
+	    return count(TicketHandler::getTicketsSeatableByUser($this)) >= Settings::prioritySeatingReq;	    
+	}
 }
 ?>

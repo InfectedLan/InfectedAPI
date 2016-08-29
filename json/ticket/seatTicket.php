@@ -22,6 +22,7 @@ require_once 'session.php';
 require_once 'localization.php';
 require_once 'handlers/tickethandler.php';
 require_once 'handlers/seathandler.php';
+require_once 'handlers/eventhandler.php';
 
 $result = false;
 $message = null;
@@ -41,14 +42,27 @@ if(Session::isAuthenticated()) {
 					$ticket->canSeat($user)) {
 					
 					if (!$seat->hasTicket()) {
-						if ($seat->getEvent()->equals($ticket->getEvent())) {
-							TicketHandler::updateTicketSeat($ticket, $seat);
+					    $event = EventHandler::getCurrentEvent();
 
-							$message = Localization::getLocale('the_ticket_has_a_new_seat');
-							$result = true;
+					    if(($event->getPrioritySeatingTime() <= time() && $user->isEligibleForPreSeating()) || $event->getSeatingTime() <= time()) {
+						if ($seat->getEvent()->equals($ticket->getEvent())) {
+						    TicketHandler::updateTicketSeat($ticket, $seat);
+
+						    $message = Localization::getLocale('the_ticket_has_a_new_seat');
+						    $result = true;
 						} else {
-							$message = Localization::getLocale('the_ticket_and_the_seat_are_not_from_the_same_event');
+						    $message = Localization::getLocale('the_ticket_and_the_seat_are_not_from_the_same_event');
 						}
+					    } else {
+						if($event->getPrioritySeatingTime() < time()) {
+						    $message = Localization::getLocale('you_are_not_eligible_for_early_seating');
+						    SyslogHandler::log("Hack attack! ", "seatTicket", $user, SyslogHandler::SEVERITY_CRITICAL);
+						} else {
+						    $message = Localization::getLocale('seating_has_not_opened_yet');
+						    SyslogHandler::log("Hack attack! ", "seatTicket", $user, SyslogHandler::SEVERITY_CRITICAL);
+						}
+					    }
+						
 					} else {
 						$message = Localization::getLocale('this_seat_is_occupied');
 					}

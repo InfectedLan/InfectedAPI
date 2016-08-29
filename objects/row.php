@@ -28,6 +28,7 @@ class Row extends Object {
 	private $number;
 	private $x;
 	private $y;
+	private $isHorizontal;
 
 	/*
 	 * Returns the seatmap the section belongs to.
@@ -90,6 +91,13 @@ class Row extends Object {
 	 */
 	public function removeSeat() {
 		SeatHandler::removeSeat($this);
+	}
+
+	/*
+	 * Returns true if row is horizontal
+	 */
+	public function isHorizontal() {
+	    return $this->isHorizontal == 1;
 	}
 }
 ?>

@@ -150,5 +150,7 @@ class Settings {
 	// How long time after ticket is transfered should we allow the former owner to revert the transaction?
 	const ticketFee = 20; // Radar membership ticket fee.
 	const ticketTransferTime = 86400; // 1 day (24 * 60 * 60)
+
+	const prioritySeatingReq = 5;
 }
 ?>

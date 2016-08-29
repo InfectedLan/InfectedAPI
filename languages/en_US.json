@@ -195,5 +195,7 @@
    "reset_password":"Reset password",
    "enter_a_new_password":"Enter a new password.",
    "change":"Change",
-   "since_you_are_already_logged_in_you_it_seems_like_you_remember_your_password_after_all":"Since you are already logged in you remember your password after all."
+    "since_you_are_already_logged_in_you_it_seems_like_you_remember_your_password_after_all":"Since you are already logged in you remember your password after all.",
+    "you_are_not_eligible_for_early_seating": "You are not eligible for early seating",
+    "seating_has_not_opened_yet": "Seating has not opened yet"
 }

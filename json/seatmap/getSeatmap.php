@@ -52,7 +52,8 @@ if (Session::isAuthenticated()) {
 												  'id' => $row->getId(),
 												  'x' => $row->getX(),
 												  'y' => $row->getY(),
-												  'number' => $row->getNumber()];
+						  						  'number' => $row->getNumber(),
+						  						  'horizontal' => $row->isHorizontal()];
 			}
 
 			$result = true;
