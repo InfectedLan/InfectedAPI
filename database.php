@@ -22,10 +22,7 @@ require_once 'settings.php';
 require_once 'secret.php';
 
 class Database {
-	/*
-	 * Opens a connection to specified database.
-	 */
-	public static function open($database) {
+	public static function getConnection($database) {
 		// Create connection
 		$mysqli = new mysqli(Settings::db_host,
 							 Secret::db_username,
@@ -44,6 +41,13 @@ class Database {
 		}
 
 		return $mysqli;
+	}
+
+	/*
+	 * Opens a connection to specified database. (Deprecated)
+	 */
+	public static function open($database) {
+		return self::getConnection($database);
 	}
 }
 ?>
