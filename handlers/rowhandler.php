@@ -135,7 +135,7 @@ class RowHandler {
 		$database->close();
 
 		foreach (SeatHandler::getSeatsByRow($row) as $seat) {
-			SeatHandler::deleteSeat($seat);
+			SeatHandler::removeSeat($seat);
 		}
 	}
 
