@@ -172,13 +172,15 @@ class EventHandler {
 	/*
 	 * Update an event
 	 */
-	public static function updateEvent(Event $event, $location, $participants, $bookingTime, $startTime, $endTime) {
+	public static function updateEvent(Event $event, $location, $participants, $bookingTime, $prioritySeatingTime, $seatingTime, $startTime, $endTime) {
 	  $database = Database::open(Settings::db_name_infected);
 
 		$database->query('UPDATE `' . Settings::db_table_infected_events . '`
 										  SET `locationId` = \'' . $database->real_escape_string($location) . '\',
 												  `participants` = \'' . $database->real_escape_string($participants) . '\',
 												  `bookingTime` = \'' . $database->real_escape_string($bookingTime) . '\',
+								  				  `prioritySeatingTime` = \'' . $database->real_escape_string($prioritySeatingTime) . '\',
+								  				  `seatingTime` = \'' . $database->real_escape_string($seatingTime) . '\',
 												  `startTime` = \'' . $database->real_escape_string($startTime) . '\',
 												  `endTime` = \'' . $database->real_escape_string($endTime) . '\'
 										  WHERE `id` = \'' . $event->getId() . '\';');
