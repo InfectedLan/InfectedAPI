@@ -146,7 +146,7 @@ class RowHandler {
 		$seatList = SeatHandler::getSeatsByRow($row);
 
 		foreach ($seatList as $seat) {
-			if (SeatHandler::hasOwner($seat)) {
+			if (SeatHandler::hasTicket($seat)) {
 				return false;
 			}
 		}
