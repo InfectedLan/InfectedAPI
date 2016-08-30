@@ -279,7 +279,7 @@ class UserHandler {
 														  \'' . $database->real_escape_string($phone) . '\',
 														  \'' . $database->real_escape_string($address) . '\',
 														  \'' . $database->real_escape_string($postalCode) . '\',
-															\''26'\',
+															\'26\',
 														  \'' . $database->real_escape_string($nickname) . '\',
 														  \'' . date('Y-m-d H:i:s') . '\');');
 

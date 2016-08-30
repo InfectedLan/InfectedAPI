@@ -67,6 +67,11 @@ if(Session::isAuthenticated()) {
 
                                 $message = Localization::getLocale('the_ticket_has_a_new_seat');
                                 $result = true;
+			    } else if($user->hasPermission('*') || $user->hasPermission('admin.tickets')) {
+				TicketHandler::updateTicketSeat($ticket, $seat);
+
+                                $message = Localization::getLocale('the_ticket_has_a_new_seat');
+                                $result = true;
                             } else {
                                 $message = Localization::getLocale('seating_has_not_opened_yet');
                                 SyslogHandler::log("Hack attack! ", "seatTicket", $user, SyslogHandler::SEVERITY_CRITICAL);
