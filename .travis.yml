@@ -30,4 +30,4 @@ script:
   - 'phpunit --version'
   - 'phpunit tests/tests'
 after_success:
-  - 'phpDocumentor -d . -t docs_build'
+#  - 'phpDocumentor -d . -t docs_build'
