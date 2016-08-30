@@ -48,7 +48,7 @@ if(Session::isAuthenticated()) {
                             //Flags
                             $prioritySeatingStarted = $event->getPrioritySeatingTime() <= time();
                             $normalSeatingStarted = $event->getSeatingTime() <= time();
-                            if($prioritySeatingStarted && $user->isEligibleForPreSeating()) {
+                            if($prioritySeatingStarted && $user->isEligibleForPreSeating() && !$normalSeatingStarted) {
                                 if($user->isEligibleForPreSeating()) {
                                     if(SeatHandler::canBeSeated($seat, $user)) {
                                         TicketHandler::updateTicketSeat($ticket, $seat);
