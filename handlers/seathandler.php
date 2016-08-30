@@ -160,20 +160,22 @@ class SeatHandler {
     public static function canBeSeated(Seat $seat, User $user) {
         $seatRow = $seat->getRow();
         $seatableTickets = TicketHandler::getTicketsSeatableByUser($user);
-        
-        for($seatableTickets as $ticket) {
+
+	$seatedCount = 0;
+        foreach($seatableTickets as $ticket) {
             $ticketSeat = $ticket->getSeat();
             if($ticketSeat==null) { //Ticket is not seated
                 continue;
             }
-            if($ticketRow->equals($seatRow)) {
+	    $seatedCount++;
+            if($ticketSeat->getRow()->equals($seatRow)) {
                 if($seat->getNumber()-1 == $ticketSeat->getNumber() || $seat->getNumber()+1 == $ticketSeat->getNumber()) {
                     return true;
                 }
             }
             
         }
-            return false;
+	return $seatedCount == 0;
     }
 }
 ?>
