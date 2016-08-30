@@ -268,7 +268,7 @@ class UserHandler {
 	public static function createUser($firstname, $lastname, $username, $password, $email, $birthDate, $gender, $phone, $address, $postalCode, $nickname) {
 		$database = Database::open(Settings::db_name_infected);
 
-		$database->query('INSERT INTO `' . Settings::db_table_infected_users . '` (`firstname`, `lastname`, `username`, `password`, `email`, `birthdate`, `gender`, `phone`, `address`, `postalcode`, `nickname`, `registereddate`)
+		$database->query('INSERT INTO `' . Settings::db_table_infected_users . '` (`firstname`, `lastname`, `username`, `password`, `email`, `birthdate`, `gender`, `phone`, `address`, `postalcode`, `countryId`, `nickname`, `registereddate`)
 										  VALUES (\'' . $database->real_escape_string($firstname) . '\',
 														  \'' . $database->real_escape_string($lastname) . '\',
 														  \'' . $database->real_escape_string($username) . '\',
@@ -279,6 +279,7 @@ class UserHandler {
 														  \'' . $database->real_escape_string($phone) . '\',
 														  \'' . $database->real_escape_string($address) . '\',
 														  \'' . $database->real_escape_string($postalCode) . '\',
+															\''26'\',
 														  \'' . $database->real_escape_string($nickname) . '\',
 														  \'' . date('Y-m-d H:i:s') . '\');');
 
