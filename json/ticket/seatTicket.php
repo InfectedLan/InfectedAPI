@@ -23,6 +23,7 @@ require_once 'localization.php';
 require_once 'handlers/tickethandler.php';
 require_once 'handlers/seathandler.php';
 require_once 'handlers/eventhandler.php';
+require_once 'handlers/sysloghandler.php';
 
 $result = false;
 $message = null;
