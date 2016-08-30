@@ -1,0 +1,33 @@
+language: php
+php:
+#  - '5.5.9'
+  - '7.0'
+dist: trusty
+sudo: required
+addons:
+  apt:
+    packages:
+    - mysql-server-5.6
+    - mysql-client-core-5.6
+    - mysql-client-5.6
+services:
+  - mysql
+install:
+  - 'date'
+  - 'git clone https://github.com/InfectedLan/InfectedDeployment.git deployment'
+  - 'echo "<?php class Secret { const db_username = \"root\"; const db_password= \"\";  } ?>" > secret.php'
+  - 'cat secret.php'
+  - 'mysql --version'
+  - 'tests/install/installDb.sh deployment/test_infected_no.sql test_infected_no'
+  - 'tests/install/installDb.sh deployment/test_infected_no_compo.sql test_infected_no_compo'
+  - 'tests/install/installDb.sh deployment/test_infected_no_crew.sql test_infected_no_crew'
+  - 'tests/install/installDb.sh deployment/test_infected_no_info.sql test_infected_no_info'
+  - 'tests/install/installDb.sh deployment/test_infected_no_main.sql test_infected_no_main'
+  - 'tests/install/installDb.sh deployment/test_infected_no_tickets.sql test_infected_no_tickets'
+  - 'composer require --dev phpdocumentor/phpdocumentor'
+  - 'mkdir docs_build'
+script:
+  - 'phpunit --version'
+  - 'phpunit tests/tests'
+after_success:
+  - 'phpDocumentor -d . -t docs_build'
