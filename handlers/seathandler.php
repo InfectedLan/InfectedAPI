@@ -20,6 +20,7 @@
 
 require_once 'settings.php';
 require_once 'database.php';
+require_once 'handlers/eventhandler.php';
 require_once 'handlers/tickethandler.php';
 require_once 'handlers/rowhandler.php';
 require_once 'objects/seat.php';
@@ -152,5 +153,29 @@ class SeatHandler {
 	public static function getEvent(Seat $seat) {
 		return RowHandler::getEvent($seat->getRow());
 	}
+
+    /*
+     * Returns true if the user can seat at the specified seat during priority seating
+     */
+    public static function canBeSeated(Seat $seat, User $user) {
+        $seatRow = $seat->getRow();
+        $seatableTickets = TicketHandler::getTicketsSeatableByUser($user);
+
+	$seatedCount = 0;
+        foreach($seatableTickets as $ticket) {
+            $ticketSeat = $ticket->getSeat();
+            if($ticketSeat==null) { //Ticket is not seated
+                continue;
+            }
+	    $seatedCount++;
+            if($ticketSeat->getRow()->equals($seatRow)) {
+                if($seat->getNumber()-1 == $ticketSeat->getNumber() || $seat->getNumber()+1 == $ticketSeat->getNumber()) {
+                    return true;
+                }
+            }
+            
+        }
+	return $seatedCount == 0;
+    }
 }
 ?>

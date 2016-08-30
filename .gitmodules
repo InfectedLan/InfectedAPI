@@ -1,9 +1,9 @@
 [submodule "libraries/phpmailer"]
 	path = libraries/phpmailer
-	url = git://github.com/PHPMailer/PHPMailer.git
+	url = https://github.com/PHPMailer/PHPMailer.git
 [submodule "libraries/phpqrcode"]
 	path = libraries/phpqrcode
-	url = git://github.com/t0k4rt/phpqrcode
+	url = https://github.com/t0k4rt/phpqrcode.git
 [submodule "libraries/ckeditor"]
 	path = libraries/ckeditor
-	url = git@github.com:ckeditor/ckeditor-releases.git
+	url = https://github.com/ckeditor/ckeditor-releases.git
