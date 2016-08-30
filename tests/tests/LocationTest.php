@@ -9,7 +9,7 @@ require_once 'handlers/locationhandler.php';
  * Responsible for testing LocationHandler and the Location object.
  *
  */
-class LocationTestSuite extends TestCase {
+class LocationTest extends TestCase {
 	public function test() {
 		$this->locationCreationTest();
 	}
