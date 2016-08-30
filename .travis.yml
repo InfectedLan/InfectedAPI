@@ -24,7 +24,7 @@ install:
   - 'tests/install/installDb.sh deployment/test_infected_no_info.sql test_infected_no_info'
   - 'tests/install/installDb.sh deployment/test_infected_no_main.sql test_infected_no_main'
   - 'tests/install/installDb.sh deployment/test_infected_no_tickets.sql test_infected_no_tickets'
-  - 'composer require --dev phpdocumentor/phpdocumentor'
+#  - 'composer require --dev phpdocumentor/phpdocumentor'
   - 'mkdir docs_build'
 script:
   - 'phpunit --version'
