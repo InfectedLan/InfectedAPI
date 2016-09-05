@@ -22,7 +22,7 @@ require_once 'settings.php';
 require_once 'database.php';
 require_once 'objects/sectionpage.php';
 
-class SecrionPageHandler {
+class SectionPageHandler {
 	/*
 	 * Return the section page by the internal id.
 	 */
