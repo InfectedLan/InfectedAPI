@@ -102,6 +102,7 @@ class Settings {
 	const db_table_infected_main_gameapplications = 'gameapplications';
 	const db_table_infected_main_games = 'games';
 	const db_table_infected_main_pages = 'pages';
+	const db_table_infected_main_pages = 'sectionpages';
 
 	// InfectedTickets
 	const db_table_infected_tickets_checkedintickets = 'checkedintickets';
