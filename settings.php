@@ -92,7 +92,7 @@ class Settings {
 	const db_table_infected_crew_notewatches = 'notewatches';
 	const db_table_infected_crew_pages = 'pages';
 	const db_table_infected_crew_teams = 'teams';
-    const db_table_infected_crew_castingpages = 'castingPages';
+  const db_table_infected_crew_castingpages = 'castingPages';
 
 	// InfectedInfo
 	const db_table_infected_info_slides = 'slides';
@@ -102,7 +102,7 @@ class Settings {
 	const db_table_infected_main_gameapplications = 'gameapplications';
 	const db_table_infected_main_games = 'games';
 	const db_table_infected_main_pages = 'pages';
-	const db_table_infected_main_pages = 'sectionpages';
+	const db_table_infected_main_sectionpages = 'sectionpages';
 
 	// InfectedTickets
 	const db_table_infected_tickets_checkedintickets = 'checkedintickets';
