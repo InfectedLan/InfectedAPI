@@ -40,7 +40,8 @@ if (Session::isAuthenticated()) {
 
 		$compoData = ['name' => $compo->getName(),
 			      'tag' => $compo->getTag(),
-			      'id' => $compo->getId()];
+			      'id' => $compo->getId(),
+			      'requiresSteamId' => $compo->requiresSteamId()];
 
 		$clanData = ['id' => $clan->getId(),
 							   'name' => $clan->getName(),

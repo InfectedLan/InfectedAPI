@@ -81,6 +81,7 @@ class Settings {
 	const db_table_infected_compo_votes =  'votes';
 	const db_table_infected_compo_qualificationQueue = 'qualificationQueue';
 	const db_table_infected_compo_matchmetadata = 'matchmetadata';
+	const db_table_infected_compo_steamids = 'steamids';
 
 	// InfectedCrew
 	const db_table_infected_crew_applicationqueue = 'applicationqueue';

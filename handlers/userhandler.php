@@ -410,5 +410,19 @@ class UserHandler {
 
 		return $userList;
 	}
+	/*
+	 * Returns the steam id of a user, or null if undefined
+	 */
+	public static function getSteamId(User $user) {
+	    $database = Database::open(Settings::db_name_infected_compo);
+
+	    $result = $database->query('SELECT `steamid` FROM `' . Settings::db_table_infected_compo_steamids . '` WHERE `userId` = \'' . $user->getId() . '\';');
+
+	    $count = $result->num_rows;
+	    
+	    $database->close();
+
+	    return $result->fetch_array()[0];
+	}
 }
 ?>

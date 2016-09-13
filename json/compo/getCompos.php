@@ -42,6 +42,7 @@ if(Session::isAuthenticated()) {
 		   "teamSize" => $compo->getTeamSize(),
 		   "participantLimit" => $compo->getParticipantLimit(),
 		   "hasMatches" => CompoHandler::hasGeneratedMatches($compo),
+		   "requiresSteam" => $compo->requiresSteamId(),
 		   "pluginName" => $compo->getPluginName(),
                    "pluginJavascript" => CompoPluginHandler::getPluginJavascriptOrDefault($compo->getPluginName())];
     }
