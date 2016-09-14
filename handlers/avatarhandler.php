@@ -141,9 +141,9 @@ class AvatarHandler {
 	public static function createAvatar($fileName, User $user) {
 		$database = Database::open(Settings::db_name_infected_crew);
 
-		$result = $database->query('INSERT INTO `' . Settings::db_table_infected_crew_avatars . '` (`userId`, `fileName`)
+		$result = $database->query('INSERT INTO `' . Settings::db_table_infected_crew_avatars . '` (`userId`, `fileName`, `state`)
 																VALUES (\'' . $user->getId() . '\',
-																				\'' . $fileName . '\');');
+																				\'' . $fileName . '\', 0);');
 
 		$database->close();
 
