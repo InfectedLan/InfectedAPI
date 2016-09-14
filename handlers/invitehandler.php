@@ -149,7 +149,9 @@ class InviteHandler {
 				$canQualify = true;
 			    }
 			}
+			$canQualify = $canQualify && $invite->getUser()->getSteamId() !== null;
 		    }
+		    //echo "Qualification test result: " . $canQualify;
 	    
 		    if($canQualify) {
 			$playingClans = ClanHandler::getQualifiedClansByCompo($compo);

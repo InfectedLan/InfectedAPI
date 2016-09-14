@@ -658,5 +658,12 @@ class User extends Object {
 	public function getSteamId() {
 	    return UserHandler::getSteamId($this);
 	}
+
+	/*
+	 * Sets the users steam id
+	 */
+	public function setSteamId($steamId) {
+	    UserHandler::setSteamId($this, $steamId);
+	}
 }
 ?>

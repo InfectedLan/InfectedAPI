@@ -135,7 +135,7 @@ class Compo extends EventObject {
      * Returns true if the compo requires steam id to qualify
      */
     public function requiresSteamId() {
-	return $this->requiresSteamId==1;
+	return $this->requiresSteamId=="1"?true:false;
     }
 }
 ?>
