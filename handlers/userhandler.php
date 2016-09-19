@@ -396,8 +396,10 @@ class UserHandler {
 
 		// Query the database using a "full-text" search.
 		$result = $database->query('SELECT * FROM `' . Settings::db_table_infected_users . '`
-																WHERE MATCH (`firstname`, `lastname`, `username`, `email`, `nickname`)
+																WHERE MATCH (`firstname`, `lastname`, `username`, `nickname`)
 																AGAINST (\'' . $database->real_escape_string(implode(' ', $keywordList)) . '\' IN BOOLEAN MODE)
+																OR `email` = \'' . $database->real_escape_string($queryList[0]) . '\'
+																OR `phone` = \'' . $database->real_escape_string($queryList[0]) . '\'
 																LIMIT 15;');
 
 		$database->close();
