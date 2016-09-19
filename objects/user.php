@@ -651,5 +651,19 @@ class User extends Object {
 	public function isEligibleForPreSeating() {
 	    return count(TicketHandler::getTicketsSeatableByUser($this)) >= Settings::prioritySeatingReq;	    
 	}
+
+	/* 
+	 * Returns the steam id of this user. Null if not existent
+	 */
+	public function getSteamId() {
+	    return UserHandler::getSteamId($this);
+	}
+
+	/*
+	 * Sets the users steam id
+	 */
+	public function setSteamId($steamId) {
+	    UserHandler::setSteamId($this, $steamId);
+	}
 }
 ?>

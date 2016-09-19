@@ -49,7 +49,8 @@ if(Session::isAuthenticated()) {
                       "genderString" => $target->getGenderAsString(),
                       "nickname" => $target->getNickname(),
                       "displayName" => $target->getDisplayName(),
-                      "age" => $target->getAge());
+                      "age" => $target->getAge(),
+		      "steamId" => $target->getSteamId());
         //Get avatar info
 	if ($target->hasValidAvatar()) {
 	    $avatar = $target->getAvatar();

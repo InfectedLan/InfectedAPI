@@ -48,7 +48,7 @@ if(Session::isAuthenticated()) {
                             //Flags
                             $prioritySeatingStarted = $event->getPrioritySeatingTime() <= time();
                             $normalSeatingStarted = $event->getSeatingTime() <= time();
-                            if($prioritySeatingStarted && $user->isEligibleForPreSeating()) {
+                            if($prioritySeatingStarted && $user->isEligibleForPreSeating() && !$normalSeatingStarted) {
                                 if($user->isEligibleForPreSeating()) {
                                     if(SeatHandler::canBeSeated($seat, $user)) {
                                         TicketHandler::updateTicketSeat($ticket, $seat);
@@ -64,6 +64,11 @@ if(Session::isAuthenticated()) {
                                 }
                             } else if($normalSeatingStarted) {
                                 TicketHandler::updateTicketSeat($ticket, $seat);
+
+                                $message = Localization::getLocale('the_ticket_has_a_new_seat');
+                                $result = true;
+			    } else if($user->hasPermission('*') || $user->hasPermission('admin.tickets')) {
+				TicketHandler::updateTicketSeat($ticket, $seat);
 
                                 $message = Localization::getLocale('the_ticket_has_a_new_seat');
                                 $result = true;

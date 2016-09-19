@@ -312,14 +312,17 @@ class ApplicationHandler {
 	public static function createApplication(Group $group, User $user, $content) {
 		$database = Database::open(Settings::db_name_infected_crew);
 
-		$database->query('INSERT INTO `' . Settings::db_table_infected_crew_applications . '` (`eventId`, `groupId`, `userId`, `openedTime`, `state`, `content`)
+		$database->query('INSERT INTO `' . Settings::db_table_infected_crew_applications . '` (`eventId`, `groupId`, `userId`, `openedTime`, `closedTime`, `state`, `content`, `updatedByUserId`, `comment`)
 										  VALUES (\'' . EventHandler::getCurrentEvent()->getId() . '\',
 														  \'' . $group->getId() . '\',
 														  \'' . $user->getId() . '\',
 														  \'' . date('Y-m-d H:i:s') . '\',
+                              NULL,
 														  \'1\',
-														  \'' . $database->real_escape_string($content) . '\');');
-
+														  \'' . $database->real_escape_string($content) . '\',
+                              \'0\',
+                              \'\');');
+                              
 		$application = self::getApplication($database->insert_id);
 
 		$database->close();

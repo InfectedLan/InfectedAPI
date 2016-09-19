@@ -268,7 +268,7 @@ class UserHandler {
 	public static function createUser($firstname, $lastname, $username, $password, $email, $birthDate, $gender, $phone, $address, $postalCode, $nickname) {
 		$database = Database::open(Settings::db_name_infected);
 
-		$database->query('INSERT INTO `' . Settings::db_table_infected_users . '` (`firstname`, `lastname`, `username`, `password`, `email`, `birthdate`, `gender`, `phone`, `address`, `postalcode`, `nickname`, `registereddate`)
+		$database->query('INSERT INTO `' . Settings::db_table_infected_users . '` (`firstname`, `lastname`, `username`, `password`, `email`, `birthdate`, `gender`, `phone`, `address`, `postalcode`, `countryId`, `nickname`, `registereddate`)
 										  VALUES (\'' . $database->real_escape_string($firstname) . '\',
 														  \'' . $database->real_escape_string($lastname) . '\',
 														  \'' . $database->real_escape_string($username) . '\',
@@ -279,6 +279,7 @@ class UserHandler {
 														  \'' . $database->real_escape_string($phone) . '\',
 														  \'' . $database->real_escape_string($address) . '\',
 														  \'' . $database->real_escape_string($postalCode) . '\',
+															\'26\',
 														  \'' . $database->real_escape_string($nickname) . '\',
 														  \'' . date('Y-m-d H:i:s') . '\');');
 
@@ -395,8 +396,10 @@ class UserHandler {
 
 		// Query the database using a "full-text" search.
 		$result = $database->query('SELECT * FROM `' . Settings::db_table_infected_users . '`
-																WHERE MATCH (`firstname`, `lastname`, `username`, `email`, `nickname`)
+																WHERE MATCH (`firstname`, `lastname`, `username`, `nickname`)
 																AGAINST (\'' . $database->real_escape_string(implode(' ', $keywordList)) . '\' IN BOOLEAN MODE)
+																OR `email` = \'' . $database->real_escape_string($queryList[0]) . '\'
+																OR `phone` = \'' . $database->real_escape_string($queryList[0]) . '\'
 																LIMIT 15;');
 
 		$database->close();
@@ -408,6 +411,37 @@ class UserHandler {
 		}
 
 		return $userList;
+	}
+	/*
+	 * Returns the steam id of a user, or null if undefined
+	 */
+	public static function getSteamId(User $user) {
+	    $database = Database::open(Settings::db_name_infected_compo);
+
+	    $result = $database->query('SELECT `steamId` FROM `' . Settings::db_table_infected_compo_steamids . '` WHERE `userId` = \'' . $user->getId() . '\';');
+
+	    $count = $result->num_rows;
+	    
+	    $database->close();
+
+	    return $result->fetch_array()[0];
+	}
+
+	/*
+	 * Sets the steam id
+	 */
+	public static function setSteamId(User $user, $steamId) {
+	    $database = Database::open(Settings::db_name_infected_compo);
+
+	    $result = $database->query('SELECT `steamId` FROM `' . Settings::db_table_infected_compo_steamids . '` WHERE `userId` = \'' . $user->getId() . '\';');
+
+	    $count = $result->num_rows;
+
+	    if($count==0) {
+		$database->query('INSERT INTO `' . Settings::db_table_infected_compo_steamids . '`(`userId`, `steamId`) VALUES (\'' . $user->getId() . '\', \'' . $database->real_escape_string($steamId) . '\');');
+	    } else {
+		$database->query('UPDATE `' . Settings::db_table_infected_compo_steamids . '` SET `steamId` = \'' . $database->real_escape_string($steamId) . '\' WHERE `userId` = \'' . $user->getId() . '\';');
+	    }
 	}
 }
 ?>

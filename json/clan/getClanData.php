@@ -46,25 +46,38 @@ if(Session::isAuthenticated()) {
 	    $data["playingMembers"] = [];
 	    $playing = ClanHandler::getPlayingClanMembers($clan);
 	    foreach($playing as $person) {
-		$data["playingMembers"][] = ["id" => $person->getId(),
-					     "displayName" => $person->getDisplayName()];
+		$personData = ["id" => $person->getId(),
+						 "displayName" => $person->getDisplayName()];
+		if($compo->requiresSteamId() && $clan->getChiefId() == $user->getId()) {
+		    $personData["hasLinkedSteam"] = $person->getSteamId() !== null;
+		}
+		$data["playingMembers"][] = $personData;
 	    }
 	    $data["stepinMembers"] = [];
 	    $stepin = ClanHandler::getStepinClanMembers($clan);
 	    foreach($stepin as $person) {
-		$data["stepinMembers"][] = ["id" => $person->getId(),
-					     "displayName" => $person->getDisplayName()];
+		$personData = ["id" => $person->getId(),
+						 "displayName" => $person->getDisplayName()];
+		if($compo->requiresSteamId() && $clan->getChiefId() == $user->getId()) {
+		    $personData["hasLinkedSteam"] = $person->getSteamId() !== null;
+		}
+		$data["stepinMembers"][] = $personData;
 	    }
 
 	    $data["invitedMembers"] = [];
 	    $invited = InviteHandler::getInvitesByClan($clan);
 	    foreach($invited as $invitee) {
+		$inviteeUser = $invitee->getUser();
+		$personData = ["displayName" => $inviteeUser->getCompoDisplayName()];
+		
 		if($clan->getChiefId() == $user->getId()) {
-		    $data["invitedMembers"][] = ["displayName" => $invitee->getUser()->getCompoDisplayName(),
-						 "inviteId" => $invitee->getId()];
-		} else {
-		    $data["invitedMembers"][] = ["displayName" => $invitee->getUser()->getCompoDisplayName()];
+		    $personData["inviteId"] = $invitee->getId();
+		    if($compo->requiresSteamId()) {
+			$personData["hasLinkedSteam"] = $inviteeUser->getSteamId() !== null;
+		    }
 		}
+		
+		$data["invitedMembers"][] = $personData;
 	    }
             
             $result = true;

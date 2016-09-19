@@ -271,9 +271,9 @@ class ClanHandler {
 										  VALUES (\'' . $database->real_escape_string($clan->getId()) . '\',
 												  		\'' . $compo->getId() . '\', \'0\');');
 
-		$database->query('INSERT INTO `' . Settings::db_table_infected_compo_memberof . '` (`clanId`, `userId`)
+		$database->query('INSERT INTO `' . Settings::db_table_infected_compo_memberof . '` (`clanId`, `userId`, `stepinId`)
 										  VALUES (\'' . $database->real_escape_string($clan->getId()) . '\',
-												  		\'' . $user->getId() . '\');');
+												  		\'' . $user->getId() . '\', 0);');
 
 		$result = $database->query('SELECT * FROM `' . Settings::db_table_infected_compo_clans . '`
 																WHERE `id` = \'' . $database->real_escape_string($clan->getId()) . '\';');

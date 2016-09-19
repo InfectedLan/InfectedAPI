@@ -7,3 +7,6 @@
 [submodule "libraries/ckeditor"]
 	path = libraries/ckeditor
 	url = https://github.com/ckeditor/ckeditor-releases.git
+[submodule "libraries/lightopenid"]
+	path = libraries/lightopenid
+	url = git@github.com:iignatov/LightOpenID.git

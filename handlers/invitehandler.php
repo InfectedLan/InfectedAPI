@@ -136,16 +136,32 @@ class InviteHandler {
 															\'' . $clan->getId() . '\',
 															\'' . $stepInId . '\');');
 
-        if(count($memberList) == $compo->getTeamSize()-1) {
-            $playingClans = ClanHandler::getQualifiedClansByCompo($compo);
-            if(count($playingClans) < $compo->getParticipantLimit() || $compo->getParticipantLimit() == 0) {
-                ClanHandler::setQualified($clan, true);
-            } else if(!ClanHandler::isInQualificationQueue($clan)){
-                ClanHandler::addToQualificationQueue($clan);
-            }
-            
-        }
-
+		if(count($memberList) == $compo->getTeamSize()-1) {
+		    //NEW: steamid check
+		    $canQualify = !$compo->requiresSteamId();
+		    if(!$canQualify) {
+			//Compo requires steam id
+			foreach($memberList as $member) {
+			    if($member->getSteamId() === null) {
+				$canQualify = false;
+				break;
+			    } else {
+				$canQualify = true;
+			    }
+			}
+			$canQualify = $canQualify && $invite->getUser()->getSteamId() !== null;
+		    }
+		    //echo "Qualification test result: " . $canQualify;
+	    
+		    if($canQualify) {
+			$playingClans = ClanHandler::getQualifiedClansByCompo($compo);
+			if(count($playingClans) < $compo->getParticipantLimit() || $compo->getParticipantLimit() == 0) {
+			    ClanHandler::setQualified($clan, true);
+			} else if(!ClanHandler::isInQualificationQueue($clan)){
+			    ClanHandler::addToQualificationQueue($clan);
+			}
+		    }
+		}
 		$database->close();
 	}
 

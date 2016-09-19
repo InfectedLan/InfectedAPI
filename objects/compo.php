@@ -38,6 +38,7 @@ class Compo extends EventObject {
     private $participantLimit;
     private $chatId;
     private $connectionType;
+    private $requiresSteamId;
 
     /*
      * Returns the name of this compo.
@@ -128,6 +129,13 @@ class Compo extends EventObject {
     
     public function getConnectionType() {
 	return $this->connectionType;
+    }
+
+    /*
+     * Returns true if the compo requires steam id to qualify
+     */
+    public function requiresSteamId() {
+	return $this->requiresSteamId=="1"?true:false;
     }
 }
 ?>
