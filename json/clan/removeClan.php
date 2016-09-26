@@ -33,7 +33,7 @@ if (Session::isAuthenticated()) {
 		$clan = ClanHandler::getClan($_GET['id']);
 		
 		if ($clan != null) {
-			if ($user->equals($clan->getChief())) {
+			if ($user->equals($clan->getChief()) || $user->hasPermission('event.compo')) {
 				ClanHandler::removeClan($clan);
 				$result = true;
 			} else {

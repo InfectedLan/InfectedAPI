@@ -295,7 +295,7 @@ class ClanHandler {
 
 		$database->query('UPDATE `' . Settings::db_table_infected_compo_clans . '`
 										  SET `name` = \'' . $database->real_escape_string($name) . '\',
-											  	`tag` = \'' . $database->real_escape_string($tag) . '\',
+											  	`tag` = \'' . $database->real_escape_string($tag) . '\'
 										  WHERE `id` = \'' . $clan->getId() . '\';');
 
 		$database->close();
