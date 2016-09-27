@@ -1,0 +1,8 @@
+{
+    "name": "Default compo behaviour + toornament exporting",
+    "description": "Gives you the default behaviour of the compo system, and the ability to export to toornament",
+    "javascript": {"compoPlugin": "default/compoPlugin.js"},
+    "pages": [{"title": "Overfør til toornament", "urlName": "toornamentTransfer", "file": "toornament/transferUi.php"}],
+    "plugin": ["toornament/toornamentplugin.php"],
+    "classname": "ToornamentPlugin"
+}

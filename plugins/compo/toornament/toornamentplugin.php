@@ -17,7 +17,9 @@
 * along with this program. If not, see <http://www.gnu.org/licenses/>.
 */
 require_once 'handlers/matchhandler.php';
-class CompoPlugin {
+require_once 'handlers/clanhandler.php';
+require_once 'handlers/compohandler.php';
+class ToornamentPlugin {
     public function getCustomMatchInformation(Match $match) { //Called for each current match on the crew page
         return null;
     }
@@ -32,6 +34,32 @@ class CompoPlugin {
     }
     public function onMatchFinished(Match $match) {
 	
+    }
+    public function getToornamentParticipantData(Clan $clan) {
+	$clanData = [];
+	$clanData["name"] = $clan->getName();
+	$compo = CompoHandler::getCompoByClan($clan);
+
+	$lineup = [];
+	$members = ClanHandler::getPlayingClanMembers($clan);
+	foreach($members as $member) {
+	    $memberData = [];
+	    $memberData["name"] = $member->getCompoDisplayName();
+	    if($compo->requiresSteamId()) {
+		$privateFields = [];
+		$steamIdField = [];
+		$steamIdField["type"] = "steam_player_id";
+		$steamIdField["label"] = "Steam ID";
+		$steamIdField["value"] = $member->getSteamId();
+		$privateFields[] = $steamIdField;
+		$memberData["custom_fields_private"] = $privateFields;
+	    }
+	    
+	    $lineup[] = $memberData;
+	}
+	$clanData["lineup"] = $lineup;
+	
+	return $clanData;
     }
 }
 ?>

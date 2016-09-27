@@ -2,6 +2,7 @@
     "name": "CSGO plugin",
     "description": "Adds support for pick/ban",
     "javascript": {"compoPlugin": "csgo/compoPlugin.js"},
+    "pages": [],
     "plugin": ["csgo/csgoplugin.php"],
     "classname": "CsgoPlugin"
 }
