@@ -39,5 +39,8 @@ class CsgoPlugin extends CompoPlugin {
     public function onMatchFinished(Match $match) {
 
     }
+    public function getAdminHeaderEntries() {
+        return ["Overfør til toornament" => "toornamentTransfer"];
+    }
 }
 ?>

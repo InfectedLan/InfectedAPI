@@ -42,6 +42,14 @@ class CompoPluginHandler {
     }
 
     /**
+     * Returns plugin metadata
+     */
+    public static function getPluginMetadata($pluginName) {
+        $string = file_get_contents(Settings::api_path . "plugins/compo/" . $pluginName . ".json");
+        return json_decode($string, true);;
+    }
+
+    /**
      * Returns javascripts for the plugin, or the default if none existing. Will cache.
      */
     public static function getPluginJavascriptOrDefault($pluginName) {

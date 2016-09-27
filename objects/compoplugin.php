@@ -33,5 +33,8 @@ class CompoPlugin {
     public function onMatchFinished(Match $match) {
 	
     }
+    public function getAdminHeaderEntries() {
+        return [];
+    }
 }
 ?>
