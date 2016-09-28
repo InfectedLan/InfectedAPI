@@ -35,6 +35,19 @@ class ToornamentPlugin {
     public function onMatchFinished(Match $match) {
 	
     }
+    public function getToornamentOauthToken() {
+	$curlSess = curl_init();
+	curl_setopt($curlSess, CURLOPT_URL,"https://api.toornament.com/oauth/v2/token");
+	curl_setopt($curlSess, CURLOPT_POST, 1);
+	curl_setopt($curlSess, CURLOPT_POSTFIELDS, "grant_type=client_credentials&client_id=" . Secret::toornamentClientId . "&client_secret=" . Secret::toornamentClientSecret);
+	curl_setopt($curlSess, CURLOPT_RETURNTRANSFER, true);
+
+	$output = curl_exec($curlSess);
+
+	curl_close($curlSess);
+
+	return json_decode($output)->access_token;
+    }
     public function getToornamentParticipantData(Clan $clan) {
 	$clanData = [];
 	$clanData["name"] = $clan->getName();

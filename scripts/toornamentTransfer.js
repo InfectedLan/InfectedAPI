@@ -6,7 +6,7 @@ $(document).ready(function() {
 	});
 	$.getJSON('../api/json/compo/toornamentExport.php?' + $("#toornamentForm").serialize(), function(data){
 	    if(data.result == true) {
-		info("success");
+		info("Success!");
 		$("#toornamentSendArea").fadeIn(300);
 	    } else {
 		error(data.message);
