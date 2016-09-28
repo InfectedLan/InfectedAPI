@@ -34,7 +34,8 @@ if (Session::isAuthenticated()) {
         if(isset($_GET['id']) && isset($_GET["url"])) {
 	    $compo = CompoHandler::getCompo($_GET["id"]);
             if($compo != null) {
-		
+                $compoId = str_replace("/", "", str_replace("https://organizer.toornament.com/tournaments/", "", $_GET["url"]));
+                echo "Compo id: " . $compoId;
                 $result = true;
             } else {
                 $message = Localization::getLocale('this_compo_does_not_exist');

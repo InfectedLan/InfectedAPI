@@ -18,7 +18,7 @@ if(Session::isAuthenticated()) {
 		$plugin = CompoPluginHandler::getPluginObjectOrDefault($compo->getPluginName());
 		echo "<h3>Send data</h3>";
 		echo '<div id="toornamentSendArea"><form id="toornamentForm"><input type="text" placeholder="Toornament URL" name="url" /><input type="hidden" name="id" value="' . $compo->getId() . '" /></form><input type="button" value="Send data" id="toornamentSendBtn"/></div>';
-		echo '<div id="toornamentLoadingArea" style="display: hidden;"><i>Sending data....</i></div>';
+		echo '<div id="toornamentLoadingArea" style="display: none;"><i>Sending data....</i></div>';
 		echo "<h3>Review</h3>";
 		echo "<p>The following information will be transferred to toornament. Please skim for obvious errors</p>";
 		$qualifiedClans = ClanHandler::getQualifiedClansByCompo($compo);
