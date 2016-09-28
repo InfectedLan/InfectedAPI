@@ -57,7 +57,7 @@ class ToornamentPlugin {
 	$members = ClanHandler::getPlayingClanMembers($clan);
 	foreach($members as $member) {
 	    $memberData = [];
-	    $memberData["name"] = $member->getCompoDisplayName();
+	    $memberData["name"] = $member->getNickname();
 	    if($compo->requiresSteamId()) {
 		$privateFields = [];
 		$steamIdField = [];

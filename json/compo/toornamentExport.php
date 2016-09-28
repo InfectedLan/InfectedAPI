@@ -64,7 +64,7 @@ if (Session::isAuthenticated()) {
 			if($info["http_code"] != 201) {
 			    $data = json_decode($curlResult);
 			    if(isset($data->errors)) {
-				$message = "There was an error adding the clanid " . $clan->getId() . ": " . $data->errors[0]->message;				
+				$message = "There was an error adding the clanid " . $clan->getId() . ": " . $curlResult;				
 			    } else {
 				$message = "There was an error adding the clanid " . $clan->getId() . ". We were not able to parse the error.";
 			    }
