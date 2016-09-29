@@ -17,8 +17,27 @@
 * along with this program. If not, see <http://www.gnu.org/licenses/>.
 */
 require_once 'objects/compoplugin.php';
+require_once 'objects/match.php';
 class CsgoPlugin extends CompoPlugin {
     public function getCustomMatchInformation(Match $match) { //Called for each current match on the crew page
+        if($match->getState() == Match::STATE_CUSTOM_PREGAME) {
+            $options = VoteOptionHandler::getVoteOptionsByCompo($match->getCompo());
+            $votedCount = 0;
+            foreach($options as $option) {
+                if(VoteOptionHandler::isVoted($option, $match)) {
+                    $votedCount++;
+                }
+            }
+            return ["Maps banned" => $votedCount . " av " . count($options)];
+        } else if($match->getState() == Match::STATE_JOIN_GAME) {
+            $options = VoteOptionHandler::getVoteOptionsByCompo($match->getCompo());
+            $votedCount = 0;
+            foreach($options as $option) {
+                if(!VoteOptionHandler::isVoted($option, $match)) {
+                    return ["Selected map" => $option->getName()];
+                }
+            }
+        }
         return null;
     }
     public function hasVoteScreen() {

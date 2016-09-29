@@ -623,7 +623,17 @@ AND `scheduledTime` < NOW() + INTERVAL ' . $database->real_escape_string($interv
 																SET `state` = \'' . $database->real_escape_string($state) . '\'
 																WHERE `id` = \'' . $match->getId() . '\';');
 
-		$database->close();
+    	$database->close();
+	}
+
+	public static function updateConnectDetails(Match $match, $connectDetails) {
+        $database = Database::open(Settings::db_name_infected_compo);
+
+        $result = $database->query('UPDATE `' . Settings::db_table_infected_compo_matches . '`
+																SET `connectDetails` = \'' . $database->real_escape_string($connectDetails) . '\'
+																WHERE `id` = \'' . $match->getId() . '\';');
+
+        $database->close();
 	}
 
     public static function getMetadata(Match $match) {
