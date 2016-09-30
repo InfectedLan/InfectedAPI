@@ -140,7 +140,7 @@ if (isset($_POST['firstname']) &&
 	if($result != true) {
 	    //We are NOT getting raw post data because it would make the password visible in the log. 
 	    $registrationData = array("username" => $username, "email" => $email, "phone" => $phone, "firstname" => $firstname, "lastname" => $lastname, "gender" => $gender, "address" => $address, "postalcode" => $postalcode, "nickname" => $nickname);
-	    SyslogHandler::log("Failed to register!", "addUser", null, SyslogHandler::SEVERITY_INFO, array("message" => $message, "user_agent" => $_SERVER['HTTP_USER_AGENT'], "registrationData" => $registrationData));
+	    SyslogHandler::log("Failed to register!", "addUser", null, SyslogHandler::SEVERITY_INFO, array("message" => $message, "passLength" => strlen($_POST["password"]), "user_agent" => $_SERVER['HTTP_USER_AGENT'], "registrationData" => $registrationData));
 	}
 } else {
 	$message = Localization::getLocale('you_have_not_filled_out_the_required_fields');

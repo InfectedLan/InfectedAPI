@@ -309,6 +309,7 @@ class ClanHandler {
 
 		$database->query('DELETE FROM `' . Settings::db_table_infected_compo_clans . '`
 						  				WHERE `id` = \'' . $clan->getId() . '\';');
+        $database->query('DELETE FROM `' . Settings::db_table_infected_compo_invites . '` WHERE `clanId` = \'' . $clan->getId() . '\';');
 
 		$database->close();
 	}
