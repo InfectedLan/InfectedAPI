@@ -22,6 +22,7 @@ require_once 'settings.php';
 require_once 'database.php';
 require_once 'handlers/chathandler.php';
 require_once 'handlers/eventhandler.php';
+require_once 'handlers/matchhandler.php';
 require_once 'objects/clan.php';
 require_once 'objects/user.php';
 require_once 'objects/event.php';
@@ -309,7 +310,9 @@ class ClanHandler {
 
 		$database->query('DELETE FROM `' . Settings::db_table_infected_compo_clans . '`
 						  				WHERE `id` = \'' . $clan->getId() . '\';');
-        $database->query('DELETE FROM `' . Settings::db_table_infected_compo_invites . '` WHERE `clanId` = \'' . $clan->getId() . '\';');
+		$database->query('DELETE FROM `' . Settings::db_table_infected_compo_invites . '` WHERE `clanId` = \'' . $clan->getId() . '\';');
+		$database->query('DELETE FROM `' . Settings::db_table_infected_compo_participantof . '` WHERE `clanId` = \'' . $clan->getId() . '\';');
+		$database->query('DELETE FROM `' . Settings::db_table_infected_compo_participantOfMatch . '` WHERE `participantId` = \'' . $clan->getId() . '\' AND `type` = \'' . MatchHandler::participantof_state_clan . '\';');
 
 		$database->close();
 	}

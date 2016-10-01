@@ -78,17 +78,21 @@ if(isset($_GET['id']) && isset($_GET["api_key"])) {
                         }
                     }
                     if(!$allreadyExists) {
-                        $chat = ChatHandler::createChat("match-chat", "Match chat");
-                        $match = MatchHandler::createMatch(time(), "connect " . $jsonMatch->ip . ";password " . $jsonMatch->password, $compo, 0, $chat, 0);
-                        MatchHandler::setMetadata($match, "toornamentId", $jsonMatch->toornamentId);
-                        //Add participants
-                        foreach($jsonMatch->participants as $participant) {
-                            foreach($participatingClans as $clan) {
-                                if($clan->getName() == $participant) {
-                                    MatchHandler::addMatchParticipant(MatchHandler::participantof_state_clan, $clan->getId(), $match);
-                                }
-                            }
-                        }
+			if(count($jsonMatch->participants)!=2) {
+			    echo "WARNING: Skipping match due to not enough participants\n";
+			} else {
+			    $chat = ChatHandler::createChat("match-chat", "Match chat");
+			    $match = MatchHandler::createMatch(time(), "connect " . $jsonMatch->ip . ";password " . $jsonMatch->password, $compo, 0, $chat, 0);
+			    MatchHandler::setMetadata($match, "toornamentId", $jsonMatch->toornamentId);
+			    //Add participants
+			    foreach($jsonMatch->participants as $participant) {
+				foreach($participatingClans as $clan) {
+				    if($clan->getName() == $participant) {
+					MatchHandler::addMatchParticipant(MatchHandler::participantof_state_clan, $clan->getId(), $match);
+				    }
+				}
+			    }
+			}
                     } else {
                         MatchHandler::updateConnectDetails($existingMatch, "connect " . $jsonMatch->ip . ";password " . $jsonMatch->password);
                         //TODO STEPIN SUPPORT

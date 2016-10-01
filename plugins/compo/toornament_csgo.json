@@ -1,8 +1,8 @@
 {
     "name": "Default compo behaviour + toornament exporting + csgo features",
     "description": "Gives you the default behaviour of the compo system, and the ability to export to toornament. Comes in cs:go flavour, meaning there is a pick/ban process.",
-    "javascript": {"compoPlugin": "csgo/compoPlugin.js"},
+    "javascript": {"compoPlugin": "toornament_csgo/compoPlugin.js"},
     "pages": [{"title": "Overfør til toornament", "urlName": "toornamentTransfer", "file": "toornament/transferUi.php"}],
-    "plugin": ["csgo/csgoplugin.php"],
-    "classname": "CsgoPlugin"
+    "plugin": ["toornament_csgo/csgotoornamentplugin.php"],
+    "classname": "CsgoToornamentPlugin"
 }

@@ -106,7 +106,7 @@ class AdminPlugin extends WebSocketPlugin {
 	    $index = 0;
 	    foreach($this->server->authenticatedUsers as $person) {
 		$user = $this->server->getUser($person);
-		$data[$index] = $data[$index] . "&nbsp;" . $user->getUsername() . '(' . $user->getId() . ')';
+		$data[$index] = /*$data[$index] .*/ "&nbsp;" . $user->getUsername() . '(' . $user->getId() . ')';
 		if($count%4==3) {
 		    $index++;
 		}
