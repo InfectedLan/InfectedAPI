@@ -122,7 +122,7 @@ module = (function(){
 	} else {
 	    console.log("Compo has no matches... yet");
 	}
-	$("#customContent").html('<h2>Spillere</h2><iframe style="margin: auto; display: block;" allowfullscreen="true" scrolling="no" src="https://widget.toornament.com/tournaments/57ce8a6b140ba0d3408b4567/stages/2?_locale=en_GB&theme=discipline" frameborder="0" height="580" width="980"></iframe>');
+	$("#customContent").html('<h2>Spillere</h2><iframe style="margin: auto; display: block;" allowfullscreen="true" scrolling="no" src="https://widget.toornament.com/tournaments/57ce8a6b140ba0d3408b4567/stages/2?_locale=en_GB&theme=discipline" frameborder="0" height="610" width="980"></iframe>');
     };
 
     return pluginObj;
