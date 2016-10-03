@@ -66,9 +66,9 @@ require_once 'adminplugin.php';
 
 class Server extends WebSocketServer {
   public $authenticatedUsers;
+  public $plugins;
   
   private $intentHandlers;
-  private $plugins;
 
   function __construct($addr, $port, $bufferLength = 2048) {
     parent::__construct($addr, $port, $bufferLength);
@@ -121,8 +121,8 @@ class Server extends WebSocketServer {
     $this->intentHandlers[$intent] = $handler;
   }
 
-  public function registerPlugin($plugin) {
-    array_push($this->plugins, $plugin);
+  public function registerPlugin($plugin, $name) {
+      $this->plugins[$name] = $plugin;
   }
 
 

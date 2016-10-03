@@ -22,7 +22,7 @@ require_once 'websocketplugin.php';
 require_once 'handlers/chathandler.php';
 
 class ChatPlugin extends WebSocketPlugin {
-    private $followingChatChannels;
+    public $followingChatChannels;
     private $server;
         
     function __construct(Server $server) {
@@ -30,7 +30,7 @@ class ChatPlugin extends WebSocketPlugin {
         $server->registerIntent("subscribeChatroom", $this);
         $server->registerIntent("chatMessage", $this);
         $server->registerIntent("unsubscribeChatroom", $this);
-        $server->registerPlugin($this);
+        $server->registerPlugin($this, "ChatPlugin");
 
         $this->server = $server;
 
@@ -87,7 +87,7 @@ class ChatPlugin extends WebSocketPlugin {
 	echo "Handling chat disconnect\n";
         foreach ($this->followingChatChannels as $chatKey => $chatroom) {
 	    foreach($chatroom as $key => $value) {
-		if($connection == $connection) {
+		if($connection == $value) {
 		    echo "Removing from one chatroom\n";		    
 		    unset($this->followingChatChannels[$chatKey][$key]);
 		}

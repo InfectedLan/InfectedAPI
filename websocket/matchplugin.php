@@ -42,7 +42,7 @@ class MatchPlugin extends WebSocketPlugin {
 	$server->registerIntent("spectateMatch", $this);
 	$server->registerIntent("voteMap", $this);
 	$server->registerIntent("ready", $this);
-        $server->registerPlugin($this);
+        $server->registerPlugin($this, "MatchPlugin");
 
         $this->server = $server;
         $this->subscribedUsers = new SplObjectStorage();
