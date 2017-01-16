@@ -92,7 +92,7 @@ function outputText(array $userList) {
 			echo '<th>Telefon:</th>';
 			echo '<th>Adresse:</th>';
 			echo '<th>Fødselsdato:</th>';
-			echo '<th>Alder:</th>';
+			echo '<th>Nåværende Alder:</th>';
 			echo '<th>Rolle:</th>';
 		echo '</tr>';
 
@@ -127,7 +127,7 @@ function outputCsv(array $userList) {
 		['Navn:', 'E-post:', 'Telefon:', 'Adresse:', 'Fødselsdato:', 'Alder:', 'Rolle:']
 	];
 
-	array(array('Navn:', 'E-post:', 'Telefon:', 'Adresse:', 'Fødselsdato:', 'Alder:', 'Rolle:'));
+	array(array('Navn:', 'E-post:', 'Telefon:', 'Adresse:', 'Fødselsdato:', 'Nåværende Alder:', 'Rolle:'));
 
 	// Add each user to the row list.
 	foreach ($userList as $userValue) {
