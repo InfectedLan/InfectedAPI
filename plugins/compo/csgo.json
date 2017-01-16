@@ -1,7 +1,8 @@
 {
-    "name": "Default compo plugin",
-    "description": "Gives you the default behaviour of the compo system",
+    "name": "CSGO plugin",
+    "description": "Adds support for pick/ban",
     "javascript": {"compoPlugin": "csgo/compoPlugin.js"},
+    "pages": [],
     "plugin": ["csgo/csgoplugin.php"],
     "classname": "CsgoPlugin"
 }

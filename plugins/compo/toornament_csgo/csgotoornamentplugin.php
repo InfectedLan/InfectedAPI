@@ -18,7 +18,7 @@
 */
 require_once 'objects/compoplugin.php';
 require_once 'objects/match.php';
-class CsgoPlugin extends CompoPlugin {
+class CsgoToornamentPlugin extends CompoPlugin {
     public function getCustomMatchInformation(Match $match) { //Called for each current match on the crew page
         if($match->getState() == Match::STATE_CUSTOM_PREGAME) {
             $options = VoteOptionHandler::getVoteOptionsByCompo($match->getCompo());
@@ -37,7 +37,9 @@ class CsgoPlugin extends CompoPlugin {
                     return ["Selected map" => $option->getName()];
                 }
             }
-        }
+        } else {
+	    return ["Map vote status" => "Venter på vote"];
+	}
         return null;
     }
     public function hasVoteScreen() {
@@ -57,6 +59,45 @@ class CsgoPlugin extends CompoPlugin {
     }
     public function onMatchFinished(Match $match) {
 
+    }
+    public function getToornamentOauthToken() {
+	$curlSess = curl_init();
+	curl_setopt($curlSess, CURLOPT_URL,"https://api.toornament.com/oauth/v2/token");
+	curl_setopt($curlSess, CURLOPT_POST, 1);
+	curl_setopt($curlSess, CURLOPT_POSTFIELDS, "grant_type=client_credentials&client_id=" . Secret::toornamentClientId . "&client_secret=" . Secret::toornamentClientSecret);
+	curl_setopt($curlSess, CURLOPT_RETURNTRANSFER, true);
+
+	$output = curl_exec($curlSess);
+
+	curl_close($curlSess);
+
+	return json_decode($output)->access_token;
+    }
+    public function getToornamentParticipantData(Clan $clan) {
+	$clanData = [];
+	$clanData["name"] = $clan->getName();
+	$compo = CompoHandler::getCompoByClan($clan);
+
+	$lineup = [];
+	$members = ClanHandler::getPlayingClanMembers($clan);
+	foreach($members as $member) {
+	    $memberData = [];
+	    $memberData["name"] = $member->getNickname();
+	    if($compo->requiresSteamId()) {
+		$privateFields = [];
+		$steamIdField = [];
+		$steamIdField["type"] = "steam_player_id";
+		$steamIdField["label"] = "Steam ID";
+		$steamIdField["value"] = $member->getSteamId();
+		$privateFields[] = $steamIdField;
+		$memberData["custom_fields_private"] = $privateFields;
+	    }
+	    
+	    $lineup[] = $memberData;
+	}
+	$clanData["lineup"] = $lineup;
+	
+	return $clanData;
     }
 }
 ?>

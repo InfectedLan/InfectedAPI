@@ -17,12 +17,7 @@ module = (function(){
     };
 
     pluginObj.decorateCompoPage = function(compo) {
-	$("#customContent").html('<h2>Playoff-bracket</h2><div style="display: block;" class="bracket_container" id="playoffBracket"></div><br />');
-	var source = new DataSource(compo.id);
-	var bracket = source.derive("playoffBracket", "playoff");
-	$("#customContent").html('<h2>Looser playoff-bracket</h2><div style="display: block;" class="bracket_container" id="playoffLooserBracket"></div><br />');
-	var source = new DataSource(compo.id);
-	var bracket = source.derive("playoffLooserBracket", "play_looser");
+	$("#customContent").html('<h2>Deltagere</h2><iframe style="margin: auto; display: block;" allowfullscreen="true" scrolling="no" src="https://widget.toornament.com/tournaments/57cfe82b150ba0c7768b4567/stages/2?_locale=en_GB&theme=discipline" frameborder="0" height="610" width="980"></iframe>');
     };
 
     return pluginObj;

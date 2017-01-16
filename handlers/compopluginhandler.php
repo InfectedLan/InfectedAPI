@@ -23,6 +23,7 @@ class CompoPluginHandler {
 
     private static $cachedPlugins = array();
     private static $cachedJavascripts = array();
+    private static $cachedMetadata = array();
     /**
      * Returns object for the plugin, or the default if none existing. Will cache.
      */
@@ -39,6 +40,31 @@ class CompoPluginHandler {
 	} else {
 	    return self::$cachedPlugins[$pluginName];
 	}
+    }
+
+    /**
+     * Returns plugin metadata, or default if not available
+     */
+    public static function getPluginMetadataOrDefault($pluginName) {
+	if(!isset(self::$cachedMetadata[$pluginName])) { //please note isset will return false if the key exists, but the value is null. This is not a case we need to care for in this example.
+	    $obj = null;
+	    if(!file_exists(Settings::api_path . "plugins/compo/" . $pluginName . ".json")) {
+		$obj = ["name" => "Default plugin", "description" => "pretty default.", "javascript" => [], "pages" => [], "classname" => "default"];
+	    } else {
+		$obj = self::getPluginMetadata($pluginName);
+	    }
+	    self::$cachedMetadata[$pluginName] = $obj;
+	    return $obj;
+	} else {
+	    return self::$cachedMetadata[$pluginName];
+	}
+    }
+    /**
+     * Returns plugin metadata
+     */
+    public static function getPluginMetadata($pluginName) {
+        $string = file_get_contents(Settings::api_path . "plugins/compo/" . $pluginName . ".json");
+        return json_decode($string, true);
     }
 
     /**

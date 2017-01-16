@@ -39,7 +39,7 @@ if (Session::isAuthenticated()) {
 		$tag = $_GET['tag'];
 		
 		if ($clan != null) {
-			if ($user->equals($clan->getChief())) {
+			if ($user->equals($clan->getChief()) || $user->hasPermission('event.compo')) {
 				ClanHandler::updateClan($clan, $name, $tag);
 				$result = true;
 			} else {

@@ -113,6 +113,26 @@ AND `scheduledTime` < NOW() + INTERVAL ' . $database->real_escape_string($interv
 
 		return $matchList;
 	}
+    /**
+     * Returns current playing matches for current event
+     */
+    public static function getPlayingMatches() {
+	$event = EventHandler::getCurrentEvent();
+	$database = Database::open(Settings::db_name_infected_compo);
+
+	$result = $database->query('SELECT * FROM `' . Settings::db_table_infected_compo_matches . '` WHERE `compoId` IN (SELECT `id` FROM `' . Settings::db_table_infected_compo_compos . '` where `eventId` = ' . $event->getId() . ') AND `winnerId` = \'0\'
+																AND `scheduledTime` < \'' . date('Y-m-d H:i:s') . '\';');
+
+	$database->close();
+
+	$matchList = [];
+
+	    while ($object = $result->fetch_object('Match')) {
+		$matchList[] = $object;
+	    }
+
+	return $matchList;
+    }
 
 	// Unstable if user has multiple matches happening. Returns the "current match", current being the first match with a scheduled time before now, and without a winner.
 	public static function getMatchByUser(User $user) {
@@ -623,7 +643,17 @@ AND `scheduledTime` < NOW() + INTERVAL ' . $database->real_escape_string($interv
 																SET `state` = \'' . $database->real_escape_string($state) . '\'
 																WHERE `id` = \'' . $match->getId() . '\';');
 
-		$database->close();
+    	$database->close();
+	}
+
+	public static function updateConnectDetails(Match $match, $connectDetails) {
+        $database = Database::open(Settings::db_name_infected_compo);
+
+        $result = $database->query('UPDATE `' . Settings::db_table_infected_compo_matches . '`
+																SET `connectDetails` = \'' . $database->real_escape_string($connectDetails) . '\'
+																WHERE `id` = \'' . $match->getId() . '\';');
+
+        $database->close();
 	}
 
     public static function getMetadata(Match $match) {

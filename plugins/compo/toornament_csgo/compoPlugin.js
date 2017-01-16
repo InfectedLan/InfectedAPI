@@ -111,15 +111,18 @@ module = (function(){
 	    $("#mainContent").append('<h2>Gruppe D</h2><div style="display: block;" class="bracket_container" id="bracket_container_4"></div><br />');
 	    var source = new DataSource(compo.id);
 	    var bracket = source.derive("bracket_container_4", "grp_4");*/
-	    $("#customContent").html('<h2>Playoff-bracket</h2><div style="display: block;" class="bracket_container" id="playoffBracket"></div><br />');
+	    /*$("#mainContent").append('<h2>Playoff-bracket</h2><div style="display: block;" class="bracket_container" id="playoffBracket"></div><br />');
 	    var source = new DataSource(compo.id);
 	    var bracket = source.derive("playoffBracket", "playoff");
-	    $("#customContent").html('<h2>Lower playoff-bracket</h2><div style="display: block;" class="bracket_container" id="playoffBracketLooser"></div><br />');
+	    $("#mainContent").append('<h2>Lower playoff-bracket</h2><div style="display: block;" class="bracket_container" id="playoffBracketLooser"></div><br />');
 	    var source = new DataSource(compo.id);
-	    var bracket = source.derive("playoffBracketLooser", "play_looser");
+	    var bracket = source.derive("playoffBracketLooser", "play_looser");*/
+	    //$("#customContent").html('<h2>Spillere</h2><iframe style="margin: auto; display: block;" allowfullscreen="true" scrolling="no" src="https://widget.toornament.com/tournaments/57ce8a6b140ba0d3408b4567/matches/schedule?_locale=en_GB&theme=discipline" frameborder="0" height="480" width="853"></iframe>');
+
 	} else {
 	    console.log("Compo has no matches... yet");
 	}
+	$("#customContent").html('<h2>Spillere</h2><iframe style="margin: auto; display: block;" allowfullscreen="true" scrolling="no" src="https://widget.toornament.com/tournaments/57ce8a6b140ba0d3408b4567/stages/2?_locale=en_GB&theme=discipline" frameborder="0" height="610" width="980"></iframe>');
     };
 
     return pluginObj;

@@ -562,6 +562,20 @@ class User extends Object {
 		return TeamHandler::isTeamLeader($this);
 	}
 
+	/*
+	 * Return team by user and event.
+	 */
+	public function getTeamByLeaderAndEvent(Event $event) {
+		return TeamHandler::getTeamByLeaderAndEvent($event, $this);
+	}
+
+	/*
+	 * Return team by user.
+	 */
+	public function getTeamByLeader() {
+		return TeamHandler::getTeamByLeader($this);
+	}
+
 	public function getParticipatedEvents() {
 		return UserHistoryHandler::getUserParticipatedEvents($this);
 	}
@@ -595,7 +609,7 @@ class User extends Object {
 				$this->isTeamLeaderByEvent($event)) {
 				$team = $this->getTeam();
 
-				return 'Lag-leder i ' . $group->getTitle() . ":" . $team->getTitle();
+				return 'Lag-leder i ' . $group->getTitle() . ":" . $this->getTeamByLeader()->getTitle();
 			}
 
 			return 'Medlem';
@@ -649,10 +663,10 @@ class User extends Object {
 	}
 
 	public function isEligibleForPreSeating() {
-	    return count(TicketHandler::getTicketsSeatableByUser($this)) >= Settings::prioritySeatingReq;	    
+	    return count(TicketHandler::getTicketsSeatableByUser($this)) >= Settings::prioritySeatingReq;
 	}
 
-	/* 
+	/*
 	 * Returns the steam id of this user. Null if not existent
 	 */
 	public function getSteamId() {
