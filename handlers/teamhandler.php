@@ -42,7 +42,7 @@ class TeamHandler {
 	}
 
 	/*
-	 * Returns the group for the specified user and event.
+	 * Returns the team for the specified user and event.
 	 */
 	public static function getTeamByUserAndEvent(Event $event, User $user) {
 		$database = Database::open(Settings::db_name_infected_crew);
@@ -59,10 +59,32 @@ class TeamHandler {
 	}
 
 	/*
-	 * Returns the group of the specified user.
+	 * Returns the team of the specified user.
 	 */
 	public static function getTeamByUser(User $user) {
 		return self::getTeamByUserAndEvent(EventHandler::getCurrentEvent(), $user);
+	}
+
+	/*
+	 * Return the team of the specified leader.
+	 */
+	public static function getTeamByLeaderAndEvent(Event $event, User $user) {
+		$database = Database::open(Settings::db_name_infected_crew);
+
+		$result = $database->query('SELECT * FROM `' . Settings::db_table_infected_crew_teams . '`
+																WHERE `eventId` = \'' . $event->getId() . '\'
+																AND `leaderId` = \'' . $user->getId() . '\';');
+
+		$database->close();
+
+		return $result->fetch_object('Team');
+	}
+
+	/*
+	 * Return the team of the specified leader.
+	 */
+	public static function getTeamByLeader(User $user) {
+		return self::getTeamByLeaderAndEvent(EventHandler::getCurrentEvent(), $user);
 	}
 
 	 /*
