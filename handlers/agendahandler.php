@@ -111,12 +111,12 @@ class AgendaHandler {
 	public static function createAgenda(Event $event, $name, $title, $description, $startTime) {
 		$database = Database::open(Settings::db_name_infected_main);
 
-		$database->query('INSERT INTO `' . Settings::db_table_infected_main_agenda . '` (`eventId`, `name`, `title`, `description`, `startTime`)
+		$database->query('INSERT INTO `' . Settings::db_table_infected_main_agenda . '` (`eventId`, `name`, `title`, `description`, `startTime`, `published`)
 										  VALUES (\'' . $event->getId() . '\',
 														  \'' . $database->real_escape_string($name) . '\',
 														  \'' . $database->real_escape_string($title) . '\',
 														  \'' . $database->real_escape_string($description) . '\',
-														  \'' . $database->real_escape_string($startTime) . '\');');
+														  \'' . $database->real_escape_string($startTime) . '\', 1);');
 
 		$agenda = self::getAgenda($database->insert_id);
 
