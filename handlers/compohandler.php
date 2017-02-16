@@ -93,7 +93,7 @@ class CompoHandler {
         $chat = ChatHandler::createChat($name . '-compo-chat', $title . ' compo chat');
         $database = Database::open(Settings::db_name_infected_compo);
         
-		$database->query('INSERT INTO `' . Settings::db_table_infected_compo_compos . '` (`eventId`, `name`, `title`, `tag`, `description`, `pluginName`, `startTime`, `registrationEndTime`, `teamSize`, `chatId`, `participantLimit`)
+        $query = 'INSERT INTO `' . Settings::db_table_infected_compo_compos . '` (`eventId`, `name`, `title`, `tag`, `description`, `pluginName`, `startTime`, `registrationEndTime`, `teamSize`, `chatId`, `participantLimit`, `connectionType`, `requiresSteamId`)
 										  VALUES (\'' . EventHandler::getCurrentEvent()->getId() . '\',
 														  \'' . $database->real_escape_string($name) . '\',
 														  \'' . $database->real_escape_string($title) . '\',
@@ -104,7 +104,13 @@ class CompoHandler {
 															\'' . $database->real_escape_string($registrationEndTime) . '\',
 														  \'' . $database->real_escape_string($teamSize) . '\',
 															\'' . $database->real_escape_string($chat->getId()) . '\',
-		   												\'' . $database->real_escape_string($participantLimit) . '\');');
+		   												\'' . $database->real_escape_string($participantLimit) . '\',
+		   												\'0\',
+		   												\'0\',);';
+
+		echo "Creating compo with id " . $query;
+
+		$database->query($query);
         $id = $database->insert_id;
         
 		$database->close();
