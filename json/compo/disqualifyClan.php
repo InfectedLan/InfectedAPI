@@ -28,7 +28,7 @@ $message = null;
 if (Session::isAuthenticated()) {
     $user = Session::getCurrentUser();
 
-    if ($user->hasPermission('event.compo')) {
+    if ($user->hasPermission('compo.management')) {
 	$clan = ClanHandler::getClan($_GET["id"]);
         if($clan != null) {
             ClanHandler::setQualified($clan, false);
