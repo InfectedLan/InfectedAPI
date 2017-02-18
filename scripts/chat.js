@@ -94,7 +94,7 @@ Chat.unbindChat = function(divId) {
 }
 
 Chat.sendMsg = function(chatId, msg) {
-    Websocket.sendIntent("chatMessage", [chatId, msg]);
+    Websocket.sendIntent("chatMessage", [chatId, encodeURIComponent(msg)]);
     Websocket.expectIntent("chatMessageResult", function(data){
 	if (data[0]) {
     	    Chat.chatWrite(data[1], data[2]);

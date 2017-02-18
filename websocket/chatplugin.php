@@ -56,7 +56,7 @@ class ChatPlugin extends WebSocketPlugin {
 
         case 'chatMessage':
             if ($this->server->isAuthenticated($connection)) {
-                $this->sendChatMessage($connection, $args[0], $args[1]);
+                $this->sendChatMessage($connection, $args[0], urldecode($args[1]));
             } else {
                 echo "Disconnecting user due to no authentication: " . $this->server->getUser($connection)->getUsername() . "\n";
 
