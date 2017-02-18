@@ -67,6 +67,7 @@ if(isset($_GET['id']) && isset($_GET["api_key"])) {
                 }
                 //Step 2: Iterate through sendt servers and create them or smth
                 foreach($json as $jsonMatch) {
+		//echo "creating " . print_r($jsonMatch);
                     $allreadyExists = false;
                     $existingMatch = null;
                     foreach($existingMatches as $match) {
@@ -87,13 +88,18 @@ if(isset($_GET['id']) && isset($_GET["api_key"])) {
 			    //Add participants
 			    foreach($jsonMatch->participants as $participant) {
 				foreach($participatingClans as $clan) {
-				    if($clan->getName() == $participant) {
+				//echo "Comparing \"" . substr(htmlspecialchars_decode($clan->getName()), 0, 21) . "\" vs \"" . $participant . "\"<br />\n";
+				    if(substr(htmlspecialchars_decode($clan->getName()), 0, 21) == $participant) {
+				    //echo "is match\n";
 					MatchHandler::addMatchParticipant(MatchHandler::participantof_state_clan, $clan->getId(), $match);
 				    }
 				}
 			    }
 			}
                     } else {
+		      echo "<br />Match " . $jsonMatch->toornamentId . " allready exists, updating details with ip " . $jsonMatch->ip . " and password " . $jsonMatch->password . "<br />\n";
+		      print_r($jsonMatch);
+		      echo "\n<br />";
                         MatchHandler::updateConnectDetails($existingMatch, "connect " . $jsonMatch->ip . ";password " . $jsonMatch->password);
                         //TODO STEPIN SUPPORT
                     }

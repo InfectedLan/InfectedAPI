@@ -28,17 +28,17 @@ class CsgoToornamentPlugin extends CompoPlugin {
                     $votedCount++;
                 }
             }
-            return ["Maps banned" => $votedCount . " av " . count($options)];
+            return ["Maps banned" => $votedCount . " av " . count($options), "Connection details" => $match->getConnectDetails()];
         } else if($match->getState() == Match::STATE_JOIN_GAME) {
             $options = VoteOptionHandler::getVoteOptionsByCompo($match->getCompo());
             $votedCount = 0;
             foreach($options as $option) {
                 if(!VoteOptionHandler::isVoted($option, $match)) {
-                    return ["Selected map" => $option->getName()];
+                    return ["Selected map" => $option->getName(), "Connection details" => $match->getConnectDetails()];
                 }
             }
         } else {
-	    return ["Map vote status" => "Venter på vote"];
+	    return ["Map vote status" => "Venter på vote", "Connection details" => $match->getConnectDetails()];
 	}
         return null;
     }
