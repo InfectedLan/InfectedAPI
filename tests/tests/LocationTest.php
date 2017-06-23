@@ -2,6 +2,7 @@
 use PHPUnit\Framework\TestCase;
 
 require_once 'handlers/locationhandler.php';
+require_once 'database.php';
 
 /*
  * LocationTestSuite
@@ -38,6 +39,8 @@ class LocationTest extends TestCase {
 		// public static function getLocations()
 		$locationList = LocationHandler::getLocations();
 		$this->assertGreaterThan(count($locationList), 0);
+
+		Database::cleanup():
 	}
 }
 ?>
