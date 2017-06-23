@@ -31,6 +31,8 @@ install:
   - 'tests/install/installDb.sh deployment/test_infected_no_info.sql test_infected_no_info'
   - 'tests/install/installDb.sh deployment/test_infected_no_main.sql test_infected_no_main'
   - 'tests/install/installDb.sh deployment/test_infected_no_tickets.sql test_infected_no_tickets'
+  - 'sed -i \'s/const api_path = \'/home/\' . self::domain . \'/public_html/api/\';/const api_path = \'~/\';/g\' settings.php'
+  - 'cat settings.php'
 #  - 'composer require --dev phpdocumentor/phpdocumentor'
 #  - 'travis_retry composer install --no-interaction'
   - ''
