@@ -1,5 +1,5 @@
 <?php
-require_once 'PHPUnit/Autoload.php';
+use PHPUnit_Framework_TestCase as TestCase;
 
 require_once 'handlers/userhandler.php';
 require_once 'objects/user.php';
