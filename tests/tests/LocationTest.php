@@ -22,10 +22,10 @@ class LocationTest extends TestCase {
 		 */
 
 		// public function getName()
-		$this->assert_not_equals($location->getName(), null);
+		$this->assertNotEquals($location->getName(), null);
 
 		// public function getTitle()
-		$this->assert_not_equals($location->getTitle(), null);
+		$this->assertNotEquals($location->getTitle(), null);
 
 		/*
 		 * Testing LocationHandler.
@@ -33,11 +33,11 @@ class LocationTest extends TestCase {
 
 		// public static function getLocation($id)
 		$location = LocationHandler::getLocation(1);
-		$this->assert_not_equals($location, null);
+		$this->assertNotEquals($location, null);
 
 		// public static function getLocations()
 		$locationList = LocationHandler::getLocations();
-		$this->assert_greater_than(count($locationList), 0);
+		$this->assertGreaterThan(count($locationList), 0);
 	}
 }
 ?>
