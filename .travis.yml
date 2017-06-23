@@ -22,6 +22,7 @@ install:
   - 'date'
   - 'git clone https://github.com/InfectedLan/InfectedDeployment.git deployment'
   - 'echo "<?php class Secret { const db_username = \"root\"; const db_password= \"\";  } ?>" > secret.php'
+  - ''
   - 'cat secret.php'
   - 'mysql --version'
   - 'tests/install/installDb.sh deployment/test_infected_no.sql test_infected_no'
@@ -31,6 +32,7 @@ install:
   - 'tests/install/installDb.sh deployment/test_infected_no_main.sql test_infected_no_main'
   - 'tests/install/installDb.sh deployment/test_infected_no_tickets.sql test_infected_no_tickets'
 #  - 'composer require --dev phpdocumentor/phpdocumentor'
+  - 'composer require --dev phpunit/phpunit ^6.1'
   - 'mkdir docs_build'
 script:
   - 'phpunit --version'

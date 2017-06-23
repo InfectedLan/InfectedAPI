@@ -1,5 +1,5 @@
 <?php
-use PHPUnit_Framework_TestCase as TestCase;
+use PHPUnit\Framework\TestCase;
 
 require_once 'handlers/userhandler.php';
 require_once 'objects/user.php';
