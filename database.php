@@ -27,7 +27,7 @@ class Database {
 
 	public static function getConnection($database) {
 		if(isset(self::$connList[$database])) {
-			return $connList[$database];
+			return self::$connList[$database];
 		}
 		// Create connection
 		$mysqli = new mysqli(Settings::db_host,
