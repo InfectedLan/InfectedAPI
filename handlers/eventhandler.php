@@ -28,12 +28,10 @@ class EventHandler {
 	 * Returns the event with the given id.
 	 */
 	public static function getEvent($id) {
-		$database = Database::open(Settings::db_name_infected);
+		$database = Database::getConnection(Settings::db_name_infected);
 
 		$result = $database->query('SELECT * FROM `'. Settings::db_table_infected_events . '`
 																WHERE `id` = \'' . $database->real_escape_string($id) . '\';');
-
-		$database->close();
 
 		return $result->fetch_object('Event');
 	}
@@ -42,12 +40,10 @@ class EventHandler {
 	 * Returns true if we got an event with the given id.
 	 */
 	public static function hasEvent($id) {
-		$database = Database::open(Settings::db_name_infected);
+		$database = Database::getConnection(Settings::db_name_infected);
 
 		$result = $database->query('SELECT * FROM `'. Settings::db_table_infected_events . '`
 																WHERE `id` = \'' . $database->real_escape_string($id) . '\';');
-
-		$database->close();
 
 		return $result->num_rows > 0;
 	}
@@ -56,7 +52,7 @@ class EventHandler {
 	 * Returns the event after the current event.
 	 */
 	public static function getNextEvent() {
-		$database = Database::open(Settings::db_name_infected);
+		$database = Database::getConnection(Settings::db_name_infected);
 
 		$result = $database->query('SELECT * FROM `' . Settings::db_table_infected_events . '`
 																WHERE `id` > (SELECT `id` FROM `' . Settings::db_table_infected_events . '`
@@ -66,8 +62,6 @@ class EventHandler {
 																ORDER BY `startTime`
 																LIMIT 1;');
 
-		$database->close();
-
 		return $result->fetch_object('Event');
 	}
 
@@ -75,14 +69,12 @@ class EventHandler {
 	 * Returns the event that is closest in time, which means the next or on-going event.
 	 */
 	public static function getCurrentEvent() {
-		$database = Database::open(Settings::db_name_infected);
+		$database = Database::getConnection(Settings::db_name_infected);
 
 		$result = $database->query('SELECT * FROM `' . Settings::db_table_infected_events . '`
 																WHERE DATE_ADD(DATE(`endTime`), INTERVAL 1 DAY) >= NOW()
 																ORDER BY `startTime`
 																LIMIT 1;');
-
-		$database->close();
 
 		return $result->fetch_object('Event');
 	}
@@ -91,7 +83,7 @@ class EventHandler {
 	 * Returns the event before the current event.
 	 */
 	public static function getPreviousEvent() {
-		$database = Database::open(Settings::db_name_infected);
+		$database = Database::getConnection(Settings::db_name_infected);
 
 		$result = $database->query('SELECT * FROM `' . Settings::db_table_infected_events . '`
 																WHERE `id` < (SELECT `id` FROM `' . Settings::db_table_infected_events . '`
@@ -101,8 +93,6 @@ class EventHandler {
 																ORDER BY `startTime` DESC
 																LIMIT 1;');
 
-		$database->close();
-
 		return $result->fetch_object('Event');
 	}
 
@@ -110,11 +100,9 @@ class EventHandler {
 	 * Returns a list of all registred events.
 	 */
 	public static function getEvents() {
-		$database = Database::open(Settings::db_name_infected);
+		$database = Database::getConnection(Settings::db_name_infected);
 
 		$result = $database->query('SELECT * FROM `' . Settings::db_table_infected_events . '`;');
-
-		$database->close();
 
 		$eventList = [];
 
@@ -129,12 +117,10 @@ class EventHandler {
 	 * Returns a list of all registred events.
 	 */
 	public static function getEventsByYear($year) {
-		$database = Database::open(Settings::db_name_infected);
+		$database = Database::getConnection(Settings::db_name_infected);
 
 		$result = $database->query('SELECT * FROM `' . Settings::db_table_infected_events . '`
 																WHERE EXTRACT(YEAR FROM `startTime`) = \'' . $year . '\';');
-
-		$database->close();
 
 		$eventList = [];
 
@@ -151,7 +137,7 @@ class EventHandler {
 	public static function createEvent($location, $participants, $bookingTime, $startTime, $endTime) {
 		$name = Settings::name . ' ' . (date('m', strtotime($startTime)) == 2 ? 'Vinter' : 'Høst') . ' ' . date('Y', strtotime($startTime));
 		$seatmap = SeatmapHandler::createSeatmap($name, null);
-		$database = Database::open(Settings::db_name_infected);
+		$database = Database::getConnection(Settings::db_name_infected);
 
 		$database->query('INSERT INTO `' . Settings::db_table_infected_events . '` (`locationId`, `participants`, `bookingTime`, `startTime`, `endTime`, `seatmapId`, `ticketTypeId`)
 										  VALUES (\'' . $database->real_escape_string($location) . '\',
@@ -164,8 +150,6 @@ class EventHandler {
 
 		$event = self::getEvent($database->insert_id);
 
-		$database->close();
-
 		return $event;
 	}
 
@@ -173,7 +157,7 @@ class EventHandler {
 	 * Update an event
 	 */
 	public static function updateEvent(Event $event, $location, $participants, $bookingTime, $prioritySeatingTime, $seatingTime, $startTime, $endTime) {
-	  $database = Database::open(Settings::db_name_infected);
+	  $database = Database::getConnection(Settings::db_name_infected);
 
 		$database->query('UPDATE `' . Settings::db_table_infected_events . '`
 										  SET `locationId` = \'' . $database->real_escape_string($location) . '\',
@@ -185,26 +169,23 @@ class EventHandler {
 												  `endTime` = \'' . $database->real_escape_string($endTime) . '\'
 										  WHERE `id` = \'' . $event->getId() . '\';');
 
-		$database->close();
-	}
 
 	/*
 	 * Remove an event
 	 */
 	public static function removeEvent(Event $event) {
-		$database = Database::open(Settings::db_name_infected);
+		$database = Database::getConnection(Settings::db_name_infected);
 
 		$database->query('DELETE FROM `' . Settings::db_table_infected_events . '`
 						  				WHERE `id` = \'' . $event->getId() . '\';');
 
-		$database->close();
 	}
 
 	/*
 	 * Returns members and participants for given events.
 	 */
 	public static function getMembersAndParticipantsByEvents(array $eventList, $ageLimit) {
-		$database = Database::open(Settings::db_name_infected);
+		$database = Database::getConnection(Settings::db_name_infected);
 
 		// Extract event id's from the event list.
 		$dateLimit = date('Y-m-d', end($eventList)->getStartTime());
@@ -227,8 +208,6 @@ class EventHandler {
 																AND TIMESTAMPDIFF(YEAR, `birthdate`, \'' . $dateLimit . '\') <= \'' . $ageLimit . '\'
 																GROUP BY `users`.`id`
 																ORDER BY `firstname`;');
-
-		$database->close();
 
 		$userList = [];
 
