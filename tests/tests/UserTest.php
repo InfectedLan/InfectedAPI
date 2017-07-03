@@ -88,7 +88,7 @@ class UserTest extends TestCase {
 		$this->assertNotEquals(null, $user);
 
 		$this->assertEquals("Jente", $user->getGenderAsString());
-		Database::cleanup():
+		Database::cleanup();
 	}
 }
 ?>
