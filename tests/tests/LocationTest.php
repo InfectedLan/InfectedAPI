@@ -40,7 +40,7 @@ class LocationTest extends TestCase {
 		$locationList = LocationHandler::getLocations();
 		$this->assertGreaterThan(count($locationList), 0);
 
-		Database::cleanup():
+		Database::cleanup();
 	}
 }
 ?>
