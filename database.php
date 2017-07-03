@@ -26,8 +26,9 @@ class Database {
 	private static $connList = [];
 
 	public static function getConnection($database) {
-		if(isset(self::$connList[$database])) {
-			//return self::$connList[$database];
+	        
+		if(isset(self::$connList[$database]) || array_key_exists($database, self::$connList)) {
+			return self::$connList[$database];
 		}
 		// Create connection
 		$mysqli = new mysqli(Settings::db_host,
