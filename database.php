@@ -26,7 +26,6 @@ class Database {
 	private static $connList = [];
 
 	public static function getConnection($database) {
-	        
 		if(isset(self::$connList[$database]) || array_key_exists($database, self::$connList)) {
 			return self::$connList[$database];
 		}
