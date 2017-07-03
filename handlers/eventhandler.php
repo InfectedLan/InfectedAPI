@@ -168,7 +168,7 @@ class EventHandler {
 												  `startTime` = \'' . $database->real_escape_string($startTime) . '\',
 												  `endTime` = \'' . $database->real_escape_string($endTime) . '\'
 										  WHERE `id` = \'' . $event->getId() . '\';');
-
+	}
 
 	/*
 	 * Remove an event
