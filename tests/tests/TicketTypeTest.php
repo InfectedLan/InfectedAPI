@@ -42,13 +42,13 @@ class TicketTypeTest extends TestCase {
 
 		$this->assertFalse($types[0]->isUserEligibleForDiscount($user));
 		$this->assertEquals(350, $types[0]->getPriceByUser($user));
-		$this->assertEquals(670, $types[0]->getPriceByUser($user, 2));
+		$this->assertEquals(680, $types[0]->getPriceByUser($user, 2));
 
 		$ticket = TicketHandler::createTicket($user, $types[0], $payment);
 
 		$this->assertTrue($types[0]->isUserEligibleForDiscount($user));
-		$this->assertEquals(320, $types[0]->getPriceByUser($user));
-		$this->assertEquals(640, $types[0]->getPriceByUser($user, 2));
+		$this->assertEquals(330, $types[0]->getPriceByUser($user));
+		$this->assertEquals(660, $types[0]->getPriceByUser($user, 2));
 
 		//Check that GetTicketType works
 		$type = TicketType::getTicketType($types[0]->getId());
