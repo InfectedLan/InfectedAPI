@@ -54,6 +54,7 @@ class Database {
 	public static function cleanup() {
 		foreach(self::$connList as $key => $value) {
 			$value->close();
+			unset(self::$conList[$key]);
 		}
 	}
 
