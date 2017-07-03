@@ -21,6 +21,9 @@ class UserTest extends TestCase {
 		//We expect 21 users to exist from the deployment code
 		$users = UserHandler::getUsers(); //Get users
 		$this->assertGreaterThan(0, count($users)); //This asserts if the number of users is 21.
+		
+		$petterroea = UserHandler::getUser(1);
+		$this->assertNotEquals(null, $petterroea);
 
 		//Check that the user does not exist. This is done to test that the function does not return bogus data, and is a reccomended thing to test. Test everything, basically.
 		$user = UserHandler::getUserByIdentifier("assertUser");
