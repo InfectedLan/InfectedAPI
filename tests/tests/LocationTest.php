@@ -38,7 +38,7 @@ class LocationTest extends TestCase {
 
 		// public static function getLocations()
 		$locationList = LocationHandler::getLocations();
-		$this->assertGreaterThan(count($locationList), 0);
+		$this->assertGreaterThan(0, count($locationList));
 
 		Database::cleanup();
 	}
