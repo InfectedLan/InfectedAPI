@@ -90,6 +90,7 @@ class UserOptionHandler {
 												WHERE `userId` = \'' . $user->getId() . '\';');
 		}
 
+	}
 
 	/*
 	 * Returns true if the user has the prank option set.
