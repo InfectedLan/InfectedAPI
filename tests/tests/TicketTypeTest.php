@@ -28,12 +28,12 @@ class TicketTypeTest extends TestCase {
 		$this->assertEquals(1, $types[0]->getId());
 		$this->assertEquals("participant", $types[0]->getName());
 		$this->assertEquals(350, $types[0]->getPrice());
-		$this->assertEquals(true, $types[0]->getRefundable());
+		$this->assertEquals(true, $types[0]->isRefundable());
 
 		$this->assertEquals(2, $types[1]->getId());
 		$this->assertEquals("free", $types[1]->getName());
 		$this->assertEquals(0, $types[1]->getPrice());
-		$this->assertEquals(false, $types[1]->getRefundable());
+		$this->assertEquals(false, $types[1]->isRefundable());
 
 		//Check discount, so create a ticket for a test user
 
