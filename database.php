@@ -26,7 +26,7 @@ class Database {
 	private static $connList = [];
 
 	public static function getConnection($database) {
-		if(self::$connList[$database]!=null) {
+		if(isset(self::$connList[$database])) {
 			return $connList[$database];
 		}
 		// Create connection
