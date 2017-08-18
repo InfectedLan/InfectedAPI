@@ -51,9 +51,9 @@ class TicketTypeTest extends TestCase {
 		$this->assertEquals(660, $types[0]->getPriceByUser($user, 2));
 
 		//Check that GetTicketType works
-		$type = TicketType::getTicketType($types[0]->getId());
+		$type = TicketTypeHandler::getTicketType($types[0]->getId());
 		$this->assertEquals($types[0], $type);
-		$type = TicketType::getTicketType($types[1]->getId());
+		$type = TicketTypeHandler::getTicketType($types[1]->getId());
 		$this->assertEquals($types[1], $type);
 
 
