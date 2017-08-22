@@ -27,7 +27,7 @@ class EntranceHandler {
 	 * Get an entrance by the internal id.
 	 */
 	public static function getEntrance($id) {
-		$database = Database::open(Settings::db_name_infected_tickets);
+		$database = Database::getConnection(Settings::db_name_infected_tickets);
 
 		$result = $database->query('SELECT * FROM `' . Settings::db_table_infected_tickets_entrances . '`
 																WHERE `id` = \'' . $database->real_escape_string($id) . '\';');
@@ -41,7 +41,7 @@ class EntranceHandler {
 	 * Get an entrance by name.
 	 */
 	public static function getEntranceByName($name) {
-		$database = Database::open(Settings::db_name_infected_tickets);
+		$database = Database::getConnection(Settings::db_name_infected_tickets);
 
 		$result = $database->query('SELECT * FROM `' . Settings::db_table_infected_tickets_entrances . '`
 																WHERE `name` = \'' . $database->real_escape_string($name) . '\';');
@@ -55,7 +55,7 @@ class EntranceHandler {
 	 * Get a list of all entrances.
 	 */
 	public static function getEntrances() {
-		$database = Database::open(Settings::db_name_infected_tickets);
+		$database = Database::getConnection(Settings::db_name_infected_tickets);
 
 		$result = $database->query('SELECT * FROM `' . Settings::db_table_infected_tickets_entrance . '`;');
 

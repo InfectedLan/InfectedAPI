@@ -29,7 +29,7 @@ class ServerHandler {
 	 * Get a server by internal id
 	 */
 	public static function getServer($id) {
-		$database = Database::open(Settings::db_name_infected_compo);
+		$database = Database::getConnection(Settings::db_name_infected_compo);
 
 		$result = $database->query('SELECT * FROM `' . Settings::db_table_infected_compo_servers . '`
 																WHERE `id` = \'' . $id . '\';');
@@ -43,7 +43,7 @@ class ServerHandler {
 	 * Get a server for a specified compo.
 	 */
 	public static function getServersByCompo(Compo $compo) {
-		$database = Database::open(Settings::db_name_infected_compo);
+		$database = Database::getConnection(Settings::db_name_infected_compo);
 
 		$result = $database->query('SELECT * FROM `' . Settings::db_table_infected_compo_servers . '`
 																WHERE `compoId` = \'' . $compo->getId() . '\';');
@@ -63,7 +63,7 @@ class ServerHandler {
      * Creates a new server entry
      */
 	public static function createServer(Compo $compo, $humanName, $connectionDetails) {
-	    $database = Database::open(Settings::db_name_infected_compo);
+	    $database = Database::getConnection(Settings::db_name_infected_compo);
 
 	    $database->query('INSERT INTO `' . Settings::db_table_infected_compo_servers . '`(`compoId`, `humanName`, `connectionDetails`) VALUES (' . $compo->getId() . ', \'' . $database->real_escape_string($humanName) . '\', \'' . $database->real_escape_string($connectionDetails) . '\');');
 
@@ -78,7 +78,7 @@ class ServerHandler {
      * Deletes a server entry
      */
     public static function deleteServer(Server $server) {
-        $database = Database::open(Settings::db_name_infected_compo);
+        $database = Database::getConnection(Settings::db_name_infected_compo);
 
         $database->query('DELETE FROM `' . Settings::db_table_infected_compo_servers . '` WHERE `id` = \'' . $server->getId() . '\';');
     }
@@ -87,7 +87,7 @@ class ServerHandler {
 	 * Sets the connection details of a server
 	 */
 	public static function setConnectionDetails(Server $server, $connectionDetails) {
-	    $database = Database::open(Settings::db_name_infected_compo);
+	    $database = Database::getConnection(Settings::db_name_infected_compo);
 
 	    $result = $database->query('UPDATE `' . Settings::db_table_infected_compo_servers . '` SET `connectionDetails` = \'' . $database->real_escape_string($connectionDetails) . '\' WHERE `` = \'' . $server->getId() . '\';');
 
@@ -98,7 +98,7 @@ class ServerHandler {
 	 * Sets the human name of a server
 	 */
 	public static function setHumanName(Server $server, $humanName) {
-	    $database = Database::open(Settings::db_name_infected_compo);
+	    $database = Database::getConnection(Settings::db_name_infected_compo);
 
 	    $result = $database->query('UPDATE `' . Settings::db_table_infected_compo_servers . '` SET `humanName` = \'' . $database->real_escape_string($humanName) . '\' WHERE `` = \'' . $server->getId() . '\';');
 

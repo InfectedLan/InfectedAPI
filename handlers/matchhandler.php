@@ -48,7 +48,7 @@ class MatchHandler {
 	 * Get a match by the internal id.
 	 */
 	public static function getMatch($id) {
-		$database = Database::open(Settings::db_name_infected_compo);
+		$database = Database::getConnection(Settings::db_name_infected_compo);
 
 		$result = $database->query('SELECT * FROM `' . Settings::db_table_infected_compo_matches . '`
 								 								WHERE `id` = \'' . $id . '\';');
@@ -62,7 +62,7 @@ class MatchHandler {
 	 * Remove a match
 	 */
 	public static function deleteMatch($match) {
-	       $database = Database::open(Settings::db_name_infected_compo);
+	       $database = Database::getConnection(Settings::db_name_infected_compo);
 	       $database->query('DELETE FROM `' . Settings::db_table_infected_compo_matches . '` WHERE `id` = \'' . $match->getId() . '\';');
 	       $database->query('DELETE FROM `' . Settings::db_table_infected_compo_participantof . '` WHERE `matchId` = \'' . $match->getId() . '\';');
            $database->query('DELETE FROM `' . Settings::db_table_infected_compo_participantOfMatch . '` WHERE `participantId` = \'' . $match->getId() . '\' AND (`type` = \'' . Settings::compo_match_participant_type_match_winner . '\' OR `type` = \'' . Settings::compo_match_participant_type_match_looser . '\');');
@@ -77,7 +77,7 @@ class MatchHandler {
 	 * Returns a list of all matches. Matches are completely naive of what they are connected to, so this will have little use.
 	 */
 	public static function getMatches() {
-		$database = Database::open(Settings::db_name_infected_compo);
+		$database = Database::getConnection(Settings::db_name_infected_compo);
 
 		$result = $database->query('SELECT * FROM `' . Settings::db_table_infected_compo_matches . '`;');
 
@@ -97,7 +97,7 @@ class MatchHandler {
      */
 
     public static function getUpcomingMatches($interval) {
-		$database = Database::open(Settings::db_name_infected_compo);
+		$database = Database::getConnection(Settings::db_name_infected_compo);
 
 		$result = $database->query('SELECT * FROM `' . Settings::db_table_infected_compo_matches . '`
 WHERE `scheduledTime` >= NOW() 
@@ -118,7 +118,7 @@ AND `scheduledTime` < NOW() + INTERVAL ' . $database->real_escape_string($interv
      */
     public static function getPlayingMatches() {
 	$event = EventHandler::getCurrentEvent();
-	$database = Database::open(Settings::db_name_infected_compo);
+	$database = Database::getConnection(Settings::db_name_infected_compo);
 
 	$result = $database->query('SELECT * FROM `' . Settings::db_table_infected_compo_matches . '` WHERE `compoId` IN (SELECT `id` FROM `' . Settings::db_table_infected_compo_compos . '` where `eventId` = ' . $event->getId() . ') AND `winnerId` = \'0\'
 																AND `scheduledTime` < \'' . date('Y-m-d H:i:s') . '\';');
@@ -148,7 +148,7 @@ AND `scheduledTime` < NOW() + INTERVAL ' . $database->real_escape_string($interv
 	}
 
 	public static function getMatchByClan(Clan $clan) {
-		$database = Database::open(Settings::db_name_infected_compo);
+		$database = Database::getConnection(Settings::db_name_infected_compo);
 
 		$result = $database->query('SELECT `matchId` FROM `' . Settings::db_table_infected_compo_participantOfMatch . '`
 																						  WHERE `type` = \'' . Settings::compo_match_participant_type_clan . '\'
@@ -168,7 +168,7 @@ AND `scheduledTime` < NOW() + INTERVAL ' . $database->real_escape_string($interv
 	}
 
 	public static function getPendingMatchesByCompo(Compo $compo) {
-		$database = Database::open(Settings::db_name_infected_compo);
+		$database = Database::getConnection(Settings::db_name_infected_compo);
 
 		$result = $database->query('SELECT * FROM `' . Settings::db_table_infected_compo_matches . '`
 																WHERE `compoId` = ' . $compo->getId() . ';');
@@ -190,7 +190,7 @@ AND `scheduledTime` < NOW() + INTERVAL ' . $database->real_escape_string($interv
 	}
 
 	public static function getCurrentMatchesByCompo(Compo $compo) {
-		$database = Database::open(Settings::db_name_infected_compo);
+		$database = Database::getConnection(Settings::db_name_infected_compo);
 
 		//Picks matches that 'should' be running.
 		$result = $database->query('SELECT * FROM `' . Settings::db_table_infected_compo_matches . '`
@@ -211,7 +211,7 @@ AND `scheduledTime` < NOW() + INTERVAL ' . $database->real_escape_string($interv
 	}
 
 	public static function getFinishedMatchesByCompo(Compo $compo) {
-		$database = Database::open(Settings::db_name_infected_compo);
+		$database = Database::getConnection(Settings::db_name_infected_compo);
 
 		//Picks matches that 'should' be running.
 		$result = $database->query('SELECT * FROM `' . Settings::db_table_infected_compo_matches . '`
@@ -230,7 +230,7 @@ AND `scheduledTime` < NOW() + INTERVAL ' . $database->real_escape_string($interv
 	}
 
 	public static function getMatchesByCompo(Compo $compo) {
-		$database = Database::open(Settings::db_name_infected_compo);
+		$database = Database::getConnection(Settings::db_name_infected_compo);
 
 		$result = $database->query('SELECT * FROM `' . Settings::db_table_infected_compo_matches . '`
 																WHERE `compoId` = \'' . $compo->getId() . '\';');
@@ -247,7 +247,7 @@ AND `scheduledTime` < NOW() + INTERVAL ' . $database->real_escape_string($interv
 	}
 
 	public static function hasMatchByClan(Clan $clan) {
-		$database = Database::open(Settings::db_name_infected_compo);
+		$database = Database::getConnection(Settings::db_name_infected_compo);
 
 		$result = $database->query('SELECT `id` FROM `' . Settings::db_table_infected_compo_matches . '`
 																WHERE `id` = (SELECT `matchId` FROM `' . Settings::db_table_infected_compo_participantOfMatch . '`
@@ -260,7 +260,7 @@ AND `scheduledTime` < NOW() + INTERVAL ' . $database->real_escape_string($interv
 	}
 
 	public static function addMatchParticipant($type, $participantId, Match $match) {
-		$database = Database::open(Settings::db_name_infected_compo);
+		$database = Database::getConnection(Settings::db_name_infected_compo);
 
 		$database->query('INSERT INTO `' . Settings::db_table_infected_compo_participantOfMatch . '` (`type`, `participantId`, `matchId`)
 										  VALUES (\'' . $database->real_escape_string($type) . '\',
@@ -285,7 +285,7 @@ AND `scheduledTime` < NOW() + INTERVAL ' . $database->real_escape_string($interv
 	}
 	
 	public static function setWinner(Match $match, Clan $clan, CompoPlugin $compoPlugin = null) {
-		$database = Database::open(Settings::db_name_infected_compo);
+		$database = Database::getConnection(Settings::db_name_infected_compo);
 
 		// Set winner of match
 		$database->query('UPDATE `' . Settings::db_table_infected_compo_matches . '`
@@ -352,7 +352,7 @@ AND `scheduledTime` < NOW() + INTERVAL ' . $database->real_escape_string($interv
 	}
 
 	public static function getParticipantsByMatch(Match $match) {
-		$database = Database::open(Settings::db_name_infected_compo);
+		$database = Database::getConnection(Settings::db_name_infected_compo);
 
 		$result = $database->query('SELECT * FROM `' . Settings::db_table_infected_compo_clans . '`
 																WHERE `id` IN (SELECT `participantId` FROM `' . Settings::db_table_infected_compo_participantOfMatch . '`
@@ -373,7 +373,7 @@ AND `scheduledTime` < NOW() + INTERVAL ' . $database->real_escape_string($interv
 
     public static function removeParticipantEntry($id) {
         //First, we need to fetch it, as there are some extra steps we need to take in some situations
-        $database = Database::open(Settings::db_name_infected_compo);
+        $database = Database::getConnection(Settings::db_name_infected_compo);
 
         $result = $database->query('SELECT `type` FROM `' . Settings::db_table_infected_compo_participantOfMatch . '` WHERE `id` = \'' . $database->real_escape_string($id) . '\';');
 
@@ -385,7 +385,7 @@ AND `scheduledTime` < NOW() + INTERVAL ' . $database->real_escape_string($interv
      * Some times, you want low level data on the participants.
      */
 	public static function getParticipantData(Match $match) {
-        $database = Database::open(Settings::db_name_infected_compo);
+        $database = Database::getConnection(Settings::db_name_infected_compo);
 
 		$result = $database->query('SELECT * FROM `' . Settings::db_table_infected_compo_participantOfMatch . '`
 																WHERE `matchId` = \'' . $match->getId() . '\';');
@@ -402,7 +402,7 @@ AND `scheduledTime` < NOW() + INTERVAL ' . $database->real_escape_string($interv
 	}
 
 	public static function getParticipantStringByMatch(Match $match) {
-		$database = Database::open(Settings::db_name_infected_compo);
+		$database = Database::getConnection(Settings::db_name_infected_compo);
 
 		$result = $database->query('SELECT * FROM `' . Settings::db_table_infected_compo_participantOfMatch . '`
 																WHERE `matchId` = \'' . $match->getId() . '\';');
@@ -426,7 +426,7 @@ AND `scheduledTime` < NOW() + INTERVAL ' . $database->real_escape_string($interv
 	}
 
 	public static function getParticipantTagsByMatch(Match $match) {
-		$database = Database::open(Settings::db_name_infected_compo);
+		$database = Database::getConnection(Settings::db_name_infected_compo);
 
 		$result = $database->query('SELECT * FROM `' . Settings::db_table_infected_compo_participantOfMatch . '`
 																WHERE `matchId` = \'' . $match->getId() . '\';');
@@ -452,7 +452,7 @@ AND `scheduledTime` < NOW() + INTERVAL ' . $database->real_escape_string($interv
      * Returns an array with "hunan readable" string representations of the participants
      */
 	public static function getParticipantsJsonByMatch(Match $match) {
-		$database = Database::open(Settings::db_name_infected_compo);
+		$database = Database::getConnection(Settings::db_name_infected_compo);
 
 		$result = $database->query('SELECT * FROM `' . Settings::db_table_infected_compo_participantOfMatch . '`
 																WHERE `matchId` = \'' . $match->getId() . '\';');
@@ -480,7 +480,7 @@ AND `scheduledTime` < NOW() + INTERVAL ' . $database->real_escape_string($interv
 	}
 
 	public static function getMatchParents(Match $match) {
-		$database = Database::open(Settings::db_name_infected_compo);
+		$database = Database::getConnection(Settings::db_name_infected_compo);
 
 		$result = $database->query('SELECT * FROM `' . Settings::db_table_infected_compo_matches . '`
 																WHERE `id` IN (SELECT `fromCompoId` FROM `' . Settings::db_table_infected_compo_matchrelationships . '`
@@ -498,7 +498,7 @@ AND `scheduledTime` < NOW() + INTERVAL ' . $database->real_escape_string($interv
 	}
 
     	public static function getMatchChildren(Match $match) {
-		$database = Database::open(Settings::db_name_infected_compo);
+		$database = Database::getConnection(Settings::db_name_infected_compo);
 
 		$result = $database->query('SELECT * FROM `' . Settings::db_table_infected_compo_matches . '`
 																WHERE `id` IN (SELECT `toCompoId` FROM `' . Settings::db_table_infected_compo_matchrelationships . '`
@@ -517,7 +517,7 @@ AND `scheduledTime` < NOW() + INTERVAL ' . $database->real_escape_string($interv
 
 	// Checks if the match can run(If we have enough participants. Returns false if we have to wait for earlier matches to complete)
 	public static function isReady(Match $match) {
-		$database = Database::open(Settings::db_name_infected_compo);
+		$database = Database::getConnection(Settings::db_name_infected_compo);
 
 		$result = $database->query('SELECT `type` FROM `' . Settings::db_table_infected_compo_participantOfMatch . '`
 																WHERE `matchId` = \'' . $match->getId() . '\';');
@@ -540,7 +540,7 @@ AND `scheduledTime` < NOW() + INTERVAL ' . $database->real_escape_string($interv
 
 	// Used in the ready check
 	public static function isUserReady(User $user, Match $match) {
-		$database = Database::open(Settings::db_name_infected_compo);
+		$database = Database::getConnection(Settings::db_name_infected_compo);
 
 		$result = $database->query('SELECT `id` FROM `' . Settings::db_table_infected_compo_readyusers . '`
 																WHERE `userId` = \'' . $user->getId() . '\'
@@ -566,7 +566,7 @@ AND `scheduledTime` < NOW() + INTERVAL ' . $database->real_escape_string($interv
 	}
 
 	public static function acceptMatch(User $user, Match $match) {
-		$database = Database::open(Settings::db_name_infected_compo);
+		$database = Database::getConnection(Settings::db_name_infected_compo);
 
 		$result = $database->query('INSERT INTO `' . Settings::db_table_infected_compo_readyusers . '` (`userId`, `matchId`)
 																VALUES (\'' . $user->getId() . '\',
@@ -576,7 +576,7 @@ AND `scheduledTime` < NOW() + INTERVAL ' . $database->real_escape_string($interv
 	}
 
 	public static function allHasAccepted(Match $match) {
-	    $database = Database::open(Settings::db_name_infected_compo);
+	    $database = Database::getConnection(Settings::db_name_infected_compo);
 
 	    $result = $database->query('SELECT * FROM `' . Settings::db_table_infected_compo_participantOfMatch . '`
 																WHERE `type` = \'0\'
@@ -606,7 +606,7 @@ AND `scheduledTime` < NOW() + INTERVAL ' . $database->real_escape_string($interv
 	}
 
 	public static function createMatch($scheduledTime, $connectData, Compo $compo, $bracketOffset, Chat $chat, $bracket) {
-		$database = Database::open(Settings::db_name_infected_compo);
+		$database = Database::getConnection(Settings::db_name_infected_compo);
 
         $query = 'INSERT INTO `' . Settings::db_table_infected_compo_matches . '` (`scheduledTime`, `connectDetails`, `state`, `winnerId`, `compoId`, `bracketOffset`, `chatId`, `bracket`)
 											VALUES (\'' . date('Y-m-d H:i:s', $scheduledTime) . '\',
@@ -629,7 +629,7 @@ AND `scheduledTime` < NOW() + INTERVAL ' . $database->real_escape_string($interv
 	}
 
     public static function setTime(Match $match, $time) {
-        $database = Database::open(Settings::db_name_infected_compo);
+        $database = Database::getConnection(Settings::db_name_infected_compo);
 
         $database->query('UPDATE `' . Settings::db_table_infected_compo_matches . '` SET `scheduledTime` = \'' . date('Y-m-d H:i:s', $time) . '\' WHERE `id` = \'' . $match->getId() . '\';');
 
@@ -637,7 +637,7 @@ AND `scheduledTime` < NOW() + INTERVAL ' . $database->real_escape_string($interv
     }
 
 	public static function updateMatch(Match $match, $state) {
-		$database = Database::open(Settings::db_name_infected_compo);
+		$database = Database::getConnection(Settings::db_name_infected_compo);
 
 		$result = $database->query('UPDATE `' . Settings::db_table_infected_compo_matches . '`
 																SET `state` = \'' . $database->real_escape_string($state) . '\'
@@ -647,7 +647,7 @@ AND `scheduledTime` < NOW() + INTERVAL ' . $database->real_escape_string($interv
 	}
 
 	public static function updateConnectDetails(Match $match, $connectDetails) {
-        $database = Database::open(Settings::db_name_infected_compo);
+        $database = Database::getConnection(Settings::db_name_infected_compo);
 
         $result = $database->query('UPDATE `' . Settings::db_table_infected_compo_matches . '`
 																SET `connectDetails` = \'' . $database->real_escape_string($connectDetails) . '\'
@@ -657,7 +657,7 @@ AND `scheduledTime` < NOW() + INTERVAL ' . $database->real_escape_string($interv
 	}
 
     public static function getMetadata(Match $match) {
-        $database = Database::open(Settings::db_name_infected_compo);
+        $database = Database::getConnection(Settings::db_name_infected_compo);
 
         $result = $database->query('SELECT * FROM `' . Settings::db_table_infected_compo_matchmetadata . '` WHERE `match` = \'' . $match->getId() . '\';');
 
@@ -669,7 +669,7 @@ AND `scheduledTime` < NOW() + INTERVAL ' . $database->real_escape_string($interv
     }
 
     public static function setMetadata(Match $match, $key, $value) {
-        $database = Database::open(Settings::db_name_infected_compo);
+        $database = Database::getConnection(Settings::db_name_infected_compo);
         
         if(self::hasKey($match, $key)) {
             $result = $database->query('UPDATE `' . Settings::db_table_infected_compo_matchmetadata . '` SET `value` = \'' . $database->real_escape_string($value) .'\' WHERE `key` = \'' . $database->real_escape_string($key) . '\' AND `match`=\'' . $match->getId() . '\';');
@@ -679,7 +679,7 @@ AND `scheduledTime` < NOW() + INTERVAL ' . $database->real_escape_string($interv
     }
 
     public static function hasKey(Match $match, $key) {
-        $database = Database::open(Settings::db_name_infected_compo);
+        $database = Database::getConnection(Settings::db_name_infected_compo);
 
         $result = $database->query('SELECT * FROM `' . Settings::db_table_infected_compo_matchmetadata . '` WHERE `match` = \'' . $match->getId() . '\' AND `key` = \'' . $database->real_escape_string($key) . '\';');
 

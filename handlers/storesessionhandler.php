@@ -31,7 +31,7 @@ class StoreSessionHandler {
 	 * Get a store session by the internal id.
 	 */
 	public static function getStoreSession($id) {
-		$database = Database::open(Settings::db_name_infected_tickets);
+		$database = Database::getConnection(Settings::db_name_infected_tickets);
 
 		$result = $database->query('SELECT * FROM `' . Settings::db_table_infected_tickets_storesessions . '`
 																WHERE `id` = \'' . $database->real_escape_string($id) . '\';');
@@ -45,7 +45,7 @@ class StoreSessionHandler {
 	 * Get a list of all store sessions.
 	 */
 	public static function getStoreSessions() {
-		$database = Database::open(Settings::db_name_infected_tickets);
+		$database = Database::getConnection(Settings::db_name_infected_tickets);
 
 		$result = $database->query('SELECT * FROM `' . Settings::db_table_infected_tickets_storesessions . '`;');
 
@@ -64,7 +64,7 @@ class StoreSessionHandler {
 	 * Returns the store session for the specified user.
 	 */
 	public static function getStoreSessionByUser(User $user) {
-		$database = Database::open(Settings::db_name_infected_tickets);
+		$database = Database::getConnection(Settings::db_name_infected_tickets);
 
 		$result = $database->query('SELECT * FROM `' . Settings::db_table_infected_tickets_storesessions . '`
 																WHERE `userId` = \'' . $user->getId() . '\'
@@ -79,7 +79,7 @@ class StoreSessionHandler {
 	 * Returns the store session by the specified key.
 	 */
 	private static function getStoreSessionByCode($code) {
-		$database = Database::open(Settings::db_name_infected_tickets);
+		$database = Database::getConnection(Settings::db_name_infected_tickets);
 
 		$result = $database->query('SELECT * FROM `' . Settings::db_table_infected_tickets_storesessions . '`
 																WHERE `code` = \'' . $database->real_escape_string($code) . '\'
@@ -94,7 +94,7 @@ class StoreSessionHandler {
 	 * Returns true if the specified user have a store session.
 	 */
 	public static function hasStoreSession(User $user) {
-		$database = Database::open(Settings::db_name_infected_tickets);
+		$database = Database::getConnection(Settings::db_name_infected_tickets);
 
 		$result = $database->query('SELECT `id` FROM `' . Settings::db_table_infected_tickets_storesessions . '`
 																WHERE `userId` = \'' . $user->getId() . '\'
@@ -111,7 +111,7 @@ class StoreSessionHandler {
 	public static function createStoreSession(User $user, TicketType $ticketType, $amount, $price) {
 		$code = bin2hex(openssl_random_pseudo_bytes(16));
 
-		$database = Database::open(Settings::db_name_infected_tickets);
+		$database = Database::getConnection(Settings::db_name_infected_tickets);
 
 		$result = $database->query('INSERT INTO `' . Settings::db_table_infected_tickets_storesessions . '` (`userId`, `ticketTypeId`, `amount`, `code`, `price`, `datetime`)
 																VALUES (\'' . $user->getId() . '\',
@@ -130,7 +130,7 @@ class StoreSessionHandler {
 	 * Removes the specified store session.
 	 */
 	public static function removeStoreSession(StoreSession $storeSession) {
-		$database = Database::open(Settings::db_name_infected_tickets);
+		$database = Database::getConnection(Settings::db_name_infected_tickets);
 
 		$result = $database->query('DELETE FROM `' . Settings::db_table_infected_tickets_storesessions . '`
 																WHERE `id` = \'' . $storeSession->getId() . '\';');
@@ -149,7 +149,7 @@ class StoreSessionHandler {
 	 * Returns the amount of reserved tickets for the specified ticket type.
 	 */
 	public static function getReservedTicketCount(TicketType $ticketType) {
-		$database = Database::open(Settings::db_name_infected_tickets);
+		$database = Database::getConnection(Settings::db_name_infected_tickets);
 
 		$result = $database->query('SELECT `amount` FROM `' . Settings::db_table_infected_tickets_storesessions . '`
 																WHERE `ticketTypeId` = \'' . $ticketType->getId() . '\'
@@ -177,7 +177,7 @@ class StoreSessionHandler {
 	 * Returns the user with a store session with the specified code.
 	 */
 	public static function getUserByStoreSessionCode($code) {
-		$database = Database::open(Settings::db_name_infected);
+		$database = Database::getConnection(Settings::db_name_infected);
 
 		$result = $database->query('SELECT * FROM `' . Settings::db_table_infected_users . '`
 																WHERE `id` = (SELECT `userId` FROM `' . Settings::db_name_infected_tickets . '`.`' . Settings::db_table_infected_tickets_storesessions . '`

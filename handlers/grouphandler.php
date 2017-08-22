@@ -30,7 +30,7 @@ class GroupHandler {
 	 * Get a group by the internal id.
 	 */
 	public static function getGroup($id) {
-		$database = Database::open(Settings::db_name_infected_crew);
+		$database = Database::getConnection(Settings::db_name_infected_crew);
 
 		$result = $database->query('SELECT * FROM `' . Settings::db_table_infected_crew_groups . '`
 																WHERE `id` = \'' . $database->real_escape_string($id) . '\';');
@@ -44,7 +44,7 @@ class GroupHandler {
 	 * Get a group for the specified user from the given event.
 	 */
 	public static function getGroupByUserAndEvent(User $user, Event $event) {
-		$database = Database::open(Settings::db_name_infected_crew);
+		$database = Database::getConnection(Settings::db_name_infected_crew);
 
 		$result = $database->query('SELECT * FROM `' . Settings::db_table_infected_crew_groups . '`
 																WHERE `id` = (SELECT `groupId` FROM `' . Settings::db_table_infected_crew_memberof . '`
@@ -68,7 +68,7 @@ class GroupHandler {
 	 * Get a list of all groups from the given event.
 	 */
 	public static function getGroupsByEvent(Event $event) {
-		$database = Database::open(Settings::db_name_infected_crew);
+		$database = Database::getConnection(Settings::db_name_infected_crew);
 
 		$result = $database->query('SELECT * FROM `' . Settings::db_table_infected_crew_groups . '`
 																WHERE `eventId` = \'' . $event->getId() . '\'
@@ -96,7 +96,7 @@ class GroupHandler {
 	 * Create a new group
 	 */
 	public static function createGroup(Event $event, $name, $title, $description, User $leaderUser = null, User $coleaderUser = null) {
-		$database = Database::open(Settings::db_name_infected_crew);
+		$database = Database::getConnection(Settings::db_name_infected_crew);
 
 		$database->query('INSERT INTO `' . Settings::db_table_infected_crew_groups . '` (`eventId`, `name`, `title`, `description`, `leaderId`, `coleaderId`)
 										  VALUES (\'' . $event->getId() . '\',
@@ -117,7 +117,7 @@ class GroupHandler {
 	 * Update the specified group.
 	 */
 	public static function updateGroup(Group $group, $name, $title, $description, User $leaderUser = null, User $coleaderUser = null) {
-		$database = Database::open(Settings::db_name_infected_crew);
+		$database = Database::getConnection(Settings::db_name_infected_crew);
 
 		$database->query('UPDATE `' . Settings::db_table_infected_crew_groups . '`
 			  						  SET `name` = \'' . $database->real_escape_string($name) . '\',
@@ -137,7 +137,7 @@ class GroupHandler {
 		self::removeUsersFromGroup($group);
 		TeamHandler::removeTeamsByGroup($group);
 
-		$database = Database::open(Settings::db_name_infected_crew);
+		$database = Database::getConnection(Settings::db_name_infected_crew);
 
 		$database->query('DELETE FROM `' . Settings::db_table_infected_crew_groups . '`
 						  				WHERE `id` = \'' . $group->getId() . '\';');
@@ -149,7 +149,7 @@ class GroupHandler {
 	 * Returns an list of users that are members of this group in the given event.
 	 */
 	public static function getMembersByEvent(Event $event, Group $group) {
-		$database = Database::open(Settings::db_name_infected);
+		$database = Database::getConnection(Settings::db_name_infected);
 
 		$result = $database->query('SELECT `' . Settings::db_table_infected_users . '`.* FROM `' . Settings::db_table_infected_users . '`
 																LEFT JOIN `' . Settings::db_name_infected_crew . '`.`' . Settings::db_table_infected_crew_memberof . '`
@@ -180,7 +180,7 @@ class GroupHandler {
 	 * Returns true of the specified user is member of a group in the given event.
 	 */
 	public static function isGroupMemberByEvent(User $user, Event $event) {
-		$database = Database::open(Settings::db_name_infected_crew);
+		$database = Database::getConnection(Settings::db_name_infected_crew);
 
 		$result = $database->query('SELECT `id` FROM `' . Settings::db_table_infected_crew_memberof . '`
 																WHERE `eventId` = \'' . $event->getId() . '\'
@@ -202,7 +202,7 @@ class GroupHandler {
 	 * Return true if user has a leader for the given group and event.
 	 */
 	public static function hasGroupLeaderByEvent(Group $group, Event $event) {
-		$database = Database::open(Settings::db_name_infected_crew);
+		$database = Database::getConnection(Settings::db_name_infected_crew);
 
 		$result = $database->query('SELECT `id` FROM `' . Settings::db_table_infected_crew_groups . '`
 																WHERE `id` = \'' . $group->getId() . '\'
@@ -225,7 +225,7 @@ class GroupHandler {
 	 * Return true if the specified user is leader of a group.
 	 */
 	public static function isGroupLeaderByEvent(User $user, Event $event) {
-		$database = Database::open(Settings::db_name_infected_crew);
+		$database = Database::getConnection(Settings::db_name_infected_crew);
 
 		$result = $database->query('SELECT `id` FROM `' . Settings::db_table_infected_crew_groups . '`
 																WHERE `eventId` = \'' . $event->getId() . '\'
@@ -246,7 +246,7 @@ class GroupHandler {
 	 * Return true if user has a co-leader for the given group and event.
 	 */
 	public static function hasGroupCoLeaderByEvent(Group $group, Event $event) {
-		$database = Database::open(Settings::db_name_infected_crew);
+		$database = Database::getConnection(Settings::db_name_infected_crew);
 
 		$result = $database->query('SELECT `id` FROM `' . Settings::db_table_infected_crew_groups . '`
 																WHERE `id` = \'' . $group->getId() . '\'
@@ -269,7 +269,7 @@ class GroupHandler {
 	 * Return true if user is co-leader for a group.
 	 */
 	public static function isGroupCoLeaderByEvent(User $user, Event $event) {
-		$database = Database::open(Settings::db_name_infected_crew);
+		$database = Database::getConnection(Settings::db_name_infected_crew);
 
 		$result = $database->query('SELECT `id` FROM `' . Settings::db_table_infected_crew_groups . '`
 																WHERE `eventId` = \'' . $event->getId() . '\'
@@ -291,7 +291,7 @@ class GroupHandler {
 	 * Change the specifised users grooup to the one specified.
 	 */
 	public static function changeGroupForUser(User $user, Group $group) {
-		$database = Database::open(Settings::db_name_infected_crew);
+		$database = Database::getConnection(Settings::db_name_infected_crew);
 
 		if ($user->isGroupMember()) {
 			$database->query('UPDATE `' . Settings::db_table_infected_crew_memberof . '`
@@ -314,7 +314,7 @@ class GroupHandler {
 	 * Remove a specified user from all groups.
 	 */
 	public static function removeUserFromGroup(User $user) {
-		$database = Database::open(Settings::db_name_infected_crew);
+		$database = Database::getConnection(Settings::db_name_infected_crew);
 
 		$database->query('DELETE FROM `' . Settings::db_table_infected_crew_memberof . '`
 										  WHERE `eventId` = \'' . EventHandler::getCurrentEvent()->getId() . '\'
@@ -327,7 +327,7 @@ class GroupHandler {
 	 * Remove all users from the specified group.
 	 */
 	public static function removeUsersFromGroup(Group $group) {
-		$database = Database::open(Settings::db_name_infected_crew);
+		$database = Database::getConnection(Settings::db_name_infected_crew);
 
 		$database->query('DELETE FROM `' . Settings::db_table_infected_crew_memberof . '`
 										  WHERE `eventId` = \'' . EventHandler::getCurrentEvent()->getId() . '\'

@@ -30,7 +30,7 @@ class SeatmapHandler {
 	 * Get a seatmap by the internal id.
 	 */
 	public static function getSeatmap($id) {
-		$database = Database::open(Settings::db_name_infected_tickets);
+		$database = Database::getConnection(Settings::db_name_infected_tickets);
 
 		$result = $database->query('SELECT * FROM `' . Settings::db_table_infected_tickets_seatmaps . '`
 																WHERE `id` = \'' . $database->real_escape_string($id) . '\';');
@@ -44,7 +44,7 @@ class SeatmapHandler {
 	 * Returns a list of all seatmaps.
 	 */
 	public static function getSeatmaps() {
-		$database = Database::open(Settings::db_name_infected_tickets);
+		$database = Database::getConnection(Settings::db_name_infected_tickets);
 
 		$result = $database->query('SELECT * FROM `' . Settings::db_table_infected_tickets_seatmaps . '`;');
 
@@ -63,7 +63,7 @@ class SeatmapHandler {
 	 * Creates a new seatmap.
 	 */
 	public static function createSeatmap($name, $backgroundImage) {
-		$database = Database::open(Settings::db_name_infected_tickets);
+		$database = Database::getConnection(Settings::db_name_infected_tickets);
 
 		$database->query('INSERT INTO ' . Settings::db_table_infected_tickets_seatmaps . '(`humanName`, `backgroundImage`)
 						  				VALUES (\'' . $database->real_escape_string($name) . '\',
@@ -119,7 +119,7 @@ class SeatmapHandler {
 	 * Returns a list of all seatmaps.
 	 */
 	public static function getEvent(Seatmap $seatmap) {
-		$database = Database::open(Settings::db_name_infected);
+		$database = Database::getConnection(Settings::db_name_infected);
 
 		$result = $database->query('SELECT `id` FROM `' . Settings::db_table_infected_events . '`
 																WHERE `seatmapId` = \'' . $seatmap->getId() . '\';');
@@ -135,7 +135,7 @@ class SeatmapHandler {
 	 * Set the background of the specified seatmap.
 	 */
 	public static function setBackground(Seatmap $seatmap, $filename) {
-		$database = Database::open(Settings::db_name_infected_tickets);
+		$database = Database::getConnection(Settings::db_name_infected_tickets);
 
 		$database->query('UPDATE `' . Settings::db_table_infected_tickets_seatmaps . '`
 						  				SET `backgroundImage` = \'' . $database->real_escape_string($filename) . '\'

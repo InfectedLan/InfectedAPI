@@ -29,7 +29,7 @@ class SlideHandler {
 	 * Get a slide by the internal id.
 	 */
 	public static function getSlide($id) {
-		$database = Database::open(Settings::db_name_infected_info);
+		$database = Database::getConnection(Settings::db_name_infected_info);
 
 		$result = $database->query('SELECT * FROM `' . Settings::db_table_infected_info_slides . '`
 																WHERE `id` = \'' . $database->real_escape_string($id) . '\';');
@@ -43,7 +43,7 @@ class SlideHandler {
 	 * Get a list of all slides.
 	 */
 	public static function getSlides() {
-		$database = Database::open(Settings::db_name_infected_info);
+		$database = Database::getConnection(Settings::db_name_infected_info);
 
 		$result = $database->query('SELECT * FROM `' . Settings::db_table_infected_info_slides . '`
 																WHERE `eventId` = \'' . EventHandler::getCurrentEvent()->getId() . '\'
@@ -64,7 +64,7 @@ class SlideHandler {
 	 * Get a list of all published slides.
 	 */
 	public static function getPublishedSlides() {
-		$database = Database::open(Settings::db_name_infected_info);
+		$database = Database::getConnection(Settings::db_name_infected_info);
 
 		$result = $database->query('SELECT * FROM `' . Settings::db_table_infected_info_slides . '`
 																WHERE `eventId` = \'' . EventHandler::getCurrentEvent()->getId() . '\'
@@ -88,7 +88,7 @@ class SlideHandler {
 	 * Create a new slide entry.
 	 */
 	public static function createSlide(Event $event, $name, $title, $content, $startTime, $endTime, $published) {
-		$database = Database::open(Settings::db_name_infected_info);
+		$database = Database::getConnection(Settings::db_name_infected_info);
 
 		$database->query('INSERT INTO `' . Settings::db_table_infected_info_slides . '` (`eventId`, `name`, `title`, `content`, `startTime`, `endTime`, `published`)
 										  VALUES (\'' . $event->getId() . '\',
@@ -110,7 +110,7 @@ class SlideHandler {
 	 * Update a slide.
 	 */
 	public static function updateSlide(Slide $slide, $title, $content, $startTime, $endTime, $published) {
-		$database = Database::open(Settings::db_name_infected_info);
+		$database = Database::getConnection(Settings::db_name_infected_info);
 
 		$database->query('UPDATE `' . Settings::db_table_infected_info_slides . '`
 										  SET `title` = \'' . $database->real_escape_string($title) . '\',
@@ -127,7 +127,7 @@ class SlideHandler {
 	 * Remove a slide.
 	 */
 	public static function removeSlide(Slide $slide) {
-		$database = Database::open(Settings::db_name_infected_info);
+		$database = Database::getConnection(Settings::db_name_infected_info);
 
 		$database->query('DELETE FROM `' . Settings::db_table_infected_info_slides . '`
 										  WHERE `id` = \'' . $slide->getId() . '\';');

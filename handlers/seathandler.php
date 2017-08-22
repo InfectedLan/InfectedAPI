@@ -30,7 +30,7 @@ class SeatHandler {
 	 * Get a seat by the internal id.
 	 */
 	public static function getSeat($id) {
-		$database = Database::open(Settings::db_name_infected_tickets);
+		$database = Database::getConnection(Settings::db_name_infected_tickets);
 
 		$result = $database->query('SELECT * FROM `' . Settings::db_table_infected_tickets_seats . '`
 																WHERE `id` = \'' . $database->real_escape_string($id) . '\';');
@@ -44,7 +44,7 @@ class SeatHandler {
 	 * Returns a list of all seats.
 	 */
 	public static function getSeats() {
-		$database = Database::open(Settings::db_name_infected_tickets);
+		$database = Database::getConnection(Settings::db_name_infected_tickets);
 
 		$result = $database->query('SELECT * FROM `' . Settings::db_table_infected_tickets_seats . '`;');
 
@@ -63,7 +63,7 @@ class SeatHandler {
 	 * Return all seats on the specified row.
 	 */
 	public static function getSeatsByRow(Row $row) {
-		$database = Database::open(Settings::db_name_infected_tickets);
+		$database = Database::getConnection(Settings::db_name_infected_tickets);
 
 		$result = $database->query('SELECT * FROM `' . Settings::db_table_infected_tickets_seats . '`
 																WHERE `rowId` = \'' . $row->getId() . '\';');
@@ -83,7 +83,7 @@ class SeatHandler {
 	 * Add a seat to the specified row.
 	 */
 	public static function createSeat(Row $row, $number = null) {
-		$database = Database::open(Settings::db_name_infected_tickets);
+		$database = Database::getConnection(Settings::db_name_infected_tickets);
 
 		if($number == null) {
 		    // Find out what seat number we are at.
@@ -111,7 +111,7 @@ class SeatHandler {
 	 * Removes the specified seat.
 	 */
 	public static function removeSeat(Seat $seat) {
-		$database = Database::open(Settings::db_name_infected_tickets);
+		$database = Database::getConnection(Settings::db_name_infected_tickets);
 
 		$result = $database->query('DELETE FROM `' . Settings::db_table_infected_tickets_seats . '`
 																WHERE `id` = \'' . $seat->getId() . '\';');
@@ -123,7 +123,7 @@ class SeatHandler {
 	 * Returns true if this seat has a ticket seated on it.
 	 */
 	public static function hasTicket(Seat $seat) {
-		$database = Database::open(Settings::db_name_infected_tickets);
+		$database = Database::getConnection(Settings::db_name_infected_tickets);
 
 		$result = $database->query('SELECT `id` FROM `' . Settings::db_table_infected_tickets_tickets . '`
 																WHERE `seatId` = \'' . $seat->getId() . '\';');
@@ -137,7 +137,7 @@ class SeatHandler {
 	 * Returns the ticket that is seated on this seat.
 	 */
 	public static function getTicket(Seat $seat) {
-		$database = Database::open(Settings::db_name_infected_tickets);
+		$database = Database::getConnection(Settings::db_name_infected_tickets);
 
 		$result = $database->query('SELECT * FROM `' . Settings::db_table_infected_tickets_tickets . '`
 																WHERE `seatId` = \'' . $seat->getId() . '\';');
