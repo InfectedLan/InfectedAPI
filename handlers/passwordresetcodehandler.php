@@ -32,7 +32,6 @@ class PasswordResetCodeHandler {
 		$result = $database->query('SELECT `code` FROM `' . Settings::db_table_infected_passwordresetcodes . '`
 																WHERE `id` = \'' . $database->real_escape_string($id) . '\';');
 
-		$database->close();
 
 		$row = $result->fetch_array();
 
@@ -47,7 +46,6 @@ class PasswordResetCodeHandler {
 
 		$result = $database->query('SELECT `code` FROM `' . Settings::db_table_infected_passwordresetcodes . '`;');
 
-		$database->close();
 
 		$codeList = [];
 
@@ -67,7 +65,6 @@ class PasswordResetCodeHandler {
 		$result = $database->query('SELECT `id` FROM `' . Settings::db_table_infected_passwordresetcodes . '`
 																WHERE `code` = \'' . $database->real_escape_string($code) . '\';');
 
-		$database->close();
 
 		return $result->num_rows > 0;
 	}
@@ -81,7 +78,6 @@ class PasswordResetCodeHandler {
 		$result = $database->query('SELECT `id` FROM `' . Settings::db_table_infected_passwordresetcodes . '`
 																WHERE `userId` = \'' . $user->getId() . '\';');
 
-		$database->close();
 
 		return $result->num_rows > 0;
 	}
@@ -104,7 +100,6 @@ class PasswordResetCodeHandler {
 											  WHERE `userId` = \'' . $user->getId() . '\';');
 		}
 
-		$database->close();
 
 		return $code;
 	}
@@ -118,7 +113,6 @@ class PasswordResetCodeHandler {
 		$database->query('DELETE FROM `' . Settings::db_table_infected_passwordresetcodes . '`
 						  				WHERE `code` = \'' . $database->real_escape_string($code) . '\';');
 
-		$database->close();
 	}
 
 	/*
@@ -130,7 +124,6 @@ class PasswordResetCodeHandler {
 		$database->query('DELETE FROM `' . Settings::db_table_infected_passwordresetcodes . '`
 						  				WHERE `userId` = \'' . $user->getId() . '\';');
 
-		$database->close();
 	}
 
 	/*
@@ -143,7 +136,6 @@ class PasswordResetCodeHandler {
 																WHERE `id` = (SELECT `userId` FROM `' . Settings::db_table_infected_passwordresetcodes . '`
 																			  			WHERE `code` = \'' . $database->real_escape_string($code) . '\');');
 
-		$database->close();
 
 		return $result->fetch_object('User');
 	}

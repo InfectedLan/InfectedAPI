@@ -35,7 +35,6 @@ class SeatmapHandler {
 		$result = $database->query('SELECT * FROM `' . Settings::db_table_infected_tickets_seatmaps . '`
 																WHERE `id` = \'' . $database->real_escape_string($id) . '\';');
 
-		$database->close();
 
 		return $result->fetch_object('Seatmap');
 	}
@@ -48,7 +47,6 @@ class SeatmapHandler {
 
 		$result = $database->query('SELECT * FROM `' . Settings::db_table_infected_tickets_seatmaps . '`;');
 
-		$database->close();
 
 		$seatmapList = [];
 
@@ -71,7 +69,6 @@ class SeatmapHandler {
 
 		$seatmap = self::getSeatmap($database->insert_id);
 
-		$database->close();
 
 		return $seatmap;
 	}
@@ -124,7 +121,6 @@ class SeatmapHandler {
 		$result = $database->query('SELECT `id` FROM `' . Settings::db_table_infected_events . '`
 																WHERE `seatmapId` = \'' . $seatmap->getId() . '\';');
 
-		$database->close();
 
 		$row = $result->fetch_array();
 
@@ -141,7 +137,6 @@ class SeatmapHandler {
 						  				SET `backgroundImage` = \'' . $database->real_escape_string($filename) . '\'
 						  				WHERE `id` = \'' . $seatmap->getId() . '\';');
 
-		$database->close();
 	}
 }
 ?>

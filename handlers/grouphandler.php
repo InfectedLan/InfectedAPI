@@ -35,7 +35,6 @@ class GroupHandler {
 		$result = $database->query('SELECT * FROM `' . Settings::db_table_infected_crew_groups . '`
 																WHERE `id` = \'' . $database->real_escape_string($id) . '\';');
 
-		$database->close();
 
 		return $result->fetch_object('Group');
 	}
@@ -52,7 +51,6 @@ class GroupHandler {
 																						  AND `userId` = \'' . $user->getId() . '\'
 																						  LIMIT 1);');
 
-		$database->close();
 
 		return $result->fetch_object('Group');
 	}
@@ -74,7 +72,6 @@ class GroupHandler {
 																WHERE `eventId` = \'' . $event->getId() . '\'
 																ORDER BY `id`, `name`;');
 
-		$database->close();
 
 		$groupList = [];
 
@@ -108,7 +105,6 @@ class GroupHandler {
 
 		$group = self::getGroup($database->insert_id);
 
-		$database->close();
 
 		return $group;
 	}
@@ -127,7 +123,6 @@ class GroupHandler {
 				  								`coleaderId` = \'' . ($coleaderUser != null ? $coleaderUser->getId() : 0) . '\'
 			  						  WHERE `id` = \'' . $group->getId() . '\';');
 
-		$database->close();
 	}
 
 	/*
@@ -142,7 +137,6 @@ class GroupHandler {
 		$database->query('DELETE FROM `' . Settings::db_table_infected_crew_groups . '`
 						  				WHERE `id` = \'' . $group->getId() . '\';');
 
-		$database->close();
 	}
 
 	/*
@@ -158,7 +152,6 @@ class GroupHandler {
 																AND `groupId` = \'' . $group->getId() . '\'
 																ORDER BY `firstname` ASC;');
 
-		$database->close();
 
 		$memberList = [];
 
@@ -186,7 +179,6 @@ class GroupHandler {
 																WHERE `eventId` = \'' . $event->getId() . '\'
 																AND `userId` = \'' . $user->getId() . '\';');
 
-		$database->close();
 
 		return $result->num_rows > 0;
 	}
@@ -209,7 +201,6 @@ class GroupHandler {
 																AND `eventId` = \'' . $event->getId() . '\'
 																AND `leaderId` > \'0\';');
 
-		$database->close();
 
 		return $result->num_rows > 0;
 	}
@@ -230,7 +221,6 @@ class GroupHandler {
 		$result = $database->query('SELECT `id` FROM `' . Settings::db_table_infected_crew_groups . '`
 																WHERE `eventId` = \'' . $event->getId() . '\'
 																AND `leaderId` = \'' . $user->getId() . '\';');
-		$database->close();
 
 		return $result->num_rows > 0;
 	}
@@ -253,7 +243,6 @@ class GroupHandler {
 																AND `eventId` = \'' . $event->getId() . '\'
 																AND `coleaderId` > \'0\';');
 
-		$database->close();
 
 		return $result->num_rows > 0;
 	}
@@ -275,7 +264,6 @@ class GroupHandler {
 																WHERE `eventId` = \'' . $event->getId() . '\'
 																AND `coleaderId` = \'' . $user->getId() . '\';');
 
-		$database->close();
 
 		return $result->num_rows > 0;
 	}
@@ -307,7 +295,6 @@ class GroupHandler {
 													  		\'0\');');
 		}
 
-		$database->close();
 	}
 
 	/*
@@ -320,7 +307,6 @@ class GroupHandler {
 										  WHERE `eventId` = \'' . EventHandler::getCurrentEvent()->getId() . '\'
 											AND `userId` = \'' . $user->getId() . '\';');
 
-		$database->close();
 	}
 
 	/*
@@ -333,7 +319,6 @@ class GroupHandler {
 										  WHERE `eventId` = \'' . EventHandler::getCurrentEvent()->getId() . '\'
 										  AND `groupId` = \'' . $group->getId() . '\';');
 
-		$database->close();
 	}
 }
 ?>

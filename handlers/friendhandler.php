@@ -34,7 +34,6 @@ class FriendHandler {
 																WHERE (`userId` = \'' . $user->getId() . '\' AND `friendId` = \'' . $friend->getId() . '\')
 																OR (`friendId` = \'' . $friend->getId() . '\' AND `userId` = \'' . $user->getId() . '\');');
 
-		$database->close();
 
 		return $result->num_rows > 0;
 	}
@@ -50,7 +49,6 @@ class FriendHandler {
 																					     WHERE `userId` = \'' . $user->getId() . '\')
 															  ORDER BY `firstname`, `lastname`;');
 
-		$database->close();
 
 		$userList = [];
 
@@ -72,7 +70,6 @@ class FriendHandler {
 														  \'' . $friend->getId() . '\',
 														  \'' . date('Y-m-d H:i:s') . '\');');
 
-		$database->close();
 	}
 
 	/*
@@ -85,7 +82,6 @@ class FriendHandler {
 						  				WHERE `userId` = \'' . $user->getId() . '\'
 											AND `friendId` = \'' . $friend->getId() . '\';');
 
-		$database->close();
 	}
 }
 ?>

@@ -38,7 +38,6 @@ class TicketTransferHandler {
 																ORDER BY `datetime` DESC
 																LIMIT 1;');
 
-		$database->close();
 
 		return $result->fetch_object('TicketTransfer');
 	}
@@ -56,7 +55,6 @@ class TicketTransferHandler {
 																AND `revertable` = \'1\'
 																AND `datetime` > \'' . date('Y-m-d H:i:s', $wantedTimeLimit) . '\';');
 
-		$database->close();
 
 		$transferList = [];
 
@@ -82,7 +80,6 @@ class TicketTransferHandler {
 
 //		$ticketTransfer = self::getTicketTransfer($database->insert_id);
 
-		$database->close();
 
 //		return $ticketTransfer;
 	}
@@ -97,7 +94,6 @@ class TicketTransferHandler {
 																SET `revertable` = \'0\'
 																WHERE `id` = \'' . $ticketTransfer->getId() . '\';');
 
-		$database->close();
 	}
 
 	/*

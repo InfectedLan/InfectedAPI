@@ -32,7 +32,6 @@ class PermissionHandler {
 		$result = $database->query('SELECT * FROM `' . Settings::db_table_infected_permissions . '`
 																WHERE `id` = \'' . $database->real_escape_string($id) . '\';');
 
-		$database->close();
 
 		return $result->fetch_object('Permission');
 	}
@@ -46,7 +45,6 @@ class PermissionHandler {
 		$result = $database->query('SELECT * FROM `' . Settings::db_table_infected_permissions . '`
 																WHERE `value` = \'' . $database->real_escape_string($value) . '\';');
 
-		$database->close();
 
 		return $result->fetch_object('Permission');
 	}
@@ -60,7 +58,6 @@ class PermissionHandler {
 		$result = $database->query('SELECT * FROM `' . Settings::db_table_infected_permissions . '`
 																ORDER BY `value` ASC;');
 
-		$database->close();
 
 		$permissionList = [];
 

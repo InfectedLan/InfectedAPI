@@ -53,7 +53,6 @@ class MatchHandler {
 		$result = $database->query('SELECT * FROM `' . Settings::db_table_infected_compo_matches . '`
 								 								WHERE `id` = \'' . $id . '\';');
 
-		$database->close();
 
 		return $result->fetch_object('Match');
 	}
@@ -70,7 +69,6 @@ class MatchHandler {
 	       $database->query('DELETE FROM `' . Settings::db_table_infected_compo_matchrelationships . '` WHERE `fromCompoId` = \'' . $match->getId() . '\';');
 	       $database->query('DELETE FROM `' . Settings::db_table_infected_compo_matchrelationships . '` WHERE `toCompoId` = \'' . $match->getId() . '\';');
 
-	       $database->close();
 	}
 
 	/*
@@ -81,7 +79,6 @@ class MatchHandler {
 
 		$result = $database->query('SELECT * FROM `' . Settings::db_table_infected_compo_matches . '`;');
 
-		$database->close();
 
 		$matchList = [];
 
@@ -103,7 +100,6 @@ class MatchHandler {
 WHERE `scheduledTime` >= NOW() 
 AND `scheduledTime` < NOW() + INTERVAL ' . $database->real_escape_string($interval) . ' SECOND;');
 
-		$database->close();
 
 		$matchList = [];
 
@@ -123,7 +119,6 @@ AND `scheduledTime` < NOW() + INTERVAL ' . $database->real_escape_string($interv
 	$result = $database->query('SELECT * FROM `' . Settings::db_table_infected_compo_matches . '` WHERE `compoId` IN (SELECT `id` FROM `' . Settings::db_table_infected_compo_compos . '` where `eventId` = ' . $event->getId() . ') AND `winnerId` = \'0\'
 																AND `scheduledTime` < \'' . date('Y-m-d H:i:s') . '\';');
 
-	$database->close();
 
 	$matchList = [];
 
@@ -157,7 +152,6 @@ AND `scheduledTime` < NOW() + INTERVAL ' . $database->real_escape_string($interv
 		//echo "Got error " . $database->error . "\n";
 
 		
-		$database->close();
 
 		        while ($row = $result->fetch_array()) {
 			    $match = self::getMatch($row['matchId']);
@@ -175,7 +169,6 @@ AND `scheduledTime` < NOW() + INTERVAL ' . $database->real_escape_string($interv
 
 		//echo "got sql error: " . $database->error . "\n";
 
-		$database->close();
 
 		$matchList = [];
 
@@ -205,7 +198,6 @@ AND `scheduledTime` < NOW() + INTERVAL ' . $database->real_escape_string($interv
 				$matchList[] = $object;
 			}
 		}
-        $database->close();
         
 		return $matchList;
 	}
@@ -218,7 +210,6 @@ AND `scheduledTime` < NOW() + INTERVAL ' . $database->real_escape_string($interv
 																WHERE `compoId` = ' . $compo->getId() . '
 																AND `winnerId` != 0;');
 
-		$database->close();
 
 		$matchList = [];
 
@@ -235,7 +226,6 @@ AND `scheduledTime` < NOW() + INTERVAL ' . $database->real_escape_string($interv
 		$result = $database->query('SELECT * FROM `' . Settings::db_table_infected_compo_matches . '`
 																WHERE `compoId` = \'' . $compo->getId() . '\';');
 
-		$database->close();
 
 		$matchList = [];
 
@@ -254,7 +244,6 @@ AND `scheduledTime` < NOW() + INTERVAL ' . $database->real_escape_string($interv
 																						  WHERE `type` = \'' . Settings::compo_match_participant_type_clan . '\'
 																						  AND `participantId` = \'' . $clan->getId() . '\');');
 
-		$database->close();
 
 		return $result->num_rows > 0;
 	}
@@ -281,7 +270,6 @@ AND `scheduledTime` < NOW() + INTERVAL ' . $database->real_escape_string($interv
 													  		\'' . $match->getId() . '\');');
 		}
 
-		$database->close();
 	}
 	
 	public static function setWinner(Match $match, Clan $clan, CompoPlugin $compoPlugin = null) {
@@ -342,7 +330,6 @@ AND `scheduledTime` < NOW() + INTERVAL ' . $database->real_escape_string($interv
 							SET `type` = 0, `participantId` = ' . $database->real_escape_string($looser->getId()) . '
 							WHERE `type` = 2 AND `participantId` = ' . $database->real_escape_string($match->getId()) . ';');*/
 
-		$database->close();
 
 		//Notify the compo plugin that the match is over.
 		if($compoPlugin == null) {
@@ -366,7 +353,6 @@ AND `scheduledTime` < NOW() + INTERVAL ' . $database->real_escape_string($interv
 			$clanList[] = $object;
 		}
 
-        $database->close();
 
 		return $clanList;
 	}
@@ -390,7 +376,6 @@ AND `scheduledTime` < NOW() + INTERVAL ' . $database->real_escape_string($interv
 		$result = $database->query('SELECT * FROM `' . Settings::db_table_infected_compo_participantOfMatch . '`
 																WHERE `matchId` = \'' . $match->getId() . '\';');
 
-		$database->close();
 
 		$rawData = array();
 
@@ -407,7 +392,6 @@ AND `scheduledTime` < NOW() + INTERVAL ' . $database->real_escape_string($interv
 		$result = $database->query('SELECT * FROM `' . Settings::db_table_infected_compo_participantOfMatch . '`
 																WHERE `matchId` = \'' . $match->getId() . '\';');
 
-		$database->close();
 
 		$stringArray = [];
 
@@ -431,7 +415,6 @@ AND `scheduledTime` < NOW() + INTERVAL ' . $database->real_escape_string($interv
 		$result = $database->query('SELECT * FROM `' . Settings::db_table_infected_compo_participantOfMatch . '`
 																WHERE `matchId` = \'' . $match->getId() . '\';');
 
-		$database->close();
 
 		$stringArray = [];
 
@@ -457,7 +440,6 @@ AND `scheduledTime` < NOW() + INTERVAL ' . $database->real_escape_string($interv
 		$result = $database->query('SELECT * FROM `' . Settings::db_table_infected_compo_participantOfMatch . '`
 																WHERE `matchId` = \'' . $match->getId() . '\';');
 
-		$database->close();
 
 		$jsonArray = [];
 
@@ -492,7 +474,6 @@ AND `scheduledTime` < NOW() + INTERVAL ' . $database->real_escape_string($interv
 			array_push($matchList, $object);
 		}
 
-        $database->close();
 
 		return $matchList;
 	}
@@ -510,7 +491,6 @@ AND `scheduledTime` < NOW() + INTERVAL ' . $database->real_escape_string($interv
 			$matchList[] = $object;
 		}
 
-        $database->close();
 
 		return $matchList;
 	}
@@ -522,7 +502,6 @@ AND `scheduledTime` < NOW() + INTERVAL ' . $database->real_escape_string($interv
 		$result = $database->query('SELECT `type` FROM `' . Settings::db_table_infected_compo_participantOfMatch . '`
 																WHERE `matchId` = \'' . $match->getId() . '\';');
 
-		$database->close();
 
 		$hasParticipants = false;
 
@@ -546,7 +525,6 @@ AND `scheduledTime` < NOW() + INTERVAL ' . $database->real_escape_string($interv
 																WHERE `userId` = \'' . $user->getId() . '\'
 																AND `matchId` = \'' . $match->getId() . '\';');
 
-		$database->close();
 
 		return $result->num_rows > 0;
 	}
@@ -572,7 +550,6 @@ AND `scheduledTime` < NOW() + INTERVAL ' . $database->real_escape_string($interv
 																VALUES (\'' . $user->getId() . '\',
 																				\'' . $match->getId() . '\');');
 
-		$database->close();
 	}
 
 	public static function allHasAccepted(Match $match) {
@@ -600,7 +577,6 @@ AND `scheduledTime` < NOW() + INTERVAL ' . $database->real_escape_string($interv
 		}
 	    }
 
-	    $database->close();
 
 	    return true;
 	}
@@ -623,7 +599,6 @@ AND `scheduledTime` < NOW() + INTERVAL ' . $database->real_escape_string($interv
 
 		$match = self::getMatch($database->insert_id);
 
-		$database->close();
 
 		return $match;
 	}
@@ -633,7 +608,6 @@ AND `scheduledTime` < NOW() + INTERVAL ' . $database->real_escape_string($interv
 
         $database->query('UPDATE `' . Settings::db_table_infected_compo_matches . '` SET `scheduledTime` = \'' . date('Y-m-d H:i:s', $time) . '\' WHERE `id` = \'' . $match->getId() . '\';');
 
-        $database->close();
     }
 
 	public static function updateMatch(Match $match, $state) {
@@ -643,7 +617,6 @@ AND `scheduledTime` < NOW() + INTERVAL ' . $database->real_escape_string($interv
 																SET `state` = \'' . $database->real_escape_string($state) . '\'
 																WHERE `id` = \'' . $match->getId() . '\';');
 
-    	$database->close();
 	}
 
 	public static function updateConnectDetails(Match $match, $connectDetails) {
@@ -653,7 +626,6 @@ AND `scheduledTime` < NOW() + INTERVAL ' . $database->real_escape_string($interv
 																SET `connectDetails` = \'' . $database->real_escape_string($connectDetails) . '\'
 																WHERE `id` = \'' . $match->getId() . '\';');
 
-        $database->close();
 	}
 
     public static function getMetadata(Match $match) {

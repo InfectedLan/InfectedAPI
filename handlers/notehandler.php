@@ -35,7 +35,6 @@ class NoteHandler {
 		$result = $database->query('SELECT * FROM `' . Settings::db_table_infected_crew_notes . '`
 																WHERE id = \'' . $database->real_escape_string($id) . '\';');
 
-		$database->close();
 
 		return $result->fetch_object('Note');
 	}
@@ -50,7 +49,6 @@ class NoteHandler {
 																WHERE `eventId` = \'' . $event->getId() . '\'
 																ORDER BY `secondsOffset`, `time`;');
 
-		$database->close();
 
 		$noteList = [];
 
@@ -81,7 +79,6 @@ class NoteHandler {
 																AND DATE_SUB(FROM_UNIXTIME(' . $event->getStartTime() . ' + `secondsOffset`), INTERVAL 3 DAY) <= NOW()
 																ORDER BY `secondsOffset`, `time`;');
 
-		$database->close();
 
 		$noteList = [];
 
@@ -110,7 +107,6 @@ class NoteHandler {
 																AND `groupId` = \'' . $group->getId() . '\'
 																ORDER BY `secondsOffset`, `time`;');
 
-		$database->close();
 
 		$noteList = [];
 
@@ -140,7 +136,6 @@ class NoteHandler {
 																AND `teamId` = \'' . $team->getId() . '\'
 																ORDER BY `secondsOffset`, `time`;');
 
-		$database->close();
 
 		$noteList = [];
 
@@ -171,7 +166,6 @@ class NoteHandler {
 																		 AND `userId` = \'' . $user->getId() . '\')
 																ORDER BY `secondsOffset`, `time`;');
 
-		$database->close();
 
 		$noteList = [];
 
@@ -244,7 +238,6 @@ class NoteHandler {
 		 															ORDER BY `secondsOffset`, `time`;');
 		}
 
-		$database->close();
 
 		$noteList = [];
 
@@ -281,7 +274,6 @@ class NoteHandler {
 
 		$note = self::getNote($database->insert_id);
 
-		$database->close();
 
 		return $note;
 	}
@@ -302,7 +294,6 @@ class NoteHandler {
 													`time` = \'' . $database->real_escape_string($time) . '\'
 											WHERE `id` = \'' . $note->getId() . '\';');
 
-		$database->close();
 	}
 
 	/*
@@ -315,7 +306,6 @@ class NoteHandler {
 											SET `notified` = \'' . $database->real_escape_string($notified) . '\'
 											WHERE `id` = \'' . $note->getId() . '\';');
 
-		$database->close();
 	}
 
 	/*
@@ -329,7 +319,6 @@ class NoteHandler {
 													`inProgress` = \'0\'
 											WHERE `id` = \'' . $note->getId() . '\';');
 
-		$database->close();
 	}
 
 	/*
@@ -343,7 +332,6 @@ class NoteHandler {
 													`inProgress` = \'' . $database->real_escape_string($inProgress) . '\'
 											WHERE `id` = \'' . $note->getId() . '\';');
 
-		$database->close();
 	}
 
 	/*
@@ -355,7 +343,6 @@ class NoteHandler {
 		$database->query('DELETE FROM `' . Settings::db_table_infected_crew_notes . '`
 						  				WHERE `id` = \'' . $note->getId() . '\';');
 
-		$database->close();
 	}
 
 	/* Notes watchlist */
@@ -369,7 +356,6 @@ class NoteHandler {
 																WHERE `noteId` = \'' . $note->getId() . '\'
 																AND `userId` = \'' . $user->getId() . '\';');
 
-		$database->close();
 
 		return $result->num_rows > 0;
 	}
@@ -385,7 +371,6 @@ class NoteHandler {
 																							 WHERE `noteId` = \'' . $note->getId() . '\')
 																ORDER BY `firstname`, `lastname`;');
 
-		$database->close();
 
 		$userList = [];
 
@@ -408,7 +393,6 @@ class NoteHandler {
 																\'' . $user->getId() . '\');');
 		}
 
-		$database->close();
 	}
 
 	/*
@@ -421,7 +405,6 @@ class NoteHandler {
 						  				WHERE `noteId` = \'' . $note->getId() . '\'
 											AND `userId` = \'' . $user->getId() . '\';');
 
-		$database->close();
 	}
 
 	/*
@@ -444,7 +427,6 @@ class NoteHandler {
 											WHERE `noteId` = \'' . $note->getId() . '\'
 											AND `userId` NOT IN (\'' . implode('\', \'', UserUtils::toUserIdList($userList)) . '\');');
 
-		$database->close();
 	}
 }
 ?>

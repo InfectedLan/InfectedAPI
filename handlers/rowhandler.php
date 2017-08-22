@@ -36,7 +36,6 @@ class RowHandler {
 		$result = $database->query('SELECT * FROM `' . Settings::db_table_infected_tickets_rows . '`
 																WHERE `id` = \'' . $database->real_escape_string($id) . '\';');
 
-		$database->close();
 
 		return $result->fetch_object('Row');
 	}
@@ -49,7 +48,6 @@ class RowHandler {
 
 		$result = $database->query('SELECT * FROM `' . Settings::db_table_infected_tickets_rows . '`;');
 
-		$database->close();
 
 		$rowList = [];
 
@@ -69,7 +67,6 @@ class RowHandler {
 		$result = $database->query('SELECT * FROM `' . Settings::db_table_infected_tickets_rows . '`
 																WHERE `seatmapId` = \'' . $seatmap->getId() . '\';');
 
-		$database->close();
 
 		$rowList = [];
 
@@ -104,7 +101,6 @@ class RowHandler {
 		$insert_id = $database->insert_id;
 
 		
-		$database->close();
 
 		return self::getRow($insert_id);
 	}
@@ -120,7 +116,6 @@ class RowHandler {
 											  	`y` = \'' . $database->real_escape_string($y) . '\'
 										  WHERE `id` = \'' . $row->getId() . '\';');
 
-		$database->close();
 	}
 
 	/*
@@ -132,7 +127,6 @@ class RowHandler {
 		$result = $database->query('DELETE FROM `' . Settings::db_table_infected_tickets_rows . '`
 																WHERE `id` = ' . $row->getId() . ';');
 
-		$database->close();
 
 		foreach (SeatHandler::getSeatsByRow($row) as $seat) {
 			SeatHandler::removeSeat($seat);

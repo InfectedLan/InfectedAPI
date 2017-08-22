@@ -36,7 +36,6 @@ class RestrictedPageHandler {
 		$result = $database->query('SELECT * FROM `' . Settings::db_table_infected_crew_pages . '`
 																WHERE `id` = \'' . $database->real_escape_string($id) . '\';');
 
-		$database->close();
 
 		return $result->fetch_object('RestrictedPage');
 	}
@@ -75,7 +74,6 @@ class RestrictedPageHandler {
 																			AND `teamId` = \'0\';');
 				}
 
-				$database->close();
 
 				return $result->fetch_object('RestrictedPage');
 			}
@@ -91,7 +89,6 @@ class RestrictedPageHandler {
 		$result = $database->query('SELECT * FROM `' . Settings::db_table_infected_crew_pages . '`
 																WHERE `eventId` = \'' . EventHandler::getCurrentEvent()->getId() . '\';');
 
-		$database->close();
 
 		$restrictedPageList = [];
 
@@ -113,7 +110,6 @@ class RestrictedPageHandler {
 																AND `groupId` = \'' . $group->getId() . '\'
 																AND `teamId` = \'0\';');
 
-		$database->close();
 
 		$restrictedPageList = [];
 
@@ -134,7 +130,6 @@ class RestrictedPageHandler {
 																WHERE `eventId` = \'' . EventHandler::getCurrentEvent()->getId() . '\'
 																AND `groupId` = \'' . $group->getId() . '\';');
 
-		$database->close();
 
 		$restrictedPageList = [];
 
@@ -156,7 +151,6 @@ class RestrictedPageHandler {
 																AND `groupId` = \'' . $group->getId() . '\'
 																AND (`teamId` = \'' . $team->getId() . '\' OR `teamId` = \'0\');');
 
-		$database->close();
 
 		$restrictedPageList = [];
 
@@ -183,7 +177,6 @@ class RestrictedPageHandler {
 
 		$restrictedPage = self::getRestrictedPage($database->insert_id);
 
-		$database->close();
 
 		return $restrictedPage;
 	}
@@ -201,7 +194,6 @@ class RestrictedPageHandler {
 													`teamId` = \'' . ($team != null ? $team->getId() : '0') . '\'
 										  WHERE `id` = \'' . $page->getId() . '\';');
 
-		$database->close();
 	}
 
 	/*
@@ -213,7 +205,6 @@ class RestrictedPageHandler {
 		$database->query('DELETE FROM `' . Settings::db_table_infected_crew_pages . '`
 						  				WHERE `id` = \'' . $page->getId() . '\';');
 
-		$database->close();
 	}
 }
 ?>

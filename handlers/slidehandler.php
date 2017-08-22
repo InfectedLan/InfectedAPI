@@ -34,7 +34,6 @@ class SlideHandler {
 		$result = $database->query('SELECT * FROM `' . Settings::db_table_infected_info_slides . '`
 																WHERE `id` = \'' . $database->real_escape_string($id) . '\';');
 
-		$database->close();
 
 		return $result->fetch_object('Slide');
 	}
@@ -49,7 +48,6 @@ class SlideHandler {
 																WHERE `eventId` = \'' . EventHandler::getCurrentEvent()->getId() . '\'
 																ORDER BY `startTime`;');
 
-		$database->close();
 
 		$slideList = [];
 
@@ -73,7 +71,6 @@ class SlideHandler {
 																AND `published` = \'1\'
 																ORDER BY `startTime`;');
 
-		$database->close();
 
 		$slideList = [];
 
@@ -101,7 +98,6 @@ class SlideHandler {
 
 		$slide = self::getSlide($database->insert_id);
 
-		$database->close();
 
 		return $slide;
 	}
@@ -120,7 +116,6 @@ class SlideHandler {
 												  `published` = \'' . $database->real_escape_string($published) . '\'
 										  WHERE `id` = \'' . $slide->getId() . '\';');
 
-		$database->close();
 	}
 
 	/*
@@ -132,7 +127,6 @@ class SlideHandler {
 		$database->query('DELETE FROM `' . Settings::db_table_infected_info_slides . '`
 										  WHERE `id` = \'' . $slide->getId() . '\';');
 
-		$database->close();
 	}
 }
 ?>

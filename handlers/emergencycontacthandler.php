@@ -33,7 +33,6 @@ class EmergencyContactHandler {
 		$result = $database->query('SELECT * FROM `'. Settings::db_table_infected_emergencycontacts . '`
 																WHERE `id` = \'' . $database->real_escape_string($id) . '\';');
 
-		$database->close();
 
 		return $result->fetch_object('EmergencyContact');
 	}
@@ -47,7 +46,6 @@ class EmergencyContactHandler {
 		$result = $database->query('SELECT * FROM `'. Settings::db_table_infected_emergencycontacts . '`
 																WHERE `userId` = \'' . $user->getId() . '\';');
 
-		$database->close();
 
 		return $result->fetch_object('EmergencyContact');
 	}
@@ -60,7 +58,6 @@ class EmergencyContactHandler {
 
 		$result = $database->query('SELECT * FROM `' . Settings::db_table_infected_emergencycontacts . '`;');
 
-		$database->close();
 
 		$emergencyContactsList = [];
 
@@ -80,7 +77,6 @@ class EmergencyContactHandler {
 		$result = $database->query('SELECT `id` FROM `'. Settings::db_table_infected_emergencycontacts . '`
 																WHERE `userId` = \'' . $user->getId() . '\';');
 
-		$database->close();
 
 		return $result->num_rows > 0;
 	}
@@ -96,7 +92,6 @@ class EmergencyContactHandler {
 											  VALUES (\'' . $user->getId() . '\',
 													  		\'' . $database->real_escape_string($phone) . '\');');
 
-			$database->close();
 		} else {
 			if (!empty($phone) && $phone != 0) {
 				self::updateEmergencyContact($user, $phone);
@@ -116,7 +111,6 @@ class EmergencyContactHandler {
 										  SET `phone` = \'' . $database->real_escape_string($phone) . '\'
 										  WHERE `userId` = \'' . $user->getId() . '\';');
 
-		$database->close();
 	}
 
 	/*
@@ -128,7 +122,6 @@ class EmergencyContactHandler {
 		$database->query('DELETE FROM `' . Settings::db_table_infected_emergencycontacts . '`
 						  				WHERE `userId` = \'' . $user->getId() . '\';');
 
-		$database->close();
 	}
 }
 ?>

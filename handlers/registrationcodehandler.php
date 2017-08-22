@@ -34,7 +34,6 @@ class RegistrationCodeHandler {
 
 		$row = $result->fetch_array();
 
-		$database->close();
 
 		return $row['code'];
 	}
@@ -47,7 +46,6 @@ class RegistrationCodeHandler {
 
 		$result = $database->query('SELECT `code` FROM `' . Settings::db_table_infected_registrationcodes . '`;');
 
-		$database->close();
 
 		$codeList = [];
 
@@ -67,7 +65,6 @@ class RegistrationCodeHandler {
 		$result = $database->query('SELECT `id` FROM `' . Settings::db_table_infected_registrationcodes . '`
 																WHERE `code` = \'' . $database->real_escape_string($code) . '\';');
 
-		$database->close();
 
 		return $result->num_rows > 0;
 	}
@@ -81,7 +78,6 @@ class RegistrationCodeHandler {
 		$result = $database->query('SELECT `id` FROM `' . Settings::db_table_infected_registrationcodes . '`
 																WHERE `userId` = \'' . $user->getId() . '\';');
 
-		$database->close();
 
 		return $result->num_rows > 0;
 	}
@@ -98,7 +94,6 @@ class RegistrationCodeHandler {
 										  VALUES (\'' . $user->getId() . '\',
 												  		\'' . $code . '\');');
 
-		$database->close();
 
 		return $code;
 	}
@@ -112,7 +107,6 @@ class RegistrationCodeHandler {
 		$database->query('DELETE FROM `' . Settings::db_table_infected_registrationcodes . '`
 						  				WHERE `code` = \'' . $database->real_escape_string($code) . '\';');
 
-		$database->close();
 	}
 
 	/*
@@ -124,7 +118,6 @@ class RegistrationCodeHandler {
 		$database->query('DELETE FROM `' . Settings::db_table_infected_registrationcodes . '`
 						  				WHERE `userId` = \'' . $user->getId() . '\';');
 
-		$database->close();
 	}
 }
 ?>

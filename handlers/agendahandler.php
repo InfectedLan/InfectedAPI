@@ -34,7 +34,6 @@ class AgendaHandler {
 		$result = $database->query('SELECT * FROM `' . Settings::db_table_infected_main_agenda . '`
 																WHERE `id` = \'' . $database->real_escape_string($id) . '\';');
 
-		$database->close();
 
 		return $result->fetch_object('Agenda');
 	}
@@ -49,7 +48,6 @@ class AgendaHandler {
 																WHERE `eventId` = \'' . EventHandler::getCurrentEvent()->getId() . '\'
 																ORDER BY `startTime`;');
 
-		$database->close();
 
 		$agendaList = [];
 
@@ -71,7 +69,6 @@ class AgendaHandler {
 											  				AND `published` = \'1\'
 											  				ORDER BY `startTime`;');
 
-		$database->close();
 
 		$agendaList = [];
 
@@ -94,7 +91,6 @@ class AgendaHandler {
 																AND `published` = \'1\'
 																ORDER BY `startTime`;');
 
-		$database->close();
 
 		$agendaList = [];
 
@@ -120,7 +116,6 @@ class AgendaHandler {
 
 		$agenda = self::getAgenda($database->insert_id);
 
-		$database->close();
 
 		return $agenda;
 	}
@@ -138,7 +133,6 @@ class AgendaHandler {
 												  `published` = \'' . $database->real_escape_string($published) . '\'
 										  WHERE `id` = \'' . $agenda->getId() . '\';');
 
-		$database->close();
 	}
 
 	/*
@@ -150,7 +144,6 @@ class AgendaHandler {
 		$database->query('DELETE FROM `' . Settings::db_table_infected_main_agenda . '`
 						  				WHERE `id` = \'' . $agenda->getId() . '\';');
 
-		$database->close();
 	}
 }
 ?>

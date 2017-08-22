@@ -35,7 +35,6 @@ class InviteHandler {
 		$result = $database->query('SELECT * FROM `' . Settings::db_table_infected_compo_invites . '`
 																WHERE `id` = \'' . $id . '\';');
 
-		$database->close();
 
 		return $result->fetch_object('Invite');
 	}
@@ -48,7 +47,6 @@ class InviteHandler {
 
 		$result = $database->query('SELECT * FROM `'  . Settings::db_table_infected_compo_invites . '`;');
 
-		$database->close();
 
 		$inviteList = [];
 
@@ -68,7 +66,6 @@ class InviteHandler {
 		$result = $database->query('SELECT * FROM `'  . Settings::db_table_infected_compo_invites . '`
 																WHERE `userId` = \'' . $user->getId() . '\';');
 
-		$database->close();
 
 		$inviteList = [];
 
@@ -88,7 +85,6 @@ class InviteHandler {
 		$result = $database->query('SELECT * FROM `' . Settings::db_table_infected_compo_invites . '`
 																WHERE `clanId` = \'' . $clan->getId() . '\';');
 
-		$database->close();
 
 		$inviteList = [];
 
@@ -112,7 +108,6 @@ class InviteHandler {
 
 		$invite = self::getInvite($database->insert_id);
 
-		$database->close();
 
 		return $invite;
 	}
@@ -162,7 +157,6 @@ class InviteHandler {
 			}
 		    }
 		}
-		$database->close();
 	}
 
 	/*
@@ -174,7 +168,6 @@ class InviteHandler {
 		$database->query('DELETE FROM `' . Settings::db_table_infected_compo_invites . '`
 											WHERE `id` = \'' . $invite->getId() . '\';');
 
-		$database->close();
 	}
 }
 ?>

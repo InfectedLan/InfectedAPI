@@ -32,7 +32,6 @@ class ReadyHandlerHandler {
 		$result = $database->query('SELECT * FROM `' . Settings::db_table_infected_compo_readyInstances . '`
 																WHERE `id` = \'' . $database->real_escape_string($id) . '\';');
 
-		$database->close();
 
 		return $result->fetch_object('ReadyHandler');
 	}
@@ -45,7 +44,6 @@ class ReadyHandlerHandler {
 
 		$result = $database->query('SELECT * FROM `' . Settings::db_table_infected_compo_readyInstances . '`;');
 
-		$database->close();
 
 		$readyHandlerList = [];
 

@@ -31,7 +31,6 @@ class UserNoteHandler {
 		$result = $database->query('SELECT * FROM `' . Settings::db_table_infected_usernotes . '`
 																WHERE `id` = \'' . $database->real_escape_string($id) . '\';');
 
-		$database->close();
 
 		$row = $result->fetch_array();
 
@@ -47,7 +46,6 @@ class UserNoteHandler {
 		$result = $database->query('SELECT `id` FROM `' . Settings::db_table_infected_usernotes . '`
 																WHERE `userId` = \'' . $user->getId() . '\';');
 
-		$database->close();
 
 		return $result->num_rows > 0;
 	}
@@ -61,7 +59,6 @@ class UserNoteHandler {
 		$result = $database->query('SELECT * FROM `' . Settings::db_table_infected_usernotes . '`
 																WHERE `userId` = \'' . $user->getId() . '\';');
 
-		$database->close();
 
 		$row = $result->fetch_array();
 
@@ -84,7 +81,6 @@ class UserNoteHandler {
 			self::removeUserNote($user);
 		}
 
-		$database->close();
 	}
 
 	/*
@@ -97,7 +93,6 @@ class UserNoteHandler {
 											VALUES (\'' . $user->getId() . '\',
 															\'' . $database->real_escape_string($content) . '\');');
 
-		$database->close();
 	}
 
 	/*
@@ -110,7 +105,6 @@ class UserNoteHandler {
 											SET `content` = \'' . $database->real_escape_string($content) . '\'
 											WHERE `userId` = \'' . $user->getId() . '\';');
 
-		$database->close();
 	}
 
 	/*
@@ -122,7 +116,6 @@ class UserNoteHandler {
 		$database->query('DELETE FROM `' . Settings::db_table_infected_usernotes . '`
 						  				WHERE `userId` = \'' . $user->getId() . '\';');
 
-		$database->close();
 	}
 }
 ?>

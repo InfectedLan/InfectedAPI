@@ -32,7 +32,6 @@ class EntranceHandler {
 		$result = $database->query('SELECT * FROM `' . Settings::db_table_infected_tickets_entrances . '`
 																WHERE `id` = \'' . $database->real_escape_string($id) . '\';');
 
-		$database->close();
 
 		return $result->fetch_object('Entrance');
 	}
@@ -46,7 +45,6 @@ class EntranceHandler {
 		$result = $database->query('SELECT * FROM `' . Settings::db_table_infected_tickets_entrances . '`
 																WHERE `name` = \'' . $database->real_escape_string($name) . '\';');
 
-		$database->close();
 
 		return $result->fetch_object('Entrance');
 	}
@@ -59,7 +57,6 @@ class EntranceHandler {
 
 		$result = $database->query('SELECT * FROM `' . Settings::db_table_infected_tickets_entrance . '`;');
 
-		$database->close();
 
 		$entranceList = [];
 

@@ -34,7 +34,6 @@ class ServerHandler {
 		$result = $database->query('SELECT * FROM `' . Settings::db_table_infected_compo_servers . '`
 																WHERE `id` = \'' . $id . '\';');
 
-		$database->close();
 
 		return $result->fetch_object('Server');
 	}
@@ -48,7 +47,6 @@ class ServerHandler {
 		$result = $database->query('SELECT * FROM `' . Settings::db_table_infected_compo_servers . '`
 																WHERE `compoId` = \'' . $compo->getId() . '\';');
 
-		$database->close();
 
 		$serverList = [];
 
@@ -69,7 +67,6 @@ class ServerHandler {
 
         $return_id = $database->insert_id;
         
-	    $database->close();
         
         return $return_id;
 	}
@@ -91,7 +88,6 @@ class ServerHandler {
 
 	    $result = $database->query('UPDATE `' . Settings::db_table_infected_compo_servers . '` SET `connectionDetails` = \'' . $database->real_escape_string($connectionDetails) . '\' WHERE `` = \'' . $server->getId() . '\';');
 
-	    $database->close();
 	}
 
 	/*
@@ -102,7 +98,6 @@ class ServerHandler {
 
 	    $result = $database->query('UPDATE `' . Settings::db_table_infected_compo_servers . '` SET `humanName` = \'' . $database->real_escape_string($humanName) . '\' WHERE `` = \'' . $server->getId() . '\';');
 
-	    $database->close();
 	}
 }
 ?>

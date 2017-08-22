@@ -36,7 +36,6 @@ class StoreSessionHandler {
 		$result = $database->query('SELECT * FROM `' . Settings::db_table_infected_tickets_storesessions . '`
 																WHERE `id` = \'' . $database->real_escape_string($id) . '\';');
 
-		$database->close();
 
 		return $result->fetch_object('StoreSession');
 	}
@@ -49,7 +48,6 @@ class StoreSessionHandler {
 
 		$result = $database->query('SELECT * FROM `' . Settings::db_table_infected_tickets_storesessions . '`;');
 
-		$database->close();
 
 		$storeSessionList = [];
 
@@ -70,7 +68,6 @@ class StoreSessionHandler {
 																WHERE `userId` = \'' . $user->getId() . '\'
 																AND `datetime` > \'' . self::oldestValidTimestamp() . '\';');
 
-		$database->close();
 
 		return $result->fetch_object('StoreSession');
 	}
@@ -85,7 +82,6 @@ class StoreSessionHandler {
 																WHERE `code` = \'' . $database->real_escape_string($code) . '\'
 																AND `datetime` > \'' . self::oldestValidTimestamp() . '\';');
 
-		$database->close();
 
 		return $result->fetch_object('StoreSession');
 	}
@@ -100,7 +96,6 @@ class StoreSessionHandler {
 																WHERE `userId` = \'' . $user->getId() . '\'
 																AND `datetime` > \'' . self::oldestValidTimestamp() . '\';');
 
-		$database->close();
 
 		return $result->num_rows > 0;
 	}
@@ -121,7 +116,6 @@ class StoreSessionHandler {
 																				\'' . $database->real_escape_string($price) . '\',
 																				\'' . date('Y-m-d H:i:s') . '\');');
 
-		$database->close();
 
 		return $code;
 	}
@@ -135,7 +129,6 @@ class StoreSessionHandler {
 		$result = $database->query('DELETE FROM `' . Settings::db_table_infected_tickets_storesessions . '`
 																WHERE `id` = \'' . $storeSession->getId() . '\';');
 
-		$database->close();
 	}
 
 	/*
@@ -155,7 +148,6 @@ class StoreSessionHandler {
 																WHERE `ticketTypeId` = \'' . $ticketType->getId() . '\'
 																AND `datetime` > \'' . self::oldestValidTimestamp() . '\';');
 
-		$database->close();
 
 		$reservedCount = 0;
 
@@ -184,7 +176,6 @@ class StoreSessionHandler {
 																			  			WHERE `code`= \'' . $database->real_escape_string($code) . '\'
 																			  			AND `datetime` > \'' . self::oldestValidTimestamp() . '\');');
 
-		$database->close();
 
 		return $result->fetch_object('User');
 	}

@@ -35,7 +35,6 @@ class SeatHandler {
 		$result = $database->query('SELECT * FROM `' . Settings::db_table_infected_tickets_seats . '`
 																WHERE `id` = \'' . $database->real_escape_string($id) . '\';');
 
-		$database->close();
 
 		return $result->fetch_object('Seat');
 	}
@@ -48,7 +47,6 @@ class SeatHandler {
 
 		$result = $database->query('SELECT * FROM `' . Settings::db_table_infected_tickets_seats . '`;');
 
-		$database->close();
 
 		$seatList = [];
 
@@ -68,7 +66,6 @@ class SeatHandler {
 		$result = $database->query('SELECT * FROM `' . Settings::db_table_infected_tickets_seats . '`
 																WHERE `rowId` = \'' . $row->getId() . '\';');
 
-		$database->close();
 
 		$seatList = [];
 
@@ -102,7 +99,6 @@ class SeatHandler {
 
 		$seat = self::getSeat($database->insert_id);
 
-		$database->close();
 
 		return $seat;
 	}
@@ -116,7 +112,6 @@ class SeatHandler {
 		$result = $database->query('DELETE FROM `' . Settings::db_table_infected_tickets_seats . '`
 																WHERE `id` = \'' . $seat->getId() . '\';');
 
-		$database->close();
 	}
 
 	/*
@@ -142,7 +137,6 @@ class SeatHandler {
 		$result = $database->query('SELECT * FROM `' . Settings::db_table_infected_tickets_tickets . '`
 																WHERE `seatId` = \'' . $seat->getId() . '\';');
 
-		$database->close();
 
 		return $result->fetch_object('Ticket');
 	}

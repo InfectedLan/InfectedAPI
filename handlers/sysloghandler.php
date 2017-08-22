@@ -15,7 +15,6 @@ class SyslogHandler {
 	$result = $database->query('SELECT * FROM `' . Settings::db_table_infected_syslogs . '`
 																WHERE `id` = \'' . $database->real_escape_string($id) . '\';');
 
-	$database->close();
 
 	return $result->fetch_object('SyslogEntry');
     }
@@ -25,7 +24,6 @@ class SyslogHandler {
 
 	$result = $database->query('SELECT * FROM `' . Settings::db_table_infected_syslogs . '` ORDER BY `id` DESC LIMIT ' . $database->real_escape_string($count) . ';');
 
-	$database->close();
 
 	$syslogList = [];
 
@@ -41,7 +39,6 @@ class SyslogHandler {
 
 	$result = $database->query('SELECT * FROM `' . Settings::db_table_infected_syslogs . '` WHERE `source` LIKE \'' . $database->real_escape_string($source) . '\' ORDER BY `id` DESC LIMIT ' . $database->real_escape_string($count) . ';');
 
-	$database->close();
 
 	$syslogList = [];
 

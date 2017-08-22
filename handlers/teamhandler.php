@@ -36,7 +36,6 @@ class TeamHandler {
 		$result = $database->query('SELECT * FROM `' . Settings::db_table_infected_crew_teams . '`
 																WHERE `id` = \'' . $database->real_escape_string($id) . '\';');
 
-		$database->close();
 
 		return $result->fetch_object('Team');
 	}
@@ -53,7 +52,6 @@ class TeamHandler {
 																							AND `userId` = \'' . $user->getId() . '\'
 																							LIMIT 1);');
 
-		$database->close();
 
 		return $result->fetch_object('Team');
 	}
@@ -75,7 +73,6 @@ class TeamHandler {
 																WHERE `eventId` = \'' . $event->getId() . '\'
 																AND `leaderId` = \'' . $user->getId() . '\';');
 
-		$database->close();
 
 		return $result->fetch_object('Team');
 	}
@@ -97,7 +94,6 @@ class TeamHandler {
 																WHERE `eventId` = \'' . $event->getId() . '\'
 																ORDER BY `groupId`, `name`;');
 
-		$database->close();
 
 		$teamList = [];
 
@@ -126,7 +122,6 @@ class TeamHandler {
 																AND `groupId` = \'' . $group->getId() . '\'
 																ORDER BY `groupId`, `name`;');
 
-		$database->close();
 
 		$teamList = [];
 
@@ -160,7 +155,6 @@ class TeamHandler {
 
 		$team = self::getTeam($database->insert_id);
 
-		$database->close();
 
 		return $team;
 	}
@@ -179,7 +173,6 @@ class TeamHandler {
 												  `leaderId` = \'' . ($leaderUser != null ? $leaderUser->getId() : 0) . '\'
 										  WHERE `id` = \'' . $team->getId() . '\';');
 
-		$database->close();
 	}
 
 	/*
@@ -193,7 +186,6 @@ class TeamHandler {
 		$database->query('DELETE FROM `' . Settings::db_table_infected_crew_teams . '`
 						  				WHERE `id` = \'' . $team->getId() . '\';');
 
-		$database->close();
 	}
 
 	/*
@@ -205,7 +197,6 @@ class TeamHandler {
 		$database->query('DELETE FROM `' . Settings::db_table_infected_crew_teams . '`
 						  				WHERE `groupId` = \'' . $group->getId() . '\';');
 
-		$database->close();
 	}
 
 	/*
@@ -221,7 +212,6 @@ class TeamHandler {
 																AND `teamId` = \'' . $team->getId() . '\'
 																ORDER BY `firstname` ASC;');
 
-		$database->close();
 
 		$memberList = [];
 
@@ -250,7 +240,6 @@ class TeamHandler {
 																AND `userId` = \'' . $user->getId() . '\'
 																AND `teamId` != \'0\';');
 
-		$database->close();
 
 		return $result->num_rows > 0;
 	}
@@ -273,7 +262,6 @@ class TeamHandler {
 																AND `eventId` = \'' . $event->getId() . '\'
 																AND `leaderId` > \'0\';');
 
-		$database->close();
 
 		return $result->num_rows > 0;
 	}
@@ -295,7 +283,6 @@ class TeamHandler {
 																WHERE `eventId` = \'' . $event->getId() . '\'
 																AND `leaderId` = \'' . $user->getId() . '\';');
 
-		$database->close();
 
 		return $result->num_rows > 0;
 	}
@@ -321,7 +308,6 @@ class TeamHandler {
 											  AND `groupId` = \'' . $team->getGroup()->getId() . '\';');
 		}
 
-		$database->close();
 	}
 
 	/*
@@ -335,7 +321,6 @@ class TeamHandler {
 										  WHERE `eventId` = \'' . EventHandler::getCurrentEvent()->getId() . '\'
 											AND `userId` = \'' . $user->getId() . '\';');
 
-		$database->close();
 	}
 
 	/*
@@ -349,7 +334,6 @@ class TeamHandler {
 										  WHERE `eventId` = \'' . EventHandler::getCurrentEvent()->getId() . '\'
 										  AND `teamId` = \'' . $team->getId() . '\';');
 
-		$database->close();
 	}
 }
 ?>

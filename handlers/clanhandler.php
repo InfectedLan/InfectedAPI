@@ -41,7 +41,6 @@ class ClanHandler {
 		$result = $database->query('SELECT * FROM `' . Settings::db_table_infected_compo_clans . '`
 																WHERE `id` = \'' . $database->real_escape_string($id) . '\';');
 
-		$database->close();
 
 		return $result->fetch_object('Clan');
 	}
@@ -57,7 +56,6 @@ class ClanHandler {
 																WHERE `id` IN (SELECT `clanId` FROM `' . Settings::db_table_infected_compo_memberof . '`
 																						  WHERE `userId` = \'' . $user->getId() . '\');');
 
-		$database->close();
 
 		$clanList = [];
 
@@ -80,7 +78,6 @@ class ClanHandler {
 																WHERE `id` IN (SELECT `clanId` FROM `' . Settings::db_table_infected_compo_participantof . '`
 																			  			 WHERE `compoId` = \'' . $compo->getId() . '\');');
 
-		$database->close();
 
 		$clanList = [];
 
@@ -111,7 +108,6 @@ class ClanHandler {
 
         $result = $database->query('SELECT * FROM `' . Settings::db_table_infected_compo_participantof . '` WHERE `clanId` = \'' . $clan->getId() . '\' AND `compoId` = \'' . $compo->getId() . '\' AND `qualified` = 1;');
 
-        $database->close();
 
         return $result->num_rows > 0;
     }
@@ -123,7 +119,6 @@ class ClanHandler {
 
 	//Cleanup just to be sure
         $database->query('DELETE FROM `' . Settings::db_table_infected_compo_qualificationQueue . '` WHERE `clan` = \'' . $clan->getId() . '\';');
-        $database->close();
     }
 
 	/*
@@ -136,7 +131,6 @@ class ClanHandler {
 																WHERE `id` IN (SELECT `userId` FROM `' . Settings::db_name_infected_compo . '`.`' . Settings::db_table_infected_compo_memberof . '`
 																			   			 WHERE `clanId` = \'' . $clan->getId() . '\');');
 
-		$database->close();
 
 		$memberList = [];
 
@@ -159,7 +153,6 @@ class ClanHandler {
 
 		$count = $result->num_rows;
 
-		$database->close();
 
 		return $count;
 	}
@@ -175,7 +168,6 @@ class ClanHandler {
 																						   WHERE `clanId` = \'' . $clan->getId() . '\'
 																						   AND `stepInId` = \'0\');');
 
-		$database->close();
 
 		$memberList = [];
 
@@ -197,7 +189,6 @@ class ClanHandler {
 																						   WHERE `clanId` = \'' . $clan->getId() . '\'
 																						   AND `stepInId` = \'1\');');
 
-		$database->close();
 
 		$memberList = [];
 
@@ -218,7 +209,6 @@ class ClanHandler {
 																WHERE `clanId` = \'' . $clan->getId() . '\'
 																AND `userId` = \'' . $user->getId() . '\';');
 
-		$database->close();
 
 		return $result->num_rows > 0;
 	}
@@ -234,7 +224,6 @@ class ClanHandler {
 																AND `userId` = \'' . $user->getId() . '\'
 																AND `stepInId` = \'1\';');
 
-		$database->close();
 
 		return $result->num_rows > 0;
 	}
@@ -250,7 +239,6 @@ class ClanHandler {
 																WHERE `clanId` = \'' . $clan->getId() . '\'
 																AND `userId` = \'' . $user->getId() . '\';');
 
-		$database->close();
 	}
 
 	/*
@@ -279,7 +267,6 @@ class ClanHandler {
 		$result = $database->query('SELECT * FROM `' . Settings::db_table_infected_compo_clans . '`
 																WHERE `id` = \'' . $database->real_escape_string($clan->getId()) . '\';');
 
-		$database->close();
 
 		// Allow user to talk in global chat.
 		$mainChat = ChatHandler::getChat(1); // TODO: Change this to the first chat in the array? <- Hmm. Good question.
@@ -299,7 +286,6 @@ class ClanHandler {
 											  	`tag` = \'' . $database->real_escape_string($tag) . '\'
 										  WHERE `id` = \'' . $clan->getId() . '\';');
 
-		$database->close();
 	}
 
 	/*
@@ -314,7 +300,6 @@ class ClanHandler {
 		$database->query('DELETE FROM `' . Settings::db_table_infected_compo_participantof . '` WHERE `clanId` = \'' . $clan->getId() . '\';');
 		$database->query('DELETE FROM `' . Settings::db_table_infected_compo_participantOfMatch . '` WHERE `participantId` = \'' . $clan->getId() . '\' AND `type` = \'' . MatchHandler::participantof_state_clan . '\';');
 
-		$database->close();
 	}
 
 	/*
@@ -327,7 +312,6 @@ class ClanHandler {
 																WHERE `userId` = \'' . $user->getId() . '\'
 																AND `clanId` = \'' . $clan->getId() . '\';');
 
-		$database->close();
 	}
 
     /*
@@ -340,7 +324,6 @@ class ClanHandler {
 
         $database->query('INSERT INTO `' . Settings::db_table_infected_compo_qualificationQueue . '` (`clan`, `compo`, `time`) VALUES (\'' . $clan->getId() . '\', \'' . $compo->getId() . '\', \'' . date('Y-m-d H:i:s') . '\');');
 
-        $database->close();
     }
 
     /*
@@ -351,7 +334,6 @@ class ClanHandler {
 
         $database->query('DELETE FROM `' . Settings::db_table_infected_compo_qualificationQueue . '` WHERE `clan` = \'' . $clan->getId() . '\';');
 
-        $database->close();
     }
 
     public static function isInQualificationQueue(Clan $clan) {
@@ -359,7 +341,6 @@ class ClanHandler {
 
         $result = $database->query('SELECT * FROM `' . Settings::db_table_infected_compo_qualificationQueue . '` WHERE `clan` = \'' . $clan->getId() . '\';');
 
-        $database->close();
 
         return $result->num_rows > 0;
     }

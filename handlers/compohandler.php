@@ -37,7 +37,6 @@ class CompoHandler {
 		$result = $database->query('SELECT * FROM `' . Settings::db_table_infected_compo_compos . '`
 																WHERE `id` = \'' . $database->real_escape_string($id) . '\';');
 
-		$database->close();
 
 		return $result->fetch_object('Compo');
 	}
@@ -51,7 +50,6 @@ class CompoHandler {
 		$result = $database->query('SELECT * FROM `' . Settings::db_table_infected_compo_compos . '`
 																WHERE `eventId` = \'' . $event->getId() . '\';');
 
-		$database->close();
 
 		$compoList = [];
 
@@ -80,7 +78,6 @@ class CompoHandler {
 																						  WHERE `clanId` = \'' . $clan->getId() . '\'
 																						  LIMIT 1);');
 
-		$database->close();
 
 		return $result->fetch_object('Compo');
 	}
@@ -113,7 +110,6 @@ class CompoHandler {
 		$database->query($query);
         $id = $database->insert_id;
         
-		$database->close();
         
         return $id;
 	}
@@ -136,7 +132,6 @@ class CompoHandler {
 													`participantLimit` = \'' . $database->real_escape_string($participantLimit) . '\'
 										  WHERE `id` = \'' . $compo->getId() . '\';');
 
-		$database->close();
 	}
 
 	/*
@@ -148,7 +143,6 @@ class CompoHandler {
 		$result = $database->query('SELECT `id` FROM `' . Settings::db_table_infected_compo_matches . '`
 																WHERE `compoId` = \'' . $compo->getId() . '\';');
 
-		$database->close();
 
 		return $result->num_rows > 0;
 	}

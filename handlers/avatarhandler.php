@@ -33,7 +33,6 @@ class AvatarHandler {
 		$result = $database->query('SELECT * FROM `' . Settings::db_table_infected_crew_avatars . '`
 																WHERE `id` = \'' . $database->real_escape_string($id) . '\';');
 
-		$database->close();
 
 		return $result->fetch_object('Avatar');
 	}
@@ -47,7 +46,6 @@ class AvatarHandler {
 		$result = $database->query('SELECT * FROM `' . Settings::db_table_infected_crew_avatars . '`
 																WHERE `userId` = \'' . $user->getId() . '\';');
 
-		$database->close();
 
 		return $result->fetch_object('Avatar');
 	}
@@ -60,7 +58,6 @@ class AvatarHandler {
 
 		$result = $database->query('SELECT * FROM `' . Settings::db_table_infected_crew_avatars . '`;');
 
-		$database->close();
 
 		$avatarList = [];
 
@@ -80,7 +77,6 @@ class AvatarHandler {
 		$result = $database->query('SELECT * FROM `' . Settings::db_table_infected_crew_avatars . '`
 																WHERE `state` = \'1\';');
 
-		$database->close();
 
 		$avatarList = [];
 
@@ -100,7 +96,6 @@ class AvatarHandler {
 		$result = $database->query('SELECT `id` FROM `' . Settings::db_table_infected_crew_avatars . '`
 																WHERE `userId` = \'' . $user->getId() . '\';');
 
-		$database->close();
 
 		return $result->num_rows > 0;
 	}
@@ -115,7 +110,6 @@ class AvatarHandler {
 																WHERE `userId` = \'' . $user->getId() . '\'
 																AND (`state` = 1 OR `state` = 2);');
 
-		$database->close();
 
 		return $result->num_rows > 0;
 	}
@@ -130,7 +124,6 @@ class AvatarHandler {
 																WHERE `userId` = \'' . $user->getId() . '\'
 																AND `state` = \'2\';');
 
-		$database->close();
 
 		return $result->num_rows > 0;
 	}
@@ -145,7 +138,6 @@ class AvatarHandler {
 																VALUES (\'' . $user->getId() . '\',
 																				\'' . $fileName . '\', 0);');
 
-		$database->close();
 
 		return Settings::api_path . Settings::avatar_path . 'temp/' . $fileName;
 	}
@@ -161,7 +153,6 @@ class AvatarHandler {
 													`fileName` = \'' . $database->real_escape_string($fileName) . '\'
 										  WHERE `id` = \'' . $avatar->getId() . '\'');
 
-		$database->close();
 	}
 
 	/*
@@ -173,7 +164,6 @@ class AvatarHandler {
 		$result = $database->query('DELETE FROM `' . Settings::db_table_infected_crew_avatars . '`
 																WHERE `id` = \'' . $avatar->getId() . '\';');
 
-		$database->close();
 
 		// Delete all avatars.
 		$avatar->deleteFiles();
@@ -189,7 +179,6 @@ class AvatarHandler {
 										  SET `state` = \'2\'
 										  WHERE `id` = \'' . $avatar->getId() . '\';');
 
-		$database->close();
 	}
 
 	/*
@@ -202,7 +191,6 @@ class AvatarHandler {
 										  SET `state` =  \'3\'
 										  WHERE `id` = \'' . $avatar->getId() . '\';');
 
-		$database->close();
 	}
 
 	/*

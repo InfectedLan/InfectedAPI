@@ -39,7 +39,6 @@ class UserHistoryHandler {
 										  																														 												 WHERE `userId` = \'' . $user->getId() . '\')
 																							 ) AS `' . Settings::db_table_infected_events . '`;');
 
-	  $database->close();
 
 	  $eventList = [];
 

@@ -42,7 +42,6 @@ class ApplicationHandler {
 		$result = $database->query('SELECT * FROM `' . Settings::db_table_infected_crew_applications . '`
 																WHERE `id` = \'' . $database->real_escape_string($id) . '\';');
 
-		$database->close();
 
 		return $result->fetch_object('Application');
 	}
@@ -57,7 +56,6 @@ class ApplicationHandler {
 																WHERE `eventId` = \'' . $event->getId() . '\'
 																ORDER BY `openedTime`;');
 
-		$database->close();
 
 		$applicationList = [];
 
@@ -89,7 +87,6 @@ class ApplicationHandler {
 																AND `state` = \'1\'
 																ORDER BY `openedTime`;');
 
-		$database->close();
 
 		$applicationList = [];
 
@@ -115,7 +112,6 @@ class ApplicationHandler {
 																AND `state` = \'1\'
 																ORDER BY `openedTime`;');
 
-		$database->close();
 
 		$applicationList = [];
 
@@ -140,7 +136,6 @@ class ApplicationHandler {
 																AND `state` = \'1\'
 																ORDER BY `' . Settings::db_table_infected_crew_applicationqueue . '`.`id`;');
 
-		$database->close();
 
 		$applicationList = [];
 
@@ -166,7 +161,6 @@ class ApplicationHandler {
 																AND `state` = \'1\'
 																ORDER BY `' . Settings::db_table_infected_crew_applicationqueue . '`.`id`;');
 
-		$database->close();
 
 		$applicationList = [];
 
@@ -187,7 +181,6 @@ class ApplicationHandler {
 																WHERE `state` = \'2\'
 																ORDER BY `openedTime` DESC;');
 
-		$database->close();
 
 		$applicationList = [];
 
@@ -209,7 +202,6 @@ class ApplicationHandler {
 																AND `state` = \'2\'
 																ORDER BY `openedTime` DESC;');
 
-		$database->close();
 
 		$applicationList = [];
 
@@ -230,7 +222,6 @@ class ApplicationHandler {
 																WHERE `state` = \'3\'
 																ORDER BY `openedTime` DESC;');
 
-		$database->close();
 
 		$applicationList = [];
 
@@ -252,7 +243,6 @@ class ApplicationHandler {
 																AND `state` = \'3\'
 																ORDER BY `openedTime` DESC;');
 
-		$database->close();
 
 		$applicationList = [];
 
@@ -273,7 +263,6 @@ class ApplicationHandler {
 																WHERE (`state` = \'2\' OR `state` = \'3\')
 																ORDER BY `closedTime` DESC, `openedTime` DESC;');
 
-		$database->close();
 
 		$applicationList = [];
 
@@ -295,7 +284,6 @@ class ApplicationHandler {
 																AND (`state` = \'2\' OR `state` = \'3\')
 																ORDER BY `closedTime` DESC, `openedTime` DESC;');
 
-		$database->close();
 
 		$applicationList = [];
 
@@ -325,7 +313,6 @@ class ApplicationHandler {
                               
 		$application = self::getApplication($database->insert_id);
 
-		$database->close();
 
 		// If the group is set to queue applications, do so automatically.
 		if ($group->isQueuing()) {
@@ -348,7 +335,6 @@ class ApplicationHandler {
 		$database->query('DELETE FROM `' . Settings::db_table_infected_crew_applications . '`
 						  				WHERE `id` = \'' . $application->getId() . '\';');
 
-		$database->close();
 
 		// Remove the application from the queue, if present.
 		self::unqueueApplication($application, Session::getCurrentUser());
@@ -369,7 +355,6 @@ class ApplicationHandler {
 																`comment` = \'' . $database->real_escape_string($comment) . '\'
 													  WHERE `id` = \'' . $application->getId() . '\';');
 
-	  			$database->close();
 
 	  			$applicationUser = $application->getUser();
 	  			$group = $application->getGroup();
@@ -412,7 +397,6 @@ class ApplicationHandler {
 														  `comment` = \'' . $database->real_escape_string($comment) . '\'
 												  WHERE `id` = \'' . $application->getId() . '\';');
 
-  			$database->close();
 
   			// Remove the application from the queue, if present.
   			self::unqueueApplication($application, $user);
@@ -437,7 +421,6 @@ class ApplicationHandler {
 											  	`comment` = \'Closed by the system.\'
 										  WHERE `id` = \'' . $application->getId() . '\';');
 
-		$database->close();
 
 		// Remove the application from the queue, if present.
 		self::unqueueApplication($application, $user);
@@ -459,7 +442,6 @@ class ApplicationHandler {
 		  							  			SET `updatedByUserId` = \'' . $user->getId() . '\'
 		  							  			WHERE `id` = \'' . $application->getId() . '\';');
 
-					$database->close();
   			}
 
   			// Notify the user by email, if notify is true.
@@ -484,7 +466,6 @@ class ApplicationHandler {
 				  							  SET `updatedByUserId` = \'' . $user->getId() . '\'
 				  							  WHERE `id` = \'' . $application->getId() . '\';');
 
-  			$database->close();
 		}
 	}
 
@@ -497,7 +478,6 @@ class ApplicationHandler {
 		$result = $database->query('SELECT `id` FROM `' . Settings::db_table_infected_crew_applicationqueue . '`
 																WHERE `applicationId` = \'' . $application->getId() . '\';');
 
-		$database->close();
 
 		return $result->num_rows > 0;
 	}
@@ -514,7 +494,6 @@ class ApplicationHandler {
 																AND `groupId` = \'' . $group->getId() . '\'
 																AND (`state` = \'1\' OR `state` = \'2\');');
 
-		$database->close();
 
 		return $result->num_rows > 0;
 	}
@@ -538,7 +517,6 @@ class ApplicationHandler {
 																AND `groupId` = \'' . $group->getId() . '\'
 																AND (`state` = \'1\' OR `state` = \'2\');');
 
-		$database->close();
 
 		return $result->fetch_object('Application');
 	}
@@ -560,7 +538,6 @@ class ApplicationHandler {
 																WHERE `eventId` = \'' . $event->getId() . '\'
 																AND `userId` = \'' . $user->getId() . '\';');
 
-		$database->close();
 
 		$applicationList = [];
 

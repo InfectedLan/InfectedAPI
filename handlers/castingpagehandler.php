@@ -35,7 +35,6 @@ class CastingPageHandler {
 		$result = $database->query('SELECT * FROM `' . Settings::db_table_infected_crew_castingpages . '`
 																WHERE `id` = \'' . $id . '\';');
 
-		$database->close();
 
 		return $result->fetch_object('CastingPage');
 	}
@@ -49,7 +48,6 @@ class CastingPageHandler {
 		$result = $database->query('SELECT * FROM `' . Settings::db_table_infected_crew_castingpages . '`
 																WHERE `eventId` = \'' . $event->getId() . '\';');
 
-		$database->close();
 
 		$serverList = [];
 
@@ -70,7 +68,6 @@ class CastingPageHandler {
 
         $return_id = $database->insert_id;
         
-	    $database->close();
         
         return $return_id;
 	}
@@ -92,7 +89,6 @@ class CastingPageHandler {
 
 	    $result = $database->query('UPDATE `' . Settings::db_table_infected_crew_castingpages . '` SET `data` = \'' . $database->real_escape_string($data) . '\' WHERE `` = \'' . $castingPage->getId() . '\';');
 
-	    $database->close();
 	}
 
 	/*
@@ -103,7 +99,6 @@ class CastingPageHandler {
 
 	    $result = $database->query('UPDATE `' . Settings::db_table_infected_crew_castingpages . '` SET `name` = \'' . $database->real_escape_string($name) . '\' WHERE `` = \'' . $castingPage->getId() . '\';');
 
-	    $database->close();
 	}
 
     /*
@@ -114,7 +109,6 @@ class CastingPageHandler {
 
 	    $result = $database->query('UPDATE `' . Settings::db_table_infected_crew_castingpages . '` SET `template` = \'' . $database->real_escape_string($template) . '\' WHERE `` = \'' . $castingPage->getId() . '\';');
 
-	    $database->close();
     }
 }
 ?>

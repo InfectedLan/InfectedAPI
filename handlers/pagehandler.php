@@ -32,7 +32,6 @@ class PageHandler {
 		$result = $database->query('SELECT * FROM `' . Settings::db_table_infected_main_pages . '`
 																WHERE id = \'' . $database->real_escape_string($id) . '\';');
 
-		$database->close();
 
 		return $result->fetch_object('Page');
 	}
@@ -46,7 +45,6 @@ class PageHandler {
 		$result = $database->query('SELECT * FROM `' . Settings::db_table_infected_main_pages . '`
 																WHERE `name` = \'' . $database->real_escape_string($name) . '\';');
 
-		$database->close();
 
 		return $result->fetch_object('Page');
 	}
@@ -59,7 +57,6 @@ class PageHandler {
 
 		$result = $database->query('SELECT * FROM `' . Settings::db_table_infected_main_pages . '`;');
 
-		$database->close();
 
 		$pageList = [];
 
@@ -83,7 +80,6 @@ class PageHandler {
 
 		$page = self::getPage($database->insert_id);
 
-		$database->close();
 
 		return $page;
 	}
@@ -99,7 +95,6 @@ class PageHandler {
 											  	`content` = \'' . $database->real_escape_string($content) . '\'
 										  WHERE `id` = \'' . $page->getId() . '\';');
 
-		$database->close();
 	}
 
 	/*
@@ -111,7 +106,6 @@ class PageHandler {
 		$database->query('DELETE FROM `' . Settings::db_table_infected_main_pages . '`
 						  				WHERE `id` = \'' . $page->getId() . '\';');
 
-		$database->close();
 	}
 }
 ?>

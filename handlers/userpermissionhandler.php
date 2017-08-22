@@ -36,7 +36,6 @@ class UserPermissionHandler {
 																AND `userId` = \'' . $user->getId() . '\'
 																AND `permissionId` = \'' . $permission->getId() . '\';');
 
-		$database->close();
 
 		return $result->num_rows > 0;
 	}
@@ -60,7 +59,6 @@ class UserPermissionHandler {
 																AND `permissionId` = (SELECT `id` FROM `' . Settings::db_table_infected_permissions . '`
 																											WHERE `value` = \'' . $database->real_escape_string($value) . '\');');
 
-		$database->close();
 
 		return $result->num_rows > 0;
 	}
@@ -82,7 +80,6 @@ class UserPermissionHandler {
 																WHERE (`eventId` = \'0\' OR `eventId` = \'' . $event->getId() . '\')
 																AND `userId` = \'' . $user->getId() . '\';');
 
-		$database->close();
 
 		return $result->num_rows > 0;
 	}
@@ -105,7 +102,6 @@ class UserPermissionHandler {
 																							 WHERE (`eventId` = \'0\' OR `eventId` = \'' . $event->getId() . '\')
 																							 AND `userId` = \'' . $user->getId() . '\');');
 
-		$database->close();
 
 		$permissionList = [];
 
@@ -135,7 +131,6 @@ class UserPermissionHandler {
 															  \'' . $user->getId() . '\',
 															  \'' . $permission->getId() . '\')');
 
-			$database->close();
 		}
 	}
 
@@ -150,7 +145,6 @@ class UserPermissionHandler {
 											AND `userId` = \'' . $user->getId() . '\'
 											AND `permissionId` = \'' . $permission->getId() . '\';');
 
-		$database->close();
 	}
 
 	/*
@@ -170,7 +164,6 @@ class UserPermissionHandler {
 											WHERE (`eventId` = \'0\' OR `eventId` = \'' . $event->getId() . '\')
 											AND `userId` = \'' . $user->getId() . '\';');
 
-		$database->close();
 	}
 
 	/*

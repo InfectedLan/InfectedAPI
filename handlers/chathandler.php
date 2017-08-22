@@ -36,7 +36,6 @@ class ChatHandler {
 		$result = $database->query('SELECT * FROM `' . Settings::db_table_infected_compo_chats . '`
 																WHERE `id` = \'' . $database->real_escape_string($id) . '\';');
 
-		$database->close();
 
 		return $result->fetch_object('Chat');
 	}
@@ -49,7 +48,6 @@ class ChatHandler {
 
 		$result = $database->query('SELECT * FROM `' . Settings::db_table_infected_compo_chats . '`;');
 
-		$database->close();
 
 		$chatList = [];
 
@@ -72,7 +70,6 @@ class ChatHandler {
         
         $chat = self::getChat( $database->insert_id );
 
-        $database->close();       
 
 		return $chat;
 	}
@@ -86,7 +83,6 @@ class ChatHandler {
 		$database->query('DELETE FROM `' . Settings::db_table_infected_compo_chats . '`
 						  				WHERE `id` = \'' . $chat->getId() . '\';');
 
-		$database->close();
 
 		// Remove all chat messages for this chat.
 		self::removeChatMessages($chat);
@@ -106,7 +102,6 @@ class ChatHandler {
 																WHERE `userId` = \'' . $user->getId() . '\'
 																AND `chatId` = \'' . $chat->getId() . '\';');
 
-		$database->close();
 
 		return $result->num_rows > 0;
 	}
@@ -121,7 +116,6 @@ class ChatHandler {
 																WHERE `id` = (SELECT `userId` FROM `' . Settings::db_name_infected_compo . '`.`' . Settings::db_table_infected_compo_memberofchat . '`
 																							WHERE `chatId` = \'' . $chat->getId() . '\');');
 
-		$database->close();
 
 		$chatMemberList = [];
 
@@ -142,7 +136,6 @@ class ChatHandler {
 										  VALUES (\'' . $user->getId() . '\',
 												  		\'' . $chat->getId() . '\');');
 
-		$database->close();
 	}
 	
 	/*
@@ -155,7 +148,6 @@ class ChatHandler {
 										  VALUES (\'' . $database->real_escape_string($userId) . '\',
 												  		\'' . $database->real_escape_string($chatId) . '\');');
 
-	    $database->close();
 	}
 
 	/*
@@ -168,7 +160,6 @@ class ChatHandler {
 											WHERE `userId` = \'' . $user->getId() . '\'
 											AND `chatId` = \'' . $chat->getId() . '\';');
 
-		$database->close();
 	}
 
 	/*
@@ -183,7 +174,6 @@ class ChatHandler {
 																\'' . $chat->getId() . '\');');
 		}
 
-		$database->close();
 	}
 
 	/*
@@ -195,7 +185,6 @@ class ChatHandler {
 		$database->query('DELETE FROM `' . Settings::db_table_infected_compo_memberofchat . '`
 											WHERE `chatId` = \'' . $chat->getId() . '\';');
 
-		$database->close();
 	}
 
 	/*
@@ -207,7 +196,6 @@ class ChatHandler {
 		$result = $database->query('SELECT * FROM `' . Settings::db_table_infected_compo_chatmessages . '`
 																WHERE `id` = \'' . $database->real_escape_string($id) . '\';');
 
-		$database->close();
 
 		return $result->fetch_object('ChatMessage');
 	}
@@ -220,7 +208,6 @@ class ChatHandler {
 
 		$result = $database->query('SELECT * FROM `' . Settings::db_table_infected_compo_chatmessages . '`;');
 
-		$database->close();
 
 		$chatMessageList = [];
 
@@ -242,7 +229,6 @@ class ChatHandler {
 																ORDER BY `id` DESC
 																LIMIT 1;');
 
-		$database->close();
 
 		return $result->fetch_object('ChatMessage');
 	}
@@ -258,7 +244,6 @@ class ChatHandler {
 																ORDER BY `id` DESC
 																LIMIT ' . $database->real_escape_string($count) . ';');
 
-		$database->close();
 
 		$chatMessageList = [];
 
@@ -278,7 +263,6 @@ class ChatHandler {
 		$database->query('DELETE FROM `' . Settings::db_table_infected_compo_chatmessages . '`
 						  				WHERE `chatId` = \'' . $chat->getId() . '\';');
 
-		$database->close();
 	}
 
 	/*
@@ -293,7 +277,6 @@ class ChatHandler {
 														  \'' . date('Y-m-d H:i:s') . '\',
 														  \'' . htmlspecialchars($database->real_escape_string($message), ENT_QUOTES | ENT_HTML401) . '\');');
 
-		$database->close();
 	}
 
     public static function canChat(Chat $chat, User $user) {

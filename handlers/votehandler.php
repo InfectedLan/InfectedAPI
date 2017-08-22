@@ -36,7 +36,6 @@ class VoteHandler {
 		$result = $database->query('SELECT * FROM `' . Settings::db_table_infected_compo_votes . '`
 																WHERE `id` = \'$id\';');
 
-		$database->close();
 
 		return $result->fetch_object('Vote');
 	}
@@ -47,7 +46,6 @@ class VoteHandler {
 		$result = $database->query('SELECT `id` FROM `' . Settings::db_table_infected_compo_votes . '`
 																WHERE `consumerId` = ' . $database->real_escape_string($matchId) . ';');
 
-		$database->close();
 
 		return $result->num_rows;
 	}
@@ -76,7 +74,6 @@ class VoteHandler {
 																VALUES (\'' . $database->real_escape_string($consumer) . '\',
 																				\'' . $voteOption->getId() . '\', \'' . $database->real_escape_string($type) . '\');');
 
-		$database->close();
 	}
 }
 ?>

@@ -300,7 +300,6 @@ class UserHandler {
 			$database->query('DELETE FROM `' . Settings::db_table_infected_users . '`
 							  				WHERE `id` = \'' . $user->getId() . '\';');
 
-			$database->close();
 
 			// Remove users emergencycontact.
 			if (EmergencyContactHandler::hasEmergencyContactByUser($user)) {

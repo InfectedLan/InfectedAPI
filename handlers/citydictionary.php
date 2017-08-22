@@ -31,7 +31,6 @@ class CityDictionary {
 		$result = $database->query('SELECT `city` FROM `' . Settings::db_table_infected_postalcodes . '`
 																WHERE `code` = \'' . $database->real_escape_string($postalCode) . '\';');
 
-		$database->close();
 
 		$row = $result->fetch_array();
 
@@ -47,7 +46,6 @@ class CityDictionary {
 		$result = $database->query('SELECT `id` FROM `' . Settings::db_table_infected_postalcodes . '`
 																WHERE `code` = \'' . $database->real_escape_string($postalCode) . '\';');
 
-		$database->close();
 
 		return $result->num_rows > 0;
 	}
@@ -61,7 +59,6 @@ class CityDictionary {
 		$result = $database->query('SELECT `code` FROM `' . Settings::db_table_infected_postalcodes . '`
 																WHERE `city` = \'' . $database->real_escape_string($city) . '\';');
 
-		$database->close();
 
 		$row = $result->fetch_array();
 
