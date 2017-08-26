@@ -122,4 +122,5 @@ function str_replace_last($search, $replace, $str) {
 
 	return $str;
 }
+Database::cleanup();
 ?>

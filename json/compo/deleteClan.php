@@ -46,4 +46,5 @@ if (Session::isAuthenticated()) {
 
 header('Content-Type: text/plain');
 echo json_encode(array('result' => $result, 'message' => $message), JSON_PRETTY_PRINT);
+Database::cleanup();
 ?>

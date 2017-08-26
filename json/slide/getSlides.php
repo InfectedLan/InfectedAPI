@@ -36,4 +36,5 @@ foreach (SlideHandler::getSlides() as $slide) {
 
 header('Content-Type: text/plain');
 echo json_encode(array('slideList' => $slideList), JSON_PRETTY_PRINT);
+Database::cleanup();
 ?>

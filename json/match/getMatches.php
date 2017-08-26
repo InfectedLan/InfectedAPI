@@ -94,4 +94,5 @@ if ($result) {
 }
 
 
+Database::cleanup();
 ?>

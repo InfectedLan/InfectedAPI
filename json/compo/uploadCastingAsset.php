@@ -68,4 +68,5 @@ if($result) {
     echo json_encode(['result' => $result, 'message' => $message], JSON_PRETTY_PRINT);
 }
 
+Database::cleanup();
 ?>

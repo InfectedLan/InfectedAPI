@@ -58,4 +58,5 @@ if($result) {
 } else {
     echo json_encode(array('result' => $result, 'message' => $message), JSON_PRETTY_PRINT);
 }
+Database::cleanup();
 ?>

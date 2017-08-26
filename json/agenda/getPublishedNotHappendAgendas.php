@@ -35,4 +35,5 @@ foreach (AgendaHandler::getPublishedNotHappendAgendas() as $agenda) {
 
 header('Content-Type: text/plain');
 echo json_encode(array('agendaList' => $agendaList), JSON_PRETTY_PRINT);
+Database::cleanup();
 ?>

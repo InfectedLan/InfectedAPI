@@ -65,4 +65,5 @@ if ($result) {
 }
 
 
+Database::cleanup();
 ?>

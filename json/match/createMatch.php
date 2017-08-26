@@ -67,4 +67,5 @@ if ($result) {
 }
 
 
+Database::cleanup();
 ?>
