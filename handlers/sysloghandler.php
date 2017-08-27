@@ -10,22 +10,20 @@ class SyslogHandler {
     const SEVERITY_CRITICAL = 4; //HOLY FUCK THE SERVERS ARE BURNING
 
     public static function getSyslogEntry($id) {
-	$database = Database::open(Settings::db_name_infected);
+	$database = Database::getConnection(Settings::db_name_infected);
 
 	$result = $database->query('SELECT * FROM `' . Settings::db_table_infected_syslogs . '`
 																WHERE `id` = \'' . $database->real_escape_string($id) . '\';');
 
-	$database->close();
 
 	return $result->fetch_object('SyslogEntry');
     }
 
     public static function getLastEntries($count) {
-	$database = Database::open(Settings::db_name_infected);
+	$database = Database::getConnection(Settings::db_name_infected);
 
 	$result = $database->query('SELECT * FROM `' . Settings::db_table_infected_syslogs . '` ORDER BY `id` DESC LIMIT ' . $database->real_escape_string($count) . ';');
 
-	$database->close();
 
 	$syslogList = [];
 
@@ -37,11 +35,10 @@ class SyslogHandler {
     }
 
     public static function getLastEntriesBySource($source, $count) {
-	$database = Database::open(Settings::db_name_infected);
+	$database = Database::getConnection(Settings::db_name_infected);
 
 	$result = $database->query('SELECT * FROM `' . Settings::db_table_infected_syslogs . '` WHERE `source` LIKE \'' . $database->real_escape_string($source) . '\' ORDER BY `id` DESC LIMIT ' . $database->real_escape_string($count) . ';');
 
-	$database->close();
 
 	$syslogList = [];
 
@@ -53,7 +50,7 @@ class SyslogHandler {
     }
 
     public static function log($message, $source, $user = null, $severity = self::SEVERITY_INFO, $metadata = array()) {
-	$database = Database::open(Settings::db_name_infected);
+	$database = Database::getConnection(Settings::db_name_infected);
 	$userId = ($user == null ? 0 : $user->getId());
 	$query = 'INSERT INTO `' . Settings::db_table_infected_syslogs . '`(`source`, `severity`, `message`, `metadata`, `date`, `userId`)  VALUES (\'' .
 				   $database->real_escape_string($source) . '\', \'' .

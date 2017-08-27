@@ -1,4 +1,5 @@
 <?php
+include 'database.php';
 /**
  * This file is part of InfectedAPI.
  *
@@ -121,4 +122,5 @@ function str_replace_last($search, $replace, $str) {
 
 	return $str;
 }
+Database::cleanup();
 ?>

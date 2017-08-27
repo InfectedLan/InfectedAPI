@@ -30,12 +30,11 @@ class NoteHandler {
 	 * Return the note by the internal id.
 	 */
 	public static function getNote($id) {
-		$database = Database::open(Settings::db_name_infected_crew);
+		$database = Database::getConnection(Settings::db_name_infected_crew);
 
 		$result = $database->query('SELECT * FROM `' . Settings::db_table_infected_crew_notes . '`
 																WHERE id = \'' . $database->real_escape_string($id) . '\';');
 
-		$database->close();
 
 		return $result->fetch_object('Note');
 	}
@@ -44,13 +43,12 @@ class NoteHandler {
 	 * Returns a list of all notes by the specified event.
 	 */
 	public static function getNotesByEvent(Event $event) {
-		$database = Database::open(Settings::db_name_infected_crew);
+		$database = Database::getConnection(Settings::db_name_infected_crew);
 
 		$result = $database->query('SELECT * FROM `' . Settings::db_table_infected_crew_notes . '`
 																WHERE `eventId` = \'' . $event->getId() . '\'
 																ORDER BY `secondsOffset`, `time`;');
 
-		$database->close();
 
 		$noteList = [];
 
@@ -72,7 +70,7 @@ class NoteHandler {
 	 * Returns a list of all notes that has reached the notification time, by event.
 	 */
 	public static function getNotesReachedNotificationTimeByEvent(Event $event) {
-		$database = Database::open(Settings::db_name_infected_crew);
+		$database = Database::getConnection(Settings::db_name_infected_crew);
 
 		$result = $database->query('SELECT * FROM `' . Settings::db_table_infected_crew_notes . '`
 																WHERE `eventId` = \'' . $event->getId() . '\'
@@ -81,7 +79,6 @@ class NoteHandler {
 																AND DATE_SUB(FROM_UNIXTIME(' . $event->getStartTime() . ' + `secondsOffset`), INTERVAL 3 DAY) <= NOW()
 																ORDER BY `secondsOffset`, `time`;');
 
-		$database->close();
 
 		$noteList = [];
 
@@ -103,14 +100,13 @@ class NoteHandler {
 	 * Returns a list of all notes by the specified event.
 	 */
 	public static function getNotesByGroupAndEvent(Group $group, Event $event) {
-		$database = Database::open(Settings::db_name_infected_crew);
+		$database = Database::getConnection(Settings::db_name_infected_crew);
 
 		$result = $database->query('SELECT * FROM `' . Settings::db_table_infected_crew_notes . '`
 																WHERE `eventId` = \'' . $event->getId() . '\'
 																AND `groupId` = \'' . $group->getId() . '\'
 																ORDER BY `secondsOffset`, `time`;');
 
-		$database->close();
 
 		$noteList = [];
 
@@ -132,7 +128,7 @@ class NoteHandler {
 	 * Returns a list of all notes by group for a specified event.
 	 */
 	public static function getNotesByTeamAndEvent(Team $team, Event $event) {
-		$database = Database::open(Settings::db_name_infected_crew);
+		$database = Database::getConnection(Settings::db_name_infected_crew);
 
 		$result = $database->query('SELECT * FROM `' . Settings::db_table_infected_crew_notes . '`
 																WHERE `eventId` = \'' . $event->getId() . '\'
@@ -140,7 +136,6 @@ class NoteHandler {
 																AND `teamId` = \'' . $team->getId() . '\'
 																ORDER BY `secondsOffset`, `time`;');
 
-		$database->close();
 
 		$noteList = [];
 
@@ -162,7 +157,7 @@ class NoteHandler {
 	 * Returns a list of all notes by user for a specified event.
 	 */
 	public static function getNotesByUserAndEvent(User $user, Event $event) {
-		$database = Database::open(Settings::db_name_infected_crew);
+		$database = Database::getConnection(Settings::db_name_infected_crew);
 
 		$result = $database->query('SELECT * FROM `' . Settings::db_table_infected_crew_notes . '`
 																WHERE `eventId` = \'' . $event->getId() . '\'
@@ -171,7 +166,6 @@ class NoteHandler {
 																		 AND `userId` = \'' . $user->getId() . '\')
 																ORDER BY `secondsOffset`, `time`;');
 
-		$database->close();
 
 		$noteList = [];
 
@@ -193,7 +187,7 @@ class NoteHandler {
 	 * Returns a list of all notes by the specified event.
 	 */
 	public static function getNotesByGroupAndTeamAndUserAndEvent(User $user, Event $event) {
-		$database = Database::open(Settings::db_name_infected_crew);
+		$database = Database::getConnection(Settings::db_name_infected_crew);
 
 		$leaderInGroups = [];
 		$leaderInTeams = [];
@@ -244,7 +238,6 @@ class NoteHandler {
 		 															ORDER BY `secondsOffset`, `time`;');
 		}
 
-		$database->close();
 
 		$noteList = [];
 
@@ -266,7 +259,7 @@ class NoteHandler {
 	 * Create a new note.
 	 */
 	public static function createNote(User $creatorUser = null, Group $group = null, Team $team = null, User $user = null, $title, $content, $secondsOffset = 0, $time = null) {
-		$database = Database::open(Settings::db_name_infected_crew);
+		$database = Database::getConnection(Settings::db_name_infected_crew);
 
 		$database->query('INSERT INTO `' . Settings::db_table_infected_crew_notes . '` (`eventId`, `creatorId`, `groupId`, `teamId`, `userId`, `title`, `content`, `secondsOffset`, `time`)
 										  VALUES (\'' . EventHandler::getCurrentEvent()->getId() . '\',
@@ -281,7 +274,6 @@ class NoteHandler {
 
 		$note = self::getNote($database->insert_id);
 
-		$database->close();
 
 		return $note;
 	}
@@ -290,7 +282,7 @@ class NoteHandler {
 	 * Update a note.
 	 */
 	public static function updateNote(Note $note, Group $group = null, Team $team = null, User $user = null, $title, $content, $secondsOffset = 0, $time = 0) {
-		$database = Database::open(Settings::db_name_infected_crew);
+		$database = Database::getConnection(Settings::db_name_infected_crew);
 
 		$database->query('UPDATE `' . Settings::db_table_infected_crew_notes . '`
 											SET `groupId` = \'' . ($group != null ? $group->getId() : 0) . '\',
@@ -302,60 +294,55 @@ class NoteHandler {
 													`time` = \'' . $database->real_escape_string($time) . '\'
 											WHERE `id` = \'' . $note->getId() . '\';');
 
-		$database->close();
 	}
 
 	/*
 	 * Update a notes notified state.
 	 */
 	public static function updateNoteNotified(Note $note, $notified) {
-		$database = Database::open(Settings::db_name_infected_crew);
+		$database = Database::getConnection(Settings::db_name_infected_crew);
 
 		$database->query('UPDATE `' . Settings::db_table_infected_crew_notes . '`
 											SET `notified` = \'' . $database->real_escape_string($notified) . '\'
 											WHERE `id` = \'' . $note->getId() . '\';');
 
-		$database->close();
 	}
 
 	/*
 	 * Update a notes done state.
 	 */
 	public static function updateNoteDone(Note $note, $done) {
-		$database = Database::open(Settings::db_name_infected_crew);
+		$database = Database::getConnection(Settings::db_name_infected_crew);
 
 		$database->query('UPDATE `' . Settings::db_table_infected_crew_notes . '`
 											SET `done` = \'' . $database->real_escape_string($done) . '\',
 													`inProgress` = \'0\'
 											WHERE `id` = \'' . $note->getId() . '\';');
 
-		$database->close();
 	}
 
 	/*
 	 * Update a notes in progress state.
 	 */
 	public static function updateNoteInProgress(Note $note, $inProgress) {
-		$database = Database::open(Settings::db_name_infected_crew);
+		$database = Database::getConnection(Settings::db_name_infected_crew);
 
 		$database->query('UPDATE `' . Settings::db_table_infected_crew_notes . '`
 											SET `done` = \'0\',
 													`inProgress` = \'' . $database->real_escape_string($inProgress) . '\'
 											WHERE `id` = \'' . $note->getId() . '\';');
 
-		$database->close();
 	}
 
 	/*
 	 * Remove a note.
 	 */
 	public static function removeNote(Note $note) {
-		$database = Database::open(Settings::db_name_infected_crew);
+		$database = Database::getConnection(Settings::db_name_infected_crew);
 
 		$database->query('DELETE FROM `' . Settings::db_table_infected_crew_notes . '`
 						  				WHERE `id` = \'' . $note->getId() . '\';');
 
-		$database->close();
 	}
 
 	/* Notes watchlist */
@@ -363,13 +350,12 @@ class NoteHandler {
 	 * Returns true if this user has a option.
 	 */
 	public static function isWatchingNote(Note $note, User $user) {
-		$database = Database::open(Settings::db_name_infected_crew);
+		$database = Database::getConnection(Settings::db_name_infected_crew);
 
 		$result = $database->query('SELECT `id` FROM `' . Settings::db_table_infected_crew_notewatches . '`
 																WHERE `noteId` = \'' . $note->getId() . '\'
 																AND `userId` = \'' . $user->getId() . '\';');
 
-		$database->close();
 
 		return $result->num_rows > 0;
 	}
@@ -378,14 +364,13 @@ class NoteHandler {
 	 * Returns a list of all users watching the specified note.
 	 */
 	public static function getWatchingUsers(Note $note) {
-		$database = Database::open(Settings::db_name_infected);
+		$database = Database::getConnection(Settings::db_name_infected);
 
 		$result = $database->query('SELECT * FROM `' . Settings::db_table_infected_users . '`
 																WHERE `id` IN (SELECT `userId` FROM `' . Settings::db_name_infected_crew . '`.`' . Settings::db_table_infected_crew_notewatches . '`
 																							 WHERE `noteId` = \'' . $note->getId() . '\')
 																ORDER BY `firstname`, `lastname`;');
 
-		$database->close();
 
 		$userList = [];
 
@@ -400,7 +385,7 @@ class NoteHandler {
 	 * Watch a note.
 	 */
 	public static function watchNote(Note $note, User $user) {
-		$database = Database::open(Settings::db_name_infected_crew);
+		$database = Database::getConnection(Settings::db_name_infected_crew);
 
 		if (!self::isWatchingNote($note, $user)) {
 			$database->query('INSERT INTO `' . Settings::db_table_infected_crew_notewatches . '` (`noteId`, `userId`)
@@ -408,27 +393,25 @@ class NoteHandler {
 																\'' . $user->getId() . '\');');
 		}
 
-		$database->close();
 	}
 
 	/*
 	 * Unwatch a note.
 	 */
 	public static function unwatchNote(Note $note, User $user) {
-		$database = Database::open(Settings::db_name_infected_crew);
+		$database = Database::getConnection(Settings::db_name_infected_crew);
 
 		$database->query('DELETE FROM `' . Settings::db_table_infected_crew_notewatches . '`
 						  				WHERE `noteId` = \'' . $note->getId() . '\'
 											AND `userId` = \'' . $user->getId() . '\';');
 
-		$database->close();
 	}
 
 	/*
 	 * Update watching users of a note.
 	 */
 	public static function updateWatchingUsers(Note $note, array $userList) {
-		$database = Database::open(Settings::db_name_infected_crew);
+		$database = Database::getConnection(Settings::db_name_infected_crew);
 
 		// Add watching users that's not already watching.
 		foreach ($userList as $user) {
@@ -444,7 +427,6 @@ class NoteHandler {
 											WHERE `noteId` = \'' . $note->getId() . '\'
 											AND `userId` NOT IN (\'' . implode('\', \'', UserUtils::toUserIdList($userList)) . '\');');
 
-		$database->close();
 	}
 }
 ?>

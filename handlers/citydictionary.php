@@ -26,12 +26,11 @@ class CityDictionary {
 	 * Returns the city from given postalcode.
 	 */
 	public static function getCity($postalCode) {
-		$database = Database::open(Settings::db_name_infected);
+		$database = Database::getConnection(Settings::db_name_infected);
 
 		$result = $database->query('SELECT `city` FROM `' . Settings::db_table_infected_postalcodes . '`
 																WHERE `code` = \'' . $database->real_escape_string($postalCode) . '\';');
 
-		$database->close();
 
 		$row = $result->fetch_array();
 
@@ -42,12 +41,11 @@ class CityDictionary {
 	 * Return true if the specified postal code exists.
 	 */
 	public static function hasPostalCode($postalCode) {
-		$database = Database::open(Settings::db_name_infected);
+		$database = Database::getConnection(Settings::db_name_infected);
 
 		$result = $database->query('SELECT `id` FROM `' . Settings::db_table_infected_postalcodes . '`
 																WHERE `code` = \'' . $database->real_escape_string($postalCode) . '\';');
 
-		$database->close();
 
 		return $result->num_rows > 0;
 	}
@@ -56,12 +54,11 @@ class CityDictionary {
 	 * Returns the postalcode for given city.
 	 */
 	public static function getPostalCode($city) {
-		$database = Database::open(Settings::db_name_infected);
+		$database = Database::getConnection(Settings::db_name_infected);
 
 		$result = $database->query('SELECT `code` FROM `' . Settings::db_table_infected_postalcodes . '`
 																WHERE `city` = \'' . $database->real_escape_string($city) . '\';');
 
-		$database->close();
 
 		$row = $result->fetch_array();
 

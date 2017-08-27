@@ -31,23 +31,21 @@ class VoteHandler {
 	 * Get a vote by the internal id.
 	 */
 	public static function getVote($id) {
-		$database = Database::open(Settings::db_name_infected_compo);
+		$database = Database::getConnection(Settings::db_name_infected_compo);
 
 		$result = $database->query('SELECT * FROM `' . Settings::db_table_infected_compo_votes . '`
 																WHERE `id` = \'$id\';');
 
-		$database->close();
 
 		return $result->fetch_object('Vote');
 	}
 	//$consumer is a match id
 	public static function getNumBanned($matchId) {
-		$database = Database::open(Settings::db_name_infected_compo);
+		$database = Database::getConnection(Settings::db_name_infected_compo);
 
 		$result = $database->query('SELECT `id` FROM `' . Settings::db_table_infected_compo_votes . '`
 																WHERE `consumerId` = ' . $database->real_escape_string($matchId) . ';');
 
-		$database->close();
 
 		return $result->num_rows;
 	}
@@ -70,13 +68,12 @@ class VoteHandler {
 
 	//Again, consumer is a match id
 	public static function banMap(VoteOption $voteOption, $consumer, $type) {
-		$database = Database::open(Settings::db_name_infected_compo);
+		$database = Database::getConnection(Settings::db_name_infected_compo);
 
 		$result = $database->query('INSERT INTO `' . Settings::db_table_infected_compo_votes . '` (`consumerId`, `voteOptionId`,`type`)
 																VALUES (\'' . $database->real_escape_string($consumer) . '\',
 																				\'' . $voteOption->getId() . '\', \'' . $database->real_escape_string($type) . '\');');
 
-		$database->close();
 	}
 }
 ?>

@@ -29,12 +29,10 @@ class VoteOptionHandler {
 	 * Get a vote option by the internal id.
 	 */
 	public static function getVoteOption($id) {
-		$database = Database::open(Settings::db_name_infected_compo);
+		$database = Database::getConnection(Settings::db_name_infected_compo);
 
 		$result = $database->query('SELECT * FROM `' . Settings::db_table_infected_compo_voteoptions . '`
 																WHERE `id` = \'' . $id . '\';');
-
-		$database->close();
 
 		return $result->fetch_object('VoteOption');
 	}
@@ -43,12 +41,10 @@ class VoteOptionHandler {
 	 * Get a vote option for a specified compo.
 	 */
 	public static function getVoteOptionsByCompo(Compo $compo) {
-		$database = Database::open(Settings::db_name_infected_compo);
+		$database = Database::getConnection(Settings::db_name_infected_compo);
 
 		$result = $database->query('SELECT * FROM `' . Settings::db_table_infected_compo_voteoptions . '`
 																WHERE `compoId` = \'' . $compo->getId() . '\';');
-
-		$database->close();
 
 		$voteOptionList = [];
 
@@ -63,13 +59,11 @@ class VoteOptionHandler {
 	 * Returns true if specified vote option is voted for the specified match.
 	 */
 	public static function isVoted(VoteOption $voteOption, Match $match) {
-		$database = Database::open(Settings::db_name_infected_compo);
+		$database = Database::getConnection(Settings::db_name_infected_compo);
 
 		$result = $database->query('SELECT `id` FROM `' . Settings::db_table_infected_compo_votes . '`
 																WHERE `voteOptionId` = \'' . $voteOption->getId() . '\'
 																AND `consumerId` = \'' . $match->getId() . '\';');
-
-		$database->close();
 
 		return $result->num_rows > 0;
 	}
@@ -78,18 +72,16 @@ class VoteOptionHandler {
 	 * Returns the vote type of the vote option, if any
 	 */
 	public static function getVoteType(VoteOption $voteOption, Match $match) {
-		$database = Database::open(Settings::db_name_infected_compo);
+		$database = Database::getConnection(Settings::db_name_infected_compo);
 
 		$result = $database->query('SELECT `type` FROM `' . Settings::db_table_infected_compo_votes . '`
 																WHERE `voteOptionId` = \'' . $voteOption->getId() . '\'
 																AND `consumerId` = \'' . $match->getId() . '\';');
 
 		if($result->num_rows == 0) {
-		    $database->close();
 		    return null;
 		}
 		$row = $result->fetch_row();
-		$database->close();
 		//echo "Vote type: " . $row[0] . "\n";
 		return $row[0];
 	}

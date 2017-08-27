@@ -28,13 +28,12 @@ class FriendHandler {
 	 * Returns true is the specified user is friend with the specified friend user.
 	 */
 	public static function isUserFriendsWith(User $user, User $friend) {
-		$database = Database::open(Settings::db_name_infected);
+		$database = Database::getConnection(Settings::db_name_infected);
 
 		$result = $database->query('SELECT `id` FROM `' . Settings::db_table_infected_friends . '`
 																WHERE (`userId` = \'' . $user->getId() . '\' AND `friendId` = \'' . $friend->getId() . '\')
 																OR (`friendId` = \'' . $friend->getId() . '\' AND `userId` = \'' . $user->getId() . '\');');
 
-		$database->close();
 
 		return $result->num_rows > 0;
 	}
@@ -43,14 +42,13 @@ class FriendHandler {
 	 * Get a list of all users that the specified user is friends with.
 	 */
 	public static function getFriendsByUser(User $user) {
-		$database = Database::open(Settings::db_name_infected);
+		$database = Database::getConnection(Settings::db_name_infected);
 
 		$result = $database->query('SELECT * FROM `' . Settings::db_table_infected_users . '`
 																WHERE `id` IN (SELECT `friendId` FROM `' . Settings::db_table_infected_userfriends . '`
 																					     WHERE `userId` = \'' . $user->getId() . '\')
 															  ORDER BY `firstname`, `lastname`;');
 
-		$database->close();
 
 		$userList = [];
 
@@ -65,27 +63,25 @@ class FriendHandler {
 	 * Create a new agenda entry.
 	 */
 	public static function addUserFriend(User $user, User $friend) {
-		$database = Database::open(Settings::db_name_infected);
+		$database = Database::getConnection(Settings::db_name_infected);
 
 		$database->query('INSERT INTO `' . Settings::db_table_infected_friends . '` (`userId`, `friendId`, `datetime`)
 										  VALUES (\'' . $user->getId() . '\',
 														  \'' . $friend->getId() . '\',
 														  \'' . date('Y-m-d H:i:s') . '\');');
 
-		$database->close();
 	}
 
 	/*
 	 * Remove an agenda entry.
 	 */
 	public static function removeUserFriend(User $user, User $friend) {
-		$database = Database::open(Settings::db_name_infected);
+		$database = Database::getConnection(Settings::db_name_infected);
 
 		$database->query('DELETE FROM `' . Settings::db_table_infected_friends . '`
 						  				WHERE `userId` = \'' . $user->getId() . '\'
 											AND `friendId` = \'' . $friend->getId() . '\';');
 
-		$database->close();
 	}
 }
 ?>

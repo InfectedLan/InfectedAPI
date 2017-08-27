@@ -17,7 +17,7 @@ module = (function(){
     };
 
     pluginObj.decorateCompoPage = function(compo) {
-	$("#customContent").html('<h2>Deltagere</h2><iframe style="margin: auto; display: block;" allowfullscreen="true" scrolling="no" src="https://widget.toornament.com/tournaments/57cfe82b150ba0c7768b4567/stages/2?_locale=en_GB&theme=discipline" frameborder="0" height="610" width="980"></iframe>');
+	$("#customContent").html('<h2>Deltagere</h2><iframe style="margin: auto; display: block;" allowfullscreen="true" scrolling="no" src="https://widget.toornament.com/tournaments/58a71076150ba092088b45a1/stages/2?_locale=en_GB&theme=discipline" frameborder="0" height="610" width="980"></iframe>');
     };
 
     return pluginObj;

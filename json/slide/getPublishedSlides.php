@@ -1,4 +1,5 @@
 <?php
+include 'database.php';
 /**
  * This file is part of InfectedAPI.
  *
@@ -35,4 +36,5 @@ foreach (SlideHandler::getPublishedSlides() as $slide) {
 
 header('Content-Type: text/plain');
 echo json_encode(['slideList' => $slideList], JSON_PRETTY_PRINT);
+Database::cleanup();
 ?>
