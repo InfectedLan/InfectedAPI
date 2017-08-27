@@ -64,5 +64,10 @@ class Database {
 	public static function open($database) {
 		return self::getConnection($database);
 	}
+
+	public static function debug() {
+		echo count(self::$connList) . " connections:\n";
+		print_r(self::$connList);
+	}
 }
 ?>
