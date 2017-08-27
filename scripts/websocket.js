@@ -124,16 +124,16 @@ Websocket = (function() {
     };
     wsObject.connect = function(url) {
 	url = (typeof(url) === "undefined" ? this.getDefaultConnectUrl() : url);
-	
-	console.log("WebSocket connecting to " + url);
-	socket = new WebSocket(url);
-	socket.onopen = _onOpen;
-	socket.onmessage = onMessage;
-	socket.onclose = _onClose;
-	connecting = true;
-	window.setTimeout(function(){
-	    Websocket.sendIntent("keepAlive", []);
-	}, 1000*120);
+		return;
+		console.log("WebSocket connecting to " + url);
+		socket = new WebSocket(url);
+		socket.onopen = _onOpen;
+		socket.onmessage = onMessage;
+		socket.onclose = _onClose;
+		connecting = true;
+		window.setTimeout(function(){
+		    Websocket.sendIntent("keepAlive", []);
+		}, 1000*120);
     };
     wsObject.addHandler = function(intent, handler) {
 	if(typeof(listeners[intent]) === "undefined") {
