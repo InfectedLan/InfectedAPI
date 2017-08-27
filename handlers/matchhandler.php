@@ -167,6 +167,11 @@ AND `scheduledTime` < NOW() + INTERVAL ' . $database->real_escape_string($interv
 		$result = $database->query('SELECT * FROM `' . Settings::db_table_infected_compo_matches . '`
 																WHERE `compoId` = ' . $compo->getId() . ';');
 
+		/*Database::debug();
+		echo "\n\n";
+		print_r($database);
+		echo "\n\n";
+		print_r($database->error);*/
 		//echo "got sql error: " . $database->error . "\n";
 
 
