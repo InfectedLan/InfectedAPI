@@ -109,13 +109,11 @@ class Clan extends EventObject {
             return false;
         }
 
-		$database = Database::open(Settings::db_name_infected_compo);
+		$database = Database::getConnection(Settings::db_name_infected_compo);
 
 		$result = $database->query('SELECT `id` FROM `' . Settings::db_table_infected_compo_participantof . '`
 								 WHERE `clanId` = \'' . $this->getId() . '\'
 								 AND `compoId` = \'' . $database->real_escape_string($compo->getId()) . '\';');
-
-		$database->close();
 
 		return $result->num_rows > 0;
 	}
