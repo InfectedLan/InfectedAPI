@@ -34,39 +34,19 @@ if (Session::isAuthenticated()) {
 			$event = EventHandler::getEvent($_GET["id"]);
 			
 			if ($event != null) {
-				$tickets = TicketHandler::getTicketsByEvent($event);
+				//This will break if infected survives to the point where people turn 200 years old. And still attent computer parties.
+				$people = EventHandler::getMembersAndParticipantsByEvents([$event], 200); 
 
-				//Variables
-				$dayList = [];
-				$currCount = 0;
-				$skippedTickets = 0; //Tickets without a payment can't have their date traced
-				$bookingTime = $event->getBookingTime(); //Start counting from the beginning
-				$dayStep = 60*60*24; //One day at a time
-
-				foreach($tickets as $ticket) {
-					$payment = $ticket->getPayment();
-					$totalTickets++;
-
-					if($payment != null && $payment->getDateTime()>$bookingTime) {
-						$time = $payment->getDateTime();
-						$slot = floor(($time-$bookingTime)/$dayStep);
-						if($dayList[$slot]==null) {
-							$dayList[$slot] = 1;
-						} else {
-							$dayList[$slot]++;
-						}
+				$boyCount = 0;
+				$girlCount = 0;
+				foreach($people as $person) {
+					if($person->getGender()) {
+						$boyCount++;
 					} else {
-						$skippedTickets++;
+						$girlCount++;
 					}
 				}
-				$sendList = [];
-				$totalCount = 0;
-				foreach($dayList as $day) {
-					$totalCount+=$day;
-					$sendList[] = $totalCount;
-				}
-				//From this, generate
-				$result = ["list" => $sendList, "totalTickets" => $totalTickets, "ticketsSkipped" => $skippedTickets];
+				$result = ["boys" => $boyCount, "girls" => $girlCount];
 			} else {
 				$message = Localization::getLocale('this_event_does_not_exist');
 			}
