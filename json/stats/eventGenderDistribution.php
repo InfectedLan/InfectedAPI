@@ -26,6 +26,7 @@ require_once 'handlers/tickethandler.php';
 
 $result = false;
 $message = null;
+$data = null;
 
 if (Session::isAuthenticated()) {
 	$user = Session::getCurrentUser();
@@ -34,19 +35,34 @@ if (Session::isAuthenticated()) {
 			$event = EventHandler::getEvent($_GET["id"]);
 			
 			if ($event != null) {
-				//This will break if infected survives to the point where people turn 200 years old. And still attent computer parties.
-				$people = EventHandler::getMembersAndParticipantsByEvents([$event], 200); 
+				//Crew
+				$members = EventHandler::getMembersByEvent($event); 
 
-				$boyCount = 0;
-				$girlCount = 0;
-				foreach($people as $person) {
+				$memberBoyCount = 0;
+				$memberGirlCount = 0;
+				foreach($members as $person) {
 					if($person->getGender()) {
-						$boyCount++;
+						$memberBoyCount++;
 					} else {
-						$girlCount++;
+						$memberGirlCount++;
 					}
 				}
-				$result = ["boys" => $boyCount, "girls" => $girlCount];
+
+				//Participants
+				$participants = EventHandler::getParticipantsByEvent($event); 
+
+				$participantBoyCount = 0;
+				$participantGirlCount = 0;
+				foreach($participants as $person) {
+					if($person->getGender()) {
+						$participantBoyCount++;
+					} else {
+						$participantGirlCount++;
+					}
+				}
+
+				$data = ["participants" => ["boys" => $participantBoyCount, "girls" => $participantGirlCount], "crew" => ["boys" => $memberBoyCount, "girls" => $memberGirlCount]];
+				$result = true;
 			} else {
 				$message = Localization::getLocale('this_event_does_not_exist');
 			}
@@ -61,6 +77,10 @@ if (Session::isAuthenticated()) {
 }
 
 header('Content-Type: text/plain');
-echo json_encode(['result' => $result, 'message' => $message], JSON_PRETTY_PRINT);
+if($result) {
+	echo json_encode(['result' => $result, 'message' => $message, "data" => $data], JSON_PRETTY_PRINT);
+} else {
+	echo json_encode(['result' => $result, 'message' => $message], JSON_PRETTY_PRINT);
+}
 Database::cleanup();
 ?>

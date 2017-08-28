@@ -180,6 +180,47 @@ class EventHandler {
 						  				WHERE `id` = \'' . $event->getId() . '\';');
 
 	}
+	/*
+	 * Returns a list of everyone in a group for the specified event
+	 */
+	public static function getMembersByEvent(Event $event) {
+		$database = Database::getConnection(Settings::db_name_infected);
+
+		$result = $database->query('SELECT `' . Settings::db_table_infected_users . '`.* FROM `' . Settings::db_table_infected_users . '` 
+													LEFT JOIN `' . Settings::db_name_infected_crew . '`.`' . Settings::db_table_infected_crew_memberof . '` ON `' . Settings::db_table_infected_users . '`.`id` = `' . Settings::db_name_infected_crew . '`.`' . Settings::db_table_infected_crew_memberof . '`.`userId` WHERE `eventId` = ' . $event->getId() . ';');
+
+		$eventList = [];
+
+		while ($object = $result->fetch_object('User')) {
+			$eventList[] = $object;
+		}
+
+		return $eventList;
+	}
+
+	/*
+	 * Returns list of people owning tickets for the specified event, that arent in a group
+	 */
+	public static function getParticipantsByEvent(Event $event) {
+		$database = Database::getConnection(Settings::db_name_infected);
+
+		$result = $database->query('SELECT `' . Settings::db_table_infected_users . '`.* FROM `' . Settings::db_table_infected_users . '`
+							LEFT JOIN `' . Settings::db_name_infected_tickets . '`.`' . Settings::db_table_infected_tickets_tickets . '`
+							    ON `' . Settings::db_table_infected_users . '`.`id` = `' . Settings::db_table_infected_tickets_tickets . '`.`userId`
+							LEFT JOIN `' . Settings::db_name_infected_crew . '`.`' . Settings::db_table_infected_crew_memberof . '`
+							    ON (`' . Settings::db_table_infected_users . '`.`id` = `' . Settings::db_table_infected_crew_memberof . '`.`userId` AND `' . Settings::db_table_infected_crew_memberof . '`.`eventId` = ' . $event->getId() . ')
+							WHERE `' . Settings::db_table_infected_tickets_tickets . '`.`eventId` = ' . $event->getId() . '
+							AND `groupId` IS NULL
+							GROUP BY `' . Settings::db_table_infected_users . '`.`id`;');
+
+		$eventList = [];
+
+		while ($object = $result->fetch_object('User')) {
+			$eventList[] = $object;
+		}
+
+		return $eventList;
+	}
 
 	/*
 	 * Returns members and participants for given events.

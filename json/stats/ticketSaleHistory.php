@@ -26,6 +26,7 @@ require_once 'handlers/tickethandler.php';
 
 $result = false;
 $message = null;
+$data = null;
 
 if (Session::isAuthenticated()) {
 	$user = Session::getCurrentUser();
@@ -66,7 +67,8 @@ if (Session::isAuthenticated()) {
 					$sendList[] = $totalCount;
 				}
 				//From this, generate
-				$result = ["list" => $sendList, "totalTickets" => $totalTickets, "ticketsSkipped" => $skippedTickets];
+				$data = ["list" => $sendList, "totalTickets" => $totalTickets, "ticketsSkipped" => $skippedTickets];
+				$result = true;
 			} else {
 				$message = Localization::getLocale('this_event_does_not_exist');
 			}
@@ -81,6 +83,10 @@ if (Session::isAuthenticated()) {
 }
 
 header('Content-Type: text/plain');
-echo json_encode(['result' => $result, 'message' => $message], JSON_PRETTY_PRINT);
+if($result) {
+	echo json_encode(['result' => $result, 'message' => $message, "data" => $data], JSON_PRETTY_PRINT);
+} else {
+	echo json_encode(['result' => $result, 'message' => $message], JSON_PRETTY_PRINT);
+}
 Database::cleanup();
 ?>
