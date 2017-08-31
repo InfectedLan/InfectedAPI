@@ -2,6 +2,7 @@
 use PHPUnit\Framework\TestCase;
 
 require_once 'handlers/userhandler.php';
+require_once 'handlers/eventhandler.php';
 require_once 'objects/user.php';
 require_once 'database.php';
 
@@ -68,6 +69,8 @@ class UserTest extends TestCase {
 		$this->assertEquals("32cdb619196200050ab0af581a10fb83cfc63b1a20f58d4bafb6313d55a3f0e9", $user->getPassword());
 		$this->assertEquals("assertUser@infected.no", $user->getEmail());
 		$this->assertEquals(strtotime("1998-03-27 00:00:00"), $user->getBirthdate());
+		$this->assertEquals($user->getAgeByEvent(EventHandler::getEvent(7)), 18); //True story
+		$this->assertEquals($user->getAgeByEvent(EventHandler::getEvent(6)), 17);
 		$this->assertEquals("Male", $user->getGenderAsString());
 		$this->assertEquals("(+47) 12 34 56 78", $user->getPhoneAsString());
 		$this->assertEquals(12345678, $user->getPhone());

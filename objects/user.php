@@ -185,6 +185,16 @@ class User extends Object {
 	}
 
 	/*
+	 * Returns the users age, for the specified event
+	 */
+	public function getAgeByEvent(Event $event) {
+		$birthdate = new DateTime(date('Y-m-d', $this->getBirthdate()));
+		$then = new DateTime(date('Y-m-d', $event->getStartTime()));
+
+		return $birthdate->diff($then)->y;
+	}
+
+	/*
 	 * Returns true if the given users account is activated.
 	 */
 	public function isActivated() {
