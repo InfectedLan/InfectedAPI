@@ -44,7 +44,6 @@ class NfcCardTest extends TestCase {
 
 		$cards = NfcCardHandler::getCardsByCurrentEvent();
 		$this->assertEquals(0, count($cards));
-
 	}
 
 	private function getterTest() {
