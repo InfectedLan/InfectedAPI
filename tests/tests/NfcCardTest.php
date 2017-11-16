@@ -47,9 +47,9 @@ class NfcCardTest extends TestCase {
 	}
 
 	private function getterTest() {
-		//RegisterCard and getCardsByCurrentEvent
+		//RegisterCard and getCardByUserForCurrentEvent
 		NfcCardHandler::registerCard($me,EventHandler::getCurrentEvent(), $nfcid);
-		$cards = NfcCardHandler::getCardsByCurrentEvent();
+		$cards = NfcCardHandler::getCardByUserForCurrentEvent();
 		$this->assertEquals(1, count($cards));
 
 		$card = $cards[0];
@@ -62,10 +62,6 @@ class NfcCardTest extends TestCase {
 
 		//getCardByUserAndEvent
 		$newCard = NfcCardHandler::getCardByUserAndEvent($me, EventHandler::getCurrentEvent());
-		$this->assertEquals($card, $newCard);
-
-		//getCardByUserForCurrentEvent
-		$newCard = NfcCardHandler::getCardByUserForCurrentEvent($me);
 		$this->assertEquals($card, $newCard);
 	}
 
