@@ -119,11 +119,22 @@ class Event extends Object {
 	 * Returns true if booking for this event is opened.
 	 */
 	public function isBookingTime() {
-		$offset = 86400;
+		$offset = 24 * 60 * 60;
 		$bookingTime = $this->getBookingTime();
 		$bookingEndTime = $this->getStartTime() + $offset;
 
 		return time() >= $bookingTime && time() <= $bookingEndTime;
+	}
+
+	/*
+	 * Returns true if booking for this event is opened.
+	 */
+	public function isOngoing() {
+		$offset = 2 * 60 * 60;
+		$startTime = $this->getStartTime() - $offset;
+		$endTime = $this->getEndTime() + $offset;
+
+		return time() >= $startTime && time() <= $endTime;
 	}
 
 	/*

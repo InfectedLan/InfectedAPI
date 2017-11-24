@@ -36,7 +36,7 @@ if (Session::isAuthenticated()) {
 
 			if ($ticket != null) {
 				if (!$ticket->isCheckedIn()) {
-                    TicketHandler::checkInTicket($ticket);
+          TicketHandler::checkInTicket($ticket);
 
 					$message = Localization::getLocale('value_ticket_is_now_checked_in', $ticket->getBuyer()->getFirstname());
 					$result = true;
