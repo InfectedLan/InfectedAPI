@@ -21,17 +21,21 @@ class CompoPlugin {
     public function getCustomMatchInformation(Match $match) { //Called for each current match on the crew page
         return null;
     }
+    
     public function hasVoteScreen() {
-	return false;
+	     return false;
     }
+
     public function getTurnArray(Match $match) {
-	return [0, 1, 0, 1, 1, 0, 2];
+	     return [0, 1, 0, 1, 1, 0, 2];
     }
+
     public function getTurnMask(Match $match) {
-	return [0, 0, 0, 0, 0, 0, 2];
+	     return [0, 0, 0, 0, 0, 0, 2];
     }
+
     public function onMatchFinished(Match $match) {
-	
+
     }
 }
 ?>
