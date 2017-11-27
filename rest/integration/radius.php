@@ -118,6 +118,27 @@ if (isset($_GET['key']) &&
 					} else {
 						$message = 'Invalid input data for post-authentication.';
 					}
+					break;
+
+				case "accounting":
+					if (isset($_GET['port-type']) &&
+						isset($_GET['ip-address']) &&
+						isset($_GET['device']) &&
+						isset($_GET['mac-address']) &&
+						!empty($_GET['port-type']) &&
+						preg_match('/^((\.|^)(25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[1-9][0-9]?|0$)){4}$/', $_GET['ip-address']) &&
+						!empty($_GET['device']) &&
+						preg_match('/^[0-9a-fA-F]{1,2}([\.:-])[0-9a-fA-F]{1,2}(?:\1[0-9a-fA-F]{1,2}){4}$/', $_GET['mac-address'])) {
+						$portType = $_GET['port-type'];
+						$ipAddress = $_GET['ip-address'];
+						$device = $_GET['device'];
+						$macAddress = $_GET['mac-address'];
+
+						// TODO: Implement backend for this.
+					} else {
+						$message = 'Invalid input data for accounting.';
+					}
+					break;
 		 	}
 		} else {
 			$message = Localization::getLocale('this_user_does_not_exist');
