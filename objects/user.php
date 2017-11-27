@@ -2,7 +2,7 @@
 /**
  * This file is part of InfectedAPI.
  *
- * Copyright (C) 2015 Infected <http://infected.no/>.
+ * Copyright (C) 2017 Infected <http://infected.no/>.
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -271,7 +271,7 @@ class User extends Object {
 			$permissionList[] = PermissionHandler::getPermissionByValue('event.checklist');
 
 		  // Give leaders access to permissions by default.
-		  if ($this->isGroupLeader() || $this->isGroupCoLeader()) {
+		  if ($this->isGroupLeader()) {
 		    $permissionList[] = PermissionHandler::getPermissionByValue('chief.*');
 			// Give team leaders access to permissions by default.
 			}
@@ -475,151 +475,81 @@ class User extends Object {
 	}
 
 	/*
-	 * Returns the users group for the fiven event.
-	 */
-	public function getGroupByEvent(Event $event) {
-		return GroupHandler::getGroupByUserAndEvent($this, $event);
-	}
-
-	/*
-	 * Returns the users group.
-	 */
-	public function getGroup() {
-		return GroupHandler::getGroupByUser($this);
-	}
-
-	/*
-	 * Is member of a group for the given event.
-	 */
-	public function isGroupMemberByEvent(Event $event) {
-		return GroupHandler::isGroupMemberByEvent($this, $event);
-	}
-
-	/*
 	 * Is member of a group.
 	 */
-	public function isGroupMember() {
-		return GroupHandler::isGroupMember($this);
-	}
-
-	/*
-	 * Return true if user is leader of a group for the given event.
-	 */
-	public function isGroupLeaderByEvent(Event $event) {
-		return GroupHandler::isGroupLeaderByEvent($this, $event);
+	public function isGroupMember(Event $event = null) {
+		return GroupHandler::isGroupMember($this, $event);
 	}
 
 	/*
 	 * Return true if user is leader of a group.
 	 */
-	public function isGroupLeader() {
-		return GroupHandler::isGroupLeader($this);
+	public function isGroupLeader(Event $event = null) {
+		return GroupHandler::isGroupLeader($this, $event);
 	}
 
 	/*
-	 * Return true if user is co-leader of a group for the given event.
+	 * Returns the users group.
 	 */
-	public function isGroupCoLeaderByEvent(Event $event) {
-		return GroupHandler::isGroupCoLeaderByEvent($this, $event);
-	}
-
-	/*
-	 * Return true if user is co-leader of a group.
-	 */
-	public function isGroupCoLeader() {
-		return GroupHandler::isGroupCoLeader($this);
-	}
-
-	/*
-	 * Returns the team for the given event.
-	 */
-	public function getTeamByEvent(Event $event) {
-		return TeamHandler::getTeamByUserAndEvent($this, $event);
-	}
-
-	/*
-	 * Returns the team.
-	 */
-	public function getTeam() {
-		return TeamHandler::getTeamByUser($this);
-	}
-
-	/*
-	 * Is member of a team for the given event.
-	 */
-	public function isTeamMemberByEvent(Event $event) {
-		return TeamHandler::isTeamMemberByEvent($this, $event);
+	public function getGroup(Event $event = null) {
+		return GroupHandler::getGroupByUser($this, $event);
 	}
 
 	/*
 	 * Is member of a team.
 	 */
-	public function isTeamMember() {
-		return TeamHandler::isTeamMember($this);
-	}
-
-	/*
-	 * Return true if user is leader of a team for the given event.
-	 */
-	public function isTeamLeaderByEvent(Event $event) {
-		return TeamHandler::isTeamLeaderByEvent($this, $event);
+	public function isTeamMember(Event $event = null) {
+		return TeamHandler::isTeamMember($this, $event);
 	}
 
 	/*
 	 * Return true if user is leader of a team.
 	 */
-	public function isTeamLeader() {
-		return TeamHandler::isTeamLeader($this);
+	public function isTeamLeader(Event $event = null) {
+		return TeamHandler::isTeamLeader($this, $event);
 	}
 
 	/*
-	 * Return team by user and event.
+	 * Returns the team.
 	 */
-	public function getTeamByLeaderAndEvent(Event $event) {
-		return TeamHandler::getTeamByLeaderAndEvent($event, $this);
+	public function getTeam(Event $event = null) {
+		return TeamHandler::getTeamByUser($this, $event);
 	}
 
 	/*
-	 * Return team by user.
+	 * Return team by user. // TODO: Deprecate this? What is it used for?
 	 */
-	public function getTeamByLeader() {
-		return TeamHandler::getTeamByLeader($this);
+	public function getTeamByLeader(Event $event = null) {
+		return TeamHandler::getTeamByLeader($this, $event);
 	}
 
 	public function getParticipatedEvents() {
 		return UserHistoryHandler::getUserParticipatedEvents($this);
 	}
 
-	public function hasSpecialRoleByEvent(Event $event) {
-		if ($this->isGroupMemberByEvent($event)) {
-			return $this->isGroupLeaderByEvent($event) ||
-						$this->isGroupCoLeaderByEvent($event) ||
-						($this->isTeamMemberByEvent($event) && $this->isTeamLeaderByEvent($event));
+	public function hasSpecialRole(Event $event = null) {
+		if ($this->isGroupMember($event)) {
+			return $this->isGroupLeader($event) ||
+						($this->isTeamMember($event) && $this->isTeamLeader($event));
 		}
 
 		return false;
 	}
 
-	public function hasSpecialRole() {
-		return $this->hasSpecialRoleByEvent(EventHandler::getCurrentEvent());
-	}
-
 	/*
 	 * Returns the name of the users position.
 	 */
-	public function getRoleByEvent(Event $event) {
-		if ($this->isGroupMemberByEvent($event)) {
-			$group = $this->getGroupByEvent($event);
+	public function getRole(Event $event = null) {
+		if ($this->isGroupMember($event)) {
+			$group = $this->getGroup($event);
 
-			if ($this->isGroupLeaderByEvent($event)) {
+			if ($this->isGroupLeader($event)) {
 				return 'Leder i ' . $group->getTitle();
-			} else if ($this->isGroupCoLeaderByEvent($event)) {
-				return 'Co-leder i ' . $group->getTitle();
-			} else if ($this->isTeamMemberByEvent($event) &&
-				$this->isTeamLeaderByEvent($event)) {
-				$team = $this->getTeam();
+			} else if ($this->isTeamMember($event) &&
+				$this->isTeamLeader($event)) {
+				$team = $this->getTeam($event);
 
-				return 'Lag-leder i ' . $group->getTitle() . ":" . $this->getTeamByLeader()->getTitle();
+				return 'Lag-leder i ' . $group->getTitle() . ":" . $this->getTeamByLeader($event)->getTitle();
 			}
 
 			return 'Medlem';
@@ -628,13 +558,6 @@ class User extends Object {
 		}
 
 		return 'Ingen';
-	}
-
-	/*
-	 * Returns the name of the users position.
-	 */
-	public function getRole() {
-		return $this->getRoleByEvent(EventHandler::getCurrentEvent());
 	}
 
 	/*
@@ -666,28 +589,28 @@ class User extends Object {
 	}
 
 	/*
-	 * Returns the full name with nickname instead of username for use in compos.
+	 * Returns the full name with nickname instead of username for use in compos. // TODO: Remove this, use getDisplayName() instead.
 	 */
 	public function getCompoDisplayName() {
-		return $this->getFirstname() . ' "' . $this->getNickname() . '" ' . $this->getLastname();
+		return $this->getDisplayName();
 	}
 
 	public function isEligibleForPreSeating() {
-	    return count(TicketHandler::getTicketsSeatableByUser($this)) >= Settings::prioritySeatingReq;
+		return count(TicketHandler::getTicketsSeatableByUser($this)) >= Settings::prioritySeatingReq;
 	}
 
 	/*
 	 * Returns the steam id of this user. Null if not existent
 	 */
 	public function getSteamId() {
-	    return UserHandler::getSteamId($this);
+		return UserHandler::getSteamId($this);
 	}
 
 	/*
 	 * Sets the users steam id
 	 */
 	public function setSteamId($steamId) {
-	    UserHandler::setSteamId($this, $steamId);
+		UserHandler::setSteamId($this, $steamId);
 	}
 }
 ?>

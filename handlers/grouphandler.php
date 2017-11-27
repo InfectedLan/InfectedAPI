@@ -2,7 +2,7 @@
 /**
  * This file is part of InfectedAPI.
  *
- * Copyright (C) 2015 Infected <http://infected.no/>.
+ * Copyright (C) 2017 Infected <http://infected.no/>.
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -21,8 +21,8 @@
 require_once 'settings.php';
 require_once 'database.php';
 require_once 'handlers/eventhandler.php';
-require_once 'objects/group.php';
 require_once 'objects/event.php';
+require_once 'objects/group.php';
 require_once 'objects/user.php';
 
 class GroupHandler {
@@ -40,14 +40,14 @@ class GroupHandler {
 	}
 
 	/*
-	 * Get a group for the specified user from the given event.
+	 * Get a group for the specified user.
 	 */
-	public static function getGroupByUserAndEvent(User $user, Event $event) {
+	public static function getGroupByUser(User $user, Event $event = null) {
 		$database = Database::getConnection(Settings::db_name_infected_crew);
 
 		$result = $database->query('SELECT * FROM `' . Settings::db_table_infected_crew_groups . '`
 																WHERE `id` = (SELECT `groupId` FROM `' . Settings::db_table_infected_crew_memberof . '`
-																						  WHERE `eventId` = \'' . $event->getId() . '\'
+																						  WHERE `eventId` = \'' . ($event != null ? $event->getId() : EventHandler::getCurrentEvent()->getId()) . '\'
 																						  AND `userId` = \'' . $user->getId() . '\'
 																						  LIMIT 1);');
 
@@ -56,15 +56,9 @@ class GroupHandler {
 	}
 
 	/*
-	 * Get a group for the specified user.
+	 * Get a list of all active groups. // TODO: Check what happens if previous history MUST HAVE the group for a specific event?
 	 */
-	public static function getGroupByUser(User $user) {
-		return self::getGroupByUserAndEvent($user, EventHandler::getCurrentEvent());
-	}
-
-	/*
-	 * Get a list of all groups from the given event.
-	 */
+	/**
 	public static function getGroupsByEvent(Event $event) {
 		$database = Database::getConnection(Settings::db_name_infected_crew);
 
@@ -72,6 +66,25 @@ class GroupHandler {
 																WHERE `eventId` = \'' . $event->getId() . '\'
 																ORDER BY `id`, `name`;');
 
+		$groupList = [];
+
+		while ($object = $result->fetch_object('Group')) {
+			$groupList[] = $object;
+		}
+
+		return $groupList;
+	}
+	*/
+
+	/*
+	 * Get a list of all active groups.
+	 */
+	public static function getGroups() {
+		$database = Database::getConnection(Settings::db_name_infected_crew);
+
+		$result = $database->query('SELECT * FROM `' . Settings::db_table_infected_crew_groups . '`
+																WHERE `active` = \'1\'
+																ORDER BY `id`, `name`;');
 
 		$groupList = [];
 
@@ -83,72 +96,74 @@ class GroupHandler {
 	}
 
 	/*
-	 * Get a list of all groups.
+	 * Create a new group.
 	 */
-	public static function getGroups() {
-		return self::getGroupsByEvent(EventHandler::getCurrentEvent());
-	}
-
-	/*
-	 * Create a new group
-	 */
-	public static function createGroup(Event $event, $name, $title, $description, User $leaderUser = null, User $coleaderUser = null) {
+	public static function createGroup($name, $title, $description, User $leaderUser = null) {
 		$database = Database::getConnection(Settings::db_name_infected_crew);
 
-		$database->query('INSERT INTO `' . Settings::db_table_infected_crew_groups . '` (`eventId`, `name`, `title`, `description`, `leaderId`, `coleaderId`)
-										  VALUES (\'' . $event->getId() . '\',
-														  \'' . $database->real_escape_string($name) . '\',
+		$database->query('INSERT INTO `' . Settings::db_table_infected_crew_groups . '` (`name`, `title`, `description`, `leaderId`, `active`)
+										  VALUES (\'' . $database->real_escape_string($name) . '\',
 														  \'' . $database->real_escape_string($title) . '\',
 														  \'' . $database->real_escape_string($description) . '\',
 														  \'' . ($leaderUser != null ? $leaderUser->getId() : 0) . '\',
-															\'' . ($coleaderUser != null ? $coleaderUser->getId() : 0) . '\');');
+															\'' . ($coleaderUser != null ? $coleaderUser->getId() : 0) . '\'
+															\'1\');');
 
 		$group = self::getGroup($database->insert_id);
 
+		if ($leaderUser != null) {
+			self::setGroupLeader($leaderUser, $group);
+		}
 
 		return $group;
 	}
 
 	/*
-	 * Update the specified group.
+	 * Update the specified group, with the specified parameters.
 	 */
-	public static function updateGroup(Group $group, $name, $title, $description, User $leaderUser = null, User $coleaderUser = null) {
+	public static function updateGroup(Group $group, $name, $title, $description, User $leaderUser = null) {
 		$database = Database::getConnection(Settings::db_name_infected_crew);
 
 		$database->query('UPDATE `' . Settings::db_table_infected_crew_groups . '`
 			  						  SET `name` = \'' . $database->real_escape_string($name) . '\',
 				  								`title` = \'' . $database->real_escape_string($title) . '\',
-				  								`description` = \'' . $database->real_escape_string($description) . '\',
-				  								`leaderId` = \'' . ($leaderUser != null ? $leaderUser->getId() : 0) . '\',
-				  								`coleaderId` = \'' . ($coleaderUser != null ? $coleaderUser->getId() : 0) . '\'
+				  								`description` = \'' . $database->real_escape_string($description) . '\'
 			  						  WHERE `id` = \'' . $group->getId() . '\';');
 
+		self::setGroupLeader($leaderUser, $group);
 	}
 
 	/*
 	 * Remove the specified group
 	 */
 	public static function removeGroup(Group $group) {
+		/**
 		self::removeUsersFromGroup($group);
 		TeamHandler::removeTeamsByGroup($group);
+		*/
 
 		$database = Database::getConnection(Settings::db_name_infected_crew);
 
+		/**
 		$database->query('DELETE FROM `' . Settings::db_table_infected_crew_groups . '`
 						  				WHERE `id` = \'' . $group->getId() . '\';');
+		*/
 
+		$database->query('UPDATE `' . Settings::db_table_infected_crew_groups . '`
+			  						  SET `active` = \'0\'
+			  						  WHERE `id` = \'' . $group->getId() . '\';');
 	}
 
 	/*
-	 * Returns an list of users that are members of this group in the given event.
+	 * Returns an list of users that are members of this group.
 	 */
-	public static function getMembersByEvent(Event $event, Group $group) {
+	public static function getMembers(Group $group, Event $event = null) {
 		$database = Database::getConnection(Settings::db_name_infected);
 
 		$result = $database->query('SELECT `' . Settings::db_table_infected_users . '`.* FROM `' . Settings::db_table_infected_users . '`
 																LEFT JOIN `' . Settings::db_name_infected_crew . '`.`' . Settings::db_table_infected_crew_memberof . '`
 																ON `' . Settings::db_table_infected_users . '`.`id` = `userId`
-																WHERE `eventId` = \'' . $event->getId() . '\'
+																WHERE `eventId` = \'' . ($event != null ? $event->getId() : EventHandler::getCurrentEvent()->getId()) . '\'
 																AND `groupId` = \'' . $group->getId() . '\'
 																ORDER BY `firstname` ASC;');
 
@@ -163,44 +178,14 @@ class GroupHandler {
 	}
 
 	/*
-	   * Returns an list of users that are members of this group.
-	   */
-	public static function getMembers(Group $group) {
-		return self::getMembersByEvent(EventHandler::getCurrentEvent(), $group);
-	}
-
-	/*
 	 * Returns true of the specified user is member of a group in the given event.
 	 */
-	public static function isGroupMemberByEvent(User $user, Event $event) {
+	public static function isGroupMember(User $user, Event $event = null) {
 		$database = Database::getConnection(Settings::db_name_infected_crew);
 
 		$result = $database->query('SELECT `id` FROM `' . Settings::db_table_infected_crew_memberof . '`
-																WHERE `eventId` = \'' . $event->getId() . '\'
+																WHERE `eventId` = \'' . ($event != null ? $event->getId() : EventHandler::getCurrentEvent()->getId()) . '\'
 																AND `userId` = \'' . $user->getId() . '\';');
-
-
-		return $result->num_rows > 0;
-	}
-
-	/*
-	 * Returns true of the specified user is member of a group.
-	 */
-	public static function isGroupMember(User $user) {
-		return self::isGroupMemberByEvent($user, EventHandler::getCurrentEvent());
-	}
-
-	/*
-	 * Return true if user has a leader for the given group and event.
-	 */
-	public static function hasGroupLeaderByEvent(Group $group, Event $event) {
-		$database = Database::getConnection(Settings::db_name_infected_crew);
-
-		$result = $database->query('SELECT `id` FROM `' . Settings::db_table_infected_crew_groups . '`
-																WHERE `id` = \'' . $group->getId() . '\'
-																AND `eventId` = \'' . $event->getId() . '\'
-																AND `leaderId` > \'0\';');
-
 
 		return $result->num_rows > 0;
 	}
@@ -208,77 +193,50 @@ class GroupHandler {
 	/*
 	 * Return true if user has a leader for the given group.
 	 */
-	public static function hasGroupLeader(Group $group) {
-		return self::hasGroupLeaderByEvent($group, EventHandler::getCurrentEvent());
+	public static function hasGroupLeader(Group $group, Event $event = null) {
+		$database = Database::getConnection(Settings::db_name_infected_crew);
+
+		$result = $database->query('SELECT `id` FROM `' . Settings::db_table_infected_crew_memberof . '`
+																WHERE `groupId` = \'' . ($event != null ? $event->getId() : EventHandler::getCurrentEvent()->getId()) . '\'
+																AND `groupId` = \'' . $group->getId() . '\'
+																AND `groupLeader` > \'0\';');
+
+		return $result->num_rows > 0;
+	}
+
+	/*
+	 * Return true if user has a leader for the given group.
+	 */
+	public static function getGroupLeader(Group $group, Event $event = null) {
+		$database = Database::getConnection(Settings::db_name_infected);
+
+		$result = $database->query('SELECT * FROM `' . Settings::db_table_infected_users . '`
+																WHERE `id` = (SELECT `userId` FROM `' . Settings::db_name_infected_crew . '`.`' . Settings::db_table_infected_crew_memberof . '`
+																							WHERE `eventId` = \'' . ($event != null ? $event->getId() : EventHandler::getCurrentEvent()->getId()) . '\'
+																							AND `groupId` = \'' . $group->getId() . '\'
+																							AND `groupLeader` > \'0\'
+																							LIMIT 1);');
+
+		return $result->fetch_object('User');
 	}
 
 	/*
 	 * Return true if the specified user is leader of a group.
 	 */
-	public static function isGroupLeaderByEvent(User $user, Event $event) {
+	public static function isGroupLeader(User $user, Event $event = null) {
 		$database = Database::getConnection(Settings::db_name_infected_crew);
 
-		$result = $database->query('SELECT `id` FROM `' . Settings::db_table_infected_crew_groups . '`
-																WHERE `eventId` = \'' . $event->getId() . '\'
-																AND `leaderId` = \'' . $user->getId() . '\';');
+		$result = $database->query('SELECT `id` FROM `' . Settings::db_table_infected_crew_memberof . '`
+																WHERE `eventId` = \'' . ($event != null ? $event->getId() : EventHandler::getCurrentEvent()->getId()) . '\'
+																AND `groupLeader` = \'' . $user->getId() . '\';');
 
 		return $result->num_rows > 0;
-	}
-
-	/*
-	 * Return true if the specified user is leader of a group.
-	 */
-	public static function isGroupLeader(User $user) {
-		return self::isGroupLeaderByEvent($user, EventHandler::getCurrentEvent());
-	}
-
-	/*
-	 * Return true if user has a co-leader for the given group and event.
-	 */
-	public static function hasGroupCoLeaderByEvent(Group $group, Event $event) {
-		$database = Database::getConnection(Settings::db_name_infected_crew);
-
-		$result = $database->query('SELECT `id` FROM `' . Settings::db_table_infected_crew_groups . '`
-																WHERE `id` = \'' . $group->getId() . '\'
-																AND `eventId` = \'' . $event->getId() . '\'
-																AND `coleaderId` > \'0\';');
-
-
-		return $result->num_rows > 0;
-	}
-
-	/*
-	 * Return true if user has a co-leader for the given group.
-	 */
-	public static function hasGroupCoLeader(Group $group) {
-		return self::hasGroupCoLeaderByEvent($group, EventHandler::getCurrentEvent());
-	}
-
-	/*
-	 * Return true if user is co-leader for a group.
-	 */
-	public static function isGroupCoLeaderByEvent(User $user, Event $event) {
-		$database = Database::getConnection(Settings::db_name_infected_crew);
-
-		$result = $database->query('SELECT `id` FROM `' . Settings::db_table_infected_crew_groups . '`
-																WHERE `eventId` = \'' . $event->getId() . '\'
-																AND `coleaderId` = \'' . $user->getId() . '\';');
-
-
-		return $result->num_rows > 0;
-	}
-
-	/*
-	 * Return true if user is co-leader for a group.
-	 */
-	public static function isGroupCoLeader(User $user) {
-		return self::isGroupCoLeaderByEvent($user, EventHandler::getCurrentEvent());
 	}
 
 	/*
 	 * Change the specifised users grooup to the one specified.
 	 */
-	public static function changeGroupForUser(User $user, Group $group) {
+	public static function setGroupForUser(User $user, Group $group) {
 		$database = Database::getConnection(Settings::db_name_infected_crew);
 
 		if ($user->isGroupMember()) {
@@ -288,12 +246,30 @@ class GroupHandler {
 											  WHERE `eventId` = \'' . EventHandler::getCurrentEvent()->getId() . '\'
 											  AND `userId` = \'' . $user->getId() . '\';');
 		} else {
-			$database->query('INSERT INTO `' . Settings::db_table_infected_crew_memberof . '` (`eventId`, `userId`, `groupId`, `teamId`)
+			$database->query('INSERT INTO `' . Settings::db_table_infected_crew_memberof . '` (`eventId`, `userId`, `groupId`, `teamId`, `groupLeader`, `teamLeader`)
 											  VALUES (\'' . EventHandler::getCurrentEvent()->getId() . '\',
 																\'' . $user->getId() . '\',
 													  		\'' . $group->getId() . '\',
-													  		\'0\');');
+																\'0\',
+																\'0\',
+																\'0\');');
 		}
+	}
+
+	/*
+	 * Change the specifised users grooup to the one specified.
+	 */
+	public static function setGroupLeader(User $user = null, Group $group) {
+		$database = Database::getConnection(Settings::db_name_infected_crew);
+
+		if ($user != null && !$user->isGroupMember()) {
+			self::setGroupForUser($user, $group);
+		}
+
+		$database->query('UPDATE `' . Settings::db_table_infected_crew_memberof . '`
+										  SET `groupLeader` = \'' . ($user != null ? $user->getId() : 0) . '\'
+										  WHERE `eventId` = \'' . EventHandler::getCurrentEvent()->getId() . '\'
+											AND `groupId` = \'' . $user->getId() . '\';');
 
 	}
 

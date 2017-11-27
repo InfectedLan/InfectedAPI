@@ -31,15 +31,25 @@ if (Session::isAuthenticated()) {
 	$user = Session::getCurrentUser();
 
 	if ($user->hasPermission('chief.team')) {
-		if (isset($_GET['teamId']) &&
-			is_numeric($_GET['teamId'])) {
-			$groupUser = UserHandler::getUser($_GET['teamId']);
+		if (isset($_GET['userId']) &&
+				isset($_GET['teamId']) &&
+				is_numeric($_GET['userId']) &&
+				is_numeric($_GET['teamId'])) {
 
-			if ($groupUser != null) {
-				TeamHandler::removeUserFromTeam($groupUser);
-				$result = true;
+			$team = TeamHandler::getTeam($_GET['teamId']);
+
+			if ($team != null) {
+				$groupUser = UserHandler::getUser($_GET['userId']);
+
+				if ($groupUser != null) {
+					TeamHandler::removeUserFromTeam($groupUser, $team);
+
+					$result = true;
+				} else {
+					$message = Localization::getLocale('this_user_does_not_exist');
+				}
 			} else {
-				$message = Localization::getLocale('this_user_does_not_exist');
+				$message = Localization::getLocale('this_team_does_not_exist');
 			}
 		} else {
 			$message = Localization::getLocale('no_user_specified');
@@ -51,7 +61,7 @@ if (Session::isAuthenticated()) {
 	$message = Localization::getLocale('you_are_not_logged_in');
 }
 
-header('Content-Type: text/plain');
+header('Content-Type: application/json');
 echo json_encode(['result' => $result, 'message' => $message], JSON_PRETTY_PRINT);
 Database::cleanup();
 ?>
