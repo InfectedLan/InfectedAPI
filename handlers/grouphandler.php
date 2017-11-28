@@ -173,19 +173,13 @@ class GroupHandler {
 		return $result->num_rows > 0;
 	}
 
-	/* OK!
+	/* OK! Multi-group support!
 	 * Change the specifised users grooup to the one specified.
 	 */
 	public static function addGroupMember(User $user, Group $group, Event $event = null) {
 		$database = Database::getConnection(Settings::db_name_infected_crew);
 
-		if ($user->isGroupMember()) {
-			$database->query('UPDATE `' . Settings::db_table_infected_crew_memberof . '`
-											  SET `groupId` = \'' . $group->getId() . '\',
-												  	`teamId` = \'0\'
-											  WHERE `eventId` = \'' . ($event != null ? $event->getId() : EventHandler::getCurrentEvent()->getId()) . '\'
-											  AND `userId` = \'' . $user->getId() . '\';');
-		} else {
+		if (!$group->isMember($user)) {
 			$database->query('INSERT INTO `' . Settings::db_table_infected_crew_memberof . '` (`eventId`, `userId`, `groupId`, `teamId`, `groupLeader`, `teamLeader`)
 											  VALUES (\'' . ($event != null ? $event->getId() : EventHandler::getCurrentEvent()->getId()) . '\',
 																\'' . $user->getId() . '\',
@@ -303,12 +297,12 @@ class GroupHandler {
 		return $result->fetch_object('User');
 	}
 
-	/* OK!
+	/* OK! Multi-group support!
 	 * Change the specifised users group to the one specified.
 	 */
 	public static function setGroupLeader(User $user = null, Group $group, Event $event = null) {
-		if ($user != null && !$user->isGroupMember()) {
-			self::addUserToGroup($user, $group);
+		if ($user != null && !$group->isMember($user)) {
+			self::addGroupMember($user, $group);
 		}
 
 		$database = Database::getConnection(Settings::db_name_infected_crew);

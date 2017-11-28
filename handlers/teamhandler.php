@@ -220,11 +220,15 @@ class TeamHandler {
 	public static function addTeamMember(User $user, Team $team, Event $event = null) {
 		$database = Database::getConnection(Settings::db_name_infected_crew);
 
-		$database->query('UPDATE `' . Settings::db_table_infected_crew_memberof . '`
-											SET `teamId` = \'' . $team->getId() . '\'
-											WHERE `eventId` = \'' . ($event != null ? $event->getId() : EventHandler::getCurrentEvent()->getId()) . '\'
-											AND `groupId` = \'' . $team->getGroup()->getId() . '\'
-											AND `userId` = \'' . $user->getId() . '\';');
+		$group = $team->getGroup();
+
+		if ($group->isMember($user)) {
+			$database->query('UPDATE `' . Settings::db_table_infected_crew_memberof . '`
+												SET `teamId` = \'' . $team->getId() . '\'
+												WHERE `eventId` = \'' . ($event != null ? $event->getId() : EventHandler::getCurrentEvent()->getId()) . '\'
+												AND `groupId` = \'' . $group->getId() . '\'
+												AND `userId` = \'' . $user->getId() . '\';');
+		}
 	}
 
 	/* OK!
@@ -341,7 +345,7 @@ class TeamHandler {
 	 * Sets the teams leader.
 	 */
 	public static function setTeamLeader(User $user = null, Team $team, Event $event = null) {
-		if ($user != null && !$user->isTeamMember()) {
+		if ($user != null && !$team->isMember($user)) {
 			self::addTeamMember($user, $team);
 		}
 
@@ -353,7 +357,6 @@ class TeamHandler {
 											WHERE `eventId` = \'' . ($event != null ? $event->getId() : EventHandler::getCurrentEvent()->getId()) . '\'
 											AND `groupId` = \'' . $team->getGroup()->getId() . '\'
 											AND `teamId` = \'' . $team->getId() . '\';');
-
 
 		// Make our user the leader of the team, if one where specified.
 		if ($user != null) {
