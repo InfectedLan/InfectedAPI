@@ -42,7 +42,7 @@ if (Session::isAuthenticated()) {
 			$description = $_GET['description'];
 			$leaderUser = UserHandler::getUser($_GET['leader']);
 
-			GroupHandler::createGroup(EventHandler::getCurrentEvent(), $name, $title, $description, $leaderUser);
+			GroupHandler::createGroup($name, $title, $description, $leaderUser);
 			$result = true;
 		} else {
 			$message = Localization::getLocale('you_have_not_filled_out_the_required_fields');

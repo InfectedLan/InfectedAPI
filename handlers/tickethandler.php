@@ -44,11 +44,11 @@ class TicketHandler {
 	/*
 	 * Returns true if the specified user has a ticket.
 	 */
-	public static function hasTicketByUserAndEvent(User $user, Event $event) {
+	public static function hasTicketByUser(User $user, Event $event = null) {
 		$database = Database::getConnection(Settings::db_name_infected_tickets);
 
-		$result = $database->query('SELECT `id` FROM `' . Settings::db_table_infected_tickets_tickets . '`
-																WHERE `eventId` = \'' . $event->getId() . '\'
+		$result = $database->query('SELECT * FROM `' . Settings::db_table_infected_tickets_tickets . '`
+																WHERE `eventId` = \'' . ($event != null ? $event->getId() : EventHandler::getCurrentEvent()->getId()) . '\'
 																AND `userId` = \'' . $user->getId() . '\'
 																LIMIT 1;');
 
@@ -56,20 +56,13 @@ class TicketHandler {
 	}
 
 	/*
-	 * Returns true if the specified user has a ticket.
-	 */
-	public static function hasTicketByUser(User $user) {
-		return self::hasTicketByUserAndEvent($user, EventHandler::getCurrentEvent());
-	}
-
-	/*
 	 * Returns the specified user latest ticket from the specified event.
 	 */
-	public static function getTicketByUserAndEvent(User $user, Event $event) {
+	public static function getTicketByUser(User $user, Event $event = null) {
 		$database = Database::getConnection(Settings::db_name_infected_tickets);
 
 		$result = $database->query('SELECT * FROM `' . Settings::db_table_infected_tickets_tickets . '`
-																WHERE `eventId` = \'' . $event->getId() . '\'
+																WHERE `eventId` = \'' . ($event != null ? $event->getId() : EventHandler::getCurrentEvent()->getId()) . '\'
 																AND `userId` = \'' . $user->getId() . '\'
 																LIMIT 1;');
 
@@ -77,20 +70,13 @@ class TicketHandler {
 	}
 
 	/*
-	 * Return the specified user latest ticket.
-	 */
-	public static function getTicketByUser(User $user) {
-		return self::getTicketByUserAndEvent($user, EventHandler::getCurrentEvent());
-	}
-
-	/*
 	 * Returns a list of the specified user tickets for the specified event.
 	 */
-	public static function getTicketsByUserAndEvent(User $user, Event $event) {
+	public static function getTicketsByUser(User $user, Event $event = null) {
 		$database = Database::getConnection(Settings::db_name_infected_tickets);
 
 		$result = $database->query('SELECT * FROM `' . Settings::db_table_infected_tickets_tickets . '`
-																WHERE `eventId` = \'' . $event->getId() . '\'
+																WHERE `eventId` = \'' . ($event != null ? $event->getId() : EventHandler::getCurrentEvent()->getId()) . '\'
 																AND `userId` = \'' . $user->getId() . '\';');
 
 		$ticketList = [];
@@ -103,20 +89,13 @@ class TicketHandler {
 	}
 
 	/*
-	 * Returns a list of the specified user tickets for the current event..
-	 */
-	public static function getTicketsByUser(User $user) {
-		return self::getTicketsByUserAndEvent($user, EventHandler::getCurrentEvent());
-	}
-
-	/*
 	 * Returns a list of all the tickets for a specified event.
 	 */
-	public static function getTicketsByEvent(Event $event) {
+	public static function getTickets(Event $event = null) {
 		$database = Database::getConnection(Settings::db_name_infected_tickets);
 
 		$result = $database->query('SELECT * FROM `' . Settings::db_table_infected_tickets_tickets . '`
-																WHERE `eventId` = \'' . $event->getId() . '\';');
+																WHERE `eventId` = \'' . ($event != null ? $event->getId() : EventHandler::getCurrentEvent()->getId()) . '\';');
 
 		$ticketList = [];
 
@@ -125,13 +104,6 @@ class TicketHandler {
 		}
 
 		return $ticketList;
-	}
-
-	/*
-	 * Returns a list of all the tickets.
-	 */
-	public static function getTickets() {
-		return self::getTicketsByEvent(EventHandler::getCurrentEvent());
 	}
 
 	/*
@@ -274,6 +246,7 @@ class TicketHandler {
 
 		$result = $database->query('SELECT `id` FROM `' . Settings::db_table_infected_tickets_checkedintickets . '`
 																WHERE `ticketId` = \'' . $ticket->getId() . '\';');
+
 		return $result->num_rows > 0;
 	}
 }

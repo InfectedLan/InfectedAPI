@@ -48,7 +48,7 @@ if (Session::isAuthenticated()) {
 			$leaderUser = UserHandler::getUser($_GET['leader']);
 
 			if ($group != null) {
-				TeamHandler::createTeam(EventHandler::getCurrentEvent(), $group, $name, $title, $description, $leaderUser);
+				TeamHandler::createTeam($group, $name, $title, $description, $leaderUser);
 				$result = true;
 			} else {
 				$message = Localization::getLocale('this_group_does_not_exist');

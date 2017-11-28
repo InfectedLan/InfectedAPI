@@ -83,7 +83,7 @@ class TicketType extends Object {
     // A better formula would be (ticketFee*amount)+radarMembership, but then we need to store ticket prices without the membership included.
 		// This will propabily confuse some people. Let's keep it this way :)
 		$discount = Settings::ticketFee; // Radar event discount, membership goes per calender year.
-    	$fee = $this->isUserEligibleForDiscount($user) ? 0 : $discount;
+    $fee = $this->isUserEligibleForDiscount($user) ? 0 : $discount;
 
 		return (($this->getPrice() - $discount) * $amount) + $fee;
 	}

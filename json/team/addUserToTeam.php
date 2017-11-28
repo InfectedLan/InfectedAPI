@@ -35,13 +35,17 @@ if (Session::isAuthenticated()) {
 			isset($_GET['teamId']) &&
 			is_numeric($_GET['userId']) &&
 			is_numeric($_GET['teamId'])) {
-			$groupUser = UserHandler::getUser($_GET['userId']);
 			$team = TeamHandler::getTeam($_GET['teamId']);
 
-			if ($groupUser != null &&
-				$team != null) {
-				TeamHandler::changeTeamForUser($groupUser, $team);
-				$result = true;
+			if ($team != null) {
+				$teamUser = UserHandler::getUser($_GET['userId']);
+
+				if ($teamUser != null) {
+					TeamHandler::addTeamMember($teamUser, $team);
+					$result = true;
+				} else {
+					$message = Localization::getLocale('this_user_does_not_exist');
+				}
 			} else {
 				$message = Localization::getLocale('this_team_does_not_exist');
 			}

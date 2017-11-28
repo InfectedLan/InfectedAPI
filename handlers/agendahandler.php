@@ -34,20 +34,18 @@ class AgendaHandler {
 		$result = $database->query('SELECT * FROM `' . Settings::db_table_infected_main_agenda . '`
 																WHERE `id` = \'' . $database->real_escape_string($id) . '\';');
 
-
 		return $result->fetch_object('Agenda');
 	}
 
 	/*
 	   * Returns agendas.
 	   */
-	public static function getAgendas() {
+	public static function getAgendas(Event $event = null) {
 		$database = Database::getConnection(Settings::db_name_infected_main);
 
 		$result = $database->query('SELECT * FROM `' . Settings::db_table_infected_main_agenda . '`
-																WHERE `eventId` = \'' . EventHandler::getCurrentEvent()->getId() . '\'
+																WHERE `eventId` = \'' . ($event != null ? $event->getId() : EventHandler::getCurrentEvent()->getId()) . '\'
 																ORDER BY `startTime`;');
-
 
 		$agendaList = [];
 
@@ -61,14 +59,13 @@ class AgendaHandler {
 	/*
 	 * Returns published agendas.
   	 */
-	  public static function getPublishedAgendas() {
+	  public static function getPublishedAgendas(Event $event = null) {
 		$database = Database::getConnection(Settings::db_name_infected_main);
 
 		$result = $database->query('SELECT * FROM `' . Settings::db_table_infected_main_agenda . '`
-											  				WHERE `eventId` = \'' . EventHandler::getCurrentEvent()->getId() . '\'
+											  				WHERE `eventId` = \'' . ($event != null ? $event->getId() : EventHandler::getCurrentEvent()->getId()) . '\'
 											  				AND `published` = \'1\'
 											  				ORDER BY `startTime`;');
-
 
 		$agendaList = [];
 
@@ -82,15 +79,14 @@ class AgendaHandler {
   	/*
   	 * Returns only published agendas that have not happend yet.
   	 */
-	public static function getPublishedNotHappendAgendas() {
+	public static function getPublishedNotHappendAgendas(Event $event = null) {
 		$database = Database::getConnection(Settings::db_name_infected_main);
 
 		$result = $database->query('SELECT * FROM `' . Settings::db_table_infected_main_agenda . '`
-																WHERE `eventId` = \'' . EventHandler::getCurrentEvent()->getId() . '\'
+																WHERE `eventId` = \'' . ($event != null ? $event->getId() : EventHandler::getCurrentEvent()->getId()) . '\'
 																AND DATE_ADD(`startTime`, INTERVAL 1 HOUR) >= NOW()
 																AND `published` = \'1\'
 																ORDER BY `startTime`;');
-
 
 		$agendaList = [];
 
@@ -114,10 +110,7 @@ class AgendaHandler {
 														  \'' . $database->real_escape_string($description) . '\',
 														  \'' . $database->real_escape_string($startTime) . '\', 1);');
 
-		$agenda = self::getAgenda($database->insert_id);
-
-
-		return $agenda;
+		return self::getAgenda($database->insert_id);
 	}
 
 	/*

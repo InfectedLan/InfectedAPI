@@ -59,15 +59,15 @@ class Group extends Object {
 	/*
 	 * Returns if this group has a leader.
 	 */
-	public function hasLeader() {
-		return GroupHandler::hasGroupLeader($this);
+	public function hasLeader(Event $event = null) {
+		return GroupHandler::hasGroupLeader($this, $event);
 	}
 
 	/*
 	 * Returns the user which is the leader of this group.
 	 */
-	public function getLeader() {
-		return GroupHandler::getGroupLeader($this);
+	public function getLeader(Event $event = null) {
+		return GroupHandler::getGroupLeader($this, $event);
 	}
 
 	/*
@@ -80,29 +80,29 @@ class Group extends Object {
 	/*
 	 * Return true if the specified user is member of this group.
 	 */
-	public function isMember(User $user) {
-		return $user->isGroupMember() && $this->equals($user->getGroup());
+	public function isMember(User $user, Event $event = null) {
+		return GroupHandler::isGroupMemberOf($user, $this, $event);
 	}
 
 	/*
 	 * Return true if the specified user is leader of this group.
 	 */
-	public function isLeader(User $user) {
-		return $this->isGroupLeader() && $user->equals($this->getLeader());
+	public function isLeader(User $user, Event $event = null) {
+		return GroupHandler::isGroupLeaderOf($user, $this, $event);
 	}
 
 	/*
 	 * Returns an array of users that are member of this group.
 	 */
-	public function getMembers() {
-		return GroupHandler::getMembers($this);
+	public function getMembers(Event $event = null) {
+		return GroupHandler::getGroupMembers($this, $event);
 	}
 
 	/*
 	 * Returns an array of all teams connected to this group.
 	 */
-	public function getTeams() {
-		return TeamHandler::getTeamsByGroup($this);
+	public function getTeams(Event $event = null) {
+		return TeamHandler::getTeamsByGroup($this, $event);
 	}
 }
 ?>

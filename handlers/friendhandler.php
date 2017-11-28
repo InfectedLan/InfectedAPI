@@ -30,10 +30,9 @@ class FriendHandler {
 	public static function isUserFriendsWith(User $user, User $friend) {
 		$database = Database::getConnection(Settings::db_name_infected);
 
-		$result = $database->query('SELECT `id` FROM `' . Settings::db_table_infected_friends . '`
+		$result = $database->query('SELECT * FROM `' . Settings::db_table_infected_friends . '`
 																WHERE (`userId` = \'' . $user->getId() . '\' AND `friendId` = \'' . $friend->getId() . '\')
 																OR (`friendId` = \'' . $friend->getId() . '\' AND `userId` = \'' . $user->getId() . '\');');
-
 
 		return $result->num_rows > 0;
 	}

@@ -140,7 +140,7 @@ if (Session::isAuthenticated()) {
 			$message = Localization::getLocale('this_user_does_not_exist');
 		}
 	} else {
-		$message = Localization::getLocale('no_user_specified');
+		$message = Localization::getLocale('you_have_not_filled_out_the_required_fields');
 	}
 } else {
 	$message = Localization::getLocale('you_are_not_logged_in');

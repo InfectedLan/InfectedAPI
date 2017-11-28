@@ -131,8 +131,8 @@ class Ticket extends EventObject {
 	/*
 	 * Checks in this ticket.
 	 */
-	public function checkedIn() {
-		return TicketHandler::checkedInTicket($this);
+	public function checkIn() {
+		return TicketHandler::checkInTicket($this);
 	}
 
 	/*

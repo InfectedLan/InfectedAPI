@@ -318,43 +318,22 @@ class User extends Object {
 	/*
 	 * Returns true if user has an ticket for the current/upcoming event.
 	 */
-	public function hasTicket() {
-		return TicketHandler::hasTicketByUser($this);
-	}
-
-	/*
-	 * Returns true if user has an ticket for the specified event.
-	 */
-	public function hasTicketByEvent(Event $event) {
-		return TicketHandler::hasTicketByUserAndEvent($this, $event);
+	public function hasTicket(Event $event = null) {
+		return TicketHandler::hasTicketByUser($this, $event);
 	}
 
 	/*
 	 * Returns the first ticket for the current/upcoming event is found for this user.
 	 */
-	public function getTicket() {
-		return TicketHandler::getTicketByUser($this);
-	}
-
-	/*
-	 * Returns the first ticket for the specified event is found for this user.
-	 */
-	public function getTicketByEvent(Event $event) {
-		return TicketHandler::getTicketByUserAndEvent($this, $event);
+	public function getTicket(Event $event = null) {
+		return TicketHandler::getTicketByUser($this, $event);
 	}
 
 	/*
 	 * Returns the tickets for the current/upcoming event linked to this account.
 	 */
-	public function getTickets() {
-		return TicketHandler::getTicketsByUser($this);
-	}
-
-	/*
-	 * Returns the tickets for the current/upcoming event linked to this account.
-	 */
-	public function getTicketsByEvent(Event $event) {
-		return TicketHandler::getTicketsByUserAndEvent($this, $event);
+	public function getTickets(Event $event = null) {
+		return TicketHandler::getTicketsByUser($this, $event);
 	}
 
 	public function hasTicketsByAllEvents() {
@@ -516,13 +495,6 @@ class User extends Object {
 		return TeamHandler::getTeamByUser($this, $event);
 	}
 
-	/*
-	 * Return team by user. // TODO: Deprecate this? What is it used for?
-	 */
-	public function getTeamByLeader(Event $event = null) {
-		return TeamHandler::getTeamByLeader($this, $event);
-	}
-
 	public function getParticipatedEvents() {
 		return UserHistoryHandler::getUserParticipatedEvents($this);
 	}
@@ -549,11 +521,14 @@ class User extends Object {
 				$this->isTeamLeader($event)) {
 				$team = $this->getTeam($event);
 
-				return 'Lag-leder i ' . $group->getTitle() . ":" . $this->getTeamByLeader($event)->getTitle();
+				// Check if the user is leader of this team.
+				if ($team->isLeader($this, $event)) {
+					return 'Lag-leder i ' . $group->getTitle() . ":" . $team->getTitle();
+				}
 			}
 
 			return 'Medlem';
-		} else if ($this->hasTicketByEvent($event)) {
+		} else if ($this->hasTicket($event)) {
 			return 'Deltaker';
 		}
 

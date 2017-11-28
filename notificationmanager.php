@@ -63,10 +63,6 @@ class NotificationManager {
 			$userList[] = $group->getLeader();
 		}
 
-		if ($group->hasCoLeader()) {
-			$userList[] = $group->getCoLeader();
-		}
-
 		if (!empty($userList)) {
 			$message = [];
 			$message[] = '<!DOCTYPE html>';

@@ -31,13 +31,13 @@ if (Session::isAuthenticated()) {
 	$user = Session::getCurrentUser();
 
 	if ($user->hasPermission('chief.group')) {
-		if (isset($_GET['id']) &&
+		if (isset($_GET['groupId']) &&
 			isset($_GET['title']) &&
 			isset($_GET['description']) &&
 			isset($_GET['leader']) &&
 			!empty($_GET['title']) &&
 			!empty($_GET['description'])) {
-			$group = GroupHandler::getGroup($_GET['id']);
+			$group = GroupHandler::getGroup($_GET['groupId']);
 			$name = strtolower(str_replace(' ', '-', $_GET['title']));
 			$title = $_GET['title'];
 			$description = $_GET['description'];

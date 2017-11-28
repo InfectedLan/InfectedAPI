@@ -31,18 +31,26 @@ if (Session::isAuthenticated()) {
 	$user = Session::getCurrentUser();
 
 	if ($user->hasPermission('chief.group')) {
-		if (isset($_GET['id']) &&
-			is_numeric($_GET['id'])) {
-			$groupUser = UserHandler::getUser($_GET['id']);
+		if (isset($_GET['userId']) &&
+			isset($_GET['groupId']) &&
+			is_numeric($_GET['userId']) &&
+			is_numeric($_GET['groupId'])) {
+			$group = GroupHandler::getGroup($_GET['groupId']);
 
-			if ($groupUser != null) {
-				GroupHandler::removeUserFromGroup($groupUser);
-				$result = true;
+			if ($group != null) {
+				$groupUser = UserHandler::getUser($_GET['userId']);
+
+				if ($groupUser != null) {
+					GroupHandler::removeGroupMember($groupUser, $group);
+					$result = true;
+				} else {
+					$message = Localization::getLocale('this_user_does_not_exist');
+				}
 			} else {
-				$message = Localization::getLocale('this_user_does_not_exist');
+				$message = Localization::getLocale('this_group_does_not_exist');
 			}
 		} else {
-			$message = Localization::getLocale('no_user_specified');
+			$message = Localization::getLocale('you_have_not_filled_out_the_required_fields');
 		}
 	} else {
 		$message = Localization::getLocale('you_do_not_have_permission_to_do_that');

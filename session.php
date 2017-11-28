@@ -56,9 +56,10 @@ class Session {
    * Returns the user by the given session id.
    */
   public function getUserFromSessionId($sessionId) {
-      if(!preg_match("/^[a-zA-Z0-9]+$/", $sessionId)) {
-	  SyslogHandler::log("Hack attack! ", "getUserFromSessionId", null, SyslogHandler::SEVERITY_CRITICAL);
-	  return null;
+      if (!preg_match("/^[a-zA-Z0-9]+$/", $sessionId)) {
+			  SyslogHandler::log("Hack attack! ", "getUserFromSessionId", null, SyslogHandler::SEVERITY_CRITICAL);
+
+			  return null;
       }
 
       $sessionData = exec("cat /var/lib/php5/sessions/sess_" . $sessionId); //I am not debugging regex at 0:35 in the morning, and it is temp anyways

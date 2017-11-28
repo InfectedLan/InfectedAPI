@@ -61,36 +61,36 @@ class Team extends Object {
 	/*
 	 * Returns if this team has a leader.
 	 */
-	public function hasLeader() {
-		return TeamHandler::hasTeamLeader($this);
+	public function hasLeader(Event $event = null) {
+		return TeamHandler::hasTeamLeader($this, $event);
 	}
 
 	/*
 	 * Returns the leader of this team.
 	 */
-	public function getLeader() {
-		return TeamHandler::getTeamLeader($this);
+	public function getLeader(Event $event = null) {
+		return TeamHandler::getTeamLeader($this, $event);
 	}
 
 	/*
 	 * Return true if the specified user is member of this team.
 	 */
-	public function isMember(User $user) {
-		return $user->isTeamMember() && $this->equals($user->getTeam());
+	public function isMember(User $user, Event $event = null) {
+		return TeamHandler::isTeamMemberOf($user, $this, $event);
 	}
 
 	/*
 	 * Return true if the specified user is leader of this team.
 	 */
-	public function isLeader(User $user) {
-		return $this->hasLeader() && $user->equals($this->getLeader());
+	public function isLeader(User $user, Event $event = null) {
+		return TeamHandler::isTeamLeaderOf($user, $this, $event);
 	}
 
 	/*
 	 * Returns an array of users that are members of this group.
 	 */
-	public function getMembers() {
-		return TeamHandler::getMembers($this);
+	public function getMembers(Event $event = null) {
+		return TeamHandler::getTeamMembers($this, $event);
 	}
 }
 ?>

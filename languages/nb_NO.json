@@ -55,7 +55,6 @@
    "you_cannot_remove_this_event":"Du kan ikke fjerne dette arrangementet.",
 
    "this_group_does_not_exist":"Denne gruppen finnes ikke.",
-   "no_group_specified":"Ingen gruppe angitt.",
 
    "this_invite_does_not_exist":"Denne invitasjonen finnes ikke.",
    "you_are_not_the_owner_of_this_invite":"Du eier ikke denne invitasjonen.",
@@ -118,7 +117,6 @@
    "the_target_user_does_not_exist":"Målbrukeren eksisterer ikke.",
 
    "this_user_does_not_exist":"Denne brukeren finnes ikke.",
-   "no_user_specified":"Ingen bruker er spesifisert.",
    "the_username_is_already_in_use_by_someone_else":"Brukernavnet er allerede i bruk av en annen.",
    "the_email_address_is_already_in_use_by_someone_else":"E-post adressen er allerede i bruk av en annen.",
    "the_phone_number_is_already_in_use_by_someone_else":"Telefonnummeret er allerede i bruk av en annen.",

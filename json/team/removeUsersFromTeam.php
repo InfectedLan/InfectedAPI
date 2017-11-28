@@ -35,7 +35,7 @@ if (Session::isAuthenticated()) {
 			$team = TeamHandler::getTeam($_GET['teamId']);
 
 			if ($team != null) {
-				TeamHandler::removeUsersFromTeam($team);
+				TeamHandler::removeTeamMembers($team);
 				$result = true;
 			} else {
 				$message = Localization::getLocale('this_team_does_not_exist');

@@ -49,8 +49,7 @@ if (Session::isAuthenticated()) {
 			$description = $_GET['description'];
 			$leaderUser = UserHandler::getUser($_GET['leader']);
 
-			if ($team != null &&
-				$group != null) {
+			if ($group != null && $team != null) {
 				TeamHandler::updateTeam($team, $group, $name, $title, $description, $leaderUser);
 				$result = true;
 			} else {

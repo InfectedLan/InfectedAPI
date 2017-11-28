@@ -285,8 +285,7 @@ class Note extends EventObject {
 		if ($this->hasGroup()) {
 			$group = $this->getGroup();
 
-			if ($group->isLeader($user) ||
-				$group->isCoLeader($user)) {
+			if ($group->isLeader($user)) {
 				return true;
 			}
 
