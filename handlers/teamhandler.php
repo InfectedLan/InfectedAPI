@@ -51,6 +51,7 @@ class TeamHandler {
 																	WHERE `id` = (SELECT `teamId` FROM `' . Settings::db_table_infected_crew_memberof . '`
 																								WHERE `eventId` = \'' . $event->getId() . '\'
 																								AND `userId` = \'' . $user->getId() . '\'
+																								AND `teamId` > \'0\'
 																								LIMIT 1);');
 		} else {
 			// Fetch all teams for current event.
@@ -58,6 +59,7 @@ class TeamHandler {
 																	WHERE `id` = (SELECT `teamId` FROM `' . Settings::db_table_infected_crew_memberof . '`
 																								WHERE `eventId` = \'' . EventHandler::getCurrentEvent()->getId() . '\'
 																								AND `userId` = \'' . $user->getId() . '\'
+																								AND `teamId` > \'0\'
 																								LIMIT 1)
 																	AND `active` = \'1\';');
 		}
@@ -223,11 +225,21 @@ class TeamHandler {
 		$group = $team->getGroup();
 
 		if ($group->isMember($user)) {
-			$database->query('UPDATE `' . Settings::db_table_infected_crew_memberof . '`
-												SET `teamId` = \'' . $team->getId() . '\'
-												WHERE `eventId` = \'' . ($event != null ? $event->getId() : EventHandler::getCurrentEvent()->getId()) . '\'
-												AND `groupId` = \'' . $group->getId() . '\'
-												AND `userId` = \'' . $user->getId() . '\';');
+			if ($user->isTeamMember() && !$team->isMember($user)) {
+				$database->query('INSERT INTO `' . Settings::db_table_infected_crew_memberof . '` (`eventId`, `userId`, `groupId`, `teamId`, `groupLeader`, `teamLeader`)
+												  VALUES (\'' . ($event != null ? $event->getId() : EventHandler::getCurrentEvent()->getId()) . '\',
+																	\'' . $user->getId() . '\',
+														  		\'' . $group->getId() . '\',
+																	\'' . $team->getId() . '\',
+																	\'0\',
+																	\'0\');');
+			} else {
+				$database->query('UPDATE `' . Settings::db_table_infected_crew_memberof . '`
+													SET `teamId` = \'' . $team->getId() . '\'
+													WHERE `eventId` = \'' . ($event != null ? $event->getId() : EventHandler::getCurrentEvent()->getId()) . '\'
+													AND `groupId` = \'' . $group->getId() . '\'
+													AND `userId` = \'' . $user->getId() . '\';');
+			}
 		}
 	}
 
@@ -287,7 +299,7 @@ class TeamHandler {
 		$result = $database->query('SELECT * FROM `' . Settings::db_table_infected_crew_memberof . '`
 																WHERE `eventId` = \'' . ($event != null ? $event->getId() : EventHandler::getCurrentEvent()->getId()) . '\'
 																AND `teamId` = \'' . $team->getId() . '\'
-																AND `teamLeader` > \'0\';');
+																AND `teamLeader` != \'0\';');
 
 		return $result->num_rows > 0;
 	}
@@ -303,7 +315,7 @@ class TeamHandler {
 																ON `teamId` = `' . Settings::db_table_infected_crew_teams . '`.`id`
 																WHERE `eventId` = \'' . ($event != null ? $event->getId() : EventHandler::getCurrentEvent()->getId()) . '\'
 																AND `userId` = \'' . $user->getId() . '\'
-																AND `teamLeader` > \'0\'
+																AND `teamLeader` != \'0\'
 																AND `active` != \'0\';');
 
 		return $result->num_rows > 0;
@@ -319,7 +331,7 @@ class TeamHandler {
 																WHERE `eventId` = \'' . ($event != null ? $event->getId() : EventHandler::getCurrentEvent()->getId()) . '\'
 																AND `userId` = \'' . $user->getId() . '\'
 																AND `teamId` = \'' . $team->getId() . '\'
-																AND `teamLeader` = \'' . $team->getId() . '\';');
+																AND `teamLeader` = \'1\';');
 
 		return $result->num_rows > 0;
 	}
@@ -335,7 +347,7 @@ class TeamHandler {
 																							WHERE `eventId` = \'' . ($event != null ? $event->getId() : EventHandler::getCurrentEvent()->getId()) . '\'
 																							AND `groupId` = \'' . $team-getGroup()->getId() . '\'
 																							AND `teamId` = \'' . $team->getId() . '\'
-																							AND `teamLeader` > \'0\'
+																							AND `teamLeader` != \'0\'
 																							LIMIT 1);');
 
 		return $result->fetch_object('User');
@@ -361,7 +373,7 @@ class TeamHandler {
 		// Make our user the leader of the team, if one where specified.
 		if ($user != null) {
 			$database->query('UPDATE `' . Settings::db_table_infected_crew_memberof . '`
-												SET `teamLeader` = \'' . $team->getId() . '\'
+												SET `teamLeader` = \'1\'
 												WHERE `eventId` = \'' . ($event != null ? $event->getId() : EventHandler::getCurrentEvent()->getId()) . '\'
 												AND `userId` = \'' . $user->getId() . '\'
 												AND `groupId` = \'' . $team->getGroup()->getId() . '\'

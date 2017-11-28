@@ -213,6 +213,7 @@ class GroupHandler {
 																ON `' . Settings::db_table_infected_users . '`.`id` = `userId`
 																WHERE `eventId` = \'' . ($event != null ? $event->getId() : EventHandler::getCurrentEvent()->getId()) . '\'
 																AND `groupId` = \'' . $group->getId() . '\'
+																GROUP BY `' . Settings::db_table_infected_users . '`.`id`
 																ORDER BY `firstname` ASC;');
 
 		$memberList = [];
@@ -244,7 +245,7 @@ class GroupHandler {
 		$result = $database->query('SELECT * FROM `' . Settings::db_table_infected_crew_memberof . '`
 																WHERE `eventId` = \'' . ($event != null ? $event->getId() : EventHandler::getCurrentEvent()->getId()) . '\'
 																AND `groupId` = \'' . $group->getId() . '\'
-																AND `groupLeader` > \'0\';');
+																AND `groupLeader` != \'0\';');
 
 		return $result->num_rows > 0;
 	}
@@ -260,7 +261,7 @@ class GroupHandler {
 																ON `groupId` = `' . Settings::db_table_infected_crew_groups . '`.`id`
 																WHERE `eventId` = \'' . ($event != null ? $event->getId() : EventHandler::getCurrentEvent()->getId()) . '\'
 																AND `userId` = \'' . $user->getId() . '\'
-																AND `groupLeader` > \'0\'
+																AND `groupLeader` != \'0\'
 																AND `active` != \'0\';');
 
 		return $result->num_rows > 0;
@@ -276,7 +277,7 @@ class GroupHandler {
 																WHERE `eventId` = \'' . ($event != null ? $event->getId() : EventHandler::getCurrentEvent()->getId()) . '\'
 																AND `userId` = \'' . $user->getId() . '\'
 																AND `groupId` = \'' . $group->getId() . '\'
-																AND `groupLeader` = \'' . $group->getId() . '\';');
+																AND `groupLeader` = \'1\';');
 
 		return $result->num_rows > 0;
 	}
@@ -291,7 +292,7 @@ class GroupHandler {
 																WHERE `id` = (SELECT `userId` FROM `' . Settings::db_name_infected_crew . '`.`' . Settings::db_table_infected_crew_memberof . '`
 																							WHERE `eventId` = \'' . ($event != null ? $event->getId() : EventHandler::getCurrentEvent()->getId()) . '\'
 																							AND `groupId` = \'' . $group->getId() . '\'
-																							AND `groupLeader` > \'0\'
+																							AND `groupLeader` != \'0\'
 																							LIMIT 1);');
 
 		return $result->fetch_object('User');
@@ -316,7 +317,7 @@ class GroupHandler {
 		// Make our user the leader of the group, if one where specified.
 		if ($user != null) {
 			$database->query('UPDATE `' . Settings::db_table_infected_crew_memberof . '`
-												SET `groupLeader` = \'' . $group->getId() . '\'
+												SET `groupLeader` = \'1\'
 												WHERE `eventId` = \'' . ($event != null ? $event->getId() : EventHandler::getCurrentEvent()->getId()) . '\'
 												AND `userId` = \'' . $user->getId() . '\'
 												AND `groupId` = \'' . $group->getId() . '\';');
