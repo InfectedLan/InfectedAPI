@@ -69,18 +69,18 @@ if(Session::isAuthenticated()) {
 	    $invited = InviteHandler::getInvitesByClan($clan);
 	    foreach($invited as $invitee) {
 		$inviteeUser = $invitee->getUser();
-		$personData = ["displayName" => $inviteeUser->getCompoDisplayName()];
-		
+		$personData = ["displayName" => $inviteeUser->getDisplayName()];
+
 		if($clan->getChiefId() == $user->getId()) {
 		    $personData["inviteId"] = $invitee->getId();
 		    if($compo->requiresSteamId()) {
 			$personData["hasLinkedSteam"] = $inviteeUser->getSteamId() !== null;
 		    }
 		}
-		
+
 		$data["invitedMembers"][] = $personData;
 	    }
-            
+
             $result = true;
         } else {
             $message = Localization::getLocale("this_clan_does_not_exist");

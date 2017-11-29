@@ -22,18 +22,17 @@ require_once 'settings.php';
 require_once 'secret.php';
 
 class Database {
-
 	private static $connList = [];
 
 	public static function getConnection($database) {
-		if(isset(self::$connList[$database]) || array_key_exists($database, self::$connList)) {
+		if (isset(self::$connList[$database]) || array_key_exists($database, self::$connList)) {
 			return self::$connList[$database];
 		}
 		// Create connection
 		$mysqli = new mysqli(Settings::db_host,
-							 Secret::db_username,
-							 Secret::db_password,
-							 $database);
+												 Secret::db_username,
+												 Secret::db_password,
+												 $database);
 
 		// Check connection.
 		if ($mysqli->connect_errno) {
@@ -67,6 +66,7 @@ class Database {
 
 	public static function debug() {
 		echo count(self::$connList) . " connections:\n";
+
 		print_r(self::$connList);
 	}
 }

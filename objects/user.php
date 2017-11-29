@@ -563,13 +563,6 @@ class User extends Object {
 		return $this->hasTicket() || $this->isGroupMember();
 	}
 
-	/*
-	 * Returns the full name with nickname instead of username for use in compos. // TODO: Remove this, use getDisplayName() instead.
-	 */
-	public function getCompoDisplayName() {
-		return $this->getDisplayName();
-	}
-
 	public function isEligibleForPreSeating() {
 		return count(TicketHandler::getTicketsSeatableByUser($this)) >= Settings::prioritySeatingReq;
 	}

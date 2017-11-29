@@ -2,18 +2,18 @@
 /**
  * This file is part of InfectedAPI.
  *
- * Copyright (C) 2015 Infected <http://infected.no/>.
+ * Copyright (C) 2017 Infected <http://infected.no/>.
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
  * License as published by the Free Software Foundation; either
  * version 3.0 of the License, or (at your option) any later version.
- * 
+ *
  * This library is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
  * Lesser General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU Lesser General Public
  * License along with this library.  If not, see <http://www.gnu.org/licenses/>.
  */
@@ -21,11 +21,11 @@
 /****************************************************
 CallerService.php
 
-This file uses the constants.php to get parameters needed 
+This file uses the constants.php to get parameters needed
 to make an API call and calls the server.if you want use your
 own credentials, you have to change the constants.php
 
-Called by TransactionDetails.php, ReviewOrder.php, 
+Called by TransactionDetails.php, ReviewOrder.php,
 DoDirectPaymentReceipt.php and DoExpressCheckoutPayment.php.
 
 ****************************************************/
@@ -44,18 +44,18 @@ if(defined('AUTH_MODE')) {
 	//$AuthMode = "3TOKEN"; //Merchant's API 3-TOKEN Credential is required to make API Call.
 	//$AuthMode = "FIRSTPARTY"; //Only merchant Email is required to make EC Calls.
 	//$AuthMode = "THIRDPARTY";Partner's API Credential and Merchant Email as Subject are required.
-	$AuthMode = "AUTH_MODE"; 
-} 
+	$AuthMode = "AUTH_MODE";
+}
 else {
-	
+
 	if((!empty($API_UserName)) && (!empty($API_Password)) && (!empty($API_Signature)) && (!empty($subject))) {
 		$AuthMode = "THIRDPARTY";
 	}
-	
+
 	else if((!empty($API_UserName)) && (!empty($API_Password)) && (!empty($API_Signature))) {
 		$AuthMode = "TOKEN"; //This
 	}
-	
+
 	elseif (!empty($AUTH_token) && !empty($AUTH_signature) && !empty($AUTH_timestamp)) {
 		$AuthMode = "PERMISSION";
 	}
@@ -74,7 +74,7 @@ else {
 	}
 }*//*
 switch($AuthMode) {
-	
+
 	case "TOKEN" : */
 			$nvpHeaderStr = "&PWD=".urlencode(PaypalSecret::ApiPassword)."&USER=".urlencode(PaypalSecret::ApiUsername)."&SIGNATURE=".urlencode(PaypalSecret::ApiSignature);
 			/*break;
@@ -83,7 +83,7 @@ switch($AuthMode) {
 			break;
 	case "THIRDPARTY" :
 			$nvpHeaderStr = "&PWD=".urlencode($API_Password)."&USER=".urlencode($API_UserName)."&SIGNATURE=".urlencode($API_Signature)."&SUBJECT=".urlencode($subject);
-			break;		
+			break;
 	case "PERMISSION" :
 			$nvpHeaderStr = formAutorization($AUTH_token,$AUTH_signature,$AUTH_timestamp);
 			break;
@@ -116,31 +116,31 @@ function hash_call($methodName,$nvpStr)
 
 	curl_setopt($ch, CURLOPT_RETURNTRANSFER,1);
 	curl_setopt($ch, CURLOPT_POST, 1);
-	
+
 	//in case of permission APIs send headers as HTTPheders
 	if(!empty($AUTH_token) && !empty($AUTH_signature) && !empty($AUTH_timestamp))
 	 {
 		$headers_array[] = "X-PP-AUTHORIZATION: ".$nvpheader;
-  
+
 	curl_setopt($ch, CURLOPT_HTTPHEADER, $headers_array);
 	curl_setopt($ch, CURLOPT_HEADER, false);
 	}
-	else 
+	else
 	{
 		$nvpStr=$nvpheader.$nvpStr;
 	}
 	//if USE_PROXY constant set to TRUE in Constants.php, then only proxy will be enabled.
-   //Set proxy name to PROXY_HOST and port number to PROXY_PORT in constants.php 
+   //Set proxy name to PROXY_HOST and port number to PROXY_PORT in constants.php
 	/*if(USE_PROXY)
 	curl_setopt ($ch, CURLOPT_PROXY, PROXY_HOST.":".PROXY_PORT); */
 
 	//check if version is included in $nvpStr else include the version.
 	if(strlen(str_replace('VERSION=', '', strtoupper($nvpStr))) == strlen($nvpStr)) {
-		$nvpStr = "&VERSION=" . urlencode(PaypalSecret::Version) . $nvpStr;	
+		$nvpStr = "&VERSION=" . urlencode(PaypalSecret::Version) . $nvpStr;
 	}
-	
+
 	$nvpreq="METHOD=".urlencode($methodName).$nvpStr;
-	
+
 	//setting the nvpreq as POST FIELD to curl
 	curl_setopt($ch,CURLOPT_POSTFIELDS,$nvpreq);
 

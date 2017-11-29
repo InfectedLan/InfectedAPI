@@ -135,7 +135,7 @@ class EventHandler {
 	 * Create new event
 	 */
 	public static function createEvent($location, $participants, $bookingTime, $startTime, $endTime) {
-		$name = Settings::name . ' ' . (date('m', strtotime($startTime)) == 2 ? 'Vinter' : 'Høst') . ' ' . date('Y', strtotime($startTime)); // TODO: Add localization for this.
+		$name = Settings::name . ' ' . Localization::getLocale(date('m', strtotime($startTime)) == 2 ? 'winter' : 'autumn') . ' ' . date('Y', strtotime($startTime));
 		$seatmap = SeatmapHandler::createSeatmap($name, null);
 
 		$database = Database::getConnection(Settings::db_name_infected);

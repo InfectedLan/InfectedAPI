@@ -27,7 +27,7 @@ class SectionPageHandler {
 	 * Return the section page by the internal id.
 	 */
 	public static function getSectionPage($id) {
-		$database = Database::open(Settings::db_name_infected_main);
+		$database = Database::getConnection(Settings::db_name_infected_main);
 
 		$result = $database->query('SELECT * FROM `' . Settings::db_table_infected_main_sectionpages . '`
 																WHERE id = \'' . $database->real_escape_string($id) . '\';');
@@ -39,7 +39,7 @@ class SectionPageHandler {
 	 * Return the section page by name.
 	 */
 	public static function getSectionPageByName($name) {
-		$database = Database::open(Settings::db_name_infected_main);
+		$database = Database::getConnection(Settings::db_name_infected_main);
 
 		$result = $database->query('SELECT * FROM `' . Settings::db_table_infected_main_sectionpages . '`
 																WHERE `name` = \'' . $database->real_escape_string($name) . '\';');
@@ -51,7 +51,7 @@ class SectionPageHandler {
 	 * Returns a list of all pages.
 	 */
 	public static function getSectionPages() {
-		$database = Database::open(Settings::db_name_infected_main);
+		$database = Database::getConnection(Settings::db_name_infected_main);
 
 		$result = $database->query('SELECT * FROM `' . Settings::db_table_infected_main_sectionpages . '`;');
 
@@ -68,7 +68,7 @@ class SectionPageHandler {
 	 * Create a new section page.
 	 */
 	public static function createSectionPage($name, $title, $content) {
-		$database = Database::open(Settings::db_name_infected_main);
+		$database = Database::getConnection(Settings::db_name_infected_main);
 
 		$database->query('INSERT INTO `' . Settings::db_table_infected_main_sectionpages . '` (`name`, `title`, `content`)
 										  VALUES (\'' . $database->real_escape_string($name) . '\',
@@ -82,7 +82,7 @@ class SectionPageHandler {
 	 * Update a section page.
 	 */
 	public static function updatePage(SectionPage $sectionPage, $title, $content) {
-		$database = Database::open(Settings::db_name_infected_main);
+		$database = Database::getConnection(Settings::db_name_infected_main);
 
 		$database->query('UPDATE `' . Settings::db_table_infected_main_sectionpages . '`
 										  SET `title` = \'' . $database->real_escape_string($title) . '\',
@@ -94,7 +94,7 @@ class SectionPageHandler {
 	 * Remove a section page.
 	 */
 	public static function removeSectionPage(SectionPage $sectionPage) {
-		$database = Database::open(Settings::db_name_infected_main);
+		$database = Database::getConnection(Settings::db_name_infected_main);
 
 		$database->query('DELETE FROM `' . Settings::db_table_infected_main_sectionpages . '`
 						  				WHERE `id` = \'' . $page->getId() . '\';');

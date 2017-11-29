@@ -112,7 +112,7 @@ class Event extends Object {
 	 * Returns the title for this event.
 	 */
 	public function getTitle() {
-		return Settings::name . ' ' . (date('m', $this->getStartTime()) == 2 ? 'Vinter' : 'Høst') . ' ' . date('Y', $this->getStartTime()); // TODO: Add localization for this.
+		return Settings::name . ' ' . $this->getSeason() . ' ' . date('Y', $this->getStartTime());
 	}
 
 	/*
@@ -135,6 +135,10 @@ class Event extends Object {
 		$endTime = $this->getEndTime() + $offset;
 
 		return time() >= $startTime && time() <= $endTime;
+	}
+
+	public function getSeason() {
+		return Localization::getLocale(date('m', $this->getStartTime()) == 2 ? 'winter' : 'autumn');
 	}
 
 	/*

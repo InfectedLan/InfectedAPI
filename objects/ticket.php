@@ -85,8 +85,7 @@ class Ticket extends EventObject {
 	 */
 	public function toString() {
 		$event = $this->getEvent();
-		$season = date('m', $event->getStartTime()) == 2 ? 'VINTER' : 'HØST'; // TODO: Add localization for this.
-		$eventName = !empty($event->getTheme()) ? $event->getTheme() : $season;
+		$eventName = !empty($event->getTheme()) ? $event->getTheme() : $event->getSeason();
 
 		return strtoupper(Settings::name . '_' . $eventName . '_' . date('Y', $event->getStartTime()) . '_' . $this->getId());
 	}
