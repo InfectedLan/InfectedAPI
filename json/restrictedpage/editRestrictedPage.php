@@ -41,8 +41,7 @@ if (Session::isAuthenticated()) {
 			$page = RestrictedPageHandler::getPage($_GET['id']);
 
 			if ($page != null) {
-				if ($user->hasPermission('*') ||
-					$user->hasPermission('chief.my-crew') &&
+				if ($user->hasPermission('chief.my-crew') &&
 					($page->getGroup()->equals($user->getGroup()))) {
 					$title = $_GET['title'];
 					$content = $_GET['content'];

@@ -27,8 +27,7 @@ require_once 'handlers/seathandler.php';
 if (Session::isAuthenticated()) {
 	$user = Session::getCurrentUser();
 
-	if ($user->hasPermission('*') ||
-		$user->hasPermission('event.table.labels')) {
+	if ($user->hasPermission('event.table.labels')) {
 		echo '<!DOCTYPE html>';
 		echo '<html>';
 			echo '<head>';

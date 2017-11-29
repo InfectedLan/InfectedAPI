@@ -40,8 +40,7 @@ if (Session::isAuthenticated()) {
 		$match = MatchHandler::getMatch($_GET['id']);
 
 		if ($match != null) {
-			if ($user->hasPermission('*') ||
-				$user->hasPermission('event.compo') ||
+			if ($user->hasPermission('event.compo') ||
 				$match->isParticipant($user)) {
 
 				$matchData['state'] = $match->getState();

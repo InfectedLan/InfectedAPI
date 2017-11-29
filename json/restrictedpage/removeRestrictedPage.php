@@ -35,8 +35,7 @@ if (Session::isAuthenticated()) {
 			$page = RestrictedPageHandler::getPage($_GET['id']);
 
 			if ($page != null) {
-				if ($user->hasPermission('*') ||
-					$user->hasPermission('chief.my-crew') &&
+				if ($user->hasPermission('chief.my-crew') &&
 					$user->getGroup()->equals($page->getGroup())) {
 					RestrictedPageHandler::removePage($page);
 					$result = true;

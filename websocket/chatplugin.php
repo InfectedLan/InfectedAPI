@@ -24,7 +24,7 @@ require_once 'handlers/chathandler.php';
 class ChatPlugin extends WebSocketPlugin {
     public $followingChatChannels;
     private $server;
-        
+
     function __construct(Server $server) {
         parent::__construct($server);
         $server->registerIntent("subscribeChatroom", $this);
@@ -36,7 +36,7 @@ class ChatPlugin extends WebSocketPlugin {
 
         $this->followingChatChannels = array(); // Fun fact, PHP arrays are not arrays! It is if you do [] instead...
     }
-    
+
     public function handleIntent($intent, $args, $connection) {
         switch($intent) {
         case 'subscribeChatroom':
@@ -88,13 +88,13 @@ class ChatPlugin extends WebSocketPlugin {
         foreach ($this->followingChatChannels as $chatKey => $chatroom) {
 	    foreach($chatroom as $key => $value) {
 		if($connection == $value) {
-		    echo "Removing from one chatroom\n";		    
+		    echo "Removing from one chatroom\n";
 		    unset($this->followingChatChannels[$chatKey][$key]);
 		}
 	    }
         }
     }
-    
+
     protected function unsubscribeChatroom($channel, $connection) {
         if (isset($this->followingChatChannels[$channel])) {
             if (($key = array_search($connection, $this->followingChatChannels[$channel])) !== false) {
@@ -135,7 +135,7 @@ class ChatPlugin extends WebSocketPlugin {
 
     protected function getFormattedChatMessage($user, $message, $timestamp) {
         $time = date('H:i', $timestamp);
-        $username = ($user->hasPermission('*') || $user->hasPermission('compo.chat') ? "<b>[Admin] " . $user->getUsername() . "</b>" : $user->getUsername());
+        $username = ($user->hasPermission('compo.chat') ? "<b>[Admin] " . $user->getUsername() . "</b>" : $user->getUsername());
         $message = htmlspecialchars($message, ENT_QUOTES, 'UTF-8');
 
         return $time . ' ' . $username . ": " . $message;

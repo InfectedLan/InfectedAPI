@@ -67,7 +67,7 @@ class ChatHandler {
 		$database->query('INSERT INTO `' . Settings::db_table_infected_compo_chats . '` (`name`, `title`)
 						  				VALUES (\'' . $database->real_escape_string($name) . '\',
 															\'' . $database->real_escape_string($title) . '\');');
-        
+
         $chat = self::getChat( $database->insert_id );
 
 
@@ -137,7 +137,7 @@ class ChatHandler {
 												  		\'' . $chat->getId() . '\');');
 
 	}
-	
+
 	/*
 	 * Same as above, but with id's to save 2 queries
 	 */
@@ -280,8 +280,7 @@ class ChatHandler {
 	}
 
     public static function canChat(Chat $chat, User $user) {
-        if ($user->hasPermission('*') ||
-            $user->hasPermission('compo.chat') ||
+        if ($user->hasPermission('compo.chat') ||
             $chat->isMember($user)) {
             return true;
         }
@@ -302,7 +301,7 @@ class ChatHandler {
                 }
             }
             //You can also read from a match you are a part of
-            
+
         }
     }
 }
