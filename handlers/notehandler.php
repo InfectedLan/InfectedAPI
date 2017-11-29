@@ -2,7 +2,7 @@
 /**
  * This file is part of InfectedAPI.
  *
- * Copyright (C) 2015 Infected <http://infected.no/>.
+ * Copyright (C) 2017 Infected <http://infected.no/>.
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -35,7 +35,6 @@ class NoteHandler {
 		$result = $database->query('SELECT * FROM `' . Settings::db_table_infected_crew_notes . '`
 																WHERE id = \'' . $database->real_escape_string($id) . '\';');
 
-
 		return $result->fetch_object('Note');
 	}
 
@@ -44,6 +43,8 @@ class NoteHandler {
 	 */
 	public static function getNotes(Event $event = null) {
 		$database = Database::getConnection(Settings::db_name_infected_crew);
+
+		// TODO: Check eventid against memberof table instead. What about secondsOffset?
 
 		$result = $database->query('SELECT * FROM `' . Settings::db_table_infected_crew_notes . '`
 																WHERE `eventId` = \'' . ($event != null ? $event->getId() : EventHandler::getCurrentEvent()->getId()) . '\'
@@ -63,6 +64,8 @@ class NoteHandler {
 	 */
 	public static function getNotesReachedNotificationTime(Event $event = null) {
 		$database = Database::getConnection(Settings::db_name_infected_crew);
+
+		// TODO: Check eventid against memberof table instead. What about secondsOffset?
 
 		$result = $database->query('SELECT * FROM `' . Settings::db_table_infected_crew_notes . '`
 																WHERE `eventId` = \'' . ($event != null ? $event->getId() : EventHandler::getCurrentEvent()->getId()) . '\'
@@ -86,6 +89,8 @@ class NoteHandler {
 	public static function getNotesByGroup(Group $group, Event $event = null) {
 		$database = Database::getConnection(Settings::db_name_infected_crew);
 
+		// TODO: Check eventid against memberof table instead.
+
 		$result = $database->query('SELECT * FROM `' . Settings::db_table_infected_crew_notes . '`
 																WHERE `eventId` = \'' . ($event != null ? $event->getId() : EventHandler::getCurrentEvent()->getId()) . '\'
 																AND `groupId` = \'' . $group->getId() . '\'
@@ -106,12 +111,13 @@ class NoteHandler {
 	public static function getNotesByTeam(Team $team, Event $event = null) {
 		$database = Database::getConnection(Settings::db_name_infected_crew);
 
+		// TODO: Check eventid against memberof table instead.
+
 		$result = $database->query('SELECT * FROM `' . Settings::db_table_infected_crew_notes . '`
 																WHERE `eventId` = \'' . ($event != null ? $event->getId() : EventHandler::getCurrentEvent()->getId()) . '\'
 																AND `groupId` = \'' . $team->getGroup()->getId() . '\'
 																AND `teamId` = \'' . $team->getId() . '\'
 																ORDER BY `secondsOffset`, `time`;');
-
 
 		$noteList = [];
 
@@ -127,6 +133,8 @@ class NoteHandler {
 	 */
 	public static function getNotesByUser(User $user, Event $event = null) {
 		$database = Database::getConnection(Settings::db_name_infected_crew);
+
+		// TODO: Check eventid against memberof table instead. Is it even relevant?
 
 		$result = $database->query('SELECT * FROM `' . Settings::db_table_infected_crew_notes . '`
 																WHERE `eventId` = \'' . ($event != null ? $event->getId() : EventHandler::getCurrentEvent()->getId()) . '\'
@@ -147,9 +155,7 @@ class NoteHandler {
 	/*
 	 * Returns a list of all notes by the specified event.
 	 */
-	public static function getNotesByGroupAndTeamAndUserAndEvent(User $user, Event $event) {
-		$database = Database::getConnection(Settings::db_name_infected_crew);
-
+	public static function getNotesByGroupAndTeamAndUser(User $user, Event $event = null) {
 		$leaderInGroups = [];
 		$leaderInTeams = [];
 
@@ -165,11 +171,13 @@ class NoteHandler {
 			}
 		}
 
+		$database = Database::getConnection(Settings::db_name_infected_crew);
+
 		if ($user->isGroupLeader()) {
 			$result = $database->query('SELECT DISTINCT `' . Settings::db_table_infected_crew_notes . '`.* FROM `' . Settings::db_table_infected_crew_notes . '`
 																	LEFT JOIN `' . Settings::db_table_infected_crew_notewatches . '`
 																	ON `' . Settings::db_table_infected_crew_notes . '`.`id` = `' . Settings::db_table_infected_crew_notewatches . '`.`noteId`
-																	WHERE `eventId` = \'' . $event->getId() . '\'
+																	WHERE `eventId` = \'' . ($event != null ? $event->getId() : EventHandler::getCurrentEvent()->getId()) . '\'
 																	AND (`groupId` IN (' . implode(',', $leaderInGroups) . ')
 																				OR (`groupId` != \'0\'
 																	    			AND `' . Settings::db_table_infected_crew_notes . '`.`userId` = \'' . $user->getId() . '\')
@@ -180,7 +188,7 @@ class NoteHandler {
 			$result = $database->query('SELECT DISTINCT `' . Settings::db_table_infected_crew_notes . '`.* FROM `' . Settings::db_table_infected_crew_notes . '`
 																	LEFT JOIN `' . Settings::db_table_infected_crew_notewatches . '`
 																	ON `' . Settings::db_table_infected_crew_notes . '`.`id` = `' . Settings::db_table_infected_crew_notewatches . '`.`noteId`
-																	WHERE `eventId` = \'' . $event->getId() . '\'
+																	WHERE `eventId` = \'' . ($event != null ? $event->getId() : EventHandler::getCurrentEvent()->getId()) . '\'
 																	AND ((`groupId` != \'0\'
 	 			 																AND `teamId` IN (' . implode(',', $leaderInTeams) . '))
 																				OR (`groupId` != \'0\'
@@ -191,13 +199,12 @@ class NoteHandler {
 			$result = $database->query('SELECT DISTINCT `' . Settings::db_table_infected_crew_notes . '`.* FROM `' . Settings::db_table_infected_crew_notes . '`
 																	LEFT JOIN `' . Settings::db_table_infected_crew_notewatches . '`
 																	ON `' . Settings::db_table_infected_crew_notes . '`.`id` = `' . Settings::db_table_infected_crew_notewatches . '`.`noteId`
-																	WHERE `eventId` = \'' . $event->getId() . '\'
+																	WHERE `eventId` = \'' . ($event != null ? $event->getId() : EventHandler::getCurrentEvent()->getId()) . '\'
 																	AND ((`groupId` != \'0\'
 																				AND `' . Settings::db_table_infected_crew_notes . '`.`userId` = \'' . $user->getId() . '\')
 																				OR `' . Settings::db_table_infected_crew_notewatches . '`.`userId` = \'' . $user->getId() . '\')
 		 															ORDER BY `secondsOffset`, `time`;');
 		}
-
 
 		$noteList = [];
 
@@ -206,13 +213,6 @@ class NoteHandler {
 		}
 
 		return $noteList;
-	}
-
-	/*
-	 * Returns a list of all notes by user.
-	 */
-	public static function getNotesByGroupAndTeamAndUser(User $user) {
-		return self::getNotesByGroupAndTeamAndUserAndEvent($user, EventHandler::getCurrentEvent());
 	}
 
 	/*
@@ -232,10 +232,7 @@ class NoteHandler {
 															\'' . $database->real_escape_string($secondsOffset) . '\',
 															\'' . $database->real_escape_string($time) . '\');');
 
-		$note = self::getNote($database->insert_id);
-
-
-		return $note;
+		return self::getNote($database->insert_id);
 	}
 
 	/*
@@ -253,7 +250,6 @@ class NoteHandler {
 													`secondsOffset` = \'' . $database->real_escape_string($secondsOffset) . '\',
 													`time` = \'' . $database->real_escape_string($time) . '\'
 											WHERE `id` = \'' . $note->getId() . '\';');
-
 	}
 
 	/*
@@ -265,7 +261,6 @@ class NoteHandler {
 		$database->query('UPDATE `' . Settings::db_table_infected_crew_notes . '`
 											SET `notified` = \'' . $database->real_escape_string($notified) . '\'
 											WHERE `id` = \'' . $note->getId() . '\';');
-
 	}
 
 	/*
@@ -278,7 +273,6 @@ class NoteHandler {
 											SET `done` = \'' . $database->real_escape_string($done) . '\',
 													`inProgress` = \'0\'
 											WHERE `id` = \'' . $note->getId() . '\';');
-
 	}
 
 	/*
@@ -291,7 +285,6 @@ class NoteHandler {
 											SET `done` = \'0\',
 													`inProgress` = \'' . $database->real_escape_string($inProgress) . '\'
 											WHERE `id` = \'' . $note->getId() . '\';');
-
 	}
 
 	/*
@@ -302,7 +295,6 @@ class NoteHandler {
 
 		$database->query('DELETE FROM `' . Settings::db_table_infected_crew_notes . '`
 						  				WHERE `id` = \'' . $note->getId() . '\';');
-
 	}
 
 	/* Notes watchlist */
@@ -315,7 +307,6 @@ class NoteHandler {
 		$result = $database->query('SELECT `id` FROM `' . Settings::db_table_infected_crew_notewatches . '`
 																WHERE `noteId` = \'' . $note->getId() . '\'
 																AND `userId` = \'' . $user->getId() . '\';');
-
 
 		return $result->num_rows > 0;
 	}
@@ -330,7 +321,6 @@ class NoteHandler {
 																WHERE `id` IN (SELECT `userId` FROM `' . Settings::db_name_infected_crew . '`.`' . Settings::db_table_infected_crew_notewatches . '`
 																							 WHERE `noteId` = \'' . $note->getId() . '\')
 																ORDER BY `firstname`, `lastname`;');
-
 
 		$userList = [];
 
@@ -352,7 +342,6 @@ class NoteHandler {
 											  VALUES (\'' . $note->getId() . '\',
 																\'' . $user->getId() . '\');');
 		}
-
 	}
 
 	/*
@@ -364,7 +353,6 @@ class NoteHandler {
 		$database->query('DELETE FROM `' . Settings::db_table_infected_crew_notewatches . '`
 						  				WHERE `noteId` = \'' . $note->getId() . '\'
 											AND `userId` = \'' . $user->getId() . '\';');
-
 	}
 
 	/*
@@ -386,7 +374,6 @@ class NoteHandler {
 		$database->query('DELETE FROM `' . Settings::db_table_infected_crew_notewatches . '`
 											WHERE `noteId` = \'' . $note->getId() . '\'
 											AND `userId` NOT IN (\'' . implode('\', \'', UserUtils::toUserIdList($userList)) . '\');');
-
 	}
 }
 ?>

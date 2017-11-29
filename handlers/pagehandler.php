@@ -2,7 +2,7 @@
 /**
  * This file is part of InfectedAPI.
  *
- * Copyright (C) 2015 Infected <http://infected.no/>.
+ * Copyright (C) 2017 Infected <http://infected.no/>.
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -32,7 +32,6 @@ class PageHandler {
 		$result = $database->query('SELECT * FROM `' . Settings::db_table_infected_main_pages . '`
 																WHERE id = \'' . $database->real_escape_string($id) . '\';');
 
-
 		return $result->fetch_object('Page');
 	}
 
@@ -45,7 +44,6 @@ class PageHandler {
 		$result = $database->query('SELECT * FROM `' . Settings::db_table_infected_main_pages . '`
 																WHERE `name` = \'' . $database->real_escape_string($name) . '\';');
 
-
 		return $result->fetch_object('Page');
 	}
 
@@ -56,7 +54,6 @@ class PageHandler {
 		$database = Database::getConnection(Settings::db_name_infected_main);
 
 		$result = $database->query('SELECT * FROM `' . Settings::db_table_infected_main_pages . '`;');
-
 
 		$pageList = [];
 
@@ -78,10 +75,7 @@ class PageHandler {
 														  \'' . $database->real_escape_string($title) . '\',
 														  \'' . $database->real_escape_string($content) . '\')');
 
-		$page = self::getPage($database->insert_id);
-
-
-		return $page;
+		return self::getPage($database->insert_id);
 	}
 
 	/*
@@ -94,7 +88,6 @@ class PageHandler {
 										  SET `title` = \'' . $database->real_escape_string($title) . '\',
 											  	`content` = \'' . $database->real_escape_string($content) . '\'
 										  WHERE `id` = \'' . $page->getId() . '\';');
-
 	}
 
 	/*
@@ -105,7 +98,6 @@ class PageHandler {
 
 		$database->query('DELETE FROM `' . Settings::db_table_infected_main_pages . '`
 						  				WHERE `id` = \'' . $page->getId() . '\';');
-
 	}
 }
 ?>

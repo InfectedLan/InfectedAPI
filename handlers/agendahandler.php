@@ -2,7 +2,7 @@
 /**
  * This file is part of InfectedAPI.
  *
- * Copyright (C) 2015 Infected <http://infected.no/>.
+ * Copyright (C) 2017 Infected <http://infected.no/>.
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -125,7 +125,6 @@ class AgendaHandler {
 												  `startTime` = \'' . $database->real_escape_string($startTime) . '\',
 												  `published` = \'' . $database->real_escape_string($published) . '\'
 										  WHERE `id` = \'' . $agenda->getId() . '\';');
-
 	}
 
 	/*
@@ -136,7 +135,6 @@ class AgendaHandler {
 
 		$database->query('DELETE FROM `' . Settings::db_table_infected_main_agenda . '`
 						  				WHERE `id` = \'' . $agenda->getId() . '\';');
-
 	}
 }
 ?>
