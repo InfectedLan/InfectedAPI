@@ -2,7 +2,7 @@
 /**
  * This file is part of InfectedAPI.
  *
- * Copyright (C) 2015 Infected <http://infected.no/>.
+ * Copyright (C) 2017 Infected <http://infected.no/>.
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -34,7 +34,6 @@ class RegistrationCodeHandler {
 
 		$row = $result->fetch_array();
 
-
 		return $row['code'];
 	}
 
@@ -65,7 +64,6 @@ class RegistrationCodeHandler {
 		$result = $database->query('SELECT `id` FROM `' . Settings::db_table_infected_registrationcodes . '`
 																WHERE `code` = \'' . $database->real_escape_string($code) . '\';');
 
-
 		return $result->num_rows > 0;
 	}
 
@@ -77,7 +75,6 @@ class RegistrationCodeHandler {
 
 		$result = $database->query('SELECT `id` FROM `' . Settings::db_table_infected_registrationcodes . '`
 																WHERE `userId` = \'' . $user->getId() . '\';');
-
 
 		return $result->num_rows > 0;
 	}
@@ -94,7 +91,6 @@ class RegistrationCodeHandler {
 										  VALUES (\'' . $user->getId() . '\',
 												  		\'' . $code . '\');');
 
-
 		return $code;
 	}
 
@@ -106,7 +102,6 @@ class RegistrationCodeHandler {
 
 		$database->query('DELETE FROM `' . Settings::db_table_infected_registrationcodes . '`
 						  				WHERE `code` = \'' . $database->real_escape_string($code) . '\';');
-
 	}
 
 	/*
@@ -117,7 +112,6 @@ class RegistrationCodeHandler {
 
 		$database->query('DELETE FROM `' . Settings::db_table_infected_registrationcodes . '`
 						  				WHERE `userId` = \'' . $user->getId() . '\';');
-
 	}
 }
 ?>

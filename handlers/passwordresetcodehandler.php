@@ -2,7 +2,7 @@
 /**
  * This file is part of InfectedAPI.
  *
- * Copyright (C) 2015 Infected <http://infected.no/>.
+ * Copyright (C) 2017 Infected <http://infected.no/>.
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -32,7 +32,6 @@ class PasswordResetCodeHandler {
 		$result = $database->query('SELECT `code` FROM `' . Settings::db_table_infected_passwordresetcodes . '`
 																WHERE `id` = \'' . $database->real_escape_string($id) . '\';');
 
-
 		$row = $result->fetch_array();
 
 		return $row['code'];
@@ -45,7 +44,6 @@ class PasswordResetCodeHandler {
 		$database = Database::getConnection(Settings::db_name_infected);
 
 		$result = $database->query('SELECT `code` FROM `' . Settings::db_table_infected_passwordresetcodes . '`;');
-
 
 		$codeList = [];
 
@@ -65,7 +63,6 @@ class PasswordResetCodeHandler {
 		$result = $database->query('SELECT `id` FROM `' . Settings::db_table_infected_passwordresetcodes . '`
 																WHERE `code` = \'' . $database->real_escape_string($code) . '\';');
 
-
 		return $result->num_rows > 0;
 	}
 
@@ -77,7 +74,6 @@ class PasswordResetCodeHandler {
 
 		$result = $database->query('SELECT `id` FROM `' . Settings::db_table_infected_passwordresetcodes . '`
 																WHERE `userId` = \'' . $user->getId() . '\';');
-
 
 		return $result->num_rows > 0;
 	}
@@ -100,7 +96,6 @@ class PasswordResetCodeHandler {
 											  WHERE `userId` = \'' . $user->getId() . '\';');
 		}
 
-
 		return $code;
 	}
 
@@ -112,7 +107,6 @@ class PasswordResetCodeHandler {
 
 		$database->query('DELETE FROM `' . Settings::db_table_infected_passwordresetcodes . '`
 						  				WHERE `code` = \'' . $database->real_escape_string($code) . '\';');
-
 	}
 
 	/*
@@ -123,7 +117,6 @@ class PasswordResetCodeHandler {
 
 		$database->query('DELETE FROM `' . Settings::db_table_infected_passwordresetcodes . '`
 						  				WHERE `userId` = \'' . $user->getId() . '\';');
-
 	}
 
 	/*
@@ -135,7 +128,6 @@ class PasswordResetCodeHandler {
 		$result = $database->query('SELECT * FROM `' . Settings::db_table_infected_users . '`
 																WHERE `id` = (SELECT `userId` FROM `' . Settings::db_table_infected_passwordresetcodes . '`
 																			  			WHERE `code` = \'' . $database->real_escape_string($code) . '\');');
-
 
 		return $result->fetch_object('User');
 	}

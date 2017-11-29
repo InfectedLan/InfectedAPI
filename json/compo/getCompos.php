@@ -31,7 +31,7 @@ $message = "";
 $data = null;
 
 if(Session::isAuthenticated()) {
-    $compos = CompoHandler::getComposByEvent(EventHandler::getCurrentEvent());
+    $compos = CompoHandler::getCompos();
     $data = array();
     foreach($compos as $compo) {
         $data[] = ["id" => $compo->getId(),

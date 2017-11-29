@@ -2,7 +2,7 @@
 /**
  * This file is part of InfectedAPI.
  *
- * Copyright (C) 2015 Infected <http://infected.no/>.
+ * Copyright (C) 2017 Infected <http://infected.no/>.
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -35,7 +35,6 @@ class RestrictedPageHandler {
 
 		$result = $database->query('SELECT * FROM `' . Settings::db_table_infected_crew_pages . '`
 																WHERE `id` = \'' . $database->real_escape_string($id) . '\';');
-
 
 		return $result->fetch_object('RestrictedPage');
 	}
@@ -74,7 +73,6 @@ class RestrictedPageHandler {
 																			AND `teamId` = \'0\';');
 				}
 
-
 				return $result->fetch_object('RestrictedPage');
 			}
 		}
@@ -88,7 +86,6 @@ class RestrictedPageHandler {
 
 		$result = $database->query('SELECT * FROM `' . Settings::db_table_infected_crew_pages . '`
 																WHERE `eventId` = \'' . EventHandler::getCurrentEvent()->getId() . '\';');
-
 
 		$restrictedPageList = [];
 
@@ -109,7 +106,6 @@ class RestrictedPageHandler {
 																WHERE `eventId` = \'' . EventHandler::getCurrentEvent()->getId() . '\'
 																AND `groupId` = \'' . $group->getId() . '\'
 																AND `teamId` = \'0\';');
-
 
 		$restrictedPageList = [];
 
@@ -151,7 +147,6 @@ class RestrictedPageHandler {
 																AND `groupId` = \'' . $group->getId() . '\'
 																AND (`teamId` = \'' . $team->getId() . '\' OR `teamId` = \'0\');');
 
-
 		$restrictedPageList = [];
 
 		while ($object = $result->fetch_object('RestrictedPage')) {
@@ -175,10 +170,7 @@ class RestrictedPageHandler {
 														  \'' . ($group != null ? $group->getId() : '0') . '\',
 														  \'' . ($team != null ? $team->getId() : '0') . '\')');
 
-		$restrictedPage = self::getRestrictedPage($database->insert_id);
-
-
-		return $restrictedPage;
+		return self::getRestrictedPage($database->insert_id);
 	}
 
 	  /*
@@ -193,7 +185,6 @@ class RestrictedPageHandler {
 													`groupId` = \'' . ($group != null ? $group->getId() : '0') . '\',
 													`teamId` = \'' . ($team != null ? $team->getId() : '0') . '\'
 										  WHERE `id` = \'' . $page->getId() . '\';');
-
 	}
 
 	/*
@@ -204,7 +195,6 @@ class RestrictedPageHandler {
 
 		$database->query('DELETE FROM `' . Settings::db_table_infected_crew_pages . '`
 						  				WHERE `id` = \'' . $page->getId() . '\';');
-
 	}
 }
 ?>

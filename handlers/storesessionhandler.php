@@ -2,7 +2,7 @@
 /**
  * This file is part of InfectedAPI.
  *
- * Copyright (C) 2015 Infected <http://infected.no/>.
+ * Copyright (C) 2017 Infected <http://infected.no/>.
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -36,7 +36,6 @@ class StoreSessionHandler {
 		$result = $database->query('SELECT * FROM `' . Settings::db_table_infected_tickets_storesessions . '`
 																WHERE `id` = \'' . $database->real_escape_string($id) . '\';');
 
-
 		return $result->fetch_object('StoreSession');
 	}
 
@@ -47,7 +46,6 @@ class StoreSessionHandler {
 		$database = Database::getConnection(Settings::db_name_infected_tickets);
 
 		$result = $database->query('SELECT * FROM `' . Settings::db_table_infected_tickets_storesessions . '`;');
-
 
 		$storeSessionList = [];
 
@@ -68,7 +66,6 @@ class StoreSessionHandler {
 																WHERE `userId` = \'' . $user->getId() . '\'
 																AND `datetime` > \'' . self::oldestValidTimestamp() . '\';');
 
-
 		return $result->fetch_object('StoreSession');
 	}
 
@@ -82,7 +79,6 @@ class StoreSessionHandler {
 																WHERE `code` = \'' . $database->real_escape_string($code) . '\'
 																AND `datetime` > \'' . self::oldestValidTimestamp() . '\';');
 
-
 		return $result->fetch_object('StoreSession');
 	}
 
@@ -95,7 +91,6 @@ class StoreSessionHandler {
 		$result = $database->query('SELECT `id` FROM `' . Settings::db_table_infected_tickets_storesessions . '`
 																WHERE `userId` = \'' . $user->getId() . '\'
 																AND `datetime` > \'' . self::oldestValidTimestamp() . '\';');
-
 
 		return $result->num_rows > 0;
 	}
@@ -116,7 +111,6 @@ class StoreSessionHandler {
 																				\'' . $database->real_escape_string($price) . '\',
 																				\'' . date('Y-m-d H:i:s') . '\');');
 
-
 		return $code;
 	}
 
@@ -128,7 +122,6 @@ class StoreSessionHandler {
 
 		$result = $database->query('DELETE FROM `' . Settings::db_table_infected_tickets_storesessions . '`
 																WHERE `id` = \'' . $storeSession->getId() . '\';');
-
 	}
 
 	/*
@@ -147,7 +140,6 @@ class StoreSessionHandler {
 		$result = $database->query('SELECT `amount` FROM `' . Settings::db_table_infected_tickets_storesessions . '`
 																WHERE `ticketTypeId` = \'' . $ticketType->getId() . '\'
 																AND `datetime` > \'' . self::oldestValidTimestamp() . '\';');
-
 
 		$reservedCount = 0;
 
@@ -175,7 +167,6 @@ class StoreSessionHandler {
 																WHERE `id` = (SELECT `userId` FROM `' . Settings::db_name_infected_tickets . '`.`' . Settings::db_table_infected_tickets_storesessions . '`
 																			  			WHERE `code`= \'' . $database->real_escape_string($code) . '\'
 																			  			AND `datetime` > \'' . self::oldestValidTimestamp() . '\');');
-
 
 		return $result->fetch_object('User');
 	}

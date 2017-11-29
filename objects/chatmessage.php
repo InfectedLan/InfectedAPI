@@ -2,7 +2,7 @@
 /**
  * This file is part of InfectedAPI.
  *
- * Copyright (C) 2015 Infected <http://infected.no/>.
+ * Copyright (C) 2017 Infected <http://infected.no/>.
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -18,8 +18,8 @@
  * License along with this library.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-require_once 'handlers/userhandler.php';
 require_once 'handlers/chathandler.php';
+require_once 'handlers/userhandler.php';
 require_once 'objects/object.php';
 
 class ChatMessage extends Object {

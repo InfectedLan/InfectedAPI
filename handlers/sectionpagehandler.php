@@ -2,7 +2,7 @@
 /**
  * This file is part of InfectedAPI.
  *
- * Copyright (C) 2013-2016 Infected <http://infected.no/>.
+ * Copyright (C) 2017 Infected <http://infected.no/>.
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -32,8 +32,6 @@ class SectionPageHandler {
 		$result = $database->query('SELECT * FROM `' . Settings::db_table_infected_main_sectionpages . '`
 																WHERE id = \'' . $database->real_escape_string($id) . '\';');
 
-		$database->close();
-
 		return $result->fetch_object('SectionPage');
 	}
 
@@ -46,8 +44,6 @@ class SectionPageHandler {
 		$result = $database->query('SELECT * FROM `' . Settings::db_table_infected_main_sectionpages . '`
 																WHERE `name` = \'' . $database->real_escape_string($name) . '\';');
 
-		$database->close();
-
 		return $result->fetch_object('SectionPage');
 	}
 
@@ -58,8 +54,6 @@ class SectionPageHandler {
 		$database = Database::open(Settings::db_name_infected_main);
 
 		$result = $database->query('SELECT * FROM `' . Settings::db_table_infected_main_sectionpages . '`;');
-
-		$database->close();
 
 		$pageList = [];
 
@@ -81,11 +75,7 @@ class SectionPageHandler {
 														  \'' . $database->real_escape_string($title) . '\',
 														  \'' . $database->real_escape_string($content) . '\')');
 
-		$page = self::getSectionPage($database->insert_id);
-
-		$database->close();
-
-		return $page;
+		return self::getSectionPage($database->insert_id);
 	}
 
 	/*
@@ -98,8 +88,6 @@ class SectionPageHandler {
 										  SET `title` = \'' . $database->real_escape_string($title) . '\',
 											  	`content` = \'' . $database->real_escape_string($content) . '\'
 										  WHERE `id` = \'' . $sectionPage->getId() . '\';');
-
-		$database->close();
 	}
 
 	/*
@@ -110,8 +98,6 @@ class SectionPageHandler {
 
 		$database->query('DELETE FROM `' . Settings::db_table_infected_main_sectionpages . '`
 						  				WHERE `id` = \'' . $page->getId() . '\';');
-
-		$database->close();
 	}
 }
 ?>

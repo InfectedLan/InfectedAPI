@@ -2,7 +2,7 @@
 /**
  * This file is part of InfectedAPI.
  *
- * Copyright (C) 2015 Infected <http://infected.no/>.
+ * Copyright (C) 2017 Infected <http://infected.no/>.
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -31,7 +31,6 @@ class UserNoteHandler {
 		$result = $database->query('SELECT * FROM `' . Settings::db_table_infected_usernotes . '`
 																WHERE `id` = \'' . $database->real_escape_string($id) . '\';');
 
-
 		$row = $result->fetch_array();
 
 		return $row['content'];
@@ -46,7 +45,6 @@ class UserNoteHandler {
 		$result = $database->query('SELECT `id` FROM `' . Settings::db_table_infected_usernotes . '`
 																WHERE `userId` = \'' . $user->getId() . '\';');
 
-
 		return $result->num_rows > 0;
 	}
 
@@ -58,7 +56,6 @@ class UserNoteHandler {
 
 		$result = $database->query('SELECT * FROM `' . Settings::db_table_infected_usernotes . '`
 																WHERE `userId` = \'' . $user->getId() . '\';');
-
 
 		$row = $result->fetch_array();
 
@@ -80,7 +77,6 @@ class UserNoteHandler {
 		} else {
 			self::removeUserNote($user);
 		}
-
 	}
 
 	/*
@@ -92,7 +88,6 @@ class UserNoteHandler {
 		$database->query('INSERT INTO `' . Settings::db_table_infected_usernotes . '` (`userId`, `content`)
 											VALUES (\'' . $user->getId() . '\',
 															\'' . $database->real_escape_string($content) . '\');');
-
 	}
 
 	/*
@@ -104,7 +99,6 @@ class UserNoteHandler {
 		$database->query('UPDATE `' . Settings::db_table_infected_usernotes . '`
 											SET `content` = \'' . $database->real_escape_string($content) . '\'
 											WHERE `userId` = \'' . $user->getId() . '\';');
-
 	}
 
 	/*
@@ -115,7 +109,6 @@ class UserNoteHandler {
 
 		$database->query('DELETE FROM `' . Settings::db_table_infected_usernotes . '`
 						  				WHERE `userId` = \'' . $user->getId() . '\';');
-
 	}
 }
 ?>

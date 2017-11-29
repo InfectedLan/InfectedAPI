@@ -2,7 +2,7 @@
 /**
  * This file is part of InfectedAPI.
  *
- * Copyright (C) 2015 Infected <http://infected.no/>.
+ * Copyright (C) 2017 Infected <http://infected.no/>.
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -32,7 +32,6 @@ class EntranceHandler {
 		$result = $database->query('SELECT * FROM `' . Settings::db_table_infected_tickets_entrances . '`
 																WHERE `id` = \'' . $database->real_escape_string($id) . '\';');
 
-
 		return $result->fetch_object('Entrance');
 	}
 
@@ -45,7 +44,6 @@ class EntranceHandler {
 		$result = $database->query('SELECT * FROM `' . Settings::db_table_infected_tickets_entrances . '`
 																WHERE `name` = \'' . $database->real_escape_string($name) . '\';');
 
-
 		return $result->fetch_object('Entrance');
 	}
 
@@ -56,7 +54,6 @@ class EntranceHandler {
 		$database = Database::getConnection(Settings::db_name_infected_tickets);
 
 		$result = $database->query('SELECT * FROM `' . Settings::db_table_infected_tickets_entrance . '`;');
-
 
 		$entranceList = [];
 

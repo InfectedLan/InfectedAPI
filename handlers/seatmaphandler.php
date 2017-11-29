@@ -2,7 +2,7 @@
 /**
  * This file is part of InfectedAPI.
  *
- * Copyright (C) 2015 Infected <http://infected.no/>.
+ * Copyright (C) 2017 Infected <http://infected.no/>.
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -35,7 +35,6 @@ class SeatmapHandler {
 		$result = $database->query('SELECT * FROM `' . Settings::db_table_infected_tickets_seatmaps . '`
 																WHERE `id` = \'' . $database->real_escape_string($id) . '\';');
 
-
 		return $result->fetch_object('Seatmap');
 	}
 
@@ -46,7 +45,6 @@ class SeatmapHandler {
 		$database = Database::getConnection(Settings::db_name_infected_tickets);
 
 		$result = $database->query('SELECT * FROM `' . Settings::db_table_infected_tickets_seatmaps . '`;');
-
 
 		$seatmapList = [];
 
@@ -67,10 +65,7 @@ class SeatmapHandler {
 						  				VALUES (\'' . $database->real_escape_string($name) . '\',
 								  						\'' . $database->real_escape_string($backgroundImage) . '\')');
 
-		$seatmap = self::getSeatmap($database->insert_id);
-
-
-		return $seatmap;
+		return self::getSeatmap($database->insert_id);
 	}
 
 	/*
@@ -80,7 +75,7 @@ class SeatmapHandler {
 	    $targetSeatmap = self::createSeatmap('Clone of ' . $sourceSeatmap->getHumanName(), $sourceSeatmap->getBackgroundImage());
 
 	    self::copySeatmap($sourceSeatmap, $targetSeatmap);
-	    
+
 	    return $targetSeatmap;
 	}
 
@@ -88,28 +83,33 @@ class SeatmapHandler {
 	 * Copies a seatmap, destroying the old seatmap in the process
 	 */
 	public static function copySeatmap(Seatmap $sourceSeatmap, Seatmap $targetSeatmap) {
-	    $preExistingRows = RowHandler::getRowsBySeatmap($targetSeatmap);
-	    $isSafeToDelete = true;
-	    foreach($preExistingRows as $row) {
-		if(!RowHandler::safeToDelete($row)) {
+    $preExistingRows = RowHandler::getRowsBySeatmap($targetSeatmap);
+    $isSafeToDelete = true;
+
+		foreach ($preExistingRows as $row) {
+			if (!RowHandler::safeToDelete($row)) {
 		    $isSafeToDelete = false;
+
 		    break;
+			}
 		}
-	    }
-	    if(!$isSafeToDelete) {
-		return false;
-	    }
 
-	    $sourceRows = RowHandler::getRowsBySeatmap($sourceSeatmap);
-	    foreach($sourceRows as $sourceRow) {
-		$targetRow = RowHandler::createRow($targetSeatmap, $sourceRow->getX(), $sourceRow->getY());
-		$sourceSeats = SeatHandler::getSeatsByRow($sourceRow);
-		foreach($sourceSeats as $sourceSeat) {
-		    $targetSeat = SeatHandler::createSeat($targetRow, $sourceSeat->getNumber());
-		}
-	    }
+    if (!$isSafeToDelete) {
+			return false;
+    }
 
-	    return true;
+		$sourceRows = RowHandler::getRowsBySeatmap($sourceSeatmap);
+
+		foreach ($sourceRows as $sourceRow) {
+			$targetRow = RowHandler::createRow($targetSeatmap, $sourceRow->getX(), $sourceRow->getY());
+			$sourceSeats = SeatHandler::getSeatsByRow($sourceRow);
+
+			foreach ($sourceSeats as $sourceSeat) {
+				$targetSeat = SeatHandler::createSeat($targetRow, $sourceSeat->getNumber());
+			}
+    }
+
+    return true;
 	}
 
 	/*
@@ -118,9 +118,9 @@ class SeatmapHandler {
 	public static function getEvent(Seatmap $seatmap) {
 		$database = Database::getConnection(Settings::db_name_infected);
 
+		// TODO: Use joins here to join with event table. Somehow.
 		$result = $database->query('SELECT `id` FROM `' . Settings::db_table_infected_events . '`
 																WHERE `seatmapId` = \'' . $seatmap->getId() . '\';');
-
 
 		$row = $result->fetch_array();
 
@@ -136,7 +136,6 @@ class SeatmapHandler {
 		$database->query('UPDATE `' . Settings::db_table_infected_tickets_seatmaps . '`
 						  				SET `backgroundImage` = \'' . $database->real_escape_string($filename) . '\'
 						  				WHERE `id` = \'' . $seatmap->getId() . '\';');
-
 	}
 }
 ?>

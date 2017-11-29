@@ -2,7 +2,7 @@
 /**
  * This file is part of InfectedAPI.
  *
- * Copyright (C) 2015 Infected <http://infected.no/>.
+ * Copyright (C) 2017 Infected <http://infected.no/>.
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -32,7 +32,6 @@ class PermissionHandler {
 		$result = $database->query('SELECT * FROM `' . Settings::db_table_infected_permissions . '`
 																WHERE `id` = \'' . $database->real_escape_string($id) . '\';');
 
-
 		return $result->fetch_object('Permission');
 	}
 
@@ -45,7 +44,6 @@ class PermissionHandler {
 		$result = $database->query('SELECT * FROM `' . Settings::db_table_infected_permissions . '`
 																WHERE `value` = \'' . $database->real_escape_string($value) . '\';');
 
-
 		return $result->fetch_object('Permission');
 	}
 
@@ -57,7 +55,6 @@ class PermissionHandler {
 
 		$result = $database->query('SELECT * FROM `' . Settings::db_table_infected_permissions . '`
 																ORDER BY `value` ASC;');
-
 
 		$permissionList = [];
 

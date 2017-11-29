@@ -2,7 +2,7 @@
 /**
  * This file is part of InfectedAPI.
  *
- * Copyright (C) 2015 Infected <http://infected.no/>.
+ * Copyright (C) 2017 Infected <http://infected.no/>.
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -34,20 +34,18 @@ class SlideHandler {
 		$result = $database->query('SELECT * FROM `' . Settings::db_table_infected_info_slides . '`
 																WHERE `id` = \'' . $database->real_escape_string($id) . '\';');
 
-
 		return $result->fetch_object('Slide');
 	}
 
 	/*
 	 * Get a list of all slides.
 	 */
-	public static function getSlides() {
+	public static function getSlides(Event $event = null) {
 		$database = Database::getConnection(Settings::db_name_infected_info);
 
 		$result = $database->query('SELECT * FROM `' . Settings::db_table_infected_info_slides . '`
-																WHERE `eventId` = \'' . EventHandler::getCurrentEvent()->getId() . '\'
+																WHERE `eventId` = \'' . ($event != null ? $event->getId() : EventHandler::getCurrentEvent()->getId()) . '\'
 																ORDER BY `startTime`;');
-
 
 		$slideList = [];
 
@@ -61,16 +59,15 @@ class SlideHandler {
 	/*
 	 * Get a list of all published slides.
 	 */
-	public static function getPublishedSlides() {
+	public static function getPublishedSlides(Event $event = null) {
 		$database = Database::getConnection(Settings::db_name_infected_info);
 
 		$result = $database->query('SELECT * FROM `' . Settings::db_table_infected_info_slides . '`
-																WHERE `eventId` = \'' . EventHandler::getCurrentEvent()->getId() . '\'
+																WHERE `eventId` = \'' . ($event != null ? $event->getId() : EventHandler::getCurrentEvent()->getId()) . '\'
 																AND `startTime` <= NOW()
 																AND `endTime` >= NOW()
 																AND `published` = \'1\'
 																ORDER BY `startTime`;');
-
 
 		$slideList = [];
 
@@ -96,10 +93,7 @@ class SlideHandler {
 														  \'' . $database->real_escape_string($endTime) . '\',
 														  \'' . $database->real_escape_string($published) . '\');');
 
-		$slide = self::getSlide($database->insert_id);
-
-
-		return $slide;
+		return self::getSlide($database->insert_id);
 	}
 
 	/*
@@ -115,7 +109,6 @@ class SlideHandler {
 												  `endTime` = \'' . $database->real_escape_string($endTime) . '\',
 												  `published` = \'' . $database->real_escape_string($published) . '\'
 										  WHERE `id` = \'' . $slide->getId() . '\';');
-
 	}
 
 	/*
@@ -126,7 +119,6 @@ class SlideHandler {
 
 		$database->query('DELETE FROM `' . Settings::db_table_infected_info_slides . '`
 										  WHERE `id` = \'' . $slide->getId() . '\';');
-
 	}
 }
 ?>

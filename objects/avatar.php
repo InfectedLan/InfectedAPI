@@ -2,7 +2,7 @@
 /**
  * This file is part of InfectedAPI.
  *
- * Copyright (C) 2015 Infected <http://infected.no/>.
+ * Copyright (C) 2017 Infected <http://infected.no/>.
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -19,8 +19,8 @@
  */
 
 require_once 'settings.php';
-require_once 'handlers/userhandler.php';
 require_once 'handlers/avatarhandler.php';
+require_once 'handlers/userhandler.php';
 require_once 'objects/object.php';
 
 class Avatar extends Object {
@@ -121,20 +121,20 @@ class Avatar extends Object {
 		}
 	}
 
-    /*
-     * Returns the state of this avatar
-     */
-    public function getState() {
-        return $this->state;
-    }
+  /*
+   * Returns the state of this avatar
+   */
+  public function getState() {
+      return $this->state;
+  }
 
-    /*
-     * Sets the state of this avatar
-     */
-    public function setState($state) {
-        $this->state = $state;
+  /*
+   * Sets the state of this avatar
+   */
+  public function setState($state) {
+      $this->state = $state;
 
-        AvatarHandler::updateAvatar($this, $state, $this->getFileName());
-    }
+      AvatarHandler::updateAvatar($this, $state, $this->getFileName());
+  }
 }
 ?>

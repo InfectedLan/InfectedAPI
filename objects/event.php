@@ -2,7 +2,7 @@
 /**
  * This file is part of InfectedAPI.
  *
- * Copyright (C) 2015 Infected <http://infected.no/>.
+ * Copyright (C) 2017 Infected <http://infected.no/>.
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -112,7 +112,7 @@ class Event extends Object {
 	 * Returns the title for this event.
 	 */
 	public function getTitle() {
-		return Settings::name . ' ' . (date('m', $this->getStartTime()) == 2 ? 'Vinter' : 'Høst') . ' ' . date('Y', $this->getStartTime());
+		return Settings::name . ' ' . (date('m', $this->getStartTime()) == 2 ? 'Vinter' : 'Høst') . ' ' . date('Y', $this->getStartTime()); // TODO: Add localization for this.
 	}
 
 	/*

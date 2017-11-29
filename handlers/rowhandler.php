@@ -2,7 +2,7 @@
 /**
  * This file is part of InfectedAPI.
  *
- * Copyright (C) 2015 Infected <http://infected.no/>.
+ * Copyright (C) 2017 Infected <http://infected.no/>.
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -36,7 +36,6 @@ class RowHandler {
 		$result = $database->query('SELECT * FROM `' . Settings::db_table_infected_tickets_rows . '`
 																WHERE `id` = \'' . $database->real_escape_string($id) . '\';');
 
-
 		return $result->fetch_object('Row');
 	}
 
@@ -47,7 +46,6 @@ class RowHandler {
 		$database = Database::getConnection(Settings::db_name_infected_tickets);
 
 		$result = $database->query('SELECT * FROM `' . Settings::db_table_infected_tickets_rows . '`;');
-
 
 		$rowList = [];
 
@@ -66,7 +64,6 @@ class RowHandler {
 
 		$result = $database->query('SELECT * FROM `' . Settings::db_table_infected_tickets_rows . '`
 																WHERE `seatmapId` = \'' . $seatmap->getId() . '\';');
-
 
 		$rowList = [];
 
@@ -88,21 +85,17 @@ class RowHandler {
 		// Find out what row is max row
 		$result = $database->query('SELECT COUNT(*) FROM `' . Settings::db_table_infected_tickets_rows . '` as count
 																WHERE `seatmapId` = \'' . $seatmap->getId() . '\';');
-		
-		$newRowNumber = $result->fetch_array()['COUNT(*)']+1;
 
-		$result = $database->query('INSERT INTO `' . Settings::db_table_infected_tickets_rows . '` (`seatmapId`, `entranceId`, `number`, `x`, `y`, `isHorizontal`)
+		$newRowNumber = $result->fetch_array()['COUNT(*)'] + 1;
+
+		$database->query('INSERT INTO `' . Settings::db_table_infected_tickets_rows . '` (`seatmapId`, `entranceId`, `number`, `x`, `y`, `isHorizontal`)
 											VALUES (\'' . $seatmap->getId() . '\',
 															\'' . $entrance->getId() . '\',
 															\'' . $database->real_escape_string($newRowNumber) . '\',
 															\'' . $database->real_escape_string($x) . '\',
 															\'' . $database->real_escape_string($y) . '\', \'0\');');
 
-		$insert_id = $database->insert_id;
-
-		
-
-		return self::getRow($insert_id);
+		return self::getRow($database->insert_id);
 	}
 
 	/*
@@ -115,7 +108,6 @@ class RowHandler {
 										  SET `x` = \'' . $database->real_escape_string($x) . '\',
 											  	`y` = \'' . $database->real_escape_string($y) . '\'
 										  WHERE `id` = \'' . $row->getId() . '\';');
-
 	}
 
 	/*
@@ -126,7 +118,6 @@ class RowHandler {
 
 		$result = $database->query('DELETE FROM `' . Settings::db_table_infected_tickets_rows . '`
 																WHERE `id` = ' . $row->getId() . ';');
-
 
 		foreach (SeatHandler::getSeatsByRow($row) as $seat) {
 			SeatHandler::removeSeat($seat);

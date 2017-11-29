@@ -2,7 +2,7 @@
 /**
  * This file is part of InfectedAPI.
  *
- * Copyright (C) 2015 Infected <http://infected.no/>.
+ * Copyright (C) 2017 Infected <http://infected.no/>.
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -20,9 +20,9 @@
 
 require_once 'settings.php';
 require_once 'database.php';
-require_once 'handlers/userhandler.php';
 require_once 'handlers/clanhandler.php';
 require_once 'handlers/invitehandler.php';
+require_once 'handlers/userhandler.php';
 require_once 'objects/eventobject.php';
 require_once 'objects/user.php';
 
@@ -52,12 +52,12 @@ class Clan extends EventObject {
 		return UserHandler::getUser($this->chiefId);
 	}
 
-    /*
-     * Return the user id of the chief of this clan
-     */
-    public function getChiefId() {
-        return $this->chiefId;
-    }
+  /*
+   * Return the user id of the chief of this clan
+   */
+  public function getChiefId() {
+  	return $this->chiefId;
+  }
 
 	/*
 	 * Return the compo of this clan.
@@ -105,15 +105,16 @@ class Clan extends EventObject {
 	 * Returns true if this clan is qualified for specified compo.
 	 */
 	public function isQualified($compo) {
-        if(!ClanHandler::isQualified($this, $compo)) {
-            return false;
-        }
+    if (!ClanHandler::isQualified($this, $compo)) {
+    	return false;
+    }
 
+		// TODO: Move this database stuff, should really be in a handler.
 		$database = Database::getConnection(Settings::db_name_infected_compo);
 
-		$result = $database->query('SELECT `id` FROM `' . Settings::db_table_infected_compo_participantof . '`
-								 WHERE `clanId` = \'' . $this->getId() . '\'
-								 AND `compoId` = \'' . $database->real_escape_string($compo->getId()) . '\';');
+		$result = $database->query('SELECT * FROM `' . Settings::db_table_infected_compo_participantof . '`
+																WHERE `clanId` = \'' . $this->getId() . '\'
+																AND `compoId` = \'' . $database->real_escape_string($compo->getId()) . '\';');
 
 		return $result->num_rows > 0;
 	}

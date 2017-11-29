@@ -2,7 +2,7 @@
 /**
  * This file is part of InfectedAPI.
  *
- * Copyright (C) 2015 Infected <http://infected.no/>.
+ * Copyright (C) 2017 Infected <http://infected.no/>.
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -30,50 +30,50 @@ class Server extends Object{
 	/*
 	 * Returns the id of the compo this server is bound to
 	 */
-        public function getCompoId() {
-	    return $this->compoId;
+  public function getCompoId() {
+		return $this->compoId;
 	}
 
 	/*
 	 * Returns the compo object associated with this server
 	 */
 	public function getCompo() {
-	    return CompoHandler::getCompo($this->compoId);
+		return CompoHandler::getCompo($this->compoId);
 	}
 
 	/*
 	 * Returns the human name of this server
 	 */
 	public function getHumanName() {
-	    return $this->humanName;
+		return $this->humanName;
 	}
 
 	/*
 	 * Returns the connection data for this server. Note that the compo plugin is supposed to parse this however it wants. Might be json data. Might be a string. God knows.
 	 */
 	public function getConnectionData() {
-	    return $this->connectionData;
+		return $this->connectionData;
 	}
 
 	/*
 	 * Sets the connection details of this server
 	 */
 	public function setConnectionDetails($details) {
-	    ServerHandler::setConnectionDetails($this, $details);
+		ServerHandler::setConnectionDetails($this, $details);
 	}
 
 	/*
 	 * Sets the human name of this server
 	 */
 	public function setHumanName($humanName) {
-	    ServerHandler::setHumanName($this, $humanName);
+		ServerHandler::setHumanName($this, $humanName);
 	}
 
-    /*
-     * Deletes the server entry
-     */
-    public function delete() {
-        ServerHandler::deleteServer($this);
-    }
+  /*
+   * Deletes the server entry
+   */
+  public function delete() {
+  	ServerHandler::deleteServer($this);
+  }
 }
 ?>

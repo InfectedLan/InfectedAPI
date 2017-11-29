@@ -2,7 +2,7 @@
 /**
  * This file is part of InfectedAPI.
  *
- * Copyright (C) 2015 Infected <http://infected.no/>.
+ * Copyright (C) 2017 Infected <http://infected.no/>.
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -78,11 +78,12 @@ class VoteOptionHandler {
 																WHERE `voteOptionId` = \'' . $voteOption->getId() . '\'
 																AND `consumerId` = \'' . $match->getId() . '\';');
 
-		if($result->num_rows == 0) {
-		    return null;
+		if ($result->num_rows == 0) {
+			return null;
 		}
+
 		$row = $result->fetch_row();
-		//echo "Vote type: " . $row[0] . "\n";
+
 		return $row[0];
 	}
 }

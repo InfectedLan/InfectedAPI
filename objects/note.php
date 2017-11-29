@@ -2,7 +2,7 @@
 /**
  * This file is part of InfectedAPI.
  *
- * Copyright (C) 2015 Infected <http://infected.no/>.
+ * Copyright (C) 2017 Infected <http://infected.no/>.
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -18,10 +18,10 @@
  * License along with this library.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+require_once 'handlers/eventhandler.php';
 require_once 'handlers/grouphandler.php';
 require_once 'handlers/teamhandler.php';
 require_once 'handlers/userhandler.php';
-require_once 'handlers/eventhandler.php';
 require_once 'objects/eventobject.php';
 
 class Note extends EventObject {
@@ -133,7 +133,7 @@ class Note extends EventObject {
 	 * Returns the time of this note.
 	 */
 	public function getTime() {
-		list($h, $m, $s) = explode (":", $this->time);
+		list($h, $m, $s) = explode (':', $this->time);
 
 		return ($h * 3600) + ($m * 60);
 	}
