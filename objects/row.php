@@ -2,7 +2,7 @@
 /**
  * This file is part of InfectedAPI.
  *
- * Copyright (C) 2015 Infected <http://infected.no/>.
+ * Copyright (C) 2017 Infected <http://infected.no/>.
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -97,7 +97,7 @@ class Row extends Object {
 	 * Returns true if row is horizontal
 	 */
 	public function isHorizontal() {
-	    return $this->isHorizontal == 1;
+		return $this->isHorizontal == 1;
 	}
 }
 ?>

@@ -108,7 +108,8 @@ class AgendaHandler {
 														  \'' . $database->real_escape_string($name) . '\',
 														  \'' . $database->real_escape_string($title) . '\',
 														  \'' . $database->real_escape_string($description) . '\',
-														  \'' . $database->real_escape_string($startTime) . '\', 1);');
+														  \'' . $database->real_escape_string($startTime) . '\',
+															\'1\');');
 
 		return self::getAgenda($database->insert_id);
 	}

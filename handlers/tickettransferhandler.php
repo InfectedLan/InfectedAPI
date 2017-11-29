@@ -2,7 +2,7 @@
 /**
  * This file is part of InfectedAPI.
  *
- * Copyright (C) 2015 Infected <http://infected.no/>.
+ * Copyright (C) 2017 Infected <http://infected.no/>.
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -38,7 +38,6 @@ class TicketTransferHandler {
 																ORDER BY `datetime` DESC
 																LIMIT 1;');
 
-
 		return $result->fetch_object('TicketTransfer');
 	}
 
@@ -54,7 +53,6 @@ class TicketTransferHandler {
 																WHERE `fromId` = \'' . $user->getId() . '\'
 																AND `revertable` = \'1\'
 																AND `datetime` > \'' . date('Y-m-d H:i:s', $wantedTimeLimit) . '\';');
-
 
 		$transferList = [];
 
@@ -78,10 +76,7 @@ class TicketTransferHandler {
 														  \'' . date('Y-m-d H:i:s') . '\',
 														  \'' . $revertable . '\');');
 
-//		$ticketTransfer = self::getTicketTransfer($database->insert_id);
-
-
-//		return $ticketTransfer;
+		return self::getTicketTransfer($database->insert_id);
 	}
 
 	/*
@@ -93,7 +88,6 @@ class TicketTransferHandler {
 		$result = $database->query('UPDATE `' . Settings::db_table_infected_tickets_tickettransfers .  '`
 																SET `revertable` = \'0\'
 																WHERE `id` = \'' . $ticketTransfer->getId() . '\';');
-
 	}
 
 	/*

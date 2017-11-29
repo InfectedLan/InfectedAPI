@@ -2,7 +2,7 @@
 /**
  * This file is part of InfectedAPI.
  *
- * Copyright (C) 2015 Infected <http://infected.no/>.
+ * Copyright (C) 2017 Infected <http://infected.no/>.
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -43,7 +43,7 @@ class EmergencyContact extends Object {
 	 * Returns the phone number formatted as a string.
 	 */
 	public function getPhoneAsString() {
-		return rtrim('(+47) ' . chunk_split($this->getPhone(), 2, ' '));
+		return rtrim('(+47) ' . chunk_split($this->getPhone(), 2, ' ')); // TODO: Select area code based on country.
 	}
 }
 ?>

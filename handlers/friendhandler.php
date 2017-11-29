@@ -2,7 +2,7 @@
 /**
  * This file is part of InfectedAPI.
  *
- * Copyright (C) 2015 Infected <http://infected.no/>.
+ * Copyright (C) 2017 Infected <http://infected.no/>.
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -48,7 +48,6 @@ class FriendHandler {
 																					     WHERE `userId` = \'' . $user->getId() . '\')
 															  ORDER BY `firstname`, `lastname`;');
 
-
 		$userList = [];
 
 		while ($object = $result->fetch_object('User')) {
@@ -68,7 +67,6 @@ class FriendHandler {
 										  VALUES (\'' . $user->getId() . '\',
 														  \'' . $friend->getId() . '\',
 														  \'' . date('Y-m-d H:i:s') . '\');');
-
 	}
 
 	/*
@@ -80,7 +78,6 @@ class FriendHandler {
 		$database->query('DELETE FROM `' . Settings::db_table_infected_friends . '`
 						  				WHERE `userId` = \'' . $user->getId() . '\'
 											AND `friendId` = \'' . $friend->getId() . '\';');
-
 	}
 }
 ?>

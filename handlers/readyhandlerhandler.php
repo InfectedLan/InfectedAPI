@@ -2,7 +2,7 @@
 /**
  * This file is part of InfectedAPI.
  *
- * Copyright (C) 2015 Infected <http://infected.no/>.
+ * Copyright (C) 2017 Infected <http://infected.no/>.
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -32,7 +32,6 @@ class ReadyHandlerHandler {
 		$result = $database->query('SELECT * FROM `' . Settings::db_table_infected_compo_readyInstances . '`
 																WHERE `id` = \'' . $database->real_escape_string($id) . '\';');
 
-
 		return $result->fetch_object('ReadyHandler');
 	}
 
@@ -43,7 +42,6 @@ class ReadyHandlerHandler {
 		$database = Database::getConnection(Settings::db_name_infected_compo);
 
 		$result = $database->query('SELECT * FROM `' . Settings::db_table_infected_compo_readyInstances . '`;');
-
 
 		$readyHandlerList = [];
 

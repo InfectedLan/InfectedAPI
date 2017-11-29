@@ -251,9 +251,7 @@ class UserHandler {
 														  \'' . $database->real_escape_string($nickname) . '\',
 														  \'' . date('Y-m-d H:i:s') . '\');');
 
-		$user = self::getUser($database->insert_id);
-
-		return $user;
+		return self::getUser($database->insert_id);
 	}
 
 	/*
@@ -274,7 +272,6 @@ class UserHandler {
 												  `postalcode` = \'' . $database->real_escape_string($postalCode) . '\',
 												  `nickname` = \'' . $database->real_escape_string($nickname) . '\'
 										  WHERE `id` = \'' . $user->getId() . '\';');
-
 	}
 
 	/*
@@ -334,7 +331,6 @@ class UserHandler {
 		$database->query('UPDATE `' . Settings::db_table_infected_users . '`
 										  SET `password` = \'' . $database->real_escape_string($password) . '\'
 										  WHERE `id` = \'' . $user->getId() . '\';');
-
 	}
 
 	/*
@@ -378,7 +374,8 @@ class UserHandler {
 	public static function getSteamId(User $user) {
     $database = Database::getConnection(Settings::db_name_infected_compo);
 
-    $result = $database->query('SELECT `steamId` FROM `' . Settings::db_table_infected_compo_steamids . '` WHERE `userId` = \'' . $user->getId() . '\';');
+    $result = $database->query('SELECT `steamId` FROM `' . Settings::db_table_infected_compo_steamids . '`
+																WHERE `userId` = \'' . $user->getId() . '\';');
     $count = $result->num_rows;
 
     return $result->fetch_array()[0];
@@ -390,13 +387,18 @@ class UserHandler {
 	public static function setSteamId(User $user, $steamId) {
     $database = Database::getConnection(Settings::db_name_infected_compo);
 
-    $result = $database->query('SELECT `steamId` FROM `' . Settings::db_table_infected_compo_steamids . '` WHERE `userId` = \'' . $user->getId() . '\';');
+    $result = $database->query('SELECT `steamId` FROM `' . Settings::db_table_infected_compo_steamids . '`
+																WHERE `userId` = \'' . $user->getId() . '\';');
     $count = $result->num_rows;
 
-    if($count==0) {
-			$database->query('INSERT INTO `' . Settings::db_table_infected_compo_steamids . '`(`userId`, `steamId`) VALUES (\'' . $user->getId() . '\', \'' . $database->real_escape_string($steamId) . '\');');
+    if ($count == 0) {
+			$database->query('INSERT INTO `' . Settings::db_table_infected_compo_steamids . '`(`userId`, `steamId`)
+												VALUES (\'' . $user->getId() . '\',
+																\'' . $database->real_escape_string($steamId) . '\');');
     } else {
-			$database->query('UPDATE `' . Settings::db_table_infected_compo_steamids . '` SET `steamId` = \'' . $database->real_escape_string($steamId) . '\' WHERE `userId` = \'' . $user->getId() . '\';');
+			$database->query('UPDATE `' . Settings::db_table_infected_compo_steamids . '`
+												SET `steamId` = \'' . $database->real_escape_string($steamId) . '\'
+												WHERE `userId` = \'' . $user->getId() . '\';');
     }
 	}
 }

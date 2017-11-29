@@ -2,7 +2,7 @@
 /**
  * This file is part of InfectedAPI.
  *
- * Copyright (C) 2015 Infected <http://infected.no/>.
+ * Copyright (C) 2017 Infected <http://infected.no/>.
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -36,7 +36,6 @@ class ChatHandler {
 		$result = $database->query('SELECT * FROM `' . Settings::db_table_infected_compo_chats . '`
 																WHERE `id` = \'' . $database->real_escape_string($id) . '\';');
 
-
 		return $result->fetch_object('Chat');
 	}
 
@@ -47,7 +46,6 @@ class ChatHandler {
 		$database = Database::getConnection(Settings::db_name_infected_compo);
 
 		$result = $database->query('SELECT * FROM `' . Settings::db_table_infected_compo_chats . '`;');
-
 
 		$chatList = [];
 
@@ -68,10 +66,7 @@ class ChatHandler {
 						  				VALUES (\'' . $database->real_escape_string($name) . '\',
 															\'' . $database->real_escape_string($title) . '\');');
 
-        $chat = self::getChat( $database->insert_id );
-
-
-		return $chat;
+		return self::getChat($database->insert_id);
 	}
 
 	/*
@@ -82,7 +77,6 @@ class ChatHandler {
 
 		$database->query('DELETE FROM `' . Settings::db_table_infected_compo_chats . '`
 						  				WHERE `id` = \'' . $chat->getId() . '\';');
-
 
 		// Remove all chat messages for this chat.
 		self::removeChatMessages($chat);
@@ -102,7 +96,6 @@ class ChatHandler {
 																WHERE `userId` = \'' . $user->getId() . '\'
 																AND `chatId` = \'' . $chat->getId() . '\';');
 
-
 		return $result->num_rows > 0;
 	}
 
@@ -115,7 +108,6 @@ class ChatHandler {
 		$result = $database->query('SELECT * FROM `' . Settings::db_table_infected_users . '`
 																WHERE `id` = (SELECT `userId` FROM `' . Settings::db_name_infected_compo . '`.`' . Settings::db_table_infected_compo_memberofchat . '`
 																							WHERE `chatId` = \'' . $chat->getId() . '\');');
-
 
 		$chatMemberList = [];
 
@@ -135,7 +127,6 @@ class ChatHandler {
 		$database->query('INSERT INTO `' . Settings::db_table_infected_compo_memberofchat . '` (`userId`, `chatId`)
 										  VALUES (\'' . $user->getId() . '\',
 												  		\'' . $chat->getId() . '\');');
-
 	}
 
 	/*
@@ -147,7 +138,6 @@ class ChatHandler {
 	    $database->query('INSERT INTO `' . Settings::db_table_infected_compo_memberofchat . '` (`userId`, `chatId`)
 										  VALUES (\'' . $database->real_escape_string($userId) . '\',
 												  		\'' . $database->real_escape_string($chatId) . '\');');
-
 	}
 
 	/*
@@ -159,7 +149,6 @@ class ChatHandler {
 		$database->query('DELETE FROM `' . Settings::db_table_infected_compo_memberofchat . '`
 											WHERE `userId` = \'' . $user->getId() . '\'
 											AND `chatId` = \'' . $chat->getId() . '\';');
-
 	}
 
 	/*
@@ -173,7 +162,6 @@ class ChatHandler {
 												VALUES (\'' . $user->getId() . '\',
 																\'' . $chat->getId() . '\');');
 		}
-
 	}
 
 	/*
@@ -184,7 +172,6 @@ class ChatHandler {
 
 		$database->query('DELETE FROM `' . Settings::db_table_infected_compo_memberofchat . '`
 											WHERE `chatId` = \'' . $chat->getId() . '\';');
-
 	}
 
 	/*
@@ -196,7 +183,6 @@ class ChatHandler {
 		$result = $database->query('SELECT * FROM `' . Settings::db_table_infected_compo_chatmessages . '`
 																WHERE `id` = \'' . $database->real_escape_string($id) . '\';');
 
-
 		return $result->fetch_object('ChatMessage');
 	}
 
@@ -207,7 +193,6 @@ class ChatHandler {
 		$database = Database::getConnection(Settings::db_name_infected_compo);
 
 		$result = $database->query('SELECT * FROM `' . Settings::db_table_infected_compo_chatmessages . '`;');
-
 
 		$chatMessageList = [];
 
@@ -229,7 +214,6 @@ class ChatHandler {
 																ORDER BY `id` DESC
 																LIMIT 1;');
 
-
 		return $result->fetch_object('ChatMessage');
 	}
 
@@ -243,7 +227,6 @@ class ChatHandler {
 																WHERE `chatId` = \'' . $chat->getId() . '\'
 																ORDER BY `id` DESC
 																LIMIT ' . $database->real_escape_string($count) . ';');
-
 
 		$chatMessageList = [];
 
@@ -279,30 +262,24 @@ class ChatHandler {
 
 	}
 
-    public static function canChat(Chat $chat, User $user) {
-        if ($user->hasPermission('compo.chat') ||
-            $chat->isMember($user)) {
-            return true;
-        }
+  public static function canChat(Chat $chat, User $user) {
+    return $user->hasPermission('compo.chat') || $chat->isMember($user);
+  }
 
-				return false;
-    }
+  public static function canRead(Chat $chat, User $user) {
+    if (self::canChat($chat, $user)) {
+      return true;
+    } else {
+      // You can also read the chat if it is a compo chat for a compo you are currently participating in. Soooo....
+      $clanList = ClanHandler::getClansByUser($user);
 
-    public static function canRead(Chat $chat, User $user) {
-        if (self::canChat($chat, $user)) {
+      foreach ($clanList as $clan) {
+        if (($clan->isQualified($clan->getCompo()) && $clan->getCompo()->getChat() == $chat)) {
           return true;
-        } else {
-            //You can also read the chat if it is a compo chat for a compo you are currently participating in. Soooo....
-            $clanList = ClanHandler::getClansByUser($user);
-
-            foreach ($clanList as $clan) {
-                if (($clan->isQualified($clan->getCompo()) && $clan->getCompo()->getChat()->getId() == $chat->getId() )) {
-                    return true;
-                }
-            }
-            //You can also read from a match you are a part of
-
         }
+      }
+      // You can also read from a match you are a part of
     }
+  }
 }
 ?>

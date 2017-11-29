@@ -2,7 +2,7 @@
 /**
  * This file is part of InfectedAPI.
  *
- * Copyright (C) 2015 Infected <http://infected.no/>.
+ * Copyright (C) 2017 Infected <http://infected.no/>.
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -33,7 +33,6 @@ class EmergencyContactHandler {
 		$result = $database->query('SELECT * FROM `'. Settings::db_table_infected_emergencycontacts . '`
 																WHERE `id` = \'' . $database->real_escape_string($id) . '\';');
 
-
 		return $result->fetch_object('EmergencyContact');
 	}
 
@@ -46,7 +45,6 @@ class EmergencyContactHandler {
 		$result = $database->query('SELECT * FROM `'. Settings::db_table_infected_emergencycontacts . '`
 																WHERE `userId` = \'' . $user->getId() . '\';');
 
-
 		return $result->fetch_object('EmergencyContact');
 	}
 
@@ -57,7 +55,6 @@ class EmergencyContactHandler {
 		$database = Database::getConnection(Settings::db_name_infected);
 
 		$result = $database->query('SELECT * FROM `' . Settings::db_table_infected_emergencycontacts . '`;');
-
 
 		$emergencyContactsList = [];
 
@@ -77,7 +74,6 @@ class EmergencyContactHandler {
 		$result = $database->query('SELECT `id` FROM `'. Settings::db_table_infected_emergencycontacts . '`
 																WHERE `userId` = \'' . $user->getId() . '\';');
 
-
 		return $result->num_rows > 0;
 	}
 
@@ -91,7 +87,6 @@ class EmergencyContactHandler {
 			$database->query('INSERT INTO `' . Settings::db_table_infected_emergencycontacts . '` (`userId`, `phone`)
 											  VALUES (\'' . $user->getId() . '\',
 													  		\'' . $database->real_escape_string($phone) . '\');');
-
 		} else {
 			if (!empty($phone) && $phone != 0) {
 				self::updateEmergencyContact($user, $phone);
@@ -110,7 +105,6 @@ class EmergencyContactHandler {
 		$database->query('UPDATE `' . Settings::db_table_infected_emergencycontacts . '`
 										  SET `phone` = \'' . $database->real_escape_string($phone) . '\'
 										  WHERE `userId` = \'' . $user->getId() . '\';');
-
 	}
 
 	/*
@@ -121,7 +115,6 @@ class EmergencyContactHandler {
 
 		$database->query('DELETE FROM `' . Settings::db_table_infected_emergencycontacts . '`
 						  				WHERE `userId` = \'' . $user->getId() . '\';');
-
 	}
 }
 ?>

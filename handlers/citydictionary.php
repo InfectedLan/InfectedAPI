@@ -2,7 +2,7 @@
 /**
  * This file is part of InfectedAPI.
  *
- * Copyright (C) 2015 Infected <http://infected.no/>.
+ * Copyright (C) 2017 Infected <http://infected.no/>.
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -31,7 +31,6 @@ class CityDictionary {
 		$result = $database->query('SELECT `city` FROM `' . Settings::db_table_infected_postalcodes . '`
 																WHERE `code` = \'' . $database->real_escape_string($postalCode) . '\';');
 
-
 		$row = $result->fetch_array();
 
 		return ucfirst(strtolower($row['city']));
@@ -46,7 +45,6 @@ class CityDictionary {
 		$result = $database->query('SELECT `id` FROM `' . Settings::db_table_infected_postalcodes . '`
 																WHERE `code` = \'' . $database->real_escape_string($postalCode) . '\';');
 
-
 		return $result->num_rows > 0;
 	}
 
@@ -58,7 +56,6 @@ class CityDictionary {
 
 		$result = $database->query('SELECT `code` FROM `' . Settings::db_table_infected_postalcodes . '`
 																WHERE `city` = \'' . $database->real_escape_string($city) . '\';');
-
 
 		$row = $result->fetch_array();
 

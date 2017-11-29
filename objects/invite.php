@@ -2,7 +2,7 @@
 /**
  * This file is part of InfectedAPI.
  *
- * Copyright (C) 2015 Infected <http://infected.no/>.
+ * Copyright (C) 2017 Infected <http://infected.no/>.
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -20,9 +20,9 @@
 
 require_once 'database.php';
 require_once 'settings.php';
-require_once 'handlers/userhandler.php';
 require_once 'handlers/clanhandler.php';
 require_once 'handlers/invitehandler.php';
+require_once 'handlers/userhandler.php';
 require_once 'objects/eventobject.php';
 
 class Invite extends EventObject {

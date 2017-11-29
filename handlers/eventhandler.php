@@ -2,7 +2,7 @@
 /**
  * This file is part of InfectedAPI.
  *
- * Copyright (C) 2015 Infected <http://infected.no/>.
+ * Copyright (C) 2017 Infected <http://infected.no/>.
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -135,8 +135,9 @@ class EventHandler {
 	 * Create new event
 	 */
 	public static function createEvent($location, $participants, $bookingTime, $startTime, $endTime) {
-		$name = Settings::name . ' ' . (date('m', strtotime($startTime)) == 2 ? 'Vinter' : 'Høst') . ' ' . date('Y', strtotime($startTime));
+		$name = Settings::name . ' ' . Localization::getLocale(date('m', strtotime($startTime)) == 2 ? 'winter' : 'autumn') . ' ' . date('Y', strtotime($startTime));
 		$seatmap = SeatmapHandler::createSeatmap($name, null);
+
 		$database = Database::getConnection(Settings::db_name_infected);
 
 		$database->query('INSERT INTO `' . Settings::db_table_infected_events . '` (`locationId`, `participants`, `bookingTime`, `startTime`, `endTime`, `seatmapId`, `ticketTypeId`)
@@ -148,9 +149,7 @@ class EventHandler {
 														  \'' . $seatmap->getId() . '\',
 														  \'1\');');
 
-		$event = self::getEvent($database->insert_id);
-
-		return $event;
+		return self::getEvent($database->insert_id);
 	}
 
 	/*
@@ -178,16 +177,17 @@ class EventHandler {
 
 		$database->query('DELETE FROM `' . Settings::db_table_infected_events . '`
 						  				WHERE `id` = \'' . $event->getId() . '\';');
-
 	}
+
 	/*
 	 * Returns a list of everyone in a group for the specified event
 	 */
 	public static function getMembersByEvent(Event $event) {
 		$database = Database::getConnection(Settings::db_name_infected);
 
-		$result = $database->query('SELECT `' . Settings::db_table_infected_users . '`.* FROM `' . Settings::db_table_infected_users . '` 
-													LEFT JOIN `' . Settings::db_name_infected_crew . '`.`' . Settings::db_table_infected_crew_memberof . '` ON `' . Settings::db_table_infected_users . '`.`id` = `' . Settings::db_name_infected_crew . '`.`' . Settings::db_table_infected_crew_memberof . '`.`userId` WHERE `eventId` = ' . $event->getId() . ';');
+		$result = $database->query('SELECT `' . Settings::db_table_infected_users . '`.* FROM `' . Settings::db_table_infected_users . '`
+													LEFT JOIN `' . Settings::db_name_infected_crew . '`.`' . Settings::db_table_infected_crew_memberof . '` ON `' . Settings::db_table_infected_users . '`.`id` = `' . Settings::db_name_infected_crew . '`.`' . Settings::db_table_infected_crew_memberof . '`.`userId`
+													WHERE `eventId` = ' . $event->getId() . ';');
 
 		$eventList = [];
 
@@ -208,7 +208,8 @@ class EventHandler {
 							LEFT JOIN `' . Settings::db_name_infected_tickets . '`.`' . Settings::db_table_infected_tickets_tickets . '`
 							    ON `' . Settings::db_table_infected_users . '`.`id` = `' . Settings::db_table_infected_tickets_tickets . '`.`userId`
 							LEFT JOIN `' . Settings::db_name_infected_crew . '`.`' . Settings::db_table_infected_crew_memberof . '`
-							    ON (`' . Settings::db_table_infected_users . '`.`id` = `' . Settings::db_table_infected_crew_memberof . '`.`userId` AND `' . Settings::db_table_infected_crew_memberof . '`.`eventId` = ' . $event->getId() . ')
+							    ON (`' . Settings::db_table_infected_users . '`.`id` = `' . Settings::db_table_infected_crew_memberof . '`.`userId`
+									    AND `' . Settings::db_table_infected_crew_memberof . '`.`eventId` = ' . $event->getId() . ')
 							WHERE `' . Settings::db_table_infected_tickets_tickets . '`.`eventId` = ' . $event->getId() . '
 							AND `groupId` IS NULL
 							GROUP BY `' . Settings::db_table_infected_users . '`.`id`;');

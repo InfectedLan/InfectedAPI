@@ -2,7 +2,7 @@
 /**
  * This file is part of InfectedAPI.
  *
- * Copyright (C) 2015 Infected <http://infected.no/>.
+ * Copyright (C) 2017 Infected <http://infected.no/>.
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -89,7 +89,6 @@ class UserOptionHandler {
 												SET `swimming` = \'' . $database->real_escape_string($swimming) . '\'
 												WHERE `userId` = \'' . $user->getId() . '\';');
 		}
-
 	}
 
 	/*

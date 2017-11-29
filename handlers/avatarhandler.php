@@ -2,7 +2,7 @@
 /**
  * This file is part of InfectedAPI.
  *
- * Copyright (C) 2015 Infected <http://infected.no/>.
+ * Copyright (C) 2017 Infected <http://infected.no/>.
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -89,7 +89,7 @@ class AvatarHandler {
 	public static function hasAvatar(User $user) {
 		$database = Database::getConnection(Settings::db_name_infected_crew);
 
-		$result = $database->query('SELECT `id` FROM `' . Settings::db_table_infected_crew_avatars . '`
+		$result = $database->query('SELECT * FROM `' . Settings::db_table_infected_crew_avatars . '`
 																WHERE `userId` = \'' . $user->getId() . '\';');
 
 		return $result->num_rows > 0;
@@ -101,7 +101,7 @@ class AvatarHandler {
 	public static function hasCroppedAvatar(User $user) {
 		$database = Database::getConnection(Settings::db_name_infected_crew);
 
-		$result = $database->query('SELECT `id` FROM `' . Settings::db_table_infected_crew_avatars . '`
+		$result = $database->query('SELECT * FROM `' . Settings::db_table_infected_crew_avatars . '`
 																WHERE `userId` = \'' . $user->getId() . '\'
 																AND (`state` = 1 OR `state` = 2);');
 
@@ -114,7 +114,7 @@ class AvatarHandler {
 	public static function hasValidAvatar(User $user) {
 		$database = Database::getConnection(Settings::db_name_infected_crew);
 
-		$result = $database->query('SELECT `id` FROM `' . Settings::db_table_infected_crew_avatars . '`
+		$result = $database->query('SELECT * FROM `' . Settings::db_table_infected_crew_avatars . '`
 																WHERE `userId` = \'' . $user->getId() . '\'
 																AND `state` = \'2\';');
 
@@ -129,7 +129,8 @@ class AvatarHandler {
 
 		$result = $database->query('INSERT INTO `' . Settings::db_table_infected_crew_avatars . '` (`userId`, `fileName`, `state`)
 																VALUES (\'' . $user->getId() . '\',
-																				\'' . $fileName . '\', 0);');
+																				\'' . $fileName . '\',
+																				\'0\');');
 
 		return Settings::api_path . Settings::avatar_path . 'temp/' . $fileName;
 	}
@@ -179,7 +180,6 @@ class AvatarHandler {
 		$database->query('UPDATE `' . Settings::db_table_infected_crew_avatars . '`
 										  SET `state` =  \'3\'
 										  WHERE `id` = \'' . $avatar->getId() . '\';');
-
 	}
 
 	/*
