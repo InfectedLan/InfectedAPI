@@ -44,8 +44,6 @@ class NoteHandler {
 	public static function getNotes(Event $event = null): array {
 		$database = Database::getConnection(Settings::db_name_infected_crew);
 
-		// TODO: Check eventid against memberof table instead. What about secondsOffset?
-
 		$result = $database->query('SELECT * FROM `' . Settings::db_table_infected_crew_notes . '`
 																WHERE `eventId` = \'' . ($event != null ? $event->getId() : EventHandler::getCurrentEvent()->getId()) . '\'
 																ORDER BY `secondsOffset`, `time`;');
@@ -64,8 +62,6 @@ class NoteHandler {
 	 */
 	public static function getNotesReachedNotificationTime(Event $event = null): array {
 		$database = Database::getConnection(Settings::db_name_infected_crew);
-
-		// TODO: Check eventid against memberof table instead. What about secondsOffset?
 
 		$result = $database->query('SELECT * FROM `' . Settings::db_table_infected_crew_notes . '`
 																WHERE `eventId` = \'' . ($event != null ? $event->getId() : EventHandler::getCurrentEvent()->getId()) . '\'
@@ -89,8 +85,6 @@ class NoteHandler {
 	public static function getNotesByGroup(Group $group, Event $event = null): array {
 		$database = Database::getConnection(Settings::db_name_infected_crew);
 
-		// TODO: Check eventid against memberof table instead.
-
 		$result = $database->query('SELECT * FROM `' . Settings::db_table_infected_crew_notes . '`
 																WHERE `eventId` = \'' . ($event != null ? $event->getId() : EventHandler::getCurrentEvent()->getId()) . '\'
 																AND `groupId` = \'' . $group->getId() . '\'
@@ -110,8 +104,6 @@ class NoteHandler {
 	 */
 	public static function getNotesByTeam(Team $team, Event $event = null): array {
 		$database = Database::getConnection(Settings::db_name_infected_crew);
-
-		// TODO: Check eventid against memberof table instead.
 
 		$result = $database->query('SELECT * FROM `' . Settings::db_table_infected_crew_notes . '`
 																WHERE `eventId` = \'' . ($event != null ? $event->getId() : EventHandler::getCurrentEvent()->getId()) . '\'
@@ -133,8 +125,6 @@ class NoteHandler {
 	 */
 	public static function getNotesByUser(User $user, Event $event = null): array {
 		$database = Database::getConnection(Settings::db_name_infected_crew);
-
-		// TODO: Check eventid against memberof table instead. Is it even relevant?
 
 		$result = $database->query('SELECT * FROM `' . Settings::db_table_infected_crew_notes . '`
 																WHERE `eventId` = \'' . ($event != null ? $event->getId() : EventHandler::getCurrentEvent()->getId()) . '\'
