@@ -1,4 +1,5 @@
 <?php
+include 'database.php';
 /**
  * This file is part of InfectedAPI.
  *
@@ -65,7 +66,8 @@ if (Session::isAuthenticated()) {
 												  'id' => $row->getId(),
 												  'x' => $row->getX(),
 												  'y' => $row->getY(),
-												  'number' => $row->getNumber()];
+						  						  'number' => $row->getNumber(),
+						  						  'horizontal' => $row->isHorizontal()];
 
 				$result = true;
 			}
@@ -86,4 +88,5 @@ if ($result) {
 } else {
 	echo json_encode(['result' => $result, 'message' => $message], JSON_PRETTY_PRINT);
 }
+Database::cleanup();
 ?>

@@ -51,7 +51,7 @@ class Localization {
 		}
 
 		// Otherwise, return an error string.
-		return 'Locale file for language "\'' . $language . '\'" not found, this is a bug.';
+		return 'Locale "' . $key . '" file for language "\'' . $language . '\'" not found, this is a bug.';
 	}
 }
 ?>

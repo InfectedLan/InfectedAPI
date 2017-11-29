@@ -1,4 +1,5 @@
 <?php
+include 'database.php';
 /**
  * This file is part of InfectedAPI.
  *
@@ -41,4 +42,5 @@ if (isset($_GET['postalcode']) &&
 
 header('Content-Type: text/plain');
 echo json_encode(['result' => $result, 'message' => $message], JSON_PRETTY_PRINT);
+Database::cleanup();
 ?>

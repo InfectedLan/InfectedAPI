@@ -55,7 +55,6 @@
    "you_cannot_remove_this_event":"Du kan ikke fjerne dette arrangementet.",
 
    "this_group_does_not_exist":"Denne gruppen finnes ikke.",
-   "no_group_specified":"Ingen gruppe angitt.",
 
    "this_invite_does_not_exist":"Denne invitasjonen finnes ikke.",
    "you_are_not_the_owner_of_this_invite":"Du eier ikke denne invitasjonen.",
@@ -118,7 +117,6 @@
    "the_target_user_does_not_exist":"Målbrukeren eksisterer ikke.",
 
    "this_user_does_not_exist":"Denne brukeren finnes ikke.",
-   "no_user_specified":"Ingen bruker er spesifisert.",
    "the_username_is_already_in_use_by_someone_else":"Brukernavnet er allerede i bruk av en annen.",
    "the_email_address_is_already_in_use_by_someone_else":"E-post adressen er allerede i bruk av en annen.",
    "the_phone_number_is_already_in_use_by_someone_else":"Telefonnummeret er allerede i bruk av en annen.",
@@ -194,5 +192,12 @@
    "reset_password":"Nullstill passord",
    "enter_a_new_password":"Skriv inn et nytt passord.",
    "change":"Endre",
-   "since_you_are_already_logged_in_you_it_seems_like_you_remember_your_password_after_all":"Siden du allerede er logget inn, ser det ut til at du husker passordet ditt likevel."
+    "since_you_are_already_logged_in_you_it_seems_like_you_remember_your_password_after_all":"Siden du allerede er logget inn, ser det ut til at du husker passordet ditt likevel.",
+    "you_are_not_eligible_for_early_seating": "Du har ikke nok biletter for å seate tidlig",
+    "seating_has_not_opened_yet": "Seating har ikke åpnet enda",
+    "you_have_to_seat_next_to_another_seat_you_own_during_early_seating": "Du må sette setet ved siden av et annet sete du har tilgang til å plassere så lenge tidlig seating er aktivt.",
+
+    "you_do_not_have_permission_to_do_this_you_will only be able to run this from command line": "Du har ikke rettigheter til å gjøre det, du kan kun kjøre denne fra CLI.",
+    "autumn": "Høst",
+    "winter": "Vinter"
 }

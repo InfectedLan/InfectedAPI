@@ -2,7 +2,7 @@
 /**
  * This file is part of InfectedAPI.
  *
- * Copyright (C) 2015 Infected <http://infected.no/>.
+ * Copyright (C) 2017 Infected <http://infected.no/>.
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -75,8 +75,7 @@ class Agenda extends EventObject {
 	 * Returns true if this agenda is happening right now.
 	 */
 	public function isHappening() {
-		return $this->getStartTime() - 5 * 60 >= time() ||
-			   $this->getStartTime() + 1 * 60 * 60 >= time();
+		return $this->getStartTime() - 5 * 60 >= time() || $this->getStartTime() + 1 * 60 * 60 >= time();
 	}
 }
 ?>

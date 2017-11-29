@@ -2,7 +2,7 @@
 /**
  * This file is part of InfectedAPI.
  *
- * Copyright (C) 2015 Infected <http://infected.no/>.
+ * Copyright (C) 2017 Infected <http://infected.no/>.
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -31,6 +31,8 @@ class Event extends Object {
 	private $locationId;
 	private $participants;
 	private $bookingTime;
+	private $prioritySeatingTime;
+	private $seatingTime;
 	private $startTime;
 	private $endTime;
 	private $seatmapId;
@@ -65,6 +67,20 @@ class Event extends Object {
 	}
 
 	/*
+	 * Returns the time when priority seating starts(See settings.php)
+	 */
+	public function getPrioritySeatingTime() {
+		return strtotime($this->prioritySeatingTime);
+	}
+
+	/*
+	 * Returns the time when normal seating starts
+	 */
+	public function getSeatingTime() {
+		return strtotime($this->seatingTime);
+	}
+
+	/*
 	 * Returns when the event starts.
 	 */
 	public function getStartTime() {
@@ -96,14 +112,14 @@ class Event extends Object {
 	 * Returns the title for this event.
 	 */
 	public function getTitle() {
-		return Settings::name . ' ' . (date('m', $this->getStartTime()) == 2 ? 'Vinter' : 'Høst') . ' ' . date('Y', $this->getStartTime());
+		return Settings::name . ' ' . $this->getSeason() . ' ' . date('Y', $this->getStartTime());
 	}
 
 	/*
 	 * Returns true if booking for this event is opened.
 	 */
 	public function isBookingTime() {
-		$offset = 86400;
+		$offset = 24 * 60 * 60;
 		$bookingTime = $this->getBookingTime();
 		$bookingEndTime = $this->getStartTime() + $offset;
 
@@ -111,10 +127,25 @@ class Event extends Object {
 	}
 
 	/*
+	 * Returns true if booking for this event is opened.
+	 */
+	public function isOngoing() {
+		$offset = 2 * 60 * 60;
+		$startTime = $this->getStartTime() - $offset;
+		$endTime = $this->getEndTime() + $offset;
+
+		return time() >= $startTime && time() <= $endTime;
+	}
+
+	public function getSeason() {
+		return Localization::getLocale(date('m', $this->getStartTime()) == 2 ? 'winter' : 'autumn');
+	}
+
+	/*
 	 * Returns the number of tickets for this event.
 	 */
 	public function getTicketCount() {
-		return count(TicketHandler::getTicketsByEvent($this));
+		return count(TicketHandler::getTickets($this));
 	}
 
 	/*

@@ -1,4 +1,5 @@
 <?php
+include 'database.php';
 /**
  * This file is part of InfectedAPI.
  *
@@ -28,7 +29,7 @@ $message = null;
 if (Session::isAuthenticated()) {
     $user = Session::getCurrentUser();
 
-    if ($user->hasPermission('event.compo')) {
+    if ($user->hasPermission('compo.management')) {
 	$clan = ClanHandler::getClan($_GET["id"]);
         if($clan != null) {
             ClanHandler::setQualified($clan, true);
@@ -45,4 +46,5 @@ if (Session::isAuthenticated()) {
 
 header('Content-Type: text/plain');
 echo json_encode(array('result' => $result, 'message' => $message), JSON_PRETTY_PRINT);
+Database::cleanup();
 ?>

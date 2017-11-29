@@ -1,4 +1,5 @@
 <?php
+include 'database.php';
 /**
  * This file is part of InfectedAPI.
  *
@@ -34,4 +35,5 @@ foreach (AgendaHandler::getAgendas() as $agenda) {
 
 header('Content-Type: text/plain');
 echo json_encode(array('agendaList' => $agendaList), JSON_PRETTY_PRINT);
+Database::cleanup();
 ?>

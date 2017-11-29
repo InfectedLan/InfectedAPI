@@ -39,7 +39,7 @@ function renderSeatmap(target, seatHandlerFunction, callback) {
 	{
 		var returnData = [];
 
-		returnData.push('<div class="row" style="top: ' + seatmapData.rows[i].y + 'px; left: ' + seatmapData.rows[i].x + 'px;" id="row' + seatmapData.rows[i].id + '">');
+	    	returnData.push('<div class="row' + (seatmapData.rows[i].horizontal ? "-horizontal" : "") + '" style="top: ' + seatmapData.rows[i].y + 'px; left: ' + seatmapData.rows[i].x + 'px;" id="row' + seatmapData.rows[i].id + '">');
 		for(var s = 0; s < seatmapData.rows[i].seats.length; s++)
 		{
 			var title = "Ledig sete";

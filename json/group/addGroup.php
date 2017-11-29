@@ -1,4 +1,5 @@
 <?php
+include 'database.php';
 /**
  * This file is part of InfectedAPI.
  *
@@ -34,28 +35,14 @@ if (Session::isAuthenticated()) {
 		if (isset($_GET['title']) &&
 			isset($_GET['description']) &&
 			isset($_GET['leader']) &&
-			isset($_GET['coleader']) &&
 			!empty($_GET['title']) &&
 			!empty($_GET['description'])) {
 			$name = strtolower(str_replace(' ', '-', $_GET['title']));
 			$title = $_GET['title'];
 			$description = $_GET['description'];
 			$leaderUser = UserHandler::getUser($_GET['leader']);
-			$coleaderUser = UserHandler::getUser($_GET['coleader']);
 
-			if ($leaderUser != null) {
-				if (!$leaderUser->isGroupMember() && !$leaderUser->equals($group->getLeader())) {
-					GroupHandler::changeGroupForUser($leaderUser, $group);
-				}
-			}
-
-			if ($coleaderUser != null) {
-				if (!$coleaderUser->isGroupMember() && !$coleaderUser->equals($group->getCoLeader())) {
-					GroupHandler::changeGroupForUser($leaderUser, $group);
-				}
-			}
-
-			GroupHandler::createGroup(EventHandler::getCurrentEvent(), $name, $title, $description, $leaderUser, $coleaderUser);
+			GroupHandler::createGroup($name, $title, $description, $leaderUser);
 			$result = true;
 		} else {
 			$message = Localization::getLocale('you_have_not_filled_out_the_required_fields');
@@ -67,6 +54,7 @@ if (Session::isAuthenticated()) {
 	$message = Localization::getLocale('you_are_not_logged_in');
 }
 
-header('Content-Type: text/plain');
+header('Content-Type: application/json');
 echo json_encode(['result' => $result, 'message' => $message], JSON_PRETTY_PRINT);
+Database::cleanup();
 ?>

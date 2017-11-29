@@ -19,6 +19,7 @@
  */
 require_once 'server.php';
 require_once 'phpwebsockets/users.php';
+require_once 'handlers/chathandler.php';
 require_once 'websocketplugin.php';
 
 class AdminPlugin extends WebSocketPlugin {
@@ -31,7 +32,7 @@ class AdminPlugin extends WebSocketPlugin {
         //$server->registerIntent("subscribeLog", $this);
         $server->registerIntent("command", $this);
         //$server->registerIntent("unsubscribeLog", $this);
-        $server->registerPlugin($this);
+        $server->registerPlugin($this, "AdminPlugin");
 
         $this->server = $server;
 
@@ -90,15 +91,15 @@ class AdminPlugin extends WebSocketPlugin {
     protected function handleCommand(WebSocketUser $connection, $args) {
 	switch(strtolower($args[0])) {
 	case 'help':
-	    $this->server->send($connection, '{"intent": "commandResponse", "data": ["Help for the websocket admin-ui", "", "&nbsp;help: shows this list", "&nbsp;refreshAll: Force-refreshes all connected clients within the next 60 seconds(plus 10 sec warning)", "&nbsp;online: Shows all authenticated people", "&nbsp;subscribeLog: Prints happenings to this console.", "&nbsp;unsubscribeLog: Unsubscribes you from recieving log info in this console"]}');
+	    $this->server->send($connection, '{"intent": "commandResponse", "data": ["Help for the websocket admin-ui", "", "&nbsp;help: shows this list", "&nbsp;refreshAll: Force-refreshes all connected clients within the next 60 seconds(plus 10 sec warning)", "&nbsp;online: Shows all authenticated people", "&nbsp;subscribeLog: Prints happenings to this console.", "&nbsp;unsubscribeLog: Unsubscribes you from recieving log info in this console", "&nbsp;plugins: Lists loaded plugins", "&nbsp;chatroomSubscriptions: Shows who is subscribed to what chatroom"]}');
 	    break;
 	case 'refreshall':
 	    foreach($this->server->authenticatedUsers as $person) {
 		$delay = rand(10*1000, 60*1000);
 		$this->server->send($person, '{"intent": "refresh", "data": [' . $delay . ']}');
-		$this->server->send($connection, '{"intent": "commandResponse", "data": ["See you in a bit!"]}');
 		$this->server->disconnect($connection);
 	    }
+	    $this->server->send($connection, '{"intent": "commandResponse", "data": ["See you in a bit!"]}');
 	    break;
 	case 'online':
 	    $data = [""];
@@ -106,7 +107,7 @@ class AdminPlugin extends WebSocketPlugin {
 	    $index = 0;
 	    foreach($this->server->authenticatedUsers as $person) {
 		$user = $this->server->getUser($person);
-		$data[$index] = $data[$index] . "&nbsp;" . $user->getUsername() . '(' . $user->getId() . ')';
+		$data[$index] = $data[$index] ."&nbsp;" . $user->getUsername() . '(' . $user->getId() . ')';
 		if($count%4==3) {
 		    $index++;
 		}
@@ -124,6 +125,40 @@ class AdminPlugin extends WebSocketPlugin {
                 println("Unsubscribing connection from admin messages");
                 unset($this->subscribedPeople[$key]);
             }
+	    break;
+	case 'plugins':
+	    $pluginList = [];
+	    $pluginList[] = "Loaded plugins: " . count($this->server->plugins);
+	    foreach($this->server->plugins as $key => $val) {
+		$pluginList[] = " * " . $key;
+	    }
+	    $jsonData = ["intent"=>"commandResponse", "data" => $pluginList];
+	    $this->server->send($connection, json_encode($jsonData));
+	    break;
+	case 'chatroomsubscriptions':
+	    $lines = [];
+
+	    $lines[] = "Chatrooms:";
+	    foreach($this->server->plugins["ChatPlugin"]->followingChatChannels as $key => $value) {
+		$room = ChatHandler::getChat($key);
+		$lines[] = "---" . $room->getTitle() . "(" . $key . ")---";
+		$lines[] = "Subscribers: " . count($value);
+		$lines[] = "";
+		$count = 0;
+		$index = count($lines)-1;
+		foreach($value as $person) {
+		    $user = $this->server->getUser($person);
+		    $lines[$index] = $lines[$index] . "&nbsp;" . $user->getUsername() . '(' . $user->getId() . ')';
+		    if($count%4==3) {
+			$index++;
+		    }
+		    $count++;
+		}
+		
+	    }
+	    
+	    $jsonData = ["intent"=>"commandResponse", "data" => $lines];
+	    $this->server->send($connection, json_encode($jsonData));
 	    break;
 	default:
 	    $this->server->send($connection, '{"intent": "commandResponse", "data": ["Unknown command - type help for help."]}');

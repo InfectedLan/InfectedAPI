@@ -2,6 +2,7 @@
     "name": "Default compo plugin",
     "description": "Gives you the default behaviour of the compo system",
     "javascript": {"compoPlugin": "default/compoPlugin.js"},
+    "pages": [],
     "plugin": [],
     "classname": "CompoPlugin"
 }

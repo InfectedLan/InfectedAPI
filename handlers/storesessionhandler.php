@@ -2,7 +2,7 @@
 /**
  * This file is part of InfectedAPI.
  *
- * Copyright (C) 2015 Infected <http://infected.no/>.
+ * Copyright (C) 2017 Infected <http://infected.no/>.
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -31,12 +31,10 @@ class StoreSessionHandler {
 	 * Get a store session by the internal id.
 	 */
 	public static function getStoreSession($id) {
-		$database = Database::open(Settings::db_name_infected_tickets);
+		$database = Database::getConnection(Settings::db_name_infected_tickets);
 
 		$result = $database->query('SELECT * FROM `' . Settings::db_table_infected_tickets_storesessions . '`
 																WHERE `id` = \'' . $database->real_escape_string($id) . '\';');
-
-		$database->close();
 
 		return $result->fetch_object('StoreSession');
 	}
@@ -45,11 +43,9 @@ class StoreSessionHandler {
 	 * Get a list of all store sessions.
 	 */
 	public static function getStoreSessions() {
-		$database = Database::open(Settings::db_name_infected_tickets);
+		$database = Database::getConnection(Settings::db_name_infected_tickets);
 
 		$result = $database->query('SELECT * FROM `' . Settings::db_table_infected_tickets_storesessions . '`;');
-
-		$database->close();
 
 		$storeSessionList = [];
 
@@ -64,13 +60,11 @@ class StoreSessionHandler {
 	 * Returns the store session for the specified user.
 	 */
 	public static function getStoreSessionByUser(User $user) {
-		$database = Database::open(Settings::db_name_infected_tickets);
+		$database = Database::getConnection(Settings::db_name_infected_tickets);
 
 		$result = $database->query('SELECT * FROM `' . Settings::db_table_infected_tickets_storesessions . '`
 																WHERE `userId` = \'' . $user->getId() . '\'
 																AND `datetime` > \'' . self::oldestValidTimestamp() . '\';');
-
-		$database->close();
 
 		return $result->fetch_object('StoreSession');
 	}
@@ -79,13 +73,11 @@ class StoreSessionHandler {
 	 * Returns the store session by the specified key.
 	 */
 	private static function getStoreSessionByCode($code) {
-		$database = Database::open(Settings::db_name_infected_tickets);
+		$database = Database::getConnection(Settings::db_name_infected_tickets);
 
 		$result = $database->query('SELECT * FROM `' . Settings::db_table_infected_tickets_storesessions . '`
 																WHERE `code` = \'' . $database->real_escape_string($code) . '\'
 																AND `datetime` > \'' . self::oldestValidTimestamp() . '\';');
-
-		$database->close();
 
 		return $result->fetch_object('StoreSession');
 	}
@@ -94,13 +86,11 @@ class StoreSessionHandler {
 	 * Returns true if the specified user have a store session.
 	 */
 	public static function hasStoreSession(User $user) {
-		$database = Database::open(Settings::db_name_infected_tickets);
+		$database = Database::getConnection(Settings::db_name_infected_tickets);
 
 		$result = $database->query('SELECT `id` FROM `' . Settings::db_table_infected_tickets_storesessions . '`
 																WHERE `userId` = \'' . $user->getId() . '\'
 																AND `datetime` > \'' . self::oldestValidTimestamp() . '\';');
-
-		$database->close();
 
 		return $result->num_rows > 0;
 	}
@@ -111,7 +101,7 @@ class StoreSessionHandler {
 	public static function createStoreSession(User $user, TicketType $ticketType, $amount, $price) {
 		$code = bin2hex(openssl_random_pseudo_bytes(16));
 
-		$database = Database::open(Settings::db_name_infected_tickets);
+		$database = Database::getConnection(Settings::db_name_infected_tickets);
 
 		$result = $database->query('INSERT INTO `' . Settings::db_table_infected_tickets_storesessions . '` (`userId`, `ticketTypeId`, `amount`, `code`, `price`, `datetime`)
 																VALUES (\'' . $user->getId() . '\',
@@ -121,8 +111,6 @@ class StoreSessionHandler {
 																				\'' . $database->real_escape_string($price) . '\',
 																				\'' . date('Y-m-d H:i:s') . '\');');
 
-		$database->close();
-
 		return $code;
 	}
 
@@ -130,12 +118,10 @@ class StoreSessionHandler {
 	 * Removes the specified store session.
 	 */
 	public static function removeStoreSession(StoreSession $storeSession) {
-		$database = Database::open(Settings::db_name_infected_tickets);
+		$database = Database::getConnection(Settings::db_name_infected_tickets);
 
 		$result = $database->query('DELETE FROM `' . Settings::db_table_infected_tickets_storesessions . '`
 																WHERE `id` = \'' . $storeSession->getId() . '\';');
-
-		$database->close();
 	}
 
 	/*
@@ -149,13 +135,11 @@ class StoreSessionHandler {
 	 * Returns the amount of reserved tickets for the specified ticket type.
 	 */
 	public static function getReservedTicketCount(TicketType $ticketType) {
-		$database = Database::open(Settings::db_name_infected_tickets);
+		$database = Database::getConnection(Settings::db_name_infected_tickets);
 
 		$result = $database->query('SELECT `amount` FROM `' . Settings::db_table_infected_tickets_storesessions . '`
 																WHERE `ticketTypeId` = \'' . $ticketType->getId() . '\'
 																AND `datetime` > \'' . self::oldestValidTimestamp() . '\';');
-
-		$database->close();
 
 		$reservedCount = 0;
 
@@ -177,14 +161,12 @@ class StoreSessionHandler {
 	 * Returns the user with a store session with the specified code.
 	 */
 	public static function getUserByStoreSessionCode($code) {
-		$database = Database::open(Settings::db_name_infected);
+		$database = Database::getConnection(Settings::db_name_infected);
 
 		$result = $database->query('SELECT * FROM `' . Settings::db_table_infected_users . '`
 																WHERE `id` = (SELECT `userId` FROM `' . Settings::db_name_infected_tickets . '`.`' . Settings::db_table_infected_tickets_storesessions . '`
 																			  			WHERE `code`= \'' . $database->real_escape_string($code) . '\'
 																			  			AND `datetime` > \'' . self::oldestValidTimestamp() . '\');');
-
-		$database->close();
 
 		return $result->fetch_object('User');
 	}

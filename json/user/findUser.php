@@ -1,4 +1,5 @@
 <?php
+include 'database.php';
 /**
  * This file is part of InfectedAPI.
  *
@@ -31,7 +32,7 @@ if (Session::isAuthenticated()) {
 
 	if (isset($_GET['query']) &&
 		strlen($_GET['query']) >= 2) {
-		$query = preg_replace('/[^A-Za-z0-9]/', ' ', $_GET['query']);
+		$query = $_GET['query'];
 		$userList = UserHandler::search($query);
 
 		if (!empty($userList)) {
@@ -58,4 +59,5 @@ if (Session::isAuthenticated()) {
 
 header('Content-Type: text/plain');
 echo json_encode(['result' => $result, 'message' => $message, 'users' => $users], JSON_PRETTY_PRINT);
+Database::cleanup();
 ?>

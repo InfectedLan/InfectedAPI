@@ -1,4 +1,5 @@
 <?php
+include 'database.php';
 /**
  * This file is part of InfectedAPI.
  *
@@ -30,34 +31,20 @@ if (Session::isAuthenticated()) {
 	$user = Session::getCurrentUser();
 
 	if ($user->hasPermission('chief.group')) {
-		if (isset($_GET['id']) &&
+		if (isset($_GET['groupId']) &&
 			isset($_GET['title']) &&
 			isset($_GET['description']) &&
 			isset($_GET['leader']) &&
-			isset($_GET['coleader']) &&
 			!empty($_GET['title']) &&
 			!empty($_GET['description'])) {
-			$group = GroupHandler::getGroup($_GET['id']);
+			$group = GroupHandler::getGroup($_GET['groupId']);
 			$name = strtolower(str_replace(' ', '-', $_GET['title']));
 			$title = $_GET['title'];
 			$description = $_GET['description'];
 			$leaderUser = UserHandler::getUser($_GET['leader']);
-			$coleaderUser = UserHandler::getUser($_GET['coleader']);
 
 			if ($group != null) {
-				if ($leaderUser != null) {
-					if (!$leaderUser->isGroupMember() && !$leaderUser->equals($group->getLeader())) {
-						GroupHandler::changeGroupForUser($leaderUser, $group);
-					}
-				}
-
-				if ($coleaderUser != null) {
-					if (!$coleaderUser->isGroupMember() && !$coleaderUser->equals($group->getCoLeader())) {
-						GroupHandler::changeGroupForUser($leaderUser, $group);
-					}
-				}
-
-				GroupHandler::updateGroup($group, $name, $title, $description, $leaderUser, $coleaderUser);
+				GroupHandler::updateGroup($group, $name, $title, $description, $leaderUser);
 				$result = true;
 			} else {
 				$message = Localization::getLocale('this_group_does_not_exist');
@@ -72,6 +59,7 @@ if (Session::isAuthenticated()) {
 	$message = Localization::getLocale('you_are_not_logged_in');
 }
 
-header('Content-Type: text/plain');
+header('Content-Type: application/json');
 echo json_encode(['result' => $result, 'message' => $message], JSON_PRETTY_PRINT);
+Database::cleanup();
 ?>

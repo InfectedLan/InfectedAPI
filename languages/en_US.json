@@ -55,7 +55,6 @@
    "you_cannot_remove_this_event":"You cannot remove this event.",
 
    "this_group_does_not_exist":"This group does not exist.",
-   "no_group_specified":"No group specified.",
 
    "this_invite_does_not_exist":"This invite does not exist.",
    "you_are_not_the_owner_of_this_invite":"You are not the owner of this invite.",
@@ -119,7 +118,6 @@
    "the_target_user_does_not_exist":"The target user does not exist.",
 
    "this_user_does_not_exist":"This user does not exist.",
-   "no_user_specified":"No user specified.",
    "the_username_is_already_in_use_by_someone_else":"The username is already in use by someone else.",
    "the_email_address_is_already_in_use_by_someone_else":"The email address is already in use by someone else.",
    "the_phone_number_is_already_in_use_by_someone_else":"The phone number is already in use by someone else.",
@@ -195,5 +193,12 @@
    "reset_password":"Reset password",
    "enter_a_new_password":"Enter a new password.",
    "change":"Change",
-   "since_you_are_already_logged_in_you_it_seems_like_you_remember_your_password_after_all":"Since you are already logged in you remember your password after all."
+    "since_you_are_already_logged_in_you_it_seems_like_you_remember_your_password_after_all":"Since you are already logged in you remember your password after all.",
+    "you_are_not_eligible_for_early_seating": "You are not eligible for early seating",
+    "seating_has_not_opened_yet": "Seating has not opened yet",
+    "you_have_to_seat_next_to_another_seat_you_own_during_early_seating": "You have to seat next to another seat you have permission to seat while early seating is active",
+
+    "you_do_not_have_permission_to_do_this_you_will only be able to run this from command line": "You don\'t have permission do do this, you\'ll only be able to run this from the CLI.",
+    "autumn": "Autumn",
+    "winter": "Winter"
 }

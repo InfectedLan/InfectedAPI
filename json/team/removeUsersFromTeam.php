@@ -1,4 +1,5 @@
 <?php
+include 'database.php';
 /**
  * This file is part of InfectedAPI.
  *
@@ -34,7 +35,7 @@ if (Session::isAuthenticated()) {
 			$team = TeamHandler::getTeam($_GET['teamId']);
 
 			if ($team != null) {
-				TeamHandler::removeUsersFromTeam($team);
+				TeamHandler::removeTeamMembers($team);
 				$result = true;
 			} else {
 				$message = Localization::getLocale('this_team_does_not_exist');
@@ -49,6 +50,7 @@ if (Session::isAuthenticated()) {
 	$message = Localization::getLocale('you_are_not_logged_in');
 }
 
-header('Content-Type: text/plain');
+header('Content-Type: application/json');
 echo json_encode(['result' => $result, 'message' => $message], JSON_PRETTY_PRINT);
+Database::cleanup();
 ?>

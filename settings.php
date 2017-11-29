@@ -81,6 +81,7 @@ class Settings {
 	const db_table_infected_compo_votes =  'votes';
 	const db_table_infected_compo_qualificationQueue = 'qualificationQueue';
 	const db_table_infected_compo_matchmetadata = 'matchmetadata';
+	const db_table_infected_compo_steamids = 'steamids';
 
 	// InfectedCrew
 	const db_table_infected_crew_applicationqueue = 'applicationqueue';
@@ -92,7 +93,7 @@ class Settings {
 	const db_table_infected_crew_notewatches = 'notewatches';
 	const db_table_infected_crew_pages = 'pages';
 	const db_table_infected_crew_teams = 'teams';
-    const db_table_infected_crew_castingpages = 'castingPages';
+  const db_table_infected_crew_castingpages = 'castingPages';
 
 	// InfectedInfo
 	const db_table_infected_info_slides = 'slides';
@@ -102,6 +103,7 @@ class Settings {
 	const db_table_infected_main_gameapplications = 'gameapplications';
 	const db_table_infected_main_games = 'games';
 	const db_table_infected_main_pages = 'pages';
+	const db_table_infected_main_sectionpages = 'sectionpages';
 
 	// InfectedTickets
 	const db_table_infected_tickets_checkedintickets = 'checkedintickets';
@@ -150,5 +152,7 @@ class Settings {
 	// How long time after ticket is transfered should we allow the former owner to revert the transaction?
 	const ticketFee = 20; // Radar membership ticket fee.
 	const ticketTransferTime = 86400; // 1 day (24 * 60 * 60)
+
+	const prioritySeatingReq = 5;
 }
 ?>

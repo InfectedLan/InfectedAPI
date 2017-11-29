@@ -1,4 +1,5 @@
 <?php
+include 'database.php';
 /**
  * This file is part of InfectedAPI.
  *
@@ -29,9 +30,9 @@ if (Session::isAuthenticated()) {
 	$user = Session::getCurrentUser();
 
 	if ($user->hasPermission('*')) {
-		if (isset($_GET['id']) &&
-			is_numeric($_GET['id'])) {
-			$group = GroupHandler::getGroup($_GET['id']);
+		if (isset($_GET['groupId']) &&
+			is_numeric($_GET['groupId'])) {
+			$group = GroupHandler::getGroup($_GET['groupId']);
 
 			if ($group != null) {
 				GroupHandler::removeGroup($group);
@@ -40,7 +41,7 @@ if (Session::isAuthenticated()) {
 				$message = Localization::getLocale('this_group_does_not_exist');
 			}
 		} else {
-			$message = Localization::getLocale('no_group_specified');
+			$message = Localization::getLocale('you_have_not_filled_out_the_required_fields');
 		}
 	} else {
 		$message = Localization::getLocale('you_do_not_have_permission_to_do_that');
@@ -49,6 +50,7 @@ if (Session::isAuthenticated()) {
 	$message = Localization::getLocale('you_are_not_logged_in');
 }
 
-header('Content-Type: text/plain');
+header('Content-Type: application/json');
 echo json_encode(['result' => $result, 'message' => $message], JSON_PRETTY_PRINT);
+Database::cleanup();
 ?>

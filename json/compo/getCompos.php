@@ -1,4 +1,5 @@
 <?php
+include 'database.php';
 /**
  * This file is part of InfectedAPI.
  *
@@ -30,7 +31,7 @@ $message = "";
 $data = null;
 
 if(Session::isAuthenticated()) {
-    $compos = CompoHandler::getComposByEvent(EventHandler::getCurrentEvent());
+    $compos = CompoHandler::getCompos();
     $data = array();
     foreach($compos as $compo) {
         $data[] = ["id" => $compo->getId(),
@@ -42,6 +43,7 @@ if(Session::isAuthenticated()) {
 		   "teamSize" => $compo->getTeamSize(),
 		   "participantLimit" => $compo->getParticipantLimit(),
 		   "hasMatches" => CompoHandler::hasGeneratedMatches($compo),
+		   "requiresSteam" => $compo->requiresSteamId(),
 		   "pluginName" => $compo->getPluginName(),
                    "pluginJavascript" => CompoPluginHandler::getPluginJavascriptOrDefault($compo->getPluginName())];
     }
@@ -56,4 +58,5 @@ if($result) {
 } else {
     echo json_encode(['result' => $result, 'message' => $message], JSON_PRETTY_PRINT);
 }
+Database::cleanup();
 ?>

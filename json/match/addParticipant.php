@@ -1,4 +1,5 @@
 <?php
+include 'database.php';
 /**
  * This file is part of InfectedAPI.
  *
@@ -64,4 +65,5 @@ if ($result) {
 }
 
 
+Database::cleanup();
 ?>

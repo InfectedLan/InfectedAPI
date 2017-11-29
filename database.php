@@ -22,15 +22,17 @@ require_once 'settings.php';
 require_once 'secret.php';
 
 class Database {
-	/*
-	 * Opens a connection to specified database.
-	 */
-	public static function open($database) {
+	private static $connList = [];
+
+	public static function getConnection($database) {
+		if (isset(self::$connList[$database]) || array_key_exists($database, self::$connList)) {
+			return self::$connList[$database];
+		}
 		// Create connection
 		$mysqli = new mysqli(Settings::db_host,
-							 Secret::db_username,
-							 Secret::db_password,
-							 $database);
+												 Secret::db_username,
+												 Secret::db_password,
+												 $database);
 
 		// Check connection.
 		if ($mysqli->connect_errno) {
@@ -43,7 +45,29 @@ class Database {
 			printf('Error loading character set utf8: %s\n', $mysqli->error);
 		}
 
+		self::$connList[$database] = $mysqli;
+
 		return $mysqli;
+	}
+
+	public static function cleanup() {
+		foreach(self::$connList as $key => $value) {
+			$value->close();
+			unset(self::$connList[$key]);
+		}
+	}
+
+	/*
+	 * Opens a connection to specified database. (Deprecated)
+	 */
+	public static function open($database) {
+		return self::getConnection($database);
+	}
+
+	public static function debug() {
+		echo count(self::$connList) . " connections:\n";
+
+		print_r(self::$connList);
 	}
 }
 ?>

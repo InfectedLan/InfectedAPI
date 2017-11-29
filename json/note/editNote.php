@@ -1,4 +1,5 @@
 <?php
+include 'database.php';
 /**
  * This file is part of InfectedAPI.
  *
@@ -62,13 +63,17 @@ if (Session::isAuthenticated()) {
 			$intersectsTimePeriod = $newTimestamp >= ($eventDateTimestamp - $periodBefore) && // Check if time offset is greather than periodBefore.
 															$newTimestamp <= ($eventDateTimestamp + $periodAfter); // Check if time offset is less than periodAfter.
 
-			$time = isset($_GET['time']) && $intersectsTimePeriod ? $_GET['time'] : null;
-			$notified = $secondsOffset != $note->getSecondsOffset() && $time != $note->getTime();
-
+			$time = isset($_GET['time']) && $intersectsTimePeriod ? $_GET['time'] : 0;
 			$watchingUserIdList = isset($_GET['watchingUserIdList']) ? $_GET['watchingUserIdList'] : [];
 
 			if ($note != null) {
-				NoteHandler::updateNote($note, $group, $team, $delegatedUser, $title, $content, $secondsOffset, $time, $notified);
+				NoteHandler::updateNote($note, $group, $team, $delegatedUser, $title, $content, $secondsOffset, $time);
+
+				// If the secondsOffset or time was changed, we flag the note as not notified.
+				if (($secondsOffset != $note->getSecondsOffset()) || ($time != $note->getTime())) {
+					$note->setNotified(false);
+				}
+
 				NoteHandler::updateWatchingUsers($note, UserUtils::fromUserIdList($watchingUserIdList));
 				$result = true;
 			} else {
@@ -86,4 +91,5 @@ if (Session::isAuthenticated()) {
 
 header('Content-Type: text/plain');
 echo json_encode(['result' => $result, 'message' => $message], JSON_PRETTY_PRINT);
+Database::cleanup();
 ?>

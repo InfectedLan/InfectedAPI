@@ -80,9 +80,9 @@ module = (function(){
         matchData.push('</div>');
 	if(typeof(spectate_mode) === "undefined") {
             matchData.push('<br />');
-            matchData.push('<p id="startGameBtn" class="acpt acptLarge go">PLAY</p>');
-            matchData.push('<h4 style="text-align: center;">NB: Har du Windows 8 er du NØDT til å koble til med konsollen</h4>');
-            matchData.push('<p style="text-align: center;">Trykk play eller skriv i konsollen: <i>connect ' + currMatchData.gameData.connectDetails + '</i></p>');
+            //matchData.push('<p id="startGameBtn" class="acpt acptLarge go">PLAY</p>');
+            //matchData.push('<h4 style="text-align: center;">NB: Har du Windows 8 er du NØDT til å koble til med konsollen</h4>');
+            matchData.push('<p style="text-align: center;">Skriv i konsollen: <i>' + currMatchData.gameData.connectDetails + '</i></p>');
             //matchData.push('<p class="ippw">Hvert lag er nødt til å skrive !map de_' + data.matchData.gameData.mapData.name.toLowerCase() + ' når de kobler til</p>');
 	}
         matchData.push('</div>');
@@ -111,10 +111,10 @@ module = (function(){
 	    $("#mainContent").append('<h2>Gruppe D</h2><div style="display: block;" class="bracket_container" id="bracket_container_4"></div><br />');
 	    var source = new DataSource(compo.id);
 	    var bracket = source.derive("bracket_container_4", "grp_4");*/
-	    $("#mainContent").append('<h2>Playoff-bracket</h2><div style="display: block;" class="bracket_container" id="playoffBracket"></div><br />');
+	    $("#customContent").html('<h2>Playoff-bracket</h2><div style="display: block;" class="bracket_container" id="playoffBracket"></div><br />');
 	    var source = new DataSource(compo.id);
 	    var bracket = source.derive("playoffBracket", "playoff");
-	    $("#mainContent").append('<h2>Lower playoff-bracket</h2><div style="display: block;" class="bracket_container" id="playoffBracketLooser"></div><br />');
+	    $("#customContent").html('<h2>Lower playoff-bracket</h2><div style="display: block;" class="bracket_container" id="playoffBracketLooser"></div><br />');
 	    var source = new DataSource(compo.id);
 	    var bracket = source.derive("playoffBracketLooser", "play_looser");
 	} else {

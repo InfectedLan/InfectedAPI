@@ -42,7 +42,7 @@ class MatchPlugin extends WebSocketPlugin {
 	$server->registerIntent("spectateMatch", $this);
 	$server->registerIntent("voteMap", $this);
 	$server->registerIntent("ready", $this);
-        $server->registerPlugin($this);
+        $server->registerPlugin($this, "MatchPlugin");
 
         $this->server = $server;
         $this->subscribedUsers = new SplObjectStorage();
@@ -111,6 +111,11 @@ class MatchPlugin extends WebSocketPlugin {
 	    if($this->server->isAuthenticated($connection)) {
 		$user = $this->server->getUser($connection);
 		$match = MatchHandler::getMatch($args[0]);
+		if($match == null) {
+		    echo "ERROR OMG MATCH IS 0\n";
+		    $this->server->send($connection, '{"intent": "error", "Det skjedde noe galt, snakk med game. Si at "Match == null"}');
+		    return;
+		}
 		
 		$result = $this->attemptMapVote($args[1], $match, $user);
 		if($result === true) {
@@ -140,11 +145,13 @@ class MatchPlugin extends WebSocketPlugin {
     }
 
     public function attemptAcceptMatch(Match $match, User $user) {
+	echo "ACCEPTING MATCH";
 	if ($match != null) {
 	    if ($match->isParticipant($user)) {
 		MatchHandler::acceptMatch($user, $match);
 		
 		if (MatchHandler::allHasAccepted($match)) {
+		    echo "ALL HAS ACCEPTED. SENDING ONWARDS";
 		    $compo = $match->getCompo();
 		    $plugin = CompoPluginHandler::getPluginObjectOrDefault($compo->getPluginName());
 
@@ -221,7 +228,9 @@ class MatchPlugin extends WebSocketPlugin {
 		$matchKey = $key;
 	    }
 	}
+	echo "Updating match " . $match->getId() . "\n";
 	if($match->getWinnerId() != 0) {
+	    echo "Match is over";
 	    $clans = MatchHandler::getParticipantsByMatch($match);
 	    $people = array();
 	    foreach($clans as $clan) {
@@ -229,7 +238,7 @@ class MatchPlugin extends WebSocketPlugin {
 		$people = array_merge($people, $members);
 	    }
 	    
-	    //echo "Clans have " . count($people) . " total members.\n";
+	    echo "Clans have " . count($people) . " total members.\n";
 	    foreach($people as $person) {
 		foreach($this->subscribedUsers as $key) {
 		    if($this->subscribedUsers[$key]->getId() == $person->getId()) {
@@ -240,7 +249,7 @@ class MatchPlugin extends WebSocketPlugin {
 	    }
 	}
 	else if($matchData["state"] != $match->getState() || $matchData["stateProgress"] != $this->calculateStateProgress($match)) {
-	    //echo "Match " . $match->getId() . " needs an update!\n";
+	    echo "Match " . $match->getId() . " needs an update!\n";
 
 	    $clans = MatchHandler::getParticipantsByMatch($match);
 	    $people = array();
@@ -249,7 +258,7 @@ class MatchPlugin extends WebSocketPlugin {
 		$people = array_merge($people, $members);
 	    }
 	    
-	    //echo "Clans have " . count($people) . " total members.\n";
+	    echo "Clans have " . count($people) . " total members.\n";
 	    foreach($people as $person) {
 		foreach($this->subscribedUsers as $key) {
 		    if($this->subscribedUsers[$key]->getId() == $person->getId()) {
@@ -266,6 +275,8 @@ class MatchPlugin extends WebSocketPlugin {
 		    $this->sendMatchData($conn, $match);
 		}
 	    }
+	} else {
+	    //????
 	}
 	
     }
@@ -317,6 +328,27 @@ class MatchPlugin extends WebSocketPlugin {
         }
 	//Things we check every now and then for compatability reasons
         if(time()-$this->lastUpdate > 60) {
+	    echo "1 min TICK UPDATE-----------------------------------------------\n";
+	    //Check for new matches magically appearing
+	    $currentMatches = MatchHandler::getPlayingMatches();
+	    foreach($currentMatches as $match) {
+		$isWatching = false;
+		foreach($this->watchingMatches as $index => $matchData) {
+		    if($matchData["id"] == $match->getId()) {
+			$isWatching = true;
+			break;
+		    }
+		}
+		if(!$isWatching) {
+		    echo "Found new match, which i added to match progress.";
+		    //The -1 forces an update
+		    $this->watchingMatches[] = ["id" => $match->getId(), "state" => $match->getState()-1, "stateProgress" => $this->calculateStateProgress($match)];
+		    if($match->getScheduledTime() < time()) {
+			echo "The match has started, so i am sending an update\n";
+			$this->handleMatchUpdate($match);
+		    }
+		}
+	    }
 	    //Check for new matches to inform about starting
             $matches = MatchHandler::getUpcomingMatches(60);
             if(count($matches) > 0) {

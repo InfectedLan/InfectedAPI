@@ -2,7 +2,7 @@
 /**
  * This file is part of InfectedAPI.
  *
- * Copyright (C) 2015 Infected <http://infected.no/>.
+ * Copyright (C) 2017 Infected <http://infected.no/>.
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -28,12 +28,10 @@ class EmergencyContactHandler {
 	 * Get an emergenctcontacts by the internal id.
 	 */
 	public static function getEmergencyContact($id) {
-		$database = Database::open(Settings::db_name_infected);
+		$database = Database::getConnection(Settings::db_name_infected);
 
 		$result = $database->query('SELECT * FROM `'. Settings::db_table_infected_emergencycontacts . '`
 																WHERE `id` = \'' . $database->real_escape_string($id) . '\';');
-
-		$database->close();
 
 		return $result->fetch_object('EmergencyContact');
 	}
@@ -42,12 +40,10 @@ class EmergencyContactHandler {
 	 * Get the emergency contact for the given user.
 	 */
 	public static function getEmergencyContactByUser(User $user) {
-		$database = Database::open(Settings::db_name_infected);
+		$database = Database::getConnection(Settings::db_name_infected);
 
 		$result = $database->query('SELECT * FROM `'. Settings::db_table_infected_emergencycontacts . '`
 																WHERE `userId` = \'' . $user->getId() . '\';');
-
-		$database->close();
 
 		return $result->fetch_object('EmergencyContact');
 	}
@@ -56,11 +52,9 @@ class EmergencyContactHandler {
 	 * Returns a list of all emergency contacts.
 	 */
 	public static function getEmergencyContacts() {
-		$database = Database::open(Settings::db_name_infected);
+		$database = Database::getConnection(Settings::db_name_infected);
 
 		$result = $database->query('SELECT * FROM `' . Settings::db_table_infected_emergencycontacts . '`;');
-
-		$database->close();
 
 		$emergencyContactsList = [];
 
@@ -75,12 +69,10 @@ class EmergencyContactHandler {
 	 * Returns true if the specified user has an emergency contact.
 	 */
 	public static function hasEmergencyContactByUser(User $user) {
-		$database = Database::open(Settings::db_name_infected);
+		$database = Database::getConnection(Settings::db_name_infected);
 
 		$result = $database->query('SELECT `id` FROM `'. Settings::db_table_infected_emergencycontacts . '`
 																WHERE `userId` = \'' . $user->getId() . '\';');
-
-		$database->close();
 
 		return $result->num_rows > 0;
 	}
@@ -90,13 +82,11 @@ class EmergencyContactHandler {
 	 */
 	public static function createEmergencyContact(User $user, $phone) {
 		if (!self::hasEmergencyContactByUser($user)) {
-			$database = Database::open(Settings::db_name_infected);
+			$database = Database::getConnection(Settings::db_name_infected);
 
 			$database->query('INSERT INTO `' . Settings::db_table_infected_emergencycontacts . '` (`userId`, `phone`)
 											  VALUES (\'' . $user->getId() . '\',
 													  		\'' . $database->real_escape_string($phone) . '\');');
-
-			$database->close();
 		} else {
 			if (!empty($phone) && $phone != 0) {
 				self::updateEmergencyContact($user, $phone);
@@ -110,25 +100,21 @@ class EmergencyContactHandler {
 	 * Update information about a emergency contact.
 	 */
 	public static function updateEmergencyContact(User $user, $phone) {
-		$database = Database::open(Settings::db_name_infected);
+		$database = Database::getConnection(Settings::db_name_infected);
 
 		$database->query('UPDATE `' . Settings::db_table_infected_emergencycontacts . '`
 										  SET `phone` = \'' . $database->real_escape_string($phone) . '\'
 										  WHERE `userId` = \'' . $user->getId() . '\';');
-
-		$database->close();
 	}
 
 	/*
 	 * Remove a emergency contact.
 	 */
 	public static function removeEmergencyContact(User $user) {
-		$database = Database::open(Settings::db_name_infected);
+		$database = Database::getConnection(Settings::db_name_infected);
 
 		$database->query('DELETE FROM `' . Settings::db_table_infected_emergencycontacts . '`
 						  				WHERE `userId` = \'' . $user->getId() . '\';');
-
-		$database->close();
 	}
 }
 ?>

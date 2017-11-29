@@ -1,4 +1,5 @@
 <?php
+include 'database.php';
 /**
  * This file is part of InfectedAPI.
  *
@@ -34,13 +35,17 @@ if (Session::isAuthenticated()) {
 			isset($_GET['teamId']) &&
 			is_numeric($_GET['userId']) &&
 			is_numeric($_GET['teamId'])) {
-			$groupUser = UserHandler::getUser($_GET['userId']);
 			$team = TeamHandler::getTeam($_GET['teamId']);
 
-			if ($groupUser != null &&
-				$team != null) {
-				TeamHandler::changeTeamForUser($groupUser, $team);
-				$result = true;
+			if ($team != null) {
+				$teamUser = UserHandler::getUser($_GET['userId']);
+
+				if ($teamUser != null) {
+					TeamHandler::addTeamMember($teamUser, $team);
+					$result = true;
+				} else {
+					$message = Localization::getLocale('this_user_does_not_exist');
+				}
 			} else {
 				$message = Localization::getLocale('this_team_does_not_exist');
 			}
@@ -54,6 +59,7 @@ if (Session::isAuthenticated()) {
 	$message = Localization::getLocale('you_are_not_logged_in');
 }
 
-header('Content-Type: text/plain');
+header('Content-Type: application/json');
 echo json_encode(['result' => $result, 'message' => $message], JSON_PRETTY_PRINT);
+Database::cleanup();
 ?>

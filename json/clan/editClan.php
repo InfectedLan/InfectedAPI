@@ -1,4 +1,5 @@
 <?php
+include 'database.php';
 /**
  * This file is part of InfectedAPI.
  *
@@ -39,7 +40,7 @@ if (Session::isAuthenticated()) {
 		$tag = $_GET['tag'];
 		
 		if ($clan != null) {
-			if ($user->equals($clan->getChief())) {
+			if ($user->equals($clan->getChief()) || $user->hasPermission('event.compo')) {
 				ClanHandler::updateClan($clan, $name, $tag);
 				$result = true;
 			} else {
@@ -57,4 +58,5 @@ if (Session::isAuthenticated()) {
 
 header('Content-Type: text/plain');
 echo json_encode(['result' => $result, 'message' => $message], JSON_PRETTY_PRINT);
+Database::cleanup();
 ?>

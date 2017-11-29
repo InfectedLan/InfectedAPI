@@ -2,7 +2,7 @@
 /**
  * This file is part of InfectedAPI.
  *
- * Copyright (C) 2015 Infected <http://infected.no/>.
+ * Copyright (C) 2017 Infected <http://infected.no/>.
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -29,12 +29,10 @@ class ServerHandler {
 	 * Get a server by internal id
 	 */
 	public static function getServer($id) {
-		$database = Database::open(Settings::db_name_infected_compo);
+		$database = Database::getConnection(Settings::db_name_infected_compo);
 
 		$result = $database->query('SELECT * FROM `' . Settings::db_table_infected_compo_servers . '`
 																WHERE `id` = \'' . $id . '\';');
-
-		$database->close();
 
 		return $result->fetch_object('Server');
 	}
@@ -43,12 +41,10 @@ class ServerHandler {
 	 * Get a server for a specified compo.
 	 */
 	public static function getServersByCompo(Compo $compo) {
-		$database = Database::open(Settings::db_name_infected_compo);
+		$database = Database::getConnection(Settings::db_name_infected_compo);
 
 		$result = $database->query('SELECT * FROM `' . Settings::db_table_infected_compo_servers . '`
 																WHERE `compoId` = \'' . $compo->getId() . '\';');
-
-		$database->close();
 
 		$serverList = [];
 
@@ -59,50 +55,50 @@ class ServerHandler {
 		return $serverList;
 	}
 
-    /*
-     * Creates a new server entry
-     */
+  /*
+   * Creates a new server entry
+   */
 	public static function createServer(Compo $compo, $humanName, $connectionDetails) {
-	    $database = Database::open(Settings::db_name_infected_compo);
+    $database = Database::getConnection(Settings::db_name_infected_compo);
 
-	    $database->query('INSERT INTO `' . Settings::db_table_infected_compo_servers . '`(`compoId`, `humanName`, `connectionDetails`) VALUES (' . $compo->getId() . ', \'' . $database->real_escape_string($humanName) . '\', \'' . $database->real_escape_string($connectionDetails) . '\');');
+    $database->query('INSERT INTO `' . Settings::db_table_infected_compo_servers . '`(`compoId`, `humanName`, `connectionDetails`)
+											VALUES (\'' . $compo->getId() . '\',
+															\'' . $database->real_escape_string($humanName) . '\',
+															\'' . $database->real_escape_string($connectionDetails) . '\');');
 
-        $return_id = $database->insert_id;
-        
-	    $database->close();
-        
-        return $return_id;
+		return $database->insert_id;
 	}
 
-    /*
-     * Deletes a server entry
-     */
-    public static function deleteServer(Server $server) {
-        $database = Database::open(Settings::db_name_infected_compo);
+  /*
+   * Deletes a server entry
+   */
+  public static function deleteServer(Server $server) {
+    $database = Database::getConnection(Settings::db_name_infected_compo);
 
-        $database->query('DELETE FROM `' . Settings::db_table_infected_compo_servers . '` WHERE `id` = \'' . $server->getId() . '\';');
-    }
+    $database->query('DELETE FROM `' . Settings::db_table_infected_compo_servers . '`
+											WHERE `id` = \'' . $server->getId() . '\';');
+  }
 
 	/*
 	 * Sets the connection details of a server
 	 */
 	public static function setConnectionDetails(Server $server, $connectionDetails) {
-	    $database = Database::open(Settings::db_name_infected_compo);
+    $database = Database::getConnection(Settings::db_name_infected_compo);
 
-	    $result = $database->query('UPDATE `' . Settings::db_table_infected_compo_servers . '` SET `connectionDetails` = \'' . $database->real_escape_string($connectionDetails) . '\' WHERE `` = \'' . $server->getId() . '\';');
-
-	    $database->close();
+    $result = $database->query('UPDATE `' . Settings::db_table_infected_compo_servers . '`
+																SET `connectionDetails` = \'' . $database->real_escape_string($connectionDetails) . '\'
+																WHERE `` = \'' . $server->getId() . '\';');
 	}
 
 	/*
 	 * Sets the human name of a server
 	 */
 	public static function setHumanName(Server $server, $humanName) {
-	    $database = Database::open(Settings::db_name_infected_compo);
+	    $database = Database::getConnection(Settings::db_name_infected_compo);
 
-	    $result = $database->query('UPDATE `' . Settings::db_table_infected_compo_servers . '` SET `humanName` = \'' . $database->real_escape_string($humanName) . '\' WHERE `` = \'' . $server->getId() . '\';');
-
-	    $database->close();
+	    $result = $database->query('UPDATE `' . Settings::db_table_infected_compo_servers . '`
+																	SET `humanName` = \'' . $database->real_escape_string($humanName) . '\'
+																	WHERE `` = \'' . $server->getId() . '\';');
 	}
 }
 ?>

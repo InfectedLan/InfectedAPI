@@ -1,4 +1,5 @@
 <?php
+include 'database.php';
 /**
  * This file is part of InfectedAPI.
  *
@@ -35,7 +36,7 @@ if (Session::isAuthenticated()) {
 
 			if ($ticket != null) {
 				if (!$ticket->isCheckedIn()) {
-                    TicketHandler::checkInTicket($ticket);
+          TicketHandler::checkInTicket($ticket);
 
 					$message = Localization::getLocale('value_ticket_is_now_checked_in', $ticket->getBuyer()->getFirstname());
 					$result = true;
@@ -57,4 +58,5 @@ if (Session::isAuthenticated()) {
 
 header('Content-Type: text/plain');
 echo json_encode(['result' => $result, 'message' => $message], JSON_PRETTY_PRINT);
+Database::cleanup();
 ?>

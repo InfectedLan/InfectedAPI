@@ -2,7 +2,7 @@
 /**
  * This file is part of InfectedAPI.
  *
- * Copyright (C) 2015 Infected <http://infected.no/>.
+ * Copyright (C) 2017 Infected <http://infected.no/>.
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -22,7 +22,7 @@ require_once 'handlers/userhandler.php';
 require_once 'handlers/tickettypehandler.php';
 require_once 'objects/object.php';
 
-class Payment extends Object{
+class Payment extends Object {
 	private $userId;
 	private $ticketTypeId;
 	private $amount;

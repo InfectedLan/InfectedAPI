@@ -2,7 +2,7 @@
 /**
  * This file is part of InfectedAPI.
  *
- * Copyright (C) 2015 Infected <http://infected.no/>.
+ * Copyright (C) 2017 Infected <http://infected.no/>.
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -18,9 +18,9 @@
  * License along with this library.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+require_once 'handlers/sysloghandler.php';
 require_once 'handlers/userhandler.php';
 require_once 'objects/user.php';
-require_once 'handlers/sysloghandler.php';
 
 session_start();
 
@@ -56,23 +56,24 @@ class Session {
    * Returns the user by the given session id.
    */
   public function getUserFromSessionId($sessionId) {
-      if(!preg_match("/^[a-zA-Z0-9]+$/", $sessionId)) {
-	  SyslogHandler::log("Hack attack! ", "getUserFromSessionId", null, SyslogHandler::SEVERITY_CRITICAL);
-	  return null;
-      }
+    if (!preg_match("/^[a-zA-Z0-9]+$/", $sessionId)) {
+		  SyslogHandler::log("Hack attack! ", "getUserFromSessionId", null, SyslogHandler::SEVERITY_CRITICAL);
 
-      $sessionData = exec("cat /var/lib/php5/sessions/sess_" . $sessionId); //I am not debugging regex at 0:35 in the morning, and it is temp anyways
-      $regex = '/userId\|s:\d+:"(.+)";/';
+		  return null;
+    }
 
-      //echo "Got session data: " . $sessionData . "\n";
+    $sessionData = exec("cat /var/lib/php5/sessions/sess_" . $sessionId); //I am not debugging regex at 0:35 in the morning, and it is temp anyways
+    $regex = '/userId\|s:\d+:"(.+)";/';
 
-      preg_match($regex, $sessionData, $matches);
+    //echo "Got session data: " . $sessionData . "\n";
 
-      //echo "Got match data: " . print_r($matches) . "\n";
+    preg_match($regex, $sessionData, $matches);
 
-      $id = $matches[1]; //$matches[0] returns the entire regex, $matches[1] returns the first subgroup.
+    //echo "Got match data: " . print_r($matches) . "\n";
 
-      return UserHandler::getUser($id);
+    $id = $matches[1]; //$matches[0] returns the entire regex, $matches[1] returns the first subgroup.
+
+    return UserHandler::getUser($id);
   }
 }
 ?>

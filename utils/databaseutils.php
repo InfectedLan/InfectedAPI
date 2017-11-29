@@ -2,7 +2,7 @@
 /**
  * This file is part of InfectedAPI.
  *
- * Copyright (C) 2015 Infected <http://infected.no/>.
+ * Copyright (C) 2017 Infected <http://infected.no/>.
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -27,19 +27,17 @@ class DatabaseUtils {
 	 * Copies the contents of the given table to the new one.
 	 */
 	public static function copyTable($databaseName, $fromTableName, $toTableName) {
-		$database = Database::open($databaseName);
+		$database = Database::getConnection($databaseName);
 
 		$database->query('INSERT INTO `' . $toTableName . '`
 						  				SELECT * FROM `' . $fromTableName . '`;');
-
-		$database->close();
 	}
 
 	/*
 	 * Copies the contents of the given table to the new one, but only the specified selection and referenceField is changed with the new value.
 	 */
 	public static function copyTableSelection($databaseName, $tableName, $referenceField, $fromValue, $toValue) {
-		$database = Database::open($databaseName);
+		$database = Database::getConnection($databaseName);
 
 		$database->query('CREATE TEMPORARY TABLE `temporary`
 								  		SELECT * FROM `' . $tableName . '`
@@ -56,7 +54,5 @@ class DatabaseUtils {
 										  									WHERE `' . $referenceField . '` = \'' . $toValue . '\');');
 
 		$database->query('DROP TABLE `temporary`;');
-
-		$database->close();
 	}
 }

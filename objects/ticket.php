@@ -2,7 +2,7 @@
 /**
  * This file is part of InfectedAPI.
  *
- * Copyright (C) 2015 Infected <http://infected.no/>.
+ * Copyright (C) 2017 Infected <http://infected.no/>.
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -85,8 +85,7 @@ class Ticket extends EventObject {
 	 */
 	public function toString() {
 		$event = $this->getEvent();
-		$season = date('m', $event->getStartTime()) == 2 ? 'VINTER' : 'HØST';
-		$eventName = !empty($event->getTheme()) ? $event->getTheme() : $season;
+		$eventName = !empty($event->getTheme()) ? $event->getTheme() : $event->getSeason();
 
 		return strtoupper(Settings::name . '_' . $eventName . '_' . date('Y', $event->getStartTime()) . '_' . $this->getId());
 	}
@@ -131,8 +130,8 @@ class Ticket extends EventObject {
 	/*
 	 * Checks in this ticket.
 	 */
-	public function checkedIn() {
-		return TicketHandler::checkedInTicket($this);
+	public function checkIn() {
+		return TicketHandler::checkInTicket($this);
 	}
 
 	/*

@@ -1,4 +1,5 @@
 <?php
+include 'database.php';
 /**
  * This file is part of InfectedAPI.
  *
@@ -49,7 +50,8 @@ if(Session::isAuthenticated()) {
                       "genderString" => $target->getGenderAsString(),
                       "nickname" => $target->getNickname(),
                       "displayName" => $target->getDisplayName(),
-                      "age" => $target->getAge());
+                      "age" => $target->getAge(),
+		      "steamId" => $target->getSteamId());
         //Get avatar info
 	if ($target->hasValidAvatar()) {
 	    $avatar = $target->getAvatar();
@@ -76,4 +78,5 @@ if($result) {
 } else {
     echo json_encode(['result' => $result, 'message' => $message], JSON_PRETTY_PRINT);
 }
+Database::cleanup();
 ?>

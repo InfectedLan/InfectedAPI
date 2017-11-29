@@ -2,7 +2,7 @@
 /**
  * This file is part of InfectedAPI.
  *
- * Copyright (C) 2015 Infected <http://infected.no/>.
+ * Copyright (C) 2017 Infected <http://infected.no/>.
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -28,7 +28,7 @@ class UserHistoryHandler {
 	 * Get a list of events that the given user has history with.
    */
 	public static function getUserParticipatedEvents(User $user) {
-	  $database = Database::open(Settings::db_name_infected);
+	  $database = Database::getConnection(Settings::db_name_infected);
 
 	  $result = $database->query('SELECT * FROM (SELECT `' . Settings::db_table_infected_events . '`.* FROM `' . Settings::db_table_infected_events . '`
 										  												 WHERE `' . Settings::db_table_infected_events . '`.`id` IN (SELECT `eventId` FROM `' . Settings::db_name_infected_crew . '`.`' . Settings::db_table_infected_crew_memberof . '`
@@ -36,16 +36,14 @@ class UserHistoryHandler {
 										  												 UNION ALL
 										  												 SELECT `' . Settings::db_table_infected_events . '`.* FROM `' . Settings::db_table_infected_events . '`
 										  												 WHERE `' . Settings::db_table_infected_events . '`.`id` IN (SELECT `eventId` FROM `' . Settings::db_name_infected_tickets . '`.`' . Settings::db_table_infected_tickets_tickets . '`
-										  																														 												 WHERE `userId` = \'' . $user->getId() . '\')) AS `' . Settings::db_table_infected_events . '`
-																GROUP BY `' . Settings::db_table_infected_events . '`.`id`;');
-
-	  $database->close();
+										  																														 												 WHERE `userId` = \'' . $user->getId() . '\')
+																							 ) AS `' . Settings::db_table_infected_events . '`;');
 
 	  $eventList = [];
 
-	  while ($object = $result->fetch_object('Event')) {
+		while ($object = $result->fetch_object('Event')) {
 			$eventList[] = $object;
-	  }
+		}
 
 	  return $eventList;
 	}
