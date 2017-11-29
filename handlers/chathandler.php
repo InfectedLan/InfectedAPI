@@ -262,24 +262,24 @@ class ChatHandler {
 
 	}
 
-  public static function canChat(Chat $chat, User $user): bool {
-    return $user->hasPermission('compo.chat') || $chat->isMember($user);
-  }
+	public static function canChat(Chat $chat, User $user): bool {
+		return $user->hasPermission('compo.chat') || $chat->isMember($user);
+	}
 
-  public static function canRead(Chat $chat, User $user): bool {
-    if (self::canChat($chat, $user)) {
-      return true;
-    } else {
-      // You can also read the chat if it is a compo chat for a compo you are currently participating in. Soooo....
-      $clanList = ClanHandler::getClansByUser($user);
+	public static function canRead(Chat $chat, User $user): bool {
+		if (self::canChat($chat, $user)) {
+			return true;
+		} else {
+			// You can also read the chat if it is a compo chat for a compo you are currently participating in. Soooo....
+			$clanList = ClanHandler::getClansByUser($user);
 
-      foreach ($clanList as $clan) {
-        if (($clan->isQualified($clan->getCompo()) && $clan->getCompo()->getChat() == $chat)) {
-          return true;
-        }
-      }
-      // You can also read from a match you are a part of
-    }
-  }
+			foreach ($clanList as $clan) {
+				if (($clan->isQualified($clan->getCompo()) && $clan->getCompo()->getChat() == $chat)) {
+				 	return true;
+				}
+			}
+			// You can also read from a match you are a part of
+		}
+	}
 }
 ?>

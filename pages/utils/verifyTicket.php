@@ -30,9 +30,7 @@ echo '<html>';
 			if (Session::isAuthenticated()) {
 				$user = Session::getCurrentUser();
 
-				if ($user->hasPermission('*') ||
-					$user->hasPermission('event.checkin')) {
-
+				if ($user->hasPermission('event.checkin')) {
 					if (isset($_GET['id'])) {
 						$ticket = TicketHandler::getTicket($_GET['id']);
 
