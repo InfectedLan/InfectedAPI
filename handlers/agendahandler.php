@@ -59,7 +59,7 @@ class AgendaHandler {
 	/*
 	 * Returns published agendas.
   	 */
-	  public static function getPublishedAgendas(Event $event = null) {
+	public static function getPublishedAgendas(Event $event = null) {
 		$database = Database::getConnection(Settings::db_name_infected_main);
 
 		$result = $database->query('SELECT * FROM `' . Settings::db_table_infected_main_agenda . '`
@@ -76,9 +76,9 @@ class AgendaHandler {
 		return $agendaList;
 	}
 
-  	/*
-  	 * Returns only published agendas that have not happend yet.
-  	 */
+	/*
+	 * Returns only published agendas that have not happend yet.
+	 */
 	public static function getPublishedNotHappendAgendas(Event $event = null) {
 		$database = Database::getConnection(Settings::db_name_infected_main);
 

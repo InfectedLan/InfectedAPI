@@ -23,6 +23,7 @@ class Settings {
 	const name = 'Infected';
 	const description = 'Infected er et av Akershus største datatreff (LAN-party), og holder til i kulturhuset i Asker kommune.';
 	const keywords = 'infected, lan, party, asker, kulturhus, ungdom, gaming';
+	const authors = 'halvors og petterroa';
 
 	/* Configuration */
 	const domain = 'test.infected.no';
@@ -37,6 +38,9 @@ class Settings {
 	// Tells where images should be stored.
 	const qr_path = '../api/content/qrcache/';
 	const avatar_path = '../api/content/avatars/';
+
+	/* PHP */
+	const php_version = '7.0.0';
 
 	/* Database */
 	const db_host = 'localhost';
