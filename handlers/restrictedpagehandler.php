@@ -42,7 +42,7 @@ class RestrictedPageHandler {
 	/*
 	 * Get page by name.
 	 */
-	public static function getPageByName(string $name): RestrictedPage {
+	public static function getPageByName(string $name) {
 		if (Session::isAuthenticated()) {
 			$user = Session::getCurrentUser();
 

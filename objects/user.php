@@ -439,7 +439,7 @@ class User extends Object {
 	/*
 	 * Returns the default avatar, determined by gender of this user.
 	 */
-	public function getDefaultAvatar(): Avatar {
+	public function getDefaultAvatar(): string {
 		return AvatarHandler::getDefaultAvatar($this);
 	}
 

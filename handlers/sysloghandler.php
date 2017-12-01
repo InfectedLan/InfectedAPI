@@ -70,7 +70,7 @@ class SyslogHandler {
   	return $syslogList;
   }
 
-  public static function log(string $message, string $source, User $user = null, int $severity = self::SEVERITY_INFO, string $metadata = []) {
+  public static function log(string $message, string $source, User $user = null, int $severity = self::SEVERITY_INFO, array $metadata = []) {
   	$database = Database::getConnection(Settings::db_name_infected);
 
     $database->query('INSERT INTO `' . Settings::db_table_infected_syslogs . '`(`source`, `severity`, `message`, `metadata`, `date`, `userId`)

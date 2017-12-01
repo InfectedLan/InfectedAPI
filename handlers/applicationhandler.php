@@ -248,7 +248,7 @@ class ApplicationHandler {
 
 		$result = $database->query('SELECT * FROM `' . Settings::db_table_infected_crew_applications . '`
                                 WHERE `eventId` = \'' . ($event != null ? $event->getId() : EventHandler::getCurrentEvent()->getId()) . '\'
-                                WHERE (`state` = \'2\' OR `state` = \'3\')
+                                AND (`state` = \'2\' OR `state` = \'3\')
 																ORDER BY `closedTime` DESC, `openedTime` DESC;');
 
 		$applicationList = [];
