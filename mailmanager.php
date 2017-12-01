@@ -26,7 +26,7 @@ class MailManager {
 	/*
 	 * Sends an email to the given user.
 	 */
-	public static function sendEmail(User $user, $subject, $message) {
+	public static function sendEmail(User $user, string $subject, string $message) {
 		// Create PHPMailer object.
 		$email = new PHPMailer;
 
@@ -51,7 +51,7 @@ class MailManager {
 	/*
 	 * Sends an email to all given users.
 	 */
-	public static function sendEmails(array $userList, $subject, $message) {
+	public static function sendEmails(array $userList, string $subject, string $message) {
 		foreach ($userList as $user) {
 			self::sendEmail($user, $subject, $message);
 		}

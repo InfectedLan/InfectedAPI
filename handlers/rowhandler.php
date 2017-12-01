@@ -30,7 +30,7 @@ class RowHandler {
 	/*
 	 * Return the row by the internal id.
 	 */
-	public static function getRow($id) {
+	public static function getRow(int $id): Row {
 		$database = Database::getConnection(Settings::db_name_infected_tickets);
 
 		$result = $database->query('SELECT * FROM `' . Settings::db_table_infected_tickets_rows . '`
@@ -42,7 +42,7 @@ class RowHandler {
 	/*
 	 * Returns a list of all rows.
 	 */
-	public static function getRows() {
+	public static function getRows(): array {
 		$database = Database::getConnection(Settings::db_name_infected_tickets);
 
 		$result = $database->query('SELECT * FROM `' . Settings::db_table_infected_tickets_rows . '`;');
@@ -59,7 +59,7 @@ class RowHandler {
 	/*
 	 * Returns a list of all rows for the specified seatmap.
 	 */
-	public static function getRowsBySeatmap(Seatmap $seatmap) {
+	public static function getRowsBySeatmap(Seatmap $seatmap): array {
 		$database = Database::getConnection(Settings::db_name_infected_tickets);
 
 		$result = $database->query('SELECT * FROM `' . Settings::db_table_infected_tickets_rows . '`
@@ -77,7 +77,7 @@ class RowHandler {
 	/*
 	 * Create a new row.
 	 */
-	public static function createRow(Seatmap $seatmap, $x, $y) {
+	public static function createRow(Seatmap $seatmap, int $x, int $y): Row {
 		$database = Database::getConnection(Settings::db_name_infected_tickets);
 
 		$entrance = EntranceHandler::getEntrance(2); // TODO: Make it not statically set entrance
@@ -101,7 +101,7 @@ class RowHandler {
 	/*
 	 * Move the specified row to the specified coordinates.
 	 */
-	public static function updateRow(Row $row, $x, $y) {
+	public static function updateRow(Row $row, int $x, int $y) {
 		$database = Database::getConnection(Settings::db_name_infected_tickets);
 
 		$database->query('UPDATE `' . Settings::db_table_infected_tickets_rows . '`
@@ -127,7 +127,7 @@ class RowHandler {
 	/*
 	 * Returns true if the row is safe to delete.
 	 */
-	public static function safeToDelete(Row $row) {
+	public static function safeToDelete(Row $row): bool {
 		$seatList = SeatHandler::getSeatsByRow($row);
 
 		foreach ($seatList as $seat) {
@@ -142,7 +142,7 @@ class RowHandler {
 	/*
 	 * Returns the event this row is for.
 	 */
-	public static function getEvent($row) {
+	public static function getEvent($row): Event {
 		return SeatmapHandler::getEvent($row->getSeatmap());
 	}
 }

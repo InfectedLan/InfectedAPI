@@ -27,7 +27,7 @@ class ReadyHandler extends Object {
 	/*
 	 * Returns the compo that this readyhandler is for.
 	 */
-	public function getCompo() {
+	public function getCompo(): Compo {
 		return CompoHandler::getCompo($this->compoId);
 	}
 }

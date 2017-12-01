@@ -28,27 +28,27 @@ class SyslogEntry extends Object {
   private $date;
   private $userId;
 
-  public function getSource() {
+  public function getSource(): string {
     return $this->source;
   }
 
-  public function getSeverity() {
+  public function getSeverity(): int {
     return $this->severity;
   }
 
-  public function getMessage() {
+  public function getMessage(): string {
     return $this->message;
   }
 
-  public function getMetadata() {
+  public function getMetadata(): array {
     return json_decode($this->metadata);
   }
 
-  public function getTimestamp() {
+  public function getTimestamp(): int {
     return strtotime($this->date);
   }
 
-  public function getUser() {
+  public function getUser(): User {
     return UserHandler::getUser($this->userId);
   }
 }

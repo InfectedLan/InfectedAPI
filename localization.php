@@ -2,7 +2,7 @@
 /**
  * This file is part of InfectedAPI.
  *
- * Copyright (C) 2015 Infected <http://infected.no/>.
+ * Copyright (C) 2017 Infected <http://infected.no/>.
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -26,7 +26,7 @@ class Localization {
 	/*
 	 * Get locale by key.
 	 */
-	public static function getLocale($key, ...$arguments) {
+	public static function getLocale(string $key, string ...$arguments) {
 		$path = Settings::api_path . 'languages/';
 		$language = isset($_SERVER['HTTP_ACCEPT_LANGUAGE']) ? Locale::acceptFromHttp($_SERVER['HTTP_ACCEPT_LANGUAGE']) : self::defaultLanguage;
 

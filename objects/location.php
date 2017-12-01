@@ -27,14 +27,14 @@ class Location extends Object {
 	/*
 	 * Returns the name of this location.
 	 */
-	public function getName() {
+	public function getName(): string {
 		return $this->name;
 	}
 
 	/*
 	 * Returns the title of this location.
 	 */
-	public function getTitle() {
+	public function getTitle(): string {
 		return $this->title;
 	}
 }

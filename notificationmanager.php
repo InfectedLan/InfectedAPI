@@ -101,7 +101,7 @@ class NotificationManager {
 	/*
 	 * Sends an mail to the users e-mail address with status information.
 	 */
-	public function sendApplicationRejectedNotification(Application $application, $comment) {
+	public function sendApplicationRejectedNotification(Application $application, string $comment) {
 		$message = [];
 		$message[] = '<!DOCTYPE html>';
 		$message[] = '<html>';
@@ -140,7 +140,7 @@ class NotificationManager {
 	/*
 	 * Sends a notification to the users e-mail address with purchase information.
 	 */
-	public function sendPurchaseCompleteNotification(User $user, $reference) {
+	public function sendPurchaseCompleteNotification(User $user, string $reference) {
 		$message = [];
 		$message[] = '<!DOCTYPE html>';
 		$message[] = '<html>';

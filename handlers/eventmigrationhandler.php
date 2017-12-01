@@ -27,7 +27,7 @@ class EventMigrationHandler {
 	/*
 	 * Copies all information from the given event to the new one.
 	 */
-	public static function copyTableByEvent(Event $fromEvent, Event $toEvent, $databaseName, $tableName) {
+	public static function copyTableByEvent(Event $fromEvent, Event $toEvent, string $databaseName, string $tableName) {
 		if (!$fromEvent->equals($toEvent)) {
 			DatabaseUtils::copyTableSelection($databaseName, $tableName, 'eventId', $fromEvent->getId(), $toEvent->getId());
 		}
@@ -75,14 +75,14 @@ class EventMigrationHandler {
  	/*
 	 * Copies compos from given event to the new one, overwriting is forbidden so no entries for the new event can already exist.
 	 */
-	public static function copyCompos($fromEvent, $toEvent) {
+	public static function copyCompos(Event $fromEvent, Event $toEvent) {
 		self::copyTableByEvent($fromEvent, $toEvent, Settings::db_name_infected_compo, Settings::db_table_infected_compo_compos);
 	}
 
 	/*
 	 * Copies invites from given event to the new one, overwriting is forbidden so no entries for the new event can already exist.
 	 */
-	public static function copyInvites($fromEvent, $toEvent) {
+	public static function copyInvites(Event $fromEvent, Event $toEvent) {
 		self::copyTableByEvent($fromEvent, $toEvent, Settings::db_name_infected_compo, Settings::db_table_infected_compo_invites);
 	}
 
@@ -135,7 +135,7 @@ class EventMigrationHandler {
 	/*
 	 * Copies slides from given event to the new one, overwriting is forbidden so no entries for the new event can already exist.
 	 */
-	public static function copySlides($fromEvent, $toEvent) {
+	public static function copySlides(Event $fromEvent, Event $toEvent) {
 		self::copyTableByEvent($fromEvent, $toEvent, Settings::db_name_infected_info, Settings::db_table_infected_info_slides);
 	}
 
@@ -144,7 +144,7 @@ class EventMigrationHandler {
 	/*
 	 * Copies agenda entries from given event to the new one, overwriting is forbidden so no entries for the new event can already exist.
 	 */
-	public static function copyAgenda($fromEvent, $toEvent) {
+	public static function copyAgenda(Event $fromEvent, Event $toEvent) {
 		self::copyTableByEvent($fromEvent, $toEvent, Settings::db_name_infected_main, Settings::db_table_infected_main_agenda);
 	}
 
@@ -153,7 +153,7 @@ class EventMigrationHandler {
 	/*
 	 * Copies tickets from given event to the new one, overwriting is forbidden so no entries for the new event can already exist.
 	 */
-	public static function copySeatmap($fromEvent, $toEvent) {
+	public static function copySeatmap(Event $fromEvent, Event $toEvent) {
 		//self::copyTableByEvent($fromEvent, $toEvent, Settings::db_name_infected_sea, Settings::db_table_infected_tickets_tickets);
 	}
 }

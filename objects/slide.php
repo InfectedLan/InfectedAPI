@@ -32,42 +32,42 @@ class Slide extends EventObject {
 	/*
 	 * Returns the name of this slide.
 	 */
-	public function getName() {
+	public function getName(): string {
 		return $this->name;
 	}
 
 	/*
 	 * Returns the title of this slide.
 	 */
-	public function getTitle() {
+	public function getTitle(): string {
 		return $this->title;
 	}
 
 	/*
 	 * Returns the content of this slide.
 	 */
-	public function getContent() {
+	public function getContent(): string {
 		return $this->content;
 	}
 
 	/*
 	 * Returns the start time of this slide.
 	 */
-	public function getStartTime() {
+	public function getStartTime(): int {
 		return strtotime($this->startTime);
 	}
 
 	/*
 	 * Returns the end time of this slide.
 	 */
-	public function getEndTime() {
+	public function getEndTime(): int {
 		return strtotime($this->endTime);
 	}
 
 	/*
 	 * Returns true if this slide is published.
 	 */
-	public function isPublished() {
+	public function isPublished(): bool {
 		return $this->published ? true : false;
 	}
 }

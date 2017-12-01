@@ -42,93 +42,93 @@ class Compo extends EventObject {
   /*
    * Returns the name of this compo.
    */
-  public function getName() {
+  public function getName(): string {
     return $this->name;
   }
 
   /*
    * Returns the title of this compo.
    */
-  public function getTitle() {
+  public function getTitle(): string {
     return $this->title;
   }
 
   /*
    * Returns the tag of this compo.
    */
-  public function getTag() {
+  public function getTag(): string {
     return $this->tag;
   }
 
   /*
    * Returns the description of this compo.
    */
-  public function getDescription() {
+  public function getDescription(): string {
     return $this->description;
   }
 
   /*
    * Returns the gamemode for this compo. Note we are not returning the object, as this is done on request depending on if it is JS or php we want.
    */
-  public function getPluginName() {
+  public function getPluginName(): string {
     return $this->pluginName;
   }
 
   /*
    * Returns the startTime of this compo.
    */
-  public function getStartTime() {
+  public function getStartTime(): int {
     return strtotime($this->startTime);
   }
 
   /*
    * Returns the registration deadline of this compo.
    */
-  public function getRegistrationEndTime() {
+  public function getRegistrationEndTime(): int {
     return strtotime($this->registrationEndTime);
   }
 
   /*
    * Returns the size of this team.
    */
-  public function getTeamSize() {
+  public function getTeamSize(): int {
     return $this->teamSize;
   }
 
   /*
    * Returns the chat used by this compo
    */
-  public function getChat() {
+  public function getChat(): Chat {
     return ChatHandler::getChat($this->chatId);
   }
 
   /*
    * Returns the chat id used by this compo
    */
-  public function getChatId() {
+  public function getChatId(): int {
     return $this->chatId;
   }
 
-  public function getParticipantLimit() {
+  public function getParticipantLimit(): int {
     return $this->participantLimit;
   }
 
   /*
    * Return a list of all matches for this compo.
    */
-  public function getMatches() {
+  public function getMatches(): array {
     return MatchHandler::getMatchesByCompo($this);
   }
 
 
-  public function getConnectionType() {
+  public function getConnectionType(): int {
     return $this->connectionType;
   }
 
   /*
    * Returns true if the compo requires steam id to qualify
    */
-  public function requiresSteamId() {
+  public function requiresSteamId(): bool {
     return $this->requiresSteamId == "1" ? true : false;
   }
 }

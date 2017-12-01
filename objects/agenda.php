@@ -30,42 +30,42 @@ class Agenda extends EventObject {
 	/*
 	 * Returns the name of this object.
 	 */
-	public function getName() {
+	public function getName(): string {
 		return $this->name;
 	}
 
 	/*
 	 * Returns the name of this object.
 	 */
-	public function getTitle() {
+	public function getTitle(): string {
 		return $this->title;
 	}
 
 	/*
 	 * Returns the description for this agenda.
 	 */
-	public function getDescription() {
+	public function getDescription(): string {
 		return $this->description;
 	}
 
 	/*
 	 * Returns the startTime of this agenda.
 	 */
-	public function getStartTime() {
+	public function getStartTime(): int {
 		return strtotime($this->startTime);
 	}
 
 	/*
 	 * Returns true if this agenda is published.
 	 */
-	public function isPublished() {
+	public function isPublished(): bool {
 		return $this->published ? true : false;
 	}
 
 	/*
 	 * Returns true if this agenda is happening right now.
 	 */
-	public function isHappening() {
+	public function isHappening(): bool {
 		return $this->getStartTime() - 5 * 60 >= time() || $this->getStartTime() + 1 * 60 * 60 >= time();
 	}
 }

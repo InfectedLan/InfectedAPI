@@ -26,15 +26,15 @@ class CompoPlugin {
     return null;
   }
 
-  public function hasVoteScreen() {
+  public function hasVoteScreen(): bool {
     return false;
   }
 
-  public function getTurnArray(Match $match) {
+  public function getTurnArray(Match $match): array {
     return [0, 1, 0, 1, 1, 0, 2];
   }
 
-  public function getTurnMask(Match $match) {
+  public function getTurnMask(Match $match): array {
     return [0, 0, 0, 0, 0, 0, 2];
   }
 

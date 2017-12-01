@@ -26,7 +26,7 @@ class UserOptionHandler {
 	/*
 	 * Returns true if this user has a option.
 	 */
-	public static function hasUserOption(User $user) {
+	public static function hasUserOption(User $user): bool {
 		$database = Database::getConnection(Settings::db_name_infected);
 
 		$result = $database->query('SELECT `id` FROM `' . Settings::db_table_infected_useroptions . '`
@@ -38,7 +38,7 @@ class UserOptionHandler {
 	/*
 	 * Returns true is the phone number is set to private for the specified user.
 	 */
-	public static function hasUserPrivatePhone(User $user) {
+	public static function hasUserPrivatePhone(User $user): bool {
 		$database = Database::getConnection(Settings::db_name_infected);
 
 		$result = $database->query('SELECT `id` FROM `' . Settings::db_table_infected_useroptions . '`
@@ -51,7 +51,7 @@ class UserOptionHandler {
 	/*
 	 * Returns true is the phone number is set to private for the specified user.
 	 */
-	public static function isUserReservedFromNotifications(User $user) {
+	public static function isUserReservedFromNotifications(User $user): bool {
 		$database = Database::getConnection(Settings::db_name_infected);
 
 		$result = $database->query('SELECT `id` FROM `' . Settings::db_table_infected_useroptions . '`
@@ -64,7 +64,7 @@ class UserOptionHandler {
 	/*
 	 * Returns true is the user is set to go on swimming.
 	 */
-	public static function isUserSwimming(User $user) {
+	public static function isUserSwimming(User $user): bool {
 		$database = Database::getConnection(Settings::db_name_infected);
 
 		$result = $database->query('SELECT `id` FROM `' . Settings::db_table_infected_useroptions . '`
@@ -77,7 +77,7 @@ class UserOptionHandler {
 	/*
 	 * Set a users note.
 	 */
-	public static function setUserSwimming(User $user, $swimming) {
+	public static function setUserSwimming(User $user, bool $swimming) {
 		$database = Database::getConnection(Settings::db_name_infected);
 
 		if (!self::hasUserOption($user)) {
@@ -94,7 +94,7 @@ class UserOptionHandler {
 	/*
 	 * Returns true if the user has the prank option set.
 	 */
-	public static function hasUserEasterEgg(User $user) {
+	public static function hasUserEasterEgg(User $user): bool {
 		$database = Database::getConnection(Settings::db_name_infected);
 
 		$result = $database->query('SELECT `id` FROM `' . Settings::db_table_infected_useroptions . '`

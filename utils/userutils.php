@@ -19,7 +19,7 @@
  */
 
 class UserUtils {
-	public static function toUserIdList(array $userList) {
+	public static function toUserIdList(array $userList): array {
 		$userIdList = [];
 
 		foreach ($userList as $user) {
@@ -29,7 +29,7 @@ class UserUtils {
 		return $userIdList;
 	}
 
-	public static function fromUserIdList(array $userIdList) {
+	public static function fromUserIdList(array $userIdList): array {
 		$userList = [];
 
 		foreach ($userIdList as $userId) {

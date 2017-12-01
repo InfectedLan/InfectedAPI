@@ -34,63 +34,63 @@ class Clan extends EventObject {
 	/*
 	 * Return the name of this clan.
 	 */
-	public function getName() {
+	public function getName(): string {
 		return $this->name;
 	}
 
 	/*
 	 * Return the tag of this clan.
 	 */
-	public function getTag() {
+	public function getTag(): string {
 		return $this->tag;
 	}
 
 	/*
 	 * Return the chief of this clan.
 	 */
-	public function getChief() {
+	public function getChief(): User {
 		return UserHandler::getUser($this->chiefId);
 	}
 
   /*
    * Return the user id of the chief of this clan
    */
-  public function getChiefId() {
+  public function getChiefId(): int {
   	return $this->chiefId;
   }
 
 	/*
 	 * Return the compo of this clan.
 	 */
-	public function getCompo() {
+	public function getCompo(): Compo {
 		return CompoHandler::getCompoByClan($this);
 	}
 
 	/*
 	 * Returns a list of all the clan members.
 	 */
-	public function getMembers() {
+	public function getMembers(): array {
 		return ClanHandler::getClanMembers($this);
 	}
 
 	/*
 	 * Returns a list of all playing members of this clan.
 	 */
-	public function getPlayingMembers() {
+	public function getPlayingMembers(): array {
 		return ClanHandler::getPlayingClanMembers($this);
 	}
 
 	/*
 	 * Returns a list of all step in members of this clan.
 	 */
-	public function getStepInMembers() {
+	public function getStepInMembers(): array {
 		return ClanHandler::getStepInClanMembers($this);
 	}
 
 	/*
 	 * Returns a list of all invites to this clan.
 	 */
-	public function getInvites() {
+	public function getInvites(): array {
 		return ClanHandler::getInvitesByClan($this);
 	}
 
@@ -104,7 +104,7 @@ class Clan extends EventObject {
 	/*
 	 * Returns true if this clan is qualified for specified compo.
 	 */
-	public function isQualified($compo) {
+	public function isQualified(Compo $compo): bool {
     if (!ClanHandler::isQualified($this, $compo)) {
     	return false;
     }
@@ -122,14 +122,14 @@ class Clan extends EventObject {
 	/*
 	 * Returns true of the specified user is member of this clan.
 	 */
-	public function isMember(User $user) {
+	public function isMember(User $user): bool {
 		return ClanHandler::isClanMember($this, $user);
 	}
 
 	/*
 	 * Return true if the specified user is a stepin member of this clan.
 	 */
-	public function isStepInMember(User $user) {
+	public function isStepInMember(User $user): bool {
 		return ClanHandler::isStepInClanMember($this, $user);
 	}
 

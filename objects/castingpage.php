@@ -31,35 +31,35 @@ class CastingPage extends Object {
 	/*
 	 * Returns the id of the compo this server is bound to
 	 */
-  public function getEventId() {
+  public function getEventId(): int {
     return $this->eventId;
 	}
 
 	/*
 	 * Returns the compo object associated with this server
 	 */
-	public function getEvent() {
+	public function getEvent(): Event {
 		return EventHandler::getEvent($this->eventId);
 	}
 
 	/*
 	 * Returns the human name of this server
 	 */
-	public function getName() {
+	public function getName(): string {
 		return $this->name;
 	}
 
 	/*
 	 * Returns the connection data for this server. Note that the compo plugin is supposed to parse this however it wants. Might be json data. Might be a string. God knows.
 	 */
-	public function getData() {
+	public function getData(): string {
 		return $this->data;
 	}
 
   /*
    * Returns the template associated with this page
    */
-  public function getTemplate() {
+  public function getTemplate(): string {
     return $this->template;
   }
 

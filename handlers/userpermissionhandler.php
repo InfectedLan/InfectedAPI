@@ -28,7 +28,7 @@ class UserPermissionHandler {
 	/*
 	 * Returns true if user has the given permission, otherwise false.
 	 */
-	public static function hasUserPermission(User $user, Permission $permission, Event $event = null) {
+	public static function hasUserPermission(User $user, Permission $permission, Event $event = null): bool {
 		$database = Database::getConnection(Settings::db_name_infected);
 
 		$result = $database->query('SELECT * FROM `' . Settings::db_table_infected_userpermissions . '`
@@ -42,7 +42,7 @@ class UserPermissionHandler {
 	/*
 	 * Returns true if user has the given permission value and event, otherwise false.
 	 */
-	public static function hasUserPermissionByValue(User $user, $value, Event $event = null) {
+	public static function hasUserPermissionByValue(User $user, string $value, Event $event = null): bool {
 		$database = Database::getConnection(Settings::db_name_infected);
 
 		$result = $database->query('SELECT `id` FROM `' . Settings::db_table_infected_userpermissions . '`
@@ -57,7 +57,7 @@ class UserPermissionHandler {
 	/*
 	 * Returns true if the specified user has any permissions.
 	 */
-	public static function hasUserPermissions(User $user, Event $event = null) {
+	public static function hasUserPermissions(User $user, Event $event = null): bool {
 		$database = Database::getConnection(Settings::db_name_infected);
 
 		$result = $database->query('SELECT `id` FROM `' . Settings::db_table_infected_userpermissions . '`
@@ -70,7 +70,7 @@ class UserPermissionHandler {
 	/*
 	 * Returns a list of permissions for the specified user and event.
 	 */
-	public static function getUserPermissions(User $user, Event $event = null) {
+	public static function getUserPermissions(User $user, Event $event = null): array {
 		$database = Database::getConnection(Settings::db_name_infected);
 
 		$result = $database->query('SELECT * FROM `' . Settings::db_table_infected_permissions . '`

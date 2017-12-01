@@ -48,39 +48,39 @@ class Match extends Object {
     return $this->bracket;
   }
 
-  public function getChat() {
+  public function getChat(): Chat {
     return ChatHandler::getChat($this->chatId);
   }
 
-  public function getChatId() {
+  public function getChatId(): int {
     return $this->chatId;
   }
 
-  public function getScheduledTime() {
+  public function getScheduledTime(): int {
     return strtotime($this->scheduledTime);
   }
 
-  public function getConnectDetails() {
+  public function getConnectDetails(): string {
     return $this->connectDetails;
   }
 
-  public function getWinner() {
+  public function getWinner(): Clan {
     return ClanHandler::getClan($this->winnerId);
   }
 
-  public function getWinnerId() {
+  public function getWinnerId(): int {
     return $this->winnerId;
   }
 
-  public function getState() {
+  public function getState(): int {
     return $this->state;
   }
 
-  public function getBracketOffset() {
+  public function getBracketOffset(): int {
     return $this->bracketOffset;
   }
 
-  public function isParticipant($user) {
+  public function isParticipant($user): bool {
     foreach (MatchHandler::getParticipantsByMatch($this) as $clan) {
       if ($clan->isMember($user)) {
   	     return true;
@@ -93,7 +93,7 @@ class Match extends Object {
   /*
    * Returns true if the match can be run
    */
-  public function isReady() {
+  public function isReady(): bool {
     return MatchHandler::isReady($this);
   }
 
@@ -103,15 +103,15 @@ class Match extends Object {
     MatchHandler::updateMatch($this, $state);
   }
 
-  public function getCompo() {
+  public function getCompo(): Compo {
     return CompoHandler::getCompo($this->compoId);
   }
 
-  public function getParents() {
+  public function getParents() : array {
     return MatchHandler::getMatchParents($this);
   }
 
-  public function getJsonableData() {
+  public function getJsonableData(): array {
     return MatchHandler::getJsonableData($this);
   }
 }

@@ -31,28 +31,28 @@ class ChatMessage extends Object {
 	/*
 	 * Returns the user who sent this chat message.
 	 */
-	public function getUser() {
+	public function getUser(): User {
 		return UserHandler::getUser($this->userId);
 	}
 
 	/*
 	 * Returns the chat that this chat message belongs to.
 	 */
-	public function getChat() {
+	public function getChat(): Chat {
 		return ChatHandler::getChat($this->chatId);
 	}
 
 	/*
 	 * Returns the time this message was sent.
 	 */
-	public function getTime() {
+	public function getTime(): int {
 		return strtotime($this->time);
 	}
 
 	/*
 	 * Returns the message.
 	 */
-	public function getMessage() {
+	public function getMessage(): string {
 		return $this->message;
 	}
 }

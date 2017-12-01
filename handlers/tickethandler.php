@@ -32,7 +32,7 @@ class TicketHandler {
 	/*
 	 * Return the ticket by the internal id.
 	 */
-	public static function getTicket($id) {
+	public static function getTicket(int $id): Ticket {
 		$database = Database::getConnection(Settings::db_name_infected_tickets);
 
 		$result = $database->query('SELECT * FROM `' . Settings::db_table_infected_tickets_tickets . '`
@@ -44,7 +44,7 @@ class TicketHandler {
 	/*
 	 * Returns true if the specified user has a ticket.
 	 */
-	public static function hasTicketByUser(User $user, Event $event = null) {
+	public static function hasTicketByUser(User $user, Event $event = null): bool {
 		$database = Database::getConnection(Settings::db_name_infected_tickets);
 
 		$result = $database->query('SELECT * FROM `' . Settings::db_table_infected_tickets_tickets . '`
@@ -58,7 +58,7 @@ class TicketHandler {
 	/*
 	 * Returns the specified user latest ticket from the specified event.
 	 */
-	public static function getTicketByUser(User $user, Event $event = null) {
+	public static function getTicketByUser(User $user, Event $event = null): Ticket {
 		$database = Database::getConnection(Settings::db_name_infected_tickets);
 
 		$result = $database->query('SELECT * FROM `' . Settings::db_table_infected_tickets_tickets . '`
@@ -72,7 +72,7 @@ class TicketHandler {
 	/*
 	 * Returns a list of the specified user tickets for the specified event.
 	 */
-	public static function getTicketsByUser(User $user, Event $event = null) {
+	public static function getTicketsByUser(User $user, Event $event = null): array {
 		$database = Database::getConnection(Settings::db_name_infected_tickets);
 
 		$result = $database->query('SELECT * FROM `' . Settings::db_table_infected_tickets_tickets . '`
@@ -91,7 +91,7 @@ class TicketHandler {
 	/*
 	 * Returns a list of all the tickets for a specified event.
 	 */
-	public static function getTickets(Event $event = null) {
+	public static function getTickets(Event $event = null): array {
 		$database = Database::getConnection(Settings::db_name_infected_tickets);
 
 		$result = $database->query('SELECT * FROM `' . Settings::db_table_infected_tickets_tickets . '`
@@ -109,7 +109,7 @@ class TicketHandler {
 	/*
 	 * Returns a list of all the tickets from all events.
 	 */
-	public static function hasTicketsByUserAndAllEvents(User $user) {
+	public static function hasTicketsByUserAndAllEvents(User $user): bool {
 		$database = Database::getConnection(Settings::db_name_infected_tickets);
 
 		$result = $database->query('SELECT * FROM `' . Settings::db_table_infected_tickets_tickets . '`
@@ -121,7 +121,7 @@ class TicketHandler {
 	/*
 	 * Returns a list of all the tickets from all events.
 	 */
-	public static function getTicketsByUserAndAllEvents(User $user) {
+	public static function getTicketsByUserAndAllEvents(User $user): array {
 		$database = Database::getConnection(Settings::db_name_infected_tickets);
 
 		$result = $database->query('SELECT * FROM `' . Settings::db_table_infected_tickets_tickets . '`
@@ -139,11 +139,11 @@ class TicketHandler {
 	/*
 	 * Returns true if the specified user is able to seat tickets.
 	 */
-	public static function getTicketsSeatableByUserAndEvent(User $user, Event $event) {
+	public static function getTicketsSeatableByUser(User $user, Event $event = null): array {
 		$database = Database::getConnection(Settings::db_name_infected_tickets);
 
 		$result = $database->query('SELECT * FROM `' . Settings::db_table_infected_tickets_tickets . '`
-																WHERE `eventId` = \'' . $event->getId() . '\'
+																WHERE `eventId` = \'' . ($event != null ? $event->getId() : EventHandler::getCurrentEvent()->getId()) . '\'
 																AND (`seaterId` = \'' . $user->getId() . '\' OR (`userId` = \'' . $user->getId() . '\' AND `seaterId` = \'0\'));');
 
 		$ticketList = [];
@@ -156,16 +156,9 @@ class TicketHandler {
 	}
 
 	/*
-	 * Returns true if the specified user is able to seat tickets.
-	 */
-	public static function getTicketsSeatableByUser(User $user) {
-		return self::getTicketsSeatableByUserAndEvent($user, EventHandler::getCurrentEvent());
-	}
-
-	/*
 	 * Create a new ticket.
 	 */
-	public static function createTicket(User $user, TicketType $ticketType, Payment $payment) {
+	public static function createTicket(User $user, TicketType $ticketType, Payment $payment): Ticket {
 		$database = Database::getConnection(Settings::db_name_infected_tickets);
 
 		$result = $database->query('INSERT INTO `' . Settings::db_table_infected_tickets_tickets . '` (`eventId`, `typeId`, `buyerId`, `paymentId`, `userId`, `seaterId`, `seatId`)
@@ -238,7 +231,7 @@ class TicketHandler {
 	/*
 	 * Returns true if the specified ticket is checked in.
 	 */
-	public static function isTicketCheckedIn(Ticket $ticket) {
+	public static function isTicketCheckedIn(Ticket $ticket): bool {
 		$database = Database::getConnection(Settings::db_name_infected_tickets);
 
 		$result = $database->query('SELECT `id` FROM `' . Settings::db_table_infected_tickets_checkedintickets . '`

@@ -57,7 +57,7 @@ if (Session::isAuthenticated()) {
 			!empty($_GET['endDate']) &&
 			!empty($_GET['endTime']) &&
 			$event = EventHandler::getEvent($_GET['id']);
-			$location = $_GET['location'];
+			$location = LocationHandler::getLocation($_GET['location']);
 			$participants = $_GET['participants'];
 			$bookingTime = $_GET['bookingDate'] . ' ' . $_GET['bookingTime'];
 			$prioritySeatingTime = $_GET['prioritySeatingDate'] . ' ' . $_GET['prioritySeatingTime'];
@@ -66,8 +66,10 @@ if (Session::isAuthenticated()) {
 			$endTime = $_GET['endDate'] . ' ' . $_GET['endTime'];
 
 			if ($event != null) {
+				if ($location != null) {
 			    EventHandler::updateEvent($event, $location, $participants, $bookingTime, $prioritySeatingTime , $seatingTime , $startTime, $endTime);
-				$result = true;
+					$result = true;
+				}
 			} else {
 				$message = Localization::getLocale('the_event_does_not_exist');
 			}

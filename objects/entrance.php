@@ -27,14 +27,14 @@ class Entrance extends Object {
 	/*
 	 * Returns the name of this entrance.
 	 */
-	public function getName() {
+	public function getName(): string {
 		return $this->name;
 	}
 
 	/*
 	 * Returns the title of this entrance.
 	 */
-	public function getTitle() {
+	public function getTitle(): string {
 		return $this->title;
 	}
 }

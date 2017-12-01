@@ -6,7 +6,7 @@ require_once 'handlers/eventhandler.php';
 require_once 'objects/user.php';
 require_once 'database.php';
 
-/* 
+/*
  * UserTest
  *
  * Responsible for testing UserHandler and the User object
@@ -37,16 +37,16 @@ class UserTest extends TestCase {
 		$this->assertEquals(null, $user);
 
 		//Let's create another user
-		$createdUser = UserHandler::createUser("assertionFirstname", 
-											   "assertionLastname", 
-											   "assertUser", 
-											   "32cdb619196200050ab0af581a10fb83cfc63b1a20f58d4bafb6313d55a3f0e9", 
-											   "assertUser@infected.no", 
-											   "1998-03-27 00:00:00", 
-											   0, 
-											   "12345678", 
-											   "Test address", 
-											   1337, 
+		$createdUser = UserHandler::createUser("assertionFirstname",
+											   "assertionLastname",
+											   "assertUser",
+											   "32cdb619196200050ab0af581a10fb83cfc63b1a20f58d4bafb6313d55a3f0e9",
+											   "assertUser@infected.no",
+											   "1998-03-27 00:00:00",
+											   0,
+											   "12345678",
+											   "Test address",
+											   1337,
 											   "AssertNick");
 
 		$this->assertNotEquals(null, $createdUser);
@@ -69,8 +69,8 @@ class UserTest extends TestCase {
 		$this->assertEquals("32cdb619196200050ab0af581a10fb83cfc63b1a20f58d4bafb6313d55a3f0e9", $user->getPassword());
 		$this->assertEquals("assertUser@infected.no", $user->getEmail());
 		$this->assertEquals(strtotime("1998-03-27 00:00:00"), $user->getBirthdate());
-		$this->assertEquals($user->getAgeByEvent(EventHandler::getEvent(7)), 18); //True story
-		$this->assertEquals($user->getAgeByEvent(EventHandler::getEvent(6)), 17);
+		$this->assertEquals($user->getAge(EventHandler::getEvent(7)), 18); //True story
+		$this->assertEquals($user->getAge(EventHandler::getEvent(6)), 17);
 		$this->assertEquals("Male", $user->getGenderAsString());
 		$this->assertEquals("(+47) 12 34 56 78", $user->getPhoneAsString());
 		$this->assertEquals(12345678, $user->getPhone());
@@ -79,18 +79,18 @@ class UserTest extends TestCase {
 		$this->assertEquals("AssertNick", $user->getNickname());
 
 		//One last thing, check if girl string also works
-		$createdUser = UserHandler::createUser("assertionGirlFirst", 
-											   "assertionGirlLast", 
-											   "assertGirl", 
-											   "32cdb619196200050ab0af581a10fb83cfc63b1a20f58d4bafb6313d55a3f0e9", 
-											   "assertGirl@infected.no", 
-											   "1998-03-27 00:00:00", 
-											   1, 
-											   "12345678", 
-											   "Test address", 
-											   1337, 
+		$createdUser = UserHandler::createUser("assertionGirlFirst",
+											   "assertionGirlLast",
+											   "assertGirl",
+											   "32cdb619196200050ab0af581a10fb83cfc63b1a20f58d4bafb6313d55a3f0e9",
+											   "assertGirl@infected.no",
+											   "1998-03-27 00:00:00",
+											   1,
+											   "12345678",
+											   "Test address",
+											   1337,
 											   "AssertGirl");
-		
+
 		$this->assertNotEquals(null, $createdUser);
 		$user = UserHandler::getUserByIdentifier("assertGirl");
 

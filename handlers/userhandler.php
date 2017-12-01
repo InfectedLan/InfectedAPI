@@ -36,7 +36,7 @@ class UserHandler {
 	/*
 	 * Get an user by the internal id.
 	 */
-	public static function getUser($id) {
+	public static function getUser(int $id): User {
 		$database = Database::getConnection(Settings::db_name_infected);
 
 		$result = $database->query('SELECT * FROM `' . Settings::db_table_infected_users . '`
@@ -48,7 +48,7 @@ class UserHandler {
 	/*
 	 * Get user by it's identifier.
 	 */
-	public static function getUserByIdentifier($identifier) {
+	public static function getUserByIdentifier(string $identifier): User {
 		$database = Database::getConnection(Settings::db_name_infected);
 
 		$safeIdentifier = $database->real_escape_string($identifier);
@@ -64,7 +64,7 @@ class UserHandler {
 	/*
 	 * Get a list of all users.
 	 */
-	public static function getUsers() {
+	public static function getUsers(): array {
 		$database = Database::getConnection(Settings::db_name_infected);
 
 		$result = $database->query('SELECT * FROM `' . Settings::db_table_infected_users . '`
@@ -82,7 +82,7 @@ class UserHandler {
 	/*
 	 * Returns all users that have one or more permission values in the permissions table.
 	 */
-	public static function getPermissionUsers(Event $event = null) {
+	public static function getPermissionUsers(Event $event = null): array {
 		$database = Database::getConnection(Settings::db_name_infected);
 
 		$result = $database->query('SELECT DISTINCT `' . Settings::db_table_infected_users . '`.* FROM `' . Settings::db_table_infected_users . '`
@@ -103,7 +103,7 @@ class UserHandler {
 	/*
 	 * Returns all users that have one or more permission values in the permissions table and is member of the specifed group.
 	 */
-	public static function getPermissionUsersByGroup(Group $group = null, Event $event = null) {
+	public static function getPermissionUsersByGroup(Group $group = null, Event $event = null): array {
 		$database = Database::getConnection(Settings::db_name_infected);
 
 		$result = $database->query('SELECT DISTINCT `' . Settings::db_table_infected_users . '`.* FROM `' . Settings::db_table_infected_users . '`
@@ -126,7 +126,7 @@ class UserHandler {
 	/*
 	 * Get a list of all users which is member in a group
 	 */
-	public static function getMemberUsers() {
+	public static function getMemberUsers(): array {
 		$database = Database::getConnection(Settings::db_name_infected);
 
 		$result = $database->query('SELECT `' . Settings::db_table_infected_users . '`.* FROM `' . Settings::db_table_infected_users . '`
@@ -148,7 +148,7 @@ class UserHandler {
 	/*
 	 * Get a list of all users which is not member in a group
 	 */
-	public static function getNonMemberUsers() {
+	public static function getNonMemberUsers(): array {
 		$database = Database::getConnection(Settings::db_name_infected);
 
 		$result = $database->query('SELECT `' . Settings::db_table_infected_users . '`.* FROM `' . Settings::db_table_infected_users . '`
@@ -170,7 +170,7 @@ class UserHandler {
 	/*
 	 * Get a list of all users which is a participant of current event.
 	 */
-	public static function getParticipantUsers(Event $event) {
+	public static function getParticipantUsers(Event $event): array {
 		$database = Database::getConnection(Settings::db_name_infected);
 
 		$result = $database->query('SELECT DISTINCT `' . Settings::db_table_infected_users . '`.* FROM `' . Settings::db_table_infected_users . '`
@@ -191,7 +191,7 @@ class UserHandler {
 	/*
 	 * Get a list of all users which was a participant of an event in the given timeperiod.
 	 */
-	public static function getPreviousParticipantUsers() {
+	public static function getPreviousParticipantUsers(): array {
 		$currentEvent = EventHandler::getCurrentEvent();
 		$previousEvent = EventHandler::getEvent($currentEvent->getId() - 3);
 		$userList = [];
@@ -217,7 +217,7 @@ class UserHandler {
 	/*
 	 * Check if a user with given username or email already exists.
 	 */
-	public static function hasUser($identifier) {
+	public static function hasUser(string $identifier): bool {
 		$database = Database::getConnection(Settings::db_name_infected);
 
 		$safeIdentifier = $database->real_escape_string($identifier);
@@ -233,7 +233,7 @@ class UserHandler {
 	/*
 	 * Create a new user
 	 */
-	public static function createUser($firstname, $lastname, $username, $password, $email, $birthDate, $gender, $phone, $address, $postalCode, $nickname) {
+	public static function createUser(string $firstname, string $lastname, string $username, string $password, string $email, int $birthDate, bool $gender, int $phone, string $address, int $postalCode, string $nickname): User {
 		$database = Database::getConnection(Settings::db_name_infected);
 
 		$database->query('INSERT INTO `' . Settings::db_table_infected_users . '` (`firstname`, `lastname`, `username`, `password`, `email`, `birthdate`, `gender`, `phone`, `address`, `postalcode`, `countryId`, `nickname`, `registereddate`)
@@ -257,7 +257,7 @@ class UserHandler {
 	/*
 	 * Update a user
 	 */
-	public static function updateUser(User $user, $firstname, $lastname, $username, $email, $birthDate, $gender, $phone, $address, $postalCode, $nickname) {
+	public static function updateUser(User $user, string $firstname, string $lastname, string $username, string $email, int $birthDate, bool $gender, int $phone, string $address, int $postalCode, string $nickname) {
 		$database = Database::getConnection(Settings::db_name_infected);
 
 		$database->query('UPDATE `' . Settings::db_table_infected_users . '`
@@ -325,7 +325,7 @@ class UserHandler {
 	/*
 	 * Update a users password
 	 */
-	public static function updateUserPassword(User $user, $password) {
+	public static function updateUserPassword(User $user, string $password) {
 		$database = Database::getConnection(Settings::db_name_infected);
 
 		$database->query('UPDATE `' . Settings::db_table_infected_users . '`
@@ -336,7 +336,7 @@ class UserHandler {
 	/*
 	 * Lookup users by set values and return a list of users as result.
 	 */
-	public static function search($query) {
+	public static function search(string $query): array {
 		// Sanitize the input and split the query string into an array.
 		$queryList = explode(' ', $query);
 		$keywordList = [];
@@ -371,12 +371,11 @@ class UserHandler {
 	/*
 	 * Returns the steam id of a user, or null if undefined
 	 */
-	public static function getSteamId(User $user) {
+	public static function getSteamId(User $user): string {
     $database = Database::getConnection(Settings::db_name_infected_compo);
 
     $result = $database->query('SELECT `steamId` FROM `' . Settings::db_table_infected_compo_steamids . '`
 																WHERE `userId` = \'' . $user->getId() . '\';');
-    $count = $result->num_rows;
 
     return $result->fetch_array()[0];
 	}
@@ -384,7 +383,7 @@ class UserHandler {
 	/*
 	 * Sets the steam id
 	 */
-	public static function setSteamId(User $user, $steamId) {
+	public static function setSteamId(User $user, string $steamId) {
     $database = Database::getConnection(Settings::db_name_infected_compo);
 
     $result = $database->query('SELECT `steamId` FROM `' . Settings::db_table_infected_compo_steamids . '`

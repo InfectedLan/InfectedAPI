@@ -24,7 +24,7 @@ require_once 'secret.php';
 class Database {
 	private static $connList = [];
 
-	public static function getConnection($database) {
+	public static function getConnection(string $database): mysqli {
 		if (isset(self::$connList[$database]) || array_key_exists($database, self::$connList)) {
 			return self::$connList[$database];
 		}
@@ -55,13 +55,6 @@ class Database {
 			$value->close();
 			unset(self::$connList[$key]);
 		}
-	}
-
-	/*
-	 * Opens a connection to specified database. (Deprecated)
-	 */
-	public static function open($database) {
-		return self::getConnection($database);
 	}
 
 	public static function debug() {

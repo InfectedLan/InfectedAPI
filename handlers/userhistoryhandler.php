@@ -27,7 +27,7 @@ class UserHistoryHandler {
 	/*
 	 * Get a list of events that the given user has history with.
    */
-	public static function getUserParticipatedEvents(User $user) {
+	public static function getUserParticipatedEvents(User $user): array {
 	  $database = Database::getConnection(Settings::db_name_infected);
 
 	  $result = $database->query('SELECT * FROM (SELECT `' . Settings::db_table_infected_events . '`.* FROM `' . Settings::db_table_infected_events . '`

@@ -28,7 +28,7 @@ class VoteOptionHandler {
 	/*
 	 * Get a vote option by the internal id.
 	 */
-	public static function getVoteOption($id) {
+	public static function getVoteOption(int $id): VoteOption {
 		$database = Database::getConnection(Settings::db_name_infected_compo);
 
 		$result = $database->query('SELECT * FROM `' . Settings::db_table_infected_compo_voteoptions . '`
@@ -40,7 +40,7 @@ class VoteOptionHandler {
 	/*
 	 * Get a vote option for a specified compo.
 	 */
-	public static function getVoteOptionsByCompo(Compo $compo) {
+	public static function getVoteOptionsByCompo(Compo $compo): array {
 		$database = Database::getConnection(Settings::db_name_infected_compo);
 
 		$result = $database->query('SELECT * FROM `' . Settings::db_table_infected_compo_voteoptions . '`
@@ -58,7 +58,7 @@ class VoteOptionHandler {
 	/*
 	 * Returns true if specified vote option is voted for the specified match.
 	 */
-	public static function isVoted(VoteOption $voteOption, Match $match) {
+	public static function isVoted(VoteOption $voteOption, Match $match): bool {
 		$database = Database::getConnection(Settings::db_name_infected_compo);
 
 		$result = $database->query('SELECT `id` FROM `' . Settings::db_table_infected_compo_votes . '`
@@ -71,7 +71,7 @@ class VoteOptionHandler {
 	/*
 	 * Returns the vote type of the vote option, if any
 	 */
-	public static function getVoteType(VoteOption $voteOption, Match $match) {
+	public static function getVoteType(VoteOption $voteOption, Match $match): int {
 		$database = Database::getConnection(Settings::db_name_infected_compo);
 
 		$result = $database->query('SELECT `type` FROM `' . Settings::db_table_infected_compo_votes . '`

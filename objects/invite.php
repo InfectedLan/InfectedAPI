@@ -32,14 +32,14 @@ class Invite extends EventObject {
 	/*
 	 * Returns the user that this invite is for.
 	 */
-	public function getUser() {
+	public function getUser(): User {
 		return UserHandler::getUser($this->userId);
 	}
 
 	/*
 	 * Returns the clan this invite is to.
 	 */
-	public function getClan() {
+	public function getClan(): Clan {
 		return ClanHandler::getClan($this->clanId);
 	}
 

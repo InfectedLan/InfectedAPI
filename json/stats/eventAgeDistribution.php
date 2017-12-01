@@ -9,12 +9,12 @@ include 'database.php';
  * modify it under the terms of the GNU Lesser General Public
  * License as published by the Free Software Foundation; either
  * version 3.0 of the License, or (at your option) any later version.
- * 
+ *
  * This library is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
  * Lesser General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU Lesser General Public
  * License along with this library.  If not, see <http://www.gnu.org/licenses/>.
  */
@@ -33,23 +33,23 @@ if (Session::isAuthenticated()) {
 	if ($user->hasPermission('stats')) {
 		if (isset($_GET['id'])) {
 			$event = EventHandler::getEvent($_GET["id"]);
-			
+
 			if ($event != null) {
 				//Crew
-				$members = EventHandler::getMembersByEvent($event); 
+				$members = EventHandler::getMembersByEvent($event);
 
 				$memberAgeSlots = array_fill(0,100,0);
 
 				foreach($members as $person) {
-					$memberAgeSlots[floor($person->getAgeByEvent($event))]++;
+					$memberAgeSlots[floor($person->getAge($event))]++;
 				}
 
 				//Participants
-				$participants = EventHandler::getParticipantsByEvent($event); 
+				$participants = EventHandler::getParticipantsByEvent($event);
 
 				$participantAgeSlots = array_fill(0,100,0);
 				foreach($participants as $person) {
-					$participantAgeSlots[floor($person->getAgeByEvent($event))]++;
+					$participantAgeSlots[floor($person->getAge($event))]++;
 				}
 
 				$data = ["participants" => $participantAgeSlots, "crew" => $memberAgeSlots];

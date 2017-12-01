@@ -32,32 +32,32 @@ class TicketType extends Object {
 	/*
 	 * Returns the internal name of this ticket type.
 	 */
-	public function getName() {
+	public function getName(): string {
 		return $this->name;
 	}
 
 	/*
 	 * Returns the name of this ticket type.
 	 */
-	public function getTitle() {
+	public function getTitle(): string {
 		return $this->title;
 	}
 
 	/*
 	 * Returns the price of this ticket type.
 	 */
-	public function getPrice() {
+	public function getPrice(): int {
 		return $this->price;
 	}
 
 	/*
 	 * Returns the true if this ticket type is refundable.
 	 */
-	public function isRefundable() {
+	public function isRefundable(): bool {
 		return $this->refundable ? true : false;
 	}
 
-  public function isUserEligibleForDiscount(User $user) {
+  public function isUserEligibleForDiscount(User $user): bool {
     $eventYear = date('Y', EventHandler::getCurrentEvent()->getStartTime());
 
 	  foreach (TicketHandler::getTicketsByUserAndAllEvents($user) as $ticket) {
@@ -79,7 +79,7 @@ class TicketType extends Object {
 	/*
 	 * Returns the price of this ticket, taking discount into consideration
 	 */
-	public function getPriceByUser(User $user, $amount = 1) {
+	public function getPriceByUser(User $user, int $amount = 1): int {
     // A better formula would be (ticketFee*amount)+radarMembership, but then we need to store ticket prices without the membership included.
 		// This will propabily confuse some people. Let's keep it this way :)
 		$discount = Settings::ticketFee; // Radar event discount, membership goes per calender year.

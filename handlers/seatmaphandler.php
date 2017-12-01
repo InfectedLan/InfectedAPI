@@ -29,7 +29,7 @@ class SeatmapHandler {
 	/*
 	 * Get a seatmap by the internal id.
 	 */
-	public static function getSeatmap($id) {
+	public static function getSeatmap(int $id): Seatmap {
 		$database = Database::getConnection(Settings::db_name_infected_tickets);
 
 		$result = $database->query('SELECT * FROM `' . Settings::db_table_infected_tickets_seatmaps . '`
@@ -41,7 +41,7 @@ class SeatmapHandler {
 	/*
 	 * Returns a list of all seatmaps.
 	 */
-	public static function getSeatmaps() {
+	public static function getSeatmaps(): array {
 		$database = Database::getConnection(Settings::db_name_infected_tickets);
 
 		$result = $database->query('SELECT * FROM `' . Settings::db_table_infected_tickets_seatmaps . '`;');
@@ -58,7 +58,7 @@ class SeatmapHandler {
 	/*
 	 * Creates a new seatmap.
 	 */
-	public static function createSeatmap($name, $backgroundImage) {
+	public static function createSeatmap(string $name, string $backgroundImage): Seatmap {
 		$database = Database::getConnection(Settings::db_name_infected_tickets);
 
 		$database->query('INSERT INTO ' . Settings::db_table_infected_tickets_seatmaps . '(`humanName`, `backgroundImage`)
@@ -71,7 +71,7 @@ class SeatmapHandler {
 	/*
 	 * Creates a new seatmap with the contents of another seatmap
 	 */
-	public static function cloneSeatmap(Seatmap $sourceSeatmap) {
+	public static function cloneSeatmap(Seatmap $sourceSeatmap): Seatmap {
 	    $targetSeatmap = self::createSeatmap('Clone of ' . $sourceSeatmap->getHumanName(), $sourceSeatmap->getBackgroundImage());
 
 	    self::copySeatmap($sourceSeatmap, $targetSeatmap);
@@ -82,7 +82,7 @@ class SeatmapHandler {
 	/*
 	 * Copies a seatmap, destroying the old seatmap in the process
 	 */
-	public static function copySeatmap(Seatmap $sourceSeatmap, Seatmap $targetSeatmap) {
+	public static function copySeatmap(Seatmap $sourceSeatmap, Seatmap $targetSeatmap): bool {
     $preExistingRows = RowHandler::getRowsBySeatmap($targetSeatmap);
     $isSafeToDelete = true;
 
@@ -115,7 +115,7 @@ class SeatmapHandler {
 	/*
 	 * Returns a list of all seatmaps.
 	 */
-	public static function getEvent(Seatmap $seatmap) {
+	public static function getEvent(Seatmap $seatmap): Event {
 		$database = Database::getConnection(Settings::db_name_infected);
 
 		// TODO: Use joins here to join with event table. Somehow.
@@ -130,7 +130,7 @@ class SeatmapHandler {
 	/*
 	 * Set the background of the specified seatmap.
 	 */
-	public static function setBackground(Seatmap $seatmap, $filename) {
+	public static function setBackground(Seatmap $seatmap, string $filename) {
 		$database = Database::getConnection(Settings::db_name_infected_tickets);
 
 		$database->query('UPDATE `' . Settings::db_table_infected_tickets_seatmaps . '`

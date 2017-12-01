@@ -26,7 +26,7 @@ class TaskManager {
 	/*
 	 * Get a task by given id.
 	 */
-	public static function getTask($id) {
+	public static function getTask(int $id) {
 		$database = Database::getConnection(Settings::db_name_infected);
 
 		$result = $database->query('SELECT * FROM `'. Settings::db_table_infected_tasks . '`
@@ -67,7 +67,7 @@ class TaskManager {
 	/*
 	 * Remove a task.
 	 */
-	public static function removeTask($id) {
+	public static function removeTask(int $id) {
 		$database = Database::getConnection(Settings::db_name_infected);
 
 		$database->query('DELETE FROM `' . Settings::db_table_infected_tasks . '`

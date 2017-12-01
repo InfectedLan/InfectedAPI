@@ -30,7 +30,7 @@ class ChatHandler {
 	/*
 	 * Get a chat by the internal id.
 	 */
-	public static function getChat($id) {
+	public static function getChat(int $id): Chat {
 		$database = Database::getConnection(Settings::db_name_infected_compo);
 
 		$result = $database->query('SELECT * FROM `' . Settings::db_table_infected_compo_chats . '`
@@ -42,7 +42,7 @@ class ChatHandler {
 	/*
 	 * Return all chats.
 	 */
-	public static function getChats() {
+	public static function getChats(): array {
 		$database = Database::getConnection(Settings::db_name_infected_compo);
 
 		$result = $database->query('SELECT * FROM `' . Settings::db_table_infected_compo_chats . '`;');
@@ -59,7 +59,7 @@ class ChatHandler {
 	/*
 	 * Creates a new chat and returns the object.
 	 */
-	public static function createChat($name, $title) {
+	public static function createChat(string $name, string $title): Chat {
 		$database = Database::getConnection(Settings::db_name_infected_compo);
 
 		$database->query('INSERT INTO `' . Settings::db_table_infected_compo_chats . '` (`name`, `title`)
@@ -88,7 +88,7 @@ class ChatHandler {
 	/*
 	 * Returns true if the given user is member of the given chat.
 	 */
-	public static function isChatMember(Chat $chat, User $user) {
+	public static function isChatMember(Chat $chat, User $user): bool {
 	    return true; //Remove later
 		$database = Database::getConnection(Settings::db_name_infected_compo);
 
@@ -102,7 +102,7 @@ class ChatHandler {
 	/*
 	 * Returns an array of all members in the specificed chat.
 	 */
-	public static function getChatMembers(Chat $chat) {
+	public static function getChatMembers(Chat $chat): array {
 		$database = Database::getConnection(Settings::db_name_infected);
 
 		$result = $database->query('SELECT * FROM `' . Settings::db_table_infected_users . '`
@@ -132,7 +132,7 @@ class ChatHandler {
 	/*
 	 * Same as above, but with id's to save 2 queries
 	 */
-	public static function addChatMemberById($chatId, $userId) {
+	public static function addChatMemberById(int $chatId, int $userId) {
 	    $database = Database::getConnection(Settings::db_name_infected_compo);
 
 	    $database->query('INSERT INTO `' . Settings::db_table_infected_compo_memberofchat . '` (`userId`, `chatId`)
@@ -177,7 +177,7 @@ class ChatHandler {
 	/*
 	 * Return the chat message with the given id.
 	 */
-	public static function getChatMessage($id) {
+	public static function getChatMessage(int $id): ChatMessage {
 		$database = Database::getConnection(Settings::db_name_infected_compo);
 
 		$result = $database->query('SELECT * FROM `' . Settings::db_table_infected_compo_chatmessages . '`
@@ -189,7 +189,7 @@ class ChatHandler {
 	/*
 	 * Return the chat message with the given id.
 	 */
-	public static function getChatMessages() {
+	public static function getChatMessages(): array {
 		$database = Database::getConnection(Settings::db_name_infected_compo);
 
 		$result = $database->query('SELECT * FROM `' . Settings::db_table_infected_compo_chatmessages . '`;');
@@ -206,7 +206,7 @@ class ChatHandler {
 	/*
 	 * Returns the last chat messages for the given chat.
 	 */
-	public static function getLastChatMessage(Chat $chat) {
+	public static function getLastChatMessage(Chat $chat): ChatMessage {
 		$database = Database::getConnection(Settings::db_name_infected_compo);
 
 		$result = $database->query('SELECT * FROM `' . Settings::db_table_infected_compo_chatmessages . '`
@@ -220,7 +220,7 @@ class ChatHandler {
 	/*
 	 * Returns an array of the last given number of chat messages for given chat.
 	 */
-	public static function getLastChatMessages(Chat $chat, $count) {
+	public static function getLastChatMessages(Chat $chat, int $count): array {
 		$database = Database::getConnection(Settings::db_name_infected_compo);
 
 		$result = $database->query('SELECT * FROM `' . Settings::db_table_infected_compo_chatmessages . '`
@@ -251,7 +251,7 @@ class ChatHandler {
 	/*
 	 * Send a massage to this chat from the given user.
 	 */
-	public static function sendChatMessage(Chat $chat, User $user, $message) {
+	public static function sendChatMessage(Chat $chat, User $user, string $message) {
 		$database = Database::getConnection(Settings::db_name_infected_compo);
 
 		$database->query('INSERT INTO `' . Settings::db_table_infected_compo_chatmessages . '` (`userId`, `chatId`, `time`, `message`)
@@ -262,11 +262,11 @@ class ChatHandler {
 
 	}
 
-  public static function canChat(Chat $chat, User $user) {
+  public static function canChat(Chat $chat, User $user): bool {
     return $user->hasPermission('compo.chat') || $chat->isMember($user);
   }
 
-  public static function canRead(Chat $chat, User $user) {
+  public static function canRead(Chat $chat, User $user): bool {
     if (self::canChat($chat, $user)) {
       return true;
     } else {

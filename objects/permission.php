@@ -27,14 +27,14 @@ class Permission extends Object {
 	/*
 	 * Returns the value of this permission.
 	 */
-	public function getValue() {
+	public function getValue(): string {
 		return $this->value;
 	}
 
 	/*
 	 * Returns the description of this permission.
 	 */
-	public function getDescription() {
+	public function getDescription(): string {
 		return $this->description;
 	}
 }

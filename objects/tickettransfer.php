@@ -28,35 +28,35 @@ class TicketTransfer extends Object {
 	private $datetime;
 	private $revertable;
 
-	public function getTicket() {
+	public function getTicket(): Ticket {
 		return TicketHandler::getTicket($this->ticketId);
 	}
 
 	/*
 	 * Returns the sender user.
 	 */
-	public function getFrom() {
+	public function getFrom(): User {
 		return UserHandler::getUser($this->fromId);
 	}
 
 	/*
 	 * Returns the receiving user.
 	 */
-	public function getTo() {
+	public function getTo(): User {
 		return UserHandler::getUser($this->toId);
 	}
 
 	/*
 	 * Returns the datetime of this transfer.
 	 */
-	public function getDateTime() {
+	public function getDateTime(): int {
 		return strtotime($this->datetime);
 	}
 
 	/*
 	 * Returns true if this transfer is revertable.
 	 */
-	public function isRevertable() {
+	public function isRevertable(): bool {
 		return $this->revertable ? true : false;
 	}
 }

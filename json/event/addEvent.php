@@ -22,6 +22,7 @@ include 'database.php';
 require_once 'session.php';
 require_once 'localization.php';
 require_once 'handlers/eventhandler.php';
+require_once 'handlers/locationhandler.php';
 
 $result = false;
 $message = null;
@@ -46,14 +47,17 @@ if (Session::isAuthenticated()) {
 			!empty($_GET['startTime']) &&
 			!empty($_GET['endDate']) &&
 			!empty($_GET['endTime'])) {
-			$location = $_GET['location'];
+			$location = LocationHandler::getLocation($_GET['location']);
 			$participants = $_GET['participants'];
 			$bookingTime = $_GET['bookingDate'] . ' ' . $_GET['bookingTime'];
 			$startTime = $_GET['startDate'] . ' ' . $_GET['startTime'];
 			$endTime = $_GET['endDate'] . ' ' . $_GET['endTime'];
 
-			EventHandler::createEvent($location, $participants, $bookingTime, $startTime, $endTime);
-			$result = true;
+			if ($location != null) {
+				EventHandler::createEvent($location, $participants, $bookingTime, $startTime, $endTime);
+
+				$result = true;
+			}
 		} else {
 			$message = Localization::getLocale('you_have_not_filled_out_the_required_fields');
 		}

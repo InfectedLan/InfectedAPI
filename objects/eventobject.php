@@ -27,7 +27,7 @@ class EventObject extends Object {
 	/*
 	 * Returns the event of this object.
 	 */
-	public function getEvent() {
+	public function getEvent(): Event {
 		return EventHandler::getEvent($this->eventId);
 	}
 }

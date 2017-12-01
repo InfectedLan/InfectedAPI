@@ -30,7 +30,7 @@ class VoteHandler {
 	/*
 	 * Get a vote by the internal id.
 	 */
-	public static function getVote($id) {
+	public static function getVote(int $id): Vote {
 		$database = Database::getConnection(Settings::db_name_infected_compo);
 
 		$result = $database->query('SELECT * FROM `' . Settings::db_table_infected_compo_votes . '`
@@ -39,7 +39,7 @@ class VoteHandler {
 		return $result->fetch_object('Vote');
 	}
 
-	public static function getNumBanned($matchId) {
+	public static function getNumBanned($matchId): int {
 		$database = Database::getConnection(Settings::db_name_infected_compo);
 
 		$result = $database->query('SELECT `id` FROM `' . Settings::db_table_infected_compo_votes . '`
@@ -48,7 +48,7 @@ class VoteHandler {
 		return $result->num_rows;
 	}
 
-	public static function getCurrentBanner($numBanned, Match $match) {
+	public static function getCurrentBanner(int $numBanned, Match $match): int {
     $plugin = CompoPluginHandler::getPluginObjectOrDefault($match->getCompo()->getPluginName());
 
     $turnArray = $plugin->getTurnArray($match);
@@ -56,7 +56,7 @@ class VoteHandler {
     return $turnArray[$numBanned];
 	}
 
-	public static function getCurrentTurnMask($numBanned, Match $match) {
+	public static function getCurrentTurnMask($numBanned, Match $match): int {
     $plugin = CompoPluginHandler::getPluginObjectOrDefault($match->getCompo()->getPluginName());
 
     $turnArray = $plugin->getTurnMask($match);
@@ -65,12 +65,12 @@ class VoteHandler {
 	}
 
 	//Again, consumer is a match id
-	public static function banMap(VoteOption $voteOption, $consumer, $type) {
+	public static function banMap(VoteOption $voteOption, int $consumer, int $type) {
 		$database = Database::getConnection(Settings::db_name_infected_compo);
 
-		$result = $database->query('INSERT INTO `' . Settings::db_table_infected_compo_votes . '` (`consumerId`, `voteOptionId`,`type`)
-																VALUES (\'' . $database->real_escape_string($consumer) . '\',
-																				\'' . $voteOption->getId() . '\', \'' . $database->real_escape_string($type) . '\');');
+		$database->query('INSERT INTO `' . Settings::db_table_infected_compo_votes . '` (`consumerId`, `voteOptionId`,`type`)
+											VALUES (\'' . $database->real_escape_string($consumer) . '\',
+															\'' . $voteOption->getId() . '\', \'' . $database->real_escape_string($type) . '\');');
 	}
 }
 ?>

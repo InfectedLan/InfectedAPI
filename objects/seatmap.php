@@ -30,42 +30,42 @@ class Seatmap extends Object {
 	/*
 	 * Returns the name of this seatmap.
 	 */
-	public function getHumanName() {
+	public function getHumanName(): string {
 		return $this->humanName;
 	}
 
 	/*
 	 * Returns the background image for this seatmap.
 	 */
-	public function getBackgroundImage() {
+	public function getBackgroundImage(): string {
 		return $this->backgroundImage;
 	}
 
 	/*
 	 * Sets the background image for this seatmap.
 	 */
-	public function setBackgroundImage($filename) {
+	public function setBackgroundImage(string $filename) {
 		SeatmapHandler::setBackground($this, $filename);
 	}
 
 	/*
 	 * Returns the event this seatmap is accosiated with.
 	 */
-	public function getEvent() {
+	public function getEvent(): Event {
 		return SeatmapHandler::getEvent($this);
 	}
 
 	/*
 	 * Returns the rows for this seatmap.
 	 */
-	public function getRows() {
+	public function getRows(): array {
 		return RowHandler::getRowsBySeatmap($this);
 	}
 
 	/*
 	 * Add an row to this seatmap at the specified coordinates.
 	 */
-	public function addRow($x, $y) {
+	public function addRow(int $x, int $y): Row {
 		return RowHandler::createRow($this, $x, $y);
 	}
 
@@ -73,7 +73,7 @@ class Seatmap extends Object {
 	 * Remove an row to this seatmap.
 	 */
 	public function removeRow(Row $row) {
-		return RowHandler::removeRow($row);
+		RowHandler::removeRow($row);
 	}
 }
 ?>

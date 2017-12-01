@@ -28,7 +28,7 @@ class SlideHandler {
 	/*
 	 * Get a slide by the internal id.
 	 */
-	public static function getSlide($id) {
+	public static function getSlide(int $id): Slide {
 		$database = Database::getConnection(Settings::db_name_infected_info);
 
 		$result = $database->query('SELECT * FROM `' . Settings::db_table_infected_info_slides . '`
@@ -40,7 +40,7 @@ class SlideHandler {
 	/*
 	 * Get a list of all slides.
 	 */
-	public static function getSlides(Event $event = null) {
+	public static function getSlides(Event $event = null): array {
 		$database = Database::getConnection(Settings::db_name_infected_info);
 
 		$result = $database->query('SELECT * FROM `' . Settings::db_table_infected_info_slides . '`
@@ -59,7 +59,7 @@ class SlideHandler {
 	/*
 	 * Get a list of all published slides.
 	 */
-	public static function getPublishedSlides(Event $event = null) {
+	public static function getPublishedSlides(Event $event = null): array {
 		$database = Database::getConnection(Settings::db_name_infected_info);
 
 		$result = $database->query('SELECT * FROM `' . Settings::db_table_infected_info_slides . '`
@@ -81,7 +81,7 @@ class SlideHandler {
 	/*
 	 * Create a new slide entry.
 	 */
-	public static function createSlide(Event $event, $name, $title, $content, $startTime, $endTime, $published) {
+	public static function createSlide(Event $event, string $name, string $title, string $content, int $startTime, int $endTime, bool $published): Slide {
 		$database = Database::getConnection(Settings::db_name_infected_info);
 
 		$database->query('INSERT INTO `' . Settings::db_table_infected_info_slides . '` (`eventId`, `name`, `title`, `content`, `startTime`, `endTime`, `published`)
@@ -99,7 +99,7 @@ class SlideHandler {
 	/*
 	 * Update a slide.
 	 */
-	public static function updateSlide(Slide $slide, $title, $content, $startTime, $endTime, $published) {
+	public static function updateSlide(Slide $slide, string $title, string $content, int $startTime, int $endTime, bool $published) {
 		$database = Database::getConnection(Settings::db_name_infected_info);
 
 		$database->query('UPDATE `' . Settings::db_table_infected_info_slides . '`
