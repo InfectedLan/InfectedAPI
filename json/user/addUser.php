@@ -1,9 +1,8 @@
 <?php
-include 'database.php';
 /**
  * This file is part of InfectedAPI.
  *
- * Copyright (C) 2015 Infected <http://infected.no/>.
+ * Copyright (C) 2017 Infected <http://infected.no/>.
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -19,6 +18,7 @@ include 'database.php';
  * License along with this library.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+require_once 'database.php';
 require_once 'localization.php';
 require_once 'handlers/userhandler.php';
 require_once 'handlers/emergencycontacthandler.php';
@@ -139,7 +139,7 @@ if (isset($_POST['firstname']) &&
 		$result = true;
 	}
 	if($result != true) {
-	    //We are NOT getting raw post data because it would make the password visible in the log. 
+	    //We are NOT getting raw post data because it would make the password visible in the log.
 	    $registrationData = array("username" => $username, "email" => $email, "phone" => $phone, "firstname" => $firstname, "lastname" => $lastname, "gender" => $gender, "address" => $address, "postalcode" => $postalcode, "nickname" => $nickname);
 	    SyslogHandler::log("Failed to register!", "addUser", null, SyslogHandler::SEVERITY_INFO, array("message" => $message, "passLength" => strlen($_POST["password"]), "user_agent" => $_SERVER['HTTP_USER_AGENT'], "registrationData" => $registrationData));
 	}

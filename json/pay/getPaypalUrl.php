@@ -1,9 +1,8 @@
 <?php
-include 'database.php';
 /**
  * This file is part of InfectedAPI.
  *
- * Copyright (C) 2015 Infected <http://infected.no/>.
+ * Copyright (C) 2017 Infected <http://infected.no/>.
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -20,6 +19,7 @@ include 'database.php';
  */
 
 require_once 'session.php';
+require_once 'database.php';
 require_once 'localization.php';
 require_once 'handlers/tickettypehandler.php';
 require_once 'handlers/eventhandler.php';
@@ -81,7 +81,7 @@ if (Session::isAuthenticated()) {
 			}
 		} else {
 			$message = Localization::getLocale('the_ticket_sale_is_not_open_yet');
-			
+
 		}
 	} else {
 		$message = Localization::getLocale('you_do_not_have_permission_to_do_that');

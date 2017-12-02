@@ -1,9 +1,8 @@
 <?php
-include 'database.php';
 /**
  * This file is part of InfectedAPI.
  *
- * Copyright (C) 2015 Infected <http://infected.no/>.
+ * Copyright (C) 2017 Infected <http://infected.no/>.
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -19,6 +18,7 @@ include 'database.php';
  * License along with this library.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+require_once 'database.php';
 require_once 'localization.php';
 require_once 'handlers/userhandler.php';
 require_once 'handlers/passwordresetcodehandler.php';

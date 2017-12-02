@@ -1,9 +1,8 @@
 <?php
-include 'database.php';
 /**
  * This file is part of InfectedAPI.
  *
- * Copyright (C) 2015 Infected <http://infected.no/>.
+ * Copyright (C) 2017 Infected <http://infected.no/>.
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -20,6 +19,7 @@ include 'database.php';
  */
 
 require_once 'session.php';
+require_once 'database.php';
 require_once 'secret.php';
 require_once 'localization.php';
 require_once 'handlers/compohandler.php';
@@ -40,10 +40,10 @@ if (Session::isAuthenticated()) {
 		$plugin = CompoPluginHandler::getPluginObjectOrDefault($compo->getPluginName());
 		if(defined("Secret::toornamentApiKey") && defined("Secret::toornamentClientId") && defined("Secret::toornamentClientSecret")) {
 		    //Stage 1: Authenticate with OAuth
-		    
+
 		    $oauthToken = $plugin->getToornamentOauthToken();
 		    //echo "Toornament oauth token: " . $oauthToken;
-		    
+
 		    $compoId = str_replace("/", "", str_replace("https://organizer.toornament.com/tournaments/", "", $_GET["url"]));
 		    $result = true;
 		    $qualifiedClans = ClanHandler::getQualifiedClansByCompo($compo);
@@ -65,7 +65,7 @@ if (Session::isAuthenticated()) {
 			if($info["http_code"] != 201) {
 			    $data = json_decode($curlResult);
 			    //if(isset($data->errors)) {
-				$message = "There was an error adding the clanid " . $clan->getId() . ": " . $curlResult;				
+				$message = "There was an error adding the clanid " . $clan->getId() . ": " . $curlResult;
 			    /*} else {
 				$message = "There was an error adding the clanid " . $clan->getId() . ". We were not able to parse the error.";
 			    }*/

@@ -42,7 +42,7 @@ class Database {
 
 		// Change character set to utf8.
 		if (!$mysqli->set_charset('utf8')) {
-			printf('Error loading character set utf8: %s\n', $mysqli->error);
+			printf('Error loading character set UTF-8: %s\n', $mysqli->error);
 		}
 
 		self::$connList[$database] = $mysqli;

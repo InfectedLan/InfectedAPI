@@ -1,5 +1,4 @@
 <?php
-include 'database.php';
 /**
  * This file is part of InfectedAPI.
  *
@@ -19,8 +18,8 @@ include 'database.php';
  * License along with this library.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-
 require_once 'session.php';
+require_once 'database.php';
 require_once 'localization.php';
 require_once 'handlers/userhandler.php';
 require_once 'handlers/matchhandler.php';

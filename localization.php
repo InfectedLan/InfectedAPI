@@ -26,7 +26,7 @@ class Localization {
 	/*
 	 * Get locale by key.
 	 */
-	public static function getLocale(string $key, string ...$arguments) {
+	public static function getLocale(string $key, ?string ...$arguments): string {
 		$path = Settings::api_path . 'languages/';
 		$language = isset($_SERVER['HTTP_ACCEPT_LANGUAGE']) ? Locale::acceptFromHttp($_SERVER['HTTP_ACCEPT_LANGUAGE']) : self::defaultLanguage;
 

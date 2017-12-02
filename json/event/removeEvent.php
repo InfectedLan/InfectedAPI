@@ -1,5 +1,4 @@
 <?php
-include 'database.php';
 /**
  * This file is part of InfectedAPI.
  *
@@ -20,6 +19,7 @@ include 'database.php';
  */
 
 require_once 'session.php';
+require_once 'database.php';
 require_once 'localization.php';
 require_once 'handlers/eventhandler.php';
 
