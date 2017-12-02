@@ -30,6 +30,7 @@ $data = null;
 
 if (Session::isAuthenticated()) {
 	$user = Session::getCurrentUser();
+
 	if ($user->hasPermission('stats')) {
 		if (isset($_GET['id'])) {
 			$event = EventHandler::getEvent($_GET["id"]);
@@ -44,14 +45,15 @@ if (Session::isAuthenticated()) {
 				$bookingTime = $event->getBookingTime(); //Start counting from the beginning
 				$dayStep = 60*60*24; //One day at a time
 
-				foreach($tickets as $ticket) {
+				foreach ($tickets as $ticket) {
 					$payment = $ticket->getPayment();
 					$totalTickets++;
 
-					if($payment != null && $payment->getDateTime()>$bookingTime) {
+					if ($payment != null && $payment->getDateTime() > $bookingTime) {
 						$time = $payment->getDateTime();
 						$slot = floor(($time-$bookingTime)/$dayStep);
-						if($dayList[$slot]==null) {
+
+						if ($dayList[$slot]==null) {
 							$dayList[$slot] = 1;
 						} else {
 							$dayList[$slot]++;
@@ -83,10 +85,11 @@ if (Session::isAuthenticated()) {
 }
 
 header('Content-Type: text/plain');
-if($result) {
+if ($result) {
 	echo json_encode(['result' => $result, 'message' => $message, "data" => $data], JSON_PRETTY_PRINT);
 } else {
 	echo json_encode(['result' => $result, 'message' => $message], JSON_PRETTY_PRINT);
 }
+
 Database::cleanup();
 ?>

@@ -54,7 +54,7 @@ if (isset($_GET['key']) &&
 							if (hash_equals($hashedPassword, $user->getPassword())) {
 								if (isAllowedToAuthenticate($user)) {
 									$reply = ['control:SHA2-Password' => $hashedPassword];
-									$message = 'User \'' . $identifier .  '\' succesfully authorized.';
+									$message = 'User \'' . $user->getUsername() .  '\' succesfully authorized.';
 
 									SyslogHandler::log('User succesfully authorized.', 'radius', $user);
 								} else {
@@ -108,7 +108,7 @@ if (isset($_GET['key']) &&
 						$reply = ['Tunnel-Type' => 'VLAN',
 											'Tunnel-Medium-Type' => 'IEEE-802',
 											'Tunnel-Private-Group-Id' => $vlan];
-						$message = 'User \'' . $identifier .  '\' succesfully post-authenticated, and was placed on network \'VLAN' . $vlan . '\'.';
+						$message = 'User \'' . $user->getUsername() .  '\' succesfully post-authenticated, and was placed on network \'VLAN' . $vlan . '\'.';
 
 						SyslogHandler::log('User succesfully post-authenticated', 'radius', $user, SyslogHandler::SEVERITY_INFO, ['Port-Type' => $portType,
 																																																											'IP-Address' => $ipAddress,

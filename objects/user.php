@@ -535,7 +535,7 @@ class User extends DatabaseObject {
 	/*
 	 * Returns the note for this user.
 	 */
-	public function getNote(): Note {
+	public function getNote(): ?string {
 		return UserNoteHandler::getUserNoteByUser($this);
 	}
 
