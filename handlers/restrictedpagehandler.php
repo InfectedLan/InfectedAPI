@@ -75,9 +75,9 @@ class RestrictedPageHandler {
 
 				return $result->fetch_object('RestrictedPage');
 			}
-
-			return null;
 		}
+
+		return null;
 	}
 
 	/*

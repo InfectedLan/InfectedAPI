@@ -96,7 +96,7 @@ if (isset($_POST['firstname']) &&
 	} else if ($email != $confirmEmail) {
 		$message = Localization::getLocale('the_email_addresses_does_not_match');
 	} else if (!is_numeric($gender)) {
-		$message = Localization::getLocale('you_have_entered_an_invalid_gender');
+			$message = Localization::getLocale('you_have_entered_an_invalid_gender');
 	} else if (!is_numeric($phone) || strlen($phone) < 8 || strlen($phone) > 8) {
 		$message = Localization::getLocale('the_phone_number_is_not_valid');
 	} else if (empty($address) && strlen($address) > 32) {
@@ -105,7 +105,7 @@ if (isset($_POST['firstname']) &&
 		$message = Localization::getLocale('the_postcode_is_not_valid_the_postcode_consists_of_4_characters');
 	} else if (!preg_match('/^[a-zæøåA-ZÆØÅ0-9_-]{2,16}$/', $nickname) && !empty($nickname)) {
 		$message = Localization::getLocale('the_nickname_is_not_valid_it_must_consist_of_at_least_2_characters_and_maximum_16_characters');
-	} else if (date_diff(date_create($birthdate), date_create('now'))->y < 18 && (!isset($_POST['emergencycontactphone']) || !is_numeric($emergencyContactPhone) || strlen($emergencyContactPhone) < 8 || strlen($emergencyContactPhone) > 8)) {
+	} else if ((new DateTime($birthdate))->diff(new DateTime())->y < 18 && (!isset($_POST['emergencycontactphone']) || !is_numeric($emergencyContactPhone) || strlen($emergencyContactPhone) < 8 || strlen($emergencyContactPhone) > 8)) {
 		if (!is_numeric($emergencyContactPhone)) {
 			$message = Localization::getLocale('parent_phone_must_be_a_number');
 		} else if (strlen($emergencyContactPhone) < 8) {
