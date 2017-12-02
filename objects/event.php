@@ -41,14 +41,14 @@ class Event extends DatabaseObject {
 	/*
 	 * Returns theme of this event.
 	 */
-	public function getTheme(): string {
+	public function getTheme(): ?string {
 		return $this->theme;
 	}
 
 	/*
 	 * Returns the event location.
 	 */
-	public function getLocation(): Location {
+	public function getLocation(): ?Location {
 		return LocationHandler::getLocation($this->locationId);
 	}
 
@@ -97,14 +97,14 @@ class Event extends DatabaseObject {
 	/*
 	 * Returns the seatmap for this event.
 	 */
-	public function getSeatmap(): Seatmap {
+	public function getSeatmap(): ?Seatmap {
 		return SeatmapHandler::getSeatmap($this->seatmapId);
 	}
 
 	/*
 	 * Returns the ticket type for this event.
 	 */
-	public function getTicketType(): TicketType {
+	public function getTicketType(): ?TicketType {
 		return TicketTypeHandler::getTicketType($this->ticketTypeId);
 	}
 

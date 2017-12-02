@@ -40,7 +40,7 @@ class SyslogEntry extends DatabaseObject {
     return $this->message;
   }
 
-  public function getMetadata(): array {
+  public function getMetadata() {
     return json_decode($this->metadata);
   }
 

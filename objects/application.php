@@ -102,14 +102,14 @@ class Application extends EventObject {
 	/*
 	 * Returns the user that last updated this application.
 	 */
-	public function getUpdatedByUser(): User {
+	public function getUpdatedByUser(): ?User {
 		return UserHandler::getUser($this->updatedByUserId);
 	}
 
 	/*
 	 * Returns the comment of this application.
 	 */
-	public function getComment(): string {
+	public function getComment(): ?string {
 		return $this->comment;
 	}
 

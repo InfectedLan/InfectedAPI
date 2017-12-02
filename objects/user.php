@@ -560,7 +560,7 @@ class User extends DatabaseObject {
 	/*
 	 * Returns the steam id of this user. Null if not existent
 	 */
-	public function getSteamId(): string {
+	public function getSteamId(): ?string {
 		return UserHandler::getSteamId($this);
 	}
 

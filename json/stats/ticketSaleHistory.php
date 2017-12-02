@@ -33,7 +33,7 @@ if (Session::isAuthenticated()) {
 
 	if ($user->hasPermission('stats')) {
 		if (isset($_GET['id'])) {
-			$event = EventHandler::getEvent($_GET["id"]);
+			$event = EventHandler::getEvent($_GET['id']);
 
 			if ($event != null) {
 				$tickets = TicketHandler::getTickets($event);
@@ -43,7 +43,7 @@ if (Session::isAuthenticated()) {
 				$currCount = 0;
 				$skippedTickets = 0; //Tickets without a payment can't have their date traced
 				$bookingTime = $event->getBookingTime(); //Start counting from the beginning
-				$dayStep = 60*60*24; //One day at a time
+				$dayStep = 60 * 60 * 24; //One day at a time
 
 				foreach ($tickets as $ticket) {
 					$payment = $ticket->getPayment();
@@ -51,9 +51,9 @@ if (Session::isAuthenticated()) {
 
 					if ($payment != null && $payment->getDateTime() > $bookingTime) {
 						$time = $payment->getDateTime();
-						$slot = floor(($time-$bookingTime)/$dayStep);
+						$slot = floor(($time - $bookingTime) / $dayStep);
 
-						if ($dayList[$slot]==null) {
+						if ($dayList[$slot] == null) {
 							$dayList[$slot] = 1;
 						} else {
 							$dayList[$slot]++;
@@ -62,12 +62,15 @@ if (Session::isAuthenticated()) {
 						$skippedTickets++;
 					}
 				}
+
 				$sendList = [];
 				$totalCount = 0;
-				foreach($dayList as $day) {
-					$totalCount+=$day;
+
+				foreach ($dayList as $day) {
+					$totalCount += $day;
 					$sendList[] = $totalCount;
 				}
+
 				//From this, generate
 				$data = ["list" => $sendList, "totalTickets" => $totalTickets, "ticketsSkipped" => $skippedTickets];
 				$result = true;
