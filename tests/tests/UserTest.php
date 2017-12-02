@@ -78,7 +78,7 @@ class UserTest extends TestCase {
 		$this->assertEquals("Male", $user->getGenderAsString());
 		$this->assertEquals("(+47) 12 34 56 78", $user->getPhoneAsString());
 		$this->assertEquals(12345678, $user->getPhone());
-		$this->assertEquals("Test address", $user->getAddress());
+		$this->assertEquals("Address", $user->getAddress());
 		$this->assertEquals(1337, $user->getPostalCode());
 		$this->assertEquals("AssertNick", $user->getNickname());
 
