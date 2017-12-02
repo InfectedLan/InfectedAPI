@@ -26,7 +26,7 @@ class PasswordResetCodeHandler {
 	/*
 	 * Get the password reset code by the internal id.
 	 */
-	public static function getPasswordResetCode(int $id): string {
+	public static function getPasswordResetCode(int $id): ?string {
 		$database = Database::getConnection(Settings::db_name_infected);
 
 		$result = $database->query('SELECT `code` FROM `' . Settings::db_table_infected_passwordresetcodes . '`
@@ -81,7 +81,7 @@ class PasswordResetCodeHandler {
 	/*
 	 * Create a new password reset code for the specified user.
 	 */
-	public static function createPasswordResetCode(User $user): string {
+	public static function createPasswordResetCode(User $user): ?string {
 		$code = bin2hex(openssl_random_pseudo_bytes(16));
 
 		$database = Database::getConnection(Settings::db_name_infected);
@@ -122,7 +122,7 @@ class PasswordResetCodeHandler {
 	/*
 	 * Returns the user with the specified password reset code.
 	 */
-	public static function getUserFromPasswordResetCode($code): User {
+	public static function getUserFromPasswordResetCode($code): ?User {
 		$database = Database::getConnection(Settings::db_name_infected);
 
 		$result = $database->query('SELECT * FROM `' . Settings::db_table_infected_users . '`

@@ -35,9 +35,9 @@ require_once 'handlers/teamhandler.php';
 require_once 'handlers/userhistoryhandler.php';
 require_once 'handlers/usernotehandler.php';
 require_once 'handlers/friendhandler.php';
-require_once 'objects/object.php';
+require_once 'objects/databaseobject.php';
 
-class User extends Object {
+class User extends DatabaseObject {
 	private $firstname;
 	private $lastname;
 	private $username;

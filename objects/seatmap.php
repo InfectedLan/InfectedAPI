@@ -20,10 +20,10 @@
 
 require_once 'handlers/seatmaphandler.php';
 require_once 'handlers/rowhandler.php';
-require_once 'objects/object.php';
+require_once 'objects/databaseobject.php';
 require_once 'objects/row.php';
 
-class Seatmap extends Object {
+class Seatmap extends DatabaseObject {
 	private $humanName;
 	private $backgroundImage;
 

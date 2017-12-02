@@ -26,7 +26,7 @@ class PageHandler {
 	/*
 	 * Return the page bu the internal id.
 	 */
-	public static function getPage(int $id): Page {
+	public static function getPage(int $id): ?Page {
 		$database = Database::getConnection(Settings::db_name_infected_main);
 
 		$result = $database->query('SELECT * FROM `' . Settings::db_table_infected_main_pages . '`
@@ -38,7 +38,7 @@ class PageHandler {
 	/*
 	 * Return the page by name.
 	 */
-	public static function getPageByName(string $name): Page {
+	public static function getPageByName(string $name): ?Page {
 		$database = Database::getConnection(Settings::db_name_infected_main);
 
 		$result = $database->query('SELECT * FROM `' . Settings::db_table_infected_main_pages . '`

@@ -19,9 +19,9 @@
  */
 
 require_once 'objects/emergencycontact.php';
-require_once 'objects/object.php';
+require_once 'objects/databaseobject.php';
 
-class EmergencyContact extends Object {
+class EmergencyContact extends DatabaseObject {
 	private $userId;
 	private $phone;
 

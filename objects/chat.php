@@ -19,9 +19,9 @@
  */
 
 require_once 'handlers/chathandler.php';
-require_once 'objects/object.php';
+require_once 'objects/databaseobject.php';
 
-class Chat extends Object {
+class Chat extends DatabaseObject {
 	private $name;
 	private $title;
 

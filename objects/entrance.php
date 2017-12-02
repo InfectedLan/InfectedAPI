@@ -18,9 +18,9 @@
  * License along with this library.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-require_once 'objects/object.php';
+require_once 'objects/databaseobject.php';
 
-class Entrance extends Object {
+class Entrance extends DatabaseObject {
 	private $name;
 	private $title;
 

@@ -29,7 +29,7 @@ class InviteHandler {
 	/*
 	 * Get a invite by the internal id.
 	 */
-	public static function getInvite(int $id): Invite {
+	public static function getInvite(int $id): ?Invite {
 		$database = Database::getConnection(Settings::db_name_infected_compo);
 
 		$result = $database->query('SELECT * FROM `' . Settings::db_table_infected_compo_invites . '`
@@ -102,10 +102,7 @@ class InviteHandler {
 														  \'' . $user->getId() . '\',
 														  \'' . $clan->getId() . '\');');
 
-		$invite = self::getInvite($database->insert_id);
-
-
-		return $invite;
+		return self::getInvite($database->insert_id);
 	}
 
 	/*
@@ -142,18 +139,18 @@ class InviteHandler {
 			    }
 				}
 
-			$canQualify = $canQualify && $invite->getUser()->getSteamId() !== null;
-		}
-
-    if ($canQualify) {
-			$playingClans = ClanHandler::getQualifiedClansByCompo($compo);
-
-			if (count($playingClans) < $compo->getParticipantLimit() || $compo->getParticipantLimit() == 0) {
-				ClanHandler::setQualified($clan, true);
-			} else if (!ClanHandler::isInQualificationQueue($clan)) {
-			  ClanHandler::addToQualificationQueue($clan);
+				$canQualify = $canQualify && $invite->getUser()->getSteamId() !== null;
 			}
-    }
+
+	    if ($canQualify) {
+				$playingClans = ClanHandler::getQualifiedClansByCompo($compo);
+
+				if (count($playingClans) < $compo->getParticipantLimit() || $compo->getParticipantLimit() == 0) {
+					ClanHandler::setQualified($clan, true);
+				} else if (!ClanHandler::isInQualificationQueue($clan)) {
+				  ClanHandler::addToQualificationQueue($clan);
+				}
+	    }
 		}
 	}
 

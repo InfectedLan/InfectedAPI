@@ -25,9 +25,9 @@ require_once 'handlers/clanhandler.php';
 require_once 'handlers/compohandler.php';
 require_once 'handlers/matchhandler.php';
 require_once 'handlers/userhandler.php';
-require_once 'objects/object.php';
+require_once 'objects/databaseobject.php';
 
-class Match extends Object {
+class Match extends DatabaseObject {
   const STATE_READYCHECK = 0;
   const STATE_CUSTOM_PREGAME = 1;
   const STATE_JOIN_GAME = 2;

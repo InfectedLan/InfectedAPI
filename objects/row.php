@@ -20,9 +20,9 @@
 
 require_once 'handlers/entrancehandler.php';
 require_once 'handlers/seatmaphandler.php';
-require_once 'objects/object.php';
+require_once 'objects/databaseobject.php';
 
-class Row extends Object {
+class Row extends DatabaseObject {
 	private $seatmapId;
 	private $entranceId;
 	private $number;

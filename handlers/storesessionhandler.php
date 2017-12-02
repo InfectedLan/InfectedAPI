@@ -30,7 +30,7 @@ class StoreSessionHandler {
 	/*
 	 * Get a store session by the internal id.
 	 */
-	public static function getStoreSession(int $id): StoreSession {
+	public static function getStoreSession(int $id): ?StoreSession {
 		$database = Database::getConnection(Settings::db_name_infected_tickets);
 
 		$result = $database->query('SELECT * FROM `' . Settings::db_table_infected_tickets_storesessions . '`
@@ -59,7 +59,7 @@ class StoreSessionHandler {
 	/*
 	 * Returns the store session for the specified user.
 	 */
-	public static function getStoreSessionByUser(User $user): StoreSession {
+	public static function getStoreSessionByUser(User $user): ?StoreSession {
 		$database = Database::getConnection(Settings::db_name_infected_tickets);
 
 		$result = $database->query('SELECT * FROM `' . Settings::db_table_infected_tickets_storesessions . '`
@@ -72,7 +72,7 @@ class StoreSessionHandler {
 	/*
 	 * Returns the store session by the specified key.
 	 */
-	private static function getStoreSessionByCode(string $code): StoreSession {
+	private static function getStoreSessionByCode(string $code): ?StoreSession {
 		$database = Database::getConnection(Settings::db_name_infected_tickets);
 
 		$result = $database->query('SELECT * FROM `' . Settings::db_table_infected_tickets_storesessions . '`
@@ -98,7 +98,7 @@ class StoreSessionHandler {
 	/*
 	 * Create a new store session.
 	 */
-	public static function createStoreSession(User $user, TicketType $ticketType, int $amount, int $price): string {
+	public static function createStoreSession(User $user, TicketType $ticketType, int $amount, int $price): ?string {
 		$code = bin2hex(openssl_random_pseudo_bytes(16));
 
 		$database = Database::getConnection(Settings::db_name_infected_tickets);
@@ -160,7 +160,7 @@ class StoreSessionHandler {
 	/*
 	 * Returns the user with a store session with the specified code.
 	 */
-	public static function getUserByStoreSessionCode(string $code): User {
+	public static function getUserByStoreSessionCode(string $code): ?User {
 		$database = Database::getConnection(Settings::db_name_infected);
 
 		$result = $database->query('SELECT * FROM `' . Settings::db_table_infected_users . '`

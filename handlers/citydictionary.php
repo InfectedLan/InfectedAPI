@@ -25,7 +25,7 @@ class CityDictionary {
 	/*
 	 * Returns the city from given postalcode.
 	 */
-	public static function getCity(int $postalCode): string {
+	public static function getCity(int $postalCode): ?string {
 		$database = Database::getConnection(Settings::db_name_infected);
 
 		$result = $database->query('SELECT `city` FROM `' . Settings::db_table_infected_postalcodes . '`

@@ -20,9 +20,9 @@
 
 require_once 'handlers/compohandler.php';
 require_once 'handlers/serverhandler.php';
-require_once 'objects/object.php';
+require_once 'objects/databaseobject.php';
 
-class Server extends Object {
+class Server extends DatabaseObject {
 	private $compoId;
 	private $humanName;
 	private $connectionData;

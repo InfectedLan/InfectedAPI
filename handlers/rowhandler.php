@@ -30,7 +30,7 @@ class RowHandler {
 	/*
 	 * Return the row by the internal id.
 	 */
-	public static function getRow(int $id): Row {
+	public static function getRow(int $id): ?Row {
 		$database = Database::getConnection(Settings::db_name_infected_tickets);
 
 		$result = $database->query('SELECT * FROM `' . Settings::db_table_infected_tickets_rows . '`
@@ -142,7 +142,7 @@ class RowHandler {
 	/*
 	 * Returns the event this row is for.
 	 */
-	public static function getEvent($row): Event {
+	public static function getEvent($row): ?Event {
 		return SeatmapHandler::getEvent($row->getSeatmap());
 	}
 }

@@ -27,7 +27,7 @@ class EventHandler {
 	/*
 	 * Returns the event with the given id.
 	 */
-	public static function getEvent(int $id): Event {
+	public static function getEvent(int $id): ?Event {
 		$database = Database::getConnection(Settings::db_name_infected);
 
 		$result = $database->query('SELECT * FROM `'. Settings::db_table_infected_events . '`
@@ -51,7 +51,7 @@ class EventHandler {
 	/*
 	 * Returns the event after the current event.
 	 */
-	public static function getNextEvent(): Event {
+	public static function getNextEvent(): ?Event {
 		$database = Database::getConnection(Settings::db_name_infected);
 
 		$result = $database->query('SELECT * FROM `' . Settings::db_table_infected_events . '`
@@ -68,7 +68,7 @@ class EventHandler {
 	/*
 	 * Returns the event that is closest in time, which means the next or on-going event.
 	 */
-	public static function getCurrentEvent(): Event {
+	public static function getCurrentEvent(): ?Event {
 		$database = Database::getConnection(Settings::db_name_infected);
 
 		$result = $database->query('SELECT * FROM `' . Settings::db_table_infected_events . '`
@@ -82,7 +82,7 @@ class EventHandler {
 	/*
 	 * Returns the event before the current event.
 	 */
-	public static function getPreviousEvent(): Event {
+	public static function getPreviousEvent(): ?Event {
 		$database = Database::getConnection(Settings::db_name_infected);
 
 		$result = $database->query('SELECT * FROM `' . Settings::db_table_infected_events . '`

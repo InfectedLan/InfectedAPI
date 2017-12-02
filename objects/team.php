@@ -22,9 +22,9 @@ require_once 'session.php';
 require_once 'handlers/grouphandler.php';
 require_once 'handlers/userhandler.php';
 require_once 'handlers/teamhandler.php';
-require_once 'objects/object.php';
+require_once 'objects/databaseobject.php';
 
-class Team extends Object {
+class Team extends DatabaseObject {
 	private $groupId;
 	private $name;
 	private $title;

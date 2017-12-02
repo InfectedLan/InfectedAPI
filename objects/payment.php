@@ -20,9 +20,9 @@
 
 require_once 'handlers/userhandler.php';
 require_once 'handlers/tickettypehandler.php';
-require_once 'objects/object.php';
+require_once 'objects/databaseobject.php';
 
-class Payment extends Object {
+class Payment extends DatabaseObject {
 	private $userId;
 	private $ticketTypeId;
 	private $amount;

@@ -19,9 +19,9 @@
  */
 
 require_once 'handlers/eventhandler.php';
-require_once 'objects/object.php';
+require_once 'objects/databaseobject.php';
 
-class EventObject extends Object {
+class EventObject extends DatabaseObject {
 	protected $eventId;
 
 	/*

@@ -26,7 +26,7 @@ class LocationHandler {
 	/*
 	 * Returns the location with the given id.
 	 */
-	public static function getLocation(int $id): Location {
+	public static function getLocation(int $id): ?Location {
 		$database = Database::getConnection(Settings::db_name_infected);
 
 		$result = $database->query('SELECT * FROM `'. Settings::db_table_infected_locations . '`

@@ -29,7 +29,7 @@ class NoteHandler {
 	/*
 	 * Return the note by the internal id.
 	 */
-	public static function getNote(int $id): Note {
+	public static function getNote(int $id): ?Note {
 		$database = Database::getConnection(Settings::db_name_infected_crew);
 
 		$result = $database->query('SELECT * FROM `' . Settings::db_table_infected_crew_notes . '`

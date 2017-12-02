@@ -22,13 +22,13 @@ require_once 'session.php';
 require_once 'handlers/grouphandler.php';
 require_once 'handlers/userhandler.php';
 require_once 'handlers/teamhandler.php';
-require_once 'objects/object.php';
+require_once 'objects/databaseobject.php';
 require_once 'objects/user.php';
 
 /*
  * Used to store information about a group.
  */
-class Group extends Object {
+class Group extends DatabaseObject {
 	private $name;
 	private $title;
 	private $description;

@@ -29,7 +29,7 @@ class CastingPageHandler {
 	/*
 	 * Get a server by internal id
 	 */
-	public static function getCastingPage(int $id): CastingPage {
+	public static function getCastingPage(int $id): ?CastingPage {
 		$database = Database::getConnection(Settings::db_name_infected_crew);
 
 		$result = $database->query('SELECT * FROM `' . Settings::db_table_infected_crew_castingpages . '`

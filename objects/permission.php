@@ -18,9 +18,9 @@
  * License along with this library.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-require_once 'objects/object.php';
+require_once 'objects/databaseobject.php';
 
-class Permission extends Object {
+class Permission extends DatabaseObject {
 	private $value;
 	private $description;
 

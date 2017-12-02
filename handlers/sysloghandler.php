@@ -28,7 +28,7 @@ class SyslogHandler {
   const SEVERITY_WARNING = 3; // Calm before the storm
   const SEVERITY_CRITICAL = 4; // HOLY FUCK THE SERVERS ARE BURNING
 
-  public static function getSyslogEntry(int $id): SyslogEntry {
+  public static function getSyslogEntry(int $id): ?SyslogEntry {
     $database = Database::getConnection(Settings::db_name_infected);
 
     $result = $database->query('SELECT * FROM `' . Settings::db_table_infected_syslogs . '`
@@ -53,7 +53,7 @@ class SyslogHandler {
   	return $syslogList;
   }
 
-  public static function getLastEntriesBySource(string $source, int $count) {
+  public static function getLastEntriesBySource(string $source, int $count): array {
   	$database = Database::getConnection(Settings::db_name_infected);
 
   	$result = $database->query('SELECT * FROM `' . Settings::db_table_infected_syslogs . '`
@@ -82,7 +82,7 @@ class SyslogHandler {
                               \'' . $database->real_escape_string($user != null ? $user->getId() : 0) . '\');');
   }
 
-  public static function getSeverityString($severity): string {
+  public static function getSeverityString(int $severity): ?string {
   	switch ($severity) {
     	case self::SEVERITY_INFO:
     	    return "Info";

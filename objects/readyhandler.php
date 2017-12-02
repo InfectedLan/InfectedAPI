@@ -19,9 +19,9 @@
  */
 
 require_once 'handlers/compohandler.php';
-require_once 'objects/object.php';
+require_once 'objects/databaseobject.php';
 
-class ReadyHandler extends Object {
+class ReadyHandler extends DatabaseObject {
 	private $compoId;
 
 	/*

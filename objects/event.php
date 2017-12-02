@@ -23,10 +23,10 @@ require_once 'handlers/seatmaphandler.php';
 require_once 'handlers/tickettypehandler.php';
 require_once 'handlers/tickethandler.php';
 require_once 'handlers/storesessionhandler.php';
-require_once 'objects/object.php';
+require_once 'objects/databaseobject.php';
 require_once 'objects/location.php';
 
-class Event extends Object {
+class Event extends DatabaseObject {
 	private $theme;
 	private $locationId;
 	private $participants;

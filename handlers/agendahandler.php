@@ -28,7 +28,7 @@ class AgendaHandler {
 	/*
 	 * Get an agenda by the internal id.
 	 */
-	public static function getAgenda(int $id): Aganda {
+	public static function getAgenda(int $id): ?Aganda {
 		$database = Database::getConnection(Settings::db_name_infected_main);
 
 		$result = $database->query('SELECT * FROM `' . Settings::db_table_infected_main_agenda . '`

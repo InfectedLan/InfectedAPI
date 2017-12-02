@@ -21,7 +21,7 @@
 require_once 'handlers/tickethandler.php';
 require_once 'handlers/userhandler.php';
 
-class TicketTransfer extends Object {
+class TicketTransfer extends DatabaseObject {
 	private $ticketId;
 	private $fromId;
 	private $toId;

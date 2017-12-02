@@ -26,7 +26,7 @@ class RegistrationCodeHandler {
 	/*
 	 * Get the registration code by the internal id.
 	 */
-	public static function getRegistrationCode(User $user): string {
+	public static function getRegistrationCode(User $user): ?string {
 		$database = Database::getConnection(Settings::db_name_infected);
 
 		$result = $database->query('SELECT `code` FROM `' . Settings::db_table_infected_registrationcodes . '`
@@ -82,7 +82,7 @@ class RegistrationCodeHandler {
 	/*
 	 * Create a registration code for the specified user.
 	 */
-	public static function createRegistrationCode(User $user): string {
+	public static function createRegistrationCode(User $user): ?string {
 		$code = bin2hex(openssl_random_pseudo_bytes(16));
 
 		$database = Database::getConnection(Settings::db_name_infected);

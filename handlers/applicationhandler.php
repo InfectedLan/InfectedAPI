@@ -36,7 +36,7 @@ class ApplicationHandler {
 	/*
 	 * Get an application by the internal id.
 	 */
-	public static function getApplication(int $id): Application {
+	public static function getApplication(int $id): ?Application {
     $database = Database::getConnection(Settings::db_name_infected_crew);
 
 		$result = $database->query('SELECT * FROM `' . Settings::db_table_infected_crew_applications . '`

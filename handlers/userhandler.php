@@ -36,7 +36,7 @@ class UserHandler {
 	/*
 	 * Get an user by the internal id.
 	 */
-	public static function getUser(int $id): User {
+	public static function getUser(int $id): ?User {
 		$database = Database::getConnection(Settings::db_name_infected);
 
 		$result = $database->query('SELECT * FROM `' . Settings::db_table_infected_users . '`
@@ -48,7 +48,7 @@ class UserHandler {
 	/*
 	 * Get user by it's identifier.
 	 */
-	public static function getUserByIdentifier(string $identifier): User {
+	public static function getUserByIdentifier(string $identifier): ?User {
 		$database = Database::getConnection(Settings::db_name_infected);
 
 		$safeIdentifier = $database->real_escape_string($identifier);
@@ -371,7 +371,7 @@ class UserHandler {
 	/*
 	 * Returns the steam id of a user, or null if undefined
 	 */
-	public static function getSteamId(User $user): string {
+	public static function getSteamId(User $user): ?string {
     $database = Database::getConnection(Settings::db_name_infected_compo);
 
     $result = $database->query('SELECT `steamId` FROM `' . Settings::db_table_infected_compo_steamids . '`

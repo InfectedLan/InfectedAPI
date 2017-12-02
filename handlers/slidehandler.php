@@ -28,7 +28,7 @@ class SlideHandler {
 	/*
 	 * Get a slide by the internal id.
 	 */
-	public static function getSlide(int $id): Slide {
+	public static function getSlide(int $id): ?Slide {
 		$database = Database::getConnection(Settings::db_name_infected_info);
 
 		$result = $database->query('SELECT * FROM `' . Settings::db_table_infected_info_slides . '`

@@ -31,7 +31,7 @@ class CompoHandler {
 	/*
 	 * Get a compo by the internal id.
 	 */
-	public static function getCompo(int $id): Compo {
+	public static function getCompo(int $id): ?Compo {
 		$database = Database::getConnection(Settings::db_name_infected_compo);
 
 		$result = $database->query('SELECT * FROM `' . Settings::db_table_infected_compo_compos . '`
@@ -61,7 +61,7 @@ class CompoHandler {
 	/*
 	 * Get compo by specified clan.
 	 */
-	public static function getCompoByClan(Clan $clan): Compo {
+	public static function getCompoByClan(Clan $clan): ?Compo {
 		$database = Database::getConnection(Settings::db_name_infected_compo);
 
 		$result = $database->query('SELECT * FROM `' . Settings::db_table_infected_compo_compos . '`

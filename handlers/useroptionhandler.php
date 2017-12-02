@@ -29,7 +29,7 @@ class UserOptionHandler {
 	public static function hasUserOption(User $user): bool {
 		$database = Database::getConnection(Settings::db_name_infected);
 
-		$result = $database->query('SELECT `id` FROM `' . Settings::db_table_infected_useroptions . '`
+		$result = $database->query('SELECT * FROM `' . Settings::db_table_infected_useroptions . '`
 																WHERE `userId` = \'' . $user->getId() . '\';');
 
 		return $result->num_rows > 0;
@@ -41,7 +41,7 @@ class UserOptionHandler {
 	public static function hasUserPrivatePhone(User $user): bool {
 		$database = Database::getConnection(Settings::db_name_infected);
 
-		$result = $database->query('SELECT `id` FROM `' . Settings::db_table_infected_useroptions . '`
+		$result = $database->query('SELECT * FROM `' . Settings::db_table_infected_useroptions . '`
 																WHERE `userId` = \'' . $user->getId() . '\'
 																AND `privatePhone` = \'1\';');
 
@@ -54,7 +54,7 @@ class UserOptionHandler {
 	public static function isUserReservedFromNotifications(User $user): bool {
 		$database = Database::getConnection(Settings::db_name_infected);
 
-		$result = $database->query('SELECT `id` FROM `' . Settings::db_table_infected_useroptions . '`
+		$result = $database->query('SELECT * FROM `' . Settings::db_table_infected_useroptions . '`
 																WHERE `userId` = \'' . $user->getId() . '\'
 																AND `reserveFromNotifications` = \'1\';');
 
@@ -67,7 +67,7 @@ class UserOptionHandler {
 	public static function isUserSwimming(User $user): bool {
 		$database = Database::getConnection(Settings::db_name_infected);
 
-		$result = $database->query('SELECT `id` FROM `' . Settings::db_table_infected_useroptions . '`
+		$result = $database->query('SELECT * FROM `' . Settings::db_table_infected_useroptions . '`
 																WHERE `userId` = \'' . $user->getId() . '\'
 																AND `swimming` = \'1\';');
 
@@ -97,7 +97,7 @@ class UserOptionHandler {
 	public static function hasUserEasterEgg(User $user): bool {
 		$database = Database::getConnection(Settings::db_name_infected);
 
-		$result = $database->query('SELECT `id` FROM `' . Settings::db_table_infected_useroptions . '`
+		$result = $database->query('SELECT * FROM `' . Settings::db_table_infected_useroptions . '`
 																WHERE `userId` = \'' . $user->getId() . '\'
 																AND `easterEgg` = \'1\';');
 

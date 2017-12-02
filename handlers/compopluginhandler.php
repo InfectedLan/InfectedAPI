@@ -104,7 +104,7 @@ class CompoPluginHandler {
   /**
    * Returns an object with the plugin
    */
-  public static function loadPluginObject(string $pluginName) {
+  public static function loadPluginObject(string $pluginName): ?object {
     $string = file_get_contents(Settings::api_path . "plugins/compo/" . $pluginName . ".json");
     $json = json_decode($string, true);
 

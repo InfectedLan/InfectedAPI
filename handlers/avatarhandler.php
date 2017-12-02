@@ -27,7 +27,7 @@ class AvatarHandler {
 	/*
 	 * Get an avatar by the internal id.
 	 */
-	public static function getAvatar(int $id): Avatar {
+	public static function getAvatar(int $id): ?Avatar {
 		$database = Database::getConnection(Settings::db_name_infected_crew);
 
 		$result = $database->query('SELECT * FROM `' . Settings::db_table_infected_crew_avatars . '`
@@ -39,7 +39,7 @@ class AvatarHandler {
 	/*
 	 * Get an avatar for a specified user.
 	 */
-	public static function getAvatarByUser(User $user): Avatar {
+	public static function getAvatarByUser(User $user): ?Avatar {
 		$database = Database::getConnection(Settings::db_name_infected_crew);
 
 		$result = $database->query('SELECT * FROM `' . Settings::db_table_infected_crew_avatars . '`

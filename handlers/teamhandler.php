@@ -30,7 +30,7 @@ class TeamHandler {
 	/*
 	 * Get the team by the internal id.
 	 */
-	public static function getTeam(int $id): Team {
+	public static function getTeam(int $id): ?Team {
 		$database = Database::getConnection(Settings::db_name_infected_crew);
 
 		$result = $database->query('SELECT * FROM `' . Settings::db_table_infected_crew_teams . '`
@@ -42,7 +42,7 @@ class TeamHandler {
 	/*
 	 * Returns the team for the specified user.
 	 */
-	public static function getTeamByUser(User $user, Event $event = null): Team {
+	public static function getTeamByUser(User $user, Event $event = null): ?Team {
 		$database = Database::getConnection(Settings::db_name_infected_crew);
 
 		if ($event != null && $event != EventHandler::getCurrentEvent()) {
@@ -339,7 +339,7 @@ class TeamHandler {
 	/*
 	 * Return the team leader for a team.
 	 */
-	public static function getTeamLeader(Team $team, Event $event = null): User {
+	public static function getTeamLeader(Team $team, Event $event = null): ?User {
 		$database = Database::getConnection(Settings::db_name_infected_crew);
 
 		$result = $database->query('SELECT * FROM `' . Settings::db_table_infected_users . '`

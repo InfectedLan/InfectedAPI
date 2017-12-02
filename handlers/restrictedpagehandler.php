@@ -30,7 +30,7 @@ class RestrictedPageHandler {
 	/*
 	 * Get page by the internal id.
 	 */
-	public static function getPage(int $id): RestrictedPage {
+	public static function getPage(int $id): ?RestrictedPage {
 		$database = Database::getConnection(Settings::db_name_infected_crew);
 
 		$result = $database->query('SELECT * FROM `' . Settings::db_table_infected_crew_pages . '`
@@ -42,7 +42,7 @@ class RestrictedPageHandler {
 	/*
 	 * Get page by name.
 	 */
-	public static function getPageByName(string $name) {
+	public static function getPageByName(string $name): ?RestrictedPage {
 		if (Session::isAuthenticated()) {
 			$user = Session::getCurrentUser();
 

@@ -30,7 +30,7 @@ class TicketTransferHandler {
 	/*
 	 * Get a ticket transer by the internal id.
 	 */
-	public static function getTransferFromTicket(Ticket $ticket): TicketTransfer {
+	public static function getTransferFromTicket(Ticket $ticket): ?TicketTransfer {
 		$database = Database::getConnection(Settings::db_name_infected_tickets);
 
 		$result = $database->query('SELECT * FROM `' . Settings::db_table_infected_tickets_tickettransfers . '`

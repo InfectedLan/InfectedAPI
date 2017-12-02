@@ -25,7 +25,7 @@ class UserNoteHandler {
 	/*
 	 * Get a user note by the internal id.
 	 */
-	public static function getUserNote(int $id): string {
+	public static function getUserNote(int $id): ?string {
 		$database = Database::getConnection(Settings::db_name_infected);
 
 		$result = $database->query('SELECT * FROM `' . Settings::db_table_infected_usernotes . '`
@@ -42,7 +42,7 @@ class UserNoteHandler {
 	public static function hasUserNoteByUser(User $user): bool {
 		$database = Database::getConnection(Settings::db_name_infected);
 
-		$result = $database->query('SELECT `id` FROM `' . Settings::db_table_infected_usernotes . '`
+		$result = $database->query('SELECT * FROM `' . Settings::db_table_infected_usernotes . '`
 																WHERE `userId` = \'' . $user->getId() . '\';');
 
 		return $result->num_rows > 0;
@@ -51,7 +51,7 @@ class UserNoteHandler {
 	/*
 	 * Get a users note by user.
 	 */
-	public static function getUserNoteByUser(User $user): string {
+	public static function getUserNoteByUser(User $user): ?string {
 		$database = Database::getConnection(Settings::db_name_infected);
 
 		$result = $database->query('SELECT * FROM `' . Settings::db_table_infected_usernotes . '`

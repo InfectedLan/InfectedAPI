@@ -19,9 +19,9 @@
  */
 
 require_once 'handlers/compohandler.php';
-require_once 'objects/object.php';
+require_once 'objects/databaseobject.php';
 
-class VoteOption extends Object{
+class VoteOption extends DatabaseObject {
 	private $compoId;
 	private $thumbnailUrl;
 	private $name;

@@ -20,9 +20,9 @@
 
 require_once 'handlers/rowhandler.php';
 require_once 'handlers/seathandler.php';
-require_once 'objects/object.php';
+require_once 'objects/databaseobject.php';
 
-class Seat extends Object {
+class Seat extends DatabaseObject {
 	private $rowId;
 	private $number;
 

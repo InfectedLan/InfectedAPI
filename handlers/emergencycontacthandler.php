@@ -27,7 +27,7 @@ class EmergencyContactHandler {
 	/*
 	 * Get an emergenctcontacts by the internal id.
 	 */
-	public static function getEmergencyContact(int $id): EmergencyContact {
+	public static function getEmergencyContact(int $id): ?EmergencyContact {
 		$database = Database::getConnection(Settings::db_name_infected);
 
 		$result = $database->query('SELECT * FROM `'. Settings::db_table_infected_emergencycontacts . '`
@@ -39,7 +39,7 @@ class EmergencyContactHandler {
 	/*
 	 * Get the emergency contact for the given user.
 	 */
-	public static function getEmergencyContactByUser(User $user): EmergencyContact {
+	public static function getEmergencyContactByUser(User $user): ?EmergencyContact {
 		$database = Database::getConnection(Settings::db_name_infected);
 
 		$result = $database->query('SELECT * FROM `'. Settings::db_table_infected_emergencycontacts . '`

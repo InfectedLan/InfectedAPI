@@ -29,7 +29,7 @@ class GroupHandler {
 	/*
 	 * Get a group by the internal id.
 	 */
-	public static function getGroup(int $id): Group {
+	public static function getGroup(int $id): ?Group {
 		$database = Database::getConnection(Settings::db_name_infected_crew);
 
 		$result = $database->query('SELECT * FROM `' . Settings::db_table_infected_crew_groups . '`
@@ -41,7 +41,7 @@ class GroupHandler {
 	/*
 	 * Get a group for the specified user.
 	 */
-	public static function getGroupByUser(User $user, Event $event = null): Group {
+	public static function getGroupByUser(User $user, Event $event = null): ?Group {
 		$database = Database::getConnection(Settings::db_name_infected_crew);
 
 		if ($event != null && $event != EventHandler::getCurrentEvent()) {
@@ -284,7 +284,7 @@ class GroupHandler {
 	/*
 	 * Return true if user has a leader for the given group.
 	 */
-	public static function getGroupLeader(Group $group, Event $event = null): User {
+	public static function getGroupLeader(Group $group, Event $event = null): ?User {
 		$database = Database::getConnection(Settings::db_name_infected);
 
 		$result = $database->query('SELECT * FROM `' . Settings::db_table_infected_users . '`

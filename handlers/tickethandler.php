@@ -32,7 +32,7 @@ class TicketHandler {
 	/*
 	 * Return the ticket by the internal id.
 	 */
-	public static function getTicket(int $id): Ticket {
+	public static function getTicket(int $id): ?Ticket {
 		$database = Database::getConnection(Settings::db_name_infected_tickets);
 
 		$result = $database->query('SELECT * FROM `' . Settings::db_table_infected_tickets_tickets . '`
@@ -58,7 +58,7 @@ class TicketHandler {
 	/*
 	 * Returns the specified user latest ticket from the specified event.
 	 */
-	public static function getTicketByUser(User $user, Event $event = null): Ticket {
+	public static function getTicketByUser(User $user, Event $event = null): ?Ticket {
 		$database = Database::getConnection(Settings::db_name_infected_tickets);
 
 		$result = $database->query('SELECT * FROM `' . Settings::db_table_infected_tickets_tickets . '`

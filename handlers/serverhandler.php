@@ -28,7 +28,7 @@ class ServerHandler {
 	/*
 	 * Get a server by internal id
 	 */
-	public static function getServer(int $id): Server {
+	public static function getServer(int $id): ?Server {
 		$database = Database::getConnection(Settings::db_name_infected_compo);
 
 		$result = $database->query('SELECT * FROM `' . Settings::db_table_infected_compo_servers . '`

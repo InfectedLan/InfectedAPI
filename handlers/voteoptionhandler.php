@@ -28,7 +28,7 @@ class VoteOptionHandler {
 	/*
 	 * Get a vote option by the internal id.
 	 */
-	public static function getVoteOption(int $id): VoteOption {
+	public static function getVoteOption(int $id): ?VoteOption {
 		$database = Database::getConnection(Settings::db_name_infected_compo);
 
 		$result = $database->query('SELECT * FROM `' . Settings::db_table_infected_compo_voteoptions . '`

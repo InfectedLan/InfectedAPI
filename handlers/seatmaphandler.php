@@ -29,7 +29,7 @@ class SeatmapHandler {
 	/*
 	 * Get a seatmap by the internal id.
 	 */
-	public static function getSeatmap(int $id): Seatmap {
+	public static function getSeatmap(int $id): ?Seatmap {
 		$database = Database::getConnection(Settings::db_name_infected_tickets);
 
 		$result = $database->query('SELECT * FROM `' . Settings::db_table_infected_tickets_seatmaps . '`
@@ -115,7 +115,7 @@ class SeatmapHandler {
 	/*
 	 * Returns a list of all seatmaps.
 	 */
-	public static function getEvent(Seatmap $seatmap): Event {
+	public static function getEvent(Seatmap $seatmap): ?Event {
 		$database = Database::getConnection(Settings::db_name_infected);
 
 		// TODO: Use joins here to join with event table. Somehow.

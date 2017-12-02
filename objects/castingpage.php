@@ -20,9 +20,9 @@
 
 require_once 'handlers/eventhandler.php';
 require_once 'handlers/serverhandler.php';
-require_once 'objects/object.php';
+require_once 'objects/databaseobject.php';
 
-class CastingPage extends Object {
+class CastingPage extends DatabaseObject {
 	private $eventId;
 	private $name;
 	private $data;

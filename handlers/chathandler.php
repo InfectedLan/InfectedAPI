@@ -30,7 +30,7 @@ class ChatHandler {
 	/*
 	 * Get a chat by the internal id.
 	 */
-	public static function getChat(int $id): Chat {
+	public static function getChat(int $id): ?Chat {
 		$database = Database::getConnection(Settings::db_name_infected_compo);
 
 		$result = $database->query('SELECT * FROM `' . Settings::db_table_infected_compo_chats . '`
@@ -177,7 +177,7 @@ class ChatHandler {
 	/*
 	 * Return the chat message with the given id.
 	 */
-	public static function getChatMessage(int $id): ChatMessage {
+	public static function getChatMessage(int $id): ?ChatMessage {
 		$database = Database::getConnection(Settings::db_name_infected_compo);
 
 		$result = $database->query('SELECT * FROM `' . Settings::db_table_infected_compo_chatmessages . '`
@@ -206,7 +206,7 @@ class ChatHandler {
 	/*
 	 * Returns the last chat messages for the given chat.
 	 */
-	public static function getLastChatMessage(Chat $chat): ChatMessage {
+	public static function getLastChatMessage(Chat $chat): ?ChatMessage {
 		$database = Database::getConnection(Settings::db_name_infected_compo);
 
 		$result = $database->query('SELECT * FROM `' . Settings::db_table_infected_compo_chatmessages . '`

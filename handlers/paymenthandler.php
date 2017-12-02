@@ -28,7 +28,7 @@ class PaymentHandler {
 	/*
 	 * Returns the payment by the internal id.
 	 */
-	public static function getPayment(int $id): Payment {
+	public static function getPayment(int $id): ?Payment {
 		$database = Database::getConnection(Settings::db_name_infected_tickets);
 
 		$result = $database->query('SELECT * FROM `' . Settings::db_table_infected_tickets_payments . '`

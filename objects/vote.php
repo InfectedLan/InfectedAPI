@@ -19,9 +19,9 @@
  */
 
 require_once 'handlers/userhandler.php';
-require_once 'objects/object.php';
+require_once 'objects/databaseobject.php';
 
-class Vote extends Object {
+class Vote extends DatabaseObject {
 	private $consumerId;
 	private $voteOptionId;
 

@@ -26,7 +26,7 @@ class ReadyHandlerHandler {
 	/*
 	 * Returns the ready handler by the internal id.
 	 */
-	public static function getReadyHandler(int $id): ReadyHandler {
+	public static function getReadyHandler(int $id): ?ReadyHandler {
 		$database = Database::getConnection(Settings::db_name_infected_compo);
 
 		$result = $database->query('SELECT * FROM `' . Settings::db_table_infected_compo_readyInstances . '`

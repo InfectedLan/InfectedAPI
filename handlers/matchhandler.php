@@ -47,12 +47,11 @@ class MatchHandler {
 	/*
 	 * Get a match by the internal id.
 	 */
-	public static function getMatch(int $id): Match {
+	public static function getMatch(int $id): ?Match {
 		$database = Database::getConnection(Settings::db_name_infected_compo);
 
 		$result = $database->query('SELECT * FROM `' . Settings::db_table_infected_compo_matches . '`
 								 								WHERE `id` = \'' . $id . '\';');
-
 
 		return $result->fetch_object('Match');
 	}
@@ -143,7 +142,7 @@ class MatchHandler {
 	}
 
 	// Unstable if user has multiple matches happening. Returns the "current match", current being the first match with a scheduled time before now, and without a winner.
-	public static function getMatchByUser(User $user): Match {
+	public static function getMatchByUser(User $user): ?Match {
 		$clanList = ClanHandler::getClansByUser($user);
 
 		foreach ($clanList as $clan) {
@@ -155,7 +154,7 @@ class MatchHandler {
 		}
 	}
 
-	public static function getMatchByClan(Clan $clan): Match {
+	public static function getMatchByClan(Clan $clan): ?Match {
 		$database = Database::getConnection(Settings::db_name_infected_compo);
 
 		$result = $database->query('SELECT `matchId` FROM `' . Settings::db_table_infected_compo_participantOfMatch . '`
@@ -366,9 +365,9 @@ class MatchHandler {
 											WHERE `id` = \'' . $database->real_escape_string($id) . '\';');
   }
 
-    /*
-     * Some times, you want low level data on the participants.
-     */
+  /*
+   * Some times, you want low level data on the participants.
+   */
 	public static function getParticipantData(Match $match): array {
     $database = Database::getConnection(Settings::db_name_infected_compo);
 
@@ -516,14 +515,14 @@ class MatchHandler {
 	public static function isUserReady(User $user, Match $match): bool {
 		$database = Database::getConnection(Settings::db_name_infected_compo);
 
-		$result = $database->query('SELECT `id` FROM `' . Settings::db_table_infected_compo_readyusers . '`
+		$result = $database->query('SELECT * FROM `' . Settings::db_table_infected_compo_readyusers . '`
 																WHERE `userId` = \'' . $user->getId() . '\'
 																AND `matchId` = \'' . $match->getId() . '\';');
 
 		return $result->num_rows > 0;
 	}
 
-	public static function getReadyCount(Match $match) {
+	public static function getReadyCount(Match $match): int {
     $count = 0;
     $participantClans = self::getParticipantsByMatch($match);
 
@@ -543,9 +542,9 @@ class MatchHandler {
 	public static function acceptMatch(User $user, Match $match) {
 		$database = Database::getConnection(Settings::db_name_infected_compo);
 
-		$result = $database->query('INSERT INTO `' . Settings::db_table_infected_compo_readyusers . '` (`userId`, `matchId`)
-																VALUES (\'' . $user->getId() . '\',
-																				\'' . $match->getId() . '\');');
+		$database->query('INSERT INTO `' . Settings::db_table_infected_compo_readyusers . '` (`userId`, `matchId`)
+											VALUES (\'' . $user->getId() . '\',
+															\'' . $match->getId() . '\');');
 	}
 
 	public static function allHasAccepted(Match $match): bool {
@@ -786,24 +785,24 @@ class MatchHandler {
 		$clanList = [];
 
 		foreach (self::getParticipantsByMatch($match) as $clan) {
-		    $clanData = ['name' => $clan->getName(),
-				 						 'tag' => $clan->getTag()];
+	    $clanData = ['name' => $clan->getName(),
+			 						 'tag' => $clan->getTag()];
 
-		    /*
-		    $memberData = [];
+	    /*
+	    $memberData = [];
 
-		    foreach ($clan->getMembers() as $member) {
-					$userData = ['userId' => $member->getId(),
-					     'nick' => $member->getNickname(),
-					     'chief' => $member->equals($clan->getChief())];
+	    foreach ($clan->getMembers() as $member) {
+				$userData = ['userId' => $member->getId(),
+				     'nick' => $member->getNickname(),
+				     'chief' => $member->equals($clan->getChief())];
 
-					$memberData[] = $userData;
-		    }
+				$memberData[] = $userData;
+	    }
 
-		    $clanData['members'] = $memberData;
-				*/
+	    $clanData['members'] = $memberData;
+			*/
 
-		    $clanList[] = $clanData;
+	    $clanList[] = $clanData;
 		}
 
 		$banData['clans'] = $clanList;

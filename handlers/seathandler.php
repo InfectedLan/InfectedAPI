@@ -29,7 +29,7 @@ class SeatHandler {
 	/*
 	 * Get a seat by the internal id.
 	 */
-	public static function getSeat(int $id): Seat {
+	public static function getSeat(int $id): ?Seat {
 		$database = Database::getConnection(Settings::db_name_infected_tickets);
 
 		$result = $database->query('SELECT * FROM `' . Settings::db_table_infected_tickets_seats . '`
@@ -122,7 +122,7 @@ class SeatHandler {
 	/*
 	 * Returns the ticket that is seated on this seat.
 	 */
-	public static function getTicket(Seat $seat): Ticket {
+	public static function getTicket(Seat $seat): ?Ticket {
 		$database = Database::getConnection(Settings::db_name_infected_tickets);
 
 		$result = $database->query('SELECT * FROM `' . Settings::db_table_infected_tickets_tickets . '`
@@ -134,7 +134,7 @@ class SeatHandler {
 	/*
 	 * Returns the event this seat is for.
 	 */
-	public static function getEvent(Seat $seat): Event {
+	public static function getEvent(Seat $seat): ?Event {
 		return RowHandler::getEvent($seat->getRow());
 	}
 

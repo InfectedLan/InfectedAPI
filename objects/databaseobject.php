@@ -18,7 +18,7 @@
  * License along with this library.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-class Object {
+class DatabaseObject {
 	protected $id;
 
 	/*

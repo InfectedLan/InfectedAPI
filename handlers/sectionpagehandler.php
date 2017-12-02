@@ -26,7 +26,7 @@ class SectionPageHandler {
 	/*
 	 * Return the section page by the internal id.
 	 */
-	public static function getSectionPage(int $id): SectionPage {
+	public static function getSectionPage(int $id): ?SectionPage {
 		$database = Database::getConnection(Settings::db_name_infected_main);
 
 		$result = $database->query('SELECT * FROM `' . Settings::db_table_infected_main_sectionpages . '`
@@ -38,7 +38,7 @@ class SectionPageHandler {
 	/*
 	 * Return the section page by name.
 	 */
-	public static function getSectionPageByName(string $name): SectionPage {
+	public static function getSectionPageByName(string $name): ?SectionPage {
 		$database = Database::getConnection(Settings::db_name_infected_main);
 
 		$result = $database->query('SELECT * FROM `' . Settings::db_table_infected_main_sectionpages . '`

@@ -20,7 +20,7 @@
 
 require_once 'handlers/userhandler.php';
 
-class SyslogEntry extends Object {
+class SyslogEntry extends DatabaseObject {
   private $source;
   private $severity;
   private $message;

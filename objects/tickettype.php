@@ -20,10 +20,10 @@
 
 require_once 'handlers/eventhandler.php';
 require_once 'handlers/tickethandler.php';
-require_once 'objects/object.php';
+require_once 'objects/databaseobject.php';
 require_once 'objects/user.php';
 
-class TicketType extends Object {
+class TicketType extends DatabaseObject {
 	private $name;
 	private $title;
 	private $price;

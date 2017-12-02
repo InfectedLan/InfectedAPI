@@ -20,9 +20,9 @@
 
 require_once 'handlers/chathandler.php';
 require_once 'handlers/userhandler.php';
-require_once 'objects/object.php';
+require_once 'objects/databaseobject.php';
 
-class ChatMessage extends Object {
+class ChatMessage extends DatabaseObject {
 	private $userId;
 	private $chatId;
 	private $time;
