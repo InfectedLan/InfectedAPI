@@ -46,7 +46,7 @@ class Localization {
 		$list = json_decode(file_get_contents($filename), true);
 
 		// If key exists in array, return the value.
-		if (array_key_exists($key, $list)) {
+		if (is_array($list) && array_key_exists($key, $list)) {
 			return vsprintf($list[$key], $arguments);
 		}
 
