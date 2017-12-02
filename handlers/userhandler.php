@@ -233,7 +233,7 @@ class UserHandler {
 	/*
 	 * Create a new user
 	 */
-	public static function createUser(string $firstname, string $lastname, string $username, string $password, string $email, int $birthDate, bool $gender, int $phone, string $address, int $postalCode, string $nickname): User {
+	public static function createUser(string $firstname, string $lastname, string $username, string $password, string $email, int $birthDate, bool $gender, int $phone, string $address, int $postalCode, ?string $nickname): User {
 		$database = Database::getConnection(Settings::db_name_infected);
 
 		$database->query('INSERT INTO `' . Settings::db_table_infected_users . '` (`firstname`, `lastname`, `username`, `password`, `email`, `birthdate`, `gender`, `phone`, `address`, `postalcode`, `countryId`, `nickname`, `registereddate`)
