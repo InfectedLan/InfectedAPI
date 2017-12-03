@@ -32,7 +32,6 @@ $message = null;
 if (isset($_GET['key']) &&
 	!empty($_GET['key']) &&
 	Secret::api_key == $_GET['key']) {
-
 	if (isset($_GET['action']) &&
 		isset($_GET['identifier']) &&
 		!empty($_GET['action']) &&
@@ -42,10 +41,9 @@ if (isset($_GET['key']) &&
 
 		if (UserHandler::hasUser($identifier)) {
 			$user = UserHandler::getUserByIdentifier($identifier);
-			$event = EventHandler::getCurrentEvent();
-
+			
 			switch ($action) {
-				case "authorize":
+				case 'authorize':
 					if (isset($_GET['password']) &&
 						!empty($_GET['password'])) {
 
@@ -70,7 +68,7 @@ if (isset($_GET['key']) &&
 					}
 				break;
 
-		    case "post-auth":
+		    case 'post-auth':
 					if (isset($_GET['port-type']) &&
 						isset($_GET['ip-address']) &&
 						isset($_GET['device']) &&
@@ -115,7 +113,7 @@ if (isset($_GET['key']) &&
 					}
 					break;
 
-				case "accounting":
+				case 'accounting':
 					if (isset($_GET['port-type']) &&
 						isset($_GET['ip-address']) &&
 						isset($_GET['device']) &&

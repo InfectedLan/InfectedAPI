@@ -119,18 +119,14 @@ class Event extends DatabaseObject {
 	 * Returns true if booking for this event is opened.
 	 */
 	public function isBookingTime(): bool {
-		$offset = 24 * 60 * 60;
-		$bookingTime = $this->getBookingTime();
-		$bookingEndTime = $this->getStartTime() + $offset;
-
-		return time() >= $bookingTime && time() <= $bookingEndTime;
+		return time() >= $this->getBookingTime() && time() <= $this->getEndTime();
 	}
 
 	/*
 	 * Returns true if booking for this event is opened.
 	 */
 	public function isOngoing(): bool {
-		$offset = 2 * 60 * 60;
+		$offset = 60 * 60;
 		$startTime = $this->getStartTime() - $offset;
 		$endTime = $this->getEndTime() + $offset;
 
