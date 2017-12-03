@@ -33,7 +33,7 @@ if (Session::isAuthenticated()) {
 		if (isset($_GET['id']) &&
 			is_numeric($_GET['id'])) {
 			$editUser = UserHandler::getUser($_GET['id']);
-			$swimming = isset($_GET['swimming']) ? $_GET['swimming'] : 0;
+			$swimming = $_GET['swimming'] ?? 0;
 
 			if ($editUser != null) {
 				$editUser->setSwimming($swimming);
@@ -51,7 +51,7 @@ if (Session::isAuthenticated()) {
 	$message = Localization::getLocale('you_are_not_logged_in');
 }
 
-header('Content-Type: text/plain');
+header('Content-Type: application/json');
 echo json_encode(['result' => $result, 'message' => $message], JSON_PRETTY_PRINT);
 Database::cleanup();
 ?>

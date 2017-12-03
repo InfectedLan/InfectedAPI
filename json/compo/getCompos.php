@@ -30,33 +30,37 @@ $result = false;
 $message = null;
 $data = null;
 
-if(Session::isAuthenticated()) {
-    $compos = CompoHandler::getCompos();
-    $data = array();
-    foreach($compos as $compo) {
-        $data[] = ["id" => $compo->getId(),
-                   "name" => $compo->getName(),
-                   "title" => $compo->getTitle(),
-                   "tag" => $compo->getTag(),
-		   "chat" => $compo->getChatId(),
-                   "description" => $compo->getDescription(),
-		   "teamSize" => $compo->getTeamSize(),
-		   "participantLimit" => $compo->getParticipantLimit(),
-		   "hasMatches" => CompoHandler::hasGeneratedMatches($compo),
-		   "requiresSteam" => $compo->requiresSteamId(),
-		   "pluginName" => $compo->getPluginName(),
-                   "pluginJavascript" => CompoPluginHandler::getPluginJavascriptOrDefault($compo->getPluginName())];
-    }
-    $result = true;
+if (Session::isAuthenticated()) {
+  $compos = CompoHandler::getCompos();
+  $data = array();
+
+  foreach ($compos as $compo) {
+    $data[] = ['id' => $compo->getId(),
+               'name' => $compo->getName(),
+               'title' => $compo->getTitle(),
+               'tag' => $compo->getTag(),
+               'chat' => $compo->getChatId(),
+               'description' => $compo->getDescription(),
+               'teamSize' => $compo->getTeamSize(),
+               'participantLimit' => $compo->getParticipantLimit(),
+               'hasMatches' => CompoHandler::hasGeneratedMatches($compo),
+               'requiresSteam' => $compo->requiresSteamId(),
+               'pluginName' => $compo->getPluginName(),
+               'pluginJavascript' => CompoPluginHandler::getPluginJavascriptOrDefault($compo->getPluginName())];
+  }
+
+  $result = true;
 } else {
-    $message = Localization::getLocale('you_are_not_logged_in');
+  $message = Localization::getLocale('you_are_not_logged_in');
 }
 
-header('Content-Type: text/plain');
-if($result) {
-    echo json_encode(['result' => $result, 'data' => $data], JSON_PRETTY_PRINT);
+header('Content-Type: application/json');
+
+if ($result) {
+  echo json_encode(['result' => $result, 'data' => $data], JSON_PRETTY_PRINT);
 } else {
-    echo json_encode(['result' => $result, 'message' => $message], JSON_PRETTY_PRINT);
+  echo json_encode(['result' => $result, 'message' => $message], JSON_PRETTY_PRINT);
 }
+
 Database::cleanup();
 ?>

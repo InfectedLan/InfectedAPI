@@ -42,7 +42,6 @@ if (Session::isAuthenticated()) {
 		if (hash_equals($oldPassword, $user->getPassword())) {
 			if ($newPassword == $confirmNewPassword) {
 				UserHandler::updateUserPassword($user, hash('sha256', $newPassword));
-
 				$result = true;
 			} else {
 				$message = Localization::getLocale('passwords_does_not_match');
@@ -57,7 +56,7 @@ if (Session::isAuthenticated()) {
 	$message = Localization::getLocale('you_are_not_logged_in');
 }
 
-header('Content-Type: text/plain');
+header('Content-Type: application/json');
 echo json_encode(['result' => $result, 'message' => $message], JSON_PRETTY_PRINT);
 Database::cleanup();
 ?>

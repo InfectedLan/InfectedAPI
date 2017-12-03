@@ -28,56 +28,59 @@ $result = false;
 $message = Localization::getLocale('an_unknown_error_occurred');
 
 try {
-    if (Session::isAuthenticated()) {
-        $user = Session::getCurrentUser();
+  if (Session::isAuthenticated()) {
+    $user = Session::getCurrentUser();
 
-        // Remove avatar if the user already have one.
-        if ($user->hasAvatar()) {
-            $user->getAvatar()->remove();
-        }
-
-        $temp = explode('.', $_FILES['file']['name']);
-        $extension = strtolower(end($temp));
-        $allowedExts = ['jpeg', 'jpg', 'png'];
-
-        if (($_FILES['file']['size'] < 15 * 1024 * 1024)) {
-            if (in_array($extension, $allowedExts)) {
-                if ($_FILES['file']['error'] == 0) {
-                    // Validate size
-                    $image = 0;
-
-                    if ($extension == 'png') {
-                        $image = imagecreatefrompng($_FILES['file']['tmp_name']);
-                    } else if ($extension == 'jpeg' ||
-                               $extension == 'jpg') {
-                        $image = imagecreatefromjpeg($_FILES['file']['tmp_name']);
-                    }
-
-                    if (imagesx($image) >= Settings::avatar_minimum_width && imagesy($image) >= Settings::avatar_minimum_height) {
-                        $name = bin2hex(openssl_random_pseudo_bytes(16)) . $user->getUsername();
-                        $path = AvatarHandler::createAvatar($name . '.' . $extension, $user);
-                        move_uploaded_file($_FILES['file']['tmp_name'], $path);
-                        $result = true;
-			SyslogHandler::log("Avatar uploaded", "uploadAvatar", $user, SyslogHandler::SEVERITY_INFO, array("filename" => $name, "width" => imagesx($image), "height" => imagesy($image), "extension" => $extension));
-                    } else {
-                        $message = Localization::getLocale('the_image_is_too_small_it_must_be_at_least_value_pixels', Settings::avatar_minimum_width . ' x ' . Settings::avatar_minimum_height);
-                    }
-                } else {
-                    $message = Localization::getLocale('an_internal_error_occurred_when_uploading_image', $_FILES['file']['error']);
-                }
-            } else {
-                $message = Localization::getLocale('invalid_file_format');
-            }
-        } else {
-            $message = Localization::getLocale('the_file_size_is_too_large');
-        }
-    } else {
-        $message = Localization::getLocale('you_are_not_logged_in');
+    // Remove avatar if the user already have one.
+    if ($user->hasAvatar()) {
+        $user->getAvatar()->remove();
     }
-} catch(Exception $e) {
-    $message = Localization::getLocale('an_exception_occurred', $e);
+
+    $temp = explode('.', $_FILES['file']['name']);
+    $extension = strtolower(end($temp));
+    $allowedExts = ['jpeg', 'jpg', 'png'];
+
+    if ($_FILES['file']['size'] < 15 * 1024 * 1024) {
+      if (in_array($extension, $allowedExts)) {
+        if ($_FILES['file']['error'] == 0) {
+          // Validate size
+          $image = 0;
+
+          if ($extension == 'png') {
+            $image = imagecreatefrompng($_FILES['file']['tmp_name']);
+          } else if ($extension == 'jpeg' || $extension == 'jpg') {
+            $image = imagecreatefromjpeg($_FILES['file']['tmp_name']);
+          }
+
+          if (imagesx($image) >= Settings::avatar_minimum_width && imagesy($image) >= Settings::avatar_minimum_height) {
+            $name = bin2hex(openssl_random_pseudo_bytes(16)) . $user->getUsername();
+            $path = AvatarHandler::createAvatar($name . '.' . $extension, $user);
+            move_uploaded_file($_FILES['file']['tmp_name'], $path);
+            SyslogHandler::log('Avatar uploaded', 'uploadAvatar', $user, SyslogHandler::SEVERITY_INFO, ['filename' => $name,
+                                                                                                        'width' => imagesx($image),
+                                                                                                        'height' => imagesy($image),
+                                                                                                        'extension' => $extension]);
+            $result = true;
+          } else {
+            $message = Localization::getLocale('the_image_is_too_small_it_must_be_at_least_value_pixels', Settings::avatar_minimum_width . ' x ' . Settings::avatar_minimum_height);
+          }
+        } else {
+          $message = Localization::getLocale('an_internal_error_occurred_when_uploading_image', $_FILES['file']['error']);
+        }
+      } else {
+        $message = Localization::getLocale('invalid_file_format');
+      }
+    } else {
+      $message = Localization::getLocale('the_file_size_is_too_large');
+    }
+  } else {
+    $message = Localization::getLocale('you_are_not_logged_in');
+  }
+} catch (Exception $exception) {
+  $message = Localization::getLocale('an_exception_occurred', $exception);
 }
-header('Content-Type: text/plain');
+
+header('Content-Type: application/json');
 echo json_encode(['result' => $result, 'message' => $message], JSON_PRETTY_PRINT);
 Database::cleanup();
 ?>

@@ -50,7 +50,7 @@ if (Session::isAuthenticated()) {
 	$message = Localization::getLocale('you_are_not_logged_in');
 }
 
-header('Content-Type: text/plain');
+header('Content-Type: application/json');
 
 if ($result) {
 	echo json_encode(array('result' => $result, 'clanId' => $clanId), JSON_PRETTY_PRINT);

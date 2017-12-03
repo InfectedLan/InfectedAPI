@@ -87,7 +87,8 @@ if (Session::isAuthenticated()) {
 	$message = Localization::getLocale('you_are_not_logged_in');
 }
 
-header('Content-Type: text/plain');
+header('Content-Type: application/json');
+
 if ($result) {
 	echo json_encode(['result' => $result, 'message' => $message, "data" => $data], JSON_PRETTY_PRINT);
 } else {

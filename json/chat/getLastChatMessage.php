@@ -47,8 +47,7 @@ if (Session::isAuthenticated()) {
 										 'message' => $message->getMessage()];
 
 					//Tell chat if admin or not
-					if ($subject->hasPermission('*') ||
-						$subject->hasPermission('compo.chat')) {
+					if ($subject->hasPermission('compo.chat')) {
 						$result['admin'] = true;
 					} else {
 						$result['admin'] = false;
@@ -70,7 +69,7 @@ if (Session::isAuthenticated()) {
 	$message = Localization::getLocale('you_are_not_logged_in');
 }
 
-header('Content-Type: text/plain');
+header('Content-Type: application/json');
 echo json_encode(['result' => $result, 'message' => $message], JSON_PRETTY_PRINT);
 Database::cleanup();
 ?>

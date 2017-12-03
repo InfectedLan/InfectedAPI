@@ -36,7 +36,7 @@ if (Session::isAuthenticated()) {
 	if ($user->hasPermission('compo.bracketmanagement')) {
 		if (isset($_GET['id']) &&
 			is_numeric($_GET['id'])) {
-            MatchHandler::removeParticipantEntry($_GET['id']);
+      MatchHandler::removeParticipantEntry($_GET['id']);
 		} else {
 			$message = Localization::getLocale('you_have_not_filled_out_the_required_fields');
 		}
@@ -47,14 +47,13 @@ if (Session::isAuthenticated()) {
 	$message = Localization::getLocale('you_are_not_logged_in');
 }
 
-header('Content-Type: text/plain');
+header('Content-Type: application/json');
 
 if ($result) {
 	echo json_encode(array('result' => $result, 'data' => $matchArray), JSON_PRETTY_PRINT);
 } else {
 	echo json_encode(array('result' => $result, 'message' => $message), JSON_PRETTY_PRINT);
 }
-
 
 Database::cleanup();
 ?>

@@ -32,39 +32,41 @@ $clanArray = array();
 
 if (Session::isAuthenticated()) {
 	$user = Session::getCurrentUser();
-    if (isset($_GET['id']) &&
-    is_numeric($_GET['id'])) {
-        $compo = CompoHandler::getCompo($_GET['id']);
 
-        if ($compo != null) {
-            $clans = ClanHandler::getQualifiedClansByCompo($compo);
+	if (isset($_GET['id']) &&
+      is_numeric($_GET['id'])) {
+    $compo = CompoHandler::getCompo($_GET['id']);
 
-            foreach($clans as $clan) {
-                $data = array();
-                $data["id"] = $clan->getId();
-                $data["name"] = $clan->getName();
-                $data["tag"] = $clan->getTag();
-                array_push($clanArray, $data);
-            }
-            $result = true;
-        } else {
-            $message = Localization::getLocale('this_compo_does_not_exist');
-        }
+    if ($compo != null) {
+      $clans = ClanHandler::getQualifiedClansByCompo($compo);
+
+      foreach ($clans as $clan) {
+          $data = array();
+          $data['id'] = $clan->getId();
+          $data['name'] = $clan->getName();
+          $data['tag'] = $clan->getTag();
+
+					array_push($clanArray, $data);
+      }
+
+      $result = true;
     } else {
-        $message = Localization::getLocale('you_have_not_filled_out_the_required_fields');
+      $message = Localization::getLocale('this_compo_does_not_exist');
     }
+  } else {
+    $message = Localization::getLocale('you_have_not_filled_out_the_required_fields');
+  }
 } else {
 	$message = Localization::getLocale('you_are_not_logged_in');
 }
 
-header('Content-Type: text/plain');
+header('Content-Type: application/json');
 
 if ($result) {
 	echo json_encode(array('result' => $result, 'data' => $clanArray), JSON_PRETTY_PRINT);
 } else {
 	echo json_encode(array('result' => $result, 'message' => $message), JSON_PRETTY_PRINT);
 }
-
 
 Database::cleanup();
 ?>

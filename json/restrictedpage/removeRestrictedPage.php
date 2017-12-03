@@ -35,8 +35,7 @@ if (Session::isAuthenticated()) {
 			$page = RestrictedPageHandler::getPage($_GET['id']);
 
 			if ($page != null) {
-				if ($user->hasPermission('*') ||
-					$user->hasPermission('chief.my-crew') &&
+				if ($user->hasPermission('chief.my-crew') &&
 					$user->getGroup()->equals($page->getGroup())) {
 					RestrictedPageHandler::removePage($page);
 					$result = true;
@@ -56,7 +55,7 @@ if (Session::isAuthenticated()) {
 	$message = Localization::getLocale('you_are_not_logged_in');
 }
 
-header('Content-Type: text/plain');
+header('Content-Type: application/json');
 echo json_encode(['result' => $result, 'message' => $message], JSON_PRETTY_PRINT);
 Database::cleanup();
 ?>

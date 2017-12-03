@@ -33,7 +33,7 @@ foreach (AgendaHandler::getAgendas() as $agenda) {
 									 'isHappening' => $agenda->isHappening()];
 }
 
-header('Content-Type: text/plain');
+header('Content-Type: application/json');
 echo json_encode(array('agendaList' => $agendaList), JSON_PRETTY_PRINT);
 Database::cleanup();
 ?>

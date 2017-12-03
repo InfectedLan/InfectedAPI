@@ -31,70 +31,79 @@ $message = null;
 $data = null;
 
 if (Session::isAuthenticated()) {
-    $user = Session::getCurrentUser();
+  $user = Session::getCurrentUser();
 
-    if ($user->hasPermission('compo.management')) {
-        if(isset($_GET['id']) && isset($_GET["url"])) {
-	    $compo = CompoHandler::getCompo($_GET["id"]);
-            if($compo != null) {
-		$plugin = CompoPluginHandler::getPluginObjectOrDefault($compo->getPluginName());
-		if(defined("Secret::toornamentApiKey") && defined("Secret::toornamentClientId") && defined("Secret::toornamentClientSecret")) {
-		    //Stage 1: Authenticate with OAuth
+  if ($user->hasPermission('compo.management')) {
+    if (isset($_GET['id']) &&
+      isset($_GET['url'])) {
+      $compo = CompoHandler::getCompo($_GET['id']);
 
-		    $oauthToken = $plugin->getToornamentOauthToken();
-		    //echo "Toornament oauth token: " . $oauthToken;
+      if ($compo != null) {
+      	$plugin = CompoPluginHandler::getPluginObjectOrDefault($compo->getPluginName());
 
-		    $compoId = str_replace("/", "", str_replace("https://organizer.toornament.com/tournaments/", "", $_GET["url"]));
-		    $result = true;
-		    $qualifiedClans = ClanHandler::getQualifiedClansByCompo($compo);
+        if (defined('Secret::toornamentApiKey') && defined('Secret::toornamentClientId') && defined('Secret::toornamentClientSecret')) {
+    	    //Stage 1: Authenticate with OAuth
 
-		    $curlUrl = "https://api.toornament.com/v1/tournaments/" . urlencode($compoId) . "/participants";
-		    //echo "Sending requests to " . $curlUrl;
-		    foreach($qualifiedClans as $clan) {
-			$curlSess = curl_init();
-			//Headers
-			curl_setopt($curlSess, CURLOPT_URL, $curlUrl);
-			curl_setopt($curlSess, CURLOPT_RETURNTRANSFER, true);
-			curl_setopt($curlSess, CURLOPT_POSTFIELDS, json_encode($plugin->getToornamentParticipantData($clan)));
-			curl_setopt($curlSess, CURLOPT_HTTPHEADER, array(
-								   'Authorization: Bearer ' . $oauthToken,
-								   'X-Api-Key: ' . Secret::toornamentApiKey
-								   ));
-			$curlResult = curl_exec($curlSess);
-			$info = curl_getinfo($curlSess);
-			if($info["http_code"] != 201) {
-			    $data = json_decode($curlResult);
-			    //if(isset($data->errors)) {
-				$message = "There was an error adding the clanid " . $clan->getId() . ": " . $curlResult;
-			    /*} else {
-				$message = "There was an error adding the clanid " . $clan->getId() . ". We were not able to parse the error.";
-			    }*/
-			    $result = false;
-			    break;
-			}
-			curl_close($curlSess);
-		    }
-		} else {
-		    $message = "Toornament API key fields are missing from secret.php. Please add the fields \"toornamentApiKey\", \"toornamentClientId\", and \"toornamentClientSecret\" to secret.php.";
-		}
-            } else {
-                $message = Localization::getLocale('this_compo_does_not_exist');
-            }
+    	    $oauthToken = $plugin->getToornamentOauthToken();
+    	    //echo "Toornament oauth token: " . $oauthToken;
+
+    	    $compoId = str_replace('/', '', str_replace('https://organizer.toornament.com/tournaments/', '', $_GET['url']));
+    	    $result = true;
+    	    $qualifiedClans = ClanHandler::getQualifiedClansByCompo($compo);
+
+    	    $curlUrl = 'https://api.toornament.com/v1/tournaments/' . urlencode($compoId) . '/participants';
+    	    //echo "Sending requests to " . $curlUrl;
+
+          foreach($qualifiedClans as $clan) {
+        		$curlSess = curl_init();
+        		//Headers
+        		curl_setopt($curlSess, CURLOPT_URL, $curlUrl);
+        		curl_setopt($curlSess, CURLOPT_RETURNTRANSFER, true);
+        		curl_setopt($curlSess, CURLOPT_POSTFIELDS, json_encode($plugin->getToornamentParticipantData($clan)));
+        		curl_setopt($curlSess, CURLOPT_HTTPHEADER, array('Authorization: Bearer ' . $oauthToken,
+                                        							       'X-Api-Key: ' . Secret::toornamentApiKey));
+
+        		$curlResult = curl_exec($curlSess);
+        		$info = curl_getinfo($curlSess);
+
+            if ($info['http_code'] != 201) {
+        		  $data = json_decode($curlResult);
+
+              //if(isset($data->errors)) {
+        			  $message = 'There was an error adding the clanid ' . $clan->getId() . ': ' . $curlResult;
+        		  /*} else {
+        			  $message = "There was an error adding the clanid " . $clan->getId() . ". We were not able to parse the error.";
+    		      }*/
+
+      		    $result = false;
+      		    break;
+    		    }
+
+            curl_close($curlSess);
+    	    }
         } else {
-            $message = Localization::getLocale('you_have_not_filled_out_the_required_fields');
+          $message = "Toornament API key fields are missing from secret.php. Please add the fields \"toornamentApiKey\", \"toornamentClientId\", and \"toornamentClientSecret\" to secret.php.";
         }
+      } else {
+        $message = Localization::getLocale('this_compo_does_not_exist');
+      }
     } else {
-        $message = Localization::getLocale('you_do_not_have_permission_to_do_that');
+      $message = Localization::getLocale('you_have_not_filled_out_the_required_fields');
     }
+  } else {
+    $message = Localization::getLocale('you_do_not_have_permission_to_do_that');
+  }
 } else {
-    $message = Localization::getLocale('you_are_not_logged_in');
+  $message = Localization::getLocale('you_are_not_logged_in');
 }
 
-header('Content-Type: text/plain');
-if($result) {
-    echo json_encode(array('result' => $result), JSON_PRETTY_PRINT);
+header('Content-Type: application/json');
+
+if ($result) {
+  echo json_encode(array('result' => $result), JSON_PRETTY_PRINT);
 } else {
-    echo json_encode(array('result' => $result, 'message' => $message), JSON_PRETTY_PRINT);
+  echo json_encode(array('result' => $result, 'message' => $message), JSON_PRETTY_PRINT);
 }
+
 Database::cleanup();
 ?>

@@ -30,42 +30,45 @@ $uploadedName = null;
 $message = Localization::getLocale('an_unknown_error_occurred');
 
 try {
-    if (Session::isAuthenticated()) {
-        $user = Session::getCurrentUser();
-        if($user->hasPermission("compo.casting")) {
-            $temp = explode('.', $_FILES['file']['name']);
-            $extension = strtolower(end($temp));
-            $allowedExts = ['jpeg', 'jpg', 'png'];
+  if (Session::isAuthenticated()) {
+    $user = Session::getCurrentUser();
 
-            if (($_FILES['file']['size'] < 15 * 1024 * 1024)) {
-                if (in_array($extension, $allowedExts)) {
-                    if ($_FILES['file']['error'] == 0) {
-                        move_uploaded_file($_FILES['file']['tmp_name'], Settings::api_path . "content/castingAssets/" .  $_FILES['file']['name']);
-                        $uploadedName = $_FILES['file']['name'];
-                        $result = true;
-                    } else {
-                        $message = Localization::getLocale('an_internal_error_occurred_when_uploading_image', $_FILES['file']['error']);
-                    }
-                } else {
-                    $message = Localization::getLocale('invalid_file_format');
-                }
-            } else {
-                $message = Localization::getLocale('the_file_size_is_too_large');
-            }
+    if ($user->hasPermission("compo.casting")) {
+      $temp = explode('.', $_FILES['file']['name']);
+      $extension = strtolower(end($temp));
+      $allowedExts = ['jpeg', 'jpg', 'png'];
+
+      if ($_FILES['file']['size'] < 15 * 1024 * 1024) {
+        if (in_array($extension, $allowedExts)) {
+          if ($_FILES['file']['error'] == 0) {
+            move_uploaded_file($_FILES['file']['tmp_name'], Settings::api_path . "content/castingAssets/" .  $_FILES['file']['name']);
+            $uploadedName = $_FILES['file']['name'];
+            $result = true;
+          } else {
+            $message = Localization::getLocale('an_internal_error_occurred_when_uploading_image', $_FILES['file']['error']);
+          }
         } else {
-            $message = Localization::getLocale('you_do_not_have_permission_to_do_that');
+          $message = Localization::getLocale('invalid_file_format');
         }
+      } else {
+        $message = Localization::getLocale('the_file_size_is_too_large');
+      }
     } else {
-        $message = Localization::getLocale('you_are_not_logged_in');
+      $message = Localization::getLocale('you_do_not_have_permission_to_do_that');
     }
-} catch(Exception $e) {
-    $message = Localization::getLocale('an_exception_occurred', $e);
+  } else {
+    $message = Localization::getLocale('you_are_not_logged_in');
+  }
+} catch(Exception $exception) {
+  $message = Localization::getLocale('an_exception_occurred', $execution);
 }
-header('Content-Type: text/plain');
-if($result) {
-    echo json_encode(['result' => $result, 'uploadedName' => $uploadedName], JSON_PRETTY_PRINT);
+
+header('Content-Type: application/json');
+
+if ($result) {
+  echo json_encode(['result' => $result, 'uploadedName' => $uploadedName], JSON_PRETTY_PRINT);
 } else {
-    echo json_encode(['result' => $result, 'message' => $message], JSON_PRETTY_PRINT);
+  echo json_encode(['result' => $result, 'message' => $message], JSON_PRETTY_PRINT);
 }
 
 Database::cleanup();

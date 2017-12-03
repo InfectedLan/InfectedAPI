@@ -53,8 +53,8 @@ if (Session::isAuthenticated()) {
 												  'id' => $row->getId(),
 												  'x' => $row->getX(),
 												  'y' => $row->getY(),
-						  						  'number' => $row->getNumber(),
-						  						  'horizontal' => $row->isHorizontal()];
+						  						'number' => $row->getNumber(),
+						  						'horizontal' => $row->isHorizontal()];
 			}
 
 			$result = true;
@@ -68,12 +68,13 @@ if (Session::isAuthenticated()) {
 	$message = Localization::getLocale('you_are_not_logged_in');
 }
 
-header('Content-Type: text/plain');
+header('Content-Type: application/json');
 
 if ($result) {
 	echo json_encode(['result' => $result, 'rows' => $seatmapData, 'backgroundImage' => $backgroundImage], JSON_PRETTY_PRINT);
 } else {
 	echo json_encode(['result' => $result, 'message' => $message], JSON_PRETTY_PRINT);
 }
+
 Database::cleanup();
 ?>

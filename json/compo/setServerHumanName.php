@@ -29,33 +29,36 @@ $message = null;
 $data = null;
 
 if (Session::isAuthenticated()) {
-    $user = Session::getCurrentUser();
+  $user = Session::getCurrentUser();
 
-    if ($user->hasPermission('compo.edit')) {
-        if(isset($_GET['id']) &&
-           isset($_GET['humanName'])) {
-            $server = ServerHandler::getServer($_GET["id"]);
-            if($server != null) {
-                ServerHandler::setHumanName($server, $_GET["humanName"]);
-                $result = true;
-            } else {
-                $message = Localization::getLocale('this_server_does_not_exist');
-            }
-        } else {
-            $message = Localization::getLocale('you_have_not_filled_out_the_required_fields');
-        }
+  if ($user->hasPermission('compo.edit')) {
+    if (isset($_GET['id']) &&
+      isset($_GET['humanName'])) {
+      $server = ServerHandler::getServer($_GET['id']);
+
+      if ($server != null) {
+        ServerHandler::setHumanName($server, $_GET['humanName']);
+        $result = true;
+      } else {
+        $message = Localization::getLocale('this_server_does_not_exist');
+      }
     } else {
-        $message = Localization::getLocale('you_do_not_have_permission_to_do_that');
+      $message = Localization::getLocale('you_have_not_filled_out_the_required_fields');
     }
+  } else {
+    $message = Localization::getLocale('you_do_not_have_permission_to_do_that');
+  }
 } else {
-    $message = Localization::getLocale('you_are_not_logged_in');
+  $message = Localization::getLocale('you_are_not_logged_in');
 }
 
-header('Content-Type: text/plain');
-if($result) {
-    echo json_encode(array('result' => $result), JSON_PRETTY_PRINT);
+header('Content-Type: application/json');
+
+if ($result) {
+  echo json_encode(array('result' => $result), JSON_PRETTY_PRINT);
 } else {
-    echo json_encode(array('result' => $result, 'message' => $message), JSON_PRETTY_PRINT);
+  echo json_encode(array('result' => $result, 'message' => $message), JSON_PRETTY_PRINT);
 }
+
 Database::cleanup();
 ?>

@@ -40,8 +40,8 @@ if (Session::isAuthenticated()) {
 			$match = MatchHandler::getMatch($_GET['id']);
 
 			if ($match != null) {
-                MatchHandler::setTime($match, $_GET["scheduledTime"]);
-                $result = true;
+        MatchHandler::setTime($match, $_GET["scheduledTime"]);
+        $result = true;
 			} else {
 				$message = Localization::getLocale('this_match_does_not_exist');
 			}
@@ -55,14 +55,13 @@ if (Session::isAuthenticated()) {
 	$message = Localization::getLocale('you_are_not_logged_in');
 }
 
-header('Content-Type: text/plain');
+header('Content-Type: application/json');
 
 if ($result) {
 	echo json_encode(array('result' => $result, 'data' => $matchArray), JSON_PRETTY_PRINT);
 } else {
 	echo json_encode(array('result' => $result, 'message' => $message), JSON_PRETTY_PRINT);
 }
-
 
 Database::cleanup();
 ?>

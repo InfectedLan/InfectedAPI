@@ -40,7 +40,7 @@ if (isset($_GET['postalcode']) &&
 	$message = Localization::getLocale('no_postcode_specified');
 }
 
-header('Content-Type: text/plain');
+header('Content-Type: application/json');
 echo json_encode(['result' => $result, 'message' => $message], JSON_PRETTY_PRINT);
 Database::cleanup();
 ?>

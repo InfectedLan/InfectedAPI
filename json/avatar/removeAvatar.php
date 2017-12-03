@@ -37,7 +37,7 @@ if (Session::isAuthenticated()) {
 			$avatar->remove();
 			$result = true;
 		} else {
-            $message = Localization::getLocale('this_avatar_does_not_exist');
+      $message = Localization::getLocale('this_avatar_does_not_exist');
 		}
 	} else {
 		$message = Localization::getLocale('you_have_no_avatar_and_therefore_cannot_remove_it');
@@ -46,7 +46,7 @@ if (Session::isAuthenticated()) {
 	$message = Localization::getLocale('you_are_not_logged_in');
 }
 
-header('Content-Type: text/plain');
+header('Content-Type: application/json');
 echo json_encode(['result' => $result, 'message' => $message], JSON_PRETTY_PRINT);
 Database::cleanup();
 ?>

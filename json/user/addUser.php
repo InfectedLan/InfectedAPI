@@ -147,7 +147,7 @@ if (isset($_POST['firstname']) &&
 	$message = Localization::getLocale('you_have_not_filled_out_the_required_fields');
 }
 
-header('Content-Type: text/plain');
+header('Content-Type: application/json');
 echo json_encode(['result' => $result, 'message' => $message], JSON_PRETTY_PRINT);
 Database::cleanup();
 ?>

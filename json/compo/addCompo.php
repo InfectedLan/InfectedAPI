@@ -28,51 +28,51 @@ $message = null;
 $id = 0;
 
 if (Session::isAuthenticated()) {
-    $user = Session::getCurrentUser();
+  $user = Session::getCurrentUser();
 
-    if ($user->hasPermission('event.compo')) {
-	if (isset($_GET['title']) &&
-	    isset($_GET['tag']) &&
-	    isset($_GET['startTime']) &&
-	    isset($_GET['startDate']) &&
-	    isset($_GET['registrationEndTime']) &&
-	    isset($_GET['registrationEndDate']) &&
-	    isset($_GET['compoPlugin']) &&
-	    isset($_GET['teamSize']) &&
-	    isset($_GET['maxTeamCount']) &&
-	    !empty($_GET['title']) &&
-	    !empty($_GET['tag']) &&
-	    !empty($_GET['startTime']) &&
-	    !empty($_GET['startDate']) &&
-	    !empty($_GET['registrationEndTime']) &&
-	    !empty($_GET['registrationEndDate']) &&
-	    is_numeric($_GET['teamSize']) &&
-	    is_numeric($_GET['maxTeamCount'])) {
-	    $name = strtolower(str_replace(' ', '-', $_GET['title']));
-	    $title = $_GET['title'];
-	    $tag = $_GET['tag'];
-            $compoPlugin = $_GET['compoPlugin'];
-	    $description = $_GET['description'];
-	    $mode = $_GET['mode'];
-	    $startTime = $_GET['startDate'] . ' ' . $_GET['startTime'];
-	    $registrationEndTime = $_GET['registrationEndDate'] . ' ' . $_GET['registrationEndTime'];
-	    $teamSize = $_GET['teamSize'];
-            $maxTeamCount = $_GET['maxTeamCount'];
+  if ($user->hasPermission('event.compo')) {
+    if (isset($_GET['title']) &&
+      isset($_GET['tag']) &&
+      isset($_GET['startTime']) &&
+      isset($_GET['startDate']) &&
+      isset($_GET['registrationEndTime']) &&
+      isset($_GET['registrationEndDate']) &&
+      isset($_GET['compoPlugin']) &&
+      isset($_GET['teamSize']) &&
+      isset($_GET['maxTeamCount']) &&
+      !empty($_GET['title']) &&
+      !empty($_GET['tag']) &&
+      !empty($_GET['startTime']) &&
+      !empty($_GET['startDate']) &&
+      !empty($_GET['registrationEndTime']) &&
+      !empty($_GET['registrationEndDate']) &&
+      is_numeric($_GET['teamSize']) &&
+      is_numeric($_GET['maxTeamCount'])) {
+      $name = strtolower(str_replace(' ', '-', $_GET['title']));
+      $title = $_GET['title'];
+      $tag = $_GET['tag'];
+      $compoPlugin = $_GET['compoPlugin'];
+      $description = $_GET['description'];
+      $mode = $_GET['mode'];
+      $startTime = $_GET['startDate'] . ' ' . $_GET['startTime'];
+      $registrationEndTime = $_GET['registrationEndDate'] . ' ' . $_GET['registrationEndTime'];
+      $teamSize = $_GET['teamSize'];
+      $maxTeamCount = $_GET['maxTeamCount'];
 
-	    $id = CompoHandler::createCompo($name, $title, $tag, $description, $compoPlugin, $startTime, $registrationEndTime, $teamSize, $maxTeamCount);
+      $id = CompoHandler::createCompo($name, $title, $tag, $description, $compoPlugin, $startTime, $registrationEndTime, $teamSize, $maxTeamCount);
 
-	    $result = true;
-	} else {
-	    $message = Localization::getLocale('you_have_not_filled_out_the_required_fields');
-	}
+      $result = true;
     } else {
-	$message = Localization::getLocale('you_do_not_have_permission_to_do_that');
+      $message = Localization::getLocale('you_have_not_filled_out_the_required_fields');
     }
+  } else {
+    $message = Localization::getLocale('you_do_not_have_permission_to_do_that');
+  }
 } else {
-    $message = Localization::getLocale('you_are_not_logged_in');
+  $message = Localization::getLocale('you_are_not_logged_in');
 }
 
-header('Content-Type: text/plain');
+header('Content-Type: application/json');
 echo json_encode(['result' => $result, 'message' => $message, 'id' => $id], JSON_PRETTY_PRINT);
 Database::cleanup();
 ?>

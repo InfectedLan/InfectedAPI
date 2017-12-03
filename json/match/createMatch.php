@@ -28,7 +28,7 @@ require_once 'handlers/voteoptionhandler.php';
 
 $result = false;
 $message = null;
-$matchArray = array();
+$matchArray = [];
 
 if (Session::isAuthenticated()) {
 	$user = Session::getCurrentUser();
@@ -42,7 +42,7 @@ if (Session::isAuthenticated()) {
 			$compo = CompoHandler::getCompo($_GET['id']);
 
 			if ($compo != null) {
-			   	$chat = ChatHandler::createChat("compo-chat", "Compo chat");
+			  $chat = ChatHandler::createChat('compo-chat', 'Compo chat');
 				$result = MatchHandler::createMatch($_GET['scheduledTime'], $_GET['connectData'], $compo, $_GET['bracketOffset'], $chat, 0) != null;
 			} else {
 				$message = Localization::getLocale('this_compo_does_not_exist');
@@ -57,14 +57,13 @@ if (Session::isAuthenticated()) {
 	$message = Localization::getLocale('you_are_not_logged_in');
 }
 
-header('Content-Type: text/plain');
+header('Content-Type: application/json');
 
 if ($result) {
 	echo json_encode(array('result' => $result, 'data' => $matchArray), JSON_PRETTY_PRINT);
 } else {
 	echo json_encode(array('result' => $result, 'message' => $message), JSON_PRETTY_PRINT);
 }
-
 
 Database::cleanup();
 ?>

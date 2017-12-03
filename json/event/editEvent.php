@@ -35,10 +35,10 @@ if (Session::isAuthenticated()) {
 			isset($_GET['participants']) &&
 			isset($_GET['bookingDate']) &&
 			isset($_GET['bookingTime']) &&
-		    	isset($_GET['prioritySeatingDate']) &&
-		    	isset($_GET['prioritySeatingTime']) &&
-		    	isset($_GET['seatingDate']) &&
-		    	isset($_GET['seatingTime']) &&
+    	isset($_GET['prioritySeatingDate']) &&
+    	isset($_GET['prioritySeatingTime']) &&
+    	isset($_GET['seatingDate']) &&
+    	isset($_GET['seatingTime']) &&
 			isset($_GET['startDate']) &&
 			isset($_GET['startTime']) &&
 			isset($_GET['endDate']) &&
@@ -67,7 +67,7 @@ if (Session::isAuthenticated()) {
 
 			if ($event != null) {
 				if ($location != null) {
-			    EventHandler::updateEvent($event, $location, $participants, $bookingTime, $prioritySeatingTime , $seatingTime , $startTime, $endTime);
+			    EventHandler::updateEvent($event, $location, $participants, $bookingTime, $prioritySeatingTime, $seatingTime, $startTime, $endTime);
 					$result = true;
 				}
 			} else {
@@ -83,7 +83,7 @@ if (Session::isAuthenticated()) {
 	$message = Localization::getLocale('you_are_not_logged_in');
 }
 
-header('Content-Type: text/plain');
+header('Content-Type: application/json');
 echo json_encode(['result' => $result, 'message' => $message], JSON_PRETTY_PRINT);
 Database::cleanup();
 ?>

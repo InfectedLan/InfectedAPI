@@ -48,28 +48,35 @@ if (Session::isAuthenticated()) {
 					$item["bracketOffset"] = $match->getBracketOffset();
 					$item["state"] = $match->getState();
 					$item["winner"] = $match->getWinnerId();
-                    if($user->hasPermission('compo.bracketmanagement')) {
-                        $item["connectDetails"] = $match->getConnectDetails();
-                    }
+
+          if ($user->hasPermission('compo.bracketmanagement')) {
+              $item["connectDetails"] = $match->getConnectDetails();
+          }
+
 					$item["participants"] = MatchHandler::getParticipantData($match);
-                    $item["metadata"] = MatchHandler::getMetadata($match);
+          $item["metadata"] = MatchHandler::getMetadata($match);
 
-                    $children = array();
-                    $child_matches = MatchHandler::getMatchChildren($match);
-                    foreach($child_matches as $child) {
-                        array_push($children, $child->getId());
-                    }
-                    $item["children"] = $children;
+          $children = array();
+          $child_matches = MatchHandler::getMatchChildren($match);
 
-                    $parents = array();
-                    $parent_matches = MatchHandler::getMatchParents($match);
-                    foreach($parent_matches as $parent) {
-                        array_push($parents, $parent->getId());
-                    }
-                    $item["parents"] = $parents;
+					foreach($child_matches as $child) {
+              array_push($children, $child->getId());
+          }
+
+          $item["children"] = $children;
+
+          $parents = array();
+          $parent_matches = MatchHandler::getMatchParents($match);
+
+					foreach($parent_matches as $parent) {
+              array_push($parents, $parent->getId());
+          }
+
+          $item["parents"] = $parents;
 					//$matchArray[] = $item;
 					array_push($matchArray, $item);
 				}
+
 				$result = true;
 			} else {
 				$message = Localization::getLocale('this_compo_does_not_exist');
@@ -84,14 +91,13 @@ if (Session::isAuthenticated()) {
 	$message = Localization::getLocale('you_are_not_logged_in');
 }
 
-header('Content-Type: text/plain');
+header('Content-Type: application/json');
 
 if ($result) {
 	echo json_encode(array('result' => $result, 'data' => $matchArray), JSON_PRETTY_PRINT);
 } else {
 	echo json_encode(array('result' => $result, 'message' => $message), JSON_PRETTY_PRINT);
 }
-
 
 Database::cleanup();
 ?>

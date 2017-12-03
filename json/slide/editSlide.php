@@ -49,7 +49,7 @@ if (Session::isAuthenticated()) {
 			$content = $_GET['content'];
 			$startTime = $_GET['startDate'] . ' ' . $_GET['startTime'];
 			$endTime = $_GET['endDate'] . ' ' . $_GET['endTime'];
-			$published = isset($_GET['published']) ? $_GET['published'] : 0;
+			$published = $_GET['published'] ?? 0;
 
 			if ($slide != null) {
 				SlideHandler::updateSlide($slide, $title, $content, $startTime, $endTime, $published);
@@ -67,7 +67,7 @@ if (Session::isAuthenticated()) {
 	$message = Localization::getLocale('you_are_not_logged_in');
 }
 
-header('Content-Type: text/plain');
+header('Content-Type: application/json');
 echo json_encode(['result' => $result, 'message' => $message], JSON_PRETTY_PRINT);
 Database::cleanup();
 ?>

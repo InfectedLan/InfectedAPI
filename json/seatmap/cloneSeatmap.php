@@ -32,14 +32,15 @@ if (Session::isAuthenticated()) {
 
 	if ($user->hasPermission('admin.seatmap')) {
 		if (isset($_GET['id'])) {
-		    $sourceSeatmap = SeatmapHandler::getSeatmap($_GET['id']);
-		    if($sourceSeatmap != null) {
-			$seatmap = SeatmapHandler::cloneSeatmap($sourceSeatmap);
-			$result = true;
-			$id = $seatmap->getId();
-		    } else {
-			$message = Localization::getLocale('this_seatmap_does_not_exist');
-		    }
+		  $sourceSeatmap = SeatmapHandler::getSeatmap($_GET['id']);
+
+			if ($sourceSeatmap != null) {
+				$seatmap = SeatmapHandler::cloneSeatmap($sourceSeatmap);
+				$result = true;
+				$id = $seatmap->getId();
+		  } else {
+				$message = Localization::getLocale('this_seatmap_does_not_exist');
+		  }
 		} else {
 			$message = Localization::getLocale('you_have_not_filled_out_the_required_fields');
 		}
@@ -50,12 +51,13 @@ if (Session::isAuthenticated()) {
 	$message = Localization::getLocale('you_are_not_logged_in');
 }
 
-header('Content-Type: text/plain');
+header('Content-Type: application/json');
 
 if ($result) {
 	echo json_encode(array('result' => $result, 'id' => $id), JSON_PRETTY_PRINT);
 } else {
 	echo json_encode(['result' => $result, 'message' => $message], JSON_PRETTY_PRINT);
 }
+
 Database::cleanup();
 ?>

@@ -44,7 +44,7 @@ if (Session::isAuthenticated()) {
 			$title = $_GET['title'];
 			$description = $_GET['description'];
 			$startTime = $_GET['startDate'] . ' ' . $_GET['startTime'];
-			$published = isset($_GET['published']) ? $_GET['published'] : 0;
+			$published = $_GET['published'] ?? 0;
 
 			if ($agenda != null) {
 				AgendaHandler::updateAgenda($agenda, $title, $description, $startTime, $published);
@@ -62,7 +62,7 @@ if (Session::isAuthenticated()) {
 	$message = Localization::getLocale('you_are_not_logged_in');
 }
 
-header('Content-Type: text/plain');
+header('Content-Type: application/json');
 echo json_encode(['result' => $result, 'message' => $message], JSON_PRETTY_PRINT);
 Database::cleanup();
 ?>

@@ -30,29 +30,31 @@ $message = null;
 $data = null;
 
 if (Session::isAuthenticated()) {
-    $user = Session::getCurrentUser();
+  $user = Session::getCurrentUser();
 
-    if ($user->hasPermission('compo.edit')) {
-        if(isset($_GET['name']) &&
-           isset($_GET['template']) &&
-           isset($_GET['data'])) {
-            $data = ["id" => CastingPageHandler::createCastingPage(EventHandler::getCurrentEvent(), $_GET['name'], $_GET['data'], $_GET['template'])];
-            $result = true;
-        } else {
-            $message = Localization::getLocale('you_have_not_filled_out_the_required_fields');
-        }
+  if ($user->hasPermission('compo.edit')) {
+    if (isset($_GET['name']) &&
+      isset($_GET['template']) &&
+      isset($_GET['data'])) {
+      $data = ['id' => CastingPageHandler::createCastingPage(EventHandler::getCurrentEvent(), $_GET['name'], $_GET['data'], $_GET['template'])];
+      $result = true;
     } else {
-        $message = Localization::getLocale('you_do_not_have_permission_to_do_that');
+      $message = Localization::getLocale('you_have_not_filled_out_the_required_fields');
     }
+  } else {
+    $message = Localization::getLocale('you_do_not_have_permission_to_do_that');
+  }
 } else {
-    $message = Localization::getLocale('you_are_not_logged_in');
+  $message = Localization::getLocale('you_are_not_logged_in');
 }
 
-header('Content-Type: text/plain');
-if($result) {
-    echo json_encode(array('result' => $result, 'data' => $data), JSON_PRETTY_PRINT);
+header('Content-Type: application/json');
+
+if ($result) {
+  echo json_encode(array('result' => $result, 'data' => $data), JSON_PRETTY_PRINT);
 } else {
-    echo json_encode(array('result' => $result, 'message' => $message), JSON_PRETTY_PRINT);
+  echo json_encode(array('result' => $result, 'message' => $message), JSON_PRETTY_PRINT);
 }
+
 Database::cleanup();
 ?>

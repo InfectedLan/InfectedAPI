@@ -39,7 +39,6 @@ if (Session::isAuthenticated()) {
 			$content = $_GET['content'];
 
 			PageHandler::createPage($name, $title, $content);
-
 			$result = true;
 		} else {
 			$message = Localization::getLocale('you_have_not_filled_out_the_required_fields');
@@ -51,7 +50,7 @@ if (Session::isAuthenticated()) {
 	$message = Localization::getLocale('you_are_not_logged_in');
 }
 
-header('Content-Type: text/plain');
+header('Content-Type: application/json');
 echo json_encode(['result' => $result, 'message' => $message], JSON_PRETTY_PRINT);
 Database::cleanup();
 ?>

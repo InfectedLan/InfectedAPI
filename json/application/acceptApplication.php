@@ -34,7 +34,7 @@ if (Session::isAuthenticated()) {
 		if (isset($_GET['id']) &&
 			is_numeric($_GET['id'])) {
 			$application = ApplicationHandler::getApplication($_GET['id']);
-			$comment = isset($_GET['comment']) ? $_GET['comment'] : null;
+			$comment = $_GET['comment'];
 
 			if ($application != null) {
 				if ($application->getEvent()->equals(EventHandler::getCurrentEvent())) {
@@ -56,7 +56,7 @@ if (Session::isAuthenticated()) {
 	$message = Localization::getLocale('you_are_not_logged_in');
 }
 
-header('Content-Type: text/plain');
+header('Content-Type: application/json');
 echo json_encode(['result' => $result, 'message' => $message], JSON_PRETTY_PRINT);
 Database::cleanup();
 ?>

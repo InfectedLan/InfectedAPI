@@ -30,7 +30,7 @@ $data = null;
 if (Session::isAuthenticated()) {
   $user = Session::getCurrentUser();
 
-  if (!isset($_GET["id"])) {
+  if (!isset($_GET['id'])) {
     $target = $user;
   }
 
@@ -77,15 +77,16 @@ if (Session::isAuthenticated()) {
     $result = false;
   }
 } else {
-    $message = Localization::getLocale('you_are_not_logged_in');
+  $message = Localization::getLocale('you_are_not_logged_in');
 }
 
-header('Content-Type: text/plain');
+header('Content-Type: application/json');
 
 if ($result) {
   echo json_encode(['result' => $result, 'data' => $data], JSON_PRETTY_PRINT);
 } else {
   echo json_encode(['result' => $result, 'message' => $message], JSON_PRETTY_PRINT);
 }
+
 Database::cleanup();
 ?>

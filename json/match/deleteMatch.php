@@ -37,11 +37,12 @@ if (Session::isAuthenticated()) {
 		if (isset($_GET['id']) &&
 			is_numeric($_GET['id'])) {
 			$match = MatchHandler::getMatch($_GET['id']);
-			if($match != null) {
-			        MatchHandler::deleteMatch($match);
+
+			if ($match != null) {
+			  MatchHandler::deleteMatch($match);
 				$result = true;
 			} else {
-			       $message = Localization::getLocale('this_match_does_not_exist');
+			  $message = Localization::getLocale('this_match_does_not_exist');
 			}
 		} else {
 			$message = Localization::getLocale('you_have_not_filled_out_the_required_fields');
@@ -53,14 +54,13 @@ if (Session::isAuthenticated()) {
 	$message = Localization::getLocale('you_are_not_logged_in');
 }
 
-header('Content-Type: text/plain');
+header('Content-Type: application/json');
 
 if ($result) {
 	echo json_encode(array('result' => $result, 'data' => $matchArray), JSON_PRETTY_PRINT);
 } else {
 	echo json_encode(array('result' => $result, 'message' => $message), JSON_PRETTY_PRINT);
 }
-
 
 Database::cleanup();
 ?>

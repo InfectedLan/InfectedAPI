@@ -31,39 +31,44 @@ $result = false;
 $message = null;
 $data = null;
 
-if(Session::isAuthenticated()) {
-    if(isset($_GET["id"])) {
-        $compo = CompoHandler::getCompo($_GET["id"]);
-        if($compo != null) {
-            //Return some info on the compo, to be used when displaying the compo
-            $data = [];
-            //First up: Clan data
-            $clanData = [];
-            $clans = ClanHandler::getClansByCompo($compo);
-            foreach($clans as $clan) {
-                $clanData[] = ["name" => $clan->getName(),
-                               "tag" => $clan->getTag(),
-                               "id" => $clan->getId(),
-			       "qualified" => $clan->isQualified($compo)];
-            }
-            $data["clans"] = $clanData;
-	    $data["hasMatches"] = CompoHandler::hasGeneratedMatches($compo);
-            $result = true;
-        } else {
-            $message = Localization::getLocale("this_compo_does_not_exist");
-        }
+if (Session::isAuthenticated()) {
+  if (isset($_GET['id'])) {
+    $compo = CompoHandler::getCompo($_GET['id']);
+
+    if ($compo != null) {
+      //Return some info on the compo, to be used when displaying the compo
+      $data = [];
+      //First up: Clan data
+      $clanData = [];
+      $clans = ClanHandler::getClansByCompo($compo);
+
+      foreach($clans as $clan) {
+        $clanData[] = ['name' => $clan->getName(),
+                       'tag' => $clan->getTag(),
+                       'id' => $clan->getId(),
+                       'qualified' => $clan->isQualified($compo)];
+      }
+
+      $data['clans'] = $clanData;
+      $data['hasMatches'] = CompoHandler::hasGeneratedMatches($compo);
+      $result = true;
     } else {
-        $message = Localization::getLocale("you_have_not_filled_out_the_required_fields");
+      $message = Localization::getLocale('this_compo_does_not_exist');
     }
+  } else {
+    $message = Localization::getLocale('you_have_not_filled_out_the_required_fields');
+  }
 } else {
-    $message = Localization::getLocale('you_are_not_logged_in');
+  $message = Localization::getLocale('you_are_not_logged_in');
 }
 
-header('Content-Type: text/plain');
-if($result) {
-    echo json_encode(['result' => $result, 'data' => $data], JSON_PRETTY_PRINT);
+header('Content-Type: application/json');
+
+if ($result) {
+  echo json_encode(['result' => $result, 'data' => $data], JSON_PRETTY_PRINT);
 } else {
-    echo json_encode(['result' => $result, 'message' => $message], JSON_PRETTY_PRINT);
+  echo json_encode(['result' => $result, 'message' => $message], JSON_PRETTY_PRINT);
 }
+
 Database::cleanup();
 ?>

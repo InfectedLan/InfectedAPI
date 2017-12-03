@@ -81,7 +81,6 @@ if (Session::isAuthenticated()) {
 			}
 		} else {
 			$message = Localization::getLocale('the_ticket_sale_is_not_open_yet');
-
 		}
 	} else {
 		$message = Localization::getLocale('you_do_not_have_permission_to_do_that');
@@ -90,12 +89,13 @@ if (Session::isAuthenticated()) {
 	$message = Localization::getLocale('you_are_not_logged_in');
 }
 
-header('Content-Type: text/plain');
+header('Content-Type: application/json');
 
 if ($result) {
 	echo json_encode(array('result' => $result, 'url' => $url), JSON_PRETTY_PRINT);
 } else {
 	echo json_encode(['result' => $result, 'message' => $message], JSON_PRETTY_PRINT);
 }
+
 Database::cleanup();
 ?>

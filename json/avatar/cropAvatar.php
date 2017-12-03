@@ -111,9 +111,6 @@ if (Session::isAuthenticated()) {
 	$message = Localization::getLocale('you_are_not_logged_in');
 }
 
-header('Content-Type: text/plain');
-echo json_encode(['result' => $result, 'message' => $message], JSON_PRETTY_PRINT);
-
 function str_replace_last($search, $replace, $str) {
 	if (($pos = strrpos($str, $search)) !== false) {
 		$search_length = strlen( $search );
@@ -122,5 +119,8 @@ function str_replace_last($search, $replace, $str) {
 
 	return $str;
 }
+
+header('Content-Type: application/json');
+echo json_encode(['result' => $result, 'message' => $message], JSON_PRETTY_PRINT);
 Database::cleanup();
 ?>
