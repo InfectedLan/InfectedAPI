@@ -55,6 +55,9 @@ class Settings {
 	const db_table_infected_emergencycontacts = 'emergencycontacts';
 	const db_table_infected_events = 'events';
 	const db_table_infected_locations = 'locations';
+	const db_table_infected_networkaccess = 'networkaccess';
+	const db_table_infected_networks = 'networks';
+	const db_table_infected_networktypes = 'networktypes';
 	const db_table_infected_passwordresetcodes = 'passwordresetcodes';
 	const db_table_infected_permissions = 'permissions';
 	const db_table_infected_postalcodes = 'postalcodes';

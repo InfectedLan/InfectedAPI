@@ -35,6 +35,7 @@ require_once 'handlers/teamhandler.php';
 require_once 'handlers/userhistoryhandler.php';
 require_once 'handlers/usernotehandler.php';
 require_once 'handlers/friendhandler.php';
+require_once 'handlers/networkhandler.php';
 require_once 'objects/databaseobject.php';
 
 class User extends DatabaseObject {
@@ -544,6 +545,20 @@ class User extends DatabaseObject {
 	 */
 	public function setNote(string $content) {
 		UserNoteHandler::setUserNote($this, $content);
+	}
+
+	/*
+	 * Return true if this user have network acces to the given port type.
+	 */
+	public function hasNetworkAccess(NetworkType $networkType): bool {
+		return NetworkHandler::hasNetworkAccess($this, $networkType);
+	}
+
+	/*
+	 * Get network for this user.
+	 */
+	public function getNetwork(NetworkType $networkType): Network {
+		return NetworkHandler::getNetworkByUser($this, $networkType);
 	}
 
 	/*

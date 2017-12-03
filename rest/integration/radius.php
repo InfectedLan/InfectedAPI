@@ -21,6 +21,7 @@
 require_once 'database.php';
 require_once 'secret.php';
 require_once 'handlers/eventhandler.php';
+require_once 'handlers/networkhandler.php';
 require_once 'handlers/sysloghandler.php';
 require_once 'handlers/userhandler.php';
 
@@ -78,43 +79,37 @@ if (isset($_GET['key']) &&
 						preg_match('/^((\.|^)(25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[1-9][0-9]?|0$)){4}$/', $_GET['ip-address']) &&
 						!empty($_GET['device']) &&
 						preg_match('/^[0-9a-fA-F]{1,2}([\.:-])[0-9a-fA-F]{1,2}(?:\1[0-9a-fA-F]{1,2}){4}$/', $_GET['mac-address'])) {
-						$portType = $_GET['port-type'];
+						$networkType = NetworkHandler::getNetworkTypeByPortType($_GET['port-type']);
 						$ipAddress = $_GET['ip-address'];
 						$device = $_GET['device'];
 						$macAddress = $_GET['mac-address'];
 
-						// Default VLAN for authorized users.
-						$vlan = 16;
-
-						switch ($portType) {
+						if ($networkType != null) {
 							// Method: Ethernet ("NAS-Port-Type = Ethernet")
-							case "Ethernet":
 							// Method: Wireless ("NAS-Port-Type = Wireless-802.11")
-							case "Wireless-802.11":
-								// If user is a group member, allow them to authenticate.
-								if ($user->isGroupMember()) {
-									$group = $user->getGroup();
 
-									// If the user is a member of the technical group, put them in a privileged network.
-									if ($group->getId() == 53) { // TODO: Make this more dynamic from event to event.
-										$vlan = 24;
-									} else {
-										$vlan = 16;
-									}
-								}
-								break;
+							// Does the user have network access on the given port type.
+							if ($user->hasNetworkAccess($networkType)) {
+								$network = $user->getNetwork($networkType);
+
+								// Add vlan specific parameters to the reply.
+								$reply = ['Tunnel-Type' => 'VLAN',
+													'Tunnel-Medium-Type' => 'IEEE-802',
+													'Tunnel-Private-Group-Id' => $network->getVlanId()];
+								$message = 'User \'' . $user->getUsername() .  '\' succesfully post-authenticated, with port-type \'' . $networkType->getTitle() . '\' and vlan id \'' . $network->getVlanId() . '\'.';
+
+								// We log this to syslog.
+								SyslogHandler::log('User succesfully post-authenticated', 'radius', $user, SyslogHandler::SEVERITY_INFO, ['Port-Type' => $networkType->getPortType(),
+																																																													'IP-Address' => $ipAddress,
+																																																													'Device' => $device,
+																																																													'MAC-Address' => $macAddress,
+																																																													'VLAN' => $network->getVlanId()]);
+							} else {
+								$message = 'User don\'t have access to this network.';
+							}
+						} else {
+							$message = 'Invalid port-type for post-authentication.';
 						}
-
-						$reply = ['Tunnel-Type' => 'VLAN',
-											'Tunnel-Medium-Type' => 'IEEE-802',
-											'Tunnel-Private-Group-Id' => $vlan];
-						$message = 'User \'' . $user->getUsername() .  '\' succesfully post-authenticated, and was placed on network \'VLAN' . $vlan . '\'.';
-
-						SyslogHandler::log('User succesfully post-authenticated', 'radius', $user, SyslogHandler::SEVERITY_INFO, ['Port-Type' => $portType,
-																																																											'IP-Address' => $ipAddress,
-																																																											'Device' => $device,
-																																																											'MAC-Address' => $macAddress,
-																																																											'VLAN' => $vlan]);
 					} else {
 						$message = 'Invalid input data for post-authentication.';
 					}
@@ -155,7 +150,7 @@ $reply['reply:Reply-Message'] = $message;
 function isAllowedToAuthenticate(User $user) {
 	$event = EventHandler::getCurrentEvent();
 
-	return $user->isGroupMember() || ($event->isOngoing() && $user->hasTicket());
+	return $user->isGroupMember() || ($event->isOngoing() && $user->hasTicket()); // TODO: Move this to handler.
 }
 
 header('Content-Type: application/json');
