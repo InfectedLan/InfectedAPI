@@ -26,7 +26,7 @@ require_once 'handlers/networkhandler.php';
 /*
 * Responsible for testing NetworkHandler, the Network and NetworkType object.
 */
-class UserTest extends TestCase {
+class NetworkTest extends TestCase {
 	public function test() {
     // Create a new network, and check if it was created succesfully.
     $network = NetworkHandler::createNetwork("network_test", 'Network Test', 'This is a network test.', 1);
