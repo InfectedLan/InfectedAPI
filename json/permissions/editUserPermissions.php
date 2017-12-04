@@ -24,6 +24,7 @@ require_once 'localization.php';
 require_once 'handlers/userhandler.php';
 require_once 'handlers/permissionhandler.php';
 require_once 'handlers/userpermissionhandler.php';
+require_once 'handlers/sysloghandler.php';
 
 $result = false;
 $message = null;
@@ -37,6 +38,8 @@ if (Session::isAuthenticated()) {
 			$permissionUser = UserHandler::getUser($_GET['id']);
 
 			if ($permissionUser != null) {
+				//Get list of permissions before change
+				$prePermissions = $permissionUser->getPermissions();
 				foreach (PermissionHandler::getPermissions() as $permission) {
 					// Only allow changes by admin or user with the "admin.permissions" to give permissions that he is assigned to other users.
 					if ($user->hasPermission($permission->getValue())) {
@@ -47,6 +50,40 @@ if (Session::isAuthenticated()) {
 						}
 					}
 				}
+				//Permissions after change
+				//Everything below here is for logging
+				$postPermissions = $permissionUser->getPermissions();
+
+				//Calculate added permissions
+				$addedList = [];
+				foreach($postPermissions as $perm) {
+					$exists = false;
+					foreach($prePermissions as $permPre) {
+						if($perm==$permPre) {
+							$exists = true;
+						}
+					}
+					if(!$exists) {
+						$addedList[] = $perm->getValue();
+					}
+				}
+
+				//Calculate removed permissions
+				$removedList = [];
+				foreach($prePermissions as $perm) {
+					$exists = false;
+					foreach($postPermissions as $permPost) {
+						if($perm==$permPost) {
+							$exists = true;
+						}
+					}
+					if(!$exists) {
+						$removedList[] = $perm->getValue();
+					}
+				}
+
+				//Log it!
+				SyslogHandler::log("Permissions for user " . $permissionUser->getId() . " were changed", "editUserPermissions", $user, SyslogHandler::SEVERITY_INFO, ["affected_user" => $permissionUser->getId(), "added" => $addedList, "removed" => $removedList]); 
 
 				$result = true;
 			} else {

@@ -21,6 +21,7 @@
 require_once 'session.php';
 require_once 'database.php';
 require_once 'handlers/userhandler.php';
+require_once 'handlers/sysloghandler.php';
 
 $result = false;
 $message = null;
@@ -35,7 +36,7 @@ if (Session::isAuthenticated()) {
 
 			if ($changeUser != null) {
 				$_SESSION['userId'] = $changeUser->getId();
-
+				SyslogHandler::log("Switched user", "switchUser", $user, SyslogHandler::SEVERITY_INFO, ["target_user" => $changeUser->getId()]); 
 				$result = true;
 			} else {
 				$message = Localization::getLocale('the_user_you_tried_to_switch_to_does_not_exist');
