@@ -207,20 +207,6 @@ class User extends DatabaseObject {
 	}
 
 	/*
-	 * Returns true the user is set for swimming.
-	 */
-	public function isSwimming(): bool {
-		return UserOptionHandler::isUserSwimming($this);
-	}
-
-	/*
-	 * Set whether user is swimming or not.
-	 */
-	public function setSwimming(bool $swimming) {
-		UserOptionHandler::setUserSwimming($this, $swimming);
-	}
-
-	/*
 	 * Returns true if user has easter egg.
 	 */
 	public function hasEasterEgg(): bool {

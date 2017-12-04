@@ -62,36 +62,6 @@ class UserOptionHandler {
 	}
 
 	/*
-	 * Returns true is the user is set to go on swimming.
-	 */
-	public static function isUserSwimming(User $user): bool {
-		$database = Database::getConnection(Settings::db_name_infected);
-
-		$result = $database->query('SELECT * FROM `' . Settings::db_table_infected_useroptions . '`
-																WHERE `userId` = \'' . $user->getId() . '\'
-																AND `swimming` = \'1\';');
-
-		return $result->num_rows > 0;
-	}
-
-	/*
-	 * Set a users note.
-	 */
-	public static function setUserSwimming(User $user, bool $swimming) {
-		$database = Database::getConnection(Settings::db_name_infected);
-
-		if (!self::hasUserOption($user)) {
-			$database->query('INSERT INTO `' . Settings::db_table_infected_useroptions . '` (`userId`, `swimming`)
-												VALUES (\'' . $user->getId() . '\',
-																\'' . $database->real_escape_string($swimming) . '\');');
-		} else {
-			$database->query('UPDATE `' . Settings::db_table_infected_useroptions . '`
-												SET `swimming` = \'' . $database->real_escape_string($swimming) . '\'
-												WHERE `userId` = \'' . $user->getId() . '\';');
-		}
-	}
-
-	/*
 	 * Returns true if the user has the prank option set.
 	 */
 	public static function hasUserEasterEgg(User $user): bool {
