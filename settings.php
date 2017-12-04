@@ -49,7 +49,7 @@ class Settings {
 	const db_name_infected_crew = 'test_infected_no_crew';
 	const db_name_infected_info = 'test_infected_no_info';
 	const db_name_infected_main = 'test_infected_no_main';
-	const db_name_infected_tickets = 'test_infected_no_tech';
+	const db_name_infected_tech = 'test_infected_no_tech';
 	const db_name_infected_tickets = 'test_infected_no_tickets';
 
 	// Infected
