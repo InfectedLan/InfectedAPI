@@ -52,10 +52,6 @@ class UserTest extends TestCase {
   	$networkTypes = NetworkHandler::getNetworkTypes();
     $this->assertGreaterThan(0, count($networkTypes));
 
-    public static function createNetworkType(string $name, string $title, string $portType): NetworkType {
-    public static function updateNetworkType(NetworkType $networkType, string $name, string $title, string $portType): NetworkType {
-    public static function removeNetworkType(NetworkType $networkType) {
-
     // Create a new network type, and check if it was created succesfully.
     $networkType = NetworkHandler::createNetworkType('network_type_test', 'Network Type Test', 'Wireless-802.11');
     $this->assertEquals('network_type_test', $networkType->getName());
