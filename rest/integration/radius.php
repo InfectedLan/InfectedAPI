@@ -41,7 +41,7 @@ if (isset($_GET['key']) &&
 
 		if (UserHandler::hasUser($identifier)) {
 			$user = UserHandler::getUserByIdentifier($identifier);
-			
+
 			switch ($action) {
 				case 'authorize':
 					if (isset($_GET['password']) &&
@@ -70,17 +70,17 @@ if (isset($_GET['key']) &&
 
 		    case 'post-auth':
 					if (isset($_GET['port-type']) &&
-						isset($_GET['ip-address']) &&
-						isset($_GET['device']) &&
-						isset($_GET['mac-address']) &&
+						isset($_GET['device-ip-address']) &&
+						isset($_GET['device-mac-address-ssid']) &&
+						isset($_GET['client-mac-address']) &&
 						!empty($_GET['port-type']) &&
-						preg_match('/^((\.|^)(25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[1-9][0-9]?|0$)){4}$/', $_GET['ip-address']) &&
-						!empty($_GET['device']) &&
-						preg_match('/^[0-9a-fA-F]{1,2}([\.:-])[0-9a-fA-F]{1,2}(?:\1[0-9a-fA-F]{1,2}){4}$/', $_GET['mac-address'])) {
+						preg_match('/^((\.|^)(25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[1-9][0-9]?|0$)){4}$/', $_GET['device-ip-address']) &&
+						!empty($_GET['device-mac-address-ssid']) &&
+						preg_match('/^[0-9a-fA-F]{1,2}([\.:-])[0-9a-fA-F]{1,2}(?:\1[0-9a-fA-F]{1,2}){4}$/', $_GET['client-mac-address'])) {
 						$networkType = NetworkHandler::getNetworkTypeByPortType($_GET['port-type']);
-						$ipAddress = $_GET['ip-address'];
-						$device = $_GET['device'];
-						$macAddress = $_GET['mac-address'];
+						$deviceIpAddress = $_GET['device-ip-address'];
+						$deviceMacAddressSsid = $_GET['device-mac-address-ssid'];
+						$clientMacAddress = $_GET['client-mac-address'];
 
 						if ($networkType != null) {
 							// Method: Ethernet ("NAS-Port-Type = Ethernet")
@@ -98,10 +98,10 @@ if (isset($_GET['key']) &&
 
 								// We log this to syslog.
 								SyslogHandler::log('User succesfully post-authenticated', 'radius', $user, SyslogHandler::SEVERITY_INFO, ['Port-Type' => $networkType->getPortType(),
-																																																													'IP-Address' => $ipAddress,
-																																																													'Device' => $device,
-																																																													'MAC-Address' => $macAddress,
-																																																													'VLAN' => $network->getVlanId()]);
+																																																													'Device-IP-Address' => $deviceIpAddress,
+																																																													'Device-MAC-Address' => $deviceMacAddressSsid,
+																																																													'VLAN' => $network->getVlanId(),
+																																																													'Client-MAC-Address' => $clientMacAddress]);
 							} else {
 								$message = 'User don\'t have access to this network.';
 							}
@@ -115,18 +115,17 @@ if (isset($_GET['key']) &&
 
 				case 'accounting':
 					if (isset($_GET['port-type']) &&
-						isset($_GET['ip-address']) &&
-						isset($_GET['device']) &&
-						isset($_GET['mac-address']) &&
+						isset($_GET['device-ip-address']) &&
+						isset($_GET['device-mac-address-ssid']) &&
+						isset($_GET['client-mac-address']) &&
 						!empty($_GET['port-type']) &&
-						preg_match('/^((\.|^)(25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[1-9][0-9]?|0$)){4}$/', $_GET['ip-address']) &&
-						!empty($_GET['device']) &&
-						preg_match('/^[0-9a-fA-F]{1,2}([\.:-])[0-9a-fA-F]{1,2}(?:\1[0-9a-fA-F]{1,2}){4}$/', $_GET['mac-address'])) {
-						$portType = $_GET['port-type'];
-						$ipAddress = $_GET['ip-address'];
-						$device = $_GET['device'];
-						$macAddress = $_GET['mac-address'];
-
+						preg_match('/^((\.|^)(25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[1-9][0-9]?|0$)){4}$/', $_GET['device-ip-address']) &&
+						!empty($_GET['device-mac-address-ssid']) &&
+						preg_match('/^[0-9a-fA-F]{1,2}([\.:-])[0-9a-fA-F]{1,2}(?:\1[0-9a-fA-F]{1,2}){4}$/', $_GET['client-mac-address'])) {
+						$networkType = NetworkHandler::getNetworkTypeByPortType($_GET['port-type']);
+						$deviceIpAddress = $_GET['device-ip-address'];
+						$deviceMacAddressSsid = $_GET['device-mac-address-ssid'];
+						$clientMacAddress = $_GET['client-mac-address'];
 						// TODO: Implement backend for this.
 					} else {
 						$message = 'Invalid input data for accounting.';
@@ -143,7 +142,9 @@ if (isset($_GET['key']) &&
 	$message = 'Invalid API key.';
 }
 
-$reply['reply:Reply-Message'] = $message;
+if ($message != null) {
+	$reply['reply:Reply-Message'] = $message;
+}
 
 function isAllowedToAuthenticate(User $user) {
 	$event = EventHandler::getCurrentEvent();

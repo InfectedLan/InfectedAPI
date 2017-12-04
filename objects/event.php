@@ -133,6 +133,9 @@ class Event extends DatabaseObject {
 		return time() >= $startTime && time() <= $endTime;
 	}
 
+	/*
+	 * Returns this events season.
+	 */
 	public function getSeason(): string {
 		return Localization::getLocale(date('m', $this->getStartTime()) == 2 ? 'winter' : 'autumn');
 	}
