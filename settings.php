@@ -40,7 +40,7 @@ class Settings {
 	const avatar_path = '../api/content/avatars/';
 
 	/* PHP */
-	const php_version = '7.0.0';
+	const php_version = '7.2.0';
 
 	/* Database */
 	const db_host = 'localhost';
@@ -49,15 +49,13 @@ class Settings {
 	const db_name_infected_crew = 'test_infected_no_crew';
 	const db_name_infected_info = 'test_infected_no_info';
 	const db_name_infected_main = 'test_infected_no_main';
+	const db_name_infected_tickets = 'test_infected_no_tech';
 	const db_name_infected_tickets = 'test_infected_no_tickets';
 
 	// Infected
 	const db_table_infected_emergencycontacts = 'emergencycontacts';
 	const db_table_infected_events = 'events';
 	const db_table_infected_locations = 'locations';
-	const db_table_infected_networkaccess = 'networkaccess';
-	const db_table_infected_networks = 'networks';
-	const db_table_infected_networktypes = 'networktypes';
 	const db_table_infected_passwordresetcodes = 'passwordresetcodes';
 	const db_table_infected_permissions = 'permissions';
 	const db_table_infected_postalcodes = 'postalcodes';
@@ -111,6 +109,11 @@ class Settings {
 	const db_table_infected_main_games = 'games';
 	const db_table_infected_main_pages = 'pages';
 	const db_table_infected_main_sectionpages = 'sectionpages';
+
+	// InfectedTech
+	const db_table_infected_tech_networkaccess = 'networkaccess';
+	const db_table_infected_tech_networks = 'networks';
+	const db_table_infected_tech_networktypes = 'networktypes';
 
 	// InfectedTickets
 	const db_table_infected_tickets_checkedintickets = 'checkedintickets';
