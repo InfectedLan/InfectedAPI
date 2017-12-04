@@ -1,6 +1,7 @@
 {
    "you_are_not_logged_in":"You are not logged in.",
    "you_do_not_have_permission_to_do_that":"You do not have permissions to do that.",
+   "you_do_not_have_permission_to_delegate_that_permission": "You don't have permission to delegate that permission!",
    "you_have_not_filled_out_the_required_fields":"You have not filled out the required fields.",
    "you_are_already_in_a_group":"You are already in a group.",
    "not_found":"Not found.",

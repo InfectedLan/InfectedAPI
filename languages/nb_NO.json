@@ -1,6 +1,7 @@
 {
    "you_are_not_logged_in":"Du er ikke logget inn.",
    "you_do_not_have_permission_to_do_that":"Du har ikke rettigheter til dette.",
+   "you_do_not_have_permission_to_delegate_that_permission": "Du har ikke rettigheter til å delegere den rettigheten!",
    "you_have_not_filled_out_the_required_fields":"Du har ikke fylt ut de nødvendige feltene.",
    "you_are_already_in_a_group":"Du er allerede i et crew.",
    "not_found":"Ikke funnet.",
