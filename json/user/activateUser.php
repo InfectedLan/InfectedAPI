@@ -37,7 +37,6 @@ if (Session::isAuthenticated()) {
 			if ($activateUser != null) {
 				if (!$activateUser->isActivated()) {
 					RegistrationCodeHandler::removeRegistrationCodeByUser($activateUser);
-
 					$result = true;
 				} else {
 					$message = Localization::getLocale('the_user_has_already_been_activated');

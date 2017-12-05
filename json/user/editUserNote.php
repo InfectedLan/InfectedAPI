@@ -37,7 +37,6 @@ if (Session::isAuthenticated()) {
 
 			if ($editUser != null) {
 				$editUser->setNote($content);
-
 				$result = true;
 			} else {
 				$message = Localization::getLocale('this_user_does_not_exist');
