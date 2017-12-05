@@ -44,6 +44,7 @@ if (Session::isAuthenticated()) {
 				$skippedTickets = 0; //Tickets without a payment can't have their date traced
 				$bookingTime = $event->getBookingTime(); //Start counting from the beginning
 				$dayStep = 60 * 60 * 24; //One day at a time
+				$totalTickets = 0;
 
 				foreach ($tickets as $ticket) {
 					$payment = $ticket->getPayment();
