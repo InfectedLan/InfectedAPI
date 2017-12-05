@@ -33,6 +33,7 @@ class Group extends DatabaseObject {
 	private $title;
 	private $description;
 	private $leaderId;
+	private $active;
 	private $queuing;
 
 	/*
@@ -57,6 +58,20 @@ class Group extends DatabaseObject {
 	}
 
 	/*
+	 * Return true if this group is currently active.
+	 */
+	public function isActive(): bool {
+		return $this->active ? true : false;
+	}
+
+	/*
+	 * Return true if new applications for this group automatically should be queued.
+	 */
+	public function isQueuing(): bool {
+		return $this->queuing ? true : false;
+	}
+
+	/*
 	 * Returns if this group has a leader.
 	 */
 	public function hasLeader(Event $event = null): bool {
@@ -68,13 +83,6 @@ class Group extends DatabaseObject {
 	 */
 	public function getLeader(Event $event = null): User {
 		return GroupHandler::getGroupLeader($this, $event);
-	}
-
-	/*
-	 * Return true if new applications for this group automatically should be queued.
-	 */
-	public function isQueuing(): bool {
-		return $this->queuing ? true : false;
 	}
 
 	/*

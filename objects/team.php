@@ -29,6 +29,7 @@ class Team extends DatabaseObject {
 	private $name;
 	private $title;
 	private $description;
+	private $active;
 
 	/*
 	 * Returns the group for this team.
@@ -56,6 +57,13 @@ class Team extends DatabaseObject {
 	 */
 	public function getDescription(): string {
 		return $this->description;
+	}
+
+	/*
+	 * Return true if this team is currently active.
+	 */
+	public function isActive(): bool {
+		return $this->active ? true : false;
 	}
 
 	/*

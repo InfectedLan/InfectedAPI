@@ -473,7 +473,7 @@ class User extends DatabaseObject {
 	}
 
 	public function getParticipatedEvents(): array {
-		return UserHistoryHandler::getUserParticipatedEvents($this);
+		return UserHistoryHandler::getParticipatedEvents($this);
 	}
 
 	public function hasSpecialRole(Event $event = null): bool {

@@ -192,12 +192,20 @@ class TeamHandler {
 	public static function isTeamMember(User $user, Event $event = null): bool {
 		$database = Database::getConnection(Settings::db_name_infected_crew);
 
-		$result = $database->query('SELECT `' . Settings::db_table_infected_crew_memberof . '`.* FROM `' . Settings::db_table_infected_crew_memberof . '`
-																INNER JOIN `' . Settings::db_table_infected_crew_teams . '`
-																ON `teamId` = `' . Settings::db_table_infected_crew_teams . '`.`id`
-																WHERE `eventId` = \'' . ($event != null ? $event->getId() : EventHandler::getCurrentEvent()->getId()) . '\'
-																AND `userId` = \'' . $user->getId() . '\'
-																AND `active` != \'0\';');
+		if ($event != null && $event != EventHandler::getCurrentEvent()) {
+			$result = $database->query('SELECT * FROM `' . Settings::db_table_infected_crew_memberof . '`
+																	INNER JOIN `' . Settings::db_table_infected_crew_teams . '`
+																	ON `teamId` = `' . Settings::db_table_infected_crew_teams . '`.`id`
+																	WHERE `eventId` = \'' . ($event != null ? $event->getId() : EventHandler::getCurrentEvent()->getId()) . '\'
+																	AND `userId` = \'' . $user->getId() . '\'
+																	AND `active` = \'1\';');
+		} else {
+			$result = $database->query('SELECT * FROM `' . Settings::db_table_infected_crew_memberof . '`
+																	INNER JOIN `' . Settings::db_table_infected_crew_teams . '`
+																	ON `teamId` = `' . Settings::db_table_infected_crew_teams . '`.`id`
+																	WHERE `eventId` = \'' . ($event != null ? $event->getId() : EventHandler::getCurrentEvent()->getId()) . '\'
+																	AND `userId` = \'' . $user->getId() . '\';');
+		}
 
 		return $result->num_rows > 0;
 	}
@@ -208,7 +216,7 @@ class TeamHandler {
 	public static function isTeamMemberOf(User $user, Team $team, Event $event = null): bool {
 		$database = Database::getConnection(Settings::db_name_infected_crew);
 
-		$result = $database->query('SELECT `' . Settings::db_table_infected_crew_memberof . '`.* FROM `' . Settings::db_table_infected_crew_memberof . '`
+		$result = $database->query('SELECT * FROM `' . Settings::db_table_infected_crew_memberof . '`
 																WHERE `eventId` = \'' . ($event != null ? $event->getId() : EventHandler::getCurrentEvent()->getId()) . '\'
 																AND `userId` = \'' . $user->getId() . '\'
 																AND `teamId` = \'' . $team->getId() . '\';');
