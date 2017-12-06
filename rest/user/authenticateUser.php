@@ -25,6 +25,7 @@ require_once 'handlers/userhandler.php';
 require_once 'handlers/sysloghandler.php';
 
 $result = false;
+$status = http_response_code();
 $message = null;
 
 if (!Session::isAuthenticated()) {
@@ -52,15 +53,18 @@ if (!Session::isAuthenticated()) {
 				$message = Localization::getLocale('you_must_activate_your_user_account_in_order_to_logg_in');
 			}
 		} else {
+            $status = 404; // Not found.
 			$message = Localization::getLocale('this_user_does_not_exist');
 		}
 	} else {
+        $status = 400; // Bad Request.
 		$message = Localization::getLocale('you_must_enter_a_username_and_password');
 	}
 } else {
 	$message = Localization::getLocale('you_are_already_logged_in');
 }
 
+http_response_code($status);
 header('Content-Type: application/json');
 echo json_encode(['result' => $result, 'message' => $message], JSON_PRETTY_PRINT);
 Database::cleanup();

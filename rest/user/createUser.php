@@ -26,6 +26,7 @@ require_once 'handlers/sysloghandler.php';
 require_once 'handlers/userhandler.php';
 
 $result = false;
+$status = http_response_code();
 $message = null;
 
 if (isset($_POST['firstname']) &&
@@ -126,32 +127,33 @@ if (isset($_POST['firstname']) &&
             }
 
             $user->sendRegistrationEmail();
-            $message = Localization::getLocale('your_account_is_now_successfully_registered_you_will_now_receive_an_activation_link_per_email_remember_to_check_spam_folder_if_you_should_not_find_it');
             $result = true;
+            $status = 201; // Created.
+            $message = Localization::getLocale('your_account_is_now_successfully_registered_you_will_now_receive_an_activation_link_per_email_remember_to_check_spam_folder_if_you_should_not_find_it');
 
             SyslogHandler::log('User was successfully created.', 'createUser', $user, SyslogHandler::SEVERITY_INFO, ["user_agent" => $_SERVER['HTTP_USER_AGENT']]);
+        } else {
+            // We are NOT getting raw post data because it would make the password visible in the log.
+            SyslogHandler::log('Failed to create user.', 'createUser', null, SyslogHandler::SEVERITY_INFO, ['message' => $message,
+                'passLength' => strlen($_POST['password']),
+                'user_agent' => $_SERVER['HTTP_USER_AGENT'],
+                'registration_data' => ['username' => $username,
+                                        'email' => $email,
+                                        'phone' => $phone,
+                                        'firstname' => $firstname,
+                                        'lastname' => $lastname,
+                                        'gender' => $gender,
+                                        'address' => $address,
+                                        'postal_code' => $postalcode,
+                                        'nickname' => $nickname]]);
         }
 	}
-
-	if ($result != true) {
-	    // We are NOT getting raw post data because it would make the password visible in the log.
-	    SyslogHandler::log('Failed to create user.', 'createUser', null, SyslogHandler::SEVERITY_INFO, ['message' => $message,
-																															    'passLength' => strlen($_POST['password']),
-																															    'user_agent' => $_SERVER['HTTP_USER_AGENT'],
-																															    'registration_data' => ['username' => $username,
-																																					    'email' => $email,
-																																					    'phone' => $phone,
-																																					    'firstname' => $firstname,
-																																					    'lastname' => $lastname,
-																																					    'gender' => $gender,
-																																					    'address' => $address,
-																																					    'postal_code' => $postalcode,
-																																					    'nickname' => $nickname]]);
-	}
 } else {
+    $status = 400; // Bad Request.
 	$message = Localization::getLocale('you_have_not_filled_out_the_required_fields');
 }
 
+http_response_code($status);
 header('Content-Type: application/json');
 echo json_encode(['result' => $result, 'message' => $message], JSON_PRETTY_PRINT);
 Database::cleanup();
