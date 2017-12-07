@@ -30,20 +30,16 @@ $status = http_response_code();
 $message = null;
 
 // Checking for valid API key.
-if (isset($_GET['key']) &&
-	!empty($_GET['key']) &&
+if (!empty($_GET['key']) &&
 	Secret::api_key == $_GET['key']) {
 
-    if (isset($_GET['identifier']) &&
-		!empty($_GET['identifier'])) {
+    if (!empty($_GET['identifier'])) {
 		$identifier = $_GET['identifier'];
 
 		if (UserHandler::hasUser($identifier)) {
 			$user = UserHandler::getUserByIdentifier($identifier);
 
-            if (isset($_GET['password']) &&
-                !empty($_GET['password'])) {
-
+            if (!empty($_GET['password'])) {
                 if ($user->isActivated()) {
                     $hashedPassword = hash('sha256', $_GET['password']);
 

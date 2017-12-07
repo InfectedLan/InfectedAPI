@@ -29,18 +29,7 @@ $result = false;
 $status = http_response_code();
 $message = null;
 
-if (isset($_POST['firstname']) &&
-	isset($_POST['lastname']) &&
-	isset($_POST['username']) &&
-    isset($_POST['email']) &&
-	isset($_POST['password']) &&
-	isset($_POST['confirm-password']) &&
-	isset($_POST['gender']) &&
-	isset($_POST['birthdate']) &&
-	isset($_POST['phone']) &&
-	isset($_POST['address']) &&
-	isset($_POST['postal-code']) &&
-	!empty($_POST['firstname']) &&
+if (!empty($_POST['firstname']) &&
 	!empty($_POST['lastname']) &&
 	!empty($_POST['username']) &&
     !empty($_POST['email']) &&

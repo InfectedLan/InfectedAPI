@@ -29,22 +29,16 @@ $status = http_response_code();
 $message = null;
 
 // Checking for valid API key.
-if (isset($_GET['key']) &&
-	!empty($_GET['key']) &&
+if (!empty($_GET['key']) &&
 	Secret::api_key == $_GET['key']) {
 
-	if (isset($_GET['identifier']) &&
-		!empty($_GET['identifier'])) {
+	if (!empty($_GET['identifier'])) {
 		$identifier = $_GET['identifier'];
 
 		if (UserHandler::hasUser($identifier)) {
 			$user = UserHandler::getUserByIdentifier($identifier);
 
-            if (isset($_GET['port-type']) &&
-                isset($_GET['device-ip-address']) &&
-                isset($_GET['device-mac-address-ssid']) &&
-                isset($_GET['client-mac-address']) &&
-                !empty($_GET['port-type']) &&
+            if (!empty($_GET['port-type']) &&
                 preg_match('/^((\.|^)(25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[1-9][0-9]?|0$)){4}$/', $_GET['device-ip-address']) &&
                 !empty($_GET['device-mac-address-ssid']) &&
                 preg_match('/^[0-9a-fA-F]{1,2}([\.:-])[0-9a-fA-F]{1,2}(?:\1[0-9a-fA-F]{1,2}){4}$/', $_GET['client-mac-address'])) {
