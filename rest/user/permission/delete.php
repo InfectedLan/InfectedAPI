@@ -21,8 +21,8 @@
 require_once 'session.php';
 require_once 'database.php';
 require_once 'localization.php';
-require_once 'handlers/eventhandler.php';
-require_once 'handlers/eventmigrationhandler.php';
+require_once 'handlers/userhandler.php';
+require_once 'handlers/userpermissionhandler.php';
 
 $result = false;
 $status = http_response_code();
@@ -31,18 +31,17 @@ $message = null;
 if (Session::isAuthenticated()) {
 	$user = Session::getCurrentUser();
 
-	if ($user->hasPermission('*')) {
+	if ($user->hasPermission('admin.permission')) {
 		if (is_numeric($_GET['id'])) {
-			$event = EventHandler::getCurrentEvent();
-			$fromEvent = EventHandler::getEvent($_GET['id']);
+			$permissionUser = UserHandler::getUser($_GET['id']);
 
-			if ($event != null && $fromEvent != null) {
-				EventMigrationHandler::copyMembers($fromEvent, $event);
+			if ($permissionUser != null) {
+				UserPermissionHandler::removeUserPermissions($permissionUser);
 				$result = true;
-				$message = Localization::getLocale('all_the_members_of_the_former_event_was_transferred_to_this_one');
+                $status = 202; // Accepted.
 			} else {
                 $status = 404; // Not found.
-				$message = Localization::getLocale('this_event_does_not_exist');
+				$message = Localization::getLocale('this_user_does_not_exist');
 			}
 		} else {
             $status = 400; // Bad Request.

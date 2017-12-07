@@ -68,7 +68,7 @@ class UserHandler {
 		$database = Database::getConnection(Settings::db_name_infected);
 
 		$result = $database->query('SELECT * FROM `' . Settings::db_table_infected_users . '`
-																ORDER BY `firstname`, `lastname`;');
+								   ORDER BY `firstname`, `lastname`;');
 
 		$userList = [];
 
@@ -85,11 +85,11 @@ class UserHandler {
 	public static function getPermissionUsers(Event $event = null): array {
 		$database = Database::getConnection(Settings::db_name_infected);
 
-		$result = $database->query('SELECT DISTINCT `' . Settings::db_table_infected_users . '`.* FROM `' . Settings::db_table_infected_users . '`
-																LEFT JOIN `' . Settings::db_table_infected_userpermissions . '` ON `' . Settings::db_table_infected_users . '`.`id` = `' . Settings::db_table_infected_userpermissions . '`.`userId`
-																WHERE `' . Settings::db_table_infected_userpermissions . '`.`id` IS NOT NULL
-																AND `' . Settings::db_table_infected_userpermissions . '`.`eventId` = \'' . ($event != null ? $event->getId() : EventHandler::getCurrentEvent()->getId()) . '\'
-																ORDER BY `' . Settings::db_table_infected_users . '`.`firstname`, `' . Settings::db_table_infected_users . '`.`lastname`;');
+        $result = $database->query('SELECT DISTINCT `' . Settings::db_table_infected_users . '`.* FROM `' . Settings::db_table_infected_users . '`
+                                   INNER JOIN `' . Settings::db_table_infected_userpermissions . '` ON `' . Settings::db_table_infected_users . '`.`id` = `userId`
+                                   WHERE (`eventId` = 0 OR `eventId` = ' . ($event != null ? $event->getId() : EventHandler::getCurrentEvent()->getId()) . ')
+                                   AND `' . Settings::db_table_infected_userpermissions . '`.`id` IS NOT NULL
+                                   ORDER BY `firstname`, `lastname`;');
 
 		$userList = [];
 
@@ -106,13 +106,13 @@ class UserHandler {
 	public static function getPermissionUsersByGroup(Group $group = null, Event $event = null): array {
 		$database = Database::getConnection(Settings::db_name_infected);
 
-		$result = $database->query('SELECT DISTINCT `' . Settings::db_table_infected_users . '`.* FROM `' . Settings::db_table_infected_users . '`
-																LEFT JOIN `' . Settings::db_table_infected_userpermissions . '` ON `' . Settings::db_table_infected_users . '`.`id` = `' . Settings::db_table_infected_userpermissions . '`.`userId`
-																LEFT JOIN `' . Settings::db_name_infected_crew . '`.`' . Settings::db_table_infected_crew_memberof . '` ON `users`.`id` = `' . Settings::db_table_infected_crew_memberof . '`.`userId`
-																WHERE `' . Settings::db_table_infected_userpermissions . '`.`id` IS NOT NULL
-																AND (`' . Settings::db_table_infected_userpermissions . '`.`eventId` = \'' . ($event != null ? $event->getId() : EventHandler::getCurrentEvent()->getId()) . '\' OR `' . Settings::db_table_infected_userpermissions . '`.`eventId` = \'0\')
-																AND `' . Settings::db_table_infected_crew_memberof . '`.`groupId` ' . ($group != null ? '= \'' . $group->getId() . '\'' : 'IS NULL') . '
-																ORDER BY `' . Settings::db_table_infected_users . '`.`firstname`, `' . Settings::db_table_infected_users . '`.`lastname`;');
+        $result = $database->query('SELECT DISTINCT `' . Settings::db_table_infected_users . '`.* FROM `' . Settings::db_table_infected_users . '`
+                                   INNER JOIN `' . Settings::db_table_infected_userpermissions . '` ON `' . Settings::db_table_infected_users . '`.`id` = `' . Settings::db_table_infected_userpermissions . '`.`userId`
+                                   LEFT JOIN `' . Settings::db_name_infected_crew . '`.`' . Settings::db_table_infected_crew_memberof . '` ON `' . Settings::db_table_infected_users . '`.`id` = `' . Settings::db_table_infected_crew_memberof . '`.`userId`
+                                   WHERE (`' . Settings::db_table_infected_userpermissions . '`.`eventId` = 0 OR `' . Settings::db_table_infected_userpermissions . '`.`eventId` = ' . ($event != null ? $event->getId() : EventHandler::getCurrentEvent()->getId()) . ')
+                                   AND `' . Settings::db_table_infected_userpermissions . '`.`id` IS NOT NULL
+                                   AND `' . Settings::db_table_infected_crew_memberof . '`.`groupId` ' . ($group != null ? '= \'' . $group->getId() . '\'' : 'IS NULL') . '
+                                   ORDER BY `firstname`, `lastname`;');
 
 		$userList = [];
 
