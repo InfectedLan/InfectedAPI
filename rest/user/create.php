@@ -88,7 +88,7 @@ if (isset($_POST['firstname']) &&
 	} else if (empty($email) || !preg_match('/^([a-zæøåA-ZÆØÅ0-9_\.-]+)@([\da-z\.-]+)\.([a-z\.]{2,6})$/', $email) || !filter_var($email, FILTER_VALIDATE_EMAIL)) {
 		$message = Localization::getLocale('the_email_address_is_not_valid');
 	} else if (!is_numeric($gender)) {
-			$message = Localization::getLocale('you_have_entered_an_invalid_gender');
+		$message = Localization::getLocale('you_have_entered_an_invalid_gender');
 	} else if (!is_numeric($phone) || strlen($phone) < 8 || strlen($phone) > 8) {
 		$message = Localization::getLocale('the_phone_number_is_not_valid');
 	} else if (empty($address) && strlen($address) > 32) {

@@ -134,16 +134,18 @@ class EventHandler {
 	/*
 	 * Create new event
 	 */
-	public static function createEvent(Location $location, int $participants, int $bookingTime, int $startTime, int $endTime): Event {
-		$name = Settings::name . ' ' . Localization::getLocale(date('m', strtotime($startTime)) == 2 ? 'winter' : 'autumn') . ' ' . date('Y', strtotime($startTime));
+	public static function createEvent(Location $location, int $participantCount, string $bookingTime, string $prioritySeatingTime, string $seatingTime, string $startTime, string $endTime): Event {
+	    $name = Settings::name . ' ' . Localization::getLocale(date('m', strtotime($startTime)) == 2 ? 'winter' : 'autumn') . ' ' . date('Y', strtotime($startTime));
 		$seatmap = SeatmapHandler::createSeatmap($name, null);
 
 		$database = Database::getConnection(Settings::db_name_infected);
 
-		$database->query('INSERT INTO `' . Settings::db_table_infected_events . '` (`locationId`, `participants`, `bookingTime`, `startTime`, `endTime`, `seatmapId`, `ticketTypeId`)
+		$database->query('INSERT INTO `' . Settings::db_table_infected_events . '` (`locationId`, `participants`, `bookingTime`, `prioritySeatingTime`, `seatingTime`, `startTime`, `endTime`, `seatmapId`, `ticketTypeId`)
 										  VALUES (\'' . $location->getId() . '\',
-														  \'' . $database->real_escape_string($participants) . '\',
+														  \'' . $database->real_escape_string($participantCount) . '\',
 														  \'' . $database->real_escape_string($bookingTime) . '\',
+														  \'' . $database->real_escape_string($prioritySeatingTime) . '\',
+														  \'' . $database->real_escape_string($seatingTime) . '\',
 														  \'' . $database->real_escape_string($startTime) . '\',
 														  \'' . $database->real_escape_string($endTime) . '\',
 														  \'' . $seatmap->getId() . '\',
@@ -155,18 +157,18 @@ class EventHandler {
 	/*
 	 * Update an event
 	 */
-	public static function updateEvent(Event $event, Location $location, int $participants, int $bookingTime, int $prioritySeatingTime, int $seatingTime, int $startTime, int $endTime) {
+	public static function updateEvent(Event $event, Location $location, int $participantCount, string $bookingTime, string $prioritySeatingTime, string $seatingTime, string $startTime, string $endTime) {
 	  $database = Database::getConnection(Settings::db_name_infected);
 
 		$database->query('UPDATE `' . Settings::db_table_infected_events . '`
-										  SET `locationId` = \'' . $location->getId() . '\',
-												  `participants` = \'' . $database->real_escape_string($participants) . '\',
-												  `bookingTime` = \'' . $database->real_escape_string($bookingTime) . '\',
-								  				  `prioritySeatingTime` = \'' . $database->real_escape_string($prioritySeatingTime) . '\',
-								  				  `seatingTime` = \'' . $database->real_escape_string($seatingTime) . '\',
-												  `startTime` = \'' . $database->real_escape_string($startTime) . '\',
-												  `endTime` = \'' . $database->real_escape_string($endTime) . '\'
-										  WHERE `id` = \'' . $event->getId() . '\';');
+                                SET `locationId` = \'' . $location->getId() . '\',
+                                    `participants` = \'' . $database->real_escape_string($participantCount) . '\',
+                                    `bookingTime` = \'' . $database->real_escape_string($bookingTime) . '\',
+                                    `prioritySeatingTime` = \'' . $database->real_escape_string($prioritySeatingTime) . '\',
+                                    `seatingTime` = \'' . $database->real_escape_string($seatingTime) . '\',
+                                    `startTime` = \'' . $database->real_escape_string($startTime) . '\',
+                                    `endTime` = \'' . $database->real_escape_string($endTime) . '\'
+                                WHERE `id` = \'' . $event->getId() . '\';');
 	}
 
 	/*
