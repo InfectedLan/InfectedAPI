@@ -48,8 +48,7 @@ class SyslogEntry extends DatabaseObject {
     return strtotime($this->date);
   }
 
-  public function getUser(): User {
+  public function getUser(): ?User {
     return UserHandler::getUser($this->userId);
   }
 }
-?>

@@ -19,11 +19,13 @@
  */
 
 interface IPage {
+    public function canAccess(User $user): bool;
+
 	public function hasParent(): bool;
 
 	public function getParent(): IPage;
 
 	public function getTitle(): ?string;
 
-	public function getContent(): ?string;
+	public function getContent(User $user = null): ?string;
 }
