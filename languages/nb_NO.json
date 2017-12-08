@@ -120,6 +120,7 @@
   "this_team_does_not_exist": "Dette laget finnes ikke.",
   "this_ticket_does_not_exist": "Denne billetten finnes ikke.",
   "this_ticket_is_already_checked_in": "Denne billetten er allerede sjekket inn.",
+  "this_user_already_has_this_permission": "Denne brukeren har allerede denne tilgangen.",
   "this_user_does_not_exist": "Denne brukeren finnes ikke.",
   "username": "Brukernavn",
   "value_ticket_is_now_checked_in": "%s's billett er nå sjekket inn.",

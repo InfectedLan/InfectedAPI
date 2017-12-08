@@ -32,7 +32,8 @@ if (Session::isAuthenticated()) {
 	$user = Session::getCurrentUser();
 
 	if ($user->hasPermission('*')) {
-		if (is_numeric($_GET['id'])) {
+		if (isset($_GET['id']) &&
+            is_numeric($_GET['id'])) {
 			$event = EventHandler::getCurrentEvent();
 			$fromEvent = EventHandler::getEvent($_GET['id']);
 

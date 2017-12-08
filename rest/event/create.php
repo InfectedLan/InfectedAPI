@@ -32,7 +32,19 @@ if (Session::isAuthenticated()) {
 	$user = Session::getCurrentUser();
 
 	if ($user->hasPermission('admin.event')) {
-		if (is_numeric($_POST['locationId']) &&
+		if (isset($_POST['locationId']) &&
+            isset($_POST['participantCount']) &&
+            isset($_POST['bookingDate']) &&
+            isset($_POST['bookingTime']) &&
+            isset($_POST['prioritySeatingDate']) &&
+            isset($_POST['prioritySeatingTime']) &&
+            isset($_POST['seatingDate']) &&
+            isset($_POST['seatingTime']) &&
+            isset($_POST['startDate']) &&
+            isset($_POST['startTime']) &&
+            isset($_POST['endDate']) &&
+            isset($_POST['endTime']) &&
+		    is_numeric($_POST['locationId']) &&
             is_numeric($_POST['participantCount']) &&
             !empty($_POST['bookingDate']) &&
             !empty($_POST['bookingTime']) &&

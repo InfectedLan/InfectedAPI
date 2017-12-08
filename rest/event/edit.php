@@ -32,10 +32,23 @@ if (Session::isAuthenticated()) {
 	$user = Session::getCurrentUser();
 
 	if ($user->hasPermission('admin.event')) {
-		if (is_numeric($_POST['id']) &&
+		if (isset($_POST['id']) &&
+		    isset($_POST['locationId']) &&
+            isset($_POST['participantCount']) &&
+            isset($_POST['bookingDate']) &&
+            isset($_POST['bookingTime']) &&
+            isset($_POST['prioritySeatingDate']) &&
+            isset($_POST['prioritySeatingTime']) &&
+            isset($_POST['seatingDate']) &&
+            isset($_POST['seatingTime']) &&
+            isset($_POST['startDate']) &&
+            isset($_POST['startTime']) &&
+            isset($_POST['endDate']) &&
+            isset($_POST['endTime']) &&
+		    is_numeric($_POST['id']) &&
 			is_numeric($_POST['locationId']) &&
-			is_numeric($_POST['participantCount'])) {
-			!empty($_POST['bookingDate']) &&
+			is_numeric($_POST['participantCount']) &&
+            !empty($_POST['bookingDate']) &&
 			!empty($_POST['bookingTime']) &&
 			!empty($_POST['prioritySeatingDate']) &&
 			!empty($_POST['prioritySeatingTime']) &&
@@ -44,7 +57,7 @@ if (Session::isAuthenticated()) {
 			!empty($_POST['startDate']) &&
 			!empty($_POST['startTime']) &&
 			!empty($_POST['endDate']) &&
-			!empty($_POST['endTime']) &&
+			!empty($_POST['endTime'])) {
 			$event = EventHandler::getEvent($_POST['id']);
 			$location = LocationHandler::getLocation($_POST['locationId']);
 			$participantCount = $_POST['participantCount'];

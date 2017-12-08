@@ -120,6 +120,7 @@
   "this_team_does_not_exist": "This team does not exist.",
   "this_ticket_does_not_exist": "This ticket does not exist.",
   "this_ticket_is_already_checked_in": "This ticket is already checked in.",
+  "this_user_already_has_this_permission": "This user already has this permission.",
   "this_user_does_not_exist": "This user does not exist.",
   "username": "Username",
   "value_ticket_is_now_checked_in": "%s's ticket is now checked in.",

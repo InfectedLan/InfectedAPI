@@ -33,13 +33,15 @@ $message = null;
 if (!empty($_GET['key']) &&
 	Secret::api_key == $_GET['key']) {
 
-    if (!empty($_GET['identifier'])) {
+    if (isset($_GET['identifier']) &&
+        !empty($_GET['identifier'])) {
 		$identifier = $_GET['identifier'];
 
 		if (UserHandler::hasUser($identifier)) {
 			$user = UserHandler::getUserByIdentifier($identifier);
 
-            if (!empty($_GET['password'])) {
+            if (isset($_GET['password']) &&
+                !empty($_GET['password'])) {
                 if ($user->isActivated()) {
                     $hashedPassword = hash('sha256', $_GET['password']);
 
@@ -48,7 +50,7 @@ if (!empty($_GET['key']) &&
                             $reply = ['control:SHA2-Password' => $hashedPassword];
                             $message = 'User \'' . $user->getUsername() .  '\' succesfully authorized.';
 
-                            SyslogHandler::log('User \'' . $user->getUsername() .  '\' succesfully authorized.', 'authorize', $user);
+                            SyslogHandler::log('User succesfully authorized.', 'rest/integration/radius/authorize', $user);
                         } else {
                             $message = 'You\'re not allowed to use this service.';
                         }

@@ -34,66 +34,30 @@ if (Session::isAuthenticated()) {
 	$user = Session::getCurrentUser();
 
 	if ($user->hasPermission('admin.permission')) {
-		if (is_numeric($_POST['id'])) {
-			$permissionUser = UserHandler::getUser($_POST['id']);
+		if (isset($_POST['userId']) &&
+            isset($_POST['permissionId']) &&
+            is_numeric($_POST['userId']) &&
+            is_numeric($_POST['permissionId'])) {
+			$permissionUser = UserHandler::getUser($_POST['userId']);
+            $permission = PermissionHandler::getPermission($_POST['permissionId']);
 
 			if ($permissionUser != null) {
-				//Get list of permissions before change
-				$prePermissions = $permissionUser->getPermissions();
+                if ($permission != null) {
+                    if (!UserPermissionHandler::hasUserPermission($permissionUser, $permission)) {
+                        UserPermissionHandler::createUserPermission($permissionUser, $permission);
 
-				foreach (PermissionHandler::getPermissions() as $permission) {
-					// Only allow changes by admin or user with the "admin.permissions" to give permissions that he is assigned to other users.
-					if ($user->hasPermission($permission->getValue())) {
-						if (isset($_POST['checkbox_' . $permission->getId()])) {
-							UserPermissionHandler::createUserPermission($permissionUser, $permission);
-						} else {
-							UserPermissionHandler::removeUserPermission($permissionUser, $permission);
-						}
-					}
-				}
-
-				// Permissions after change.
-				// Everything below here is for logging.
-				$postPermissions = $permissionUser->getPermissions();
-
-				//Calculate added permissions
-				$addedList = [];
-
-				foreach($postPermissions as $perm) {
-					$exists = false;
-
-					foreach ($prePermissions as $permPre) {
-						if ($perm == $permPre) {
-							$exists = true;
-						}
-					}
-
-					if(!$exists) {
-						$addedList[] = $perm->getValue();
-					}
-				}
-
-				// Calculate removed permissions.
-				$removedList = [];
-
-				foreach ($prePermissions as $perm) {
-					$exists = false;
-
-					foreach ($postPermissions as $permPost) {
-						if ($perm==$permPost) {
-							$exists = true;
-						}
-					}
-
-					if (!$exists) {
-						$removedList[] = $perm->getValue();
-					}
-				}
-
-                $result = true;
-                $status = 202; // Accepted.
-				SyslogHandler::log("Permissions for user " . $permissionUser->getId() . " were changed", "editUserPermissions", $user, SyslogHandler::SEVERITY_INFO, ["affected_user" => $permissionUser->getId(), "added" => $addedList, "removed" => $removedList]);
-			} else {
+                        $result = true;
+                        $status = 201; // Created.
+                        SyslogHandler::log('Permission granted user.', 'rest/user/permission/create', $user, SyslogHandler::SEVERITY_INFO, ['user' => $permissionUser->getId(),
+                                                                                                                                                                  'permission' => $permission->getValue()]);
+                    } else {
+                        $message = Localization::getLocale('this_user_already_has_this_permission');
+                    }
+                } else {
+                    $status = 404; // Not found.
+                    $message = Localization::getLocale('this_permission_does_not_exist');
+                }
+            } else {
                 $status = 404; // Not found.
 				$message = Localization::getLocale('this_user_does_not_exist');
 			}

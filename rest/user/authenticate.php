@@ -29,7 +29,9 @@ $status = http_response_code();
 $message = null;
 
 if (!Session::isAuthenticated()) {
-	if (!empty($_POST['identifier']) &&
+	if (isset($_POST['identifier']) &&
+        isset($_POST['password']) &&
+	    !empty($_POST['identifier']) &&
 		!empty($_POST['password'])) {
 		$identifier = $_POST['identifier'];
 		$password = hash('sha256', $_POST['password']);
@@ -43,7 +45,7 @@ if (!Session::isAuthenticated()) {
 					$_SESSION['userId'] = $user->getId();
                     $result = true;
 
-					SyslogHandler::log('User successfully authenticated.', 'authenticateUser', $user);
+					SyslogHandler::log('User successfully authenticated.', 'rest/user/authenticateUser', $user);
 				} else {
 					$message = Localization::getLocale('wrong_username_or_password');
 				}

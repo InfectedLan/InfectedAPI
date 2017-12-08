@@ -32,11 +32,18 @@ if (Session::isAuthenticated()) {
 	$user = Session::getCurrentUser();
 
 	if ($user->hasPermission('admin.permission')) {
-		if (is_numeric($_GET['id'])) {
-			$permissionUser = UserHandler::getUser($_GET['id']);
+		if (isset($_GET['userId']) &&
+		    is_numeric($_GET['userId'])) {
+			$permissionUser = UserHandler::getUser($_GET['userId']);
+            $permission = isset($_GET['permissionId']) ? PermissionHandler::getPermission($_GET['permissionId']) : null;
 
 			if ($permissionUser != null) {
-				UserPermissionHandler::removeUserPermissions($permissionUser);
+				if ($permission != null) {
+                    UserPermissionHandler::removeUserPermission($permissionUser, $permission);
+                } else {
+                    UserPermissionHandler::removeUserPermissions($permissionUser);
+                }
+
 				$result = true;
                 $status = 202; // Accepted.
 			} else {
