@@ -19,6 +19,8 @@
  */
 
 interface IPage {
+    public function isPublic(): bool;
+
     public function canAccess(User $user): bool;
 
 	public function hasParent(): bool;
