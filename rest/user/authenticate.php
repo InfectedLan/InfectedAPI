@@ -45,7 +45,7 @@ if (!Session::isAuthenticated()) {
 					$_SESSION['userId'] = $user->getId();
                     $result = true;
 
-					SyslogHandler::log('User successfully authenticated.', 'rest/user/authenticateUser', $user);
+					SyslogHandler::log('User successfully authenticated.', 'rest/user/authenticate', $user);
 				} else {
 					$message = Localization::getLocale('wrong_username_or_password');
 				}

@@ -32,10 +32,10 @@ if (Session::isAuthenticated()) {
 	$user = Session::getCurrentUser();
 
 	if ($user->hasPermission('*')) {
-		if (isset($_GET['id']) &&
-            is_numeric($_GET['id'])) {
+		if (isset($_GET['eventId']) &&
+            is_numeric($_GET['eventId'])) {
 			$event = EventHandler::getCurrentEvent();
-			$fromEvent = EventHandler::getEvent($_GET['id']);
+			$fromEvent = EventHandler::getEvent($_GET['eventId']);
 
 			if ($event != null && $fromEvent != null) {
 				EventMigrationHandler::copyMembers($fromEvent, $event);

@@ -50,7 +50,7 @@ class User extends DatabaseObject {
 	private $address;
 	private $postalcode;
 	private $nickname;
-	private $registereddate;
+	private $registerdate;
 
 	/*
 	 * Returns the users firstname.
@@ -157,8 +157,8 @@ class User extends DatabaseObject {
 	/*
 	 * Returns the date which this user was registered.
 	 */
-	public function getRegisteredDate(): int {
-		return strtotime($this->registereddate);
+	public function getRegisterDate(): int {
+		return strtotime($this->registerdate);
 	}
 
 	/*

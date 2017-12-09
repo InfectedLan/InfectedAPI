@@ -40,7 +40,7 @@ class UserHandler {
 		$database = Database::getConnection(Settings::db_name_infected);
 
 		$result = $database->query('SELECT * FROM `' . Settings::db_table_infected_users . '`
-																WHERE `id` = \'' . $database->real_escape_string($id) . '\';');
+                                   WHERE `id` = ' . $database->real_escape_string($id) . ';');
 
 		return $result->fetch_object('User');
 	}
@@ -56,7 +56,7 @@ class UserHandler {
 		$result = $database->query('SELECT * FROM `' . Settings::db_table_infected_users . '`
 																WHERE `username` = \'' . $safeIdentifier . '\'
 																OR `email` = \'' . $safeIdentifier . '\'
-																OR `phone` = \'' . $safeIdentifier . '\';');
+																OR `phone` = ' . $safeIdentifier . ';');
 
 		return $result->fetch_object('User');
 	}
@@ -130,11 +130,11 @@ class UserHandler {
 		$database = Database::getConnection(Settings::db_name_infected);
 
 		$result = $database->query('SELECT `' . Settings::db_table_infected_users . '`.* FROM `' . Settings::db_table_infected_users . '`
-																LEFT JOIN `' . Settings::db_name_infected_crew . '`.`' . Settings::db_table_infected_crew_memberof . '` ON `' . Settings::db_table_infected_users . '`.`id` = `' . Settings::db_table_infected_crew_memberof . '`.`userId`
-																WHERE `eventId` = \'' . ($event != null ? $event->getId() : EventHandler::getCurrentEvent()->getId()) . '\'
-																AND `' . Settings::db_table_infected_crew_memberof . '`.`groupId` IS NOT NULL
-																GROUP BY `' . Settings::db_table_infected_users . '`.`id`
-																ORDER BY `' . Settings::db_table_infected_users . '`.`firstname`, `' . Settings::db_table_infected_users . '`.`lastname`;');
+                                   LEFT JOIN `' . Settings::db_name_infected_crew . '`.`' . Settings::db_table_infected_crew_memberof . '` ON `' . Settings::db_table_infected_users . '`.`id` = `' . Settings::db_table_infected_crew_memberof . '`.`userId`
+                                   WHERE `eventId` = \'' . ($event != null ? $event->getId() : EventHandler::getCurrentEvent()->getId()) . '\'
+                                   AND `' . Settings::db_table_infected_crew_memberof . '`.`groupId` IS NOT NULL
+                                   GROUP BY `' . Settings::db_table_infected_users . '`.`id`
+                                   ORDER BY `' . Settings::db_table_infected_users . '`.`firstname`, `' . Settings::db_table_infected_users . '`.`lastname`;');
 
 		$userList = [];
 
@@ -152,11 +152,11 @@ class UserHandler {
 		$database = Database::getConnection(Settings::db_name_infected);
 
 		$result = $database->query('SELECT `' . Settings::db_table_infected_users . '`.* FROM `' . Settings::db_table_infected_users . '`
-																LEFT JOIN `' . Settings::db_name_infected_crew . '`.`' . Settings::db_table_infected_crew_memberof . '` ON `' . Settings::db_table_infected_users . '`.`id` = `' . Settings::db_table_infected_crew_memberof . '`.`userId`
-																WHERE `' . Settings::db_table_infected_crew_memberof . '`.`eventId` IS NULL
-																OR `' . Settings::db_table_infected_crew_memberof . '`.`eventId` != \'' . ($event != null ? $event->getId() : EventHandler::getCurrentEvent()->getId()) . '\'
-																GROUP BY `' . Settings::db_table_infected_users . '`.`id`
-																ORDER BY `' . Settings::db_table_infected_users . '`.`firstname`, `' . Settings::db_table_infected_users . '`.`lastname`;');
+                                   LEFT JOIN `' . Settings::db_name_infected_crew . '`.`' . Settings::db_table_infected_crew_memberof . '` ON `' . Settings::db_table_infected_users . '`.`id` = `' . Settings::db_table_infected_crew_memberof . '`.`userId`
+                                   WHERE `' . Settings::db_table_infected_crew_memberof . '`.`eventId` IS NULL
+                                   OR `' . Settings::db_table_infected_crew_memberof . '`.`eventId` != \'' . ($event != null ? $event->getId() : EventHandler::getCurrentEvent()->getId()) . '\'
+                                   GROUP BY `' . Settings::db_table_infected_users . '`.`id`
+                                   ORDER BY `' . Settings::db_table_infected_users . '`.`firstname`, `' . Settings::db_table_infected_users . '`.`lastname`;');
 
 		$userList = [];
 
@@ -174,10 +174,10 @@ class UserHandler {
 		$database = Database::getConnection(Settings::db_name_infected);
 
 		$result = $database->query('SELECT DISTINCT `' . Settings::db_table_infected_users . '`.* FROM `' . Settings::db_table_infected_users . '`
-																LEFT JOIN `' . Settings::db_name_infected_tickets . '`.`' . Settings::db_table_infected_tickets_tickets . '` ON `' . Settings::db_table_infected_users . '`.`id` = `' . Settings::db_table_infected_tickets_tickets . '`.`userId`
-																WHERE `' . Settings::db_table_infected_tickets_tickets . '`.`eventId` = \'' . ($event != null ? $event->getId() : EventHandler::getCurrentEvent()->getId()) . '\'
-																AND `' . Settings::db_table_infected_tickets_tickets . '`.`id` IS NOT NULL
-																ORDER BY `' . Settings::db_table_infected_users . '`.`firstname`, `' . Settings::db_table_infected_users . '`.`lastname`;');
+                                   LEFT JOIN `' . Settings::db_name_infected_tickets . '`.`' . Settings::db_table_infected_tickets_tickets . '` ON `' . Settings::db_table_infected_users . '`.`id` = `' . Settings::db_table_infected_tickets_tickets . '`.`userId`
+                                   WHERE `' . Settings::db_table_infected_tickets_tickets . '`.`eventId` = \'' . ($event != null ? $event->getId() : EventHandler::getCurrentEvent()->getId()) . '\'
+                                   AND `' . Settings::db_table_infected_tickets_tickets . '`.`id` IS NOT NULL
+                                   ORDER BY `' . Settings::db_table_infected_users . '`.`firstname`, `' . Settings::db_table_infected_users . '`.`lastname`;');
 
 		$userList = [];
 
@@ -201,10 +201,10 @@ class UserHandler {
   		$database = Database::getConnection(Settings::db_name_infected);
 
   		$result = $database->query('SELECT DISTINCT `' . Settings::db_table_infected_users . '`.* FROM `' . Settings::db_table_infected_users . '`
-							  									LEFT JOIN `' . Settings::db_name_infected_tickets . '`.`' . Settings::db_table_infected_tickets_tickets . '` ON `' . Settings::db_table_infected_users . '`.`id` = `' . Settings::db_table_infected_tickets_tickets . '`.`userId`
-							  									WHERE `' . Settings::db_table_infected_tickets_tickets . '`.`eventId` >= ' . $previousEvent->getId() . '
-							  									AND `' . Settings::db_table_infected_tickets_tickets . '`.`eventId` <= ' . $currentEvent->getId() . '
-							  									ORDER BY `' . Settings::db_table_infected_users . '`.`firstname`, `' . Settings::db_table_infected_users . '`.`lastname`;');
+                                   LEFT JOIN `' . Settings::db_name_infected_tickets . '`.`' . Settings::db_table_infected_tickets_tickets . '` ON `' . Settings::db_table_infected_users . '`.`id` = `' . Settings::db_table_infected_tickets_tickets . '`.`userId`
+                                   WHERE `' . Settings::db_table_infected_tickets_tickets . '`.`eventId` >= ' . $previousEvent->getId() . '
+                                   AND `' . Settings::db_table_infected_tickets_tickets . '`.`eventId` <= ' . $currentEvent->getId() . '
+                                   ORDER BY `' . Settings::db_table_infected_users . '`.`firstname`, `' . Settings::db_table_infected_users . '`.`lastname`;');
 
 			while ($object = $result->fetch_object('User')) {
 				$userList[] = $object;
@@ -222,10 +222,10 @@ class UserHandler {
 
 		$safeIdentifier = $database->real_escape_string($identifier);
 
-		$result = $database->query('SELECT `id` FROM `' . Settings::db_table_infected_users . '`
-																WHERE `username` = \'' . $safeIdentifier . '\'
-																OR `email` = \'' . $safeIdentifier . '\'
-																OR `phone` = \'' . $safeIdentifier . '\';');
+		$result = $database->query('SELECT * FROM `' . Settings::db_table_infected_users . '`
+                                   WHERE `username` = \'' . $safeIdentifier . '\'
+                                   OR `email` = \'' . $safeIdentifier . '\'
+                                   OR `phone` = ' . $safeIdentifier . ';');
 
 		return $result->num_rows > 0;
 	}
@@ -233,23 +233,23 @@ class UserHandler {
 	/*
 	 * Create a new user
 	 */
-	public static function createUser(string $firstname, string $lastname, string $username, string $password, string $email, string $birthDate, int $gender, int $phone, string $address, int $postalCode, ?string $nickname): User {
+	public static function createUser(string $firstname, string $lastname, string $username, string $password, string $email, string $birthDate, int $gender, int $phone, string $address, int $postalCode, string $nickname): User {
 		$database = Database::getConnection(Settings::db_name_infected);
 
-		$database->query('INSERT INTO `' . Settings::db_table_infected_users . '` (`firstname`, `lastname`, `username`, `password`, `email`, `birthdate`, `gender`, `phone`, `address`, `postalcode`, `countryId`, `nickname`, `registereddate`)
-										  VALUES (\'' . $database->real_escape_string($firstname) . '\',
-														  \'' . $database->real_escape_string($lastname) . '\',
-														  \'' . $database->real_escape_string($username) . '\',
-														  \'' . $database->real_escape_string($password) . '\',
-														  \'' . $database->real_escape_string($email) . '\',
-														  \'' . $database->real_escape_string($birthDate) . '\',
-														  \'' . $database->real_escape_string($gender) . '\',
-														  \'' . $database->real_escape_string($phone) . '\',
-														  \'' . $database->real_escape_string($address) . '\',
-														  \'' . $database->real_escape_string($postalCode) . '\',
-															\'165\',
-														  \'' . $database->real_escape_string($nickname) . '\',
-														  \'' . date('Y-m-d H:i:s') . '\');');
+		$database->query('INSERT INTO `' . Settings::db_table_infected_users . '` (`firstname`, `lastname`, `username`, `password`, `email`, `birthdate`, `gender`, `phone`, `address`, `postalcode`, `countryId`, `nickname`, `registerdate`)
+                         VALUES (\'' . $database->real_escape_string($firstname) . '\',
+                                 \'' . $database->real_escape_string($lastname) . '\',
+                                 \'' . $database->real_escape_string($username) . '\',
+                                 \'' . $database->real_escape_string($password) . '\',
+                                 \'' . $database->real_escape_string($email) . '\',
+                                 \'' . $database->real_escape_string($birthDate) . '\',
+                                 ' . $database->real_escape_string($gender) . ',
+                                 ' . $database->real_escape_string($phone) . ',
+                                 \'' . $database->real_escape_string($address) . '\',
+                                 ' . $database->real_escape_string($postalCode) . ',
+                                 165,
+                                 \'' . $database->real_escape_string($nickname) . '\',
+                                 \'' . date('Y-m-d H:i:s') . '\');');
 
 		return self::getUser($database->insert_id);
 	}
@@ -257,21 +257,21 @@ class UserHandler {
 	/*
 	 * Update a user
 	 */
-	public static function updateUser(User $user, string $firstname, string $lastname, string $username, string $email, int $birthDate, bool $gender, int $phone, string $address, int $postalCode, string $nickname) {
+	public static function updateUser(User $user, string $firstname, string $lastname, string $username, string $email, string $birthDate, int $gender, int $phone, string $address, int $postalCode, string $nickname) {
 		$database = Database::getConnection(Settings::db_name_infected);
 
 		$database->query('UPDATE `' . Settings::db_table_infected_users . '`
-										  SET `firstname` = \'' . $database->real_escape_string($firstname) . '\',
-												  `lastname` = \'' . $database->real_escape_string($lastname) . '\',
-												  `username` = \'' . $database->real_escape_string($username) . '\',
-												  `email` = \'' . $database->real_escape_string($email) . '\',
-												  `birthdate` = \'' . $database->real_escape_string($birthDate) . '\',
-												  `gender` = \'' . $database->real_escape_string($gender) . '\',
-												  `phone` = \'' . $database->real_escape_string($phone) . '\',
-												  `address` = \'' . $database->real_escape_string($address) . '\',
-												  `postalcode` = \'' . $database->real_escape_string($postalCode) . '\',
-												  `nickname` = \'' . $database->real_escape_string($nickname) . '\'
-										  WHERE `id` = \'' . $user->getId() . '\';');
+                         SET `firstname` = \'' . $database->real_escape_string($firstname) . '\',
+                             `lastname` = \'' . $database->real_escape_string($lastname) . '\',
+                             `username` = \'' . $database->real_escape_string($username) . '\',
+                             `email` = \'' . $database->real_escape_string($email) . '\',
+                             `birthdate` = \'' . $database->real_escape_string($birthDate) . '\',
+                             `gender` = \'' . $database->real_escape_string($gender) . '\',
+                             `phone` = ' . $database->real_escape_string($phone) . ',
+                             `address` = \'' . $database->real_escape_string($address) . '\',
+                             `postalcode` = ' . $database->real_escape_string($postalCode) . ',
+                             `nickname` = \'' . $database->real_escape_string($nickname) . '\'
+                         WHERE `id` = ' . $user->getId() . ';');
 	}
 
 	/*
@@ -283,7 +283,7 @@ class UserHandler {
 			$database = Database::getConnection(Settings::db_name_infected);
 
 			$database->query('DELETE FROM `' . Settings::db_table_infected_users . '`
-							  				WHERE `id` = \'' . $user->getId() . '\';');
+                             WHERE `id` = ' . $user->getId() . ';');
 
 			// Remove users emergencycontact.
 			if (EmergencyContactHandler::hasEmergencyContactByUser($user)) {
@@ -329,8 +329,8 @@ class UserHandler {
 		$database = Database::getConnection(Settings::db_name_infected);
 
 		$database->query('UPDATE `' . Settings::db_table_infected_users . '`
-										  SET `password` = \'' . $database->real_escape_string($password) . '\'
-										  WHERE `id` = \'' . $user->getId() . '\';');
+                         SET `password` = \'' . $database->real_escape_string($password) . '\'
+                         WHERE `id` = ' . $user->getId() . ';');
 	}
 
 	/*
@@ -354,11 +354,11 @@ class UserHandler {
 
 		// Query the database using a "full-text" search.
 		$result = $database->query('SELECT * FROM `' . Settings::db_table_infected_users . '`
-																WHERE MATCH (`firstname`, `lastname`, `username`, `nickname`)
-																AGAINST (\'' . $database->real_escape_string(implode(' ', $keywordList)) . '\' IN BOOLEAN MODE)
-																OR `email` = \'' . $database->real_escape_string($queryList[0]) . '\'
-																OR `phone` = \'' . $database->real_escape_string($queryList[0]) . '\'
-																LIMIT 15;');
+                                   WHERE MATCH (`firstname`, `lastname`, `username`, `nickname`)
+                                   AGAINST (\'' . $database->real_escape_string(implode(' ', $keywordList)) . '\' IN BOOLEAN MODE)
+                                   OR `email` = \'' . $database->real_escape_string($queryList[0]) . '\'
+                                   OR `phone` = ' . $database->real_escape_string($queryList[0]) . '
+                                   LIMIT 15;');
 
 		$userList = [];
 
@@ -372,33 +372,32 @@ class UserHandler {
 	 * Returns the steam id of a user, or null if undefined
 	 */
 	public static function getSteamId(User $user): ?string {
-    $database = Database::getConnection(Settings::db_name_infected_compo);
+        $database = Database::getConnection(Settings::db_name_infected_compo);
 
-    $result = $database->query('SELECT `steamId` FROM `' . Settings::db_table_infected_compo_steamids . '`
-																WHERE `userId` = \'' . $user->getId() . '\';');
+        $result = $database->query('SELECT `steamId` FROM `' . Settings::db_table_infected_compo_steamids . '`
+                                   WHERE `userId` = ' . $user->getId() . ';');
 
-    return $result->fetch_array()[0];
+        return $result->fetch_array()[0];
 	}
 
 	/*
 	 * Sets the steam id
 	 */
 	public static function setSteamId(User $user, string $steamId) {
-    $database = Database::getConnection(Settings::db_name_infected_compo);
+        $database = Database::getConnection(Settings::db_name_infected_compo);
 
-    $result = $database->query('SELECT `steamId` FROM `' . Settings::db_table_infected_compo_steamids . '`
-																WHERE `userId` = \'' . $user->getId() . '\';');
-    $count = $result->num_rows;
+        $result = $database->query('SELECT `steamId` FROM `' . Settings::db_table_infected_compo_steamids . '`
+                                   WHERE `userId` = ' . $user->getId() . ';');
+        $count = $result->num_rows;
 
-    if ($count == 0) {
-			$database->query('INSERT INTO `' . Settings::db_table_infected_compo_steamids . '`(`userId`, `steamId`)
-												VALUES (\'' . $user->getId() . '\',
-																\'' . $database->real_escape_string($steamId) . '\');');
-    } else {
-			$database->query('UPDATE `' . Settings::db_table_infected_compo_steamids . '`
-												SET `steamId` = \'' . $database->real_escape_string($steamId) . '\'
-												WHERE `userId` = \'' . $user->getId() . '\';');
-    }
+        if ($count == 0) {
+                $database->query('INSERT INTO `' . Settings::db_table_infected_compo_steamids . '`(`userId`, `steamId`)
+                                 VALUES (' . $user->getId() . ',
+                                         \'' . $database->real_escape_string($steamId) . '\');');
+        } else {
+                $database->query('UPDATE `' . Settings::db_table_infected_compo_steamids . '`
+                                 SET `steamId` = \'' . $database->real_escape_string($steamId) . '\'
+                                 WHERE `userId` = ' . $user->getId() . ';');
+        }
 	}
 }
-?>
