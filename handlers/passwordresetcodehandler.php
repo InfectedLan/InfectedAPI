@@ -30,7 +30,7 @@ class PasswordResetCodeHandler {
 		$database = Database::getConnection(Settings::db_name_infected);
 
 		$result = $database->query('SELECT `code` FROM `' . Settings::db_table_infected_passwordresetcodes . '`
-																WHERE `id` = \'' . $database->real_escape_string($id) . '\';');
+								  WHERE `id` = ' . $database->real_escape_string($id) . ';');
 
 		$row = $result->fetch_array();
 
@@ -60,8 +60,8 @@ class PasswordResetCodeHandler {
 	public static function hasPasswordResetCode(string $code): bool {
 		$database = Database::getConnection(Settings::db_name_infected);
 
-		$result = $database->query('SELECT `id` FROM `' . Settings::db_table_infected_passwordresetcodes . '`
-																WHERE `code` = \'' . $database->real_escape_string($code) . '\';');
+		$result = $database->query('SELECT * FROM `' . Settings::db_table_infected_passwordresetcodes . '`
+								   WHERE `code` = \'' . $database->real_escape_string($code) . '\';');
 
 		return $result->num_rows > 0;
 	}
@@ -72,8 +72,8 @@ class PasswordResetCodeHandler {
 	public static function hasPasswordResetCodeByUser(User $user): bool {
 		$database = Database::getConnection(Settings::db_name_infected);
 
-		$result = $database->query('SELECT `id` FROM `' . Settings::db_table_infected_passwordresetcodes . '`
-																WHERE `userId` = \'' . $user->getId() . '\';');
+		$result = $database->query('SELECT * FROM `' . Settings::db_table_infected_passwordresetcodes . '`
+								   WHERE `userId` = ' . $user->getId() . ';');
 
 		return $result->num_rows > 0;
 	}
@@ -88,12 +88,12 @@ class PasswordResetCodeHandler {
 
 		if (!self::hasPasswordResetCodeByUser($user)) {
 			$database->query('INSERT INTO `' . Settings::db_table_infected_passwordresetcodes . '` (`userId`, `code`)
-											  VALUES (\'' . $user->getId() . '\',
-													  		\'' . $database->real_escape_string($code) . '\');');
+							 VALUES (' . $user->getId() . ',
+							 		 \'' . $database->real_escape_string($code) . '\');');
 		} else {
 			$database->query('UPDATE `' . Settings::db_table_infected_passwordresetcodes . '`
-											  SET `code` = \'' . $database->real_escape_string($code) . '\'
-											  WHERE `userId` = \'' . $user->getId() . '\';');
+							 SET `code` = \'' . $database->real_escape_string($code) . '\'
+							 WHERE `userId` = ' . $user->getId() . ';');
 		}
 
 		return $code;
@@ -106,7 +106,7 @@ class PasswordResetCodeHandler {
 		$database = Database::getConnection(Settings::db_name_infected);
 
 		$database->query('DELETE FROM `' . Settings::db_table_infected_passwordresetcodes . '`
-						  				WHERE `code` = \'' . $database->real_escape_string($code) . '\';');
+						 WHERE `code` = \'' . $database->real_escape_string($code) . '\';');
 	}
 
 	/*
@@ -116,7 +116,7 @@ class PasswordResetCodeHandler {
 		$database = Database::getConnection(Settings::db_name_infected);
 
 		$database->query('DELETE FROM `' . Settings::db_table_infected_passwordresetcodes . '`
-						  				WHERE `userId` = \'' . $user->getId() . '\';');
+						 WHERE `userId` = ' . $user->getId() . ';');
 	}
 
 	/*
@@ -126,10 +126,10 @@ class PasswordResetCodeHandler {
 		$database = Database::getConnection(Settings::db_name_infected);
 
 		$result = $database->query('SELECT * FROM `' . Settings::db_table_infected_users . '`
-																WHERE `id` = (SELECT `userId` FROM `' . Settings::db_table_infected_passwordresetcodes . '`
-																			  			WHERE `code` = \'' . $database->real_escape_string($code) . '\');');
+								   WHERE `id` = (SELECT `userId` FROM `' . Settings::db_table_infected_passwordresetcodes . '`
+												 WHERE `code` = \'' . $database->real_escape_string($code) . '\'
+												 LIMIT 1);');
 
 		return $result->fetch_object('User');
 	}
 }
-?>

@@ -56,7 +56,7 @@ class UserHandler {
 		$result = $database->query('SELECT * FROM `' . Settings::db_table_infected_users . '`
 																WHERE `username` = \'' . $safeIdentifier . '\'
 																OR `email` = \'' . $safeIdentifier . '\'
-																OR `phone` = ' . $safeIdentifier . ';');
+																OR `phone` = \'' . $safeIdentifier . '\';');
 
 		return $result->fetch_object('User');
 	}
@@ -225,7 +225,7 @@ class UserHandler {
 		$result = $database->query('SELECT * FROM `' . Settings::db_table_infected_users . '`
                                    WHERE `username` = \'' . $safeIdentifier . '\'
                                    OR `email` = \'' . $safeIdentifier . '\'
-                                   OR `phone` = ' . $safeIdentifier . ';');
+                                   OR `phone` = \'' . $safeIdentifier . '\';');
 
 		return $result->num_rows > 0;
 	}
