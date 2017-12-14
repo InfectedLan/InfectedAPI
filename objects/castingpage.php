@@ -26,13 +26,13 @@ class CastingPage extends DatabaseObject {
 	private $eventId;
 	private $name;
 	private $data;
-  private $template;
+  	private $template;
 
 	/*
 	 * Returns the id of the compo this server is bound to
 	 */
-  public function getEventId(): int {
-    return $this->eventId;
+  	public function getEventId(): int {
+    	return $this->eventId;
 	}
 
 	/*
@@ -56,19 +56,19 @@ class CastingPage extends DatabaseObject {
 		return $this->data;
 	}
 
-  /*
-   * Returns the template associated with this page
-   */
-  public function getTemplate(): string {
-    return $this->template;
-  }
+	/*
+	* Returns the template associated with this page
+	*/
+	public function getTemplate(): string {
+	return $this->template;
+	}
 
-  /*
-   * Sets the template associated with this page
-   */
-  public function setTemplate() {
+	/*
+	* Sets the template associated with this page
+	*/
+	public function setTemplate() {
 		CastingPageHandler::setTemplate($this, $data);
-  }
+	}
 
 	/*
 	 * Sets the connection details of this server
@@ -84,11 +84,10 @@ class CastingPage extends DatabaseObject {
 		CastingPageHandler::setName($this, $name);
 	}
 
-  /*
-   * Deletes the server entry
-   */
-  public function delete() {
+	/*
+	* Deletes the server entry
+	*/
+	public function delete() {
 		CastingPageHandler::deleteServer($this);
-  }
+	}
 }
-?>

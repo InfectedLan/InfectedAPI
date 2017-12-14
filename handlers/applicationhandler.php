@@ -28,10 +28,10 @@ require_once 'objects/user.php';
 require_once 'objects/event.php';
 
 class ApplicationHandler {
-  const STATUS_NEW = 1;
-  const STATUS_ACCEPTED = 2;
-  const STATUS_REJECTED = 3;
-  const STATUS_CLOSED = 4;
+    const STATE_NEW = 1;
+    const STATE_ACCEPTED = 2;
+    const STATE_REJECTED = 3;
+    const STATE_CLOSED = 4;
 
 	/*
 	 * Get an application by the internal id.
@@ -40,7 +40,7 @@ class ApplicationHandler {
     $database = Database::getConnection(Settings::db_name_infected_crew);
 
 		$result = $database->query('SELECT * FROM `' . Settings::db_table_infected_crew_applications . '`
-																WHERE `id` = \'' . $database->real_escape_string($id) . '\';');
+								   WHERE `id` = ' . $database->real_escape_string($id) . ';');
 
 		return $result->fetch_object('Application');
 	}
@@ -52,8 +52,8 @@ class ApplicationHandler {
 		$database = Database::getConnection(Settings::db_name_infected_crew);
 
 		$result = $database->query('SELECT * FROM `' . Settings::db_table_infected_crew_applications . '`
-																WHERE `eventId` = \'' . ($event != null ? $event->getId() : EventHandler::getCurrentEvent()->getId()) . '\'
-																ORDER BY `openedTime`;');
+								   WHERE `eventId` = ' . ($event != null ? $event->getId() : EventHandler::getCurrentEvent()->getId()) . '
+								   ORDER BY `openedTime`;');
 
 		$applicationList = [];
 
@@ -71,12 +71,12 @@ class ApplicationHandler {
 		$database = Database::getConnection(Settings::db_name_infected_crew);
 
 		$result = $database->query('SELECT `' . Settings::db_table_infected_crew_applications . '`.* FROM `' . Settings::db_table_infected_crew_applications . '`
-																LEFT JOIN `' . Settings::db_table_infected_crew_applicationqueue . '`
-																ON `' . Settings::db_table_infected_crew_applications . '`.`id` = `applicationId`
-																WHERE `applicationId` IS NULL
-																AND `eventId` = \'' . ($event != null ? $event->getId() : EventHandler::getCurrentEvent()->getId()) . '\'
-																AND `state` = \'1\'
-																ORDER BY `openedTime`;');
+								   LEFT JOIN `' . Settings::db_table_infected_crew_applicationqueue . '`
+								   ON `' . Settings::db_table_infected_crew_applications . '`.`id` = `applicationId`
+								   WHERE `applicationId` IS NULL
+								   AND `eventId` = ' . ($event != null ? $event->getId() : EventHandler::getCurrentEvent()->getId()) . '
+								   AND `state` = ' . self::STATE_NEW . '
+								   ORDER BY `openedTime`;');
 
 		$applicationList = [];
 
@@ -94,13 +94,13 @@ class ApplicationHandler {
 		$database = Database::getConnection(Settings::db_name_infected_crew);
 
 		$result = $database->query('SELECT `' . Settings::db_table_infected_crew_applications . '`.* FROM `' . Settings::db_table_infected_crew_applications . '`
-																LEFT JOIN `' . Settings::db_table_infected_crew_applicationqueue . '`
-																ON `' . Settings::db_table_infected_crew_applications . '`.`id` = `applicationId`
-																WHERE `applicationId` IS NULL
-																AND `eventId` = \'' . ($event != null ? $event->getId() : EventHandler::getCurrentEvent()->getId()) . '\'
-																AND `groupId` = \'' . $group->getId() .  '\'
-																AND `state` = \'1\'
-																ORDER BY `openedTime`;');
+								   LEFT JOIN `' . Settings::db_table_infected_crew_applicationqueue . '`
+								   ON `' . Settings::db_table_infected_crew_applications . '`.`id` = `applicationId`
+								   WHERE `applicationId` IS NULL
+								   AND `eventId` = ' . ($event != null ? $event->getId() : EventHandler::getCurrentEvent()->getId()) . '
+								   AND `groupId` = ' . $group->getId() .  '
+								   AND `state` = ' . self::STATE_NEW . '
+								   ORDER BY `openedTime`;');
 
 		$applicationList = [];
 
@@ -118,12 +118,12 @@ class ApplicationHandler {
 		$database = Database::getConnection(Settings::db_name_infected_crew);
 
 		$result = $database->query('SELECT `' . Settings::db_table_infected_crew_applications . '`.* FROM `' . Settings::db_table_infected_crew_applications . '`
-																LEFT JOIN `' . Settings::db_table_infected_crew_applicationqueue . '`
-																ON `' . Settings::db_table_infected_crew_applications . '`.`id` = `applicationId`
-																WHERE `applicationId` IS NOT NULL
-																AND `eventId` = \'' . ($event != null ? $event->getId() : EventHandler::getCurrentEvent()->getId()) . '\'
-																AND `state` = \'1\'
-																ORDER BY `' . Settings::db_table_infected_crew_applicationqueue . '`.`id`;');
+								   LEFT JOIN `' . Settings::db_table_infected_crew_applicationqueue . '`
+								   ON `' . Settings::db_table_infected_crew_applications . '`.`id` = `applicationId`
+								   WHERE `applicationId` IS NOT NULL
+								   AND `eventId` = ' . ($event != null ? $event->getId() : EventHandler::getCurrentEvent()->getId()) . '
+								   AND `state` = ' . self::STATE_NEW . '
+								   ORDER BY `' . Settings::db_table_infected_crew_applicationqueue . '`.`id`;');
 
 		$applicationList = [];
 
@@ -141,13 +141,13 @@ class ApplicationHandler {
 		$database = Database::getConnection(Settings::db_name_infected_crew);
 
 		$result = $database->query('SELECT `' . Settings::db_table_infected_crew_applications . '`.* FROM `' . Settings::db_table_infected_crew_applications . '`
-																LEFT JOIN `' . Settings::db_table_infected_crew_applicationqueue . '`
-																ON `' . Settings::db_table_infected_crew_applications . '`.`id` = `applicationId`
-																WHERE `applicationId` IS NOT NULL
-																AND `eventId` = \'' . ($event != null ? $event->getId() : EventHandler::getCurrentEvent()->getId()) . '\'
-																AND `groupId` = \'' . $group->getId() .  '\'
-																AND `state` = \'1\'
-																ORDER BY `' . Settings::db_table_infected_crew_applicationqueue . '`.`id`;');
+								   LEFT JOIN `' . Settings::db_table_infected_crew_applicationqueue . '`
+								   ON `' . Settings::db_table_infected_crew_applications . '`.`id` = `applicationId`
+								   WHERE `applicationId` IS NOT NULL
+								   AND `eventId` = ' . ($event != null ? $event->getId() : EventHandler::getCurrentEvent()->getId()) . '
+								   AND `groupId` = ' . $group->getId() .  '
+								   AND `state` = ' . self::STATE_NEW . '
+								   ORDER BY `' . Settings::db_table_infected_crew_applicationqueue . '`.`id`;');
 
 		$applicationList = [];
 
@@ -165,9 +165,9 @@ class ApplicationHandler {
 		$database = Database::getConnection(Settings::db_name_infected_crew);
 
 		$result = $database->query('SELECT * FROM `' . Settings::db_table_infected_crew_applications . '`
-                                WHERE `eventId` = \'' . ($event != null ? $event->getId() : EventHandler::getCurrentEvent()->getId()) . '\'
-																AND `state` = \'2\'
-																ORDER BY `openedTime` DESC;');
+                                   WHERE `eventId` = ' . ($event != null ? $event->getId() : EventHandler::getCurrentEvent()->getId()) . '
+								   AND `state` = ' . self::STATE_ACCEPTED . '
+								   ORDER BY `openedTime` DESC;');
 
 		$applicationList = [];
 
@@ -185,10 +185,10 @@ class ApplicationHandler {
 		$database = Database::getConnection(Settings::db_name_infected_crew);
 
 		$result = $database->query('SELECT * FROM `' . Settings::db_table_infected_crew_applications . '`
-                                WHERE `eventId` = \'' . ($event != null ? $event->getId() : EventHandler::getCurrentEvent()->getId()) . '\'
-                                AND `groupId` = \'' . $group->getId() .  '\'
-																AND `state` = \'2\'
-																ORDER BY `openedTime` DESC;');
+                                   WHERE `eventId` = ' . ($event != null ? $event->getId() : EventHandler::getCurrentEvent()->getId()) . '
+                                   AND `groupId` = ' . $group->getId() .  '
+								   AND `state` = ' . self::STATE_ACCEPTED . '
+								   ORDER BY `openedTime` DESC;');
 
 		$applicationList = [];
 
@@ -206,9 +206,9 @@ class ApplicationHandler {
 		$database = Database::getConnection(Settings::db_name_infected_crew);
 
 		$result = $database->query('SELECT * FROM `' . Settings::db_table_infected_crew_applications . '`
-                                WHERE `eventId` = \'' . ($event != null ? $event->getId() : EventHandler::getCurrentEvent()->getId()) . '\'
-                                AND `state` = \'3\'
-																ORDER BY `openedTime` DESC;');
+                                   WHERE `eventId` = ' . ($event != null ? $event->getId() : EventHandler::getCurrentEvent()->getId()) . '
+                                   AND `state` = ' . self::STATE_REJECTED . '
+								   ORDER BY `openedTime` DESC;');
 
 		$applicationList = [];
 
@@ -226,10 +226,10 @@ class ApplicationHandler {
 		$database = Database::getConnection(Settings::db_name_infected_crew);
 
 		$result = $database->query('SELECT * FROM `' . Settings::db_table_infected_crew_applications . '`
-                                WHERE `eventId` = \'' . ($event != null ? $event->getId() : EventHandler::getCurrentEvent()->getId()) . '\'
-                                AND `groupId` = \'' . $group->getId() .  '\'
-																AND `state` = \'3\'
-																ORDER BY `openedTime` DESC;');
+                                   WHERE `eventId` = ' . ($event != null ? $event->getId() : EventHandler::getCurrentEvent()->getId()) . '
+                                   AND `groupId` = ' . $group->getId() .  '
+								   AND `state` = ' . self::STATE_REJECTED . '
+								   ORDER BY `openedTime` DESC;');
 
 		$applicationList = [];
 
@@ -247,9 +247,9 @@ class ApplicationHandler {
 		$database = Database::getConnection(Settings::db_name_infected_crew);
 
 		$result = $database->query('SELECT * FROM `' . Settings::db_table_infected_crew_applications . '`
-                                WHERE `eventId` = \'' . ($event != null ? $event->getId() : EventHandler::getCurrentEvent()->getId()) . '\'
-                                AND (`state` = \'2\' OR `state` = \'3\')
-																ORDER BY `closedTime` DESC, `openedTime` DESC;');
+								   WHERE `eventId` = ' . ($event != null ? $event->getId() : EventHandler::getCurrentEvent()->getId()) . '
+								   AND (`state` = ' . self::STATE_ACCEPTED . ' OR `state` = ' . self::STATE_REJECTED . ')
+								   ORDER BY `closedTime` DESC, `openedTime` DESC;');
 
 		$applicationList = [];
 
@@ -267,10 +267,10 @@ class ApplicationHandler {
 		$database = Database::getConnection(Settings::db_name_infected_crew);
 
 		$result = $database->query('SELECT * FROM `' . Settings::db_table_infected_crew_applications . '`
-                                WHERE `eventId` = \'' . ($event != null ? $event->getId() : EventHandler::getCurrentEvent()->getId()) . '\'
-                                AND `groupId` = \'' . $group->getId() .  '\'
-																AND (`state` = \'2\' OR `state` = \'3\')
-																ORDER BY `closedTime` DESC, `openedTime` DESC;');
+                                   WHERE `eventId` = ' . ($event != null ? $event->getId() : EventHandler::getCurrentEvent()->getId()) . '
+                                   AND `groupId` = ' . $group->getId() .  '
+								   AND (`state` = ' . self::STATE_ACCEPTED . ' OR `state` = ' . self::STATE_REJECTED . ')
+								   ORDER BY `closedTime` DESC, `openedTime` DESC;');
 
 		$applicationList = [];
 
@@ -287,16 +287,14 @@ class ApplicationHandler {
 	public static function createApplication(Group $group, User $user, Event $event = null, string $content): Application {
 		$database = Database::getConnection(Settings::db_name_infected_crew);
 
-		$database->query('INSERT INTO `' . Settings::db_table_infected_crew_applications . '` (`eventId`, `groupId`, `userId`, `openedTime`, `closedTime`, `state`, `content`, `updatedByUserId`, `comment`)
-										  VALUES (\'' . ($event != null ? $event->getId() : EventHandler::getCurrentEvent()->getId()) . '\',
-														  \'' . $group->getId() . '\',
-														  \'' . $user->getId() . '\',
-														  \'' . date('Y-m-d H:i:s') . '\',
-                              \'NULL\',
-														  \'1\',
-														  \'' . $database->real_escape_string($content) . '\',
-                              \'0\',
-                              \'\');');
+		$database->query('INSERT INTO `' . Settings::db_table_infected_crew_applications . '` (`eventId`, `groupId`, `userId`, `openedTime`, `state`, `content`, `updatedByUserId`)
+						 VALUES (' . ($event != null ? $event->getId() : EventHandler::getCurrentEvent()->getId()) . ',
+							     ' . $group->getId() . ',
+								 ' . $user->getId() . ',
+								 \'' . date('Y-m-d H:i:s') . '\',
+								 ' . self::STATE_NEW . ',
+								 \'' . $database->real_escape_string($content) . '\',
+                                 0);');
 
 		$application = self::getApplication($database->insert_id);
 
@@ -319,7 +317,7 @@ class ApplicationHandler {
 
 		// Remove the application.
 		$database->query('DELETE FROM `' . Settings::db_table_infected_crew_applications . '`
-						  				WHERE `id` = \'' . $application->getId() . '\';');
+						 WHERE `id` = ' . $application->getId() . ';');
 
 		// Remove the application from the queue, if present.
 		self::unqueueApplication($application, Session::getCurrentUser());
@@ -328,17 +326,16 @@ class ApplicationHandler {
 	/*
 	 * Accepts an application, with a optional comment.
 	 */
-	public static function acceptApplication(Application $application, User $user, string $comment, bool $notify) {
+	public static function acceptApplication(Application $application, User $user, bool $notify) {
 		// Only allow application for current event to be accepted.
 		if ($application->getEvent()->equals(EventHandler::getCurrentEvent())) {
 			$database = Database::getConnection(Settings::db_name_infected_crew);
 
 			$database->query('UPDATE `' . Settings::db_table_infected_crew_applications . '`
-											  SET `closedTime` = \'' . date('Y-m-d H:i:s') . '\',
-														`state` = \'2\',
-														`updatedByUserId` = \'' . $user->getId() . '\',
-														`comment` = \'' . $database->real_escape_string($comment) . '\'
-											  WHERE `id` = \'' . $application->getId() . '\';');
+							 SET `closedTime` = \'' . date('Y-m-d H:i:s') . '\',
+								 `state` = ' . self::STATE_ACCEPTED . ',
+								 `updatedByUserId` = ' . $user->getId() . '
+							 WHERE `id` = ' . $application->getId() . ';');
 
 			$applicationUser = $application->getUser();
 			$group = $application->getGroup();
@@ -356,7 +353,7 @@ class ApplicationHandler {
 			}
 
 			// Set the user in the new group
-			GroupHandler::changeGroupForUser($applicationUser, $group);
+            GroupHandler::addGroupMember($applicationUser, $group);
 
 			// Notify the user by email, if notify is true.
 			if ($notify) {
@@ -375,11 +372,11 @@ class ApplicationHandler {
 			$database = Database::getConnection(Settings::db_name_infected_crew);
 
 			$database->query('UPDATE `' . Settings::db_table_infected_crew_applications . '`
-											  SET `closedTime` = \'' . date('Y-m-d H:i:s') . '\',
-													  `state` = \'3\',
-													  `updatedByUserId` = \'' . $user->getId() . '\',
-													  `comment` = \'' . $database->real_escape_string($comment) . '\'
-											  WHERE `id` = \'' . $application->getId() . '\';');
+						     SET `closedTime` = \'' . date('Y-m-d H:i:s') . '\',
+								 `state` = ' . self::STATE_REJECTED . ',
+								 `updatedByUserId` = ' . $user->getId() . ',
+								 `comment` = \'' . $database->real_escape_string($comment) . '\'
+						     WHERE `id` = ' . $application->getId() . ';');
 
 			// Remove the application from the queue, if present.
 			self::unqueueApplication($application, $user);
@@ -398,11 +395,11 @@ class ApplicationHandler {
 		$database = Database::getConnection(Settings::db_name_infected_crew);
 
 		$database->query('UPDATE `' . Settings::db_table_infected_crew_applications . '`
-										  SET `closedTime` = \'' . date('Y-m-d H:i:s') . '\',
-											  	`state` = \'4\',
-													`updatedByUserId` = \'' . $user->getId() . '\',
-											  	`comment` = \'Closed by the system.\'
-										  WHERE `id` = \'' . $application->getId() . '\';');
+						 SET `closedTime` = \'' . date('Y-m-d H:i:s') . '\',
+							 `state` = ' . self::STATE_CLOSED . ',
+							 `updatedByUserId` = ' . $user->getId() . ',
+							 `comment` = \'Automatically closed by system.\'
+						 WHERE `id` = ' . $application->getId() . ';');
 
 		// Remove the application from the queue, if present.
 		self::unqueueApplication($application, $user);
@@ -418,11 +415,11 @@ class ApplicationHandler {
 					$database = Database::getConnection(Settings::db_name_infected_crew);
 
 					$database->query('INSERT INTO `' . Settings::db_table_infected_crew_applicationqueue . '` (`applicationId`)
-							 		  				VALUES (\'' . $application->getId() . '\');');
+							 		 VALUES (' . $application->getId() . ');');
 
 					$database->query('UPDATE `' . Settings::db_table_infected_crew_applications . '`
-		  							  			SET `updatedByUserId` = \'' . $user->getId() . '\'
-		  							  			WHERE `id` = \'' . $application->getId() . '\';');
+									 SET `updatedByUserId` = ' . $user->getId() . '
+									 WHERE `id` = ' . $application->getId() . ';');
   			}
 
   			// Notify the user by email, if notify is true.
@@ -441,11 +438,11 @@ class ApplicationHandler {
 			$database = Database::getConnection(Settings::db_name_infected_crew);
 
 			$database->query('DELETE FROM `' . Settings::db_table_infected_crew_applicationqueue . '`
-							  				WHERE `applicationId` = \'' . $application->getId() . '\';');
+							 WHERE `applicationId` = ' . $application->getId() . ';');
 
 			$database->query('UPDATE `' . Settings::db_table_infected_crew_applications . '`
-			  							  SET `updatedByUserId` = \'' . $user->getId() . '\'
-			  							  WHERE `id` = \'' . $application->getId() . '\';');
+						     SET `updatedByUserId` = ' . $user->getId() . '
+						     WHERE `id` = ' . $application->getId() . ';');
 		}
 	}
 
@@ -455,30 +452,31 @@ class ApplicationHandler {
 	public static function isQueued(Application $application): bool {
 		$database = Database::getConnection(Settings::db_name_infected_crew);
 
-		$result = $database->query('SELECT `id` FROM `' . Settings::db_table_infected_crew_applicationqueue . '`
-																WHERE `applicationId` = \'' . $application->getId() . '\';');
+		$result = $database->query('SELECT * FROM `' . Settings::db_table_infected_crew_applicationqueue . '`
+								   WHERE `applicationId` = ' . $application->getId() . ';');
 
 		return $result->num_rows > 0;
 	}
 
-  /*
-   * Returns a list of all applications for given user.
-   */
-  public static function getUserApplications(User $user, Event $event = null): array {
-    $database = Database::getConnection(Settings::db_name_infected_crew);
+    /*
+    * Returns a list of all applications for given user.
+    */
+    public static function getUserApplications(User $user, Event $event = null): array {
+        $database = Database::getConnection(Settings::db_name_infected_crew);
 
-    $result = $database->query('SELECT * FROM `' . Settings::db_table_infected_crew_applications . '`
-                                WHERE `eventId` = \'' . ($event != null ? $event->getId() : EventHandler::getCurrentEvent()->getId()) . '\'
-                                AND `userId` = \'' . $user->getId() . '\';');
+        $result = $database->query('SELECT * FROM `' . Settings::db_table_infected_crew_applications . '`
+                                   WHERE `eventId` = ' . ($event != null ? $event->getId() : EventHandler::getCurrentEvent()->getId()) . '
+                                   AND `userId` = ' . $user->getId() . '
+                                   AND (`state` = ' . self::STATE_NEW . ' OR `state` = ' . self::STATE_ACCEPTED . ');');
 
-    $applicationList = [];
+        $applicationList = [];
 
-    while ($object = $result->fetch_object('Application')) {
-      $applicationList[] = $object;
+        while ($object = $result->fetch_object('Application')) {
+            $applicationList[] = $object;
+        }
+
+        return $applicationList;
     }
-
-    return $applicationList;
-  }
 
 	/*
 	 * Returns a true if user has application for group.
@@ -486,11 +484,11 @@ class ApplicationHandler {
 	public static function hasUserApplicationsByGroup(User $user, Group $group, Event $event = null): bool {
 		$database = Database::getConnection(Settings::db_name_infected_crew);
 
-		$result = $database->query('SELECT `id` FROM `' . Settings::db_table_infected_crew_applications . '`
-																WHERE `eventId` = \'' . ($event != null ? $event->getId() : EventHandler::getCurrentEvent()->getId()) . '\'
-																AND `userId` = \'' . $user->getId() . '\'
-																AND `groupId` = \'' . $group->getId() . '\'
-																AND (`state` = \'1\' OR `state` = \'2\');');
+		$result = $database->query('SELECT * FROM `' . Settings::db_table_infected_crew_applications . '`
+								   WHERE `eventId` = ' . ($event != null ? $event->getId() : EventHandler::getCurrentEvent()->getId()) . '
+								   AND `userId` = ' . $user->getId() . '
+								   AND `groupId` = ' . $group->getId() . '
+								   AND (`state` = ' . self::STATE_NEW . ' OR `state` = ' . self::STATE_ACCEPTED . ');');
 
 		return $result->num_rows > 0;
 	}
@@ -502,12 +500,11 @@ class ApplicationHandler {
 		$database = Database::getConnection(Settings::db_name_infected_crew);
 
 		$result = $database->query('SELECT * FROM `' . Settings::db_table_infected_crew_applications . '`
-																WHERE `eventId` = \'' . ($event != null ? $event->getId() : EventHandler::getCurrentEvent()->getId()) . '\'
-																AND `userId` = \'' . $user->getId() . '\'
-																AND `groupId` = \'' . $group->getId() . '\'
-																AND (`state` = \'1\' OR `state` = \'2\');');
+								   WHERE `eventId` = ' . ($event != null ? $event->getId() : EventHandler::getCurrentEvent()->getId()) . '
+								   AND `userId` = ' . $user->getId() . '
+								   AND `groupId` = ' . $group->getId() . '
+								   AND (`state` = ' . self::STATE_NEW . ' OR `state` = ' . self::STATE_ACCEPTED . ');');
 
 		return $result->fetch_object('Application');
 	}
 }
-?>

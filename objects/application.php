@@ -22,6 +22,8 @@ require_once 'handlers/grouphandler.php';
 require_once 'handlers/userhandler.php';
 require_once 'objects/eventobject.php';
 
+use ApplicationHandler;
+
 class Application extends EventObject {
 	private $groupId;
 	private $userId;
@@ -70,26 +72,31 @@ class Application extends EventObject {
 	/*
 	 * Returns the state of this application.
 	 */
-	public function getStateAsString(): string {
+	public function getStateAsString(): ?string {
 		$updatedByUser = $this->getUpdatedByUser();
 
 		if ($this->isQueued()) {
 			return 'Står i kø'; // TODO: Add localization for this.
 		} else {
 			switch ($this->getState()) {
-				case 1:
+				case ApplicationHandler::STATE_NEW:
 					return 'Ikke behandlet'; // TODO: Add localization for this.
 					break;
 
-				case 2:
+				case ApplicationHandler::STATE_ACCEPTED:
 					return 'Godkjent' . ($updatedByUser != null ? ' av ' . $updatedByUser->getDisplayName() : null); // TODO: Add localization for this.
 					break;
 
-				case 3:
+				case ApplicationHandler::STATE_REJECTED:
 					return 'Avslått' . ($updatedByUser != null ? ' av ' . $updatedByUser->getDisplayName() : null); // TODO: Add localization for this.
 					break;
+
+                case ApplicationHandler::STATE_CLOSED:
+                    return 'Lukket';
 			}
 		}
+
+		return null;
 	}
 
 	/*
@@ -116,8 +123,8 @@ class Application extends EventObject {
 	/*
 	 * Accepts this application.
 	 */
-	public function accept(User $user, string $comment, bool $notify) {
-		ApplicationHandler::acceptApplication($this, $user, $comment, $notify);
+	public function accept(User $user, bool $notify) {
+		ApplicationHandler::acceptApplication($this, $user, $notify);
 	}
 
 	/*
@@ -155,4 +162,3 @@ class Application extends EventObject {
 		return ApplicationHandler::isQueued($this);
 	}
 }
-?>

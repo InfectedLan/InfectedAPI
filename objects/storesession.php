@@ -72,4 +72,3 @@ class StoreSession extends DatabaseObject {
 		return strtotime($this->datetime);
 	}
 }
-?>

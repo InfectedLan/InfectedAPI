@@ -38,4 +38,3 @@ class Permission extends DatabaseObject {
 		return $this->description;
 	}
 }
-?>

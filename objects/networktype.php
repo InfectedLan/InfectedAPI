@@ -46,4 +46,3 @@ class NetworkType extends DatabaseObject {
 		return $this->portType;
 	}
 }
-?>

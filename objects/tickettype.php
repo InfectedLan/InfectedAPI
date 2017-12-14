@@ -57,10 +57,10 @@ class TicketType extends DatabaseObject {
 		return $this->refundable ? true : false;
 	}
 
-  public function isUserEligibleForDiscount(User $user): bool {
-    $eventYear = date('Y', EventHandler::getCurrentEvent()->getStartTime());
+	public function isUserEligibleForDiscount(User $user): bool {
+		$eventYear = date('Y', EventHandler::getCurrentEvent()->getStartTime());
 
-	  foreach (TicketHandler::getTicketsByUserAndAllEvents($user) as $ticket) {
+		foreach (TicketHandler::getTicketsByUserAndAllEvents($user) as $ticket) {
 			$ticketType = $ticket->getType();
 			$ticketYear = date('Y', $ticket->getEvent()->getStartTime());
 
@@ -74,7 +74,7 @@ class TicketType extends DatabaseObject {
 		}
 
 		return false;
-  }
+	}
 
 	/*
 	 * Returns the price of this ticket, taking discount into consideration
@@ -88,4 +88,3 @@ class TicketType extends DatabaseObject {
 		return (($this->getPrice() - $discount) * $amount) + $fee;
 	}
 }
-?>

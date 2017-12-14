@@ -39,4 +39,3 @@ class Vote extends DatabaseObject {
 		return VoteOptionHandler::getVoteOption($this->voteOptionId);
 	}
 }
-?>

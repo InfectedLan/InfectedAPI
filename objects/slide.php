@@ -18,8 +18,7 @@
  * License along with this library.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-require_once 'handlers/eventhandler.php';
-require_once 'objects/databaseobject.php';
+require_once 'objects/eventobject.php';
 
 class Slide extends EventObject {
 	private $name;
@@ -71,4 +70,3 @@ class Slide extends EventObject {
 		return $this->published ? true : false;
 	}
 }
-?>

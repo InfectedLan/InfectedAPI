@@ -148,4 +148,3 @@ class Ticket extends EventObject {
 		TicketTransferHandler::revertTransfer($this, $user);
 	}
 }
-?>

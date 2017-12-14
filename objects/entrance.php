@@ -38,4 +38,3 @@ class Entrance extends DatabaseObject {
 		return $this->title;
 	}
 }
-?>

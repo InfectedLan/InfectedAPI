@@ -68,4 +68,3 @@ class DatabaseObject {
 		return !$this->isLessThan($object);
 	}
 }
-?>

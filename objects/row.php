@@ -87,17 +87,9 @@ class Row extends DatabaseObject {
 	}
 
 	/*
-	 * Removes the specified seat from this row.
-	 */
-	public function removeSeat() {
-		SeatHandler::removeSeat($this);
-	}
-
-	/*
 	 * Returns true if row is horizontal
 	 */
 	public function isHorizontal(): bool {
 		return $this->isHorizontal == 1;
 	}
 }
-?>

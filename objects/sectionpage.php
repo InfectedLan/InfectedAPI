@@ -46,4 +46,3 @@ class SectionPage extends DatabaseObject {
 		return $this->content;
 	}
 }
-?>

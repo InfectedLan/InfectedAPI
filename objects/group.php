@@ -113,4 +113,3 @@ class Group extends DatabaseObject {
 		return TeamHandler::getTeamsByGroup($this, $event);
 	}
 }
-?>

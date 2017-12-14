@@ -315,4 +315,3 @@ class Note extends EventObject {
 		return NoteHandler::getWatchingUsers($this);
 	}
 }
-?>

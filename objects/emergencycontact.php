@@ -46,4 +46,3 @@ class EmergencyContact extends DatabaseObject {
 		return rtrim('(+47) ' . chunk_split($this->getPhone(), 2, ' ')); // TODO: Select area code based on country.
 	}
 }
-?>

@@ -572,4 +572,3 @@ class User extends DatabaseObject {
 		UserHandler::setSteamId($this, $steamId);
 	}
 }
-?>

@@ -76,4 +76,3 @@ class Seatmap extends DatabaseObject {
 		RowHandler::removeRow($row);
 	}
 }
-?>
