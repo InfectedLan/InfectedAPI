@@ -24,6 +24,10 @@ require_once 'objects/avatar.php';
 require_once 'objects/user.php';
 
 class AvatarHandler {
+    const STATE_NEW = 1;
+    const STATE_ACCEPTED = 2;
+    const STATE_REJECTED = 3;
+
 	/*
 	 * Get an avatar by the internal id.
 	 */
@@ -43,7 +47,7 @@ class AvatarHandler {
 		$database = Database::getConnection(Settings::db_name_infected_crew);
 
 		$result = $database->query('SELECT * FROM `' . Settings::db_table_infected_crew_avatars . '`
-																WHERE `userId` = \'' . $user->getId() . '\';');
+								   WHERE `userId` = ' . $user->getId() . ';');
 
 		return $result->fetch_object('Avatar');
 	}
@@ -72,7 +76,7 @@ class AvatarHandler {
 		$database = Database::getConnection(Settings::db_name_infected_crew);
 
 		$result = $database->query('SELECT * FROM `' . Settings::db_table_infected_crew_avatars . '`
-																WHERE `state` = \'1\';');
+								   WHERE `state` = ' . self::STATE_NEW . ';');
 
 		$avatarList = [];
 
@@ -90,7 +94,7 @@ class AvatarHandler {
 		$database = Database::getConnection(Settings::db_name_infected_crew);
 
 		$result = $database->query('SELECT * FROM `' . Settings::db_table_infected_crew_avatars . '`
-																WHERE `userId` = \'' . $user->getId() . '\';');
+								   WHERE `userId` = ' . $user->getId() . ';');
 
 		return $result->num_rows > 0;
 	}
@@ -102,8 +106,8 @@ class AvatarHandler {
 		$database = Database::getConnection(Settings::db_name_infected_crew);
 
 		$result = $database->query('SELECT * FROM `' . Settings::db_table_infected_crew_avatars . '`
-																WHERE `userId` = \'' . $user->getId() . '\'
-																AND (`state` = 1 OR `state` = 2);');
+                                   WHERE `userId` = ' . $user->getId() . '
+                                   AND (`state` = ' . self::STATE_NEW . ' OR `state` = ' . self::STATE_ACCEPTED . ');');
 
 		return $result->num_rows > 0;
 	}
@@ -115,8 +119,8 @@ class AvatarHandler {
 		$database = Database::getConnection(Settings::db_name_infected_crew);
 
 		$result = $database->query('SELECT * FROM `' . Settings::db_table_infected_crew_avatars . '`
-																WHERE `userId` = \'' . $user->getId() . '\'
-																AND `state` = \'2\';');
+                                   WHERE `userId` = ' . $user->getId() . '
+                                   AND `state` = ' . self::STATE_ACCEPTED . ';');
 
 		return $result->num_rows > 0;
 	}
@@ -128,9 +132,9 @@ class AvatarHandler {
 		$database = Database::getConnection(Settings::db_name_infected_crew);
 
 		$result = $database->query('INSERT INTO `' . Settings::db_table_infected_crew_avatars . '` (`userId`, `fileName`, `state`)
-																VALUES (\'' . $user->getId() . '\',
-																				\'' . $fileName . '\',
-																				\'0\');');
+                                   VALUES (\'' . $user->getId() . '\',
+                                           \'' . $fileName . '\',
+                                           ' . self::STATE_NEW . ');');
 
 		return Settings::api_path . Settings::avatar_path . 'temp/' . $fileName;
 	}
@@ -142,9 +146,9 @@ class AvatarHandler {
 		$database = Database::getConnection(Settings::db_name_infected_crew);
 
 		$database->query('UPDATE `' . Settings::db_table_infected_crew_avatars . '`
-										  SET `state` = \'' . $database->real_escape_string($state) . '\',
-													`fileName` = \'' . $database->real_escape_string($fileName) . '\'
-										  WHERE `id` = \'' . $avatar->getId() . '\'');
+                         SET `state` = ' . $database->real_escape_string($state) . ',
+                             `fileName` = \'' . $database->real_escape_string($fileName) . '\'
+                         WHERE `id` = ' . $avatar->getId() . ';');
 	}
 
 	/*
@@ -153,8 +157,8 @@ class AvatarHandler {
 	public static function removeAvatar(Avatar $avatar) {
 		$database = Database::getConnection(Settings::db_name_infected_crew);
 
-		$result = $database->query('DELETE FROM `' . Settings::db_table_infected_crew_avatars . '`
-																WHERE `id` = \'' . $avatar->getId() . '\';');
+		$database->query('DELETE FROM `' . Settings::db_table_infected_crew_avatars . '`
+						 WHERE `id` = ' . $avatar->getId() . ';');
 
 		// Delete all avatars.
 		$avatar->deleteFiles();
@@ -167,8 +171,8 @@ class AvatarHandler {
 		$database = Database::getConnection(Settings::db_name_infected_crew);
 
 		$database->query('UPDATE `' . Settings::db_table_infected_crew_avatars . '`
-										  SET `state` = \'2\'
-										  WHERE `id` = \'' . $avatar->getId() . '\';');
+                         SET `state` = ' . self::STATE_ACCEPTED . '
+                         WHERE `id` = ' . $avatar->getId() . ';');
 	}
 
 	/*
@@ -178,8 +182,8 @@ class AvatarHandler {
 		$database = Database::getConnection(Settings::db_name_infected_crew);
 
 		$database->query('UPDATE `' . Settings::db_table_infected_crew_avatars . '`
-										  SET `state` =  \'3\'
-										  WHERE `id` = \'' . $avatar->getId() . '\';');
+                         SET `state` = ' . self::STATE_REJECTED . '
+                         WHERE `id` = ' . $avatar->getId() . ';');
 	}
 
 	/*
@@ -199,4 +203,3 @@ class AvatarHandler {
 		return Settings::avatar_path . 'default/' . $file;
 	}
 }
-?>
