@@ -22,8 +22,6 @@ require_once 'handlers/grouphandler.php';
 require_once 'handlers/userhandler.php';
 require_once 'objects/eventobject.php';
 
-use ApplicationHandler;
-
 class Application extends EventObject {
 	private $groupId;
 	private $userId;
