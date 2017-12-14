@@ -284,7 +284,7 @@ class ApplicationHandler {
 	/*
 	 * Create a new application.
 	 */
-	public static function createApplication(Group $group, User $user, Event $event = null, string $content): Application {
+	public static function createApplication(Group $group, User $user, string $content, Event $event = null): Application {
 		$database = Database::getConnection(Settings::db_name_infected_crew);
 
 		$database->query('INSERT INTO `' . Settings::db_table_infected_crew_applications . '` (`eventId`, `groupId`, `userId`, `openedTime`, `state`, `content`, `updatedByUserId`)
