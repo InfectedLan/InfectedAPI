@@ -29,7 +29,7 @@ require_once 'handlers/userhandler.php';
 class NfcCard extends Object {
 	private $userId;
 	private $eventId;
-	private $nfcId
+	private $nfcId;
 	
 	/*
 	 * Returns the user assigned to this card
