@@ -20,7 +20,7 @@
 
 require_once 'settings.php';
 require_once 'database.php';
-require_once 'objects/nfcgate.php';
+require_once 'objects/nfccard.php';
 require_once 'objects/event.php';
 require_once 'objects/user.php';
 require_once 'handlers/eventhandler.php';
