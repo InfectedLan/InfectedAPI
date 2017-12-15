@@ -93,7 +93,7 @@ class NfcCardHandler {
 	 * Returns a list of all nfc cards for the current event
 	 */
 	public static function getCardsForCurrentEvent() {
-		return self::getGatesByEvent(EventHandler::getCurrentEvent());
+		return self::getCardsByEvent(EventHandler::getCurrentEvent());
 	}
 }
 ?>
