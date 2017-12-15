@@ -29,6 +29,7 @@ class Settings {
 	const domain = 'test.infected.no';
 
 	// Email information.
+	const enableEmail = false;
 	const emailName = self::name;
 	const email = 'no-reply@' . self::domain;
 
