@@ -73,20 +73,26 @@ class NfcCardHandler {
 	/*
 	 * Returns the NFC card given an user and an event
 	 */
-	public static function getCardByUserAndEvent(Event $event, User $user) {
+	public static function getCardsByUserAndEvent(Event $event, User $user) {
 		$database = Database::getConnection(Settings::db_name_infected);
 
 		$result = $database->query('SELECT * FROM `'. Settings::db_table_infected_nfccards . '`
 																WHERE `eventId` = \'' . $database->real_escape_string($event->getId()) . '\' AND `userId` = \'' . $database->real_escape_string($user->getId()) . '\';');
 
-		return $result->fetch_object('NfcCard');
+		$cardList = [];
+
+		while ($object = $result->fetch_object('NfcCard')) {
+			$cardList[] = $object;
+		}
+
+		return $cardList;
 	}
 
 	/*
 	 * Returns a user's NFC card for the current event
 	 */
-	public static function getCardByUserForCurrentEvent(User $user) {
-		return self::getCardByUserAndEvent(EventHandler::getCurrentEvent(), $user);
+	public static function getCardsByUserForCurrentEvent(User $user) {
+		return self::getCardsByUserAndEvent(EventHandler::getCurrentEvent(), $user);
 	}
 
 	/*
