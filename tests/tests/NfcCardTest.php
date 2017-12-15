@@ -52,6 +52,7 @@ class NfcCardTest extends TestCase {
 		$nfcid = "E004010203040506";
 
 		NfcCardHandler::registerCard($me,EventHandler::getCurrentEvent(), $nfcid);
+
 		$cards = NfcCardHandler::getCardsByUserForCurrentEvent($me);
 		$this->assertEquals(1, count($cards));
 
