@@ -34,7 +34,7 @@ if (Session::isAuthenticated()) {
     $user = Session::getCurrentUser();
 
     if ($user->hasPermission('compo.management')) {
-        if(isset($_GET['id']) && isset($_GET["url"])) {
+        if(isset($_GET['id']) && isset($_GET["toornament_id"])) {
 	    $compo = CompoHandler::getCompo($_GET["id"]);
             if($compo != null) {
 		$plugin = CompoPluginHandler::getPluginObjectOrDefault($compo->getPluginName());
@@ -44,11 +44,11 @@ if (Session::isAuthenticated()) {
 		    $oauthToken = $plugin->getToornamentOauthToken();
 		    //echo "Toornament oauth token: " . $oauthToken;
 		    
-		    $compoId = str_replace("/", "", str_replace("https://organizer.toornament.com/tournaments/", "", $_GET["url"]));
+		    //$compoId = str_replace("/", "", str_replace("https://organizer.toornament.com/tournaments/", "", $_GET["url"]));
 		    $result = true;
 		    $qualifiedClans = ClanHandler::getQualifiedClansByCompo($compo);
 
-		    $curlUrl = "https://api.toornament.com/v1/tournaments/" . urlencode($compoId) . "/participants";
+		    $curlUrl = "https://api.toornament.com/v1/tournaments/" . urlencode($_GET["toornament_id"]) . "/participants";
 		    //echo "Sending requests to " . $curlUrl;
 		    foreach($qualifiedClans as $clan) {
 			$curlSess = curl_init();
@@ -65,7 +65,7 @@ if (Session::isAuthenticated()) {
 			if($info["http_code"] != 201) {
 			    $data = json_decode($curlResult);
 			    //if(isset($data->errors)) {
-				$message = "There was an error adding the clanid " . $clan->getId() . ": " . $curlResult;				
+				$message = "There was an error adding the clanid " . $clan->getId() . ": " . $curlResult . " (Code " . $info["http_code"] . ")";				
 			    /*} else {
 				$message = "There was an error adding the clanid " . $clan->getId() . ". We were not able to parse the error.";
 			    }*/

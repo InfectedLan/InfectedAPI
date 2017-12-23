@@ -124,7 +124,6 @@ Websocket = (function() {
     };
     wsObject.connect = function(url) {
 	url = (typeof(url) === "undefined" ? this.getDefaultConnectUrl() : url);
-		return;
 		console.log("WebSocket connecting to " + url);
 		socket = new WebSocket(url);
 		socket.onopen = _onOpen;
