@@ -2,7 +2,7 @@
 /**
  * This file is part of InfectedAPI.
  *
- * Copyright (C) 2015 Infected <http://infected.no/>.
+ * Copyright (C) 2017 Infected <http://infected.no/>.
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -26,7 +26,7 @@ class LocationHandler {
 	/*
 	 * Returns the location with the given id.
 	 */
-	public static function getLocation($id) {
+	public static function getLocation(int $id): ?Location {
 		$database = Database::getConnection(Settings::db_name_infected);
 
 		$result = $database->query('SELECT * FROM `'. Settings::db_table_infected_locations . '`
@@ -38,7 +38,7 @@ class LocationHandler {
 	/*
 	 * Returns a list of all locations.
 	 */
-	public static function getLocations() {
+	public static function getLocations(): array {
 		$database = Database::getConnection(Settings::db_name_infected);
 
 		$result = $database->query('SELECT * FROM `' . Settings::db_table_infected_locations . '`;');

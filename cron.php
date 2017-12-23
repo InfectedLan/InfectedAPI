@@ -2,7 +2,7 @@
 /**
  * This file is part of InfectedAPI.
  *
- * Copyright (C) 2015 Infected <http://infected.no/>.
+ * Copyright (C) 2017 Infected <http://infected.no/>.
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -49,6 +49,6 @@ if (Utils::isCli()) {
 		$task->run();
 	}
 } else {
-	echo 'You don\'t have permission do do this, you\'ll only be able to run this from the CLI.';
+	echo Localization::getLocale("you_do_not_have_permission_to_do_this_you_will only be able to run this from command line");
 }
 ?>

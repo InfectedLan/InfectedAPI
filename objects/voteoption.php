@@ -2,7 +2,7 @@
 /**
  * This file is part of InfectedAPI.
  *
- * Copyright (C) 2015 Infected <http://infected.no/>.
+ * Copyright (C) 2017 Infected <http://infected.no/>.
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -19,9 +19,9 @@
  */
 
 require_once 'handlers/compohandler.php';
-require_once 'objects/object.php';
+require_once 'objects/databaseobject.php';
 
-class VoteOption extends Object{
+class VoteOption extends DatabaseObject {
 	private $compoId;
 	private $thumbnailUrl;
 	private $name;
@@ -29,21 +29,21 @@ class VoteOption extends Object{
 	/*
 	 * Returns the compo of this vote option.
 	 */
-	public function getCompo() {
+	public function getCompo(): Compo {
 		return CompoHandler::getCompo($this->compoId);
 	}
 
 	/*
 	 * Return the thumbnail url for this vote option.
 	 */
-	public function getThumbnailUrl() {
+	public function getThumbnailUrl(): string {
 		return $this->thumbnailUrl;
 	}
 
 	/*
 	 * Returns the name of this vote option.
 	 */
-	public function getName() {
+	public function getName(): string {
 		return $this->name;
 	}
 }

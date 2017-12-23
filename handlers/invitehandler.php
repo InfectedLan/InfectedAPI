@@ -2,7 +2,7 @@
 /**
  * This file is part of InfectedAPI.
  *
- * Copyright (C) 2015 Infected <http://infected.no/>.
+ * Copyright (C) 2017 Infected <http://infected.no/>.
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -29,12 +29,11 @@ class InviteHandler {
 	/*
 	 * Get a invite by the internal id.
 	 */
-	public static function getInvite($id) {
+	public static function getInvite(int $id): ?Invite {
 		$database = Database::getConnection(Settings::db_name_infected_compo);
 
 		$result = $database->query('SELECT * FROM `' . Settings::db_table_infected_compo_invites . '`
 																WHERE `id` = \'' . $id . '\';');
-
 
 		return $result->fetch_object('Invite');
 	}
@@ -42,11 +41,10 @@ class InviteHandler {
 	/*
 	 * Get all invites.
 	 */
-	public static function getInvites() {
+	public static function getInvites(): array {
 		$database = Database::getConnection(Settings::db_name_infected_compo);
 
 		$result = $database->query('SELECT * FROM `'  . Settings::db_table_infected_compo_invites . '`;');
-
 
 		$inviteList = [];
 
@@ -60,12 +58,11 @@ class InviteHandler {
 	/*
 	 * Get all invites for the specified user.
 	 */
-	public static function getInvitesByUser(User $user) {
+	public static function getInvitesByUser(User $user): array {
 		$database = Database::getConnection(Settings::db_name_infected_compo);
 
 		$result = $database->query('SELECT * FROM `'  . Settings::db_table_infected_compo_invites . '`
 																WHERE `userId` = \'' . $user->getId() . '\';');
-
 
 		$inviteList = [];
 
@@ -79,12 +76,11 @@ class InviteHandler {
 	/*
 	 * Get all invites for a clan.
 	 */
-	public static function getInvitesByClan(Clan $clan) {
+	public static function getInvitesByClan(Clan $clan): array {
 		$database = Database::getConnection(Settings::db_name_infected_compo);
 
 		$result = $database->query('SELECT * FROM `' . Settings::db_table_infected_compo_invites . '`
 																WHERE `clanId` = \'' . $clan->getId() . '\';');
-
 
 		$inviteList = [];
 
@@ -98,18 +94,15 @@ class InviteHandler {
 	/*
 	 * Invite the specified user to the specifed clan.
 	 */
-	public static function createInvite(Clan $clan, User $user) {
+	public static function createInvite(Clan $clan, User $user, Event $event = null): Invite {
 		$database = Database::getConnection(Settings::db_name_infected_compo);
 
 		$database->query('INSERT INTO `' . Settings::db_table_infected_compo_invites . '` (`eventId`, `userId`, `clanId`)
-										  VALUES (\'' . EventHandler::getCurrentEvent()->getId() . '\',
+										  VALUES (\'' . ($event != null ? $event->getId() : EventHandler::getCurrentEvent()->getId()) . '\',
 														  \'' . $user->getId() . '\',
 														  \'' . $clan->getId() . '\');');
 
-		$invite = self::getInvite($database->insert_id);
-
-
-		return $invite;
+		return self::getInvite($database->insert_id);
 	}
 
 	/*
@@ -131,31 +124,33 @@ class InviteHandler {
 															\'' . $clan->getId() . '\',
 															\'' . $stepInId . '\');');
 
-		if(count($memberList) == $compo->getTeamSize()-1) {
-		    //NEW: steamid check
-		    $canQualify = !$compo->requiresSteamId();
-		    if(!$canQualify) {
-			//Compo requires steam id
-			foreach($memberList as $member) {
-			    if($member->getSteamId() === null) {
-				$canQualify = false;
-				break;
+		if (count($memberList) == $compo->getTeamSize()-1) {
+	    //NEW: steamid check
+	    $canQualify = !$compo->requiresSteamId();
+
+			if (!$canQualify) {
+				//Compo requires steam id
+				foreach ($memberList as $member) {
+			    if ($member->getSteamId() === null) {
+						$canQualify = false;
+						break;
 			    } else {
-				$canQualify = true;
+						$canQualify = true;
 			    }
+				}
+
+				$canQualify = $canQualify && $invite->getUser()->getSteamId() !== null;
 			}
-			$canQualify = $canQualify && $invite->getUser()->getSteamId() !== null;
-		    }
-		    //echo "Qualification test result: " . $canQualify;
-	    
-		    if($canQualify) {
-			$playingClans = ClanHandler::getQualifiedClansByCompo($compo);
-			if(count($playingClans) < $compo->getParticipantLimit() || $compo->getParticipantLimit() == 0) {
-			    ClanHandler::setQualified($clan, true);
-			} else if(!ClanHandler::isInQualificationQueue($clan)){
-			    ClanHandler::addToQualificationQueue($clan);
-			}
-		    }
+
+	    if ($canQualify) {
+				$playingClans = ClanHandler::getQualifiedClansByCompo($compo);
+
+				if (count($playingClans) < $compo->getParticipantLimit() || $compo->getParticipantLimit() == 0) {
+					ClanHandler::setQualified($clan, true);
+				} else if (!ClanHandler::isInQualificationQueue($clan)) {
+				  ClanHandler::addToQualificationQueue($clan);
+				}
+	    }
 		}
 	}
 
@@ -167,7 +162,6 @@ class InviteHandler {
 
 		$database->query('DELETE FROM `' . Settings::db_table_infected_compo_invites . '`
 											WHERE `id` = \'' . $invite->getId() . '\';');
-
 	}
 }
 ?>

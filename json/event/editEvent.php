@@ -1,9 +1,8 @@
 <?php
-include 'database.php';
 /**
  * This file is part of InfectedAPI.
  *
- * Copyright (C) 2015 Infected <http://infected.no/>.
+ * Copyright (C) 2017 Infected <http://infected.no/>.
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -20,6 +19,7 @@ include 'database.php';
  */
 
 require_once 'session.php';
+require_once 'database.php';
 require_once 'localization.php';
 require_once 'handlers/eventhandler.php';
 
@@ -35,10 +35,10 @@ if (Session::isAuthenticated()) {
 			isset($_GET['participants']) &&
 			isset($_GET['bookingDate']) &&
 			isset($_GET['bookingTime']) &&
-		    	isset($_GET['prioritySeatingDate']) &&
-		    	isset($_GET['prioritySeatingTime']) &&
-		    	isset($_GET['seatingDate']) &&
-		    	isset($_GET['seatingTime']) &&
+    	isset($_GET['prioritySeatingDate']) &&
+    	isset($_GET['prioritySeatingTime']) &&
+    	isset($_GET['seatingDate']) &&
+    	isset($_GET['seatingTime']) &&
 			isset($_GET['startDate']) &&
 			isset($_GET['startTime']) &&
 			isset($_GET['endDate']) &&
@@ -57,7 +57,7 @@ if (Session::isAuthenticated()) {
 			!empty($_GET['endDate']) &&
 			!empty($_GET['endTime']) &&
 			$event = EventHandler::getEvent($_GET['id']);
-			$location = $_GET['location'];
+			$location = LocationHandler::getLocation($_GET['location']);
 			$participants = $_GET['participants'];
 			$bookingTime = $_GET['bookingDate'] . ' ' . $_GET['bookingTime'];
 			$prioritySeatingTime = $_GET['prioritySeatingDate'] . ' ' . $_GET['prioritySeatingTime'];
@@ -66,8 +66,10 @@ if (Session::isAuthenticated()) {
 			$endTime = $_GET['endDate'] . ' ' . $_GET['endTime'];
 
 			if ($event != null) {
-			    EventHandler::updateEvent($event, $location, $participants, $bookingTime, $prioritySeatingTime , $seatingTime , $startTime, $endTime);
-				$result = true;
+				if ($location != null) {
+			    EventHandler::updateEvent($event, $location, $participants, $bookingTime, $prioritySeatingTime, $seatingTime, $startTime, $endTime);
+					$result = true;
+				}
 			} else {
 				$message = Localization::getLocale('the_event_does_not_exist');
 			}
@@ -81,7 +83,7 @@ if (Session::isAuthenticated()) {
 	$message = Localization::getLocale('you_are_not_logged_in');
 }
 
-header('Content-Type: text/plain');
+header('Content-Type: application/json');
 echo json_encode(['result' => $result, 'message' => $message], JSON_PRETTY_PRINT);
 Database::cleanup();
 ?>

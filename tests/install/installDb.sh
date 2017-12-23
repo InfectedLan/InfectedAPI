@@ -14,5 +14,3 @@ if [ $# -eq 0 ]
 				mysql -h localhost -u root -p$3 $2 < $1
 		fi
 fi
-
-

@@ -2,7 +2,7 @@
 /**
  * This file is part of InfectedAPI.
  *
- * Copyright (C) 2015 Infected <http://infected.no/>.
+ * Copyright (C) 2017 Infected <http://infected.no/>.
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -26,12 +26,11 @@ class PasswordResetCodeHandler {
 	/*
 	 * Get the password reset code by the internal id.
 	 */
-	public static function getPasswordResetCode($id) {
+	public static function getPasswordResetCode(int $id): ?string {
 		$database = Database::getConnection(Settings::db_name_infected);
 
 		$result = $database->query('SELECT `code` FROM `' . Settings::db_table_infected_passwordresetcodes . '`
 																WHERE `id` = \'' . $database->real_escape_string($id) . '\';');
-
 
 		$row = $result->fetch_array();
 
@@ -41,11 +40,10 @@ class PasswordResetCodeHandler {
 	/*
 	 * Returns a list of all password reset codes.
 	 */
-	public static function getPasswordResetCodes() {
+	public static function getPasswordResetCodes(): array {
 		$database = Database::getConnection(Settings::db_name_infected);
 
 		$result = $database->query('SELECT `code` FROM `' . Settings::db_table_infected_passwordresetcodes . '`;');
-
 
 		$codeList = [];
 
@@ -59,12 +57,11 @@ class PasswordResetCodeHandler {
 	/*
 	 * Returns true if we've got the specified code.
 	 */
-	public static function hasPasswordResetCode($code) {
+	public static function hasPasswordResetCode(string $code): bool {
 		$database = Database::getConnection(Settings::db_name_infected);
 
 		$result = $database->query('SELECT `id` FROM `' . Settings::db_table_infected_passwordresetcodes . '`
 																WHERE `code` = \'' . $database->real_escape_string($code) . '\';');
-
 
 		return $result->num_rows > 0;
 	}
@@ -72,12 +69,11 @@ class PasswordResetCodeHandler {
 	/*
 	 * Returns true if we've got a code for the specified user.
 	 */
-	public static function hasPasswordResetCodeByUser(User $user) {
+	public static function hasPasswordResetCodeByUser(User $user): bool {
 		$database = Database::getConnection(Settings::db_name_infected);
 
 		$result = $database->query('SELECT `id` FROM `' . Settings::db_table_infected_passwordresetcodes . '`
 																WHERE `userId` = \'' . $user->getId() . '\';');
-
 
 		return $result->num_rows > 0;
 	}
@@ -85,7 +81,7 @@ class PasswordResetCodeHandler {
 	/*
 	 * Create a new password reset code for the specified user.
 	 */
-	public static function createPasswordResetCode(User $user) {
+	public static function createPasswordResetCode(User $user): ?string {
 		$code = bin2hex(openssl_random_pseudo_bytes(16));
 
 		$database = Database::getConnection(Settings::db_name_infected);
@@ -100,19 +96,17 @@ class PasswordResetCodeHandler {
 											  WHERE `userId` = \'' . $user->getId() . '\';');
 		}
 
-
 		return $code;
 	}
 
 	/*
 	 * Remove the specified password reset code.
 	 */
-	public static function removePasswordResetCode($code) {
+	public static function removePasswordResetCode(string $code) {
 		$database = Database::getConnection(Settings::db_name_infected);
 
 		$database->query('DELETE FROM `' . Settings::db_table_infected_passwordresetcodes . '`
 						  				WHERE `code` = \'' . $database->real_escape_string($code) . '\';');
-
 	}
 
 	/*
@@ -123,19 +117,17 @@ class PasswordResetCodeHandler {
 
 		$database->query('DELETE FROM `' . Settings::db_table_infected_passwordresetcodes . '`
 						  				WHERE `userId` = \'' . $user->getId() . '\';');
-
 	}
 
 	/*
 	 * Returns the user with the specified password reset code.
 	 */
-	public static function getUserFromPasswordResetCode($code) {
+	public static function getUserFromPasswordResetCode($code): ?User {
 		$database = Database::getConnection(Settings::db_name_infected);
 
 		$result = $database->query('SELECT * FROM `' . Settings::db_table_infected_users . '`
 																WHERE `id` = (SELECT `userId` FROM `' . Settings::db_table_infected_passwordresetcodes . '`
 																			  			WHERE `code` = \'' . $database->real_escape_string($code) . '\');');
-
 
 		return $result->fetch_object('User');
 	}

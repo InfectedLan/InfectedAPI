@@ -2,7 +2,7 @@
 /**
  * This file is part of InfectedAPI.
  *
- * Copyright (C) 2015 Infected <http://infected.no/>.
+ * Copyright (C) 2017 Infected <http://infected.no/>.
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -19,7 +19,7 @@
  */
 
 class UserUtils {
-	public static function toUserIdList(array $userList) {
+	public static function toUserIdList(array $userList): array {
 		$userIdList = [];
 
 		foreach ($userList as $user) {
@@ -29,7 +29,7 @@ class UserUtils {
 		return $userIdList;
 	}
 
-	public static function fromUserIdList(array $userIdList) {
+	public static function fromUserIdList(array $userIdList): array {
 		$userList = [];
 
 		foreach ($userIdList as $userId) {

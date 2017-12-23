@@ -2,7 +2,7 @@
 /**
  * This file is part of InfectedAPI.
  *
- * Copyright (C) 2015 Infected <http://infected.no/>.
+ * Copyright (C) 2017 Infected <http://infected.no/>.
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -29,12 +29,11 @@ class SeatmapHandler {
 	/*
 	 * Get a seatmap by the internal id.
 	 */
-	public static function getSeatmap($id) {
+	public static function getSeatmap(int $id): ?Seatmap {
 		$database = Database::getConnection(Settings::db_name_infected_tickets);
 
 		$result = $database->query('SELECT * FROM `' . Settings::db_table_infected_tickets_seatmaps . '`
 																WHERE `id` = \'' . $database->real_escape_string($id) . '\';');
-
 
 		return $result->fetch_object('Seatmap');
 	}
@@ -42,11 +41,10 @@ class SeatmapHandler {
 	/*
 	 * Returns a list of all seatmaps.
 	 */
-	public static function getSeatmaps() {
+	public static function getSeatmaps(): array {
 		$database = Database::getConnection(Settings::db_name_infected_tickets);
 
 		$result = $database->query('SELECT * FROM `' . Settings::db_table_infected_tickets_seatmaps . '`;');
-
 
 		$seatmapList = [];
 
@@ -60,67 +58,69 @@ class SeatmapHandler {
 	/*
 	 * Creates a new seatmap.
 	 */
-	public static function createSeatmap($name, $backgroundImage) {
+	public static function createSeatmap(string $name, string $backgroundImage): Seatmap {
 		$database = Database::getConnection(Settings::db_name_infected_tickets);
 
 		$database->query('INSERT INTO ' . Settings::db_table_infected_tickets_seatmaps . '(`humanName`, `backgroundImage`)
 						  				VALUES (\'' . $database->real_escape_string($name) . '\',
 								  						\'' . $database->real_escape_string($backgroundImage) . '\')');
 
-		$seatmap = self::getSeatmap($database->insert_id);
-
-
-		return $seatmap;
+		return self::getSeatmap($database->insert_id);
 	}
 
 	/*
 	 * Creates a new seatmap with the contents of another seatmap
 	 */
-	public static function cloneSeatmap(Seatmap $sourceSeatmap) {
+	public static function cloneSeatmap(Seatmap $sourceSeatmap): Seatmap {
 	    $targetSeatmap = self::createSeatmap('Clone of ' . $sourceSeatmap->getHumanName(), $sourceSeatmap->getBackgroundImage());
 
 	    self::copySeatmap($sourceSeatmap, $targetSeatmap);
-	    
+
 	    return $targetSeatmap;
 	}
 
 	/*
 	 * Copies a seatmap, destroying the old seatmap in the process
 	 */
-	public static function copySeatmap(Seatmap $sourceSeatmap, Seatmap $targetSeatmap) {
-	    $preExistingRows = RowHandler::getRowsBySeatmap($targetSeatmap);
-	    $isSafeToDelete = true;
-	    foreach($preExistingRows as $row) {
-		if(!RowHandler::safeToDelete($row)) {
+	public static function copySeatmap(Seatmap $sourceSeatmap, Seatmap $targetSeatmap): bool {
+    $preExistingRows = RowHandler::getRowsBySeatmap($targetSeatmap);
+    $isSafeToDelete = true;
+
+		foreach ($preExistingRows as $row) {
+			if (!RowHandler::safeToDelete($row)) {
 		    $isSafeToDelete = false;
+
 		    break;
+			}
 		}
-	    }
-	    if(!$isSafeToDelete) {
-		return false;
-	    }
 
-	    $sourceRows = RowHandler::getRowsBySeatmap($sourceSeatmap);
-	    foreach($sourceRows as $sourceRow) {
-		$targetRow = RowHandler::createRow($targetSeatmap, $sourceRow->getX(), $sourceRow->getY());
-		$sourceSeats = SeatHandler::getSeatsByRow($sourceRow);
-		foreach($sourceSeats as $sourceSeat) {
-		    $targetSeat = SeatHandler::createSeat($targetRow, $sourceSeat->getNumber());
-		}
-	    }
+    if (!$isSafeToDelete) {
+			return false;
+    }
 
-	    return true;
+		$sourceRows = RowHandler::getRowsBySeatmap($sourceSeatmap);
+
+		foreach ($sourceRows as $sourceRow) {
+			$targetRow = RowHandler::createRow($targetSeatmap, $sourceRow->getX(), $sourceRow->getY());
+			$sourceSeats = SeatHandler::getSeatsByRow($sourceRow);
+
+			foreach ($sourceSeats as $sourceSeat) {
+				$targetSeat = SeatHandler::createSeat($targetRow, $sourceSeat->getNumber());
+			}
+    }
+
+    return true;
 	}
 
 	/*
 	 * Returns a list of all seatmaps.
 	 */
-	public static function getEvent(Seatmap $seatmap) {
+	public static function getEvent(Seatmap $seatmap): ?Event {
 		$database = Database::getConnection(Settings::db_name_infected);
 
+		// TODO: Use joins here to join with event table. Somehow.
 		$result = $database->query('SELECT `id` FROM `' . Settings::db_table_infected_events . '`
 																WHERE `seatmapId` = \'' . $seatmap->getId() . '\';');
-
 
 		$row = $result->fetch_array();
 
@@ -130,13 +130,12 @@ class SeatmapHandler {
 	/*
 	 * Set the background of the specified seatmap.
 	 */
-	public static function setBackground(Seatmap $seatmap, $filename) {
+	public static function setBackground(Seatmap $seatmap, string $filename) {
 		$database = Database::getConnection(Settings::db_name_infected_tickets);
 
 		$database->query('UPDATE `' . Settings::db_table_infected_tickets_seatmaps . '`
 						  				SET `backgroundImage` = \'' . $database->real_escape_string($filename) . '\'
 						  				WHERE `id` = \'' . $seatmap->getId() . '\';');
-
 	}
 }
 ?>

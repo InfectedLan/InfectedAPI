@@ -2,7 +2,7 @@
 /**
  * This file is part of InfectedAPI.
  *
- * Copyright (C) 2015 Infected <http://infected.no/>.
+ * Copyright (C) 2017 Infected <http://infected.no/>.
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -18,10 +18,10 @@
  * License along with this library.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+require_once 'handlers/eventhandler.php';
 require_once 'handlers/grouphandler.php';
 require_once 'handlers/teamhandler.php';
 require_once 'handlers/userhandler.php';
-require_once 'handlers/eventhandler.php';
 require_once 'objects/eventobject.php';
 
 class Note extends EventObject {
@@ -39,56 +39,56 @@ class Note extends EventObject {
 	/*
 	 * Returns true if this note has a creator.
 	 */
-	public function hasCreatorUser() {
+	public function hasCreatorUser(): bool {
 		return $this->creatorId > 0;
 	}
 
 	/*
 	 * Returns the creator of this note.
 	 */
-	public function getCreatorUser() {
+	public function getCreatorUser(): User {
 		return UserHandler::getUser($this->creatorId);
 	}
 
 	/*
 	 * Returns true if this note has a group.
 	 */
-	public function hasGroup() {
+	public function hasGroup(): bool {
 		return $this->groupId > 0;
 	}
 
 	/*
 	 * Returns the group of this note.
 	 */
-	public function getGroup() {
+	public function getGroup(): Group {
 		return GroupHandler::getGroup($this->groupId);
 	}
 
 	/*
 	 * Returns true if this note has a team.
 	 */
-	public function hasTeam() {
+	public function hasTeam(): bool {
 		return $this->teamId > 0;
 	}
 
 	/*
 	 * Returns the team of this note.
 	 */
-	public function getTeam() {
+	public function getTeam(): Team {
 		return TeamHandler::getTeam($this->teamId);
 	}
 
 	/*
 	 * Returns true if this note has a user.
 	 */
-	public function hasUser() {
+	public function hasUser(): User {
 		return $this->userId > 0;
 	}
 
 	/*
 	 * Returns the user of this note.
 	 */
-	public function getUser() {
+	public function getUser(): User {
 		if ($this->hasGroup() && !$this->hasUser()) {
 			$group = $this->getGroup();
 
@@ -111,29 +111,29 @@ class Note extends EventObject {
 	/*
 	 * Returns the title of this note.
 	 */
-	public function getTitle() {
+	public function getTitle(): string {
 		return $this->title;
 	}
 
 	/*
 	 * Returns the content of this note.
 	 */
-	public function getContent() {
+	public function getContent(): string {
 		return $this->content;
 	}
 
 	/*
 	 * Returns the secondsOffset of this note.
 	 */
-	public function getSecondsOffset() {
+	public function getSecondsOffset(): int {
 		return $this->secondsOffset;
 	}
 
 	/*
 	 * Returns the time of this note.
 	 */
-	public function getTime() {
-		list($h, $m, $s) = explode (":", $this->time);
+	public function getTime(): int {
+		list($h, $m, $s) = explode (':', $this->time);
 
 		return ($h * 3600) + ($m * 60);
 	}
@@ -141,7 +141,7 @@ class Note extends EventObject {
 	/*
 	 * Returns the start time of this note.
 	 */
-	public function getAbsoluteTime() {
+	public function getAbsoluteTime(): int {
 		$event = EventHandler::getCurrentEvent();
 
 		return (strtotime(date('Y-m-d', $event->getStartTime())) + $this->getSecondsOffset() + $this->getTime());
@@ -157,7 +157,7 @@ class Note extends EventObject {
 	/*
 	 * Returns true if this note is done.
 	 */
-	public function isDone() {
+	public function isDone(): bool {
 		return $this->done ? true : false;
 	}
 
@@ -171,7 +171,7 @@ class Note extends EventObject {
 	/*
 	 * Returns true if this note is in progress.
 	 */
-	public function isInProgress() {
+	public function isInProgress(): bool {
 		return $this->inProgress ? true : false;
 	}
 
@@ -182,7 +182,7 @@ class Note extends EventObject {
 		NoteHandler::updateNoteInProgress($this, $inProgress);
 	}
 
-	public function isExpired() {
+	public function isExpired(): bool {
 		$event = EventHandler::getCurrentEvent();
 		$eventDate = strtotime(date('Y-m-d', $event->getStartTime()));
 		$delay = 30 * 60; // 30 minutes delay.
@@ -193,14 +193,14 @@ class Note extends EventObject {
 	/*
 	 * Returns true if this note is private.
 	 */
-	public function isPrivate() {
+	public function isPrivate(): bool {
 		return !$this->hasGroup() && !$this->hasTeam() && $this->hasUser();
 	}
 
 	/*
 	 * Returns true if this note is delagated to a user, this returns false if the note is private.
 	 */
-	public function isDelegated() {
+	public function isDelegated(): bool {
 		if ($this->hasGroup()) {
 			if ($this->hasUser()) {
 				return true;
@@ -217,7 +217,7 @@ class Note extends EventObject {
 	/*
 	 * Returns true if the given user is user of this note.
 	 */
-	public function isUser(User $user) {
+	public function isUser(User $user): bool {
 		if ($this->isPrivate()) {
 			return true;
 		}
@@ -250,7 +250,7 @@ class Note extends EventObject {
 	/*
 	 * Returns true if this note has a owner.
 	 */
-	public function hasOwner() {
+	public function hasOwner(): bool {
 		if ($this->isPrivate()) {
 			return true;
 		}
@@ -277,7 +277,7 @@ class Note extends EventObject {
 	/*
 	 * Returns true if the given user is owner of this note.
 	 */
-	public function isOwner(User $user) {
+	public function isOwner(User $user): bool {
 		if ($this->isPrivate()) {
 			return true;
 		}
@@ -285,8 +285,7 @@ class Note extends EventObject {
 		if ($this->hasGroup()) {
 			$group = $this->getGroup();
 
-			if ($group->isLeader($user) ||
-				$group->isCoLeader($user)) {
+			if ($group->isLeader($user)) {
 				return true;
 			}
 
@@ -305,14 +304,14 @@ class Note extends EventObject {
 	/*
 	 * Returns true if the given user is watching this note.
 	 */
-	public function isWatching(User $user) {
+	public function isWatching(User $user): bool {
 		return NoteHandler::isWatchingNote($this, $user);
 	}
 
 	/*
 	 * Returns a list of users watching this note.
 	 */
-	public function getWatchingUsers() {
+	public function getWatchingUsers(): array {
 		return NoteHandler::getWatchingUsers($this);
 	}
 }

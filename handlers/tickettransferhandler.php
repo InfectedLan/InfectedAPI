@@ -2,7 +2,7 @@
 /**
  * This file is part of InfectedAPI.
  *
- * Copyright (C) 2015 Infected <http://infected.no/>.
+ * Copyright (C) 2017 Infected <http://infected.no/>.
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -30,7 +30,7 @@ class TicketTransferHandler {
 	/*
 	 * Get a ticket transer by the internal id.
 	 */
-	public static function getTransferFromTicket(Ticket $ticket) {
+	public static function getTransferFromTicket(Ticket $ticket): ?TicketTransfer {
 		$database = Database::getConnection(Settings::db_name_infected_tickets);
 
 		$result = $database->query('SELECT * FROM `' . Settings::db_table_infected_tickets_tickettransfers . '`
@@ -38,14 +38,13 @@ class TicketTransferHandler {
 																ORDER BY `datetime` DESC
 																LIMIT 1;');
 
-
 		return $result->fetch_object('TicketTransfer');
 	}
 
 	/*
 	 * Returns list of transfers that are eligible for reverting.
 	 */
-	public static function getRevertableTransfers(User $user) {
+	public static function getRevertableTransfers(User $user): array {
  		$wantedTimeLimit = time() - Settings::ticketTransferTime;
 
 		$database = Database::getConnection(Settings::db_name_infected_tickets);
@@ -54,7 +53,6 @@ class TicketTransferHandler {
 																WHERE `fromId` = \'' . $user->getId() . '\'
 																AND `revertable` = \'1\'
 																AND `datetime` > \'' . date('Y-m-d H:i:s', $wantedTimeLimit) . '\';');
-
 
 		$transferList = [];
 
@@ -68,7 +66,7 @@ class TicketTransferHandler {
 	/*
 	 * Create a new ticket transfer.
 	 */
-	public static function createTransfer(Ticket $ticket, User $user, $revertable) {
+	public static function createTransfer(Ticket $ticket, User $user, bool $revertable): TicketTransfer {
 		$database = Database::getConnection(Settings::db_name_infected_tickets);
 
 		$database->query('INSERT INTO `' . Settings::db_table_infected_tickets_tickettransfers . '` (`ticketId`, `fromId`, `toId`, `datetime`, `revertable`)
@@ -78,10 +76,7 @@ class TicketTransferHandler {
 														  \'' . date('Y-m-d H:i:s') . '\',
 														  \'' . $revertable . '\');');
 
-//		$ticketTransfer = self::getTicketTransfer($database->insert_id);
-
-
-//		return $ticketTransfer;
+		return self::getTicketTransfer($database->insert_id);
 	}
 
 	/*
@@ -93,7 +88,6 @@ class TicketTransferHandler {
 		$result = $database->query('UPDATE `' . Settings::db_table_infected_tickets_tickettransfers .  '`
 																SET `revertable` = \'0\'
 																WHERE `id` = \'' . $ticketTransfer->getId() . '\';');
-
 	}
 
 	/*

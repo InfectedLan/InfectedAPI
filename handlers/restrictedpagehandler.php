@@ -2,7 +2,7 @@
 /**
  * This file is part of InfectedAPI.
  *
- * Copyright (C) 2015 Infected <http://infected.no/>.
+ * Copyright (C) 2017 Infected <http://infected.no/>.
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -30,12 +30,11 @@ class RestrictedPageHandler {
 	/*
 	 * Get page by the internal id.
 	 */
-	public static function getPage($id) {
+	public static function getPage(int $id): ?RestrictedPage {
 		$database = Database::getConnection(Settings::db_name_infected_crew);
 
 		$result = $database->query('SELECT * FROM `' . Settings::db_table_infected_crew_pages . '`
 																WHERE `id` = \'' . $database->real_escape_string($id) . '\';');
-
 
 		return $result->fetch_object('RestrictedPage');
 	}
@@ -43,7 +42,7 @@ class RestrictedPageHandler {
 	/*
 	 * Get page by name.
 	 */
-	public static function getPageByName($name) {
+	public static function getPageByName(string $name): ?RestrictedPage {
 		if (Session::isAuthenticated()) {
 			$user = Session::getCurrentUser();
 
@@ -74,21 +73,21 @@ class RestrictedPageHandler {
 																			AND `teamId` = \'0\';');
 				}
 
-
 				return $result->fetch_object('RestrictedPage');
 			}
 		}
+
+		return null;
 	}
 
 	/*
 	 * Get a list of all pages.
 	 */
-	public static function getPages() {
+	public static function getPages(): array {
 		$database = Database::getConnection(Settings::db_name_infected_crew);
 
 		$result = $database->query('SELECT * FROM `' . Settings::db_table_infected_crew_pages . '`
 																WHERE `eventId` = \'' . EventHandler::getCurrentEvent()->getId() . '\';');
-
 
 		$restrictedPageList = [];
 
@@ -102,14 +101,13 @@ class RestrictedPageHandler {
 	/*
 	 * Get a list of pages for specified group.
 	 */
-	public static function getPagesForGroup(Group $group) {
+	public static function getPagesForGroup(Group $group): array {
 		$database = Database::getConnection(Settings::db_name_infected_crew);
 
 		$result = $database->query('SELECT * FROM `' . Settings::db_table_infected_crew_pages . '`
 																WHERE `eventId` = \'' . EventHandler::getCurrentEvent()->getId() . '\'
 																AND `groupId` = \'' . $group->getId() . '\'
 																AND `teamId` = \'0\';');
-
 
 		$restrictedPageList = [];
 
@@ -123,7 +121,7 @@ class RestrictedPageHandler {
 	  /*
 	 * Get a list of all pages for specified group, ignoring the teamId.
 	 */
-	public static function getAllPagesForGroup(Group $group) {
+	public static function getAllPagesForGroup(Group $group): array {
 		$database = Database::getConnection(Settings::db_name_infected_crew);
 
 		$result = $database->query('SELECT * FROM `' . Settings::db_table_infected_crew_pages . '`
@@ -143,14 +141,13 @@ class RestrictedPageHandler {
 	/*
 	 * Get a list of pages for specified team.
 	 */
-	public static function getPagesForGroupAndTeam(Group $group, Team $team) {
+	public static function getPagesForGroupAndTeam(Group $group, Team $team): array {
 		$database = Database::getConnection(Settings::db_name_infected_crew);
 
 		$result = $database->query('SELECT * FROM `' . Settings::db_table_infected_crew_pages . '`
 																WHERE `eventId` = \'' . EventHandler::getCurrentEvent()->getId() . '\'
 																AND `groupId` = \'' . $group->getId() . '\'
 																AND (`teamId` = \'' . $team->getId() . '\' OR `teamId` = \'0\');');
-
 
 		$restrictedPageList = [];
 
@@ -164,7 +161,7 @@ class RestrictedPageHandler {
 	/*
 	 * Create a new page.
 	 */
-	public static function createPage($name, $title, $content, Group $group = null, Team $team = null) {
+	public static function createPage(string $name, string $title, string $content, Group $group = null, Team $team = null): RestrictedPage {
 		$database = Database::getConnection(Settings::db_name_infected_crew);
 
 		$database->query('INSERT INTO `' . Settings::db_table_infected_crew_pages . '` (`eventId`, `name`, `title`, `content`, `groupId`, `teamId`)
@@ -175,16 +172,13 @@ class RestrictedPageHandler {
 														  \'' . ($group != null ? $group->getId() : '0') . '\',
 														  \'' . ($team != null ? $team->getId() : '0') . '\')');
 
-		$restrictedPage = self::getRestrictedPage($database->insert_id);
-
-
-		return $restrictedPage;
+		return self::getRestrictedPage($database->insert_id);
 	}
 
 	  /*
 	 * Update a page.
 	 */
-	public static function updatePage(RestrictedPage $page, $title, $content, Group $group = null, Team $team = null) {
+	public static function updatePage(RestrictedPage $page, string $title, string $content, Group $group = null, Team $team = null) {
 		$database = Database::getConnection(Settings::db_name_infected_crew);
 
 		$database->query('UPDATE `' . Settings::db_table_infected_crew_pages . '`
@@ -193,7 +187,6 @@ class RestrictedPageHandler {
 													`groupId` = \'' . ($group != null ? $group->getId() : '0') . '\',
 													`teamId` = \'' . ($team != null ? $team->getId() : '0') . '\'
 										  WHERE `id` = \'' . $page->getId() . '\';');
-
 	}
 
 	/*
@@ -204,7 +197,6 @@ class RestrictedPageHandler {
 
 		$database->query('DELETE FROM `' . Settings::db_table_infected_crew_pages . '`
 						  				WHERE `id` = \'' . $page->getId() . '\';');
-
 	}
 }
 ?>

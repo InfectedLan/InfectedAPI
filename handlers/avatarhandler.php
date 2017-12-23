@@ -2,7 +2,7 @@
 /**
  * This file is part of InfectedAPI.
  *
- * Copyright (C) 2015 Infected <http://infected.no/>.
+ * Copyright (C) 2017 Infected <http://infected.no/>.
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -27,12 +27,11 @@ class AvatarHandler {
 	/*
 	 * Get an avatar by the internal id.
 	 */
-	public static function getAvatar($id) {
+	public static function getAvatar(int $id): ?Avatar {
 		$database = Database::getConnection(Settings::db_name_infected_crew);
 
 		$result = $database->query('SELECT * FROM `' . Settings::db_table_infected_crew_avatars . '`
 																WHERE `id` = \'' . $database->real_escape_string($id) . '\';');
-
 
 		return $result->fetch_object('Avatar');
 	}
@@ -40,12 +39,11 @@ class AvatarHandler {
 	/*
 	 * Get an avatar for a specified user.
 	 */
-	public static function getAvatarByUser(User $user) {
+	public static function getAvatarByUser(User $user): ?Avatar {
 		$database = Database::getConnection(Settings::db_name_infected_crew);
 
 		$result = $database->query('SELECT * FROM `' . Settings::db_table_infected_crew_avatars . '`
 																WHERE `userId` = \'' . $user->getId() . '\';');
-
 
 		return $result->fetch_object('Avatar');
 	}
@@ -53,11 +51,10 @@ class AvatarHandler {
 	/*
 	 * Returns a list of all avatars.
 	 */
-	public static function getAvatars() {
+	public static function getAvatars(): array {
 		$database = Database::getConnection(Settings::db_name_infected_crew);
 
 		$result = $database->query('SELECT * FROM `' . Settings::db_table_infected_crew_avatars . '`;');
-
 
 		$avatarList = [];
 
@@ -71,12 +68,11 @@ class AvatarHandler {
 	/*
 	 * Returns a list of all pending avatars.
 	 */
-	public static function getPendingAvatars() {
+	public static function getPendingAvatars(): array {
 		$database = Database::getConnection(Settings::db_name_infected_crew);
 
 		$result = $database->query('SELECT * FROM `' . Settings::db_table_infected_crew_avatars . '`
 																WHERE `state` = \'1\';');
-
 
 		$avatarList = [];
 
@@ -90,12 +86,11 @@ class AvatarHandler {
 	/*
 	 * Returns true if the specificed user have an avatar.
 	 */
-	public static function hasAvatar(User $user) {
+	public static function hasAvatar(User $user): bool {
 		$database = Database::getConnection(Settings::db_name_infected_crew);
 
-		$result = $database->query('SELECT `id` FROM `' . Settings::db_table_infected_crew_avatars . '`
+		$result = $database->query('SELECT * FROM `' . Settings::db_table_infected_crew_avatars . '`
 																WHERE `userId` = \'' . $user->getId() . '\';');
-
 
 		return $result->num_rows > 0;
 	}
@@ -103,13 +98,12 @@ class AvatarHandler {
 	/*
 	 * Returns true if the specificed user have a cropped avatar.
 	 */
-	public static function hasCroppedAvatar(User $user) {
+	public static function hasCroppedAvatar(User $user): bool {
 		$database = Database::getConnection(Settings::db_name_infected_crew);
 
-		$result = $database->query('SELECT `id` FROM `' . Settings::db_table_infected_crew_avatars . '`
+		$result = $database->query('SELECT * FROM `' . Settings::db_table_infected_crew_avatars . '`
 																WHERE `userId` = \'' . $user->getId() . '\'
 																AND (`state` = 1 OR `state` = 2);');
-
 
 		return $result->num_rows > 0;
 	}
@@ -117,13 +111,12 @@ class AvatarHandler {
 	/*
 	 * Returns true if the specificed user have a valid vatar.
 	 */
-	public static function hasValidAvatar(User $user) {
+	public static function hasValidAvatar(User $user):bool {
 		$database = Database::getConnection(Settings::db_name_infected_crew);
 
-		$result = $database->query('SELECT `id` FROM `' . Settings::db_table_infected_crew_avatars . '`
+		$result = $database->query('SELECT * FROM `' . Settings::db_table_infected_crew_avatars . '`
 																WHERE `userId` = \'' . $user->getId() . '\'
 																AND `state` = \'2\';');
-
 
 		return $result->num_rows > 0;
 	}
@@ -131,13 +124,13 @@ class AvatarHandler {
 	/*
 	 * Creates an new avatar.
 	 */
-	public static function createAvatar($fileName, User $user) {
+	public static function createAvatar(string $fileName, User $user): string {
 		$database = Database::getConnection(Settings::db_name_infected_crew);
 
 		$result = $database->query('INSERT INTO `' . Settings::db_table_infected_crew_avatars . '` (`userId`, `fileName`, `state`)
 																VALUES (\'' . $user->getId() . '\',
-																				\'' . $fileName . '\', 0);');
-
+																				\'' . $fileName . '\',
+																				\'0\');');
 
 		return Settings::api_path . Settings::avatar_path . 'temp/' . $fileName;
 	}
@@ -145,14 +138,13 @@ class AvatarHandler {
 	/*
 	 * Updates the specified avatar.
 	 */
-	public static function updateAvatar(Avatar $avatar, $state, $fileName) {
+	public static function updateAvatar(Avatar $avatar, int $state, string $fileName) {
 		$database = Database::getConnection(Settings::db_name_infected_crew);
 
 		$database->query('UPDATE `' . Settings::db_table_infected_crew_avatars . '`
 										  SET `state` = \'' . $database->real_escape_string($state) . '\',
 													`fileName` = \'' . $database->real_escape_string($fileName) . '\'
 										  WHERE `id` = \'' . $avatar->getId() . '\'');
-
 	}
 
 	/*
@@ -163,7 +155,6 @@ class AvatarHandler {
 
 		$result = $database->query('DELETE FROM `' . Settings::db_table_infected_crew_avatars . '`
 																WHERE `id` = \'' . $avatar->getId() . '\';');
-
 
 		// Delete all avatars.
 		$avatar->deleteFiles();
@@ -178,7 +169,6 @@ class AvatarHandler {
 		$database->query('UPDATE `' . Settings::db_table_infected_crew_avatars . '`
 										  SET `state` = \'2\'
 										  WHERE `id` = \'' . $avatar->getId() . '\';');
-
 	}
 
 	/*
@@ -190,13 +180,12 @@ class AvatarHandler {
 		$database->query('UPDATE `' . Settings::db_table_infected_crew_avatars . '`
 										  SET `state` =  \'3\'
 										  WHERE `id` = \'' . $avatar->getId() . '\';');
-
 	}
 
 	/*
 	 * Get the default avatar for the specified user.
 	 */
-	public static function getDefaultAvatar(User $user) {
+	public static function getDefaultAvatar(User $user): string {
 		if ($user->getAge() >= 18) {
 			if ($user->getGender()) {
 				$file = 'default_gutt.png';

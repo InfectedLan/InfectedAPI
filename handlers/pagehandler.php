@@ -2,7 +2,7 @@
 /**
  * This file is part of InfectedAPI.
  *
- * Copyright (C) 2015 Infected <http://infected.no/>.
+ * Copyright (C) 2017 Infected <http://infected.no/>.
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -26,12 +26,11 @@ class PageHandler {
 	/*
 	 * Return the page bu the internal id.
 	 */
-	public static function getPage($id) {
+	public static function getPage(int $id): ?Page {
 		$database = Database::getConnection(Settings::db_name_infected_main);
 
 		$result = $database->query('SELECT * FROM `' . Settings::db_table_infected_main_pages . '`
 																WHERE id = \'' . $database->real_escape_string($id) . '\';');
-
 
 		return $result->fetch_object('Page');
 	}
@@ -39,12 +38,11 @@ class PageHandler {
 	/*
 	 * Return the page by name.
 	 */
-	public static function getPageByName($name) {
+	public static function getPageByName(string $name): ?Page {
 		$database = Database::getConnection(Settings::db_name_infected_main);
 
 		$result = $database->query('SELECT * FROM `' . Settings::db_table_infected_main_pages . '`
 																WHERE `name` = \'' . $database->real_escape_string($name) . '\';');
-
 
 		return $result->fetch_object('Page');
 	}
@@ -52,11 +50,10 @@ class PageHandler {
 	/*
 	 * Returns a list of all pages.
 	 */
-	public static function getPages() {
+	public static function getPages(): array {
 		$database = Database::getConnection(Settings::db_name_infected_main);
 
 		$result = $database->query('SELECT * FROM `' . Settings::db_table_infected_main_pages . '`;');
-
 
 		$pageList = [];
 
@@ -70,7 +67,7 @@ class PageHandler {
 	/*
 	 * Create a new page.
 	 */
-	public static function createPage($name, $title, $content) {
+	public static function createPage(string $name, string $title, string $content): Page {
 		$database = Database::getConnection(Settings::db_name_infected_main);
 
 		$database->query('INSERT INTO `' . Settings::db_table_infected_main_pages . '` (`name`, `title`, `content`)
@@ -78,23 +75,19 @@ class PageHandler {
 														  \'' . $database->real_escape_string($title) . '\',
 														  \'' . $database->real_escape_string($content) . '\')');
 
-		$page = self::getPage($database->insert_id);
-
-
-		return $page;
+		return self::getPage($database->insert_id);
 	}
 
 	/*
 	 * Update a page.
 	 */
-	public static function updatePage(Page $page, $title, $content) {
+	public static function updatePage(Page $page, string $title, string $content) {
 		$database = Database::getConnection(Settings::db_name_infected_main);
 
 		$database->query('UPDATE `' . Settings::db_table_infected_main_pages . '`
 										  SET `title` = \'' . $database->real_escape_string($title) . '\',
 											  	`content` = \'' . $database->real_escape_string($content) . '\'
 										  WHERE `id` = \'' . $page->getId() . '\';');
-
 	}
 
 	/*
@@ -105,7 +98,6 @@ class PageHandler {
 
 		$database->query('DELETE FROM `' . Settings::db_table_infected_main_pages . '`
 						  				WHERE `id` = \'' . $page->getId() . '\';');
-
 	}
 }
 ?>

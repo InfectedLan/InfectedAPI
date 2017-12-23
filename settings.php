@@ -2,7 +2,7 @@
 /**
  * This file is part of InfectedAPI.
  *
- * Copyright (C) 2015 Infected <http://infected.no/>.
+ * Copyright (C) 2017 Infected <http://infected.no/>.
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -23,6 +23,7 @@ class Settings {
 	const name = 'Infected';
 	const description = 'Infected er et av Akershus største datatreff (LAN-party), og holder til i kulturhuset i Asker kommune.';
 	const keywords = 'infected, lan, party, asker, kulturhus, ungdom, gaming';
+	const authors = 'halvors og petterroa';
 
 	/* Configuration */
 	const domain = 'test.infected.no';
@@ -38,6 +39,9 @@ class Settings {
 	const qr_path = '../api/content/qrcache/';
 	const avatar_path = '../api/content/avatars/';
 
+	/* PHP */
+	const php_version = '7.2.0';
+
 	/* Database */
 	const db_host = 'localhost';
 	const db_name_infected = 'test_infected_no';
@@ -45,6 +49,7 @@ class Settings {
 	const db_name_infected_crew = 'test_infected_no_crew';
 	const db_name_infected_info = 'test_infected_no_info';
 	const db_name_infected_main = 'test_infected_no_main';
+	const db_name_infected_tech = 'test_infected_no_tech';
 	const db_name_infected_tickets = 'test_infected_no_tickets';
 
 	// Infected
@@ -93,7 +98,7 @@ class Settings {
 	const db_table_infected_crew_notewatches = 'notewatches';
 	const db_table_infected_crew_pages = 'pages';
 	const db_table_infected_crew_teams = 'teams';
-    const db_table_infected_crew_castingpages = 'castingPages';
+  const db_table_infected_crew_castingpages = 'castingPages';
 
 	// InfectedInfo
 	const db_table_infected_info_slides = 'slides';
@@ -103,6 +108,12 @@ class Settings {
 	const db_table_infected_main_gameapplications = 'gameapplications';
 	const db_table_infected_main_games = 'games';
 	const db_table_infected_main_pages = 'pages';
+	const db_table_infected_main_sectionpages = 'sectionpages';
+
+	// InfectedTech
+	const db_table_infected_tech_networkaccess = 'networkaccess';
+	const db_table_infected_tech_networks = 'networks';
+	const db_table_infected_tech_networktypes = 'networktypes';
 
 	// InfectedTickets
 	const db_table_infected_tickets_checkedintickets = 'checkedintickets';

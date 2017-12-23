@@ -2,7 +2,7 @@
 /**
  * This file is part of InfectedAPI.
  *
- * Copyright (C) 2015 Infected <http://infected.no/>.
+ * Copyright (C) 2017 Infected <http://infected.no/>.
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -31,12 +31,11 @@ class CompoHandler {
 	/*
 	 * Get a compo by the internal id.
 	 */
-	public static function getCompo($id) {
+	public static function getCompo(int $id): ?Compo {
 		$database = Database::getConnection(Settings::db_name_infected_compo);
 
 		$result = $database->query('SELECT * FROM `' . Settings::db_table_infected_compo_compos . '`
 																WHERE `id` = \'' . $database->real_escape_string($id) . '\';');
-
 
 		return $result->fetch_object('Compo');
 	}
@@ -44,12 +43,11 @@ class CompoHandler {
 	/*
 	 * Get compos for the specified event.
 	 */
-	public static function getComposByEvent(Event $event) {
+	public static function getCompos(Event $event = null): array {
 		$database = Database::getConnection(Settings::db_name_infected_compo);
 
 		$result = $database->query('SELECT * FROM `' . Settings::db_table_infected_compo_compos . '`
-																WHERE `eventId` = \'' . $event->getId() . '\';');
-
+																WHERE `eventId` = \'' . ($event != null ? $event->getId() : EventHandler::getCurrentEvent()->getId()) . '\';');
 
 		$compoList = [];
 
@@ -61,16 +59,9 @@ class CompoHandler {
 	}
 
 	/*
-	 * Get a list of compos.
-	 */
-	public static function getCompos() {
-		return self::getComposByEvent(EventHandler::getCurrentEvent());
-	}
-
-	/*
 	 * Get compo by specified clan.
 	 */
-	public static function getCompoByClan(Clan $clan) {
+	public static function getCompoByClan(Clan $clan): ?Compo {
 		$database = Database::getConnection(Settings::db_name_infected_compo);
 
 		$result = $database->query('SELECT * FROM `' . Settings::db_table_infected_compo_compos . '`
@@ -78,19 +69,19 @@ class CompoHandler {
 																						  WHERE `clanId` = \'' . $clan->getId() . '\'
 																						  LIMIT 1);');
 
-
 		return $result->fetch_object('Compo');
 	}
 
 	/*
 	 * Create a new compo entry.
 	 */
-	public static function createCompo($name, $title, $tag, $description, $pluginName, $startTime, $registrationEndTime, $teamSize, $participantLimit) {
-        //First, create a compo chat
-        $chat = ChatHandler::createChat($name . '-compo-chat', $title . ' compo chat');
-        $database = Database::getConnection(Settings::db_name_infected_compo);
-        
-        $query = 'INSERT INTO `' . Settings::db_table_infected_compo_compos . '` (`eventId`, `name`, `title`, `tag`, `description`, `pluginName`, `startTime`, `registrationEndTime`, `teamSize`, `chatId`, `participantLimit`, `connectionType`, `requiresSteamId`)
+	public static function createCompo(string $name, string $title, string $tag, string $description, string $pluginName, int $startTime, int $registrationEndTime, int $teamSize, int $participantLimit): int {
+    //First, create a compo chat
+    $chat = ChatHandler::createChat($name . '-compo-chat', $title . ' compo chat');
+
+    $database = Database::getConnection(Settings::db_name_infected_compo);
+
+    $database->query('INSERT INTO `' . Settings::db_table_infected_compo_compos . '` (`eventId`, `name`, `title`, `tag`, `description`, `pluginName`, `startTime`, `registrationEndTime`, `teamSize`, `chatId`, `participantLimit`, `connectionType`, `requiresSteamId`)
 										  VALUES (\'' . EventHandler::getCurrentEvent()->getId() . '\',
 														  \'' . $database->real_escape_string($name) . '\',
 														  \'' . $database->real_escape_string($title) . '\',
@@ -103,21 +94,15 @@ class CompoHandler {
 															\'' . $database->real_escape_string($chat->getId()) . '\',
 		   												\'' . $database->real_escape_string($participantLimit) . '\',
 		   												\'0\',
-		   												\'0\',);';
+		   												\'0\');');
 
-		echo "Creating compo with id " . $query;
-
-		$database->query($query);
-        $id = $database->insert_id;
-        
-        
-        return $id;
+    return $database->insert_id;
 	}
 
 	/*
 	 * Update a compo.
 	 */
-	public static function updateCompo(Compo $compo, $name, $title, $tag, $description, $pluginName, $startTime, $registrationEndTime, $teamSize, $participantLimit) {
+	public static function updateCompo(Compo $compo, string $name, string $title, string $tag, string $description, string $pluginName, int $startTime, int $registrationEndTime, int $teamSize, int $participantLimit) {
 		$database = Database::getConnection(Settings::db_name_infected_compo);
 
 		$database->query('UPDATE `' . Settings::db_table_infected_compo_compos . '`
@@ -131,23 +116,21 @@ class CompoHandler {
 												  `teamSize` = \'' . $database->real_escape_string($teamSize) . '\',
 													`participantLimit` = \'' . $database->real_escape_string($participantLimit) . '\'
 										  WHERE `id` = \'' . $compo->getId() . '\';');
-
 	}
 
 	/*
 	 * Returns true if the given compo has generated matches.
 	 */
-	public static function hasGeneratedMatches(Compo $compo) {
+	public static function hasGeneratedMatches(Compo $compo): bool {
 		$database = Database::getConnection(Settings::db_name_infected_compo);
 
 		$result = $database->query('SELECT `id` FROM `' . Settings::db_table_infected_compo_matches . '`
 																WHERE `compoId` = \'' . $compo->getId() . '\';');
 
-
 		return $result->num_rows > 0;
 	}
 
-	private static function generateMatches(array $carryMatches, array $carryClans, array $carryLoosers, $iteration, Compo $compo, $time, $looserOffsetTime) {
+	private static function generateMatches(array $carryMatches, array $carryClans, array $carryLoosers, int $iteration, Compo $compo, int $time, int $looserOffsetTime): array {
 		$numberOfObjects = count($carryMatches) + count($carryClans); //The amount of objects we are going to handle
 		$match_start_index = $numberOfObjects % 2; // 0 if even number of objects, 1 if uneven
 
@@ -238,7 +221,7 @@ class CompoHandler {
 		return $carryObjects;
 	}
 
-	public static function generateDoubleElimination(Compo $compo, $startTime, $compoSpacing) {
+	public static function generateDoubleElimination(Compo $compo, int $startTime, int $compoSpacing) {
 		/*
 		 * Psudocode:
 		 * Get list of participants, order randomly

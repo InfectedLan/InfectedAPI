@@ -2,7 +2,7 @@
 /**
  * This file is part of InfectedAPI.
  *
- * Copyright (C) 2015 Infected <http://infected.no/>.
+ * Copyright (C) 2017 Infected <http://infected.no/>.
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -26,10 +26,10 @@ class UserOptionHandler {
 	/*
 	 * Returns true if this user has a option.
 	 */
-	public static function hasUserOption(User $user) {
+	public static function hasUserOption(User $user): bool {
 		$database = Database::getConnection(Settings::db_name_infected);
 
-		$result = $database->query('SELECT `id` FROM `' . Settings::db_table_infected_useroptions . '`
+		$result = $database->query('SELECT * FROM `' . Settings::db_table_infected_useroptions . '`
 																WHERE `userId` = \'' . $user->getId() . '\';');
 
 		return $result->num_rows > 0;
@@ -38,10 +38,10 @@ class UserOptionHandler {
 	/*
 	 * Returns true is the phone number is set to private for the specified user.
 	 */
-	public static function hasUserPrivatePhone(User $user) {
+	public static function hasUserPrivatePhone(User $user): bool {
 		$database = Database::getConnection(Settings::db_name_infected);
 
-		$result = $database->query('SELECT `id` FROM `' . Settings::db_table_infected_useroptions . '`
+		$result = $database->query('SELECT * FROM `' . Settings::db_table_infected_useroptions . '`
 																WHERE `userId` = \'' . $user->getId() . '\'
 																AND `privatePhone` = \'1\';');
 
@@ -51,10 +51,10 @@ class UserOptionHandler {
 	/*
 	 * Returns true is the phone number is set to private for the specified user.
 	 */
-	public static function isUserReservedFromNotifications(User $user) {
+	public static function isUserReservedFromNotifications(User $user): bool {
 		$database = Database::getConnection(Settings::db_name_infected);
 
-		$result = $database->query('SELECT `id` FROM `' . Settings::db_table_infected_useroptions . '`
+		$result = $database->query('SELECT * FROM `' . Settings::db_table_infected_useroptions . '`
 																WHERE `userId` = \'' . $user->getId() . '\'
 																AND `reserveFromNotifications` = \'1\';');
 
@@ -62,43 +62,12 @@ class UserOptionHandler {
 	}
 
 	/*
-	 * Returns true is the user is set to go on swimming.
-	 */
-	public static function isUserSwimming(User $user) {
-		$database = Database::getConnection(Settings::db_name_infected);
-
-		$result = $database->query('SELECT `id` FROM `' . Settings::db_table_infected_useroptions . '`
-																WHERE `userId` = \'' . $user->getId() . '\'
-																AND `swimming` = \'1\';');
-
-		return $result->num_rows > 0;
-	}
-
-	/*
-	 * Set a users note.
-	 */
-	public static function setUserSwimming(User $user, $swimming) {
-		$database = Database::getConnection(Settings::db_name_infected);
-
-		if (!self::hasUserOption($user)) {
-			$database->query('INSERT INTO `' . Settings::db_table_infected_useroptions . '` (`userId`, `swimming`)
-												VALUES (\'' . $user->getId() . '\',
-																\'' . $database->real_escape_string($swimming) . '\');');
-		} else {
-			$database->query('UPDATE `' . Settings::db_table_infected_useroptions . '`
-												SET `swimming` = \'' . $database->real_escape_string($swimming) . '\'
-												WHERE `userId` = \'' . $user->getId() . '\';');
-		}
-
-	}
-
-	/*
 	 * Returns true if the user has the prank option set.
 	 */
-	public static function hasUserEasterEgg(User $user) {
+	public static function hasUserEasterEgg(User $user): bool {
 		$database = Database::getConnection(Settings::db_name_infected);
 
-		$result = $database->query('SELECT `id` FROM `' . Settings::db_table_infected_useroptions . '`
+		$result = $database->query('SELECT * FROM `' . Settings::db_table_infected_useroptions . '`
 																WHERE `userId` = \'' . $user->getId() . '\'
 																AND `easterEgg` = \'1\';');
 

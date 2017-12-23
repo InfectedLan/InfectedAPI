@@ -2,7 +2,7 @@
 /**
  * This file is part of InfectedAPI.
  *
- * Copyright (C) 2015 Infected <http://infected.no/>.
+ * Copyright (C) 2017 Infected <http://infected.no/>.
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -28,7 +28,7 @@ class VoteOptionHandler {
 	/*
 	 * Get a vote option by the internal id.
 	 */
-	public static function getVoteOption($id) {
+	public static function getVoteOption(int $id): ?VoteOption {
 		$database = Database::getConnection(Settings::db_name_infected_compo);
 
 		$result = $database->query('SELECT * FROM `' . Settings::db_table_infected_compo_voteoptions . '`
@@ -40,7 +40,7 @@ class VoteOptionHandler {
 	/*
 	 * Get a vote option for a specified compo.
 	 */
-	public static function getVoteOptionsByCompo(Compo $compo) {
+	public static function getVoteOptionsByCompo(Compo $compo): array {
 		$database = Database::getConnection(Settings::db_name_infected_compo);
 
 		$result = $database->query('SELECT * FROM `' . Settings::db_table_infected_compo_voteoptions . '`
@@ -58,7 +58,7 @@ class VoteOptionHandler {
 	/*
 	 * Returns true if specified vote option is voted for the specified match.
 	 */
-	public static function isVoted(VoteOption $voteOption, Match $match) {
+	public static function isVoted(VoteOption $voteOption, Match $match): bool {
 		$database = Database::getConnection(Settings::db_name_infected_compo);
 
 		$result = $database->query('SELECT `id` FROM `' . Settings::db_table_infected_compo_votes . '`
@@ -71,18 +71,19 @@ class VoteOptionHandler {
 	/*
 	 * Returns the vote type of the vote option, if any
 	 */
-	public static function getVoteType(VoteOption $voteOption, Match $match) {
+	public static function getVoteType(VoteOption $voteOption, Match $match): int {
 		$database = Database::getConnection(Settings::db_name_infected_compo);
 
 		$result = $database->query('SELECT `type` FROM `' . Settings::db_table_infected_compo_votes . '`
 																WHERE `voteOptionId` = \'' . $voteOption->getId() . '\'
 																AND `consumerId` = \'' . $match->getId() . '\';');
 
-		if($result->num_rows == 0) {
-		    return null;
+		if ($result->num_rows == 0) {
+			return null;
 		}
+
 		$row = $result->fetch_row();
-		//echo "Vote type: " . $row[0] . "\n";
+
 		return $row[0];
 	}
 }

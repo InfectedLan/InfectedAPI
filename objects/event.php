@@ -2,7 +2,7 @@
 /**
  * This file is part of InfectedAPI.
  *
- * Copyright (C) 2015 Infected <http://infected.no/>.
+ * Copyright (C) 2017 Infected <http://infected.no/>.
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -23,10 +23,10 @@ require_once 'handlers/seatmaphandler.php';
 require_once 'handlers/tickettypehandler.php';
 require_once 'handlers/tickethandler.php';
 require_once 'handlers/storesessionhandler.php';
-require_once 'objects/object.php';
+require_once 'objects/databaseobject.php';
 require_once 'objects/location.php';
 
-class Event extends Object {
+class Event extends DatabaseObject {
 	private $theme;
 	private $locationId;
 	private $participants;
@@ -41,102 +41,116 @@ class Event extends Object {
 	/*
 	 * Returns theme of this event.
 	 */
-	public function getTheme() {
+	public function getTheme(): ?string {
 		return $this->theme;
 	}
 
 	/*
 	 * Returns the event location.
 	 */
-	public function getLocation() {
+	public function getLocation(): ?Location {
 		return LocationHandler::getLocation($this->locationId);
 	}
 
 	/*
 	 * Returns the number of paricipants for this event.
 	 */
-	public function getParticipants() {
+	public function getParticipants(): int {
 		return $this->participants;
 	}
 
 	/*
 	 * Returns the time when the booking starts.
 	 */
-	public function getBookingTime() {
+	public function getBookingTime(): int {
 		return strtotime($this->bookingTime);
 	}
 
 	/*
 	 * Returns the time when priority seating starts(See settings.php)
 	 */
-	public function getPrioritySeatingTime() {
+	public function getPrioritySeatingTime(): int {
 		return strtotime($this->prioritySeatingTime);
 	}
 
 	/*
 	 * Returns the time when normal seating starts
 	 */
-	public function getSeatingTime() {
+	public function getSeatingTime(): int {
 		return strtotime($this->seatingTime);
 	}
 
 	/*
 	 * Returns when the event starts.
 	 */
-	public function getStartTime() {
+	public function getStartTime(): int {
 		return strtotime($this->startTime);
 	}
 
 	/*
 	 * Returns when the event ends.
 	 */
-	public function getEndTime() {
+	public function getEndTime(): int {
 		return strtotime($this->endTime);
 	}
 
 	/*
 	 * Returns the seatmap for this event.
 	 */
-	public function getSeatmap() {
+	public function getSeatmap(): ?Seatmap {
 		return SeatmapHandler::getSeatmap($this->seatmapId);
 	}
 
 	/*
 	 * Returns the ticket type for this event.
 	 */
-	public function getTicketType() {
+	public function getTicketType(): ?TicketType {
 		return TicketTypeHandler::getTicketType($this->ticketTypeId);
 	}
 
 	/*
 	 * Returns the title for this event.
 	 */
-	public function getTitle() {
-		return Settings::name . ' ' . (date('m', $this->getStartTime()) == 2 ? 'Vinter' : 'Høst') . ' ' . date('Y', $this->getStartTime());
+	public function getTitle(): string {
+		return Settings::name . ' ' . $this->getSeason() . ' ' . date('Y', $this->getStartTime());
 	}
 
 	/*
 	 * Returns true if booking for this event is opened.
 	 */
-	public function isBookingTime() {
-		$offset = 86400;
-		$bookingTime = $this->getBookingTime();
-		$bookingEndTime = $this->getStartTime() + $offset;
+	public function isBookingTime(): bool {
+		return time() >= $this->getBookingTime() && time() <= $this->getEndTime();
+	}
 
-		return time() >= $bookingTime && time() <= $bookingEndTime;
+	/*
+	 * Returns true if booking for this event is opened.
+	 */
+	public function isOngoing(): bool {
+		$offset = 60 * 60;
+		$startTime = $this->getStartTime() - $offset;
+		$endTime = $this->getEndTime() + $offset;
+
+		return time() >= $startTime && time() <= $endTime;
+	}
+
+	/*
+	 * Returns this events season.
+	 */
+	public function getSeason(): string {
+		return Localization::getLocale(date('m', $this->getStartTime()) == 2 ? 'winter' : 'autumn');
 	}
 
 	/*
 	 * Returns the number of tickets for this event.
 	 */
-	public function getTicketCount() {
-		return count(TicketHandler::getTicketsByEvent($this));
+	public function getTicketCount(): int {
+		return count(TicketHandler::getTickets($this));
 	}
 
 	/*
 	 * Returns the number of tickets left for this event.
 	 */
-	public function getAvailableTickets() {
+	public function getAvailableTickets(): int {
 		$ticketCount = $this->getTicketCount();
 		$ticketsLeft = $this->getParticipants() - $ticketCount;
 		$ticketsLeft -= StoreSessionHandler::getReservedTicketCount($this->getTicketType());

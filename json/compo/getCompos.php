@@ -1,9 +1,8 @@
 <?php
-include 'database.php';
 /**
  * This file is part of InfectedAPI.
  *
- * Copyright (C) 2015 Infected <http://infected.no/>.
+ * Copyright (C) 2017 Infected <http://infected.no/>.
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -20,6 +19,7 @@ include 'database.php';
  */
 
 require_once 'session.php';
+require_once 'database.php';
 require_once 'localization.php';
 require_once 'handlers/userhandler.php';
 require_once 'handlers/compohandler.php';
@@ -27,36 +27,40 @@ require_once 'handlers/eventhandler.php';
 require_once 'handlers/compopluginhandler.php';
 
 $result = false;
-$message = "";
+$message = null;
 $data = null;
 
-if(Session::isAuthenticated()) {
-    $compos = CompoHandler::getComposByEvent(EventHandler::getCurrentEvent());
-    $data = array();
-    foreach($compos as $compo) {
-        $data[] = ["id" => $compo->getId(),
-                   "name" => $compo->getName(),
-                   "title" => $compo->getTitle(),
-                   "tag" => $compo->getTag(),
-		   "chat" => $compo->getChatId(),
-                   "description" => $compo->getDescription(),
-		   "teamSize" => $compo->getTeamSize(),
-		   "participantLimit" => $compo->getParticipantLimit(),
-		   "hasMatches" => CompoHandler::hasGeneratedMatches($compo),
-		   "requiresSteam" => $compo->requiresSteamId(),
-		   "pluginName" => $compo->getPluginName(),
-                   "pluginJavascript" => CompoPluginHandler::getPluginJavascriptOrDefault($compo->getPluginName())];
-    }
-    $result = true;
+if (Session::isAuthenticated()) {
+  $compos = CompoHandler::getCompos();
+  $data = array();
+
+  foreach ($compos as $compo) {
+    $data[] = ['id' => $compo->getId(),
+               'name' => $compo->getName(),
+               'title' => $compo->getTitle(),
+               'tag' => $compo->getTag(),
+               'chat' => $compo->getChatId(),
+               'description' => $compo->getDescription(),
+               'teamSize' => $compo->getTeamSize(),
+               'participantLimit' => $compo->getParticipantLimit(),
+               'hasMatches' => CompoHandler::hasGeneratedMatches($compo),
+               'requiresSteam' => $compo->requiresSteamId(),
+               'pluginName' => $compo->getPluginName(),
+               'pluginJavascript' => CompoPluginHandler::getPluginJavascriptOrDefault($compo->getPluginName())];
+  }
+
+  $result = true;
 } else {
-    $message = Localization::getLocale('you_are_not_logged_in');
+  $message = Localization::getLocale('you_are_not_logged_in');
 }
 
-header('Content-Type: text/plain');
-if($result) {
-    echo json_encode(['result' => $result, 'data' => $data], JSON_PRETTY_PRINT);
+header('Content-Type: application/json');
+
+if ($result) {
+  echo json_encode(['result' => $result, 'data' => $data], JSON_PRETTY_PRINT);
 } else {
-    echo json_encode(['result' => $result, 'message' => $message], JSON_PRETTY_PRINT);
+  echo json_encode(['result' => $result, 'message' => $message], JSON_PRETTY_PRINT);
 }
+
 Database::cleanup();
 ?>

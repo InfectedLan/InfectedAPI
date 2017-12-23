@@ -2,7 +2,7 @@
 /**
  * This file is part of InfectedAPI.
  *
- * Copyright (C) 2015 Infected <http://infected.no/>.
+ * Copyright (C) 2017 Infected <http://infected.no/>.
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -20,9 +20,9 @@
 
 require_once 'handlers/entrancehandler.php';
 require_once 'handlers/seatmaphandler.php';
-require_once 'objects/object.php';
+require_once 'objects/databaseobject.php';
 
-class Row extends Object {
+class Row extends DatabaseObject {
 	private $seatmapId;
 	private $entranceId;
 	private $number;
@@ -33,49 +33,49 @@ class Row extends Object {
 	/*
 	 * Returns the seatmap the section belongs to.
 	 */
-	public function getSeatmap() {
+	public function getSeatmap(): Seatmap {
 		return SeatmapHandler::getSeatmap($this->seatmapId);
 	}
 
 	/*
 	 * Returns the row of the section.
 	 */
-	public function getEntrance() {
+	public function getEntrance(): Entrance {
 		return EntranceHandler::getEntrance($this->entranceId);
 	}
 
 	/*
 	 * Returns the row of the section.
 	 */
-	public function getNumber() {
+	public function getNumber(): int {
 		return $this->number;
 	}
 
 	/*
 	 * Returns the x coordinate of the section.
 	 */
-	public function getX() {
+	public function getX(): int {
 		return $this->x;
 	}
 
 	/*
 	 * Returns the y coordinate of the section.
 	 */
-	public function getY() {
+	public function getY(): int {
 		return $this->y;
 	}
 
 	/*
 	 * Returns the event accosiated with this seat.
 	 */
-	public function getEvent() {
+	public function getEvent(): Event {
 		return RowHandler::getEvent($this);
 	}
 
 	/*
 	 * Returns a list of all the seats on this row.
 	 */
-	public function getSeats() {
+	public function getSeats(): array {
 		return SeatHandler::getSeatsByRow($this);
 	}
 
@@ -96,8 +96,8 @@ class Row extends Object {
 	/*
 	 * Returns true if row is horizontal
 	 */
-	public function isHorizontal() {
-	    return $this->isHorizontal == 1;
+	public function isHorizontal(): bool {
+		return $this->isHorizontal == 1;
 	}
 }
 ?>

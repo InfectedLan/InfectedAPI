@@ -1,9 +1,8 @@
 <?php
-include 'database.php';
 /**
  * This file is part of InfectedAPI.
  *
- * Copyright (C) 2015 Infected <http://infected.no/>.
+ * Copyright (C) 2017 Infected <http://infected.no/>.
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -20,6 +19,7 @@ include 'database.php';
  */
 
 require_once 'session.php';
+require_once 'database.php';
 require_once 'localization.php';
 
 $result = false;
@@ -111,9 +111,6 @@ if (Session::isAuthenticated()) {
 	$message = Localization::getLocale('you_are_not_logged_in');
 }
 
-header('Content-Type: text/plain');
-echo json_encode(['result' => $result, 'message' => $message], JSON_PRETTY_PRINT);
-
 function str_replace_last($search, $replace, $str) {
 	if (($pos = strrpos($str, $search)) !== false) {
 		$search_length = strlen( $search );
@@ -122,5 +119,8 @@ function str_replace_last($search, $replace, $str) {
 
 	return $str;
 }
+
+header('Content-Type: application/json');
+echo json_encode(['result' => $result, 'message' => $message], JSON_PRETTY_PRINT);
 Database::cleanup();
 ?>

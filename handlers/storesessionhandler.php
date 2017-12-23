@@ -2,7 +2,7 @@
 /**
  * This file is part of InfectedAPI.
  *
- * Copyright (C) 2015 Infected <http://infected.no/>.
+ * Copyright (C) 2017 Infected <http://infected.no/>.
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -30,12 +30,11 @@ class StoreSessionHandler {
 	/*
 	 * Get a store session by the internal id.
 	 */
-	public static function getStoreSession($id) {
+	public static function getStoreSession(int $id): ?StoreSession {
 		$database = Database::getConnection(Settings::db_name_infected_tickets);
 
 		$result = $database->query('SELECT * FROM `' . Settings::db_table_infected_tickets_storesessions . '`
 																WHERE `id` = \'' . $database->real_escape_string($id) . '\';');
-
 
 		return $result->fetch_object('StoreSession');
 	}
@@ -43,11 +42,10 @@ class StoreSessionHandler {
 	/*
 	 * Get a list of all store sessions.
 	 */
-	public static function getStoreSessions() {
+	public static function getStoreSessions(): array {
 		$database = Database::getConnection(Settings::db_name_infected_tickets);
 
 		$result = $database->query('SELECT * FROM `' . Settings::db_table_infected_tickets_storesessions . '`;');
-
 
 		$storeSessionList = [];
 
@@ -61,13 +59,12 @@ class StoreSessionHandler {
 	/*
 	 * Returns the store session for the specified user.
 	 */
-	public static function getStoreSessionByUser(User $user) {
+	public static function getStoreSessionByUser(User $user): ?StoreSession {
 		$database = Database::getConnection(Settings::db_name_infected_tickets);
 
 		$result = $database->query('SELECT * FROM `' . Settings::db_table_infected_tickets_storesessions . '`
 																WHERE `userId` = \'' . $user->getId() . '\'
 																AND `datetime` > \'' . self::oldestValidTimestamp() . '\';');
-
 
 		return $result->fetch_object('StoreSession');
 	}
@@ -75,13 +72,12 @@ class StoreSessionHandler {
 	/*
 	 * Returns the store session by the specified key.
 	 */
-	private static function getStoreSessionByCode($code) {
+	private static function getStoreSessionByCode(string $code): ?StoreSession {
 		$database = Database::getConnection(Settings::db_name_infected_tickets);
 
 		$result = $database->query('SELECT * FROM `' . Settings::db_table_infected_tickets_storesessions . '`
 																WHERE `code` = \'' . $database->real_escape_string($code) . '\'
 																AND `datetime` > \'' . self::oldestValidTimestamp() . '\';');
-
 
 		return $result->fetch_object('StoreSession');
 	}
@@ -89,13 +85,12 @@ class StoreSessionHandler {
 	/*
 	 * Returns true if the specified user have a store session.
 	 */
-	public static function hasStoreSession(User $user) {
+	public static function hasStoreSession(User $user): bool {
 		$database = Database::getConnection(Settings::db_name_infected_tickets);
 
 		$result = $database->query('SELECT `id` FROM `' . Settings::db_table_infected_tickets_storesessions . '`
 																WHERE `userId` = \'' . $user->getId() . '\'
 																AND `datetime` > \'' . self::oldestValidTimestamp() . '\';');
-
 
 		return $result->num_rows > 0;
 	}
@@ -103,7 +98,7 @@ class StoreSessionHandler {
 	/*
 	 * Create a new store session.
 	 */
-	public static function createStoreSession(User $user, TicketType $ticketType, $amount, $price) {
+	public static function createStoreSession(User $user, TicketType $ticketType, int $amount, int $price): ?string {
 		$code = bin2hex(openssl_random_pseudo_bytes(16));
 
 		$database = Database::getConnection(Settings::db_name_infected_tickets);
@@ -116,7 +111,6 @@ class StoreSessionHandler {
 																				\'' . $database->real_escape_string($price) . '\',
 																				\'' . date('Y-m-d H:i:s') . '\');');
 
-
 		return $code;
 	}
 
@@ -128,26 +122,24 @@ class StoreSessionHandler {
 
 		$result = $database->query('DELETE FROM `' . Settings::db_table_infected_tickets_storesessions . '`
 																WHERE `id` = \'' . $storeSession->getId() . '\';');
-
 	}
 
 	/*
 	 * This is used to validate a payment.
 	 */
-	public static function isPaymentValid($totalPrice, StoreSession $storeSession) {
+	public static function isPaymentValid($totalPrice, StoreSession $storeSession): bool {
 		return $storeSession->getPrice() == $totalPrice;
 	}
 
 	/*
 	 * Returns the amount of reserved tickets for the specified ticket type.
 	 */
-	public static function getReservedTicketCount(TicketType $ticketType) {
+	public static function getReservedTicketCount(TicketType $ticketType): int {
 		$database = Database::getConnection(Settings::db_name_infected_tickets);
 
 		$result = $database->query('SELECT `amount` FROM `' . Settings::db_table_infected_tickets_storesessions . '`
 																WHERE `ticketTypeId` = \'' . $ticketType->getId() . '\'
 																AND `datetime` > \'' . self::oldestValidTimestamp() . '\';');
-
 
 		$reservedCount = 0;
 
@@ -161,14 +153,14 @@ class StoreSessionHandler {
 	/*
 	 * Returns the oldest valid time a store session can be from.
 	 */
-	private static function oldestValidTimestamp() {
+	private static function oldestValidTimestamp(): string {
 		return date('Y-m-d H:i:s', time() - Settings::storeSessionTime);
 	}
 
 	/*
 	 * Returns the user with a store session with the specified code.
 	 */
-	public static function getUserByStoreSessionCode($code) {
+	public static function getUserByStoreSessionCode(string $code): ?User {
 		$database = Database::getConnection(Settings::db_name_infected);
 
 		$result = $database->query('SELECT * FROM `' . Settings::db_table_infected_users . '`
@@ -176,11 +168,10 @@ class StoreSessionHandler {
 																			  			WHERE `code`= \'' . $database->real_escape_string($code) . '\'
 																			  			AND `datetime` > \'' . self::oldestValidTimestamp() . '\');');
 
-
 		return $result->fetch_object('User');
 	}
 
-	public static function purchaseComplete(StoreSession $storeSession, Payment $payment) {
+	public static function purchaseComplete(StoreSession $storeSession, Payment $payment): bool {
 		if ($storeSession != null) {
 			// Checks are ok, lets buy!
 			for ($i = 0; $i < $storeSession->getAmount(); $i++) {

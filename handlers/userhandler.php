@@ -2,7 +2,7 @@
 /**
  * This file is part of InfectedAPI.
  *
- * Copyright (C) 2015 Infected <http://infected.no/>.
+ * Copyright (C) 2017 Infected <http://infected.no/>.
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -36,7 +36,7 @@ class UserHandler {
 	/*
 	 * Get an user by the internal id.
 	 */
-	public static function getUser($id) {
+	public static function getUser(int $id): ?User {
 		$database = Database::getConnection(Settings::db_name_infected);
 
 		$result = $database->query('SELECT * FROM `' . Settings::db_table_infected_users . '`
@@ -48,7 +48,7 @@ class UserHandler {
 	/*
 	 * Get user by it's identifier.
 	 */
-	public static function getUserByIdentifier($identifier) {
+	public static function getUserByIdentifier(string $identifier): ?User {
 		$database = Database::getConnection(Settings::db_name_infected);
 
 		$safeIdentifier = $database->real_escape_string($identifier);
@@ -64,7 +64,7 @@ class UserHandler {
 	/*
 	 * Get a list of all users.
 	 */
-	public static function getUsers() {
+	public static function getUsers(): array {
 		$database = Database::getConnection(Settings::db_name_infected);
 
 		$result = $database->query('SELECT * FROM `' . Settings::db_table_infected_users . '`
@@ -82,13 +82,13 @@ class UserHandler {
 	/*
 	 * Returns all users that have one or more permission values in the permissions table.
 	 */
-	public static function getPermissionUsersByEvent(Event $event) {
+	public static function getPermissionUsers(Event $event = null): array {
 		$database = Database::getConnection(Settings::db_name_infected);
 
 		$result = $database->query('SELECT DISTINCT `' . Settings::db_table_infected_users . '`.* FROM `' . Settings::db_table_infected_users . '`
 																LEFT JOIN `' . Settings::db_table_infected_userpermissions . '` ON `' . Settings::db_table_infected_users . '`.`id` = `' . Settings::db_table_infected_userpermissions . '`.`userId`
 																WHERE `' . Settings::db_table_infected_userpermissions . '`.`id` IS NOT NULL
-																AND `' . Settings::db_table_infected_userpermissions . '`.`eventId` = \'' . $event->getId() . '\'
+																AND `' . Settings::db_table_infected_userpermissions . '`.`eventId` = \'' . ($event != null ? $event->getId() : EventHandler::getCurrentEvent()->getId()) . '\'
 																ORDER BY `' . Settings::db_table_infected_users . '`.`firstname`, `' . Settings::db_table_infected_users . '`.`lastname`;');
 
 		$userList = [];
@@ -101,23 +101,16 @@ class UserHandler {
 	}
 
 	/*
-	 * Returns all users that have one or more permission values in the permissions table.
-	 */
-	public static function getPermissionUsers() {
-		return self::getPermissionUsersByEvent(EventHandler::getCurrentEvent());
-	}
-
-	/*
 	 * Returns all users that have one or more permission values in the permissions table and is member of the specifed group.
 	 */
-	public static function getPermissionUsersByGroupAndEvent(Group $group = null, Event $event) {
+	public static function getPermissionUsersByGroup(Group $group = null, Event $event = null): array {
 		$database = Database::getConnection(Settings::db_name_infected);
 
 		$result = $database->query('SELECT DISTINCT `' . Settings::db_table_infected_users . '`.* FROM `' . Settings::db_table_infected_users . '`
 																LEFT JOIN `' . Settings::db_table_infected_userpermissions . '` ON `' . Settings::db_table_infected_users . '`.`id` = `' . Settings::db_table_infected_userpermissions . '`.`userId`
 																LEFT JOIN `' . Settings::db_name_infected_crew . '`.`' . Settings::db_table_infected_crew_memberof . '` ON `users`.`id` = `' . Settings::db_table_infected_crew_memberof . '`.`userId`
 																WHERE `' . Settings::db_table_infected_userpermissions . '`.`id` IS NOT NULL
-																AND (`' . Settings::db_table_infected_userpermissions . '`.`eventId` = \'' . $event->getId() . '\' OR `' . Settings::db_table_infected_userpermissions . '`.`eventId` = \'0\')
+																AND (`' . Settings::db_table_infected_userpermissions . '`.`eventId` = \'' . ($event != null ? $event->getId() : EventHandler::getCurrentEvent()->getId()) . '\' OR `' . Settings::db_table_infected_userpermissions . '`.`eventId` = \'0\')
 																AND `' . Settings::db_table_infected_crew_memberof . '`.`groupId` ' . ($group != null ? '= \'' . $group->getId() . '\'' : 'IS NULL') . '
 																ORDER BY `' . Settings::db_table_infected_users . '`.`firstname`, `' . Settings::db_table_infected_users . '`.`lastname`;');
 
@@ -131,23 +124,17 @@ class UserHandler {
 	}
 
 	/*
-	 * Returns all users that have one or more permission values in the permissions table and is member of the specifed group.
-	 */
-	public static function getPermissionUsersByGroup(Group $group = null) {
-		return self::getPermissionUsersByGroupAndEvent($group, EventHandler::getCurrentEvent());
-	}
-
-	/*
 	 * Get a list of all users which is member in a group
 	 */
-	public static function getMemberUsers() {
+	public static function getMemberUsers(Event $event = null): array {
 		$database = Database::getConnection(Settings::db_name_infected);
 
 		$result = $database->query('SELECT `' . Settings::db_table_infected_users . '`.* FROM `' . Settings::db_table_infected_users . '`
 																LEFT JOIN `' . Settings::db_name_infected_crew . '`.`' . Settings::db_table_infected_crew_memberof . '` ON `' . Settings::db_table_infected_users . '`.`id` = `' . Settings::db_table_infected_crew_memberof . '`.`userId`
-																WHERE `eventId` = \'' . EventHandler::getCurrentEvent()->getId() . '\'
+																WHERE `eventId` = \'' . ($event != null ? $event->getId() : EventHandler::getCurrentEvent()->getId()) . '\'
 																AND `' . Settings::db_table_infected_crew_memberof . '`.`groupId` IS NOT NULL
-															  ORDER BY `' . Settings::db_table_infected_users . '`.`firstname`, `' . Settings::db_table_infected_users . '`.`lastname`;');
+																GROUP BY `' . Settings::db_table_infected_users . '`.`id`
+																ORDER BY `' . Settings::db_table_infected_users . '`.`firstname`, `' . Settings::db_table_infected_users . '`.`lastname`;');
 
 		$userList = [];
 
@@ -161,13 +148,14 @@ class UserHandler {
 	/*
 	 * Get a list of all users which is not member in a group
 	 */
-	public static function getNonMemberUsers() {
+	public static function getNonMemberUsers(Event $event = null): array {
 		$database = Database::getConnection(Settings::db_name_infected);
 
 		$result = $database->query('SELECT `' . Settings::db_table_infected_users . '`.* FROM `' . Settings::db_table_infected_users . '`
 																LEFT JOIN `' . Settings::db_name_infected_crew . '`.`' . Settings::db_table_infected_crew_memberof . '` ON `' . Settings::db_table_infected_users . '`.`id` = `' . Settings::db_table_infected_crew_memberof . '`.`userId`
 																WHERE `' . Settings::db_table_infected_crew_memberof . '`.`eventId` IS NULL
-																OR `' . Settings::db_table_infected_crew_memberof . '`.`eventId` != \'' . EventHandler::getCurrentEvent()->getId() . '\'
+																OR `' . Settings::db_table_infected_crew_memberof . '`.`eventId` != \'' . ($event != null ? $event->getId() : EventHandler::getCurrentEvent()->getId()) . '\'
+																GROUP BY `' . Settings::db_table_infected_users . '`.`id`
 																ORDER BY `' . Settings::db_table_infected_users . '`.`firstname`, `' . Settings::db_table_infected_users . '`.`lastname`;');
 
 		$userList = [];
@@ -182,12 +170,12 @@ class UserHandler {
 	/*
 	 * Get a list of all users which is a participant of current event.
 	 */
-	public static function getParticipantUsers(Event $event) {
+	public static function getParticipantUsers(Event $event = null): array {
 		$database = Database::getConnection(Settings::db_name_infected);
 
 		$result = $database->query('SELECT DISTINCT `' . Settings::db_table_infected_users . '`.* FROM `' . Settings::db_table_infected_users . '`
 																LEFT JOIN `' . Settings::db_name_infected_tickets . '`.`' . Settings::db_table_infected_tickets_tickets . '` ON `' . Settings::db_table_infected_users . '`.`id` = `' . Settings::db_table_infected_tickets_tickets . '`.`userId`
-																WHERE `' . Settings::db_table_infected_tickets_tickets . '`.`eventId` = ' . $event->getId() . '
+																WHERE `' . Settings::db_table_infected_tickets_tickets . '`.`eventId` = \'' . ($event != null ? $event->getId() : EventHandler::getCurrentEvent()->getId()) . '\'
 																AND `' . Settings::db_table_infected_tickets_tickets . '`.`id` IS NOT NULL
 																ORDER BY `' . Settings::db_table_infected_users . '`.`firstname`, `' . Settings::db_table_infected_users . '`.`lastname`;');
 
@@ -203,7 +191,7 @@ class UserHandler {
 	/*
 	 * Get a list of all users which was a participant of an event in the given timeperiod.
 	 */
-	public static function getPreviousParticipantUsers() {
+	public static function getPreviousParticipantUsers(): array {
 		$currentEvent = EventHandler::getCurrentEvent();
 		$previousEvent = EventHandler::getEvent($currentEvent->getId() - 3);
 		$userList = [];
@@ -229,7 +217,7 @@ class UserHandler {
 	/*
 	 * Check if a user with given username or email already exists.
 	 */
-	public static function hasUser($identifier) {
+	public static function hasUser(string $identifier): bool {
 		$database = Database::getConnection(Settings::db_name_infected);
 
 		$safeIdentifier = $database->real_escape_string($identifier);
@@ -245,7 +233,7 @@ class UserHandler {
 	/*
 	 * Create a new user
 	 */
-	public static function createUser($firstname, $lastname, $username, $password, $email, $birthDate, $gender, $phone, $address, $postalCode, $nickname) {
+	public static function createUser(string $firstname, string $lastname, string $username, string $password, string $email, string $birthDate, int $gender, int $phone, string $address, int $postalCode, ?string $nickname): User {
 		$database = Database::getConnection(Settings::db_name_infected);
 
 		$database->query('INSERT INTO `' . Settings::db_table_infected_users . '` (`firstname`, `lastname`, `username`, `password`, `email`, `birthdate`, `gender`, `phone`, `address`, `postalcode`, `countryId`, `nickname`, `registereddate`)
@@ -259,19 +247,17 @@ class UserHandler {
 														  \'' . $database->real_escape_string($phone) . '\',
 														  \'' . $database->real_escape_string($address) . '\',
 														  \'' . $database->real_escape_string($postalCode) . '\',
-															\'26\',
+															\'165\',
 														  \'' . $database->real_escape_string($nickname) . '\',
 														  \'' . date('Y-m-d H:i:s') . '\');');
 
-		$user = self::getUser($database->insert_id);
-
-		return $user;
+		return self::getUser($database->insert_id);
 	}
 
 	/*
 	 * Update a user
 	 */
-	public static function updateUser(User $user, $firstname, $lastname, $username, $email, $birthDate, $gender, $phone, $address, $postalCode, $nickname) {
+	public static function updateUser(User $user, string $firstname, string $lastname, string $username, string $email, int $birthDate, bool $gender, int $phone, string $address, int $postalCode, string $nickname) {
 		$database = Database::getConnection(Settings::db_name_infected);
 
 		$database->query('UPDATE `' . Settings::db_table_infected_users . '`
@@ -286,7 +272,6 @@ class UserHandler {
 												  `postalcode` = \'' . $database->real_escape_string($postalCode) . '\',
 												  `nickname` = \'' . $database->real_escape_string($nickname) . '\'
 										  WHERE `id` = \'' . $user->getId() . '\';');
-
 	}
 
 	/*
@@ -299,7 +284,6 @@ class UserHandler {
 
 			$database->query('DELETE FROM `' . Settings::db_table_infected_users . '`
 							  				WHERE `id` = \'' . $user->getId() . '\';');
-
 
 			// Remove users emergencycontact.
 			if (EmergencyContactHandler::hasEmergencyContactByUser($user)) {
@@ -341,19 +325,18 @@ class UserHandler {
 	/*
 	 * Update a users password
 	 */
-	public static function updateUserPassword(User $user, $password) {
+	public static function updateUserPassword(User $user, string $password) {
 		$database = Database::getConnection(Settings::db_name_infected);
 
 		$database->query('UPDATE `' . Settings::db_table_infected_users . '`
 										  SET `password` = \'' . $database->real_escape_string($password) . '\'
 										  WHERE `id` = \'' . $user->getId() . '\';');
-
 	}
 
 	/*
 	 * Lookup users by set values and return a list of users as result.
 	 */
-	public static function search($query) {
+	public static function search(string $query): array {
 		// Sanitize the input and split the query string into an array.
 		$queryList = explode(' ', $query);
 		$keywordList = [];
@@ -388,31 +371,34 @@ class UserHandler {
 	/*
 	 * Returns the steam id of a user, or null if undefined
 	 */
-	public static function getSteamId(User $user) {
-	    $database = Database::getConnection(Settings::db_name_infected_compo);
+	public static function getSteamId(User $user): ?string {
+    $database = Database::getConnection(Settings::db_name_infected_compo);
 
-	    $result = $database->query('SELECT `steamId` FROM `' . Settings::db_table_infected_compo_steamids . '` WHERE `userId` = \'' . $user->getId() . '\';');
+    $result = $database->query('SELECT `steamId` FROM `' . Settings::db_table_infected_compo_steamids . '`
+																WHERE `userId` = \'' . $user->getId() . '\';');
 
-	    $count = $result->num_rows;
-	    
-	    return $result->fetch_array()[0];
+    return $result->fetch_array()[0];
 	}
 
 	/*
 	 * Sets the steam id
 	 */
-	public static function setSteamId(User $user, $steamId) {
-	    $database = Database::getConnection(Settings::db_name_infected_compo);
+	public static function setSteamId(User $user, string $steamId) {
+    $database = Database::getConnection(Settings::db_name_infected_compo);
 
-	    $result = $database->query('SELECT `steamId` FROM `' . Settings::db_table_infected_compo_steamids . '` WHERE `userId` = \'' . $user->getId() . '\';');
+    $result = $database->query('SELECT `steamId` FROM `' . Settings::db_table_infected_compo_steamids . '`
+																WHERE `userId` = \'' . $user->getId() . '\';');
+    $count = $result->num_rows;
 
-	    $count = $result->num_rows;
-
-	    if($count==0) {
-		$database->query('INSERT INTO `' . Settings::db_table_infected_compo_steamids . '`(`userId`, `steamId`) VALUES (\'' . $user->getId() . '\', \'' . $database->real_escape_string($steamId) . '\');');
-	    } else {
-		$database->query('UPDATE `' . Settings::db_table_infected_compo_steamids . '` SET `steamId` = \'' . $database->real_escape_string($steamId) . '\' WHERE `userId` = \'' . $user->getId() . '\';');
-	    }
+    if ($count == 0) {
+			$database->query('INSERT INTO `' . Settings::db_table_infected_compo_steamids . '`(`userId`, `steamId`)
+												VALUES (\'' . $user->getId() . '\',
+																\'' . $database->real_escape_string($steamId) . '\');');
+    } else {
+			$database->query('UPDATE `' . Settings::db_table_infected_compo_steamids . '`
+												SET `steamId` = \'' . $database->real_escape_string($steamId) . '\'
+												WHERE `userId` = \'' . $user->getId() . '\';');
+    }
 	}
 }
 ?>

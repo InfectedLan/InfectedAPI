@@ -2,7 +2,7 @@
 /**
  * This file is part of InfectedAPI.
  *
- * Copyright (C) 2015 Infected <http://infected.no/>.
+ * Copyright (C) 2017 Infected <http://infected.no/>.
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -28,12 +28,11 @@ class AgendaHandler {
 	/*
 	 * Get an agenda by the internal id.
 	 */
-	public static function getAgenda($id) {
+	public static function getAgenda(int $id): ?Aganda {
 		$database = Database::getConnection(Settings::db_name_infected_main);
 
 		$result = $database->query('SELECT * FROM `' . Settings::db_table_infected_main_agenda . '`
 																WHERE `id` = \'' . $database->real_escape_string($id) . '\';');
-
 
 		return $result->fetch_object('Agenda');
 	}
@@ -41,13 +40,12 @@ class AgendaHandler {
 	/*
 	   * Returns agendas.
 	   */
-	public static function getAgendas() {
+	public static function getAgendas(Event $event = null): array {
 		$database = Database::getConnection(Settings::db_name_infected_main);
 
 		$result = $database->query('SELECT * FROM `' . Settings::db_table_infected_main_agenda . '`
-																WHERE `eventId` = \'' . EventHandler::getCurrentEvent()->getId() . '\'
+																WHERE `eventId` = \'' . ($event != null ? $event->getId() : EventHandler::getCurrentEvent()->getId()) . '\'
 																ORDER BY `startTime`;');
-
 
 		$agendaList = [];
 
@@ -61,14 +59,13 @@ class AgendaHandler {
 	/*
 	 * Returns published agendas.
   	 */
-	  public static function getPublishedAgendas() {
+	public static function getPublishedAgendas(Event $event = null): array {
 		$database = Database::getConnection(Settings::db_name_infected_main);
 
 		$result = $database->query('SELECT * FROM `' . Settings::db_table_infected_main_agenda . '`
-											  				WHERE `eventId` = \'' . EventHandler::getCurrentEvent()->getId() . '\'
+											  				WHERE `eventId` = \'' . ($event != null ? $event->getId() : EventHandler::getCurrentEvent()->getId()) . '\'
 											  				AND `published` = \'1\'
 											  				ORDER BY `startTime`;');
-
 
 		$agendaList = [];
 
@@ -79,18 +76,17 @@ class AgendaHandler {
 		return $agendaList;
 	}
 
-  	/*
-  	 * Returns only published agendas that have not happend yet.
-  	 */
-	public static function getPublishedNotHappendAgendas() {
+	/*
+	 * Returns only published agendas that have not happend yet.
+	 */
+	public static function getPublishedNotHappendAgendas(Event $event = null): array {
 		$database = Database::getConnection(Settings::db_name_infected_main);
 
 		$result = $database->query('SELECT * FROM `' . Settings::db_table_infected_main_agenda . '`
-																WHERE `eventId` = \'' . EventHandler::getCurrentEvent()->getId() . '\'
+																WHERE `eventId` = \'' . ($event != null ? $event->getId() : EventHandler::getCurrentEvent()->getId()) . '\'
 																AND DATE_ADD(`startTime`, INTERVAL 1 HOUR) >= NOW()
 																AND `published` = \'1\'
 																ORDER BY `startTime`;');
-
 
 		$agendaList = [];
 
@@ -104,7 +100,7 @@ class AgendaHandler {
 	/*
 	 * Create a new agenda entry.
 	 */
-	public static function createAgenda(Event $event, $name, $title, $description, $startTime) {
+	public static function createAgenda(Event $event, string $name, string $title, string $description, string $startTime): Agenda {
 		$database = Database::getConnection(Settings::db_name_infected_main);
 
 		$database->query('INSERT INTO `' . Settings::db_table_infected_main_agenda . '` (`eventId`, `name`, `title`, `description`, `startTime`, `published`)
@@ -112,18 +108,16 @@ class AgendaHandler {
 														  \'' . $database->real_escape_string($name) . '\',
 														  \'' . $database->real_escape_string($title) . '\',
 														  \'' . $database->real_escape_string($description) . '\',
-														  \'' . $database->real_escape_string($startTime) . '\', 1);');
+														  \'' . $database->real_escape_string($startTime) . '\',
+															\'1\');');
 
-		$agenda = self::getAgenda($database->insert_id);
-
-
-		return $agenda;
+		return self::getAgenda($database->insert_id);
 	}
 
 	/*
 	 * Update an agenda.
 	 */
-	public static function updateAgenda(Agenda $agenda, $title, $description, $startTime, $published) {
+	public static function updateAgenda(Agenda $agenda, string $title, string $description, string $startTime, bool $published) {
 		$database = Database::getConnection(Settings::db_name_infected_main);
 
 		$database->query('UPDATE `' . Settings::db_table_infected_main_agenda . '`
@@ -132,7 +126,6 @@ class AgendaHandler {
 												  `startTime` = \'' . $database->real_escape_string($startTime) . '\',
 												  `published` = \'' . $database->real_escape_string($published) . '\'
 										  WHERE `id` = \'' . $agenda->getId() . '\';');
-
 	}
 
 	/*
@@ -143,7 +136,6 @@ class AgendaHandler {
 
 		$database->query('DELETE FROM `' . Settings::db_table_infected_main_agenda . '`
 						  				WHERE `id` = \'' . $agenda->getId() . '\';');
-
 	}
 }
 ?>

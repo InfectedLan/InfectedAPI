@@ -2,7 +2,7 @@
 /**
  * This file is part of InfectedAPI.
  *
- * Copyright (C) 2015 Infected <http://infected.no/>.
+ * Copyright (C) 2017 Infected <http://infected.no/>.
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -19,7 +19,7 @@
  */
 
 class DateUtils {
-	public static function getDayFromInt($day) {
+	public static function getDayFromInt(int $day): ?string {
 		$dayList = ['Søndag',
 							  'Mandag',
 							  'Tirsdag',
@@ -31,7 +31,7 @@ class DateUtils {
 		return $dayList[$day];
 	}
 
-	public static function getMonthFromInt($month) {
+	public static function getMonthFromInt(int $month): ?string {
 		$monthList = ['Januar',
 								  'Februar',
 								  'Mars',

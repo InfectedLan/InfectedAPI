@@ -1,9 +1,8 @@
 <?php
-include 'database.php';
 /**
  * This file is part of InfectedAPI.
  *
- * Copyright (C) 2015 Infected <http://infected.no/>.
+ * Copyright (C) 2017 Infected <http://infected.no/>.
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -19,8 +18,8 @@ include 'database.php';
  * License along with this library.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-
 require_once 'session.php';
+require_once 'database.php';
 require_once 'localization.php';
 require_once 'handlers/userhandler.php';
 require_once 'handlers/matchhandler.php';
@@ -33,39 +32,41 @@ $clanArray = array();
 
 if (Session::isAuthenticated()) {
 	$user = Session::getCurrentUser();
-    if (isset($_GET['id']) &&
-    is_numeric($_GET['id'])) {
-        $compo = CompoHandler::getCompo($_GET['id']);
 
-        if ($compo != null) {
-            $clans = ClanHandler::getQualifiedClansByCompo($compo);
+	if (isset($_GET['id']) &&
+      is_numeric($_GET['id'])) {
+    $compo = CompoHandler::getCompo($_GET['id']);
 
-            foreach($clans as $clan) {
-                $data = array();
-                $data["id"] = $clan->getId();
-                $data["name"] = $clan->getName();
-                $data["tag"] = $clan->getTag();
-                array_push($clanArray, $data);
-            }
-            $result = true;
-        } else {
-            $message = Localization::getLocale('this_compo_does_not_exist');
-        }
+    if ($compo != null) {
+      $clans = ClanHandler::getQualifiedClansByCompo($compo);
+
+      foreach ($clans as $clan) {
+          $data = array();
+          $data['id'] = $clan->getId();
+          $data['name'] = $clan->getName();
+          $data['tag'] = $clan->getTag();
+
+					array_push($clanArray, $data);
+      }
+
+      $result = true;
     } else {
-        $message = Localization::getLocale('you_have_not_filled_out_the_required_fields');
+      $message = Localization::getLocale('this_compo_does_not_exist');
     }
+  } else {
+    $message = Localization::getLocale('you_have_not_filled_out_the_required_fields');
+  }
 } else {
 	$message = Localization::getLocale('you_are_not_logged_in');
 }
 
-header('Content-Type: text/plain');
+header('Content-Type: application/json');
 
 if ($result) {
 	echo json_encode(array('result' => $result, 'data' => $clanArray), JSON_PRETTY_PRINT);
 } else {
 	echo json_encode(array('result' => $result, 'message' => $message), JSON_PRETTY_PRINT);
 }
-
 
 Database::cleanup();
 ?>

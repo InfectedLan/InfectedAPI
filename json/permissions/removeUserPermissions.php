@@ -1,9 +1,8 @@
 <?php
-include 'database.php';
 /**
  * This file is part of InfectedAPI.
  *
- * Copyright (C) 2015 Infected <http://infected.no/>.
+ * Copyright (C) 2017 Infected <http://infected.no/>.
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -20,6 +19,7 @@ include 'database.php';
  */
 
 require_once 'session.php';
+require_once 'database.php';
 require_once 'localization.php';
 require_once 'handlers/userhandler.php';
 require_once 'handlers/userpermissionhandler.php';
@@ -43,7 +43,7 @@ if (Session::isAuthenticated()) {
 				$message = Localization::getLocale('this_user_does_not_exist');
 			}
 		} else {
-			$message = Localization::getLocale('no_user_specified');
+			$message = Localization::getLocale('you_have_not_filled_out_the_required_fields');
 		}
 	} else {
 		$message = Localization::getLocale('you_do_not_have_permission_to_do_that');
@@ -52,7 +52,7 @@ if (Session::isAuthenticated()) {
 	$message = Localization::getLocale('you_are_not_logged_in');
 }
 
-header('Content-Type: text/plain');
+header('Content-Type: application/json');
 echo json_encode(['result' => $result, 'message' => $message], JSON_PRETTY_PRINT);
 Database::cleanup();
 ?>

@@ -2,7 +2,7 @@
 /**
  * This file is part of InfectedAPI.
  *
- * Copyright (C) 2015 Infected <http://infected.no/>.
+ * Copyright (C) 2017 Infected <http://infected.no/>.
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -26,12 +26,11 @@ class PermissionHandler {
 	/*
 	 * Get the permission by the internal id.
 	 */
-	public static function getPermission($id) {
+	public static function getPermission(int $id): ?Permission {
 		$database = Database::getConnection(Settings::db_name_infected);
 
 		$result = $database->query('SELECT * FROM `' . Settings::db_table_infected_permissions . '`
 																WHERE `id` = \'' . $database->real_escape_string($id) . '\';');
-
 
 		return $result->fetch_object('Permission');
 	}
@@ -39,12 +38,11 @@ class PermissionHandler {
 	/*
 	 * Returns the permission with the given value.
 	 */
-	public static function getPermissionByValue($value) {
+	public static function getPermissionByValue(string $value): ?Permission {
 		$database = Database::getConnection(Settings::db_name_infected);
 
 		$result = $database->query('SELECT * FROM `' . Settings::db_table_infected_permissions . '`
 																WHERE `value` = \'' . $database->real_escape_string($value) . '\';');
-
 
 		return $result->fetch_object('Permission');
 	}
@@ -52,12 +50,11 @@ class PermissionHandler {
 	/*
 	 * Returns a list of all permissions.
 	 */
-	public static function getPermissions() {
+	public static function getPermissions(): array {
 		$database = Database::getConnection(Settings::db_name_infected);
 
 		$result = $database->query('SELECT * FROM `' . Settings::db_table_infected_permissions . '`
 																ORDER BY `value` ASC;');
-
 
 		$permissionList = [];
 
