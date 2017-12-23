@@ -56,6 +56,7 @@ class NfcCardTest extends TestCase {
 		$this->assertEquals(1, count($cards));
 
 		$card = $cards[0];
+		$this->assertNotEquals($card, null);
 		$this->assertEquals($me, $card->getUser());
 		$this->assertEquals($nfcid, $card->getNfcId());
 
