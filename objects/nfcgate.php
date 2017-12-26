@@ -18,7 +18,7 @@
  * License along with this library.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-require_once 'objects/object.php';
+require_once 'objects/databaseobject.php';
 require_once 'handlers/eventhandler.php';
 
 /*
@@ -26,7 +26,7 @@ require_once 'handlers/eventhandler.php';
  *  - Ticket booth
  *  - Entry gate
  */
-class NfcGate extends Object {
+class NfcGate extends DatabaseObject {
 	//Constants for the type field
 	const NFC_GATE_TYPE_TICKETSCANNER = 1;
     const NFC_GATE_TYPE_GATE = 0;

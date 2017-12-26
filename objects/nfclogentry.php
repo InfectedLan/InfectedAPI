@@ -18,14 +18,14 @@
  * License along with this library.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-require_once 'objects/object.php';
+require_once 'objects/databaseobject.php';
 require_once 'handlers/nfcgatehandler.php';
 require_once 'handlers/nfccardhandler.php';
 
 /*
  * Tracks person movements through gates with type 0
  */
-class NfcLogEntry extends Object {
+class NfcLogEntry extends DatabaseObject {
 	//Constants for the type field
 
 	private $timestamp;
