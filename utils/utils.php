@@ -19,7 +19,8 @@
  */
 
 class Utils {
-  public static function isCli() {
-    return (!isset($_SERVER['SERVER_SOFTWARE']) && (php_sapi_name() == 'cli' || (is_numeric($_SERVER['argc']) && $_SERVER['argc'] > 0)));
+  public static function isCli(): bool {
+    return !isset($_SERVER['SERVER_SOFTWARE']) && (php_sapi_name() == 'cli' || (is_numeric($_SERVER['argc']) && $_SERVER['argc'] > 0));
   }
 }
+?>

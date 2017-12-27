@@ -1,9 +1,8 @@
 <?php
-include 'database.php';
 /**
  * This file is part of InfectedAPI.
  *
- * Copyright (C) 2015 Infected <http://infected.no/>.
+ * Copyright (C) 2017 Infected <http://infected.no/>.
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -19,6 +18,7 @@ include 'database.php';
  * License along with this library.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+require_once 'database.php';
 require_once 'localization.php';
 require_once 'handlers/userhandler.php';
 require_once 'handlers/emergencycontacthandler.php';
@@ -96,7 +96,7 @@ if (isset($_POST['firstname']) &&
 	} else if ($email != $confirmEmail) {
 		$message = Localization::getLocale('the_email_addresses_does_not_match');
 	} else if (!is_numeric($gender)) {
-		$message = Localization::getLocale('you_have_entered_an_invalid_gender');
+			$message = Localization::getLocale('you_have_entered_an_invalid_gender');
 	} else if (!is_numeric($phone) || strlen($phone) < 8 || strlen($phone) > 8) {
 		$message = Localization::getLocale('the_phone_number_is_not_valid');
 	} else if (empty($address) && strlen($address) > 32) {
@@ -105,7 +105,7 @@ if (isset($_POST['firstname']) &&
 		$message = Localization::getLocale('the_postcode_is_not_valid_the_postcode_consists_of_4_characters');
 	} else if (!preg_match('/^[a-zæøåA-ZÆØÅ0-9_-]{2,16}$/', $nickname) && !empty($nickname)) {
 		$message = Localization::getLocale('the_nickname_is_not_valid_it_must_consist_of_at_least_2_characters_and_maximum_16_characters');
-	} else if (date_diff(date_create($birthdate), date_create('now'))->y < 18 && (!isset($_POST['emergencycontactphone']) || !is_numeric($emergencyContactPhone) || strlen($emergencyContactPhone) < 8 || strlen($emergencyContactPhone) > 8)) {
+	} else if ((new DateTime($birthdate))->diff(new DateTime())->y < 18 && (!isset($_POST['emergencycontactphone']) || !is_numeric($emergencyContactPhone) || strlen($emergencyContactPhone) < 8 || strlen($emergencyContactPhone) > 8)) {
 		if (!is_numeric($emergencyContactPhone)) {
 			$message = Localization::getLocale('parent_phone_must_be_a_number');
 		} else if (strlen($emergencyContactPhone) < 8) {
@@ -139,7 +139,7 @@ if (isset($_POST['firstname']) &&
 		$result = true;
 	}
 	if($result != true) {
-	    //We are NOT getting raw post data because it would make the password visible in the log. 
+	    //We are NOT getting raw post data because it would make the password visible in the log.
 	    $registrationData = array("username" => $username, "email" => $email, "phone" => $phone, "firstname" => $firstname, "lastname" => $lastname, "gender" => $gender, "address" => $address, "postalcode" => $postalcode, "nickname" => $nickname);
 	    SyslogHandler::log("Failed to register!", "addUser", null, SyslogHandler::SEVERITY_INFO, array("message" => $message, "passLength" => strlen($_POST["password"]), "user_agent" => $_SERVER['HTTP_USER_AGENT'], "registrationData" => $registrationData));
 	}
@@ -147,7 +147,7 @@ if (isset($_POST['firstname']) &&
 	$message = Localization::getLocale('you_have_not_filled_out_the_required_fields');
 }
 
-header('Content-Type: text/plain');
+header('Content-Type: application/json');
 echo json_encode(['result' => $result, 'message' => $message], JSON_PRETTY_PRINT);
 Database::cleanup();
 ?>

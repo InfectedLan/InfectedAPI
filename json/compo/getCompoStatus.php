@@ -1,9 +1,8 @@
 <?php
-include 'database.php';
 /**
  * This file is part of InfectedAPI.
  *
- * Copyright (C) 2015 Infected <http://infected.no/>.
+ * Copyright (C) 2017 Infected <http://infected.no/>.
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -20,6 +19,7 @@ include 'database.php';
  */
 
 require_once 'session.php';
+require_once 'database.php';
 require_once 'localization.php';
 require_once 'handlers/userhandler.php';
 require_once 'handlers/clanhandler.php';
@@ -40,9 +40,9 @@ if (Session::isAuthenticated()) {
 		$compo = $clan->getCompo();
 
 		$compoData = ['name' => $compo->getName(),
-			      'tag' => $compo->getTag(),
-			      'id' => $compo->getId(),
-			      'requiresSteamId' => $compo->requiresSteamId()];
+			       			'tag' => $compo->getTag(),
+			      			'id' => $compo->getId(),
+			      			'requiresSteamId' => $compo->requiresSteamId()];
 
 		$clanData = ['id' => $clan->getId(),
 							   'name' => $clan->getName(),
@@ -84,12 +84,13 @@ if (Session::isAuthenticated()) {
 	$message = Localization::getLocale('you_are_not_logged_in');
 }
 
-header('Content-Type: text/plain');
+header('Content-Type: application/json');
 
 if ($result) {
 	echo json_encode(['result' => $result, 'data' => $compoStatusList], JSON_PRETTY_PRINT);
 } else {
 	echo json_encode(['result' => $result, 'message' => $message], JSON_PRETTY_PRINT);
 }
+
 Database::cleanup();
 ?>

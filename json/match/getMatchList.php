@@ -1,5 +1,4 @@
 <?php
-include 'database.php';
 /**
  * This file is part of InfectedAPI.
  *
@@ -20,6 +19,7 @@ include 'database.php';
  */
 
 require_once 'session.php';
+require_once 'database.php';
 require_once 'localization.php';
 require_once 'handlers/userhandler.php';
 require_once 'handlers/matchhandler.php';
@@ -159,12 +159,13 @@ if (Session::isAuthenticated()) {
 	$message = Localization::getLocale('you_are_not_logged_in');
 }
 
-header('Content-Type: text/plain');
+header('Content-Type: application/json');
 
 if ($result) {
 	echo json_encode(['result' => $result, 'data' => $matchArray], JSON_PRETTY_PRINT);
 } else {
 	echo json_encode(['result' => $result, 'message' => $message], JSON_PRETTY_PRINT);
 }
+
 Database::cleanup();
 ?>

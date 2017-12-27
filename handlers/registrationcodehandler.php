@@ -26,7 +26,7 @@ class RegistrationCodeHandler {
 	/*
 	 * Get the registration code by the internal id.
 	 */
-	public static function getRegistrationCode(User $user) {
+	public static function getRegistrationCode(User $user): ?string {
 		$database = Database::getConnection(Settings::db_name_infected);
 
 		$result = $database->query('SELECT `code` FROM `' . Settings::db_table_infected_registrationcodes . '`
@@ -40,7 +40,7 @@ class RegistrationCodeHandler {
 	/*
 	 * Returns a list of all registration codes.
 	 */
-	public static function getRegistrationCodes() {
+	public static function getRegistrationCodes(): array {
 		$database = Database::getConnection(Settings::db_name_infected);
 
 		$result = $database->query('SELECT `code` FROM `' . Settings::db_table_infected_registrationcodes . '`;');
@@ -58,7 +58,7 @@ class RegistrationCodeHandler {
 	/*
 	 * Returns true if we got the specified code.
 	 */
-	public static function hasRegistrationCode($code) {
+	public static function hasRegistrationCode(string $code): bool {
 		$database = Database::getConnection(Settings::db_name_infected);
 
 		$result = $database->query('SELECT `id` FROM `' . Settings::db_table_infected_registrationcodes . '`
@@ -70,7 +70,7 @@ class RegistrationCodeHandler {
 	/*
 	 * Returns true if we got a registration code for the specified user.
 	 */
-	public static function hasRegistrationCodeByUser(User $user) {
+	public static function hasRegistrationCodeByUser(User $user): bool {
 		$database = Database::getConnection(Settings::db_name_infected);
 
 		$result = $database->query('SELECT `id` FROM `' . Settings::db_table_infected_registrationcodes . '`
@@ -82,7 +82,7 @@ class RegistrationCodeHandler {
 	/*
 	 * Create a registration code for the specified user.
 	 */
-	public static function createRegistrationCode(User $user) {
+	public static function createRegistrationCode(User $user): ?string {
 		$code = bin2hex(openssl_random_pseudo_bytes(16));
 
 		$database = Database::getConnection(Settings::db_name_infected);
@@ -97,7 +97,7 @@ class RegistrationCodeHandler {
 	/*
 	 * Remove the specified registration code.
 	 */
-	public static function removeRegistrationCode($code) {
+	public static function removeRegistrationCode(string $code) {
 		$database = Database::getConnection(Settings::db_name_infected);
 
 		$database->query('DELETE FROM `' . Settings::db_table_infected_registrationcodes . '`

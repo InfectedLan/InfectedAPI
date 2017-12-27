@@ -29,7 +29,7 @@ class CastingPageHandler {
 	/*
 	 * Get a server by internal id
 	 */
-	public static function getCastingPage($id) {
+	public static function getCastingPage(int $id): ?CastingPage {
 		$database = Database::getConnection(Settings::db_name_infected_crew);
 
 		$result = $database->query('SELECT * FROM `' . Settings::db_table_infected_crew_castingpages . '`
@@ -41,7 +41,7 @@ class CastingPageHandler {
 	/*
 	 * Get a server for a specified compo.
 	 */
-	public static function getCastingPages(Event $event = null) {
+	public static function getCastingPages(Event $event = null): array {
 		$database = Database::getConnection(Settings::db_name_infected_crew);
 
 		$result = $database->query('SELECT * FROM `' . Settings::db_table_infected_crew_castingpages . '`
@@ -59,7 +59,7 @@ class CastingPageHandler {
     /*
      * Creates a new server entry
      */
-	public static function createCastingPage(Event $event, $name, $data, $template) {
+	public static function createCastingPage(Event $event, string $name, string $data, string $template): int {
     $database = Database::getConnection(Settings::db_name_infected_crew);
 
     $database->query('INSERT INTO `' . Settings::db_table_infected_crew_castingpages . '`(`eventId`, `name`, `data`, `template`)
@@ -84,7 +84,7 @@ class CastingPageHandler {
 	/*
 	 * Sets the connection details of a server
 	 */
-	public static function setData(CastingPage $castingPage, $data) {
+	public static function setData(CastingPage $castingPage, string $data) {
     $database = Database::getConnection(Settings::db_name_infected_crew);
 
     $result = $database->query('UPDATE `' . Settings::db_table_infected_crew_castingpages . '`
@@ -95,7 +95,7 @@ class CastingPageHandler {
 	/*
 	 * Sets the human name of a server
 	 */
-	public static function setName(CastingPage $castingPage, $name) {
+	public static function setName(CastingPage $castingPage, string $name) {
     $database = Database::getConnection(Settings::db_name_infected_crew);
 
     $result = $database->query('UPDATE `' . Settings::db_table_infected_crew_castingpages . '`
@@ -106,7 +106,7 @@ class CastingPageHandler {
   /*
    * Sets the template for a castingPage
    */
-  public static function setTemplate(CastingPage $castingPage, $template) {
+  public static function setTemplate(CastingPage $castingPage, string $template) {
     $database = Database::getConnection(Settings::db_name_infected_crew);
 
     $result = $database->query('UPDATE `' . Settings::db_table_infected_crew_castingpages . '`

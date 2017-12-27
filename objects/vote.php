@@ -19,24 +19,23 @@
  */
 
 require_once 'handlers/userhandler.php';
-require_once 'objects/object.php';
+require_once 'objects/databaseobject.php';
 
-class Vote extends Object {
+class Vote extends DatabaseObject {
 	private $consumerId;
 	private $voteOptionId;
 
 	/*
 	 * Returns the consumer of this vote.
 	 */
-	public function getConsumer() {
+	public function getConsumer(): User {
 		return UserHandler::getUser($this->consumerId);
 	}
 
 	/*
 	 * Returns the voteoption of this vote.
 	 */
-	public function getVoteOption() {
+	public function getVoteOption(): VoteOption {
 		return VoteOptionHandler::getVoteOption($this->voteOptionId);
 	}
 }
-?>

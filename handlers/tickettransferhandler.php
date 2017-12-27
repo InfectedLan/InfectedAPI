@@ -30,7 +30,7 @@ class TicketTransferHandler {
 	/*
 	 * Get a ticket transer by the internal id.
 	 */
-	public static function getTransferFromTicket(Ticket $ticket) {
+	public static function getTransferFromTicket(Ticket $ticket): ?TicketTransfer {
 		$database = Database::getConnection(Settings::db_name_infected_tickets);
 
 		$result = $database->query('SELECT * FROM `' . Settings::db_table_infected_tickets_tickettransfers . '`
@@ -44,7 +44,7 @@ class TicketTransferHandler {
 	/*
 	 * Returns list of transfers that are eligible for reverting.
 	 */
-	public static function getRevertableTransfers(User $user) {
+	public static function getRevertableTransfers(User $user): array {
  		$wantedTimeLimit = time() - Settings::ticketTransferTime;
 
 		$database = Database::getConnection(Settings::db_name_infected_tickets);
@@ -66,7 +66,7 @@ class TicketTransferHandler {
 	/*
 	 * Create a new ticket transfer.
 	 */
-	public static function createTransfer(Ticket $ticket, User $user, $revertable) {
+	public static function createTransfer(Ticket $ticket, User $user, bool $revertable): TicketTransfer {
 		$database = Database::getConnection(Settings::db_name_infected_tickets);
 
 		$database->query('INSERT INTO `' . Settings::db_table_infected_tickets_tickettransfers . '` (`ticketId`, `fromId`, `toId`, `datetime`, `revertable`)

@@ -20,36 +20,35 @@
 
 require_once 'handlers/userhandler.php';
 
-class SyslogEntry extends Object {
-  private $source;
-  private $severity;
-  private $message;
-  private $metadata;
-  private $date;
-  private $userId;
+class SyslogEntry extends DatabaseObject {
+    private $source;
+    private $severity;
+    private $message;
+    private $metadata;
+    private $date;
+    private $userId;
 
-  public function getSource() {
-    return $this->source;
-  }
+    public function getSource(): string {
+        return $this->source;
+    }
 
-  public function getSeverity() {
-    return $this->severity;
-  }
+    public function getSeverity(): int {
+        return $this->severity;
+    }
 
-  public function getMessage() {
-    return $this->message;
-  }
+    public function getMessage(): string {
+        return $this->message;
+    }
 
-  public function getMetadata() {
-    return json_decode($this->metadata);
-  }
+    public function getMetadata() {
+        return json_decode($this->metadata);
+    }
 
-  public function getTimestamp() {
-    return strtotime($this->date);
-  }
+    public function getTimestamp(): int {
+        return strtotime($this->date);
+    }
 
-  public function getUser() {
-    return UserHandler::getUser($this->userId);
-  }
+    public function getUser(): ?User {
+        return UserHandler::getUser($this->userId);
+    }
 }
-?>

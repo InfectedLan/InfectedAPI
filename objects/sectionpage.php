@@ -18,9 +18,9 @@
  * License along with this library.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-require_once 'objects/object.php';
+require_once 'objects/databaseobject.php';
 
-class SectionPage extends Object {
+class SectionPage extends DatabaseObject {
 	private $name;
 	private $title;
 	private $content;
@@ -28,22 +28,21 @@ class SectionPage extends Object {
 	/*
 	 * Returns the name of this page.
 	 */
-	public function getName() {
+	public function getName(): string {
 		return $this->name;
 	}
 
 	/*
 	 * Returns the title of this page.
 	 */
-	public function getTitle() {
+	public function getTitle(): string {
 		return $this->title;
 	}
 
 	/*
 	 * Returns the content of this page.
 	 */
-	public function getContent() {
+	public function getContent(): string {
 		return $this->content;
 	}
 }
-?>

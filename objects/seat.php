@@ -20,52 +20,51 @@
 
 require_once 'handlers/rowhandler.php';
 require_once 'handlers/seathandler.php';
-require_once 'objects/object.php';
+require_once 'objects/databaseobject.php';
 
-class Seat extends Object {
+class Seat extends DatabaseObject {
 	private $rowId;
 	private $number;
 
 	/*
 	 * Returns row this seat belongs to.
 	 */
-	public function getRow() {
+	public function getRow(): Row {
 		return RowHandler::getRow($this->rowId);
 	}
 
 	/*
 	 * Returns seat number relative to row.
 	 */
-	public function getNumber() {
+	public function getNumber(): int {
 		return $this->number;
 	}
 
 	/*
 	 * Returns true if there is a ticket that is seated on this seat.
 	 */
-	public function hasTicket() {
+	public function hasTicket(): bool {
 		return SeatHandler::hasTicket($this);
 	}
 
 	/*
 	 * Returns the ticket that is seated on this seat.
 	 */
-	public function getTicket() {
+	public function getTicket(): Ticket {
 		return SeatHandler::getTicket($this);
 	}
 
 	/*
 	 * Returns the event accosiated with this seat.
 	 */
-	public function getEvent() {
+	public function getEvent(): Event {
 		return SeatHandler::getEvent($this);
 	}
 
 	/*
 	 * Returns a string representation of this seat.
 	 */
-	public function getString() {
+	public function getString(): string {
 		return 'R' . $this->getRow()->getNumber() . ' S' . $this->getNumber();
 	}
 }
-?>

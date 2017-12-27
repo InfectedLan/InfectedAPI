@@ -31,7 +31,7 @@ class Session {
 	/*
 	 * Returns true if the current user is authenticated.
 	 */
-	public static function isAuthenticated() {
+	public static function isAuthenticated(): bool {
 		// Check if we remember this user.
 		return isset($_SESSION['userId']);
 	}
@@ -39,14 +39,14 @@ class Session {
 	/*
 	 * Returns true if the current user is a member (To clarify, is a crew member).
 	 */
-	public static function isMember() {
+	public static function isMember(): bool {
 		return self::isAuthenticated() && self::getCurrentUser()->isGroupMember();
 	}
 
 	/*
 	 * Returns the current user.
 	 */
-	public static function getCurrentUser() {
+	public static function getCurrentUser(): ?User {
 		if (self::isAuthenticated()) {
 			return UserHandler::getUser($_SESSION['userId']);
 		}
@@ -55,7 +55,7 @@ class Session {
   /*
    * Returns the user by the given session id.
    */
-  public function getUserFromSessionId($sessionId) {
+  public function getUserFromSessionId($sessionId): ?User {
     if (!preg_match("/^[a-zA-Z0-9]+$/", $sessionId)) {
 		  SyslogHandler::log("Hack attack! ", "getUserFromSessionId", null, SyslogHandler::SEVERITY_CRITICAL);
 

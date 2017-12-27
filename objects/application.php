@@ -35,95 +35,100 @@ class Application extends EventObject {
 	/*
 	 * Returns the group that this application is for.
 	 */
-	public function getGroup() {
+	public function getGroup(): Group {
 		return GroupHandler::getGroup($this->groupId);
 	}
 
 	/*
 	 * Returns the user which opened this application.
 	 */
-	public function getUser() {
+	public function getUser(): User {
 		return UserHandler::getUser($this->userId);
 	}
 
 	/*
 	 * Returns the time when this application was opened.
 	 */
-	public function getOpenedTime() {
+	public function getOpenedTime(): int {
 		return strtotime($this->openedTime);
 	}
 
 	/*
 	 * Returns the time when this application was closed.
 	 */
-	public function getClosedTime() {
+	public function getClosedTime(): int {
 		return strtotime($this->closedTime);
 	}
 
 	/*
 	 * Returns the state of this application.
 	 */
-	public function getState() {
+	public function getState(): int {
 		return $this->state;
 	}
 
 	/*
 	 * Returns the state of this application.
 	 */
-	public function getStateAsString() {
+	public function getStateAsString(): ?string {
 		$updatedByUser = $this->getUpdatedByUser();
 
 		if ($this->isQueued()) {
 			return 'Står i kø'; // TODO: Add localization for this.
 		} else {
 			switch ($this->getState()) {
-				case 1:
+				case ApplicationHandler::STATE_NEW:
 					return 'Ikke behandlet'; // TODO: Add localization for this.
 					break;
 
-				case 2:
+				case ApplicationHandler::STATE_ACCEPTED:
 					return 'Godkjent' . ($updatedByUser != null ? ' av ' . $updatedByUser->getDisplayName() : null); // TODO: Add localization for this.
 					break;
 
-				case 3:
+				case ApplicationHandler::STATE_REJECTED:
 					return 'Avslått' . ($updatedByUser != null ? ' av ' . $updatedByUser->getDisplayName() : null); // TODO: Add localization for this.
 					break;
+
+                case ApplicationHandler::STATE_CLOSED:
+                    return 'Lukket';
 			}
 		}
+
+		return null;
 	}
 
 	/*
 	 * Returns the content of this application.
 	 */
-	public function getContent() {
+	public function getContent(): string {
 		return $this->content;
 	}
 
 	/*
 	 * Returns the user that last updated this application.
 	 */
-	public function getUpdatedByUser() {
+	public function getUpdatedByUser(): ?User {
 		return UserHandler::getUser($this->updatedByUserId);
 	}
 
 	/*
 	 * Returns the comment of this application.
 	 */
-	public function getComment() {
+	public function getComment(): ?string {
 		return $this->comment;
 	}
 
 	/*
 	 * Accepts this application.
 	 */
-	public function accept(User $user, $comment, $notify) {
-		ApplicationHandler::acceptApplication($this, $user, $comment, $notify);
+	public function accept(User $user, bool $notify) {
+		ApplicationHandler::acceptApplication($this, $user, $notify);
 	}
 
 	/*
 	 * Rejects this application.
 	 */
-	public function reject(User $user, $comment, $notify) {
+	public function reject(User $user, string $comment, bool $notify) {
 		ApplicationHandler::rejectApplication($this, $user, $comment, $notify);
 	}
 
@@ -137,7 +142,7 @@ class Application extends EventObject {
 	/*
 	 * Add this application to the queue.
 	 */
-	public function queue(User $user, $notify) {
+	public function queue(User $user, bool $notify) {
 		ApplicationHandler::queueApplication($this, $user, $notify);
 	}
 
@@ -151,8 +156,7 @@ class Application extends EventObject {
 	/*
 	 * Returns true if this application is in a queue, otherwise false.
 	 */
-	public function isQueued() {
+	public function isQueued(): bool {
 		return ApplicationHandler::isQueued($this);
 	}
 }
-?>

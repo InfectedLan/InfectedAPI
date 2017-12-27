@@ -18,21 +18,12 @@
  * License along with this library.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-class Object {
-	protected $id;
-
-	/*
-	 * Retuns the internal id for this object.
-	 */
-	public function getId() {
-		return $this->id;
-	}
-
+class BaseObject {
 	/*
 	 * Compare is a function that allows you to easily compare this object with the specified one.
 	 * It returns true if the specified object is equal to this one.
 	 */
-	public function equals(Object $object) {
+	public function equals(Object $object): bool {
 		if ($object != null) {
 			// Check that the specified object is an instance of this one.
 			if ($object instanceof $this) {
@@ -48,7 +39,7 @@ class Object {
 	 * Compare is a function that allows you to easily compare this object with the specified one.
 	 * It returns true if the specified object is less than this one.
 	 */
-	public function isLessThan(Object $object) {
+	public function isLessThan(Object $object): bool {
 		if ($object != null) {
 			// Check that the specified object is an instance of this one.
 			if ($object instanceof $this) {
@@ -64,8 +55,7 @@ class Object {
 	 * Compare is a function that allows you to easily compare this object with the specified one.
 	 * It returns true if the specified object is greater than this one.
 	 */
-	public function isGreaterThan(Object $object) {
+	public function isGreaterThan(Object $object): bool {
 		return !$this->isLessThan($object);
 	}
 }
-?>

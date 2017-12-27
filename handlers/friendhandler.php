@@ -27,7 +27,7 @@ class FriendHandler {
 	/*
 	 * Returns true is the specified user is friend with the specified friend user.
 	 */
-	public static function isUserFriendsWith(User $user, User $friend) {
+	public static function isUserFriendsWith(User $user, User $friend): bool {
 		$database = Database::getConnection(Settings::db_name_infected);
 
 		$result = $database->query('SELECT * FROM `' . Settings::db_table_infected_friends . '`
@@ -40,7 +40,7 @@ class FriendHandler {
 	/*
 	 * Get a list of all users that the specified user is friends with.
 	 */
-	public static function getFriendsByUser(User $user) {
+	public static function getFriendsByUser(User $user): array {
 		$database = Database::getConnection(Settings::db_name_infected);
 
 		$result = $database->query('SELECT * FROM `' . Settings::db_table_infected_users . '`

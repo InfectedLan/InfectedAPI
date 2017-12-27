@@ -25,7 +25,7 @@ class CityDictionary {
 	/*
 	 * Returns the city from given postalcode.
 	 */
-	public static function getCity($postalCode) {
+	public static function getCity(int $postalCode): ?string {
 		$database = Database::getConnection(Settings::db_name_infected);
 
 		$result = $database->query('SELECT `city` FROM `' . Settings::db_table_infected_postalcodes . '`
@@ -39,7 +39,7 @@ class CityDictionary {
 	/*
 	 * Return true if the specified postal code exists.
 	 */
-	public static function hasPostalCode($postalCode) {
+	public static function hasPostalCode(int $postalCode): bool {
 		$database = Database::getConnection(Settings::db_name_infected);
 
 		$result = $database->query('SELECT `id` FROM `' . Settings::db_table_infected_postalcodes . '`
@@ -51,7 +51,7 @@ class CityDictionary {
 	/*
 	 * Returns the postalcode for given city.
 	 */
-	public static function getPostalCode($city) {
+	public static function getPostalCode(string $city): int {
 		$database = Database::getConnection(Settings::db_name_infected);
 
 		$result = $database->query('SELECT `code` FROM `' . Settings::db_table_infected_postalcodes . '`

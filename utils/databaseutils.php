@@ -26,7 +26,7 @@ class DatabaseUtils {
 	/*
 	 * Copies the contents of the given table to the new one.
 	 */
-	public static function copyTable($databaseName, $fromTableName, $toTableName) {
+	public static function copyTable(string $databaseName, string $fromTableName, string $toTableName) {
 		$database = Database::getConnection($databaseName);
 
 		$database->query('INSERT INTO `' . $toTableName . '`
@@ -36,7 +36,7 @@ class DatabaseUtils {
 	/*
 	 * Copies the contents of the given table to the new one, but only the specified selection and referenceField is changed with the new value.
 	 */
-	public static function copyTableSelection($databaseName, $tableName, $referenceField, $fromValue, $toValue) {
+	public static function copyTableSelection(string $databaseName, string $tableName, string $referenceField, string $fromValue, string $toValue) {
 		$database = Database::getConnection($databaseName);
 
 		$database->query('CREATE TEMPORARY TABLE `temporary`
@@ -56,3 +56,4 @@ class DatabaseUtils {
 		$database->query('DROP TABLE `temporary`;');
 	}
 }
+?>

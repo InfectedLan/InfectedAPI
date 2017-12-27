@@ -19,51 +19,51 @@
  */
 
 require_once 'handlers/chathandler.php';
-require_once 'objects/object.php';
+require_once 'objects/databaseobject.php';
 
-class Chat extends Object {
+class Chat extends DatabaseObject {
 	private $name;
 	private $title;
 
 	/*
 	 * Returns the name of this object.
 	 */
-	public function getName() {
+	public function getName(): string {
 		return $this->name;
 	}
 
 	/*
 	 * Returns the name of this object.
 	 */
-	public function getTitle() {
+	public function getTitle(): string {
 		return $this->title;
 	}
 
 	/*
 	 * Returns a list of all members in this chat.
 	 */
-	public function getMembers() {
+	public function getMembers(): array {
 		return ChatHandler::getChatMembers($this);
 	}
 
 	/*
 	 * Returns the last chat message for this chat.
 	 */
-	public function getLastMessage() {
+	public function getLastMessage(): string {
 		return ChatHandler::getLastChatMessage($this);
 	}
 
 	/*
 	 * Returns the last chat messages, amount specified by count.
 	 */
-	public function getLastMessages($count) {
+	public function getLastMessages(int $count): string {
 		return ChatHandler::getLastChatMessages($this, $count);
 	}
 
 	/*
 	 * Returns true if the specified user is a member of this chat.
 	 */
-	public function isMember(User $user) {
+	public function isMember(User $user): bool {
 		return ChatHandler::isChatMember($this, $user);
 	}
 
@@ -88,4 +88,3 @@ class Chat extends Object {
 		ChatHandler::sendChatMessage($this, $user, $message);
 	}
 }
-?>

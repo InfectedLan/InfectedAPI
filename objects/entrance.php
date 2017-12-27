@@ -18,24 +18,23 @@
  * License along with this library.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-require_once 'objects/object.php';
+require_once 'objects/databaseobject.php';
 
-class Entrance extends Object {
+class Entrance extends DatabaseObject {
 	private $name;
 	private $title;
 
 	/*
 	 * Returns the name of this entrance.
 	 */
-	public function getName() {
+	public function getName(): string {
 		return $this->name;
 	}
 
 	/*
 	 * Returns the title of this entrance.
 	 */
-	public function getTitle() {
+	public function getTitle(): string {
 		return $this->title;
 	}
 }
-?>

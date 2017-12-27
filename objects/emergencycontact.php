@@ -19,31 +19,30 @@
  */
 
 require_once 'objects/emergencycontact.php';
-require_once 'objects/object.php';
+require_once 'objects/databaseobject.php';
 
-class EmergencyContact extends Object {
+class EmergencyContact extends DatabaseObject {
 	private $userId;
 	private $phone;
 
 	/*
 	 * Returns associated user.
 	 */
-	public function getUser() {
+	public function getUser(): User {
 		return UserHandler::getUser($this->userId);
 	}
 
 	/*
 	 * Returns the phone number.
 	 */
-	public function getPhone() {
+	public function getPhone(): int {
 		return $this->phone;
 	}
 
 	/*
 	 * Returns the phone number formatted as a string.
 	 */
-	public function getPhoneAsString() {
+	public function getPhoneAsString(): string {
 		return rtrim('(+47) ' . chunk_split($this->getPhone(), 2, ' ')); // TODO: Select area code based on country.
 	}
 }
-?>

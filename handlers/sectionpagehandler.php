@@ -26,7 +26,7 @@ class SectionPageHandler {
 	/*
 	 * Return the section page by the internal id.
 	 */
-	public static function getSectionPage($id) {
+	public static function getSectionPage(int $id): ?SectionPage {
 		$database = Database::getConnection(Settings::db_name_infected_main);
 
 		$result = $database->query('SELECT * FROM `' . Settings::db_table_infected_main_sectionpages . '`
@@ -38,7 +38,7 @@ class SectionPageHandler {
 	/*
 	 * Return the section page by name.
 	 */
-	public static function getSectionPageByName($name) {
+	public static function getSectionPageByName(string $name): ?SectionPage {
 		$database = Database::getConnection(Settings::db_name_infected_main);
 
 		$result = $database->query('SELECT * FROM `' . Settings::db_table_infected_main_sectionpages . '`
@@ -50,7 +50,7 @@ class SectionPageHandler {
 	/*
 	 * Returns a list of all pages.
 	 */
-	public static function getSectionPages() {
+	public static function getSectionPages(): array {
 		$database = Database::getConnection(Settings::db_name_infected_main);
 
 		$result = $database->query('SELECT * FROM `' . Settings::db_table_infected_main_sectionpages . '`;');
@@ -67,7 +67,7 @@ class SectionPageHandler {
 	/*
 	 * Create a new section page.
 	 */
-	public static function createSectionPage($name, $title, $content) {
+	public static function createSectionPage(string $name, string $title, string $content): SectionPage {
 		$database = Database::getConnection(Settings::db_name_infected_main);
 
 		$database->query('INSERT INTO `' . Settings::db_table_infected_main_sectionpages . '` (`name`, `title`, `content`)
@@ -81,7 +81,7 @@ class SectionPageHandler {
 	/*
 	 * Update a section page.
 	 */
-	public static function updatePage(SectionPage $sectionPage, $title, $content) {
+	public static function updatePage(SectionPage $sectionPage, string $title, string $content) {
 		$database = Database::getConnection(Settings::db_name_infected_main);
 
 		$database->query('UPDATE `' . Settings::db_table_infected_main_sectionpages . '`

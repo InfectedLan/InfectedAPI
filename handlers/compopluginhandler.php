@@ -20,13 +20,13 @@
 require_once 'objects/compoplugin.php'; // Not really required, but is used in a hack to make the default plugin use the baseclass for compo plugins
 
 class CompoPluginHandler {
-  private static $cachedPlugins = array();
-  private static $cachedJavascripts = array();
-  private static $cachedMetadata = array();
+  private static $cachedPlugins = [];
+  private static $cachedJavascripts = [];
+  private static $cachedMetadata = [];
   /**
    * Returns object for the plugin, or the default if none existing. Will cache.
    */
-  public static function getPluginObjectOrDefault($pluginName) {
+  public static function getPluginObjectOrDefault(string $pluginName): array {
   	if (!isset(self::$cachedPlugins[$pluginName])) { //please note isset will return false if the key exists, but the value is null. This is not a case we need to care for in this example.
 	    $obj = null;
 
@@ -47,7 +47,7 @@ class CompoPluginHandler {
   /**
    * Returns plugin metadata, or default if not available
    */
-  public static function getPluginMetadataOrDefault($pluginName) {
+  public static function getPluginMetadataOrDefault(string $pluginName): array {
     if (!isset(self::$cachedMetadata[$pluginName])) { //please note isset will return false if the key exists, but the value is null. This is not a case we need to care for in this example.
       $obj = null;
 
@@ -67,7 +67,7 @@ class CompoPluginHandler {
   /**
    * Returns plugin metadata
    */
-  public static function getPluginMetadata($pluginName) {
+  public static function getPluginMetadata(string $pluginName): array {
     $string = file_get_contents(Settings::api_path . "plugins/compo/" . $pluginName . ".json");
 
     return json_decode($string, true);
@@ -76,7 +76,7 @@ class CompoPluginHandler {
   /**
    * Returns javascripts for the plugin, or the default if none existing. Will cache.
    */
-  public static function getPluginJavascriptOrDefault($pluginName) {
+  public static function getPluginJavascriptOrDefault(string $pluginName): array {
     if (!isset(self::$cachedJavascripts[$pluginName])) { //please note isset will return false if the key exists, but the value is null. This is not a case we need to care for in this example.
       $arr = null;
 
@@ -90,21 +90,21 @@ class CompoPluginHandler {
 
       return $arr;
     } else {
-        return self::$cachedJavascripts[$pluginName];
+      return self::$cachedJavascripts[$pluginName];
     }
   }
 
   /**
    * Returns true if plugin exists
    */
-  public static function pluginExists($pluginName) {
+  public static function pluginExists(string $pluginName): bool {
     return file_exists(Settings::api_path . "plugins/compo/" . $pluginName . ".json");
   }
 
   /**
    * Returns an object with the plugin
    */
-  public static function loadPluginObject($pluginName) {
+  public static function loadPluginObject(string $pluginName): ?object {
     $string = file_get_contents(Settings::api_path . "plugins/compo/" . $pluginName . ".json");
     $json = json_decode($string, true);
 
@@ -119,7 +119,7 @@ class CompoPluginHandler {
   /**
    * Returns a list of scripts used by this plugin
    */
-  public static function loadPluginScripts($pluginName) {
+  public static function loadPluginScripts(string $pluginName) {
     $string = file_get_contents(Settings::api_path . "plugins/compo/" . $pluginName . ".json");
     $json = json_decode($string, true);
 

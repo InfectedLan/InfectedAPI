@@ -18,24 +18,37 @@
  * License along with this library.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-require_once 'objects/object.php';
+require_once 'objects/databaseobject.php';
 
-class Permission extends Object {
+class Permission extends BaseObject {
+	private $id;
 	private $value;
 	private $description;
+
+	public function __construct(int $id, string $value, string $description) {
+		$this->id = $id;
+		$this->value = $value;
+		$this->description = $description;
+	}
+
+	/*
+	 * Retuns the internal id for this object.
+	 */
+	public function getId(): int {
+		return $this->id;
+	}
 
 	/*
 	 * Returns the value of this permission.
 	 */
-	public function getValue() {
+	public function getValue(): string {
 		return $this->value;
 	}
 
 	/*
 	 * Returns the description of this permission.
 	 */
-	public function getDescription() {
+	public function getDescription(): string {
 		return $this->description;
 	}
 }
-?>

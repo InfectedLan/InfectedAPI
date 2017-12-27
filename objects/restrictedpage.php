@@ -32,50 +32,49 @@ class RestrictedPage extends EventObject {
 	/*
 	 * Returns the name of this page.
 	 */
-	public function getName() {
+	public function getName(): string {
 		return $this->name;
 	}
 
 	/*
 	 * Returns the title of this page.
 	 */
-	public function getTitle() {
+	public function getTitle(): string {
 		return $this->title;
 	}
 
 	/*
 	 * Returns the content of this page.
 	 */
-	public function getContent() {
+	public function getContent(): string {
 		return $this->content;
 	}
 
 	/*
 	 * Returns the true if the page is global in regards to group.
 	 */
-	public function isGroupGlobal() {
+	public function isGroupGlobal(): bool {
 		return $this->groupId == 0;
 	}
 
 	/*
 	 * Returns the group of this page.
 	 */
-	public function getGroup() {
+	public function getGroup(): Group {
 		return GroupHandler::getGroup($this->groupId);
 	}
 
 	/*
 	 * Returns the true if the page is global in regards to team.
 	 */
-	public function isTeamGlobal() {
+	public function isTeamGlobal(): bool {
 		return $this->teamId == 0;
 	}
 
 	/*
 	 * Returns the team of this page.
 	 */
-	public function getTeam() {
+	public function getTeam(): Team {
 		return TeamHandler::getTeam($this->teamId);
 	}
 }
-?>

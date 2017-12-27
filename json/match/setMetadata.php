@@ -1,9 +1,8 @@
 <?php
-include 'database.php';
 /**
  * This file is part of InfectedAPI.
  *
- * Copyright (C) 2015 Infected <http://infected.no/>.
+ * Copyright (C) 2017 Infected <http://infected.no/>.
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -19,8 +18,8 @@ include 'database.php';
  * License along with this library.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-
 require_once 'session.php';
+require_once 'database.php';
 require_once 'localization.php';
 require_once 'handlers/userhandler.php';
 require_once 'handlers/matchhandler.php';
@@ -29,7 +28,7 @@ require_once 'handlers/voteoptionhandler.php';
 
 $result = false;
 $message = null;
-$matchArray = array();
+$matchArray = [];
 
 if (Session::isAuthenticated()) {
 	$user = Session::getCurrentUser();
@@ -37,14 +36,15 @@ if (Session::isAuthenticated()) {
 	if ($user->hasPermission('compo.bracketmanagement')) {
 		if (isset($_GET['id']) &&
 			is_numeric($_GET['id']) &&
-        	isset($_GET['key']) &&
-        	isset($_GET['value'])) {
+    	isset($_GET['key']) &&
+    	isset($_GET['value'])) {
 			$match = MatchHandler::getMatch($_GET['id']);
-			if($match != null) {
-                MatchHandler::setMetadata($match, $_GET['key'], $_GET['value']);
+
+			if ($match != null) {
+        MatchHandler::setMetadata($match, $_GET['key'], $_GET['value']);
 				$result = true;
 			} else {
-			       $message = Localization::getLocale('this_match_does_not_exist');
+			  $message = Localization::getLocale('this_match_does_not_exist');
 			}
 		} else {
 			$message = Localization::getLocale('you_have_not_filled_out_the_required_fields');
@@ -56,14 +56,13 @@ if (Session::isAuthenticated()) {
 	$message = Localization::getLocale('you_are_not_logged_in');
 }
 
-header('Content-Type: text/plain');
+header('Content-Type: application/json');
 
 if ($result) {
 	echo json_encode(array('result' => $result, 'data' => $matchArray), JSON_PRETTY_PRINT);
 } else {
 	echo json_encode(array('result' => $result, 'message' => $message), JSON_PRETTY_PRINT);
 }
-
 
 Database::cleanup();
 ?>

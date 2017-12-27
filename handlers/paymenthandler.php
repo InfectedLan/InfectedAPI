@@ -28,7 +28,7 @@ class PaymentHandler {
 	/*
 	 * Returns the payment by the internal id.
 	 */
-	public static function getPayment($id) {
+	public static function getPayment(int $id): ?Payment {
 		$database = Database::getConnection(Settings::db_name_infected_tickets);
 
 		$result = $database->query('SELECT * FROM `' . Settings::db_table_infected_tickets_payments . '`
@@ -40,7 +40,7 @@ class PaymentHandler {
 	/*
 	 * Returns a list of all payments.
 	 */
-	public static function getPayments() {
+	public static function getPayments(): array {
 		$database = Database::getConnection(Settings::db_name_infected_tickets);
 
 		$result = $database->query('SELECT * FROM `' . Settings::db_table_infected_tickets_payments . '`;');
@@ -57,7 +57,7 @@ class PaymentHandler {
 	/*
 	 * Create a new payment.
 	 */
-	public static function createPayment(User $user, TicketType $ticketType, $amount, $price, $transactionId) {
+	public static function createPayment(User $user, TicketType $ticketType, int $amount, int $price, string $transactionId) {
 		$database = Database::getConnection(Settings::db_name_infected_tickets);
 
 		$database->query('INSERT INTO `' . Settings::db_table_infected_tickets_payments . '` (`userId`, `ticketTypeId`, `amount`, `price`, `transactionId`, `datetime`)
@@ -68,9 +68,7 @@ class PaymentHandler {
 														  \'' . $database->real_escape_string($transactionId) . '\',
 														  \'' . date('Y-m-d H:i:s') . '\');');
 
-		$payment = self::getPayment($database->insert_id);
-
-		return $payment;
+		return self::getPayment($database->insert_id);
 	}
 }
 ?>

@@ -30,7 +30,7 @@ class RestrictedPageHandler {
 	/*
 	 * Get page by the internal id.
 	 */
-	public static function getPage($id) {
+	public static function getPage(int $id): ?RestrictedPage {
 		$database = Database::getConnection(Settings::db_name_infected_crew);
 
 		$result = $database->query('SELECT * FROM `' . Settings::db_table_infected_crew_pages . '`
@@ -42,7 +42,7 @@ class RestrictedPageHandler {
 	/*
 	 * Get page by name.
 	 */
-	public static function getPageByName($name) {
+	public static function getPageByName(string $name): ?RestrictedPage {
 		if (Session::isAuthenticated()) {
 			$user = Session::getCurrentUser();
 
@@ -76,12 +76,14 @@ class RestrictedPageHandler {
 				return $result->fetch_object('RestrictedPage');
 			}
 		}
+
+		return null;
 	}
 
 	/*
 	 * Get a list of all pages.
 	 */
-	public static function getPages() {
+	public static function getPages(): array {
 		$database = Database::getConnection(Settings::db_name_infected_crew);
 
 		$result = $database->query('SELECT * FROM `' . Settings::db_table_infected_crew_pages . '`
@@ -99,7 +101,7 @@ class RestrictedPageHandler {
 	/*
 	 * Get a list of pages for specified group.
 	 */
-	public static function getPagesForGroup(Group $group) {
+	public static function getPagesForGroup(Group $group): array {
 		$database = Database::getConnection(Settings::db_name_infected_crew);
 
 		$result = $database->query('SELECT * FROM `' . Settings::db_table_infected_crew_pages . '`
@@ -119,7 +121,7 @@ class RestrictedPageHandler {
 	  /*
 	 * Get a list of all pages for specified group, ignoring the teamId.
 	 */
-	public static function getAllPagesForGroup(Group $group) {
+	public static function getAllPagesForGroup(Group $group): array {
 		$database = Database::getConnection(Settings::db_name_infected_crew);
 
 		$result = $database->query('SELECT * FROM `' . Settings::db_table_infected_crew_pages . '`
@@ -139,7 +141,7 @@ class RestrictedPageHandler {
 	/*
 	 * Get a list of pages for specified team.
 	 */
-	public static function getPagesForGroupAndTeam(Group $group, Team $team) {
+	public static function getPagesForGroupAndTeam(Group $group, Team $team): array {
 		$database = Database::getConnection(Settings::db_name_infected_crew);
 
 		$result = $database->query('SELECT * FROM `' . Settings::db_table_infected_crew_pages . '`
@@ -159,7 +161,7 @@ class RestrictedPageHandler {
 	/*
 	 * Create a new page.
 	 */
-	public static function createPage($name, $title, $content, Group $group = null, Team $team = null) {
+	public static function createPage(string $name, string $title, string $content, Group $group = null, Team $team = null): RestrictedPage {
 		$database = Database::getConnection(Settings::db_name_infected_crew);
 
 		$database->query('INSERT INTO `' . Settings::db_table_infected_crew_pages . '` (`eventId`, `name`, `title`, `content`, `groupId`, `teamId`)
@@ -176,7 +178,7 @@ class RestrictedPageHandler {
 	  /*
 	 * Update a page.
 	 */
-	public static function updatePage(RestrictedPage $page, $title, $content, Group $group = null, Team $team = null) {
+	public static function updatePage(RestrictedPage $page, string $title, string $content, Group $group = null, Team $team = null) {
 		$database = Database::getConnection(Settings::db_name_infected_crew);
 
 		$database->query('UPDATE `' . Settings::db_table_infected_crew_pages . '`

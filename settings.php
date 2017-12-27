@@ -2,7 +2,7 @@
 /**
  * This file is part of InfectedAPI.
  *
- * Copyright (C) 2015 Infected <http://infected.no/>.
+ * Copyright (C) 2017 Infected <http://infected.no/>.
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -23,36 +23,44 @@ class Settings {
 	const name = 'Infected';
 	const description = 'Infected er et av Akershus største datatreff (LAN-party), og holder til i kulturhuset i Asker kommune.';
 	const keywords = 'infected, lan, party, asker, kulturhus, ungdom, gaming';
+	const authors = 'halvors og petterroa';
 
 	/* Configuration */
 	const domain = 'test.infected.no';
 
 	// Email information.
+	const enableEmail = true;
 	const emailName = self::name;
 	const email = 'no-reply@' . self::domain;
 
 	// Full path to the API location.
 	const api_path = '/home/' . self::domain . '/public_html/api/';
 
+	// Permissions file.
+	const permissions_file = self::api_path . '/permissions.json';
+
 	// Tells where images should be stored.
 	const qr_path = '../api/content/qrcache/';
 	const avatar_path = '../api/content/avatars/';
 
+	/* PHP */
+	const php_version = '7.2.0';
+
 	/* Database */
 	const db_host = 'localhost';
-	const db_name_infected = 'test_infected_no';
-	const db_name_infected_compo = 'test_infected_no_compo';
-	const db_name_infected_crew = 'test_infected_no_crew';
-	const db_name_infected_info = 'test_infected_no_info';
-	const db_name_infected_main = 'test_infected_no_main';
-	const db_name_infected_tickets = 'test_infected_no_tickets';
+	const db_name_infected = 'infected_no';
+	const db_name_infected_compo = 'infected_no_compo';
+	const db_name_infected_crew = 'infected_no_crew';
+	const db_name_infected_info = 'infected_no_info';
+	const db_name_infected_main = 'infected_no_main';
+	const db_name_infected_tech = 'infected_no_tech';
+	const db_name_infected_tickets = 'infected_no_tickets';
 
 	// Infected
 	const db_table_infected_emergencycontacts = 'emergencycontacts';
 	const db_table_infected_events = 'events';
 	const db_table_infected_locations = 'locations';
 	const db_table_infected_passwordresetcodes = 'passwordresetcodes';
-	const db_table_infected_permissions = 'permissions';
 	const db_table_infected_postalcodes = 'postalcodes';
 	const db_table_infected_registrationcodes = 'registrationcodes';
 	const db_table_infected_tasks = 'tasks';
@@ -105,6 +113,11 @@ class Settings {
 	const db_table_infected_main_pages = 'pages';
 	const db_table_infected_main_sectionpages = 'sectionpages';
 
+	// InfectedTech
+	const db_table_infected_tech_networkaccess = 'networkaccess';
+	const db_table_infected_tech_networks = 'networks';
+	const db_table_infected_tech_networktypes = 'networktypes';
+
 	// InfectedTickets
 	const db_table_infected_tickets_checkedintickets = 'checkedintickets';
 	const db_table_infected_tickets_entrances = 'entrances';
@@ -122,7 +135,7 @@ class Settings {
 	const compo_match_participant_type_clan = 0;
 	const compo_match_participant_type_match_winner = 1;
 	const compo_match_participant_type_match_looser = 2;
-  const compo_match_participant_type_match_walkover = 3;
+  	const compo_match_participant_type_match_walkover = 3;
 
 	/* Crew */
 	// Avatar sizes.
@@ -155,4 +168,3 @@ class Settings {
 
 	const prioritySeatingReq = 5;
 }
-?>

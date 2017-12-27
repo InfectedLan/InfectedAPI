@@ -28,7 +28,7 @@ class SyslogHandler {
   const SEVERITY_WARNING = 3; // Calm before the storm
   const SEVERITY_CRITICAL = 4; // HOLY FUCK THE SERVERS ARE BURNING
 
-  public static function getSyslogEntry($id) {
+  public static function getSyslogEntry(int $id): ?SyslogEntry {
     $database = Database::getConnection(Settings::db_name_infected);
 
     $result = $database->query('SELECT * FROM `' . Settings::db_table_infected_syslogs . '`
@@ -37,7 +37,7 @@ class SyslogHandler {
     return $result->fetch_object('SyslogEntry');
   }
 
-  public static function getLastEntries($count) {
+  public static function getLastEntries(int $count): array {
   	$database = Database::getConnection(Settings::db_name_infected);
 
   	$result = $database->query('SELECT * FROM `' . Settings::db_table_infected_syslogs . '`
@@ -53,7 +53,7 @@ class SyslogHandler {
   	return $syslogList;
   }
 
-  public static function getLastEntriesBySource($source, $count) {
+  public static function getLastEntriesBySource(string $source, int $count): array {
   	$database = Database::getConnection(Settings::db_name_infected);
 
   	$result = $database->query('SELECT * FROM `' . Settings::db_table_infected_syslogs . '`
@@ -70,7 +70,7 @@ class SyslogHandler {
   	return $syslogList;
   }
 
-  public static function log($message, $source, $user = null, $severity = self::SEVERITY_INFO, $metadata = []) {
+  public static function log(string $message, string $source, User $user = null, int $severity = self::SEVERITY_INFO, array $metadata = []) {
   	$database = Database::getConnection(Settings::db_name_infected);
 
     $database->query('INSERT INTO `' . Settings::db_table_infected_syslogs . '`(`source`, `severity`, `message`, `metadata`, `date`, `userId`)
@@ -79,10 +79,10 @@ class SyslogHandler {
                               \'' . $database->real_escape_string($message) . '\',
                               \'' . $database->real_escape_string(json_encode($metadata)) . '\',
                               \'' . date('Y-m-d H:i:s') . '\',
-                              \'' . $database->real_escape_string($user == null ? 0 : $user->getId()) . '\');');
+                              \'' . $database->real_escape_string($user != null ? $user->getId() : 0) . '\');');
   }
 
-  public static function getSeverityString($severity) {
+  public static function getSeverityString(int $severity): ?string {
   	switch ($severity) {
     	case self::SEVERITY_INFO:
     	    return "Info";

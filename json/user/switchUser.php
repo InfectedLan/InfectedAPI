@@ -1,9 +1,8 @@
 <?php
-include 'database.php';
 /**
  * This file is part of InfectedAPI.
  *
- * Copyright (C) 2015 Infected <http://infected.no/>.
+ * Copyright (C) 2017 Infected <http://infected.no/>.
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -20,7 +19,9 @@ include 'database.php';
  */
 
 require_once 'session.php';
+require_once 'database.php';
 require_once 'handlers/userhandler.php';
+require_once 'handlers/sysloghandler.php';
 
 $result = false;
 $message = null;
@@ -35,7 +36,7 @@ if (Session::isAuthenticated()) {
 
 			if ($changeUser != null) {
 				$_SESSION['userId'] = $changeUser->getId();
-
+				SyslogHandler::log("Switched user", "switchUser", $user, SyslogHandler::SEVERITY_INFO, ["target_user" => $changeUser->getId()]); 
 				$result = true;
 			} else {
 				$message = Localization::getLocale('the_user_you_tried_to_switch_to_does_not_exist');
@@ -50,7 +51,7 @@ if (Session::isAuthenticated()) {
 	$message = Localization::getLocale('you_are_not_logged_in');
 }
 
-header('Content-Type: text/plain');
+header('Content-Type: application/json');
 echo json_encode(['result' => $result, 'message' => $message], JSON_PRETTY_PRINT);
 Database::cleanup();
 ?>

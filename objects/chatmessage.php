@@ -20,9 +20,9 @@
 
 require_once 'handlers/chathandler.php';
 require_once 'handlers/userhandler.php';
-require_once 'objects/object.php';
+require_once 'objects/databaseobject.php';
 
-class ChatMessage extends Object {
+class ChatMessage extends DatabaseObject {
 	private $userId;
 	private $chatId;
 	private $time;
@@ -31,29 +31,28 @@ class ChatMessage extends Object {
 	/*
 	 * Returns the user who sent this chat message.
 	 */
-	public function getUser() {
+	public function getUser(): User {
 		return UserHandler::getUser($this->userId);
 	}
 
 	/*
 	 * Returns the chat that this chat message belongs to.
 	 */
-	public function getChat() {
+	public function getChat(): Chat {
 		return ChatHandler::getChat($this->chatId);
 	}
 
 	/*
 	 * Returns the time this message was sent.
 	 */
-	public function getTime() {
+	public function getTime(): int {
 		return strtotime($this->time);
 	}
 
 	/*
 	 * Returns the message.
 	 */
-	public function getMessage() {
+	public function getMessage(): string {
 		return $this->message;
 	}
 }
-?>

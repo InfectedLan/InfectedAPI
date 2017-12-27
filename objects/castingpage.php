@@ -20,55 +20,55 @@
 
 require_once 'handlers/eventhandler.php';
 require_once 'handlers/serverhandler.php';
-require_once 'objects/object.php';
+require_once 'objects/databaseobject.php';
 
-class CastingPage extends Object {
+class CastingPage extends DatabaseObject {
 	private $eventId;
 	private $name;
 	private $data;
-  private $template;
+  	private $template;
 
 	/*
 	 * Returns the id of the compo this server is bound to
 	 */
-  public function getEventId() {
-    return $this->eventId;
+  	public function getEventId(): int {
+    	return $this->eventId;
 	}
 
 	/*
 	 * Returns the compo object associated with this server
 	 */
-	public function getEvent() {
+	public function getEvent(): Event {
 		return EventHandler::getEvent($this->eventId);
 	}
 
 	/*
 	 * Returns the human name of this server
 	 */
-	public function getName() {
+	public function getName(): string {
 		return $this->name;
 	}
 
 	/*
 	 * Returns the connection data for this server. Note that the compo plugin is supposed to parse this however it wants. Might be json data. Might be a string. God knows.
 	 */
-	public function getData() {
+	public function getData(): string {
 		return $this->data;
 	}
 
-  /*
-   * Returns the template associated with this page
-   */
-  public function getTemplate() {
-    return $this->template;
-  }
+	/*
+	* Returns the template associated with this page
+	*/
+	public function getTemplate(): string {
+	return $this->template;
+	}
 
-  /*
-   * Sets the template associated with this page
-   */
-  public function setTemplate() {
+	/*
+	* Sets the template associated with this page
+	*/
+	public function setTemplate() {
 		CastingPageHandler::setTemplate($this, $data);
-  }
+	}
 
 	/*
 	 * Sets the connection details of this server
@@ -84,11 +84,10 @@ class CastingPage extends Object {
 		CastingPageHandler::setName($this, $name);
 	}
 
-  /*
-   * Deletes the server entry
-   */
-  public function delete() {
+	/*
+	* Deletes the server entry
+	*/
+	public function delete() {
 		CastingPageHandler::deleteServer($this);
-  }
+	}
 }
-?>
