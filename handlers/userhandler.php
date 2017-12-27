@@ -232,8 +232,9 @@ class UserHandler {
 
 	/*
 	 * Create a new user
+	 * TEST FIXERS NOTE: Gender can't be boolean. It will give an mysql error, as mysql expects an integer.
 	 */
-	public static function createUser(string $firstname, string $lastname, string $username, string $password, string $email, int $birthDate, bool $gender, int $phone, string $address, int $postalCode, string $nickname): User {
+	public static function createUser(string $firstname, string $lastname, string $username, string $password, string $email, string $birthDate, $gender, int $phone, string $address, int $postalCode, string $nickname): User {
 		$database = Database::getConnection(Settings::db_name_infected);
 
 		$database->query('INSERT INTO `' . Settings::db_table_infected_users . '` (`firstname`, `lastname`, `username`, `password`, `email`, `birthdate`, `gender`, `phone`, `address`, `postalcode`, `countryId`, `nickname`, `registereddate`)
@@ -257,7 +258,7 @@ class UserHandler {
 	/*
 	 * Update a user
 	 */
-	public static function updateUser(User $user, string $firstname, string $lastname, string $username, string $email, int $birthDate, bool $gender, int $phone, string $address, int $postalCode, string $nickname) {
+	public static function updateUser(User $user, string $firstname, string $lastname, string $username, string $email, string $birthDate, bool $gender, int $phone, string $address, int $postalCode, string $nickname) {
 		$database = Database::getConnection(Settings::db_name_infected);
 
 		$database->query('UPDATE `' . Settings::db_table_infected_users . '`

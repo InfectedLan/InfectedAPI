@@ -199,7 +199,7 @@
     "seating_has_not_opened_yet": "Seating has not opened yet",
     "you_have_to_seat_next_to_another_seat_you_own_during_early_seating": "You have to seat next to another seat you have permission to seat while early seating is active",
 
-    "you_do_not_have_permission_to_do_this_you_will only be able to run this from command line": "You don\'t have permission do do this, you\'ll only be able to run this from the CLI.",
+    "you_do_not_have_permission_to_do_this_you_will only be able to run this from command line": "You don't have permission do do this, you'll only be able to run this from the CLI.",
     "autumn": "Autumn",
     "winter": "Winter"
 }
