@@ -37,7 +37,7 @@ class Settings {
 	const api_path = '/home/' . self::domain . '/public_html/api/';
 
 	// Permissions file.
-	const permissions_file = self::api_path . '/permissions.json';
+	const permissions_file = self::api_path . 'json/permissions.json';
 
 	// Tells where images should be stored.
 	const qr_path = '../api/content/qrcache/';
@@ -101,7 +101,7 @@ class Settings {
 	const db_table_infected_crew_notewatches = 'notewatches';
 	const db_table_infected_crew_pages = 'pages';
 	const db_table_infected_crew_teams = 'teams';
-  const db_table_infected_crew_castingpages = 'castingPages';
+  	const db_table_infected_crew_castingpages = 'castingPages';
 
 	// InfectedInfo
 	const db_table_infected_info_slides = 'slides';
