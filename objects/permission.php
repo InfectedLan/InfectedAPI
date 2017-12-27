@@ -20,9 +20,23 @@
 
 require_once 'objects/databaseobject.php';
 
-class Permission extends DatabaseObject {
+class Permission extends BaseObject {
+	private $id;
 	private $value;
 	private $description;
+
+	public function __construct(int $id, string $value, string $description) {
+		$this->id = $id;
+		$this->value = $value;
+		$this->description = $description;
+	}
+
+	/*
+	 * Retuns the internal id for this object.
+	 */
+	public function getId(): int {
+		return $this->id;
+	}
 
 	/*
 	 * Returns the value of this permission.

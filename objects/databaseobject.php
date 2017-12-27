@@ -18,7 +18,9 @@
  * License along with this library.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-class DatabaseObject {
+require_once 'baseobject.php';
+
+class DatabaseObject extends BaseObject {
 	protected $id;
 
 	/*
@@ -26,45 +28,5 @@ class DatabaseObject {
 	 */
 	public function getId(): int {
 		return $this->id;
-	}
-
-	/*
-	 * Compare is a function that allows you to easily compare this object with the specified one.
-	 * It returns true if the specified object is equal to this one.
-	 */
-	public function equals(Object $object): bool {
-		if ($object != null) {
-			// Check that the specified object is an instance of this one.
-			if ($object instanceof $this) {
-				// Logically compare these two objects against each other.
-				return $object == $this;
-			}
-		}
-
-		return false;
-	}
-
-	/*
-	 * Compare is a function that allows you to easily compare this object with the specified one.
-	 * It returns true if the specified object is less than this one.
-	 */
-	public function isLessThan(Object $object): bool {
-		if ($object != null) {
-			// Check that the specified object is an instance of this one.
-			if ($object instanceof $this) {
-				// Logically compare these two objects against each other.
-				return $this->getId() < $object->getId();
-			}
-		}
-
-		return false;
-	}
-
-	/*
-	 * Compare is a function that allows you to easily compare this object with the specified one.
-	 * It returns true if the specified object is greater than this one.
-	 */
-	public function isGreaterThan(Object $object): bool {
-		return !$this->isLessThan($object);
 	}
 }

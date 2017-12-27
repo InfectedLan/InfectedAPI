@@ -36,6 +36,9 @@ class Settings {
 	// Full path to the API location.
 	const api_path = '/home/' . self::domain . '/public_html/api/';
 
+	// Permissions file.
+	const permissions_file = self::api_path . '/permissions.json';
+
 	// Tells where images should be stored.
 	const qr_path = '../api/content/qrcache/';
 	const avatar_path = '../api/content/avatars/';
@@ -133,7 +136,7 @@ class Settings {
 	const compo_match_participant_type_clan = 0;
 	const compo_match_participant_type_match_winner = 1;
 	const compo_match_participant_type_match_looser = 2;
-  const compo_match_participant_type_match_walkover = 3;
+  	const compo_match_participant_type_match_walkover = 3;
 
 	/* Crew */
 	// Avatar sizes.
@@ -166,4 +169,3 @@ class Settings {
 
 	const prioritySeatingReq = 5;
 }
-?>

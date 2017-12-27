@@ -77,19 +77,17 @@ class UserPermissionHandler {
 	public static function getUserPermissions(User $user, Event $event = null): array {
 		$database = Database::getConnection(Settings::db_name_infected);
 
-		$result = $database->query('SELECT * FROM `' . Settings::db_table_infected_permissions . '`
-                                   WHERE `id` IN (SELECT `permissionId` FROM `' . Settings::db_table_infected_userpermissions . '`
-                                                  WHERE (`eventId` = 0 OR `eventId` = ' . ($event != null ? $event->getId() : EventHandler::getCurrentEvent()->getId()) . ')
-                                                  AND `userId` = ' . $user->getId() . ')
-                                   GROUP BY `id`;');
+		$result = $database->query('SELECT `permissionId` FROM `' . Settings::db_table_infected_userpermissions . '`
+								   WHERE (`eventId` = 0 OR `eventId` = ' . ($event != null ? $event->getId() : EventHandler::getCurrentEvent()->getId()) . ')
+								   AND `userId` = ' . $user->getId() . ';');
 
-		$permissionList = [];
+		$permissionIdList = [];
 
-		while ($object = $result->fetch_object('Permission')) {
-			$permissionList[] = $object;
+		while ($object = $result->fetch_assoc()) {
+			$permissionIdList[] = $object['permissionId'];
 		}
 
-		return $permissionList;
+		return PermissionHandler::getPermissionsByValues($permissionIdList);
 	}
 
 	/*

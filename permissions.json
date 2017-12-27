@@ -1,239 +1,237 @@
-{
-    "permissions": [
-      {
-        "id": "1",
-        "value": "*",
-        "description": "Gir tilgang til absolutt alt, du er nå en udødelig administrator."
-      },
-      {
-        "id": "2",
-        "value": "admin.*",
-        "description": "Gir tilgang til alt under admin."
-      },
-      {
-        "id": "3",
-        "value": "admin.events",
-        "description": "Administrer arrangementer, informasjon er blir automatisk endret på hovedsiden og ticketsiden."
-      },
-      {
-        "id": "4",
-        "value": "admin.permissions",
-        "description": "Velg hvilke bruker som skal ha tilgang til hva, dette er et tilgangsystem, men husk at brukere har standard tilganger utenom dette, ettersom de er medlem av crewet eller ikke."
-      },
-      {
-        "id": "5",
-        "value": "admin.seatmap",
-        "description": "Endre seatmappet, her kan du flytte, legg til, og fjerne seter og rader."
-      },
-      {
-        "id": "6",
-        "value": "admin.website",
-        "description": "Endre innholdet på nettsiden."
-      },
-      {
-        "id": "7",
-        "value": "chief.*",
-        "description": "Gir tilgang til alt under chief."
-      },
-      {
-        "id": "8",
-        "value": "chief.applications",
-        "description": "Godta eller avvis crew-søknader."
-      },
-      {
-        "id": "9",
-        "value": "chief.avatars",
-        "description": "Administrer profilbilder, alle nye profilbilder vil dukke opp her og du kan godjkenne dem eller avise."
-      },
-      {
-        "id": "10",
-        "value": "chief.email",
-        "description": "Send e-post til noen eller alle medlemmer."
-      },
-      {
-        "id": "11",
-        "value": "chief.group",
-        "description": "Administrer crewene, medlemmene i dem og hvem som er ledere."
-      },
-      {
-        "id": "12",
-        "value": "chief.my-crew",
-        "description": "Endre sider under \"My Crew\"."
-      },
-      {
-        "id": "13",
-        "value": "chief.team",
-        "description": "Administrer lagene for ditt crew, hvem som er medlem av hvilke lag og lederene i lagene."
-      },
-      {
-        "id": "14",
-        "value": "event.checklist",
-        "description": "Gir tilgang til bruk av sjekklisten."
-      },
-      {
-        "id": "15",
-        "value": "event.checklist.delegate",
-        "description": "Lar deg delegere punkter i sjekklisten til bruker utenfor ditt crew."
-      },
-      {
-        "id": "16",
-        "value": "compo.chat",
-        "description": "Lar deg chatte i alle chatter på compo siden."
-      },
-      {
-        "id": "18",
-        "value": "developer.change-user",
-        "description": "Lar deg logge inn som hvilken som helst annen bruker, kun beregnet for bruk ved feilsøking."
-      },
-      {
-        "id": "19",
-        "value": "event.*",
-        "description": "Gir tilgang til alt under event."
-      },
-      {
-        "id": "20",
-        "value": "event.agenda",
-        "description": "Endre agendaen, denne vises på hovedsiden og infoskjermen under arrangementet."
-      },
-      {
-        "id": "21",
-        "value": "event.checkin",
-        "description": "Lar brukeren sjekke inn billetter"
-      },
-      {
-        "id": "23",
-        "value": "admin.memberlist",
-        "description": "Du kan hente ut medlemslister over alle medlemmene som var på Infected det året."
-      },
-      {
-        "id": "24",
-        "value": "event.screen",
-        "description": "Post informasjon på infoskjermen som vil vises under arrangementet."
-      },
-      {
-        "id": "25",
-        "value": "event.seatmap",
-        "description": "Se seatmappet"
-      },
-      {
-        "id": "26",
-        "value": "event.table-labels",
-        "description": "Gir deg tilgang til å printe lappene som legges på bord under infected."
-      },
-      {
-        "id": "27",
-        "value": "user.*",
-        "description": "Gir tilgang til alt relatert til en bruker."
-      },
-      {
-        "id": "28",
-        "value": "user.search",
-        "description": "Søk etter brukere i databasen."
-      },
-      {
-        "id": "29",
-        "value": "user.edit",
-        "description": "Du kan endre andre brukere."
-      },
-      {
-        "id": "30",
-        "value": "user.history",
-        "description": "Viser historikken til en bruker."
-      },
-      {
-        "id": "31",
-        "value": "user.activate",
-        "description": "Lar deg aktivere en annen bruker, dersom du selv er logget inn."
-      },
-      {
-        "id": "32",
-        "value": "user.ticket",
-        "description": "Se en brukers billett, og detaljer om den."
-      },
-      {
-        "id": "33",
-        "value": "user.relocate",
-        "description": "Du kan omplassere en bruker på setekartet."
-      },
-      {
-        "id": "34",
-        "value": "user.note",
-        "description": "Legg til eller fjern notater på en bruker."
-      },
-      {
-        "id": "40",
-        "value": "compo.*",
-        "description": "Lar deg gjøre alle compo-greiene"
-      },
-      {
-        "id": "41",
-        "value": "compo.bracketmanagement",
-        "description": "Lar deg redigere brackets"
-      },
-      {
-        "id": "42",
-        "value": "compo.edit",
-        "description": "Lar deg redigere eksisterende compoer, og lar deg lage nye compoer"
-      },
-      {
-        "id": "43",
-        "value": "compo.management",
-        "description": "Lar deg administrere compoer"
-      },
-      {
-        "id": "48",
-        "value": "tickets.byPassBookingTime",
-        "description": "Du kan bestille billetter og teste kjøp av billetter før billetsalget har åpnet."
-      },
-      {
-        "id": "49",
-        "value": "event.checklist.list",
-        "description": "Lar deg se alle gjøremål for hele crewet."
-      },
-      {
-        "id": "50",
-        "value": "event.checklist.*",
-        "description": "Gir tilgang til alt relatert til sjekklisten."
-      },
-      {
-        "id": "56",
-        "value": "admin.tickets",
-        "description": "Gjøre ting relatert til tickets-siden, slik som flytting av brukere"
-      },
-      {
-        "id": "57",
-        "value": "event.checklist.watchlist",
-        "description": "Lar deg legge til eller fjerne tilskuere for punkter i sjekklisten."
-      },
-      {
-        "id": "58",
-        "value": "developer.syslog",
-        "description": "Lar deg se på systemloggen"
-      },
-      {
-        "id": "59",
-        "value": "compo.casting",
-        "description": "Gir deg tilgang til casting-verktøyet."
-      },
-      {
-        "id": "60",
-        "value": "stats.*",
-        "description": "Gir deg tilgang til all statistikk."
-      },
-      {
-        "id": "61",
-        "value": "stats.age",
-        "description": "Gir deg tilgang til alders statistikk."
-      },
-      {
-        "id": "62",
-        "value": "stats.gender",
-        "description": "Gir deg tilgang til kjønns statistikk."
-      },
-      {
-        "id": "63",
-        "value": "stats.ticketsale",
-        "description": "Gir deg tilgang til billetsalgs statistikk."
-      }
-    ]
-}
+[
+  {
+    "id": "1",
+    "value": "*",
+    "description": "Gir tilgang til absolutt alt, du er nå en udødelig administrator."
+  },
+  {
+    "id": "2",
+    "value": "admin.*",
+    "description": "Gir tilgang til alt under admin."
+  },
+  {
+    "id": "3",
+    "value": "admin.events",
+    "description": "Administrer arrangementer, informasjon er blir automatisk endret på hovedsiden og ticketsiden."
+  },
+  {
+    "id": "4",
+    "value": "admin.permissions",
+    "description": "Velg hvilke bruker som skal ha tilgang til hva, dette er et tilgangsystem, men husk at brukere har standard tilganger utenom dette, ettersom de er medlem av crewet eller ikke."
+  },
+  {
+    "id": "5",
+    "value": "admin.seatmap",
+    "description": "Endre seatmappet, her kan du flytte, legg til, og fjerne seter og rader."
+  },
+  {
+    "id": "6",
+    "value": "admin.website",
+    "description": "Endre innholdet på nettsiden."
+  },
+  {
+    "id": "7",
+    "value": "chief.*",
+    "description": "Gir tilgang til alt under chief."
+  },
+  {
+    "id": "8",
+    "value": "chief.applications",
+    "description": "Godta eller avvis crew-søknader."
+  },
+  {
+    "id": "9",
+    "value": "chief.avatars",
+    "description": "Administrer profilbilder, alle nye profilbilder vil dukke opp her og du kan godjkenne dem eller avise."
+  },
+  {
+    "id": "10",
+    "value": "chief.email",
+    "description": "Send e-post til noen eller alle medlemmer."
+  },
+  {
+    "id": "11",
+    "value": "chief.group",
+    "description": "Administrer crewene, medlemmene i dem og hvem som er ledere."
+  },
+  {
+    "id": "12",
+    "value": "chief.my-crew",
+    "description": "Endre sider under \"My Crew\"."
+  },
+  {
+    "id": "13",
+    "value": "chief.team",
+    "description": "Administrer lagene for ditt crew, hvem som er medlem av hvilke lag og lederene i lagene."
+  },
+  {
+    "id": "14",
+    "value": "event.checklist",
+    "description": "Gir tilgang til bruk av sjekklisten."
+  },
+  {
+    "id": "15",
+    "value": "event.checklist.delegate",
+    "description": "Lar deg delegere punkter i sjekklisten til bruker utenfor ditt crew."
+  },
+  {
+    "id": "16",
+    "value": "compo.chat",
+    "description": "Lar deg chatte i alle chatter på compo siden."
+  },
+  {
+    "id": "18",
+    "value": "developer.change-user",
+    "description": "Lar deg logge inn som hvilken som helst annen bruker, kun beregnet for bruk ved feilsøking."
+  },
+  {
+    "id": "19",
+    "value": "event.*",
+    "description": "Gir tilgang til alt under event."
+  },
+  {
+    "id": "20",
+    "value": "event.agenda",
+    "description": "Endre agendaen, denne vises på hovedsiden og infoskjermen under arrangementet."
+  },
+  {
+    "id": "21",
+    "value": "event.checkin",
+    "description": "Lar brukeren sjekke inn billetter"
+  },
+  {
+    "id": "23",
+    "value": "admin.memberlist",
+    "description": "Du kan hente ut medlemslister over alle medlemmene som var på Infected det året."
+  },
+  {
+    "id": "24",
+    "value": "event.screen",
+    "description": "Post informasjon på infoskjermen som vil vises under arrangementet."
+  },
+  {
+    "id": "25",
+    "value": "event.seatmap",
+    "description": "Se seatmappet"
+  },
+  {
+    "id": "26",
+    "value": "event.table-labels",
+    "description": "Gir deg tilgang til å printe lappene som legges på bord under infected."
+  },
+  {
+    "id": "27",
+    "value": "user.*",
+    "description": "Gir tilgang til alt relatert til en bruker."
+  },
+  {
+    "id": "28",
+    "value": "user.search",
+    "description": "Søk etter brukere i databasen."
+  },
+  {
+    "id": "29",
+    "value": "user.edit",
+    "description": "Du kan endre andre brukere."
+  },
+  {
+    "id": "30",
+    "value": "user.history",
+    "description": "Viser historikken til en bruker."
+  },
+  {
+    "id": "31",
+    "value": "user.activate",
+    "description": "Lar deg aktivere en annen bruker, dersom du selv er logget inn."
+  },
+  {
+    "id": "32",
+    "value": "user.ticket",
+    "description": "Se en brukers billett, og detaljer om den."
+  },
+  {
+    "id": "33",
+    "value": "user.relocate",
+    "description": "Du kan omplassere en bruker på setekartet."
+  },
+  {
+    "id": "34",
+    "value": "user.note",
+    "description": "Legg til eller fjern notater på en bruker."
+  },
+  {
+    "id": "40",
+    "value": "compo.*",
+    "description": "Lar deg gjøre alle compo-greiene"
+  },
+  {
+    "id": "41",
+    "value": "compo.bracketmanagement",
+    "description": "Lar deg redigere brackets"
+  },
+  {
+    "id": "42",
+    "value": "compo.edit",
+    "description": "Lar deg redigere eksisterende compoer, og lar deg lage nye compoer"
+  },
+  {
+    "id": "43",
+    "value": "compo.management",
+    "description": "Lar deg administrere compoer"
+  },
+  {
+    "id": "48",
+    "value": "tickets.byPassBookingTime",
+    "description": "Du kan bestille billetter og teste kjøp av billetter før billetsalget har åpnet."
+  },
+  {
+    "id": "49",
+    "value": "event.checklist.list",
+    "description": "Lar deg se alle gjøremål for hele crewet."
+  },
+  {
+    "id": "50",
+    "value": "event.checklist.*",
+    "description": "Gir tilgang til alt relatert til sjekklisten."
+  },
+  {
+    "id": "56",
+    "value": "admin.tickets",
+    "description": "Gjøre ting relatert til tickets-siden, slik som flytting av brukere"
+  },
+  {
+    "id": "57",
+    "value": "event.checklist.watchlist",
+    "description": "Lar deg legge til eller fjerne tilskuere for punkter i sjekklisten."
+  },
+  {
+    "id": "58",
+    "value": "developer.syslog",
+    "description": "Lar deg se på systemloggen"
+  },
+  {
+    "id": "59",
+    "value": "compo.casting",
+    "description": "Gir deg tilgang til casting-verktøyet."
+  },
+  {
+    "id": "60",
+    "value": "stats.*",
+    "description": "Gir deg tilgang til all statistikk."
+  },
+  {
+    "id": "61",
+    "value": "stats.age",
+    "description": "Gir deg tilgang til alders statistikk."
+  },
+  {
+    "id": "62",
+    "value": "stats.gender",
+    "description": "Gir deg tilgang til kjønns statistikk."
+  },
+  {
+    "id": "63",
+    "value": "stats.ticketsale",
+    "description": "Gir deg tilgang til billetsalgs statistikk."
+  }
+]
