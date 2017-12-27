@@ -149,7 +149,7 @@ class NetworkHandler {
 							 `portType` = \'' . $database->real_escape_string($portType) . '\'
 						 WHERE `id` = \'' . $networkType->getId() . '\';');
 
-		return self::getNetwork($networkType->getId());
+		return self::getNetworkType($networkType->getId());
 	}
 
 	/*
