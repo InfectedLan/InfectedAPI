@@ -60,4 +60,3 @@ class TicketTransfer extends DatabaseObject {
 		return $this->revertable ? true : false;
 	}
 }
-?>

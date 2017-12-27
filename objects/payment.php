@@ -72,4 +72,3 @@ class Payment extends DatabaseObject {
 		return strtotime($this->datetime);
 	}
 }
-?>

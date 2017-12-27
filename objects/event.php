@@ -41,14 +41,14 @@ class Event extends DatabaseObject {
 	/*
 	 * Returns theme of this event.
 	 */
-	public function getTheme(): string {
+	public function getTheme(): ?string {
 		return $this->theme;
 	}
 
 	/*
 	 * Returns the event location.
 	 */
-	public function getLocation(): Location {
+	public function getLocation(): ?Location {
 		return LocationHandler::getLocation($this->locationId);
 	}
 
@@ -97,14 +97,14 @@ class Event extends DatabaseObject {
 	/*
 	 * Returns the seatmap for this event.
 	 */
-	public function getSeatmap(): Seatmap {
+	public function getSeatmap(): ?Seatmap {
 		return SeatmapHandler::getSeatmap($this->seatmapId);
 	}
 
 	/*
 	 * Returns the ticket type for this event.
 	 */
-	public function getTicketType(): TicketType {
+	public function getTicketType(): ?TicketType {
 		return TicketTypeHandler::getTicketType($this->ticketTypeId);
 	}
 
@@ -119,24 +119,23 @@ class Event extends DatabaseObject {
 	 * Returns true if booking for this event is opened.
 	 */
 	public function isBookingTime(): bool {
-		$offset = 24 * 60 * 60;
-		$bookingTime = $this->getBookingTime();
-		$bookingEndTime = $this->getStartTime() + $offset;
-
-		return time() >= $bookingTime && time() <= $bookingEndTime;
+		return time() >= $this->getBookingTime() && time() <= $this->getEndTime();
 	}
 
 	/*
 	 * Returns true if booking for this event is opened.
 	 */
 	public function isOngoing(): bool {
-		$offset = 2 * 60 * 60;
+		$offset = 60 * 60;
 		$startTime = $this->getStartTime() - $offset;
 		$endTime = $this->getEndTime() + $offset;
 
 		return time() >= $startTime && time() <= $endTime;
 	}
 
+	/*
+	 * Returns this events season.
+	 */
 	public function getSeason(): string {
 		return Localization::getLocale(date('m', $this->getStartTime()) == 2 ? 'winter' : 'autumn');
 	}
@@ -159,4 +158,3 @@ class Event extends DatabaseObject {
 		return max(0, $ticketsLeft);
 	}
 }
-?>

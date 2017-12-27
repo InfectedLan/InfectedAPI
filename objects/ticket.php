@@ -53,7 +53,7 @@ class Ticket extends EventObject {
 	/*
 	 * Returns the payment that this ticket is linked to, if any.
 	 */
-	public function getPayment(): Payment {
+	public function getPayment(): ?Payment {
 		return PaymentHandler::getPayment($this->paymentId);
 	}
 
@@ -148,4 +148,3 @@ class Ticket extends EventObject {
 		TicketTransferHandler::revertTransfer($this, $user);
 	}
 }
-?>

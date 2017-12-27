@@ -20,11 +20,11 @@
 
 class StringUtils {
 	public static function startsWith(string $haystack, string $needle): string {
-		return (strpos($haystack, $needle) === 0);
+		return strpos($haystack, $needle) === 0;
 	}
 
 	public static function endsWith(string $haystack, string $needle): string {
-   	return (strpos(strrev($haystack), strrev($needle)) === 0);
+   	return strpos(strrev($haystack), strrev($needle)) === 0;
 	}
 }
 ?>

@@ -29,18 +29,22 @@ class Settings {
 	const domain = 'test.infected.no';
 
 	// Email information.
+	const enableEmail = false;
 	const emailName = self::name;
 	const email = 'no-reply@' . self::domain;
 
 	// Full path to the API location.
 	const api_path = '/home/' . self::domain . '/public_html/api/';
 
+	// Permissions file.
+	const permissions_file = self::api_path . '/permissions.json';
+
 	// Tells where images should be stored.
 	const qr_path = '../api/content/qrcache/';
 	const avatar_path = '../api/content/avatars/';
 
 	/* PHP */
-	const php_version = '7.0.0';
+	const php_version = '7.2.0';
 
 	/* Database */
 	const db_host = 'localhost';
@@ -49,6 +53,7 @@ class Settings {
 	const db_name_infected_crew = 'test_infected_no_crew';
 	const db_name_infected_info = 'test_infected_no_info';
 	const db_name_infected_main = 'test_infected_no_main';
+	const db_name_infected_tech = 'test_infected_no_tech';
 	const db_name_infected_tickets = 'test_infected_no_tickets';
 	const db_name_infected_tech = 'test_infected_no_tech';
 
@@ -110,6 +115,11 @@ class Settings {
 	const db_table_infected_main_pages = 'pages';
 	const db_table_infected_main_sectionpages = 'sectionpages';
 
+	// InfectedTech
+	const db_table_infected_tech_networkaccess = 'networkaccess';
+	const db_table_infected_tech_networks = 'networks';
+	const db_table_infected_tech_networktypes = 'networktypes';
+
 	// InfectedTickets
 	const db_table_infected_tickets_checkedintickets = 'checkedintickets';
 	const db_table_infected_tickets_entrances = 'entrances';
@@ -132,7 +142,7 @@ class Settings {
 	const compo_match_participant_type_clan = 0;
 	const compo_match_participant_type_match_winner = 1;
 	const compo_match_participant_type_match_looser = 2;
-  const compo_match_participant_type_match_walkover = 3;
+  	const compo_match_participant_type_match_walkover = 3;
 
 	/* Crew */
 	// Avatar sizes.
@@ -165,4 +175,3 @@ class Settings {
 
 	const prioritySeatingReq = 5;
 }
-?>

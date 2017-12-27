@@ -6,8 +6,8 @@ sudo: required
 addons:
   apt:
     packages:
-    - mysql-server-5.7
-    - mysql-client-5.7
+    - mysql-server-5.6
+    - mysql-client-5.6
 services:
   - mysql
 install:
@@ -28,6 +28,7 @@ install:
   - 'tests/install/installDb.sh deployment/test_infected_no_crew.sql test_infected_no_crew'
   - 'tests/install/installDb.sh deployment/test_infected_no_info.sql test_infected_no_info'
   - 'tests/install/installDb.sh deployment/test_infected_no_main.sql test_infected_no_main'
+  - 'tests/install/installDb.sh deployment/test_infected_no_tech.sql test_infected_no_tech'
   - 'tests/install/installDb.sh deployment/test_infected_no_tickets.sql test_infected_no_tickets'
 #  - 'sed -i \'s/const api_path = '\\\/home\\\/' . self::domain . '\\\/public_html\\\/api\\\/';/const api_path = '~\\\/';/g\' settings.php'
   - 'chmod 775 tests/install/patch.sh'

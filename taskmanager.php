@@ -26,7 +26,7 @@ class TaskManager {
 	/*
 	 * Get a task by given id.
 	 */
-	public static function getTask(int $id) {
+	public static function getTask(int $id): ?object {
 		$database = Database::getConnection(Settings::db_name_infected);
 
 		$result = $database->query('SELECT * FROM `'. Settings::db_table_infected_tasks . '`
@@ -40,7 +40,7 @@ class TaskManager {
 	/*
 	 * Get a list of all the tasks.
 	 */
-	public static function getTasks() {
+	public static function getTasks(): array {
 		$database = Database::getConnection(Settings::db_name_infected);
 
 		$result = $database->query('SELECT * FROM `'. Settings::db_table_infected_tasks . '`;');

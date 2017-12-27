@@ -56,4 +56,3 @@ class ChatMessage extends DatabaseObject {
 		return $this->message;
 	}
 }
-?>

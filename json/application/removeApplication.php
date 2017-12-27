@@ -1,5 +1,4 @@
 <?php
-include 'database.php';
 /**
  * This file is part of InfectedAPI.
  *
@@ -20,12 +19,12 @@ include 'database.php';
  */
 
 require_once 'session.php';
+require_once 'database.php';
 require_once 'localization.php';
 require_once 'handlers/applicationhandler.php';
 
 $result = false;
 $message = null;
-
 
 if (Session::isAuthenticated()) {
 	$user = Session::getCurrentUser();
@@ -38,7 +37,6 @@ if (Session::isAuthenticated()) {
 			if ($user->hasPermission('*') ||
 				($user->equals($application->getUser()) && $application->getState() == 1)) {
 				ApplicationHandler::removeApplication($application);
-
 				$result = true;
 			} else {
 				$message = Localization::getLocale('you_do_not_have_permission_to_do_that');
@@ -53,7 +51,7 @@ if (Session::isAuthenticated()) {
 	$message = Localization::getLocale('you_are_not_logged_in');
 }
 
-header('Content-Type: text/plain');
+header('Content-Type: application/json');
 echo json_encode(['result' => $result, 'message' => $message], JSON_PRETTY_PRINT);
 Database::cleanup();
 ?>

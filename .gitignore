@@ -7,3 +7,5 @@ paypalsecret.php
 
 # Htaccess is deprecated
 .htaccess
+
+.idea/

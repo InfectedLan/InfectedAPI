@@ -56,3 +56,4 @@ class DatabaseUtils {
 		$database->query('DROP TABLE `temporary`;');
 	}
 }
+?>

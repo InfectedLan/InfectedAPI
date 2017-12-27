@@ -1,9 +1,8 @@
 <?php
-include 'database.php';
 /**
  * This file is part of InfectedAPI.
  *
- * Copyright (C) 2015 Infected <http://infected.no/>.
+ * Copyright (C) 2017 Infected <http://infected.no/>.
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -20,6 +19,7 @@ include 'database.php';
  */
 
 require_once 'session.php';
+require_once 'database.php';
 require_once 'localization.php';
 require_once 'handlers/eventhandler.php';
 require_once 'handlers/locationhandler.php';
@@ -30,7 +30,7 @@ $message = null;
 if (Session::isAuthenticated()) {
 	$user = Session::getCurrentUser();
 
-	if ($user->hasPermission('admin.events')) {
+	if ($user->hasPermission('admin.event')) {
 		if (isset($_GET['location']) &&
 			isset($_GET['participants']) &&
 			isset($_GET['bookingDate']) &&
@@ -55,7 +55,6 @@ if (Session::isAuthenticated()) {
 
 			if ($location != null) {
 				EventHandler::createEvent($location, $participants, $bookingTime, $startTime, $endTime);
-
 				$result = true;
 			}
 		} else {
@@ -68,7 +67,7 @@ if (Session::isAuthenticated()) {
 	$message = Localization::getLocale('you_are_not_logged_in');
 }
 
-header('Content-Type: text/plain');
+header('Content-Type: application/json');
 echo json_encode(['result' => $result, 'message' => $message], JSON_PRETTY_PRINT);
 Database::cleanup();
 ?>

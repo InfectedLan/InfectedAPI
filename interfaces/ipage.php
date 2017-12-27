@@ -2,7 +2,7 @@
 /**
  * This file is part of InfectedAPI.
  *
- * Copyright (C) 2015 Infected <http://infected.no/>.
+ * Copyright (C) 2017 Infected <http://infected.no/>.
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -19,12 +19,15 @@
  */
 
 interface IPage {
+    public function isPublic(): bool;
+
+    public function canAccess(User $user): bool;
+
 	public function hasParent(): bool;
 
 	public function getParent(): IPage;
 
-	public function getTitle(): string;
+	public function getTitle(): ?string;
 
-	public function getContent(): string;
+	public function getContent(User $user = null): ?string;
 }
-?>

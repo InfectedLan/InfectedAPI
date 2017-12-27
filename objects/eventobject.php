@@ -31,4 +31,3 @@ class EventObject extends DatabaseObject {
 		return EventHandler::getEvent($this->eventId);
 	}
 }
-?>

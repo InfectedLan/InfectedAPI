@@ -1,9 +1,8 @@
 <?php
-include 'database.php';
 /**
  * This file is part of InfectedAPI.
  *
- * Copyright (C) 2015 Infected <http://infected.no/>.
+ * Copyright (C) 2017 Infected <http://infected.no/>.
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -20,29 +19,34 @@ include 'database.php';
  */
 
 require_once 'session.php';
+require_once 'database.php';
 require_once 'localization.php';
-require_once 'handlers/userhandler.php';
+require_once 'handlers/avatarhandler.php';
 
 $result = false;
+$status = http_response_code();
 $message = null;
 
 if (Session::isAuthenticated()) {
 	$user = Session::getCurrentUser();
 
-	if ($user->hasPermission('user.profile')) {
-		if (isset($_GET['id']) &&
-			is_numeric($_GET['id'])) {
-			$editUser = UserHandler::getUser($_GET['id']);
-			$swimming = isset($_GET['swimming']) ? $_GET['swimming'] : 0;
+	if ($user->hasPermission('chief.avatar')) {
+		if (isset($_POST['avatarId']) &&
+			is_numeric($_POST['avatarId'])) {
+			$avatar = AvatarHandler::getAvatar($_POST['avatarId']);
 
-			if ($editUser != null) {
-				$editUser->setSwimming($swimming);
+			if ($avatar != null) {
+				$avatar->accept();
+				$avatar->getUser()->sendAvatarEmail(true);
 				$result = true;
+                $status = 202; // Accepted.
 			} else {
-				$message = Localization::getLocale('the_user_does_not_exist');
+                $status = 404; // Not found.
+				$message = Localization::getLocale('this_avatar_does_not_exist');
 			}
 		} else {
-			$message = Localization::getLocale('you_have_not_filled_out_the_required_fields');
+            $status = 400; // Bad Request.
+            $message = Localization::getLocale('you_have_not_filled_out_the_required_fields');
 		}
 	} else {
 		$message = Localization::getLocale('you_do_not_have_permission_to_do_that');
@@ -51,7 +55,7 @@ if (Session::isAuthenticated()) {
 	$message = Localization::getLocale('you_are_not_logged_in');
 }
 
-header('Content-Type: text/plain');
+http_response_code($status);
+header('Content-Type: application/json');
 echo json_encode(['result' => $result, 'message' => $message], JSON_PRETTY_PRINT);
 Database::cleanup();
-?>

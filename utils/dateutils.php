@@ -19,7 +19,7 @@
  */
 
 class DateUtils {
-	public static function getDayFromInt(int $day): string {
+	public static function getDayFromInt(int $day): ?string {
 		$dayList = ['Søndag',
 							  'Mandag',
 							  'Tirsdag',
@@ -31,7 +31,7 @@ class DateUtils {
 		return $dayList[$day];
 	}
 
-	public static function getMonthFromInt(int $month): string {
+	public static function getMonthFromInt(int $month): ?string {
 		$monthList = ['Januar',
 								  'Februar',
 								  'Mars',

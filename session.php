@@ -46,7 +46,7 @@ class Session {
 	/*
 	 * Returns the current user.
 	 */
-	public static function getCurrentUser(): User {
+	public static function getCurrentUser(): ?User {
 		if (self::isAuthenticated()) {
 			return UserHandler::getUser($_SESSION['userId']);
 		}
@@ -55,7 +55,7 @@ class Session {
   /*
    * Returns the user by the given session id.
    */
-  public function getUserFromSessionId($sessionId): User {
+  public function getUserFromSessionId($sessionId): ?User {
     if (!preg_match("/^[a-zA-Z0-9]+$/", $sessionId)) {
 		  SyslogHandler::log("Hack attack! ", "getUserFromSessionId", null, SyslogHandler::SEVERITY_CRITICAL);
 

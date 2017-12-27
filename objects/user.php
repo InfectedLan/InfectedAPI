@@ -35,6 +35,7 @@ require_once 'handlers/teamhandler.php';
 require_once 'handlers/userhistoryhandler.php';
 require_once 'handlers/usernotehandler.php';
 require_once 'handlers/friendhandler.php';
+require_once 'handlers/networkhandler.php';
 require_once 'objects/databaseobject.php';
 
 class User extends DatabaseObject {
@@ -49,7 +50,7 @@ class User extends DatabaseObject {
 	private $address;
 	private $postalcode;
 	private $nickname;
-	private $registereddate;
+	private $registerdate;
 
 	/*
 	 * Returns the users firstname.
@@ -156,8 +157,8 @@ class User extends DatabaseObject {
 	/*
 	 * Returns the date which this user was registered.
 	 */
-	public function getRegisteredDate(): int {
-		return strtotime($this->registereddate);
+	public function getRegisterDate(): int {
+		return strtotime($this->registerdate);
 	}
 
 	/*
@@ -203,20 +204,6 @@ class User extends DatabaseObject {
 	 */
 	public function isReservedFromNotifications(): bool {
 		return UserOptionHandler::isUserReservedFromNotifications($this);
-	}
-
-	/*
-	 * Returns true the user is set for swimming.
-	 */
-	public function isSwimming(): bool {
-		return UserOptionHandler::isUserSwimming($this);
-	}
-
-	/*
-	 * Set whether user is swimming or not.
-	 */
-	public function setSwimming(bool $swimming) {
-		UserOptionHandler::setUserSwimming($this, $swimming);
 	}
 
 	/*
@@ -371,7 +358,7 @@ class User extends DatabaseObject {
 		$code = PasswordResetCodeHandler::createPasswordResetCode($this);
 
 		// Send an email to the user with a link for resetting the password.
-		$url = 'https://' . $_SERVER['HTTP_HOST'] . '/v2/index.php?page=reset-password&code=' . $code;
+		$url = 'https://' . $_SERVER['HTTP_HOST'] . '/v3/index.php?page=password-reset&code=' . $code;
 		$message = [];
 		$message[] = '<!DOCTYPE html>';
 		$message[] = '<html>';
@@ -486,7 +473,7 @@ class User extends DatabaseObject {
 	}
 
 	public function getParticipatedEvents(): array {
-		return UserHistoryHandler::getUserParticipatedEvents($this);
+		return UserHistoryHandler::getParticipatedEvents($this);
 	}
 
 	public function hasSpecialRole(Event $event = null): bool {
@@ -535,7 +522,7 @@ class User extends DatabaseObject {
 	/*
 	 * Returns the note for this user.
 	 */
-	public function getNote(): Note {
+	public function getNote(): ?string {
 		return UserNoteHandler::getUserNoteByUser($this);
 	}
 
@@ -544,6 +531,20 @@ class User extends DatabaseObject {
 	 */
 	public function setNote(string $content) {
 		UserNoteHandler::setUserNote($this, $content);
+	}
+
+	/*
+	 * Return true if this user have network acces to the given port type.
+	 */
+	public function hasNetworkAccess(NetworkType $networkType): bool {
+		return NetworkHandler::hasNetworkAccess($this, $networkType);
+	}
+
+	/*
+	 * Get network for this user.
+	 */
+	public function getNetwork(NetworkType $networkType): Network {
+		return NetworkHandler::getNetworkByUser($this, $networkType);
 	}
 
 	/*
@@ -560,7 +561,7 @@ class User extends DatabaseObject {
 	/*
 	 * Returns the steam id of this user. Null if not existent
 	 */
-	public function getSteamId(): string {
+	public function getSteamId(): ?string {
 		return UserHandler::getSteamId($this);
 	}
 
@@ -571,4 +572,3 @@ class User extends DatabaseObject {
 		UserHandler::setSteamId($this, $steamId);
 	}
 }
-?>
