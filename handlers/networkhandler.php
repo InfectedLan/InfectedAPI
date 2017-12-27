@@ -72,7 +72,7 @@ class NetworkHandler {
 	 * Update a network.
 	 */
 	public static function updateNetwork(Network $network, string $name, string $title, ?string $description, int $vlanId = 0): Network {
-	  $database = Database::getConnection(Settings::db_name_infected_tech);
+	  	$database = Database::getConnection(Settings::db_name_infected_tech);
 
 		$database->query('UPDATE `' . Settings::db_table_infected_tech_networks . '`
 					     SET `name` = \'' . $database->real_escape_string($name) . '\',

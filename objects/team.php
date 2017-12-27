@@ -76,7 +76,7 @@ class Team extends DatabaseObject {
 	/*
 	 * Returns the leader of this team.
 	 */
-	public function getLeader(Event $event = null): User {
+	public function getLeader(Event $event = null): ?User {
 		return TeamHandler::getTeamLeader($this, $event);
 	}
 
