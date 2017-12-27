@@ -29,9 +29,9 @@ class NfcGateHandler {
 	 * Returns the gate with the given id.
 	 */
 	public static function getGate($id) {
-		$database = Database::getConnection(Settings::db_name_infected);
+		$database = Database::getConnection(Settings::db_name_infected_tech);
 
-		$result = $database->query('SELECT * FROM `'. Settings::db_table_infected_nfcgates . '`
+		$result = $database->query('SELECT * FROM `'. Settings::db_table_infected_tech_nfcgates . '`
 																WHERE `id` = \'' . $database->real_escape_string($id) . '\';');
 
 		return $result->fetch_object('NfcGate');
@@ -41,9 +41,9 @@ class NfcGateHandler {
 	 * Returns a list of all nfc gates by their event.
 	 */
 	public static function getGatesByEvent(Event $event) {
-		$database = Database::getConnection(Settings::db_name_infected);
+		$database = Database::getConnection(Settings::db_name_infected_tech);
 
-		$result = $database->query('SELECT * FROM `' . Settings::db_table_infected_nfcgates . '` WHERE `eventId` = \'' . $event->getId() . '\';');
+		$result = $database->query('SELECT * FROM `' . Settings::db_table_infected_tech_nfcgates . '` WHERE `eventId` = \'' . $event->getId() . '\';');
 
 		$gateList = [];
 

@@ -30,9 +30,9 @@ class NfcCardHandler {
 	 * Registers a NFC card for a user
 	*/
 	public static function registerCard(User $user, Event $event, $nfcid) {
-		$database = Database::getConnection(Settings::db_name_infected);
+		$database = Database::getConnection(Settings::db_name_infected_tech);
 
-		$result = $database->query('INSERT INTO `' . Settings::db_table_infected_nfccards . '` (`userId`, `eventId`, `nfcId`)
+		$result = $database->query('INSERT INTO `' . Settings::db_table_infected_tech_nfccards . '` (`userId`, `eventId`, `nfcId`)
 																VALUES (\'' . $user->getId() . '\',
 																				\'' . $event->getId() . '\', 
 																				\'' . $database->real_escape_string($nfcid) . '\');');
@@ -45,9 +45,9 @@ class NfcCardHandler {
 	 * Returns the card with the given id.
 	 */
 	public static function getCard($id) {
-		$database = Database::getConnection(Settings::db_name_infected);
+		$database = Database::getConnection(Settings::db_name_infected_tech);
 
-		$result = $database->query('SELECT * FROM `'. Settings::db_table_infected_nfccards . '`
+		$result = $database->query('SELECT * FROM `'. Settings::db_table_infected_tech_nfccards . '`
 																WHERE `id` = \'' . $database->real_escape_string($id) . '\';');
 
 		return $result->fetch_object('NfcCard');
@@ -57,9 +57,9 @@ class NfcCardHandler {
 	 * Returns a list of all nfc cards by their event.
 	 */
 	public static function getCardsByEvent(Event $event) {
-		$database = Database::getConnection(Settings::db_name_infected);
+		$database = Database::getConnection(Settings::db_name_infected_tech);
 
-		$result = $database->query('SELECT * FROM `' . Settings::db_table_infected_nfccards . '` WHERE `eventId` = \'' . $database->real_escape_string($event->getId()) . '\';');
+		$result = $database->query('SELECT * FROM `' . Settings::db_table_infected_tech_nfccards . '` WHERE `eventId` = \'' . $database->real_escape_string($event->getId()) . '\';');
 
 		$cardList = [];
 
@@ -76,7 +76,7 @@ class NfcCardHandler {
 	public static function getCardsByUserAndEvent(Event $event, User $user) {
 		$database = Database::getConnection(Settings::db_name_infected);
 
-		$result = $database->query('SELECT * FROM `'. Settings::db_table_infected_nfccards . '`
+		$result = $database->query('SELECT * FROM `'. Settings::db_table_infected_tech_nfccards . '`
 																WHERE `eventId` = \'' . $database->real_escape_string($event->getId()) . '\' AND `userId` = \'' . $database->real_escape_string($user->getId()) . '\';');
 
 		$cardList = [];
