@@ -232,6 +232,7 @@ class UserHandler {
 
 	/*
 	 * Create a new user
+	 * TEST FIXERS NOTE: Gender can't be boolean. It will give an mysql error, as mysql expects an integer.
 	 */
 	public static function createUser(string $firstname, string $lastname, string $username, string $password, string $email, string $birthDate, int $gender, int $phone, string $address, int $postalCode, string $nickname): User {
 		$database = Database::getConnection(Settings::db_name_infected);
