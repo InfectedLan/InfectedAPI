@@ -50,6 +50,7 @@ class Settings {
 	const db_name_infected_info = 'test_infected_no_info';
 	const db_name_infected_main = 'test_infected_no_main';
 	const db_name_infected_tickets = 'test_infected_no_tickets';
+	const db_name_infected_tech = 'test_infected_no_tech';
 
 	// Infected
 	const db_table_infected_emergencycontacts = 'emergencycontacts';
