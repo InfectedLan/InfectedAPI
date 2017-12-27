@@ -72,9 +72,6 @@ class Settings {
 	const db_table_infected_userpermissions = 'userpermissions';
 	const db_table_infected_users = 'users';
 	const db_table_infected_syslogs = 'syslogs';
-	const db_table_infected_nfccards = 'nfccards';
-	const db_table_infected_nfcgates = 'nfcgates';
-	const db_table_infected_nfclog = 'nfclog';
 
 	// InfectedCompo
 	const db_table_infected_compo_servers = 'servers';
@@ -134,6 +131,11 @@ class Settings {
 	const db_table_infected_tickets_tickets = 'tickets';
 	const db_table_infected_tickets_tickettransfers = 'tickettransfers';
 	const db_table_infected_tickets_tickettypes = 'tickettypes';
+
+	// InfectedTech
+	const db_table_infected_tech_nfccards = 'nfccards';
+	const db_table_infected_tech_nfcgates = 'nfcgates';
+	const db_table_infected_tech_nfclog = 'nfclog';
 
 	/* Compo */
 	// Match participant of state.
