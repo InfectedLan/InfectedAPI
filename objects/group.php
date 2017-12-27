@@ -81,7 +81,7 @@ class Group extends DatabaseObject {
 	/*
 	 * Returns the user which is the leader of this group.
 	 */
-	public function getLeader(Event $event = null): User {
+	public function getLeader(Event $event = null): ?User {
 		return GroupHandler::getGroupLeader($this, $event);
 	}
 
