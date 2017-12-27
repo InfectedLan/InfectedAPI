@@ -48,13 +48,13 @@ class Settings {
 
 	/* Database */
 	const db_host = 'localhost';
-	const db_name_infected = 'infected_no';
-	const db_name_infected_compo = 'infected_no_compo';
-	const db_name_infected_crew = 'infected_no_crew';
-	const db_name_infected_info = 'infected_no_info';
-	const db_name_infected_main = 'infected_no_main';
-	const db_name_infected_tech = 'infected_no_tech';
-	const db_name_infected_tickets = 'infected_no_tickets';
+	const db_name_infected = 'test_infected_no';
+	const db_name_infected_compo = 'test_infected_no_compo';
+	const db_name_infected_crew = 'test_infected_no_crew';
+	const db_name_infected_info = 'test_infected_no_info';
+	const db_name_infected_main = 'test_infected_no_main';
+	const db_name_infected_tech = 'test_infected_no_tech';
+	const db_name_infected_tickets = 'test_infected_no_tickets';
 
 	// Infected
 	const db_table_infected_emergencycontacts = 'emergencycontacts';
