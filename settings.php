@@ -49,6 +49,7 @@ class Settings {
 
 	/* Database */
 	const db_host = 'localhost';
+	
 	const db_name_infected = 'test_infected_no';
 	const db_name_infected_compo = 'test_infected_no_compo';
 	const db_name_infected_crew = 'test_infected_no_crew';
@@ -119,6 +120,11 @@ class Settings {
 	const db_table_infected_tech_networkaccess = 'networkaccess';
 	const db_table_infected_tech_networks = 'networks';
 	const db_table_infected_tech_networktypes = 'networktypes';
+	const db_table_infected_tech_nfccards = 'nfccards';
+	const db_table_infected_tech_nfcgates = 'nfcgates';
+	const db_table_infected_tech_nfclog = 'nfclog';
+	const db_table_infected_tech_bongTypes = 'bongTypes';
+	const db_table_infected_tech_bongTransactions = 'bongTransactions';
 
 	// InfectedTickets
 	const db_table_infected_tickets_checkedintickets = 'checkedintickets';

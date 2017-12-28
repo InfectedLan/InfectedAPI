@@ -258,7 +258,7 @@ class UserHandler {
 	/*
 	 * Update a user
 	 */
-	public static function updateUser(User $user, string $firstname, string $lastname, string $username, string $email, string $birthDate, int $gender, int $phone, string $address, int $postalCode, string $nickname) {
+	public static function updateUser(User $user, string $firstname, string $lastname, string $username, string $email, string $birthDate, bool $gender, int $phone, string $address, int $postalCode, string $nickname) {
 		$database = Database::getConnection(Settings::db_name_infected);
 
 		$database->query('UPDATE `' . Settings::db_table_infected_users . '`
