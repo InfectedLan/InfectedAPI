@@ -75,7 +75,7 @@ class UserTest extends TestCase {
 		$this->assertEquals(strtotime("1998-03-27 00:00:00"), $user->getBirthdate());
 		$this->assertEquals($user->getAge(EventHandler::getEvent(7)), 18); //True story
 		$this->assertEquals($user->getAge(EventHandler::getEvent(6)), 17);
-		$this->assertEquals(false, $user->getGender());
+		$this->assertEquals(true, $user->getGender());
 		$this->assertEquals("(+47) 12 34 56 78", $user->getPhoneAsString());
 		$this->assertEquals(12345678, $user->getPhone());
 		$this->assertEquals("Address", $user->getAddress());
