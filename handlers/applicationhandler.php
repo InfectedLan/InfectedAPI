@@ -314,13 +314,14 @@ class ApplicationHandler {
 	 */
 	public static function removeApplication(Application $application) {
 		$database = Database::getConnection(Settings::db_name_infected_crew);
-
+		
+		// Remove the application from the queue, if present.
+		$database->query('DELETE FROM `' . Settings::db_table_infected_crew_applicationqueue . '`
+							 	WHERE `applicationId` = \' . $application->getId() . \';');
+		
 		// Remove the application.
 		$database->query('DELETE FROM `' . Settings::db_table_infected_crew_applications . '`
 						 WHERE `id` = ' . $application->getId() . ';');
-
-		// Remove the application from the queue, if present.
-		self::unqueueApplication($application, Session::getCurrentUser());
 	}
 
 	/*
@@ -432,7 +433,7 @@ class ApplicationHandler {
 	/*
 	 * Removes an application from queue.
 	 */
-	public static function unqueueApplication(Application $application, User $user) {
+	public static function unqueueApplication(Application $application, User $user = null) {
 		// Only allow application for current event to be unqueued.
 		if ($application->getEvent()->equals(EventHandler::getCurrentEvent())) {
 			$database = Database::getConnection(Settings::db_name_infected_crew);
@@ -440,9 +441,12 @@ class ApplicationHandler {
 			$database->query('DELETE FROM `' . Settings::db_table_infected_crew_applicationqueue . '`
 							 WHERE `applicationId` = ' . $application->getId() . ';');
 
-			$database->query('UPDATE `' . Settings::db_table_infected_crew_applications . '`
-						     SET `updatedByUserId` = ' . $user->getId() . '
-						     WHERE `id` = ' . $application->getId() . ';');
+			// TODO: Review this? Should users be able to unqueue without it being logged in database?
+			if ($user != null) {
+				$database->query('UPDATE `' . Settings::db_table_infected_crew_applications . '`
+								 SET `updatedByUserId` = ' . $user->getId() . '
+								 WHERE `id` = ' . $application->getId() . ';');
+			}
 		}
 	}
 
