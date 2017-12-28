@@ -37,7 +37,8 @@ class Settings {
 	const api_path = '/home/' . self::domain . '/public_html/api/';
 
 	// Permissions file.
-	const permissions_file = self::api_path . '/permissions.json';
+	const file_json_permissions = self::api_path . 'json/permissions.json';
+	const file_json_postalcodes = self::api_path . 'json/postalcodes.json';
 
 	// Tells where images should be stored.
 	const qr_path = '../api/content/qrcache/';
@@ -48,7 +49,7 @@ class Settings {
 
 	/* Database */
 	const db_host = 'localhost';
-
+	
 	const db_name_infected = 'test_infected_no';
 	const db_name_infected_compo = 'test_infected_no_compo';
 	const db_name_infected_crew = 'test_infected_no_crew';
@@ -102,7 +103,7 @@ class Settings {
 	const db_table_infected_crew_notewatches = 'notewatches';
 	const db_table_infected_crew_pages = 'pages';
 	const db_table_infected_crew_teams = 'teams';
-  const db_table_infected_crew_castingpages = 'castingPages';
+  	const db_table_infected_crew_castingpages = 'castingPages';
 
 	// InfectedInfo
 	const db_table_infected_info_slides = 'slides';
