@@ -99,7 +99,7 @@ class UserTest extends TestCase {
 		$user = UserHandler::getUserByIdentifier("assertGirl");
 
 		$this->assertNotEquals(null, $user);
-		$this->assertEquals("Female", $user->getGenderAsString());
+		$this->assertEquals(false, $user->getGender());
 
 		Database::cleanup();
 	}
