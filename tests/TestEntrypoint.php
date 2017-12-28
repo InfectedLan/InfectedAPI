@@ -19,4 +19,3 @@
  */
 
 use PHPUnit\Framework\TestCase;
-?>

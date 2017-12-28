@@ -30,7 +30,7 @@ require_once 'database.php';
  * Responsible for testing the functionality of the NfcCard class
  *
  */
-class NfcCardTest extends TestCase {
+class NFCCardTest extends TestCase {
 	public function test() {
 		$this->cardRegistrationTest();
 		$this->getterTest();
