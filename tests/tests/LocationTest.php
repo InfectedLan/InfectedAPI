@@ -31,10 +31,6 @@ require_once 'handlers/locationhandler.php';
  */
 class LocationTest extends TestCase {
 	public function test() {
-		$this->locationCreationTest();
-	}
-
-	private function locationCreationTest() {
 		$location = LocationHandler::getLocation(1);
 
 		/*
