@@ -37,7 +37,8 @@ class Settings {
 	const api_path = '/home/' . self::domain . '/public_html/api/';
 
 	// Permissions file.
-	const permissions_file = self::api_path . 'json/permissions.json';
+	const file_json_permissions = self::api_path . 'json/permissions.json';
+	const file_json_postalcodes = self::api_path . 'json/postalcodes.json';
 
 	// Tells where images should be stored.
 	const qr_path = '../api/content/qrcache/';

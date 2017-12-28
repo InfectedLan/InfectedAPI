@@ -93,7 +93,7 @@ if (isset($_POST['firstname']) &&
 		$message = Localization::getLocale('the_phone_number_is_not_valid');
 	} else if (empty($address) && strlen($address) > 32) {
 		$message = Localization::getLocale('you_must_enter_a_valid_address');
-	} else if (!is_numeric($postalcode) || strlen($postalcode) != 4 || !CityDictionary::hasPostalCode($postalcode)) {
+	} else if (!is_numeric($postalcode) || strlen($postalcode) != 4 || !CityDictionary::isValidPostalCode($postalcode)) {
 		$message = Localization::getLocale('the_postcode_is_not_valid_the_postcode_consists_of_4_characters');
 	} else if (!preg_match('/^[a-zæøåA-ZÆØÅ0-9_-]{2,16}$/', $nickname) && !empty($nickname)) {
 		$message = Localization::getLocale('the_nickname_is_not_valid_it_must_consist_of_at_least_2_characters_and_maximum_16_characters');

@@ -19,47 +19,50 @@
  */
 
 require_once 'settings.php';
-require_once 'database.php';
 
 class CityDictionary {
 	/*
 	 * Returns the city from given postalcode.
 	 */
-	public static function getCity(int $postalCode): ?string {
-		$database = Database::getConnection(Settings::db_name_infected);
+	public static function getCity(int $code): ?string {
+		$json = json_decode(file_get_contents(Settings::file_json_postalcodes));
 
-		$result = $database->query('SELECT `city` FROM `' . Settings::db_table_infected_postalcodes . '`
-																WHERE `code` = \'' . $database->real_escape_string($postalCode) . '\';');
+		foreach ($json as $key => $data) {
+			if ($data->code == $code) {
+				return ucfirst(strtolower($data->city));
+			}
+		}
 
-		$row = $result->fetch_array();
-
-		return ucfirst(strtolower($row['city']));
+		return null;
 	}
 
 	/*
 	 * Return true if the specified postal code exists.
 	 */
-	public static function hasPostalCode(int $postalCode): bool {
-		$database = Database::getConnection(Settings::db_name_infected);
+	public static function isValidPostalCode(int $code): bool {
+		$json = json_decode(file_get_contents(Settings::file_json_postalcodes));
 
-		$result = $database->query('SELECT `id` FROM `' . Settings::db_table_infected_postalcodes . '`
-																WHERE `code` = \'' . $database->real_escape_string($postalCode) . '\';');
+		foreach ($json as $key => $data) {
+			if ($data->code == $code) {
+				return true;
+			}
+		}
 
-		return $result->num_rows > 0;
+		return false;
 	}
 
 	/*
 	 * Returns the postalcode for given city.
 	 */
 	public static function getPostalCode(string $city): int {
-		$database = Database::getConnection(Settings::db_name_infected);
+		$json = json_decode(file_get_contents(Settings::file_json_postalcodes));
 
-		$result = $database->query('SELECT `code` FROM `' . Settings::db_table_infected_postalcodes . '`
-																WHERE `city` = \'' . $database->real_escape_string($city) . '\';');
+		foreach ($json as $key => $data) {
+			if ($data->city == $city) {
+				return $data->code;
+			}
+		}
 
-		$row = $result->fetch_array();
-
-		return $row['code'];
+		return 0;
 	}
 }
-?>
