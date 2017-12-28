@@ -55,7 +55,7 @@ class NotificationManager {
 	/*
 	 * Sends an mail to the users e-mail address with status information.
 	 */
-	public function sendApplicationCreatedNotification(Application $application) {
+	public static function sendApplicationCreatedNotification(Application $application) {
 		$group = $application->getGroup();
 		$userList = [];
 
@@ -82,7 +82,7 @@ class NotificationManager {
 	/*
 	 * Sends an mail to the users e-mail address with status information.
 	 */
-	public function sendApplicationAccpetedNotification(Application $application) {
+	public static function sendApplicationAccpetedNotification(Application $application) {
 		$message = [];
 		$message[] = '<!DOCTYPE html>';
 		$message[] = '<html>';
@@ -101,7 +101,7 @@ class NotificationManager {
 	/*
 	 * Sends an mail to the users e-mail address with status information.
 	 */
-	public function sendApplicationRejectedNotification(Application $application, string $comment) {
+	public static function sendApplicationRejectedNotification(Application $application, string $comment) {
 		$message = [];
 		$message[] = '<!DOCTYPE html>';
 		$message[] = '<html>';
@@ -120,7 +120,7 @@ class NotificationManager {
 	/*
 	 * Sends an mail to the users e-mail address with status information.
 	 */
-	public function sendApplicationQueuedNotification(Application $application) {
+	public static function sendApplicationQueuedNotification(Application $application) {
 		$message = [];
 		$message[] = '<!DOCTYPE html>';
 		$message[] = '<html>';
@@ -140,7 +140,7 @@ class NotificationManager {
 	/*
 	 * Sends a notification to the users e-mail address with purchase information.
 	 */
-	public function sendPurchaseCompleteNotification(User $user, string $reference) {
+	public static function sendPurchaseCompleteNotification(User $user, string $reference) {
 		$message = [];
 		$message[] = '<!DOCTYPE html>';
 		$message[] = '<html>';
@@ -156,4 +156,3 @@ class NotificationManager {
 		return MailManager::sendEmail($user, 'Takk for ditt kjøp av billett til Infected.', implode("\r\n", $message));
 	}
 }
-?>
