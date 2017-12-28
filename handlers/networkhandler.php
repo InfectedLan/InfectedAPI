@@ -31,7 +31,7 @@ class NetworkHandler {
 		$database = Database::getConnection(Settings::db_name_infected_tech);
 
 		$result = $database->query('SELECT * FROM `'. Settings::db_table_infected_tech_networks . '`
-																WHERE `id` = \'' . $database->real_escape_string($id) . '\';');
+								   WHERE `id` = \'' . $database->real_escape_string($id) . '\';');
 
 		return $result->fetch_object('Network');
 	}
@@ -60,10 +60,10 @@ class NetworkHandler {
 		$database = Database::getConnection(Settings::db_name_infected_tech);
 
 		$database->query('INSERT INTO `' . Settings::db_table_infected_tech_networks . '` (`name`, `title`, `description`, `vlanId`)
-										  VALUES (\'' . $database->real_escape_string($name) . '\',
-															\'' . $database->real_escape_string($title) . '\',
-														  \'' . $database->real_escape_string($description) . '\',
-														  \'' . $database->real_escape_string($vlanId) . '\');');
+					     VALUES (\'' . $database->real_escape_string($name) . '\',
+							 	 \'' . $database->real_escape_string($title) . '\',
+								 \'' . $database->real_escape_string($description) . '\',
+								 \'' . $database->real_escape_string($vlanId) . '\');');
 
 		return self::getNetwork($database->insert_id);
 	}
@@ -75,11 +75,11 @@ class NetworkHandler {
 	  $database = Database::getConnection(Settings::db_name_infected_tech);
 
 		$database->query('UPDATE `' . Settings::db_table_infected_tech_networks . '`
-										  SET `name` = \'' . $database->real_escape_string($name) . '\',
-													`title` = \'' . $database->real_escape_string($title) . '\',
-												  `description` = \'' . $database->real_escape_string($description) . '\',
-												  `vlanId` = \'' . $database->real_escape_string($vlanId) . '\'
-										  WHERE `id` = \'' . $network->getId() . '\';');
+					     SET `name` = \'' . $database->real_escape_string($name) . '\',
+							 `title` = \'' . $database->real_escape_string($title) . '\',
+							 `description` = \'' . $database->real_escape_string($description) . '\',
+							 `vlanId` = \'' . $database->real_escape_string($vlanId) . '\'
+					  	 WHERE `id` = \'' . $network->getId() . '\';');
 
 		return self::getNetwork($network->getId());
 	}
@@ -91,7 +91,7 @@ class NetworkHandler {
 		$database = Database::getConnection(Settings::db_name_infected_tech);
 
 		$database->query('DELETE FROM `' . Settings::db_table_infected_tech_networks . '`
-						  				WHERE `id` = \'' . $network->getId() . '\';');
+						 WHERE `id` = \'' . $network->getId() . '\';');
 	}
 
 	/*
@@ -101,7 +101,7 @@ class NetworkHandler {
 		$database = Database::getConnection(Settings::db_name_infected_tech);
 
 		$result = $database->query('SELECT * FROM `'. Settings::db_table_infected_tech_networktypes . '`
-																WHERE `id` = \'' . $database->real_escape_string($id) . '\';');
+								   WHERE `id` = \'' . $database->real_escape_string($id) . '\';');
 
 		return $result->fetch_object('NetworkType');
 	}
@@ -130,9 +130,9 @@ class NetworkHandler {
 		$database = Database::getConnection(Settings::db_name_infected_tech);
 
 		$database->query('INSERT INTO `' . Settings::db_table_infected_tech_networktypes . '` (`name`, `title`, `portType`)
-											VALUES (\'' . $database->real_escape_string($name) . '\',
-															\'' . $database->real_escape_string($title) . '\',
-															\'' . $database->real_escape_string($portType) . '\');');
+						 VALUES (\'' . $database->real_escape_string($name) . '\',
+								 \'' . $database->real_escape_string($title) . '\',
+								 \'' . $database->real_escape_string($portType) . '\');');
 
 		return self::getNetworkType($database->insert_id);
 	}
@@ -144,12 +144,12 @@ class NetworkHandler {
 		$database = Database::getConnection(Settings::db_name_infected_tech);
 
 		$database->query('UPDATE `' . Settings::db_table_infected_tech_networktypes . '`
-											SET `name` = \'' . $database->real_escape_string($name) . '\',
-													`title` = \'' . $database->real_escape_string($title) . '\',
-													`portType` = \'' . $database->real_escape_string($portType) . '\'
-											WHERE `id` = \'' . $networkType->getId() . '\';');
+						 SET `name` = \'' . $database->real_escape_string($name) . '\',
+							 `title` = \'' . $database->real_escape_string($title) . '\',
+							 `portType` = \'' . $database->real_escape_string($portType) . '\'
+						 WHERE `id` = \'' . $networkType->getId() . '\';');
 
-		return self::getNetwork($network->getId());
+		return self::getNetworkType($networkType->getId());
 	}
 
 	/*
@@ -159,7 +159,7 @@ class NetworkHandler {
 		$database = Database::getConnection(Settings::db_name_infected_tech);
 
 		$database->query('DELETE FROM `' . Settings::db_table_infected_tech_networktypes . '`
-											WHERE `id` = \'' . $networkType->getId() . '\';');
+						 WHERE `id` = \'' . $networkType->getId() . '\';');
 	}
 
 	/*
@@ -169,7 +169,7 @@ class NetworkHandler {
 		$database = Database::getConnection(Settings::db_name_infected_tech);
 
 		$result = $database->query('SELECT * FROM `'. Settings::db_table_infected_tech_networktypes . '`
-																WHERE `portType` = \'' . $database->real_escape_string($portType) . '\';');
+								   WHERE `portType` = \'' . $database->real_escape_string($portType) . '\';');
 
 		return $result->fetch_object('NetworkType');
 	}
@@ -181,27 +181,27 @@ class NetworkHandler {
 		$database = Database::getConnection(Settings::db_name_infected_tech);
 
 		$result = $database->query('SELECT * FROM `' . Settings::db_table_infected_tech_networkaccess . '`
-																WHERE (`userId` = \'' . $user->getId() . '\'
-																       OR (`userId` IS NULL
-																       		 AND (`groupId` IN (SELECT `groupId` FROM `' . Settings::db_name_infected_crew . '`.`' . Settings::db_table_infected_crew_memberof . '`
-																						                 WHERE `eventId` = \'' . ($event != null ? $event->getId() : EventHandler::getCurrentEvent()->getId()) . '\'
-																						                 AND `userId` = \'' . $user->getId() . '\'
-																						                 ORDER BY `groupId` DESC)
-																                OR `groupId` = 0)
-																           AND (`teamId` IN (SELECT `teamId` FROM `' . Settings::db_name_infected_crew . '`.`' . Settings::db_table_infected_crew_memberof . '`
-																					                   WHERE `eventId` = \'' . ($event != null ? $event->getId() : EventHandler::getCurrentEvent()->getId()) . '\'
-																					                   AND `userId` = \'' . $user->getId() . '\'
-																					                   ORDER BY `teamId` DESC)
-																                OR `teamId` IS NULL))
-																       OR (`userId` = 0
-																           AND `groupId` IS NULL
-																           AND `teamId` IS NULL))
-																AND `networkTypeId` = \'' . $networkType->getId() . '\'
-																GROUP BY `networkId`
-																ORDER BY CASE WHEN `userId` > 0 THEN `userId` END DESC,
-																         CASE WHEN `groupId` > 0 THEN `groupId` END DESC,
-																         CASE WHEN `teamId` > 0 THEN `teamId` END DESC,
-																         CASE WHEN `groupId` = 0 THEN `groupId` END DESC;');
+								   WHERE (`userId` = \'' . $user->getId() . '\'
+									      OR (`userId` IS NULL
+											  AND (`groupId` IN (SELECT `groupId` FROM `' . Settings::db_name_infected_crew . '`.`' . Settings::db_table_infected_crew_memberof . '`
+																 WHERE `eventId` = \'' . ($event != null ? $event->getId() : EventHandler::getCurrentEvent()->getId()) . '\'
+																 AND `userId` = \'' . $user->getId() . '\'
+																 ORDER BY `groupId` DESC)
+												   OR `groupId` = 0)
+										      AND (`teamId` IN (SELECT `teamId` FROM `' . Settings::db_name_infected_crew . '`.`' . Settings::db_table_infected_crew_memberof . '`
+																WHERE `eventId` = \'' . ($event != null ? $event->getId() : EventHandler::getCurrentEvent()->getId()) . '\'
+																AND `userId` = \'' . $user->getId() . '\'
+																ORDER BY `teamId` DESC)
+											       OR `teamId` IS NULL))
+									   	  OR (`userId` = 0
+										      AND `groupId` IS NULL
+										      AND `teamId` IS NULL))
+								   AND `networkTypeId` = \'' . $networkType->getId() . '\'
+								   GROUP BY `networkId`
+								   ORDER BY CASE WHEN `userId` > 0 THEN `userId` END DESC,
+										    CASE WHEN `groupId` > 0 THEN `groupId` END DESC,
+										    CASE WHEN `teamId` > 0 THEN `teamId` END DESC,
+										    CASE WHEN `groupId` = 0 THEN `groupId` END DESC;');
 
 		return $result->num_rows > 0;
 	}
@@ -213,31 +213,30 @@ class NetworkHandler {
 		$database = Database::getConnection(Settings::db_name_infected_tech);
 
 		$result = $database->query('SELECT * FROM `' . Settings::db_table_infected_tech_networks . '`
-																WHERE `id` = (SELECT `networkId` FROM `' . Settings::db_table_infected_tech_networkaccess . '`
-																              WHERE (`userId` = ' . $user->getId() . '
-																                     OR (`userId` IS NULL
-																                         AND (`groupId` IN (SELECT `groupId` FROM `' . Settings::db_name_infected_crew . '`.`' . Settings::db_table_infected_crew_memberof . '`
-																                                           WHERE `eventId` = ' . ($event != null ? $event->getId() : EventHandler::getCurrentEvent()->getId()) . '
-																                                           AND `userId` = ' . $user->getId() . '
-																                                           ORDER BY `groupId` DESC)
-																                              OR `groupId` = 0)
-																                         AND (`teamId` IN (SELECT `teamId` FROM `' . Settings::db_name_infected_crew . '`.`' . Settings::db_table_infected_crew_memberof . '`
-																                                           WHERE `eventId` = ' . ($event != null ? $event->getId() : EventHandler::getCurrentEvent()->getId()) . '
-																                                           AND `userId` = ' . $user->getId() . '
-																                                           ORDER BY `teamId` DESC)
-																                              OR `teamId` IS NULL))
-																                     OR (`userId` = 0
-																                         AND `groupId` IS NULL
-																                         AND `teamId` IS NULL))
-																              AND `networkTypeId` = ' . $networkType->getId() . '
-																							GROUP BY `networkId`
-																              ORDER BY CASE WHEN `userId` > 0 THEN `userId` END DESC,
-																                       CASE WHEN `groupId` > 0 THEN `groupId` END DESC,
-																                       CASE WHEN `teamId` > 0 THEN `teamId` END DESC,
-																                       CASE WHEN `groupId` = 0 THEN `groupId` END DESC
-																              LIMIT 1);');
+								   WHERE `id` = (SELECT `networkId` FROM `' . Settings::db_table_infected_tech_networkaccess . '`
+											     WHERE (`userId` = ' . $user->getId() . '
+													    OR (`userId` IS NULL
+														    AND (`groupId` IN (SELECT `groupId` FROM `' . Settings::db_name_infected_crew . '`.`' . Settings::db_table_infected_crew_memberof . '`
+																		   	   WHERE `eventId` = ' . ($event != null ? $event->getId() : EventHandler::getCurrentEvent()->getId()) . '
+																		   	   AND `userId` = ' . $user->getId() . '
+																		   	   ORDER BY `groupId` DESC)
+															     OR `groupId` = 0)
+														    AND (`teamId` IN (SELECT `teamId` FROM `' . Settings::db_name_infected_crew . '`.`' . Settings::db_table_infected_crew_memberof . '`
+																		      WHERE `eventId` = ' . ($event != null ? $event->getId() : EventHandler::getCurrentEvent()->getId()) . '
+																		      AND `userId` = ' . $user->getId() . '
+																		      ORDER BY `teamId` DESC)
+															     OR `teamId` IS NULL))
+													    OR (`userId` = 0
+														    AND `groupId` IS NULL
+														    AND `teamId` IS NULL))
+								   AND `networkTypeId` = ' . $networkType->getId() . '
+								   GROUP BY `networkId`
+								   ORDER BY CASE WHEN `userId` > 0 THEN `userId` END DESC,
+									 	    CASE WHEN `groupId` > 0 THEN `groupId` END DESC,
+											CASE WHEN `teamId` > 0 THEN `teamId` END DESC,
+											CASE WHEN `groupId` = 0 THEN `groupId` END DESC
+											LIMIT 1);');
 
 		return $result->fetch_object('Network');
 	}
 }
-?>

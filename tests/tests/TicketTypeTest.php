@@ -35,7 +35,6 @@ require_once 'database.php';
 class TicketTypeTest extends TestCase {
 	public function test() {
 		$this->ticketTypeSanityCheck();
-		$this->cleanup();
 	}
 
 	private function ticketTypeSanityCheck() {
@@ -78,9 +77,4 @@ class TicketTypeTest extends TestCase {
 
 		Database::cleanup();
 	}
-
-	private function cleanup() {
-
-	}
 }
-?>

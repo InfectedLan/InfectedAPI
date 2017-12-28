@@ -62,4 +62,3 @@ class LocationTest extends TestCase {
 		Database::cleanup();
 	}
 }
-?>

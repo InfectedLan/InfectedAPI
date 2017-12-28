@@ -37,7 +37,8 @@ class Settings {
 	const api_path = '/home/' . self::domain . '/public_html/api/';
 
 	// Permissions file.
-	const permissions_file = self::api_path . '/permissions.json';
+	const file_json_permissions = self::api_path . 'json/permissions.json';
+	const file_json_postalcodes = self::api_path . 'json/postalcodes.json';
 
 	// Tells where images should be stored.
 	const qr_path = '../api/content/qrcache/';
@@ -48,13 +49,14 @@ class Settings {
 
 	/* Database */
 	const db_host = 'localhost';
-	const db_name_infected = 'infected_no';
-	const db_name_infected_compo = 'infected_no_compo';
-	const db_name_infected_crew = 'infected_no_crew';
-	const db_name_infected_info = 'infected_no_info';
-	const db_name_infected_main = 'infected_no_main';
-	const db_name_infected_tech = 'infected_no_tech';
-	const db_name_infected_tickets = 'infected_no_tickets';
+	
+	const db_name_infected = 'test_infected_no';
+	const db_name_infected_compo = 'test_infected_no_compo';
+	const db_name_infected_crew = 'test_infected_no_crew';
+	const db_name_infected_info = 'test_infected_no_info';
+	const db_name_infected_main = 'test_infected_no_main';
+	const db_name_infected_tech = 'test_infected_no_tech';
+	const db_name_infected_tickets = 'test_infected_no_tickets';
 
 	// Infected
 	const db_table_infected_emergencycontacts = 'emergencycontacts';
@@ -101,7 +103,7 @@ class Settings {
 	const db_table_infected_crew_notewatches = 'notewatches';
 	const db_table_infected_crew_pages = 'pages';
 	const db_table_infected_crew_teams = 'teams';
-  const db_table_infected_crew_castingpages = 'castingPages';
+  	const db_table_infected_crew_castingpages = 'castingPages';
 
 	// InfectedInfo
 	const db_table_infected_info_slides = 'slides';
@@ -117,6 +119,9 @@ class Settings {
 	const db_table_infected_tech_networkaccess = 'networkaccess';
 	const db_table_infected_tech_networks = 'networks';
 	const db_table_infected_tech_networktypes = 'networktypes';
+	const db_table_infected_tech_nfccards = 'nfccards';
+	const db_table_infected_tech_nfcgates = 'nfcgates';
+	const db_table_infected_tech_nfclog = 'nfclog';
 
 	// InfectedTickets
 	const db_table_infected_tickets_checkedintickets = 'checkedintickets';
