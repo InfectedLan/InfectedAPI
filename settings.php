@@ -57,7 +57,6 @@ class Settings {
 	const db_name_infected_main = 'test_infected_no_main';
 	const db_name_infected_tech = 'test_infected_no_tech';
 	const db_name_infected_tickets = 'test_infected_no_tickets';
-	const db_name_infected_tech = 'test_infected_no_tech';
 
 	// Infected
 	const db_table_infected_emergencycontacts = 'emergencycontacts';
@@ -137,13 +136,6 @@ class Settings {
 	const db_table_infected_tickets_tickets = 'tickets';
 	const db_table_infected_tickets_tickettransfers = 'tickettransfers';
 	const db_table_infected_tickets_tickettypes = 'tickettypes';
-
-	// InfectedTech
-	const db_table_infected_tech_nfccards = 'nfccards';
-	const db_table_infected_tech_nfcgates = 'nfcgates';
-	const db_table_infected_tech_nfclog = 'nfclog';
-	const db_table_infected_tech_bongTypes = 'bongTypes';
-	const db_table_infected_tech_bongTransactions = 'bongTransactions';
 
 	/* Compo */
 	// Match participant of state.
