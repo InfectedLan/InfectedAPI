@@ -124,6 +124,7 @@ class Settings {
 	const db_table_infected_tech_nfclog = 'nfclog';
 	const db_table_infected_tech_bongTypes = 'bongTypes';
 	const db_table_infected_tech_bongTransactions = 'bongTransactions';
+	const db_table_infected_tech_discordMessageQueue = 'discordMessageQueue';
 
 	// InfectedTickets
 	const db_table_infected_tickets_checkedintickets = 'checkedintickets';
