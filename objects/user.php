@@ -358,7 +358,7 @@ class User extends DatabaseObject {
 		$code = PasswordResetCodeHandler::createPasswordResetCode($this);
 
 		// Send an email to the user with a link for resetting the password.
-		$url = 'https://' . $_SERVER['HTTP_HOST'] . '/v3/index.php?page=password-reset&code=' . $code;
+		$url = 'https://' . $_SERVER['HTTP_HOST'] . '/v2/index.php?page=password-reset&code=' . $code;
 		$message = [];
 		$message[] = '<!DOCTYPE html>';
 		$message[] = '<html>';
@@ -388,7 +388,7 @@ class User extends DatabaseObject {
 			$message[] = '<body>';
 				$message[] = '<h3>Hei!</h3>';
 				$message[] = '<p>' . $text . '</p>';
-				$message[] = '<p>Med vennlig hilsen <a href="http://infected.no/">Infected</a>.</p>';
+				$message[] = '<p>Med vennlig hilsen <a href="' . $_SERVER['HTTP_HOST'] . '">Infected</a>.</p>';
 			$message[] = '</body>';
 		$message[] = '</html>';
 

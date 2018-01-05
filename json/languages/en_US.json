@@ -148,7 +148,7 @@
   "you_cannot_remove_this_event": "You cannot remove this event.",
   "you_cannot_unqueue_applications_from_previous_events": "You cannot unqueue applications from previous events.",
   "you_do_not_have_permission_to_do_that": "You do not have permissions to do that.",
-  "you_do_not_have_permission_to_do_this_you_will only be able to run this from command line": "You don't have permission do do this, you'll only be able to run this from the CLI.",
+  "you_do_not_have_permission_to_do_this_you_will_only_be_able_to_run_this_from_command_line": "You don't have permission do do this, you'll only be able to run this from the CLI.",
   "you_do_not_own_this_ticket": "You do not own this ticket.",
   "you_have_already_submitted_an_application_to_value_you_can_apply_again_if_your_application_should_be_denied": "You have already submitted an application to %s you can apply again if your application should be denied.",
   "you_have_entered_an_invalid_gender": "You have entered an invalid gender.",
