@@ -148,7 +148,7 @@
   "you_cannot_remove_this_event": "Du kan ikke fjerne dette arrangementet.",
   "you_cannot_unqueue_applications_from_previous_events": "Du kan ikke ta søknader fra tidligere arrangementer ut av køen.",
   "you_do_not_have_permission_to_do_that": "Du har ikke rettigheter til dette.",
-  "you_do_not_have_permission_to_do_this_you_will only be able to run this from command line": "Du har ikke rettigheter til å gjøre det, du kan kun kjøre denne fra CLI.",
+  "you_do_not_have_permission_to_do_this_you_will_only_be_able_to_run_this_from_command_line": "Du har ikke rettigheter til å gjøre det, du kan kun kjøre denne fra CLI.",
   "you_do_not_own_this_ticket": "Du eier ikke denne billetten.",
   "you_have_already_submitted_an_application_to_value_you_can_apply_again_if_your_application_should_be_denied": "Du har allerede søkt til %s. Du kan søke igjen hvis søknaden din skulle bli avslått.",
   "you_have_entered_an_invalid_gender": "Du har oppgitt et ugyldig kjønn.",
