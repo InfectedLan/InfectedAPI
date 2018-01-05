@@ -27,9 +27,9 @@ require_once 'handlers/eventhandler.php';
 
 class NfcCardHandler {
 	/*
-	 * Registers a NFC card for a user
+	 * Registers a NFC card for a user. If event is not specified, the current one is returned
 	*/
-	public static function registerCard(User $user, Event $event, $nfcid) {
+	public static function registerCard(User $user, $nfcid, Event $event = EventHandler::getCurrentEvent()) {
 		$database = Database::getConnection(Settings::db_name_infected_tech);
 
 		$result = $database->query('INSERT INTO `' . Settings::db_table_infected_tech_nfccards . '` (`userId`, `eventId`, `nfcId`)
@@ -54,9 +54,9 @@ class NfcCardHandler {
 	}
 
 	/*
-	 * Returns a list of all nfc cards by their event.
+	 * Returns a list of all nfc cards by a specified event, or the current one if none is specified
 	 */
-	public static function getCardsByEvent(Event $event) {
+	public static function getCards(Event $event = EventHandler::getCurrentEvent()) {
 		$database = Database::getConnection(Settings::db_name_infected_tech);
 
 		$result = $database->query('SELECT * FROM `' . Settings::db_table_infected_tech_nfccards . '` WHERE `eventId` = \'' . $database->real_escape_string($event->getId()) . '\';');
@@ -71,9 +71,9 @@ class NfcCardHandler {
 	}
 
 	/*
-	 * Returns the NFC card given an user and an event
+	 * Returns the NFC card given a user and optionally an event
 	 */
-	public static function getCardsByUserAndEvent(Event $event, User $user) {
+	public static function getCardsByUser(User $user, Event $event = EventHandler::getCurrentEvent()) {
 		$database = Database::getConnection(Settings::db_name_infected_tech);
 
 		$result = $database->query('SELECT * FROM `'. Settings::db_table_infected_tech_nfccards . '`
@@ -86,20 +86,6 @@ class NfcCardHandler {
 		}
 
 		return $cardList;
-	}
-
-	/*
-	 * Returns a user's NFC card for the current event
-	 */
-	public static function getCardsByUserForCurrentEvent(User $user) {
-		return self::getCardsByUserAndEvent(EventHandler::getCurrentEvent(), $user);
-	}
-
-	/*
-	 * Returns a list of all nfc cards for the current event
-	 */
-	public static function getCardsForCurrentEvent() {
-		return self::getCardsByEvent(EventHandler::getCurrentEvent());
 	}
 }
 ?>
