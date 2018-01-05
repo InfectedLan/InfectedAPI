@@ -58,8 +58,8 @@ class Agenda extends EventObject {
 	/*
 	 * Returns the startTime of this agenda.
 	 */
-	public function getStartTime() {
-	    $event = EventHandler::getCurrentEvent();
+	public function getStartTime(): int {
+		$event = EventHandler::getCurrentEvent();
 		$eventDate = strtotime(date('Y-m-d', $event->getStartTime()));
 
 		return $eventDate + $this->getSecondsOffset();

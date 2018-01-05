@@ -37,8 +37,8 @@ class AgendaHandler {
 	}
 
 	/*
-	   * Returns agendas.
-	   */
+     * Returns agendas.
+     */
 	public static function getAgendas(Event $event = null): array {
 		$database = Database::getConnection(Settings::db_name_infected_main);
 
