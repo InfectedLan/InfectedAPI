@@ -2,7 +2,7 @@
 /**
  * This file is part of InfectedAPI.
  *
- * Copyright (C) 2015 Infected <http://infected.no/>.
+ * Copyright (C) 2018 Infected <https://infected.no/>.
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -22,19 +22,24 @@ require_once 'objects/databaseobject.php';
 require_once 'handlers/userhandler.php';
 
 /*
- * Motivations behind this:
- * - A card should be able to be re-used on multiple events, even if the user isn't the same
- * - Thats about it
+ * A bong type is an item in the store which can be purchased or, in this case, be provided in a limited supply to entitled individuals
  */
 class BongType extends DatabaseObject {
-	private $userId;
 	private $name;
+	private $description;
 	
 	/*
 	 * Returns the name of the bong type
 	 */
 	public function getName() {
 		return $this->name;
+	}
+
+	/*
+	 * Returns the description of the bong type
+	 */
+	public function getDescription() {
+		return $this->description;
 	}
 }
 ?>

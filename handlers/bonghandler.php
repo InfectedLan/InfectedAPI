@@ -2,7 +2,7 @@
 /**
  * This file is part of InfectedAPI.
  *
- * Copyright (C) 2015 Infected <http://infected.no/>.
+ * Copyright (C) 2018 Infected <https://infected.no/>.
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -21,27 +21,28 @@
 require_once 'settings.php';
 require_once 'database.php';
 require_once 'objects/bongtype.php';
+require_once 'handlers/eventhandler.php';
 
 class BongHandler {
 	/*
 	 * Returns the gate with the given id.
 	 */
 	public static function getBongType($id) {
-		$database = Database::getConnection(Settings::db_name_infected_tech);
+		$database = Database::getConnection(Settings::db_name_infected);
 
-		$result = $database->query('SELECT * FROM `'. Settings::db_table_infected_tech_bongTypes . '`
+		$result = $database->query('SELECT * FROM `'. Settings::db_table_infected_bongTypes . '`
 																WHERE `id` = \'' . $database->real_escape_string($id) . '\';');
 
 		return $result->fetch_object('BongType');
 	}
 
 	/*
-	 * Returns a list of all nfc gates by their event.
+	 * Returns a list of all bong types. If event is not specified, the current one is used
 	 */
-	public static function getBongTypes(Event $event) {
-		$database = Database::getConnection(Settings::db_name_infected_tech);
+	public static function getBongTypes(Event $event = EventHandler::getCurrentEvent()) {
+		$database = Database::getConnection(Settings::db_name_infected);
 
-		$result = $database->query('SELECT * FROM `' . Settings::db_table_infected_tech_nfcgates . '`;');
+		$result = $database->query('SELECT * FROM `' . Settings::db_table_infected_bongTypes . '`;');
 
 		$bongList = [];
 
