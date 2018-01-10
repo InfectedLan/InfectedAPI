@@ -136,7 +136,7 @@ class AvatarHandler {
                                            \'' . $fileName . '\',
                                            ' . self::STATE_NEW . ');');
 
-		return Settings::api_path . Settings::avatar_path . 'temp/' . $fileName;
+		return Settings::api_path . Settings::api_relative_avatar_path . 'temp/' . $fileName;
 	}
 
 	/*
@@ -200,6 +200,6 @@ class AvatarHandler {
 			$file = 'default_child.png';
 		}
 
-		return Settings::avatar_path . 'default/' . $file;
+		return Settings::api_relative_avatar_path . 'default/' . $file;
 	}
 }

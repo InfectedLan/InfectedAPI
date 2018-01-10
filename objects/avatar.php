@@ -55,7 +55,7 @@ class Avatar extends DatabaseObject {
 	 * Returns the avatar image file type.
 	 */
 	public function getFile($quality): string {
-		return Settings::avatar_path . $quality . '/' . $this->fileName;
+		return Settings::api_relative_avatar_path . $quality . '/' . $this->fileName;
 	}
 
 	/*

@@ -43,6 +43,7 @@ class Settings {
 	// Tells where images should be stored.
 	const qr_path = '../api/content/qrcache/';
 	const avatar_path = '../api/content/avatars/';
+	const api_relative_avatar_path = 'content/avatars/';
 
 	/* PHP */
 	const php_version = '7.2.0';
