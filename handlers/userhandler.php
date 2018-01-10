@@ -358,7 +358,7 @@ class UserHandler {
                                    WHERE MATCH (`firstname`, `lastname`, `username`, `nickname`)
                                    AGAINST (\'' . $database->real_escape_string(implode(' ', $keywordList)) . '\' IN BOOLEAN MODE)
                                    OR `email` = \'' . $database->real_escape_string($queryList[0]) . '\'
-                                   OR `phone` = ' . $database->real_escape_string($queryList[0]) . '
+                                   OR `phone` = \'' . $database->real_escape_string($queryList[0]) . '\'
                                    LIMIT 15;');
 
 		$userList = [];
