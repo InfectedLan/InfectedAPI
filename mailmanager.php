@@ -33,7 +33,7 @@ class MailManager {
 	 */
 	public static function sendEmail(User $user, string $subject, string $message) {
 	    // Is email support enabled?
-		if (Settings::enableEmails) {
+		if (Settings::enableEmail) {
             // Create PHPMailer object.
             $email = new PHPMailer(true);
 
