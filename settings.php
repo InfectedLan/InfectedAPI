@@ -72,6 +72,9 @@ class Settings {
 	const db_table_infected_userpermissions = 'userpermissions';
 	const db_table_infected_users = 'users';
 	const db_table_infected_syslogs = 'syslogs';
+	const db_table_infected_bongTypes = 'bongTypes';
+	const db_table_infected_bongTransactions = 'bongTransactions';
+	const db_table_infected_bongEntitlements = 'bongEntitlements';
 
 	// InfectedCompo
 	const db_table_infected_compo_servers = 'servers';
@@ -122,8 +125,6 @@ class Settings {
 	const db_table_infected_tech_nfccards = 'nfccards';
 	const db_table_infected_tech_nfcgates = 'nfcgates';
 	const db_table_infected_tech_nfclog = 'nfclog';
-	const db_table_infected_tech_bongTypes = 'bongTypes';
-	const db_table_infected_tech_bongTransactions = 'bongTransactions';
 
 	// InfectedTickets
 	const db_table_infected_tickets_checkedintickets = 'checkedintickets';
