@@ -55,7 +55,7 @@ class MailManager {
                 // Sending the e-mail.
                 $email->send();
             } catch (Exception $exception) {
-                echo 'Mailer Error: ' . $mail->ErrorInfo;
+                echo 'Mailer Error: ' . $email->ErrorInfo;
             }
         }
 	}
