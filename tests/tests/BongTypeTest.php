@@ -19,7 +19,7 @@
  */
 use PHPUnit\Framework\TestCase;
 
-require_once 'handlers/bonghandler.php';
+require_once 'handlers/bongtypehandler.php';
 require_once 'handlers/userhandler.php';
 require_once 'handlers/eventhandler.php';
 require_once 'database.php';
