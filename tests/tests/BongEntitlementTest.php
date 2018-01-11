@@ -62,10 +62,10 @@ class BongEntitlementTest extends TestCase {
 
 		//Tests additive entitlements alone, and checks that they are created properly
 		$new = BongEntitlementHandler::createBongEntitlement($type, 1, BongEntitlement::APPEND_TYPE_ADDITIVE, BongEntitlement::ENTITLEMENT_TYPE_USER, 1); //1 additive bong for user 1
-		$bongs = BongTypeHandler::getBongTypes(); //Current event
-		$this->assertEquals(count($bongs), 4);
-		$this->assertEquals($bongs[count($bongs)-1], $new);
-		$this->assertEquals(2, BongEntitlementHandler::calculateBongEntitlementByUser($type, $user));
+		$entitlements = BongEntitlementHandler::getBongEntitlements($type); //Current event
+		$this->assertEquals(2, count($entitlements));
+		$this->assertEquals($entitlements[count($entitlements)-1], $new);
+		$this->assertEquals(7, BongEntitlementHandler::calculateBongEntitlementByUser($type, $user));
 
 		//Tests proper handling of exclusive entitlements for users
 		$new2 = BongEntitlementHandler::createBongEntitlement($types[1], 3, BongEntitlement::APPEND_TYPE_EXCLUSIVE, BongEntitlement::ENTITLEMENT_TYPE_USER, 1); //1 additive bong for user 1
@@ -74,9 +74,9 @@ class BongEntitlementTest extends TestCase {
 		$this->assertEquals(7, BongEntitlementHandler::calculateBongEntitlementByUser($types[1], $user)); //Tests exclusive entitlements
 
 		//Test additive + exclusive bong entitlements for users
-		$new3 = BongEntitlementHandler::createBongEntitlement($types[1], 7, BongEntitlement::APPEND_TYPE_ADDITIVE, BongEntitlement::ENTITLEMENT_TYPE_USER, 1); //1 additive bong for user 1
+		$new3 = BongEntitlementHandler::createBongEntitlement($types[1], 7, BongEntitlement::APPEND_TYPE_ADDITIVE, BongEntitlement::ENTITLEMENT_TYPE_USER, 1); //7 additive bongs for user 1
 
-		$this->assertEquals(7, BongEntitlementHandler::calculateBongEntitlementByUser($types[1], $user)); //Tests exclusive entitlements
+		$this->assertEquals(14, BongEntitlementHandler::calculateBongEntitlementByUser($types[1], $user)); //Tests exclusive entitlements
 	}
 
 	private function cleanup() {

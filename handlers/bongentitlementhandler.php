@@ -27,7 +27,7 @@ class BongEntitlementHandler {
 	/*
 	 * Returns the gate with the given id.
 	 */
-	public static function getBongEntitlement($id) {
+	public static function getBongEntitlement(int $id) {
 		$database = Database::getConnection(Settings::db_name_infected);
 
 		$result = $database->query('SELECT * FROM `'. Settings::db_table_infected_bongEntitlements . '`
@@ -39,7 +39,7 @@ class BongEntitlementHandler {
 	/*
 	 * Creates a bong entitlement
 	 */
-	public static function createBongEntitlement(BongType $type, $amount, $appendType, $entitlementType, $entitlementArg) {
+	public static function createBongEntitlement(BongType $type, int $amount, int $appendType, int $entitlementType, int $entitlementArg) {
 		$database = Database::getConnection(Settings::db_name_infected);
 
 		$database->query('INSERT INTO `' . Settings::db_table_infected_bongEntitlements . '` (`bongTypeId`, `entitlementType`, `entitlementArg`, `entitlementAmt`, `appendType`) VALUES (' . $type->getId() . ', ' . $database->real_escape_string($entitlementType) . ', ' . $database->real_escape_string($entitlementArg) . ', ' . $database->real_escape_string($amount) . ', ' . $database->real_escape_string($appendType) . ');');
@@ -62,7 +62,7 @@ class BongEntitlementHandler {
 			}
 		}
 		else {
-			$personalEntitlements = $database->query('SELECT * FROM `' . Settings::db_table_infected_bongEntitlements . '` WHERE `bongTypeId` = ' . $type->getId() . ' AND `entitlementType` = ' . self::ENTITLEMENT_TYPE_USER . ' AND `entitlementArgs` = ' . $user->getId() . ';');
+			$personalEntitlements = $database->query('SELECT * FROM `' . Settings::db_table_infected_bongEntitlements . '` WHERE `bongTypeId` = ' . $type->getId() . ' AND `entitlementType` = ' . self::ENTITLEMENT_TYPE_USER . ' AND `entitlementArg` = ' . $user->getId() . ';');
 
 			while($obj = $personalEntitlements->fetch_object('BongEntitlement')) {
 				$entitlementList[] = $obj;
@@ -70,7 +70,7 @@ class BongEntitlementHandler {
 
 			if($user->isGroupMember()) {
 				$group = $user->getGroup($event);
-				$groupEntitlements = $database->query('SELECT * FROM `' . Settings::db_table_infected_bongEntitlements . '` WHERE `bongTypeId` = ' . $type->getId() . ' AND `entitlementType` = ' . self::ENTITLEMENT_TYPE_CREW . ' AND (`entitlementArgs` = ' . $group->getId() . ' OR `entitlementArgs` = 0);');
+				$groupEntitlements = $database->query('SELECT * FROM `' . Settings::db_table_infected_bongEntitlements . '` WHERE `bongTypeId` = ' . $type->getId() . ' AND `entitlementType` = ' . self::ENTITLEMENT_TYPE_CREW . ' AND (`entitlementArg` = ' . $group->getId() . ' OR `entitlementArg` = 0);');
 				while($obj = $groupEntitlements->fetch_object('BongEntitlement')) {
 					$entitlementList[] = $obj;
 				}
@@ -94,12 +94,12 @@ class BongEntitlementHandler {
 		$additiveNum = 0;
 
 		//First, we find out how much of the bong that this user is entitled to
-		$personalEntitlements = $database->query('SELECT * FROM `' . Settings::db_table_infected_bongEntitlements . '` WHERE `bongTypeId` = ' . $type->getId() . ' AND `entitlementType` = ' . self::ENTITLEMENT_TYPE_USER . ' AND `entitlementArgs` = ' . $user->getId() . ';');
+		$personalEntitlements = $database->query('SELECT * FROM `' . Settings::db_table_infected_bongEntitlements . '` WHERE `bongTypeId` = ' . $type->getId() . ' AND `entitlementType` = ' . BongEntitlement::ENTITLEMENT_TYPE_USER . ' AND `entitlementArg` = ' . $user->getId() . ';');
 
 		while($obj = $personalEntitlements->fetch_object('BongEntitlement')) {
 			if($obj->getAppendType()==BongEntitlement::APPEND_TYPE_ADDITIVE) {
 				$additiveNum += $obj->getEntitlementAmt();
-			} else if($obj->appendType()==BongEntitlement::APPEND_TYPE_EXCLUSIVE) {
+			} else if($obj->getAppendType()==BongEntitlement::APPEND_TYPE_EXCLUSIVE) {
 				if($obj->getEntitlementAmt() > $exclusiveNum) {
 					$exclusiveNum = $obj->getEntitlementAmt();
 				}
@@ -108,11 +108,11 @@ class BongEntitlementHandler {
 
 		if($user->isGroupMember()) {
 			$group = $user->getGroup($event);
-			$groupEntitlements = $database->query('SELECT * FROM `' . Settings::db_table_infected_bongEntitlements . '` WHERE `bongTypeId` = ' . $type->getId() . ' AND `entitlementType` = ' . self::ENTITLEMENT_TYPE_CREW . ' AND (`entitlementArgs` = ' . $group->getId() . ' OR `entitlementArgs` = 0);');
+			$groupEntitlements = $database->query('SELECT * FROM `' . Settings::db_table_infected_bongEntitlements . '` WHERE `bongTypeId` = ' . $type->getId() . ' AND `entitlementType` = ' . BongEntitlement::ENTITLEMENT_TYPE_CREW . ' AND (`entitlementArg` = ' . $group->getId() . ' OR `entitlementArg` = 0);');
 			while($obj = $groupEntitlements->fetch_object('BongEntitlement')) {
 				if($obj->getAppendType()==BongEntitlement::APPEND_TYPE_ADDITIVE) {
 					$additiveNum += $obj->getEntitlementAmt();
-				} else if($obj->appendType()==BongEntitlement::APPEND_TYPE_EXCLUSIVE) {
+				} else if($obj->getAppendType()==BongEntitlement::APPEND_TYPE_EXCLUSIVE) {
 					if($obj->getEntitlementAmt() > $exclusiveNum) {
 						$exclusiveNum = $obj->getEntitlementAmt();
 					}
