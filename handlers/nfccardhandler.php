@@ -29,7 +29,11 @@ class NfcCardHandler {
 	/*
 	 * Registers a NFC card for a user. If event is not specified, the current one is returned
 	*/
-	public static function registerCard(User $user, $nfcid, Event $event = EventHandler::getCurrentEvent()) {
+	public static function registerCard(User $user, $nfcid, Event $event = null) {
+		if($event == null) {
+			$event = EventHandler::getCurrentEvent();
+		}
+
 		$database = Database::getConnection(Settings::db_name_infected_tech);
 
 		$result = $database->query('INSERT INTO `' . Settings::db_table_infected_tech_nfccards . '` (`userId`, `eventId`, `nfcId`)
@@ -56,7 +60,10 @@ class NfcCardHandler {
 	/*
 	 * Returns a list of all nfc cards by a specified event, or the current one if none is specified
 	 */
-	public static function getCards(Event $event = EventHandler::getCurrentEvent()) {
+	public static function getCards(Event $event = null) {
+		if($event==null) {
+			$event = EventHandler::getCurrentEvent();
+		}
 		$database = Database::getConnection(Settings::db_name_infected_tech);
 
 		$result = $database->query('SELECT * FROM `' . Settings::db_table_infected_tech_nfccards . '` WHERE `eventId` = \'' . $database->real_escape_string($event->getId()) . '\';');
@@ -73,7 +80,10 @@ class NfcCardHandler {
 	/*
 	 * Returns the NFC card given a user and optionally an event
 	 */
-	public static function getCardsByUser(User $user, Event $event = EventHandler::getCurrentEvent()) {
+	public static function getCardsByUser(User $user, Event $event = null) {
+		if($event==null) {
+			$event = EventHandler::getCurrentEvent()
+		}
 		$database = Database::getConnection(Settings::db_name_infected_tech);
 
 		$result = $database->query('SELECT * FROM `'. Settings::db_table_infected_tech_nfccards . '`
