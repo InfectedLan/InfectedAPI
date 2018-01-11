@@ -25,20 +25,31 @@ require_once 'handlers/eventhandler.php';
 require_once 'database.php';
 
 /* 
- * BongTest
+ * BongTypeTest
  *
- * Tests the integrity of the bong system
+ * Tests objects/bongtype.php and handlers/bongtypehandler.php
  *
  */
-class BongTest extends TestCase {
+class BongTypeTest extends TestCase {
 	public function test() {
 		$this->creationTest();
 		$this->cleanup();
 	}
 
 	private function creationTest() {
-		$bongs = BongHandler::getBongTypes(); //Current event
+		$bongs = BongTypeHandler::getBongTypes(); //Current event
 		$this->assertEquals(count($bongs), 3);
+
+		foreach($bongs as $bong) {
+			$this->assertEquals($bong, BongTypeHandler::getBongType($bong->getId()));
+		}
+
+		$new = BongTypeHandler::createBongType("Coolest", "Liam is cool");
+
+		$bongs = BongTypeHandler::getBongTypes(); //Current event
+		$this->assertEquals(count($bongs), 4);
+
+		$this->assertEquals($bongs[count($bongs)-1], $new);
 	}
 
 	private function cleanup() {
