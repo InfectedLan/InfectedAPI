@@ -23,6 +23,7 @@ require_once 'handlers/bongtypehandler.php';
 require_once 'handlers/bongentitlementhandler.php';
 require_once 'handlers/userhandler.php';
 require_once 'handlers/eventhandler.php';
+require_once 'handlers/grouphandler.php';
 require_once 'objects/bongentitlement.php';
 require_once 'database.php';
 
@@ -34,12 +35,24 @@ require_once 'database.php';
  */
 class BongEntitlementTest extends TestCase {
 	public function test() {
+		$this->prep();
 		$this->creationTest();
 		$this->cleanup();
 	}
 
+	private function prep() {
+		$user = UserHandler::getUser(1);
+		if(!$user->isGroupMember()) {
+			GroupHandler::addGroupMember($user, GroupHandler::getGroup(1));
+		}
+	}
+
 	private function creationTest() {
 		$type = BongTypeHandler::getBongType(1);
+		$types = BongTypeHandler::getBongTypes();
+
+		$user = UserHandler::getUser(1);
+
 		$entitlements = BongEntitlementHandler::getBongEntitlements($type); //No user, all entitlements
 		$this->assertEquals(count($entitlements), 1);
 
@@ -47,12 +60,23 @@ class BongEntitlementTest extends TestCase {
 			$this->assertEquals($entitlement, BongEntitlementHandler::getBongEntitlement($entitlement->getId()));
 		}
 
-		$new = BongEntitlementHandler::createBongEntitlement($type, 1, BongEntitlement::APPEND_TYPE_ADDITIE, BongEntitlement::ENTITLEMENT_TYPE_USER, 1); //1 additive bong for user 1
-
+		//Tests additive entitlements alone, and checks that they are created properly
+		$new = BongEntitlementHandler::createBongEntitlement($type, 1, BongEntitlement::APPEND_TYPE_ADDITIVE, BongEntitlement::ENTITLEMENT_TYPE_USER, 1); //1 additive bong for user 1
 		$bongs = BongTypeHandler::getBongTypes(); //Current event
 		$this->assertEquals(count($bongs), 4);
-
 		$this->assertEquals($bongs[count($bongs)-1], $new);
+		$this->assertEquals(2, BongEntitlementHandler::calculateBongEntitlementByUser($type, $user));
+
+		//Tests proper handling of exclusive entitlements for users
+		$new2 = BongEntitlementHandler::createBongEntitlement($types[1], 3, BongEntitlement::APPEND_TYPE_EXCLUSIVE, BongEntitlement::ENTITLEMENT_TYPE_USER, 1); //1 additive bong for user 1
+		$new3 = BongEntitlementHandler::createBongEntitlement($types[1], 7, BongEntitlement::APPEND_TYPE_EXCLUSIVE, BongEntitlement::ENTITLEMENT_TYPE_USER, 1); //1 additive bong for user 1
+
+		$this->assertEquals(7, BongEntitlementHandler::calculateBongEntitlementByUser($types[1], $user)); //Tests exclusive entitlements
+
+		//Test additive + exclusive bong entitlements for users
+		$new3 = BongEntitlementHandler::createBongEntitlement($types[1], 7, BongEntitlement::APPEND_TYPE_ADDITIVE, BongEntitlement::ENTITLEMENT_TYPE_USER, 1); //1 additive bong for user 1
+
+		$this->assertEquals(7, BongEntitlementHandler::calculateBongEntitlementByUser($types[1], $user)); //Tests exclusive entitlements
 	}
 
 	private function cleanup() {
