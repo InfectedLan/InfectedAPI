@@ -56,8 +56,8 @@ class BongEntitlementHandler {
 		$entitlementList = [];
 
 		if($user==null) {
-			$database->query('SELECT * FROM `' . Settings::db_table_infected_bongEntitlements .'` WHERE `bongTypeId` = ' . $type->getId() . ';');
-			while($obj = $database->fetch_object("BongEntitlement"))  {
+			$db->query('SELECT * FROM `' . Settings::db_table_infected_bongEntitlements .'` WHERE `bongTypeId` = ' . $type->getId() . ';');
+			while($obj = $db->fetch_object("BongEntitlement"))  {
 				$entitlementList[] = $obj;
 			}
 		}
