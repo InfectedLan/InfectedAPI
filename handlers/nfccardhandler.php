@@ -82,7 +82,7 @@ class NfcCardHandler {
 	 */
 	public static function getCardsByUser(User $user, Event $event = null) {
 		if($event==null) {
-			$event = EventHandler::getCurrentEvent()
+			$event = EventHandler::getCurrentEvent();
 		}
 		$database = Database::getConnection(Settings::db_name_infected_tech);
 
