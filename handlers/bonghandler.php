@@ -46,6 +46,18 @@ class BongHandler {
 	}
 
 	/*
+	 * Creates a new bong type
+	 */
+	public static function createBongType($name, $description, Event $event = null) {
+		if($event==null) {
+			$event = EventHandler::getCurrentEvent();
+		}
+		$database = Database::getConnection(Settings::db_name_infected);
+
+		$database->query('INSERT INTO `' . Settings::db_table_infected_bongTypes . '` (`name`, `description`, `eventId`) VALUES (\'' . $database->real_escape_string($name) . '\', \'' . $database->real_escape_string($description) . '\', ' . $event->getId() . ');');
+	}
+
+	/*
 	 * Returns a list of all bong types. If event is not specified, the current one is used
 	 */
 	public static function getBongTypes(Event $event = null) {
@@ -55,7 +67,7 @@ class BongHandler {
 
 		$database = Database::getConnection(Settings::db_name_infected);
 
-		$result = $database->query('SELECT * FROM `' . Settings::db_table_infected_bongTypes . '`;');
+		$result = $database->query('SELECT * FROM `' . Settings::db_table_infected_bongTypes . '` WHERE `eventId` = ' . $event->getId() . ';');
 
 		$bongList = [];
 
