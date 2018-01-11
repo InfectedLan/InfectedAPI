@@ -69,7 +69,7 @@ class BongHandler {
 	/*
 	 * Calculates how much of a bong type a certain user has left
 	 */
-	public static function getBongAvailability(BongType $type, User $user, Event $event = null) {
+	public static function getBongEntitlement(BongType $type, User $user, Event $event = null) {
 		if($event==null) {
 			$event = EventHandler::getCurrentEvent();
 		}
@@ -92,7 +92,70 @@ class BongHandler {
 			}
 		}
 
+		if($user->isGroupMember()) {
+			$group = $user->getGroup($event);
+			$groupEntitlements = $database->query('SELECT * FROM `' . Settings::db_table_infected_bongEntitlements . '` WHERE `bongId` = ' . $type->getId() . ' AND `entitlementType` = ' . self::ENTITLEMENT_TYPE_CREW . ' AND (`entitlementArgs` = ' . $group->getId() . ' OR `entitlementArgs` = 0);');
+			while($row = $groupEntitlements->fetch_row()) {
+				if($row["appendType"]==self::APPEND_TYPE_ADDITIVE) {
+					$additiveNum += $row["entitlementAmt"];
+				} else if($row["appendType"]==self::APPEND_TYPE_EXCLUSIVE) {
+					if($row["entitlementAmt"] > $exclusiveNum) {
+						$exclusiveNum = $row["entitlementAmt"];
+					}
+				}
+			}
+		}
+
 		return $exclusiveNum+$additiveNum;
+
+	}
+
+	/*
+	 * Calculates the amount of transacted bongs on this account. A negative amount is a withdrawal.
+	 */
+	public static function sumBongTransactions(BongType $ype, User $user, Event $event = null) {
+		if($event==null) {
+			$event = EventHandler::getCurrentEvent();
+		}
+
+		$database = Database::getConnection(Settings::db_name_infected);
+
+		$transactionList = $database->query('SELECT * FROM `' . Settings::db_table_infected_bongTransactions . '` WHERE `bongType` = ' . $type->getId() . ' AND `userId` = ' . $user->getId() . ';');
+
+		$count = 0;
+
+		foreach($transactionList as $row) {
+			$count += $row["amt"];
+		}
+
+		return $count;
+	}
+
+	/*
+	 * Returns how many of a given bong a user has left
+	 */
+	public static function getBongPosession(BongType $type, User $user, Event $event = null) {
+		if($event==null) {
+			$event = EventHandler::getCurrentEvent();
+		}
+
+		return self::getBongEntitlement($type, $user, $event)+self::sumBongTransactions($type, $user, $event);
+	}
+
+	/*
+	 * Handles a bong transaction
+	 * Note that this function is not "safe", it will allow transactions that puts the user at a negative quantity of bongs.
+	 * Calling this should only be done after making sure the user can afford the transaction
+	 * Also note that all transactions are connected to the user who had the permissions to process it.
+	 */
+	public static function processBongTransaction(BongType $type, User $user, $amount, User $responsible, Event $event = null) {
+		if($event==null) {
+			$event = EventHandler::getCurrentEvent();
+		}
+
+		$database = Database::getConnection(Settings::db_name_infected);
+
+		$result = $database->query('INSERT INTO `' . Settings::db_table_infected_bongTransactions . '` (`bongType`, `amt`, `transactionHandler`, `timestamp`) VALUES (' . $type->getId() . ', ' . $database->real_escape_string($amount) . ', ' .  $responsible->getId(). ', ' . date('Y-m-d H:i:s') . ');');
 
 	}
 }
