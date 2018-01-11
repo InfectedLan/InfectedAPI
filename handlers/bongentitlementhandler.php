@@ -42,7 +42,7 @@ class BongEntitlementHandler {
 	public static function createBongEntitlement(BongType $type, $amount, $appendType, $entitlementType, $entitlementArg) {
 		$database = Database::getConnection(Settings::db_name_infected);
 
-		$database->query('INSERT INTO `' . Settings::db_table_infected_bongEntitlements . '` (`bongTypeId`, `entitlementType`, `entitlementArg`, `entitlementAmt`, `appendType`) VALUES (' . $type->getId() . ', ' . $database->real_escape_string($entitlementType) . ', ' . $database->real_escape_string($entitlementArg) . ', ' . $database->real_escape_string($entitlementAmt) . ', ' . $database->real_escape_string($appendType) . ');');
+		$database->query('INSERT INTO `' . Settings::db_table_infected_bongEntitlements . '` (`bongTypeId`, `entitlementType`, `entitlementArg`, `entitlementAmt`, `appendType`) VALUES (' . $type->getId() . ', ' . $database->real_escape_string($entitlementType) . ', ' . $database->real_escape_string($entitlementArg) . ', ' . $database->real_escape_string($amount) . ', ' . $database->real_escape_string($appendType) . ');');
 
 		return self::getBongEntitlement($database->insert_id);
 	}
