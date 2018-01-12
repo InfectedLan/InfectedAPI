@@ -33,7 +33,8 @@ $backgroundImage = null; //File name of background image. Didnt know how else to
 if (Session::isAuthenticated()) {
 	$user = Session::getCurrentUser();
 
-	if (isset($_GET['id'])) {
+	if (isset($_GET['id']) &&
+		is_numeric($_GET['id'])) {
 		$seatmap = SeatmapHandler::getSeatmap($_GET['id']);
 
 		if ($seatmap != null) {
