@@ -91,23 +91,9 @@ class UserFriendHandler {
 	}
 
 	/*
-	 * Accepts a users friendship with another user.
-	 */
-	public static function acceptUserFriend(User $user, User $friend) {
-		self::updateUserFriend($user, $friend, self::STATE_ACCEPTED);
-	}
-
-	/*
-	 * Rejects a users friendship with another user.
-	 */
-	public static function rejectUserFriend(User $user, User $friend) {
-		self::updateUserFriend($user, $friend, self::STATE_REJECTED);
-	}
-
-	/*
 	 * Updates the state of a users friendship.
 	 */
-	public static function updateUserFriend(User $user, User $friend, int $state) {
+	public static function updateUserFriend(User $user, User $friend, int $state = self::STATE_ACCEPTED) {
 		$database = Database::getConnection(Settings::db_name_infected);
 
 		$database->query('UPDATE `' . Settings::db_table_infected_userfriends . '`
