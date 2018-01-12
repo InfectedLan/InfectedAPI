@@ -315,14 +315,14 @@ class User extends DatabaseObject {
 	 * Adds a new friend for this user.
 	 */
 	public function acceptFriend(User $friend) {
-		UserFriendHandler::acceptUserFriend($this, $friend);
+		UserFriendHandler::updateUserFriend($this, $friend);
 	}
 
 	/*
 	 * Removes friendship with this given friend.
 	 */
 	public function rejectFriend(User $friend) {
-		UserFriendHandler::rejectUserFriend($this, $friend);
+		UserFriendHandler::updateUserFriend($this, $friend, UserFriendHandler::STATE_REJECTED);
 	}
 
 	/*
