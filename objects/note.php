@@ -81,7 +81,7 @@ class Note extends EventObject {
 	/*
 	 * Returns true if this note has a user.
 	 */
-	public function hasUser(): User {
+	public function hasUser(): bool {
 		return $this->userId > 0;
 	}
 

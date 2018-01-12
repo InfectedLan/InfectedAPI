@@ -209,7 +209,7 @@ class NoteHandler {
 	/*
 	 * Create a new note.
 	 */
-	public static function createNote(User $creatorUser = null, Group $group = null, Team $team = null, User $user = null, string $title, string $content, int $secondsOffset = 0, int $time): Note {
+	public static function createNote(?User $creatorUser = null, ?Group $group = null, ?Team $team = null, ?User $user = null, string $title, string $content, int $secondsOffset = 0, string $time = null): Note {
 		$database = Database::getConnection(Settings::db_name_infected_crew);
 
 		$database->query('INSERT INTO `' . Settings::db_table_infected_crew_notes . '` (`eventId`, `creatorId`, `groupId`, `teamId`, `userId`, `title`, `content`, `secondsOffset`, `time`)
@@ -229,7 +229,7 @@ class NoteHandler {
 	/*
 	 * Update a note.
 	 */
-	public static function updateNote(Note $note, Group $group = null, Team $team = null, User $user = null, string $title, string $content, int $secondsOffset = 0, int $time = 0) {
+	public static function updateNote(Note $note, ?Group $group = null, ?Team $team = null, ?User $user = null, string $title, string $content, int $secondsOffset = 0, string $time = null) {
 		$database = Database::getConnection(Settings::db_name_infected_crew);
 
 		$database->query('UPDATE `' . Settings::db_table_infected_crew_notes . '`
