@@ -2,7 +2,7 @@
 /**
  * This file is part of InfectedAPI.
  *
- * Copyright (C) 2017 Infected <http://infected.no/>.
+ * Copyright (C) 2018 Infected <https://infected.no/>.
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -27,7 +27,6 @@ $result = false;
 $message = null;
 $seatmapData = null; //Array of rows
 $backgroundImage = null; //File name of background image. Didnt know how else to do this.
-
 
 if (Session::isAuthenticated()) {
 	$user = Session::getCurrentUser();
@@ -54,7 +53,8 @@ if (Session::isAuthenticated()) {
 
 						$data['occupied'] = true;
 						$data['occupiedTicket'] = ['id' => $ticket->getId(),
-																			 'owner' => htmlspecialchars($ticket->getUser()->getDisplayName())];
+												   'owner' => htmlspecialchars($ticket->getUser()->getDisplayName()),
+												   'isFriend' => $user->isFriendsWith($ticket->getUser())];
 					} else {
 						$data['occupied'] = false;
 					}
@@ -63,11 +63,11 @@ if (Session::isAuthenticated()) {
 				}
 
 				$seatmapData[] = ['seats' => $seatData,
-												  'id' => $row->getId(),
-												  'x' => $row->getX(),
-												  'y' => $row->getY(),
-						  						  'number' => $row->getNumber(),
-						  						  'horizontal' => $row->isHorizontal()];
+								  'id' => $row->getId(),
+								  'x' => $row->getX(),
+								  'y' => $row->getY(),
+								  'number' => $row->getNumber(),
+								  'horizontal' => $row->isHorizontal()];
 
 				$result = true;
 			}
@@ -90,4 +90,3 @@ if ($result) {
 }
 
 Database::cleanup();
-?>
