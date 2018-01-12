@@ -31,7 +31,8 @@ if (Session::isAuthenticated()) {
 	$user = Session::getCurrentUser();
 
 	if ($user->hasPermission('admin.seatmap')) {
-		if (isset($_GET['name'])) {
+		if (isset($_GET['name']) &&
+			!empty($_GET['name'])) {
 			$seatmap = SeatmapHandler::createSeatmap($_GET['name'], 'default.png');
 			$result = true;
 			$id = $seatmap->getId();
