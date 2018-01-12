@@ -44,44 +44,17 @@ class UserFriendHandler {
 	/*
 	 * Get a list of all users that the specified user is friends with.
 	 */
-	public static function getFriendsByUser(User $user): array {
+	public static function getFriendsByUser(User $user, int $state = self::STATE_ACCEPTED): array {
 		$database = Database::getConnection(Settings::db_name_infected);
 
 		$result = $database->query('SELECT * FROM `' . Settings::db_table_infected_users . '`
 								   WHERE `id` IN (SELECT `toId` FROM `' . Settings::db_table_infected_userfriends . '`
 												  WHERE `fromId` = ' . $user->getId() . '
-												  AND `state` = ' . self::STATE_ACCEPTED . '
+												  AND `state` = ' . $state . '
 												  UNION
 												  SELECT `fromId` FROM `' . Settings::db_table_infected_userfriends . '`
 												  WHERE `toId` = ' . $user->getId() . '
-												  AND `state` = ' . self::STATE_ACCEPTED . ')
-								   AND `id` != ' . $user->getId() . '
-							  	   ORDER BY `firstname`, `lastname`;');
-
-		$userList = [];
-
-		while ($object = $result->fetch_object('User')) {
-			$userList[] = $object;
-		}
-
-		return $userList;
-	}
-
-	/*h.
-	 * Get a list of all users is awaiting their friendship with this user to be accepted.
-	 */
-	public static function getPendingFriendsByUser(User $user): array {
-		$database = Database::getConnection(Settings::db_name_infected);
-
-		$result = $database->query('SELECT * FROM `' . Settings::db_table_infected_users . '`
-								   WHERE `id` IN (SELECT `toId` FROM `' . Settings::db_table_infected_userfriends . '`
-												  WHERE `fromId` = ' . $user->getId() . '
-												  AND `state` = ' . self::STATE_PENDING . '
-												  UNION
-												  SELECT `fromId` FROM `' . Settings::db_table_infected_userfriends . '`
-												  WHERE `toId` = ' . $user->getId() . '
-												  AND `state` = ' . self::STATE_PENDING . ')
-								   AND `id` != ' . $user->getId() . '
+												  AND `state` = ' . $state . ')
 							  	   ORDER BY `firstname`, `lastname`;');
 
 		$userList = [];
