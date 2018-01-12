@@ -34,8 +34,8 @@ class UserFriendHandler {
 		$database = Database::getConnection(Settings::db_name_infected);
 
 		$result = $database->query('SELECT * FROM `' . Settings::db_table_infected_userfriends . '`
-								   WHERE ((`userId` = ' . $user->getId() . ' AND `friendId` = ' . $friend->getId() . ')
-								   		  OR (`friendId` = ' . $user->getId() . ' AND `userId` = ' . $friend->getId() . '))
+								   WHERE ((`fromId` = ' . $user->getId() . ' AND `toId` = ' . $friend->getId() . ')
+								   		  OR (`toId` = ' . $user->getId() . ' AND `fromId` = ' . $friend->getId() . '))
 								   AND `state` = ' . self::STATE_ACCEPTED . ';');
 
 		return $result->num_rows > 0;
@@ -48,9 +48,13 @@ class UserFriendHandler {
 		$database = Database::getConnection(Settings::db_name_infected);
 
 		$result = $database->query('SELECT * FROM `' . Settings::db_table_infected_users . '`
-								   WHERE `id` IN (SELECT `friendId` FROM `' . Settings::db_table_infected_userfriends . '`
-												  WHERE (`userId` = ' . $user->getId() . ' OR `friendId` = ' . $user->getId() . ')
-												  AND `state` = ' . self::STATE_ACCEPTED . ')
+								   WHERE `id` IN (SELECT `toId` FROM `' . Settings::db_table_infected_userfriends . '`
+												  WHERE `fromId` = ' . $user->getId() . '
+												  AND `state` = ' . self::STATE_ACCEPTED . '
+												  UNION
+												  SELECT `fromId` FROM `' . Settings::db_table_infected_userfriends . '`
+												  WHERE `toId` = ' . $user->getId() . '
+												  AND `state` = ' . self::STATE_ACCEPTED . ')
 								   AND `id` != ' . $user->getId() . '
 							  	   ORDER BY `firstname`, `lastname`;');
 
@@ -70,9 +74,13 @@ class UserFriendHandler {
 		$database = Database::getConnection(Settings::db_name_infected);
 
 		$result = $database->query('SELECT * FROM `' . Settings::db_table_infected_users . '`
-								   WHERE `id` IN (SELECT `friendId` FROM `' . Settings::db_table_infected_userfriends . '`
-												  WHERE (`userId` = ' . $user->getId() . ' OR `friendId` = ' . $user->getId() . ')
-												  AND `state` = ' . self::STATE_PENDING . ')
+								   WHERE `id` IN (SELECT `toId` FROM `' . Settings::db_table_infected_userfriends . '`
+												  WHERE `fromId` = ' . $user->getId() . '
+												  AND `state` = ' . self::STATE_PENDING . '
+												  UNION
+												  SELECT `fromId` FROM `' . Settings::db_table_infected_userfriends . '`
+												  WHERE `toId` = ' . $user->getId() . '
+												  AND `state` = ' . self::STATE_PENDING . ')
 								   AND `id` != ' . $user->getId() . '
 							  	   ORDER BY `firstname`, `lastname`;');
 
@@ -91,7 +99,7 @@ class UserFriendHandler {
 	public static function addUserFriend(User $user, User $friend) {
 		$database = Database::getConnection(Settings::db_name_infected);
 
-		$database->query('INSERT INTO `' . Settings::db_table_infected_userfriends . '` (`userId`, `friendId`, `datetime`, `state`)
+		$database->query('INSERT INTO `' . Settings::db_table_infected_userfriends . '` (`fromId`, `toId`, `datetime`, `state`)
 						 VALUES (' . $user->getId() . ',
 							     ' . $friend->getId() . ',
 								 \'' . date('Y-m-d H:i:s') . '\',
@@ -105,8 +113,8 @@ class UserFriendHandler {
 		$database = Database::getConnection(Settings::db_name_infected);
 
 		$database->query('DELETE FROM `' . Settings::db_table_infected_userfriends . '`
-						 WHERE (`userId` = ' . $user->getId() . ' AND `friendId` = ' . $friend->getId() . ')
-					     OR (`friendId` = ' . $user->getId() . ' AND `userId` = ' . $friend->getId() . ');');
+						 WHERE (`fromId` = ' . $user->getId() . ' AND `toId` = ' . $friend->getId() . ')
+					     OR (`toId` = ' . $user->getId() . ' AND `fromId` = ' . $friend->getId() . ');');
 	}
 
 	/*
@@ -131,7 +139,7 @@ class UserFriendHandler {
 
 		$database->query('UPDATE `' . Settings::db_table_infected_userfriends . '`
 						 SET `state` = ' . $state . '
-						 WHERE (`userId` = ' . $user->getId() . ' AND `friendId` = ' . $friend->getId() . ')
-					     OR (`friendId` = ' . $user->getId() . ' AND `userId` = ' . $friend->getId() . ');');
+						 WHERE (`fromId` = ' . $user->getId() . ' AND `toId` = ' . $friend->getId() . ')
+					     OR (`toId` = ' . $user->getId() . ' AND `fromId` = ' . $friend->getId() . ');');
 	}
 }
