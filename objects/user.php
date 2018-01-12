@@ -276,20 +276,46 @@ class User extends DatabaseObject {
 		return EmergencyContactHandler::getEmergencyContactByUser($this);
 	}
 
-	public function getFriends(): array {
-		return FriendHandler::getFriendsByUser($this);
-	}
-
+	/*
+	 * Returns true if the this user is friend with the given one.
+	 */
 	public function isFriendsWith(User $friend): bool {
-		return FriendHandler::isUserFriendsWith($this, $friend);
+		return UserFriendHandler::isUserFriendsWith($this, $friend);
 	}
 
+	/*
+	 * Fetches a list of this users friends.
+	 */
+	public function getFriends(): array {
+		return UserFriendHandler::getFriendsByUser($this);
+	}
+
+	/*
+	 * Adds a new friend for this user.
+	 */
 	public function addFriend(User $friend) {
-		FriendHandler::addUserFriend($this, $friend);
+		UserFriendHandler::addUserFriend($this, $friend);
 	}
 
+	/*
+	 * Removes friendship with this given friend.
+	 */
 	public function removeFriend(User $friend) {
-		FriendHandler::removeUserFriend($this, $friend);
+		UserFriendHandler::removeUserFriend($this, $friend);
+	}
+
+	/*
+	 * Adds a new friend for this user.
+	 */
+	public function acceptFriend(User $friend) {
+		UserFriendHandler::acceptUserFriend($this, $friend);
+	}
+
+	/*
+	 * Removes friendship with this given friend.
+	 */
+	public function rejectFriend(User $friend) {
+		UserFriendHandler::rejectUserFriend($this, $friend);
 	}
 
 	/*
