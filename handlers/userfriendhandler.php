@@ -23,7 +23,7 @@ require_once 'database.php';
 require_once 'objects/user.php';
 
 class UserFriendHandler {
-	const STATE_NEW = 0;
+	const STATE_PENDING = 0;
 	const STATE_ACCEPTED = 1;
 	const STATE_REJECTED = 2;
 
@@ -63,6 +63,28 @@ class UserFriendHandler {
 		return $userList;
 	}
 
+	/*h.
+	 * Get a list of all users is awaiting their friendship with this user to be accepted.
+	 */
+	public static function getPendingFriendsByUser(User $user): array {
+		$database = Database::getConnection(Settings::db_name_infected);
+
+		$result = $database->query('SELECT * FROM `' . Settings::db_table_infected_users . '`
+								   WHERE `id` IN (SELECT `friendId` FROM `' . Settings::db_table_infected_userfriends . '`
+												  WHERE (`userId` = ' . $user->getId() . ' OR `friendId` = ' . $user->getId() . ')
+												  AND `state` = ' . self::STATE_PENDING . ')
+								   AND `id` != ' . $user->getId() . '
+							  	   ORDER BY `firstname`, `lastname`;');
+
+		$userList = [];
+
+		while ($object = $result->fetch_object('User')) {
+			$userList[] = $object;
+		}
+
+		return $userList;
+	}
+
 	/*
 	 * Adds a friendship with another user.
 	 */
@@ -73,7 +95,7 @@ class UserFriendHandler {
 						 VALUES (' . $user->getId() . ',
 							     ' . $friend->getId() . ',
 								 \'' . date('Y-m-d H:i:s') . '\',
-								 ' . self::STATE_NEW . ');');
+								 ' . self::STATE_PENDING . ');');
 	}
 
 	/*

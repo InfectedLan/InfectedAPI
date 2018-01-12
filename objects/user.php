@@ -291,6 +291,13 @@ class User extends DatabaseObject {
 	}
 
 	/*
+	 * Fetches a list of this users pending friendships.
+	 */
+	public function getPendingFriends(): array {
+		return UserFriendHandler::getPendingFriendsByUser($this);
+	}
+
+	/*
 	 * Adds a new friend for this user.
 	 */
 	public function addFriend(User $friend) {
