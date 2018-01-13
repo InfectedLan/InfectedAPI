@@ -20,6 +20,7 @@
 
 require_once 'objects/databaseobject.php';
 require_once 'handlers/userhandler.php';
+require_once 'handlers/eventhandler.php';
 
 /*
  * A bong type is an item in the store which can be purchased or, in this case, be provided in a limited supply to entitled individuals
@@ -27,6 +28,7 @@ require_once 'handlers/userhandler.php';
 class BongType extends DatabaseObject {
 	private $name;
 	private $description;
+	private $eventId;
 	
 	/*
 	 * Returns the name of the bong type
@@ -40,6 +42,13 @@ class BongType extends DatabaseObject {
 	 */
 	public function getDescription() {
 		return $this->description;
+	}
+
+	/*
+	 * Returns the event that this bong type is connected to
+	 */
+	public function getEvent() {
+		return EventHandler::getEvent($this->eventId);
 	}
 }
 ?>

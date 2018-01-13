@@ -20,27 +20,62 @@
 
 require_once 'settings.php';
 require_once 'database.php';
+require_once 'objects/bongtransaction.php';
 require_once 'objects/bongtype.php';
 require_once 'handlers/eventhandler.php';
-require_once 'handlers/bongetitlementhandler.php';
+require_once 'handlers/bongentitlementhandler.php';
 
 class BongTransactionHandler {
+	
+	/* 
+	 * Returns a single transaction
+	 */
+	public static function getBongTransaction(int $id) {
+		$database = Database::getConnection(Settings::db_name_infected);
+
+		$result = $database->query('SELECT * FROM `'. Settings::db_table_infected_bongTransactions . '`
+																WHERE `id` = \'' . $database->real_escape_string($id) . '\';');
+
+		return $result->fetch_object('BongTransaction');
+	}
+
+	/* 
+	 * Returns a list of all bong transactions for the given bong and optionally user
+	 */
+	public static function getBongTransactions(BongType $type, User $user = null) {
+		$database = Database::getConnection(Settings::db_name_infected);
+
+		$transactionList = [];
+
+		if($user==null) {
+			$result = $database->query('SELECT * FROM `'. Settings::db_table_infected_bongTransactions . '`
+																WHERE `bongType` = \'' . $type->getId() . '\';');
+			while ($object = $result->fetch_object('BongTransaction')) {
+				$transactionList[] = $object;
+			}
+
+		} else {
+			$result = $database->query('SELECT * FROM `'. Settings::db_table_infected_bongTransactions . '`
+																WHERE `bongType` = \'' . $type->getId() . '\' AND `userId` =  ' . $user->getId() . ';');
+			while ($object = $result->fetch_object('BongTransaction')) {
+				$transactionList[] = $object;
+			}
+		}
+
+		return $transactionList;
+	}
+
+
 	/*
 	 * Calculates the amount of transacted bongs on this account. A negative amount is a withdrawal.
 	 */
-	public static function sumBongTransactions(BongType $ype, User $user, Event $event = null) {
-		if($event==null) {
-			$event = EventHandler::getCurrentEvent();
-		}
-
-		$database = Database::getConnection(Settings::db_name_infected);
-
-		$transactionList = $database->query('SELECT * FROM `' . Settings::db_table_infected_bongTransactions . '` WHERE `bongType` = ' . $type->getId() . ' AND `userId` = ' . $user->getId() . ';');
+	public static function sumBongTransactions(BongType $type, User $user) {
+		$transactionList = self::getBongTransactions($type, $user);
 
 		$count = 0;
 
-		foreach($transactionList as $row) {
-			$count += $row["amt"];
+		foreach($transactionList as $transaction) {
+			$count += $transaction->getTransactionAmount();
 		}
 
 		return $count;
@@ -49,12 +84,8 @@ class BongTransactionHandler {
 	/*
 	 * Returns how many of a given bong a user has left
 	 */
-	public static function getBongPosession(BongType $type, User $user, Event $event = null) {
-		if($event==null) {
-			$event = EventHandler::getCurrentEvent();
-		}
-
-		return BongEntitlementHandler::getBongEntitlementByUser($type, $user, $event)+self::sumBongTransactions($type, $user, $event);
+	public static function getBongPosession(BongType $type, User $user) {
+		return BongEntitlementHandler::calculateBongEntitlementByUser($type, $user)+self::sumBongTransactions($type, $user);
 	}
 
 	/*
@@ -63,14 +94,10 @@ class BongTransactionHandler {
 	 * Calling this should only be done after making sure the user can afford the transaction
 	 * Also note that all transactions are connected to the user who had the permissions to process it.
 	 */
-	public static function processBongTransaction(BongType $type, User $user, $amount, User $responsible, Event $event = null) {
-		if($event==null) {
-			$event = EventHandler::getCurrentEvent();
-		}
-
+	public static function processBongTransaction(BongType $type, User $user, int $amount, User $responsible) {
 		$database = Database::getConnection(Settings::db_name_infected);
 
-		$result = $database->query('INSERT INTO `' . Settings::db_table_infected_bongTransactions . '` (`bongType`, `amt`, `transactionHandler`, `timestamp`) VALUES (' . $type->getId() . ', ' . $database->real_escape_string($amount) . ', ' .  $responsible->getId(). ', ' . date('Y-m-d H:i:s') . ');');
+		$result = $database->query('INSERT INTO `' . Settings::db_table_infected_bongTransactions . '` (`bongType`, `amt`, `transactionHandler`, `timestamp`, `userId`) VALUES (' . $type->getId() . ', ' . $database->real_escape_string($amount) . ', ' .  $responsible->getId(). ', \'' . date('Y-m-d H:i:s') . '\', ' . $user->getId() . ');');
 
 	}
 }

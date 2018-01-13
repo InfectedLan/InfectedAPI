@@ -65,6 +65,11 @@ class BongEntitlementTest extends TestCase {
 		$entitlements = BongEntitlementHandler::getBongEntitlements($type); //Current event
 		$this->assertEquals(2, count($entitlements));
 		$this->assertEquals($entitlements[count($entitlements)-1], $new);
+
+		$entitlements = BongEntitlementHandler::getBongEntitlements($type, $user); //Current event and current user
+		$this->assertEquals(2, count($entitlements));
+		$this->assertEquals($new, $entitlements[0]);
+
 		$this->assertEquals(7, BongEntitlementHandler::calculateBongEntitlementByUser($type, $user));
 
 		//Tests proper handling of exclusive entitlements for users

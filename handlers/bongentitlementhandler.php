@@ -62,15 +62,15 @@ class BongEntitlementHandler {
 			}
 		}
 		else {
-			$personalEntitlements = $database->query('SELECT * FROM `' . Settings::db_table_infected_bongEntitlements . '` WHERE `bongTypeId` = ' . $type->getId() . ' AND `entitlementType` = ' . self::ENTITLEMENT_TYPE_USER . ' AND `entitlementArg` = ' . $user->getId() . ';');
+			$personalEntitlements = $database->query('SELECT * FROM `' . Settings::db_table_infected_bongEntitlements . '` WHERE `bongTypeId` = ' . $type->getId() . ' AND `entitlementType` = ' . BongEntitlement::ENTITLEMENT_TYPE_USER . ' AND `entitlementArg` = ' . $user->getId() . ';');
 
 			while($obj = $personalEntitlements->fetch_object('BongEntitlement')) {
 				$entitlementList[] = $obj;
 			}
 
 			if($user->isGroupMember()) {
-				$group = $user->getGroup($event);
-				$groupEntitlements = $database->query('SELECT * FROM `' . Settings::db_table_infected_bongEntitlements . '` WHERE `bongTypeId` = ' . $type->getId() . ' AND `entitlementType` = ' . self::ENTITLEMENT_TYPE_CREW . ' AND (`entitlementArg` = ' . $group->getId() . ' OR `entitlementArg` = 0);');
+				$group = $user->getGroup($type->getEvent());
+				$groupEntitlements = $database->query('SELECT * FROM `' . Settings::db_table_infected_bongEntitlements . '` WHERE `bongTypeId` = ' . $type->getId() . ' AND `entitlementType` = ' . BongEntitlement::ENTITLEMENT_TYPE_CREW . ' AND (`entitlementArg` = ' . $group->getId() . ' OR `entitlementArg` = 0);');
 				while($obj = $groupEntitlements->fetch_object('BongEntitlement')) {
 					$entitlementList[] = $obj;
 				}
