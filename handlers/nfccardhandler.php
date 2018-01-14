@@ -46,13 +46,25 @@ class NfcCardHandler {
 	}
 
 	/*
-	 * Returns the card with the given id.
+	 * Returns the card with the given database id.
 	 */
 	public static function getCard($id) {
 		$database = Database::getConnection(Settings::db_name_infected_tech);
 
 		$result = $database->query('SELECT * FROM `'. Settings::db_table_infected_tech_nfccards . '`
 																WHERE `id` = \'' . $database->real_escape_string($id) . '\';');
+
+		return $result->fetch_object('NfcCard');
+	}
+
+	/*
+	 * Returns the card with the given card id
+	 */
+	public static function getCardByNfcId($nfcId) {
+		$database = Database::getConnection(Settings::db_name_infected_tech);
+
+		$result = $database->query('SELECT * FROM `'. Settings::db_table_infected_tech_nfccards . '`
+																WHERE `nfcId` = \'' . $database->real_escape_string($nfcId) . '\';');
 
 		return $result->fetch_object('NfcCard');
 	}
