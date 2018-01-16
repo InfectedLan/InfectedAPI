@@ -55,8 +55,7 @@ function renderSeatmap(target, seatHandlerFunction, callback) {
 				var customClassCheck = seatHandlerFunction( seatmapData.rows[i].seats[s].id,
 															'#seat' + seatmapData.rows[i].seats[s].id,
 															seatmapData.rows[i].seats[s].occupied,
-															seatmapData.rows[i].seats[s].occupiedTicket,
-															seatmapData.rows[i].seats[s].occupiedTicket.isFriend);
+															seatmapData.rows[i].seats[s].occupiedTicket);
 				//Check if we got anything of use
 				if(typeof seatHandlerFunction !== "undefined")
 				{
