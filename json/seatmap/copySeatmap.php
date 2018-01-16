@@ -2,7 +2,7 @@
 /**
  * This file is part of InfectedAPI.
  *
- * Copyright (C) 2017 Infected <http://infected.no/>.
+ * Copyright (C) 2018 Infected <https://infected.no/>.
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -30,16 +30,19 @@ if (Session::isAuthenticated()) {
 	$user = Session::getCurrentUser();
 
 	if ($user->hasPermission('admin.seatmap')) {
-    if (isset($_GET['to']) && isset($_GET['from'])) {
-	    $sourceSeatmap = SeatmapHandler::getSeatmap($_GET['from']);
-	    $targetSeatmap = SeatmapHandler::getSeatmap($_GET['to']);
+		if (isset($_GET['to']) &&
+			isset($_GET['from']) &&
+			is_numeric($_GET['to']) &&
+			is_numeric($_GET['from'])) {
+			$sourceSeatmap = SeatmapHandler::getSeatmap($_GET['from']);
+			$targetSeatmap = SeatmapHandler::getSeatmap($_GET['to']);
 
 			if ($sourceSeatmap != null && $targetSeatmap != null) {
 				$seatmap = SeatmapHandler::copySeatmap($sourceSeatmap, $targetSeatmap);
 				$result = true;
-	    } else {
+			} else {
 				$message = Localization::getLocale('this_seatmap_does_not_exist');
-	    }
+			}
 		} else {
 			$message = Localization::getLocale('you_have_not_filled_out_the_required_fields');
 		}

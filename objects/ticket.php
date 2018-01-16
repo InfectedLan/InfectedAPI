@@ -65,6 +65,13 @@ class Ticket extends EventObject {
 	}
 
 	/*
+	 * Returns the user id of this ticket. This is done for speedup purposes.
+	 */
+	public function getUserId(): int {
+		return $this->userId;
+	}
+
+	/*
 	 * Returns the seater of this ticket.
 	 *
 	 * The seater is the user account that is allowed to decide what seat this ticket is seated on.

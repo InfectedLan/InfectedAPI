@@ -31,16 +31,17 @@ if (Session::isAuthenticated()) {
 	$user = Session::getCurrentUser();
 
 	if ($user->hasPermission('admin.seatmap')) {
-		if (isset($_GET['id'])) {
-		  $sourceSeatmap = SeatmapHandler::getSeatmap($_GET['id']);
+		if (isset($_GET['id']) &&
+			is_numeric($_GET['id'])) {
+		  	$sourceSeatmap = SeatmapHandler::getSeatmap($_GET['id']);
 
 			if ($sourceSeatmap != null) {
 				$seatmap = SeatmapHandler::cloneSeatmap($sourceSeatmap);
 				$result = true;
 				$id = $seatmap->getId();
-		  } else {
+			} else {
 				$message = Localization::getLocale('this_seatmap_does_not_exist');
-		  }
+			}
 		} else {
 			$message = Localization::getLocale('you_have_not_filled_out_the_required_fields');
 		}
