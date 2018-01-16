@@ -71,7 +71,7 @@ class NFCCardTest extends TestCase {
 
 		$card = NfcCardHandler::getCardByNfcId($nfcid);
 
-		$this->assertEquals($cards[0], $carr);
+		$this->assertEquals($cards[0], $card);
 
 		//getCard
 		$newCard = NfcCardHandler::getCard($card->getId());
