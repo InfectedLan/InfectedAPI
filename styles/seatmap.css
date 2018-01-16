@@ -39,6 +39,10 @@
 .current {
 	background: gray;
 }
+
+.friend {
+	background: pink;
+}
 .seat {
 	cursor: pointer;
 	width: 27px;
