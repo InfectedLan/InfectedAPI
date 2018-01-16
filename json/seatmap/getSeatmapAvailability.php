@@ -31,6 +31,8 @@ $backgroundImage = null; //File name of background image. Didnt know how else to
 if (Session::isAuthenticated()) {
 	$user = Session::getCurrentUser();
 
+	$friends = $user->getFriends();
+
 	if (isset($_GET['id']) &&
 		is_numeric($_GET['id'])) {
 		$seatmap = SeatmapHandler::getSeatmap($_GET['id']);
@@ -52,10 +54,19 @@ if (Session::isAuthenticated()) {
 					if ($seat->hasTicket()) {
 						$ticket = $seat->getTicket();
 
+						$isFriend = false;
+
+						foreach($friends as $friend) {
+							if($friend->getId() == $ticket->getUserId()) { //For speedup purposes
+								$isFriend = true;
+								break;
+							}
+						}
+
 						$data['occupied'] = true;
 						$data['occupiedTicket'] = ['id' => $ticket->getId(),
 												   'owner' => htmlspecialchars($ticket->getUser()->getDisplayName()),
-												   'isFriend' => $user->isFriendsWith($ticket->getUser())];
+												   'isFriend' => $isFriend];
 					} else {
 						$data['occupied'] = false;
 					}
@@ -91,3 +102,4 @@ if ($result) {
 }
 
 Database::cleanup();
+?>
