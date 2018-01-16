@@ -30,7 +30,8 @@ if (Session::isAuthenticated()) {
 	$user = Session::getCurrentUser();
 
 	if ($user->hasPermission('admin.seatmap')) {
-		if (isset($_POST['seatmapId'])) {
+		if (isset($_POST['seatmapId']) &&
+			is_numeric($_POST['seatmapId'])) {
 			$seatmap = SeatmapHandler::getSeatmap($_POST['seatmapId']);
 
 			if ($seatmap != null) {

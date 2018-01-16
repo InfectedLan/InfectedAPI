@@ -2,7 +2,7 @@
 /**
  * This file is part of InfectedAPI.
  *
- * Copyright (C) 2017 Infected <http://infected.no/>.
+ * Copyright (C) 2018 Infected <https://infected.no/>.
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -21,38 +21,36 @@
 require_once 'session.php';
 require_once 'database.php';
 require_once 'localization.php';
-require_once 'handlers/seatmaphandler.php';
+require_once 'handlers/userhandler.php';
 
 $result = false;
+$status = http_response_code();
 $message = null;
-$id = null;
 
 if (Session::isAuthenticated()) {
 	$user = Session::getCurrentUser();
 
-	if ($user->hasPermission('admin.seatmap')) {
-		if (isset($_GET['name']) &&
-			!empty($_GET['name'])) {
-			$seatmap = SeatmapHandler::createSeatmap($_GET['name'], 'default.png');
+	if (isset($_POST['friendId']) &&
+		is_numeric($_POST['friendId'])) {
+		$friend = UserHandler::getUser($_POST['friendId']);
+
+		if ($friend != null) {
+			$user->acceptFriend($friend);
 			$result = true;
-			$id = $seatmap->getId();
+			$status = 202; // Accepted.
 		} else {
-			$message = Localization::getLocale('you_have_not_filled_out_the_required_fields');
+			$status = 404; // Not found.
+			$message = Localization::getLocale('this_user_does_not_exist');
 		}
 	} else {
-		$message = Localization::getLocale('you_do_not_have_permission_to_do_that');
+		$status = 400; // Bad Request.
+		$message = Localization::getLocale('you_have_not_filled_out_the_required_fields');
 	}
 } else {
 	$message = Localization::getLocale('you_are_not_logged_in');
 }
 
+http_response_code($status);
 header('Content-Type: application/json');
-
-if ($result) {
-	echo json_encode(array('result' => $result, 'id' => $id), JSON_PRETTY_PRINT);
-} else {
-	echo json_encode(['result' => $result, 'message' => $message], JSON_PRETTY_PRINT);
-}
-
+echo json_encode(['result' => $result, 'message' => $message], JSON_PRETTY_PRINT);
 Database::cleanup();
-?>
