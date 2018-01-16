@@ -112,8 +112,8 @@ class UserTest extends TestCase {
 		$this->assertEquals(true, $user1->isFriendsWith($user2));
 		$this->assertEquals(true, $user2->isFriendsWith($user1));
 
-		$this->assertEquals(0, count($user1->getFriends()));
-		$this->assertEquals(0, count($user2->getFriends()));
+		$this->assertEquals(1, count($user1->getFriends()));
+		$this->assertEquals(1, count($user2->getFriends()));
 
 		$this->assertEquals(0, count($user1->getPendingFriends()));
 		$this->assertEquals(0, count($user2->getPendingFriends()));
