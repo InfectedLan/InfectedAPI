@@ -16,6 +16,7 @@ require_once 'objects/user.php';
 class UserTest extends TestCase {
 	public function test() {
 		$this->userSanityTest();
+		$this->friendTest();
 		$this->userCreationTest();
 	}
 
@@ -102,5 +103,65 @@ class UserTest extends TestCase {
 		$this->assertEquals(false, $user->getGender());
 
 		Database::cleanup();
+	}
+
+	private function friendTest() {
+		$user1 = UserHandler::getUser(1);
+		$user2 = UserHandler::getUser(2);
+
+		$this->assertEquals(false, $user1->isFriendsWith($user2));
+		$this->assertEquals(false, $user2->isFriendsWith($user1));
+
+		$this->assertEquals(0, count($user1->getFriends()));
+		$this->assertEquals(0, count($user2->getFriends()));
+
+		$this->assertEquals(0, count($user1->getPendingFriends()));
+		$this->assertEquals(0, count($user2->getPendingFriends()));
+
+		$user1->addFriend($user2);
+
+		$this->assertEquals(false, $user1->isFriendsWith($user2));
+		$this->assertEquals(false, $user2->isFriendsWith($user1));
+
+		$this->assertEquals(0, count($user1->getFriends()));
+		$this->assertEquals(0, count($user2->getFriends()));
+
+		$this->assertEquals(1, count($user1->getPendingFriends()));
+		$this->assertEquals(0, count($user2->getPendingFriends()));
+
+		$user1->acceptFriend($user2);
+
+		$this->assertEquals(true, $user1->isFriendsWith($user2));
+		$this->assertEquals(true, $user2->isFriendsWith($user1));
+
+		$this->assertEquals(1, count($user1->getFriends()));
+		$this->assertEquals(1, count($user2->getFriends()));
+
+		$this->assertEquals(0, count($user1->getPendingFriends()));
+		$this->assertEquals(0, count($user2->getPendingFriends()));
+
+		$user1->removeFriend($user2);
+
+		$this->assertEquals(false, $user1->isFriendsWith($user2));
+		$this->assertEquals(false, $user2->isFriendsWith($user1));
+
+		$this->assertEquals(0, count($user1->getFriends()));
+		$this->assertEquals(0, count($user2->getFriends()));
+
+		$this->assertEquals(0, count($user1->getPendingFriends()));
+		$this->assertEquals(0, count($user2->getPendingFriends()));
+
+		$user1->addFriend($user2);
+
+		$user1->rejectFriend($user2);
+
+		$this->assertEquals(false, $user1->isFriendsWith($user2));
+		$this->assertEquals(false, $user2->isFriendsWith($user1));
+
+		$this->assertEquals(0, count($user1->getFriends()));
+		$this->assertEquals(0, count($user2->getFriends()));
+
+		$this->assertEquals(0, count($user1->getPendingFriends()));
+		$this->assertEquals(0, count($user2->getPendingFriends()));
 	}
 }
