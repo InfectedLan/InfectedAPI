@@ -67,6 +67,48 @@ class UserFriendHandler {
 	}
 
 	/*
+     * Get a list of all pending friend requests to the given user
+     */
+    public static function getPendingFriendRequestsToUser(User $user): array {
+        $database = Database::getConnection(Settings::db_name_infected);
+
+        $result = $database->query('SELECT * FROM `' . Settings::db_table_infected_users . '`
+                                   WHERE `id` IN (SELECT `fromId` FROM `' . Settings::db_table_infected_userfriends . '`
+                                                  WHERE `toId` = ' . $user->getId() . '
+                                                  AND `state` = ' . self::STATE_PENDING . ')
+                                     ORDER BY `firstname`, `lastname`;');
+
+        $userList = [];
+
+        while ($object = $result->fetch_object('User')) {
+            $userList[] = $object;
+        }
+
+        return $userList;
+    }
+
+    /*
+     * Get a list of all pending friend requests from the given user
+     */
+    public static function getPendingFriendRequestsFromUser(User $user): array {
+        $database = Database::getConnection(Settings::db_name_infected);
+
+        $result = $database->query('SELECT * FROM `' . Settings::db_table_infected_users . '`
+                                   WHERE `id` IN (SELECT `toId` FROM `' . Settings::db_table_infected_userfriends . '`
+                                                  WHERE `fromId` = ' . $user->getId() . '
+                                                  AND `state` = ' . self::STATE_PENDING . ')
+                                     ORDER BY `firstname`, `lastname`;');
+
+        $userList = [];
+
+        while ($object = $result->fetch_object('User')) {
+            $userList[] = $object;
+        }
+
+        return $userList;
+    }
+
+	/*
 	 * Adds a friendship with another user.
 	 */
 	public static function addUserFriend(User $user, User $friend) {

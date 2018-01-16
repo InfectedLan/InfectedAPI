@@ -115,8 +115,11 @@ class UserTest extends TestCase {
 		$this->assertEquals(1, count($user1->getFriends()));
 		$this->assertEquals(1, count($user2->getFriends()));
 
-		$this->assertEquals(0, count($user1->getPendingFriends()));
-		$this->assertEquals(0, count($user2->getPendingFriends()));
+		$this->assertEquals(0, count($user1->getPendingFriendsTo()));
+		$this->assertEquals(0, count($user2->getPendingFriendsTo()));
+
+		$this->assertEquals(0, count($user1->getPendingFriendsFrom()));
+		$this->assertEquals(0, count($user2->getPendingFriendsFrom()));
 
 		$user1->removeFriend($user2);
 
@@ -126,8 +129,11 @@ class UserTest extends TestCase {
 		$this->assertEquals(0, count($user1->getFriends()));
 		$this->assertEquals(0, count($user2->getFriends()));
 
-		$this->assertEquals(0, count($user1->getPendingFriends()));
-		$this->assertEquals(0, count($user2->getPendingFriends()));
+		$this->assertEquals(0, count($user1->getPendingFriendsTo()));
+		$this->assertEquals(0, count($user2->getPendingFriendsTo()));
+
+		$this->assertEquals(0, count($user1->getPendingFriendsFrom()));
+		$this->assertEquals(0, count($user2->getPendingFriendsFrom()));
 
 		$user1->addFriend($user2);
 
@@ -137,8 +143,11 @@ class UserTest extends TestCase {
 		$this->assertEquals(0, count($user1->getFriends()));
 		$this->assertEquals(0, count($user2->getFriends()));
 
-		$this->assertEquals(1, count($user1->getPendingFriends()));
-		$this->assertEquals(1, count($user2->getPendingFriends()));
+		$this->assertEquals(0, count($user1->getPendingFriendsTo()));
+		$this->assertEquals(1, count($user2->getPendingFriendsTo()));
+
+		$this->assertEquals(1, count($user1->getPendingFriendsFrom()));
+		$this->assertEquals(0, count($user2->getPendingFriendsFrom()));
 
 		$user1->acceptFriend($user2);
 
@@ -148,8 +157,11 @@ class UserTest extends TestCase {
 		$this->assertEquals(1, count($user1->getFriends()));
 		$this->assertEquals(1, count($user2->getFriends()));
 
-		$this->assertEquals(0, count($user1->getPendingFriends()));
-		$this->assertEquals(0, count($user2->getPendingFriends()));
+		$this->assertEquals(0, count($user1->getPendingFriendsTo()));
+		$this->assertEquals(0, count($user2->getPendingFriendsTo()));
+
+		$this->assertEquals(0, count($user1->getPendingFriendsFrom()));
+		$this->assertEquals(0, count($user2->getPendingFriendsFrom()));
 
 		$user1->removeFriend($user2);
 
@@ -159,8 +171,11 @@ class UserTest extends TestCase {
 		$this->assertEquals(0, count($user1->getFriends()));
 		$this->assertEquals(0, count($user2->getFriends()));
 
-		$this->assertEquals(0, count($user1->getPendingFriends()));
-		$this->assertEquals(0, count($user2->getPendingFriends()));
+		$this->assertEquals(0, count($user1->getPendingFriendsTo()));
+		$this->assertEquals(0, count($user2->getPendingFriendsTo()));
+
+		$this->assertEquals(0, count($user1->getPendingFriendsFrom()));
+		$this->assertEquals(0, count($user2->getPendingFriendsFrom()));
 
 		$user1->addFriend($user2);
 
@@ -172,7 +187,10 @@ class UserTest extends TestCase {
 		$this->assertEquals(0, count($user1->getFriends()));
 		$this->assertEquals(0, count($user2->getFriends()));
 
-		$this->assertEquals(0, count($user1->getPendingFriends()));
-		$this->assertEquals(0, count($user2->getPendingFriends()));
+		$this->assertEquals(0, count($user1->getPendingFriendsTo()));
+		$this->assertEquals(0, count($user2->getPendingFriendsTo()));
+
+		$this->assertEquals(0, count($user1->getPendingFriendsFrom()));
+		$this->assertEquals(0, count($user2->getPendingFriendsFrom()));
 	}
 }
