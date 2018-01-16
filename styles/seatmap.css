@@ -43,6 +43,11 @@
 .friend {
 	background: pink;
 }
+
+.reserved {
+	background: blue;
+}
+
 .seat {
 	cursor: pointer;
 	width: 27px;
