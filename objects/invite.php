@@ -57,4 +57,3 @@ class Invite extends EventObject {
 		InviteHandler::declineInvite($this);
 	}
 }
-?>

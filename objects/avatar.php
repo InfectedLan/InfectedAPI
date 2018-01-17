@@ -55,7 +55,7 @@ class Avatar extends DatabaseObject {
 	 * Returns the avatar image file type.
 	 */
 	public function getFile($quality): string {
-		return Settings::avatar_path . $quality . '/' . $this->fileName;
+		return Settings::api_relative_avatar_path . $quality . '/' . $this->fileName;
 	}
 
 	/*
@@ -121,20 +121,19 @@ class Avatar extends DatabaseObject {
 		}
 	}
 
-  /*
-   * Returns the state of this avatar
-   */
-  public function getState(): int {
-    return $this->state;
-  }
+	/*
+	* Returns the state of this avatar
+	*/
+	public function getState(): int {
+		return $this->state;
+	}
 
-  /*
-   * Sets the state of this avatar
-   */
-  public function setState($state) {
-    $this->state = $state;
+	/*
+	* Sets the state of this avatar
+	*/
+	public function setState($state) {
+		$this->state = $state;
 
-    AvatarHandler::updateAvatar($this, $state, $this->getFileName());
-  }
+		AvatarHandler::updateAvatar($this, $state, $this->getFileName());
+	}
 }
-?>

@@ -78,4 +78,3 @@ class RestrictedPage extends EventObject {
 		return TeamHandler::getTeam($this->teamId);
 	}
 }
-?>

@@ -28,13 +28,27 @@ require_once 'objects/user.php';
 
 class TicketTransferHandler {
 	/*
-	 * Get a ticket transer by the internal id.
+	 * Get a ticket transer by the ticket
 	 */
 	public static function getTransferFromTicket(Ticket $ticket): ?TicketTransfer {
 		$database = Database::getConnection(Settings::db_name_infected_tickets);
 
 		$result = $database->query('SELECT * FROM `' . Settings::db_table_infected_tickets_tickettransfers . '`
 																WHERE `ticketId` = \'' . $ticket->getId() . '\'
+																ORDER BY `datetime` DESC
+																LIMIT 1;');
+
+		return $result->fetch_object('TicketTransfer');
+	}
+
+	/*
+	 * Get a ticket transer by the internal id.
+	 */
+	public static function getTicketTransfer(int $id): ?TicketTransfer {
+		$database = Database::getConnection(Settings::db_name_infected_tickets);
+
+		$result = $database->query('SELECT * FROM `' . Settings::db_table_infected_tickets_tickettransfers . '`
+																WHERE `id` = \'' . $id . '\'
 																ORDER BY `datetime` DESC
 																LIMIT 1;');
 

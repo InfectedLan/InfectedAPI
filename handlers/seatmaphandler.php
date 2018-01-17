@@ -58,12 +58,12 @@ class SeatmapHandler {
 	/*
 	 * Creates a new seatmap.
 	 */
-	public static function createSeatmap(string $name, string $backgroundImage): Seatmap {
+	public static function createSeatmap(string $name, ?string $backgroundImage): Seatmap {
 		$database = Database::getConnection(Settings::db_name_infected_tickets);
 
 		$database->query('INSERT INTO ' . Settings::db_table_infected_tickets_seatmaps . '(`humanName`, `backgroundImage`)
-						  				VALUES (\'' . $database->real_escape_string($name) . '\',
-								  						\'' . $database->real_escape_string($backgroundImage) . '\')');
+						  		VALUES (\'' . $database->real_escape_string($name) . '\',
+								  		\'' . $database->real_escape_string($backgroundImage) . '\')');
 
 		return self::getSeatmap($database->insert_id);
 	}

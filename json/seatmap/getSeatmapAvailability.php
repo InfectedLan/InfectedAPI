@@ -2,7 +2,7 @@
 /**
  * This file is part of InfectedAPI.
  *
- * Copyright (C) 2017 Infected <http://infected.no/>.
+ * Copyright (C) 2018 Infected <https://infected.no/>.
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -28,11 +28,13 @@ $message = null;
 $seatmapData = null; //Array of rows
 $backgroundImage = null; //File name of background image. Didnt know how else to do this.
 
-
 if (Session::isAuthenticated()) {
 	$user = Session::getCurrentUser();
 
-	if (isset($_GET['id'])) {
+	$friends = $user->getFriends();
+
+	if (isset($_GET['id']) &&
+		is_numeric($_GET['id'])) {
 		$seatmap = SeatmapHandler::getSeatmap($_GET['id']);
 
 		if ($seatmap != null) {
@@ -52,9 +54,19 @@ if (Session::isAuthenticated()) {
 					if ($seat->hasTicket()) {
 						$ticket = $seat->getTicket();
 
+						$isFriend = false;
+
+						foreach($friends as $friend) {
+							if($friend->getId() == $ticket->getUserId()) { //For speedup purposes
+								$isFriend = true;
+								break;
+							}
+						}
+
 						$data['occupied'] = true;
 						$data['occupiedTicket'] = ['id' => $ticket->getId(),
-																			 'owner' => htmlspecialchars($ticket->getUser()->getDisplayName())];
+												   'owner' => htmlspecialchars($ticket->getUser()->getDisplayName()),
+												   'isFriend' => $isFriend];
 					} else {
 						$data['occupied'] = false;
 					}
@@ -63,11 +75,11 @@ if (Session::isAuthenticated()) {
 				}
 
 				$seatmapData[] = ['seats' => $seatData,
-												  'id' => $row->getId(),
-												  'x' => $row->getX(),
-												  'y' => $row->getY(),
-						  						  'number' => $row->getNumber(),
-						  						  'horizontal' => $row->isHorizontal()];
+								  'id' => $row->getId(),
+								  'x' => $row->getX(),
+								  'y' => $row->getY(),
+								  'number' => $row->getNumber(),
+								  'horizontal' => $row->isHorizontal()];
 
 				$result = true;
 			}

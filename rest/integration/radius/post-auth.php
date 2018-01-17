@@ -29,12 +29,11 @@ $status = http_response_code();
 $message = null;
 
 // Checking for valid API key.
-if (isset($_GET['key']) &&
-	!empty($_GET['key']) &&
+if (!empty($_GET['key']) &&
 	Secret::api_key == $_GET['key']) {
 
 	if (isset($_GET['identifier']) &&
-		!empty($_GET['identifier'])) {
+        !empty($_GET['identifier'])) {
 		$identifier = $_GET['identifier'];
 
 		if (UserHandler::hasUser($identifier)) {
@@ -68,11 +67,11 @@ if (isset($_GET['key']) &&
                         $message = 'User \'' . $user->getUsername() .  '\' succesfully post-authenticated, with port-type \'' . $networkType->getTitle() . '\' and vlan id \'' . $network->getVlanId() . '\'.';
 
                         // We log this to syslog.
-                        SyslogHandler::log('User succesfully post-authenticated', 'post-auth', $user, SyslogHandler::SEVERITY_INFO, ['Port-Type' => $networkType->getPortType(),
-                                                                                                                                                           'Device-IP-Address' => $deviceIpAddress,
-                                                                                                                                                           'Device-MAC-Address' => $deviceMacAddressSsid,
-                                                                                                                                                           'VLAN' => $network->getVlanId(),
-                                                                                                                                                           'Client-MAC-Address' => $clientMacAddress]);
+                        SyslogHandler::log('User succesfully post-authenticated', 'rest/integration/radius/post-auth', $user, SyslogHandler::SEVERITY_INFO, ['Port-Type' => $networkType->getPortType(),
+                                                                                                                                                                                   'Device-IP-Address' => $deviceIpAddress,
+                                                                                                                                                                                   'Device-MAC-Address' => $deviceMacAddressSsid,
+                                                                                                                                                                                   'VLAN' => $network->getVlanId(),
+                                                                                                                                                                                   'Client-MAC-Address' => $clientMacAddress]);
                     } else {
                         $message = 'User don\'t have access to this network.';
                     }

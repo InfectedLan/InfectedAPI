@@ -30,7 +30,7 @@ class Server extends DatabaseObject {
 	/*
 	 * Returns the id of the compo this server is bound to
 	 */
-  public function getCompoId(): int {
+  	public function getCompoId(): int {
 		return $this->compoId;
 	}
 
@@ -69,11 +69,10 @@ class Server extends DatabaseObject {
 		ServerHandler::setHumanName($this, $humanName);
 	}
 
-  /*
-   * Deletes the server entry
-   */
-  public function delete() {
-  	ServerHandler::deleteServer($this);
-  }
+	/*
+	* Deletes the server entry
+	*/
+	public function delete() {
+		ServerHandler::deleteServer($this);
+	}
 }
-?>

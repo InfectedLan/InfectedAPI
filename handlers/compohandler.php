@@ -203,15 +203,15 @@ class CompoHandler {
 			$match = MatchHandler::createMatch($time + $looserOffsetTime, '', $compo, $iteration, $chat->getId(), Match::BRACKET_LOOSER); //TODO connectData
 
 			if (count($oldLooserCarry) > 0) {
-				MatchHandler::addMatchParticipant(MatchHandler::participantof_state_winner, array_shift($oldLooserCarry)->getId(), $match);
+				MatchHandler::addMatchParticipant(MatchHandler::PARTICIPANTOF_STATE_WINNER, array_shift($oldLooserCarry)->getId(), $match);
 			} else {
-				MatchHandler::addMatchParticipant(MatchHandler::participantof_state_looser, array_shift($currentMatches)->getId(), $match);
+				MatchHandler::addMatchParticipant(MatchHandler::PARTICIPANTOF_STATE_LOOSER, array_shift($currentMatches)->getId(), $match);
 			}
 
 			if (count($currentMatches) > 0) {
-				MatchHandler::addMatchParticipant(MatchHandler::participantof_state_looser, array_shift($currentMatches)->getId(), $match);
+				MatchHandler::addMatchParticipant(MatchHandler::PARTICIPANTOF_STATE_LOOSER, array_shift($currentMatches)->getId(), $match);
 			} else {
-				MatchHandler::addMatchParticipant(MatchHandler::participantof_state_winner, array_shift($oldLooserCarry)->getId(), $match);
+				MatchHandler::addMatchParticipant(MatchHandler::PARTICIPANTOF_STATE_WINNER, array_shift($oldLooserCarry)->getId(), $match);
 			}
 
 			$carryObjects['looserMatches'][] = $match;

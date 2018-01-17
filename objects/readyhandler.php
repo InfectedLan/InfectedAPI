@@ -31,4 +31,3 @@ class ReadyHandler extends DatabaseObject {
 		return CompoHandler::getCompo($this->compoId);
 	}
 }
-?>

@@ -23,6 +23,7 @@ require_once 'database.php';
 require_once 'localization.php';
 require_once 'handlers/userhandler.php';
 require_once 'handlers/userpermissionhandler.php';
+require_once 'handlers/permissionhandler.php';
 
 $result = false;
 $message = null;
@@ -35,12 +36,26 @@ if (Session::isAuthenticated()) {
 			is_numeric($_GET['id'])) {
 			$permissionUser = UserHandler::getUser($_GET['id']);
 
-			if ($permissionUser != null) {
-				UserPermissionHandler::removeUserPermissions($permissionUser);
+			$permissions = UserPermissionHandler::getUserPermissions($permissionUser);
 
-				$result = true;
+			$isOk = true;
+			//User needs all the permissions you are trying to remove
+			foreach($permissions as $permission) {
+				if(!$user->hasPermission($permission->getValue())) {
+					$isOk = false;
+					break;
+				}
+			}
+			if($isOk) {
+				if ($permissionUser != null) {
+					UserPermissionHandler::removeUserPermissions($permissionUser);
+
+					$result = true;
+				} else {
+					$message = Localization::getLocale('this_user_does_not_exist');
+				}
 			} else {
-				$message = Localization::getLocale('this_user_does_not_exist');
+				$message = Localization::getLocale('you_do_not_have_permission_to_do_that');
 			}
 		} else {
 			$message = Localization::getLocale('you_have_not_filled_out_the_required_fields');

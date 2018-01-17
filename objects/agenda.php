@@ -69,4 +69,3 @@ class Agenda extends EventObject {
 		return $this->getStartTime() - 5 * 60 >= time() || $this->getStartTime() + 1 * 60 * 60 >= time();
 	}
 }
-?>

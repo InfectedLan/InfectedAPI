@@ -158,4 +158,3 @@ class Event extends DatabaseObject {
 		return max(0, $ticketsLeft);
 	}
 }
-?>

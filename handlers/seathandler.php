@@ -80,19 +80,19 @@ class SeatHandler {
 		$database = Database::getConnection(Settings::db_name_infected_tickets);
 
 		if ($number == null) {
-	    // Find out what seat number we are at.
-	    $result = $database->query('SELECT `number` FROM `' . Settings::db_table_infected_tickets_seats . '`
-																	WHERE `rowId` = \'' . $row->getId() . '\'
-																	ORDER BY `number` DESC
-																	LIMIT 1;');
+			// Find out what seat number we are at.
+			$result = $database->query('SELECT `number` FROM `' . Settings::db_table_infected_tickets_seats . '`
+									   WHERE `rowId` = \'' . $row->getId() . '\'
+									   ORDER BY `number` DESC
+									   LIMIT 1;');
 
-	    $seatRow = $result->fetch_array();
-	    $number = $seatRow['number'] + 1;
+			$seatRow = $result->fetch_array();
+			$number = $seatRow['number'] + 1;
 		}
 
 		$database->query('INSERT INTO `' . Settings::db_table_infected_tickets_seats . '` (`rowId`, `number`)
-										  VALUES (\'' . $row->getId() . '\',
-												  		\'' . $database->real_escape_string($number) . '\');');
+						 VALUES (\'' . $row->getId() . '\',
+						 		 \'' . $database->real_escape_string($number) . '\');');
 
 		return self::getSeat($database->insert_id);
 	}
@@ -104,7 +104,7 @@ class SeatHandler {
 		$database = Database::getConnection(Settings::db_name_infected_tickets);
 
 		$result = $database->query('DELETE FROM `' . Settings::db_table_infected_tickets_seats . '`
-																WHERE `id` = \'' . $seat->getId() . '\';');
+								   WHERE `id` = \'' . $seat->getId() . '\';');
 	}
 
 	/*

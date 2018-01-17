@@ -29,21 +29,28 @@ class Settings {
 	const domain = 'test.infected.no';
 
 	// Email information.
+	const enableEmail = true;
 	const emailName = self::name;
 	const email = 'no-reply@' . self::domain;
 
 	// Full path to the API location.
 	const api_path = '/home/' . self::domain . '/public_html/api/';
 
+	// Permissions file.
+	const file_json_permissions = self::api_path . 'json/permissions.json';
+	const file_json_postalcodes = self::api_path . 'json/postalcodes.json';
+
 	// Tells where images should be stored.
 	const qr_path = '../api/content/qrcache/';
 	const avatar_path = '../api/content/avatars/';
+	const api_relative_avatar_path = 'content/avatars/';
 
 	/* PHP */
 	const php_version = '7.2.0';
 
 	/* Database */
 	const db_host = 'localhost';
+	
 	const db_name_infected = 'test_infected_no';
 	const db_name_infected_compo = 'test_infected_no_compo';
 	const db_name_infected_crew = 'test_infected_no_crew';
@@ -57,7 +64,6 @@ class Settings {
 	const db_table_infected_events = 'events';
 	const db_table_infected_locations = 'locations';
 	const db_table_infected_passwordresetcodes = 'passwordresetcodes';
-	const db_table_infected_permissions = 'permissions';
 	const db_table_infected_postalcodes = 'postalcodes';
 	const db_table_infected_registrationcodes = 'registrationcodes';
 	const db_table_infected_tasks = 'tasks';
@@ -98,7 +104,7 @@ class Settings {
 	const db_table_infected_crew_notewatches = 'notewatches';
 	const db_table_infected_crew_pages = 'pages';
 	const db_table_infected_crew_teams = 'teams';
-  const db_table_infected_crew_castingpages = 'castingPages';
+  	const db_table_infected_crew_castingpages = 'castingPages';
 
 	// InfectedInfo
 	const db_table_infected_info_slides = 'slides';
@@ -114,6 +120,11 @@ class Settings {
 	const db_table_infected_tech_networkaccess = 'networkaccess';
 	const db_table_infected_tech_networks = 'networks';
 	const db_table_infected_tech_networktypes = 'networktypes';
+	const db_table_infected_tech_nfccards = 'nfccards';
+	const db_table_infected_tech_nfcgates = 'nfcgates';
+	const db_table_infected_tech_nfclog = 'nfclog';
+	const db_table_infected_tech_bongTypes = 'bongTypes';
+	const db_table_infected_tech_bongTransactions = 'bongTransactions';
 
 	// InfectedTickets
 	const db_table_infected_tickets_checkedintickets = 'checkedintickets';
@@ -132,7 +143,7 @@ class Settings {
 	const compo_match_participant_type_clan = 0;
 	const compo_match_participant_type_match_winner = 1;
 	const compo_match_participant_type_match_looser = 2;
-  const compo_match_participant_type_match_walkover = 3;
+  	const compo_match_participant_type_match_walkover = 3;
 
 	/* Crew */
 	// Avatar sizes.
@@ -165,4 +176,3 @@ class Settings {
 
 	const prioritySeatingReq = 5;
 }
-?>

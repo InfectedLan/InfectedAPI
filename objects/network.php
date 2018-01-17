@@ -54,4 +54,3 @@ class Network extends DatabaseObject {
 		return $this->vlanId;
 	}
 }
-?>

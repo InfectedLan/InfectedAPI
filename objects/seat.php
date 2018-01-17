@@ -68,4 +68,3 @@ class Seat extends DatabaseObject {
 		return 'R' . $this->getRow()->getNumber() . ' S' . $this->getNumber();
 	}
 }
-?>

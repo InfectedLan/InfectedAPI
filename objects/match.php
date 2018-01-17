@@ -28,91 +28,90 @@ require_once 'handlers/userhandler.php';
 require_once 'objects/databaseobject.php';
 
 class Match extends DatabaseObject {
-  const STATE_READYCHECK = 0;
-  const STATE_CUSTOM_PREGAME = 1;
-  const STATE_JOIN_GAME = 2;
+    const STATE_READYCHECK = 0;
+    const STATE_CUSTOM_PREGAME = 1;
+    const STATE_JOIN_GAME = 2;
 
-  const BRACKET_WINNER = 1;
-  const BRACKET_LOOSER = 0;
+    const BRACKET_WINNER = 1;
+    const BRACKET_LOOSER = 0;
 
-  private $scheduledTime;
-  private $connectDetails;
-  private $winnerId;
-  private $state;
-  private $compoId;
-  private $bracketOffset;
-  private $chatId;
-  private $bracket;
+    private $scheduledTime;
+    private $connectDetails;
+    private $winnerId;
+    private $state;
+    private $compoId;
+    private $bracketOffset;
+    private $chatId;
+    private $bracket;
 
-  public function getBracket() {
-    return $this->bracket;
-  }
-
-  public function getChat(): Chat {
-    return ChatHandler::getChat($this->chatId);
-  }
-
-  public function getChatId(): int {
-    return $this->chatId;
-  }
-
-  public function getScheduledTime(): int {
-    return strtotime($this->scheduledTime);
-  }
-
-  public function getConnectDetails(): string {
-    return $this->connectDetails;
-  }
-
-  public function getWinner(): Clan {
-    return ClanHandler::getClan($this->winnerId);
-  }
-
-  public function getWinnerId(): int {
-    return $this->winnerId;
-  }
-
-  public function getState(): int {
-    return $this->state;
-  }
-
-  public function getBracketOffset(): int {
-    return $this->bracketOffset;
-  }
-
-  public function isParticipant($user): bool {
-    foreach (MatchHandler::getParticipantsByMatch($this) as $clan) {
-      if ($clan->isMember($user)) {
-  	     return true;
-      }
+    public function getBracket() {
+        return $this->bracket;
     }
 
-    return false;
-  }
+    public function getChat(): Chat {
+        return ChatHandler::getChat($this->chatId);
+    }
 
-  /*
-   * Returns true if the match can be run
-   */
-  public function isReady(): bool {
-    return MatchHandler::isReady($this);
-  }
+    public function getChatId(): int {
+        return $this->chatId;
+    }
 
-  public function setState($state) {
-    $this->state = $state;
+    public function getScheduledTime(): int {
+        return strtotime($this->scheduledTime);
+    }
 
-    MatchHandler::updateMatch($this, $state);
-  }
+    public function getConnectDetails(): string {
+        return $this->connectDetails;
+    }
 
-  public function getCompo(): Compo {
-    return CompoHandler::getCompo($this->compoId);
-  }
+    public function getWinner(): Clan {
+        return ClanHandler::getClan($this->winnerId);
+    }
 
-  public function getParents() : array {
-    return MatchHandler::getMatchParents($this);
-  }
+    public function getWinnerId(): int {
+        return $this->winnerId;
+    }
 
-  public function getJsonableData(): array {
-    return MatchHandler::getJsonableData($this);
-  }
+    public function getState(): int {
+        return $this->state;
+    }
+
+    public function getBracketOffset(): int {
+        return $this->bracketOffset;
+    }
+
+    public function isParticipant($user): bool {
+        foreach (MatchHandler::getParticipantsByMatch($this) as $clan) {
+            if ($clan->isMember($user)) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    /*
+     * Returns true if the match can be run
+     */
+    public function isReady(): bool {
+        return MatchHandler::isReady($this);
+    }
+
+    public function setState($state) {
+        $this->state = $state;
+
+        MatchHandler::updateMatch($this, $state);
+    }
+
+    public function getCompo(): Compo {
+        return CompoHandler::getCompo($this->compoId);
+    }
+
+    public function getParents() : array {
+        return MatchHandler::getMatchParents($this);
+    }
+
+    public function getJsonableData(): array {
+        return MatchHandler::getJsonableData($this);
+    }
 }
-?>

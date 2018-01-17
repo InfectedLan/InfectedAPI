@@ -46,4 +46,3 @@ class Page extends DatabaseObject {
 		return $this->content;
 	}
 }
-?>

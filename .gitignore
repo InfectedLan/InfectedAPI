@@ -4,3 +4,8 @@ paypalsecret.php
 
 # Emacs is an ass
 *~
+
+# Htaccess is deprecated
+.htaccess
+
+.idea/

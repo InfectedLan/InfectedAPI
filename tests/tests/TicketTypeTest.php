@@ -34,11 +34,6 @@ require_once 'database.php';
  */
 class TicketTypeTest extends TestCase {
 	public function test() {
-		$this->ticketTypeSanityCheck();
-		$this->cleanup();
-	}
-
-	private function ticketTypeSanityCheck() {
 		//We expect there to be two different types of tickets, and we expect to be able to fetch it
 		//This tests both the object, and the default data from deployment
 		$types = TicketTypeHandler::getTicketTypes();
@@ -78,9 +73,4 @@ class TicketTypeTest extends TestCase {
 
 		Database::cleanup();
 	}
-
-	private function cleanup() {
-
-	}
 }
-?>

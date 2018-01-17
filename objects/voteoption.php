@@ -47,4 +47,3 @@ class VoteOption extends DatabaseObject {
 		return $this->name;
 	}
 }
-?>

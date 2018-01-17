@@ -101,4 +101,3 @@ class Team extends DatabaseObject {
 		return TeamHandler::getTeamMembers($this, $event);
 	}
 }
-?>

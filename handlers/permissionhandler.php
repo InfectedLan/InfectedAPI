@@ -19,7 +19,6 @@
  */
 
 require_once 'settings.php';
-require_once 'database.php';
 require_once 'objects/permission.php';
 
 class PermissionHandler {
@@ -27,42 +26,59 @@ class PermissionHandler {
 	 * Get the permission by the internal id.
 	 */
 	public static function getPermission(int $id): ?Permission {
-		$database = Database::getConnection(Settings::db_name_infected);
+		$json = json_decode(file_get_contents(Settings::file_json_permissions));
 
-		$result = $database->query('SELECT * FROM `' . Settings::db_table_infected_permissions . '`
-																WHERE `id` = \'' . $database->real_escape_string($id) . '\';');
+		foreach ($json as $key => $data) {
+			if ($data->id = $id) {
+				return new Permission($data->id, $data->value, $data->description);
+			}
+		}
 
-		return $result->fetch_object('Permission');
+		return null;
 	}
 
 	/*
 	 * Returns the permission with the given value.
 	 */
 	public static function getPermissionByValue(string $value): ?Permission {
-		$database = Database::getConnection(Settings::db_name_infected);
+		$json = json_decode(file_get_contents(Settings::file_json_permissions));
 
-		$result = $database->query('SELECT * FROM `' . Settings::db_table_infected_permissions . '`
-																WHERE `value` = \'' . $database->real_escape_string($value) . '\';');
+		foreach ($json as $key => $data) {
+			if ($data->value == $value) {
+				return new Permission($data->id, $data->value, $data->description);
+			}
+		}
 
-		return $result->fetch_object('Permission');
+		return null;
 	}
 
 	/*
 	 * Returns a list of all permissions.
 	 */
 	public static function getPermissions(): array {
-		$database = Database::getConnection(Settings::db_name_infected);
-
-		$result = $database->query('SELECT * FROM `' . Settings::db_table_infected_permissions . '`
-																ORDER BY `value` ASC;');
-
+		$json = json_decode(file_get_contents(Settings::file_json_permissions));
 		$permissionList = [];
 
-		while ($object = $result->fetch_object('Permission')) {
-			$permissionList[] = $object;
+		foreach ($json as $key => $data) {
+			$permissionList[] = new Permission($data->id, $data->value, $data->description);
+		}
+
+		return $permissionList;
+	}
+
+	/*
+	 * Returns a list of all permissions.
+	 */
+	public static function getPermissionsByValues(array $values): array {
+		$json = json_decode(file_get_contents(Settings::file_json_permissions));
+		$permissionList = [];
+
+		foreach ($json as $key => $data) {
+			if (in_array($data->id, $values)) {
+				$permissionList[] = new Permission($data->id, $data->value, $data->description);
+			}
 		}
 
 		return $permissionList;
 	}
 }
-?>

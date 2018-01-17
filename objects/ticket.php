@@ -65,6 +65,13 @@ class Ticket extends EventObject {
 	}
 
 	/*
+	 * Returns the user id of this ticket. This is done for speedup purposes.
+	 */
+	public function getUserId(): int {
+		return $this->userId;
+	}
+
+	/*
 	 * Returns the seater of this ticket.
 	 *
 	 * The seater is the user account that is allowed to decide what seat this ticket is seated on.
@@ -76,7 +83,7 @@ class Ticket extends EventObject {
 	/*
 	 * Returns the seat that this ticket is seated at.
 	 */
-	public function getSeat(): Seat {
+	public function getSeat(): ?Seat{ //this has to be able to return null
 		return SeatHandler::getSeat($this->seatId);
 	}
 
@@ -148,4 +155,3 @@ class Ticket extends EventObject {
 		TicketTransferHandler::revertTransfer($this, $user);
 	}
 }
-?>

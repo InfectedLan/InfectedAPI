@@ -88,4 +88,3 @@ class Chat extends DatabaseObject {
 		ChatHandler::sendChatMessage($this, $user, $message);
 	}
 }
-?>

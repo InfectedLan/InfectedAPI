@@ -42,7 +42,7 @@ class NotificationManager {
 						$message[] = '<p><b>Navn på gjøremålet:</b> ' . $note->getTitle() . '</p>';
 						$message[] = '<p><b>Detaljer:</b> <br>';
 						$message[] = wordwrap($note->getContent(), 75, '<br>') . '</p>';
-						$message[] = '<p>Med vennlig hilsen <a href="http://infected.no/">Infected</a>.</p>';
+						$message[] = '<p>Med vennlig hilsen <a href="https://' . Settings::domain . '/">Infected</a>.</p>';
 					$message[] = '</body>';
 				$message[] = '</html>';
 
@@ -70,8 +70,8 @@ class NotificationManager {
 				$message[] = '<body>';
 					$message[] = '<h3>Hei!</h3>';
 					$message[] = '<p>Du har fått en ny søknad til crewet ditt (' . $group->getTitle() . ') fra ' . $application->getUser()->getFullName() . '<p>';
-					$message[] = '<p>Klikk <a href="https://crew.infected.no/v2/index.php?page=application&id=' . $application->getId() . '">her</a> for å se den.</p>';
-					$message[] = '<p>Med vennlig hilsen <a href="http://infected.no/">Infected</a>.</p>';
+					$message[] = '<p>Klikk <a href="https://crew.' . Settings::domain . '/v2/index.php?page=application&id=' . $application->getId() . '">her</a> for å se den.</p>';
+					$message[] = '<p>Med vennlig hilsen <a href="https://' . Settings::domain . '/">Infected</a>.</p>';
 				$message[] = '</body>';
 			$message[] = '</html>';
 
@@ -89,9 +89,9 @@ class NotificationManager {
 			$message[] = '<body>';
 				$message[] = '<h3>Hei!</h3>';
 				$message[] = '<p>Din crew søknad til ' . $application->getGroup()->getTitle() . ' crew har blitt godkjent.</p>';
-				$message[] = 'Du kan nå logge inn på <a href="https://crew.infected.no/">Infected Crew</a> å bli kjent med det nye crewet ditt.<br>';
+				$message[] = 'Du kan nå logge inn på <a href="https://crew.' . Settings::domain . '/">Infected Crew</a> å bli kjent med det nye crewet ditt.<br>';
 				$message[] = 'Ta deg tid til å gå igjennom profilen din å sjekk at du har oppgitt alle og riktige opplysninger da dette blir brukt til adgangskort osv. under arrangementet.</p>';
-				$message[] = '<p>Med vennlig hilsen <a href="http://infected.no/">Infected</a>.</p>';
+				$message[] = '<p>Med vennlig hilsen <a href="https://' . Settings::domain . '/">Infected</a>.</p>';
 			$message[] = '</body>';
 		$message[] = '</html>';
 
@@ -110,7 +110,7 @@ class NotificationManager {
 				$message[] = '<p>Din crew søknad til ' . $application->getGroup()->getTitle() . ' crew har blitt avvist.<br>';
 				$message[] = 'Grunnen var: ' . $comment . '</p>';
 				$message[] = '<p>Du er velkommen til å søke til et annet crew eller prøve på nytt neste gang.</p>';
-				$message[] = '<p>Med vennlig hilsen <a href="http://infected.no/">Infected</a>.</p>';
+				$message[] = '<p>Med vennlig hilsen <a href="https://' . Settings::domain . '/">Infected</a>.</p>';
 			$message[] = '</body>';
 		$message[] = '</html>';
 
@@ -130,7 +130,7 @@ class NotificationManager {
 				$message[] = 'Dette betyr at crewet du søkte for øyeblikket er fullt, men at er en aktuell kandidat, <br>';
 				$message[] = 'søknaden din vil bli godkjent senere dersom det blir behov for flere medlemmer.</p>';
 				$message[] = '<p>I mellomtiden er du velkommen til å søke deg inn i andre crew, men merk at det da er den første godkjente søknaden som bil bli godkjent.</p>';
-				$message[] = '<p>Med vennlig hilsen <a href="http://infected.no/">Infected</a>.</p>';
+				$message[] = '<p>Med vennlig hilsen <a href="https://' . Settings::domain . '/">Infected</a>.</p>';
 			$message[] = '</body>';
 		$message[] = '</html>';
 
@@ -148,8 +148,8 @@ class NotificationManager {
 				$message[] = '<h3>Hei!</h3>';
 				$message[] = '<p>Takk for din bestilling.<p>';
 				$message[] = '<p>Bestillingsreferansen din er: <b>' . $reference . '</b>';
-				$message[] = '<p>Du kan nå plassere deg ved å trykke <a href="https://tickets.infected.no/v2/index.php?page=viewSeatmap">her</a>.</p>';
-				$message[] = '<p>Med vennlig hilsen <a href="http://infected.no/">Infected</a>.</p>';
+				$message[] = '<p>Du kan nå plassere deg ved å trykke <a href="https://tickets.' . Settings::domain . '/v2/index.php?page=viewSeatmap">her</a>.</p>';
+				$message[] = '<p>Med vennlig hilsen <a href="https://' . Settings::domain . '/">Infected</a>.</p>';
 			$message[] = '</body>';
 		$message[] = '</html>';
 

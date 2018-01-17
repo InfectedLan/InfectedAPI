@@ -38,4 +38,3 @@ class Location extends DatabaseObject {
 		return $this->title;
 	}
 }
-?>
