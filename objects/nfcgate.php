@@ -28,7 +28,7 @@ require_once 'handlers/eventhandler.php';
  */
 class NfcGate extends DatabaseObject {
 	//Constants for the type field
-	const NFC_GATE_TYPE_POE = 2;
+	const NFC_GATE_TYPE_POS = 2;
 	const NFC_GATE_TYPE_TICKETSCANNER = 1;
     const NFC_GATE_TYPE_GATE = 0;
 

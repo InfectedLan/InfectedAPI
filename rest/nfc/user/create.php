@@ -32,44 +32,50 @@ $status = http_response_code();
 $message = null;
 $authenticated = false;
 
-if(isset($_POST["pcbid"])) {
-	if(strlen($_POST["pcbid"]) == 32) {
-		$unit = NfcGateHandler::getGateByPcbid($_POST["pcbid"]);
+if(isset($_POST["pcbId"])) {
+	if(strlen($_POST["pcbId"]) == 32) {
+		$unit = NfcGateHandler::getGateByPcbid($_POST["pcbId"]);
 		if($unit != null) {
-			if(isset($_POST["cardid"]) && isset($_POST["userid"])) {
-				if(strlen($_POST["cardid"])==16) {
-					$card = NfcCardHandler::getCardByNfcId($_POST["cardid"]);
-					if($card==null) {
-						$user = UserHandler::getUser($_POST["userid"]);
-						if($user!=null) {
-							NfcCardHandler::registerCard($user, $_POST["cardid"]);
-							$status = 200;
-							$result = true;
+			if($unit->getType()==NfcGate::NFC_GATE_TYPE_TICKETSCANNER) {
+				if(isset($_POST["cardId"]) && isset($_POST["userId"])) {
+					if(strlen($_POST["cardId"])==16) {
+						$card = NfcCardHandler::getCardByNfcId($_POST["cardId"]);
+						if($card==null) {
+							$user = UserHandler::getUser($_POST["userId"]);
+							if($user!=null) {
+								NfcCardHandler::registerCard($user, $_POST["cardId"]);
+								$status = 200;
+								$result = true;
+							} else {
+								$status = 400; // Bad Request.
+								$message = Localization::getLocale('this_user_does_not_exist');
+							}
 						} else {
-							$status = 400; // Bad Request.
-							$message = Localization::getLocale('this_user_does_not_exist');
+							$status = 400;
+							$message = Localization::getLocale('the_card_is_already_bound');
 						}
 					} else {
-						$status = 400;
-						$message = Localization::getLocale('the_card_is_already_bound');
+						$status = 400; // Bad Request.
+						$message = Localization::getLocale('invalid_cardid_format');	
 					}
 				} else {
 					$status = 400; // Bad Request.
-					$message = Localization::getLocale('invalid_cardid_format');	
+					$message = Localization::getLocale('you_have_not_filled_out_the_required_fields');
 				}
 			} else {
-				$status = 400; // Bad Request.
-				$message = Localization::getLocale('you_have_not_filled_out_the_required_fields');
+				$status = 403; // Forbidden
+				$message = Localization::getLocale('invalid_pcbid');
+				SyslogHandler::log("NFC user registration was attempted with an unit which is not a ticketscanner", "nfc/user/create", null, SyslogHandler::SEVERITY_WARNING, ["type" => $unit->getType(), "pcbId" => $_GET["pcbId"], "ip" => $_SERVER['REMOTE_ADDR']]);
 			}
 		} else {
 			$status = 403;
 			$message = Localization::getLocale('invalid_pcbid');
-			SyslogHandler::log("NFC user registration was attempted with invalid pcbid", "nfc/user/create", null, SyslogHandler::WARNING, ["pcbid" => $_POST["pcbid"], "ip" => $_SERVER['REMOTE_ADDR']]);
+			SyslogHandler::log("NFC user registration was attempted with invalid pcbid", "nfc/user/create", null, SyslogHandler::SEVERITY_WARNING, ["pcbId" => $_POST["pcbId"], "ip" => $_SERVER['REMOTE_ADDR']]);
 		}
 	} else {
 		$status = 403;
 		$message = Localization::getLocale('invalid_pcbid');
-		SyslogHandler::log("NFC user registration was attempted with malformed pcbid", "nfc/user/create", null, SyslogHandler::WARNING, ["pcbid" => $_POST["pcbid"], "ip" => $_SERVER['REMOTE_ADDR']]);
+		SyslogHandler::log("NFC user registration was attempted with malformed pcbid", "nfc/user/create", null, SyslogHandler::SEVERITY_WARNING, ["pcbId" => $_POST["pcbId"], "ip" => $_SERVER['REMOTE_ADDR']]);
 	}
 } else {
 	$status = 400;

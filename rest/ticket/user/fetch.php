@@ -24,6 +24,7 @@ require_once 'handlers/nfcgatehandler.php';
 require_once 'handlers/tickethandler.php';
 require_once 'localization.php';
 require_once 'handlers/sysloghandler.php';
+require_once 'objects/nfcgate.php';
 
 $result = false;
 $status = http_response_code();
@@ -41,20 +42,26 @@ if (Session::isAuthenticated()) {
 		$status = 403; // Forbidden
 		$message = Localization::getLocale('you_do_not_have_permission_to_do_that');
 	}
-} elseif(isset($_GET["pcbid"])) {
-	if(strlen($_GET["pcbid"]) == 32) {
-		$unit = NfcGateHandler::getGateByPcbid($_GET["pcbid"]);
+} elseif(isset($_GET["pcbId"])) {
+	if(strlen($_GET["pcbId"]) == 32) {
+		$unit = NfcGateHandler::getGateByPcbid($_GET["pcbId"]);
 		if($unit != null) {
-			$authenticated = true;
+			if($unit->getType()==NfcGate::NFC_GATE_TYPE_TICKETSCANNER) {
+				$authenticated = true;
+			} else {
+				$status = 403; // Forbidden
+				$message = Localization::getLocale('invalid_pcbid');
+				SyslogHandler::log("User data fetching was attempted with an unit which is not a ticketscanner", "ticket/user/fetch", null, SyslogHandler::SEVERITY_WARNING, ["type" => $unit->getType(), "pcbId" => $_GET["pcbId"], "ip" => $_SERVER['REMOTE_ADDR']]);
+			}
 		} else {
 			$status = 403; // Forbidden
 			$message = Localization::getLocale('invalid_pcbid');
-			SyslogHandler::log("Checkin was attempted with invalid pcbid", "ticket/user/fetch", null, SyslogHandler::WARNING, ["pcbid" => $_GET["pcbid"], "ip" => $_SERVER['REMOTE_ADDR']]);
+			SyslogHandler::log("User data fetching was attempted with invalid pcbid", "ticket/user/fetch", null, SyslogHandler::SEVERITY_WARNING, ["pcbId" => $_GET["pcbId"], "ip" => $_SERVER['REMOTE_ADDR']]);
 		}
 	} else {
 		$status = 403; // Forbidden
 		$message = Localization::getLocale('invalid_pcbid');
-		SyslogHandler::log("Checkin was attempted with malformed pcbid", "ticket/user/fetch", null, SyslogHandler::WARNING, ["pcbid" => $_GET["pcbid"], "ip" => $_SERVER['REMOTE_ADDR']]);
+		SyslogHandler::log("User data fetching was attempted with malformed pcbid", "ticket/user/fetch", null, SyslogHandler::SEVERITY_WARNING, ["pcbId" => $_GET["pcbId"], "ip" => $_SERVER['REMOTE_ADDR']]);
 	}
 } else {
 	$status = 401; // Bad Request.
