@@ -38,9 +38,25 @@ class NfcGateHandler {
 	}
 
 	/*
-	 * Returns a list of all nfc gates by their event.
+	 * Returns the gate with the given pcbid
 	 */
-	public static function getGatesByEvent(Event $event) {
+	public static function getGateByPcbid(string $pcbid) {
+		$database = Database::getConnection(Settings::db_name_infected_tech);
+
+		$result = $database->query('SELECT * FROM `'. Settings::db_table_infected_tech_nfcgates . '`
+																WHERE `pcbId` = \'' . $database->real_escape_string($pcbid) . '\';');
+
+		return $result->fetch_object('NfcGate');
+	}
+
+	/*
+	 * Returns a list of all nfc gates by their event. If the eve nt is not specified, the current one is used
+	 */
+	public static function getGatesByEvent(Event $event = null) {
+		if($event==null) {
+			$event = EventHandler::getCurrentEvent();
+		}
+
 		$database = Database::getConnection(Settings::db_name_infected_tech);
 
 		$result = $database->query('SELECT * FROM `' . Settings::db_table_infected_tech_nfcgates . '` WHERE `eventId` = \'' . $event->getId() . '\';');
@@ -52,13 +68,6 @@ class NfcGateHandler {
 		}
 
 		return $gateList;
-	}
-
-	/*
-	 * Returns a list of all nfc gates for the current event
-	 */
-	public static function getGatesForCurrentEvent() {
-		return getGatesByEvent(EventHandler::getCurrentEvent());
 	}
 }
 ?>

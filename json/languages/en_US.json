@@ -175,5 +175,14 @@
   "your_email_was_sent_to_the_selected_user": "Your email was sent to the selected user.",
   "your_email_was_sent_to_the_selected_users": "Your email was sent to the selected users.",
   "your_password_is_now_changed": "Your password is now changed.",
-  "zip_code": "ZIP code"
+  "zip_code": "ZIP code",
+  "invalid_pcbid": "Invalid pcbid",
+  "the_card_is_already_bound": "This card is already bound to an account",
+  "invalid_cardid_format": "Invalid card NFC id format",
+  "this_card_is_not_bound": "This NFC card is not bound to an account",
+  "the_transactor_card_is_not_bound": "The transaction responsible's card is not bound. Has it been deleted?",
+  "the_transactor_user_does_not_exist": "The transaction responsible user doesn't exist",
+  "the_user_bound_to_the_card_does_not_exist": "The user bound to this card does not exist",
+  "the_bong_type_doesnt_exist": "The specified bong type doesn't exist",
+  "not_enough_bongs": "The user doesn't have enough bongs to complete this transaction"
 }

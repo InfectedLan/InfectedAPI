@@ -26,37 +26,53 @@ require_once 'handlers/tickethandler.php';
 $result = false;
 $status = http_response_code();
 $message = null;
+$authenticated = false;
 
 if (Session::isAuthenticated()) {
 	$user = Session::getCurrentUser();
 
 	if ($user->hasPermission('event.checkin')) {
-		if (isset($_GET['ticketId']) &&
-			is_numeric($_GET['ticketId'])) {
-			$ticket = TicketHandler::getTicket($_GET['ticketId']);
-
-			if ($ticket != null) {
-				if (!$ticket->isCheckedIn()) {
-				    $ticket->checkIn();
-
-					$message = Localization::getLocale('value_ticket_is_now_checked_in', $ticket->getUser()->getFirstname());
-					$result = true;
-				} else {
-					$message = Localization::getLocale('this_ticket_is_already_checked_in');
-				}
-			} else {
-                $status = 404; // Not Found.
-				$message = Localization::getLocale('this_ticket_does_not_exist');
-			}
-		} else {
-            $status = 400; // Bad Request.
-			$message = Localization::getLocale('you_have_not_filled_out_the_required_fields');
-		}
+		$authenticated = true;
 	} else {
+		$status = 403; // Forbidden
 		$message = Localization::getLocale('you_do_not_have_permission_to_do_that');
 	}
+} elseif(isset($_GET["pcbid"])) {
+	$unit = NfcGateHandler::getGateByPcbid($_GET["pcbid"]);
+	if($unit != null) {
+		$authenticated = true;
+	} else {
+		$status = 403; // Forbidden
+		$message = Localization::getLocale('invalid_pcbid');
+	}
 } else {
+	$status = 401; // Denied or smth
 	$message = Localization::getLocale('you_are_not_logged_in');
+}
+
+if($authenticated) {
+	if (isset($_GET['ticketId']) &&
+		is_numeric($_GET['ticketId'])) {
+		$ticket = TicketHandler::getTicket($_GET['ticketId']);
+
+		if ($ticket != null) {
+        	if (!$ticket->isCheckedIn()) {
+			    $ticket->checkIn();
+
+				$message = Localization::getLocale('value_ticket_is_now_checked_in', $ticket->getUser()->getFirstname());
+				$result = true;
+			} else {
+				$message = Localization::getLocale('this_ticket_is_already_checked_in');
+				$status = 400;
+			}
+		} else {
+            $status = 404; // Not Found.
+			$message = Localization::getLocale('this_ticket_does_not_exist');
+		}
+	} else {
+        $status = 400; // Bad Request.
+		$message = Localization::getLocale('you_have_not_filled_out_the_required_fields');
+	}
 }
 
 http_response_code($status);

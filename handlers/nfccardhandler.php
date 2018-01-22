@@ -58,13 +58,17 @@ class NfcCardHandler {
 	}
 
 	/*
-	 * Returns the card with the given card id
+	 * Returns the card with the given card id. If the event is not specified, the current event is used.
 	 */
-	public static function getCardByNfcId($nfcId) {
+	public static function getCardByNfcId(string $nfcId, Event $event = null) {
+		if($event==null) {
+			$event = EventHandler::getCurrentEvent();
+		}
 		$database = Database::getConnection(Settings::db_name_infected_tech);
 
 		$result = $database->query('SELECT * FROM `'. Settings::db_table_infected_tech_nfccards . '`
-																WHERE `nfcId` = \'' . $database->real_escape_string($nfcId) . '\';');
+																WHERE `nfcId` = \'' . $database->real_escape_string($nfcId) . '\' 
+																AND	`eventId` = \'' . $event->getId() . '\';');
 
 		return $result->fetch_object('NfcCard');
 	}
