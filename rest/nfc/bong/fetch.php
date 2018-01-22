@@ -27,6 +27,7 @@ require_once 'handlers/nfccardhandler.php';
 require_once 'handlers/userhandler.php';
 require_once 'handlers/bongtransactionhandler.php';
 require_once 'localization.php';
+require_once 'handlers/sysloghandler.php';
 
 $result = false;
 $status = http_response_code();
@@ -34,53 +35,60 @@ $message = null;
 $data = null;
 $authenticated = false;
 
-if(isset($_POST["pcbid"])) {
-	$unit = NfcGateHandler::getGateByPcbid($_POST["pcbid"]);
-	
-	if($unit != null) {
-		if(isset($_POST["cardid"])) {
-			if(strlen($_POST["cardid"]) == 16) {
-				$card = NfcCardHandler::getCardByNfcId($_POST["cardid"]);
-				if($card != null) {
-					$user = $card->getUser();
-					if($user != null) {
-						$bongTypes = BongTypeHandler::getBongTypes();
-						$bongList = [];
-						foreach ($bongTypes as $bong) {
-							$entitlement = BongEntitlementHandler::calculateBongEntitlementByUser($bong, $user);
-							if($entitlement != 0) {
-								$posession = BongTransactionHandler::getBongPosession($bong, $user);
-								$bongList[] = ["bong" => [ "id" => $bong->getId(),
-													"name" => $bong->getName(),
-											   		"description" => $bong->getDescription()],
-											   		"posession" => $posession];
+if(isset($_GET["pcbid"])) {
+	if(strlen($_GET["pcbid"]) == 32) {
+		$unit = NfcGateHandler::getGateByPcbid($_GET["pcbid"]);
+		
+		if($unit != null) {
+			if(isset($_GET["cardid"])) {
+				if(strlen($_GET["cardid"]) == 16) {
+					$card = NfcCardHandler::getCardByNfcId($_GET["cardid"]);
+					if($card != null) {
+						$user = $card->getUser();
+						if($user != null) {
+							$bongTypes = BongTypeHandler::getBongTypes();
+							$bongList = [];
+							foreach ($bongTypes as $bong) {
+								$entitlement = BongEntitlementHandler::calculateBongEntitlementByUser($bong, $user);
+								if($entitlement != 0) {
+									$posession = BongTransactionHandler::getBongPosession($bong, $user);
+									$bongList[] = ["bong" => [ "id" => $bong->getId(),
+														"name" => $bong->getName(),
+												   		"description" => $bong->getDescription()],
+												   		"posession" => $posession];
+								}
 							}
+
+							$data = ["name" => $user->getDisplayName(),
+									 "bongs" => $bongList];
+
+							$status = 200;
+							$result = true;
+						} else {
+							$status = 400;
+							$message = Localization::getLocale('the_user_bound_to_the_card_does_not_exist');
 						}
-
-						$data = ["name" => $user->getDisplayName(),
-								 "bongs" => $bongList];
-
-						$status = 200;
-						$result = true;
 					} else {
 						$status = 400;
-						$message = Localization::getLocale('the_user_bound_to_the_card_does_not_exist');
+						$message = Localization::getLocale('this_card_is_not_bound');
 					}
 				} else {
-					$status = 400;
-					$message = Localization::getLocale('this_card_is_not_bound');
+					$status = 400; // Bad Request.
+					$message = Localization::getLocale('invalid_cardid_format');	
 				}
 			} else {
 				$status = 400; // Bad Request.
-				$message = Localization::getLocale('invalid_cardid_format');	
+				$message = Localization::getLocale('you_have_not_filled_out_the_required_fields');
 			}
 		} else {
-			$status = 400; // Bad Request.
-			$message = Localization::getLocale('you_have_not_filled_out_the_required_fields');
+			$status = 403;
+			$message = Localization::getLocale('invalid_pcbid');
+			SyslogHandler::log("NFC bong fetching was attempted with invalid pcbid", "nfc/bong/fetch", null, SyslogHandler::WARNING, ["pcbid" => $_GET["pcbid"], "ip" => $_SERVER['REMOTE_ADDR']]);
 		}
 	} else {
 		$status = 403;
 		$message = Localization::getLocale('invalid_pcbid');
+		SyslogHandler::log("NFC bong fetching was attempted with malformed pcbid", "nfc/bong/fetch", null, SyslogHandler::WARNING, ["pcbid" => $_GET["pcbid"], "ip" => $_SERVER['REMOTE_ADDR']]);
 	}
 } else {
 	$status = 400;

@@ -22,6 +22,7 @@ require_once 'session.php';
 require_once 'database.php';
 require_once 'localization.php';
 require_once 'handlers/tickethandler.php';
+require_once 'handlers/sysloghandler.php';
 
 $result = false;
 $status = http_response_code();
@@ -38,12 +39,19 @@ if (Session::isAuthenticated()) {
 		$message = Localization::getLocale('you_do_not_have_permission_to_do_that');
 	}
 } elseif(isset($_GET["pcbid"])) {
-	$unit = NfcGateHandler::getGateByPcbid($_GET["pcbid"]);
-	if($unit != null) {
-		$authenticated = true;
+	if(strlen($_GET["pcbid"]) == 32) {
+		$unit = NfcGateHandler::getGateByPcbid($_GET["pcbid"]);
+		if($unit != null) {
+			$authenticated = true;
+		} else {
+			$status = 403; // Forbidden
+			$message = Localization::getLocale('invalid_pcbid');
+			SyslogHandler::log("Checkin was attempted with invalid pcbid", "ticket/checkIn", null, SyslogHandler::WARNING, ["pcbid" => $_GET["pcbid"], "ip" => $_SERVER['REMOTE_ADDR']]);
+		}
 	} else {
 		$status = 403; // Forbidden
 		$message = Localization::getLocale('invalid_pcbid');
+		SyslogHandler::log("Checkin was attempted with malformed pcbid", "ticket/checkIn", null, SyslogHandler::WARNING, ["pcbid" => $_GET["pcbid"], "ip" => $_SERVER['REMOTE_ADDR']]);
 	}
 } else {
 	$status = 401; // Denied or smth
