@@ -2,7 +2,7 @@ module = (function(){
     var pluginObj = {};
 
     pluginObj.renderCustomScreen = function(currMatchData) {
-	$("#matchArea").html("<h1>Dette skal ikke skje! Si straks ifra til R9S10-fyren</h1>");
+	$("#matchArea").html("<h1>Dette skal ikke skje! Si straks ifra til game-fyren</h1>");
     };
 
     pluginObj.renderGameScreen = function(currMatchData) {
@@ -17,7 +17,7 @@ module = (function(){
     };
 
     pluginObj.decorateCompoPage = function(compo) {
-	//$("#customContent").html('<h2>Deltagere</h2><iframe style="margin: auto; display: block;" allowfullscreen="true" scrolling="no" src="https://widget.toornament.com/tournaments/58a71076150ba092088b45a1/stages/2?_locale=en_GB&theme=discipline" frameborder="0" height="610" width="980"></iframe>');
+	$("#customContent").html('<h2>Deltagere</h2><iframe width="640" height="360" src="https://widget.toornament.com/tournaments/787738634901643264/stages/787746956199477248/?_locale=en_US&theme=light" frameborder="0" allowfullscreen="true"></iframe>');
     };
 
     return pluginObj;
