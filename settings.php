@@ -123,7 +123,7 @@ class Settings {
 	const db_table_infected_tech_networks = 'networks';
 	const db_table_infected_tech_networktypes = 'networktypes';
 	const db_table_infected_tech_nfccards = 'nfccards';
-	const db_table_infected_tech_nfcgates = 'nfcgates';
+	const db_table_infected_tech_nfcunits = 'nfcunits';
 	const db_table_infected_tech_nfclog = 'nfclog';
 
 	// InfectedTickets

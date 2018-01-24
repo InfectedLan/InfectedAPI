@@ -26,7 +26,7 @@ require_once 'handlers/eventhandler.php';
  *  - Ticket booth
  *  - Entry gate
  */
-class NfcGate extends DatabaseObject {
+class NfcUnit extends DatabaseObject {
 	//Constants for the type field
 	const NFC_GATE_TYPE_POS = 2;
 	const NFC_GATE_TYPE_TICKETSCANNER = 1;

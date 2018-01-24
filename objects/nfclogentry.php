@@ -19,7 +19,7 @@
  */
 
 require_once 'objects/databaseobject.php';
-require_once 'handlers/nfcgatehandler.php';
+require_once 'handlers/nfcunithandler.php';
 require_once 'handlers/nfccardhandler.php';
 
 /*
@@ -43,7 +43,7 @@ class NfcLogEntry extends DatabaseObject {
 	 * Returns the gate which this entry logs passing
 	 */
 	public function getGate() {
-		return NfcGateHandler::getGate($this->gateId);
+		return NfcUnitHandler::getGate($this->gateId);
 	}
 	
 	/*

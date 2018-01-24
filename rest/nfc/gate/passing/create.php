@@ -34,9 +34,9 @@ $authenticated = false;
 
 if(isset($_POST["pcbId"])) {
 	if(strlen($_POST["pcbId"]) == 32) {
-		$unit = NfcGateHandler::getGateByPcbid($_POST["pcbId"]);
+		$unit = NfcUnitHandler::getGateByPcbid($_POST["pcbId"]);
 		if($unit != null) {
-			if($unit->getType()==NfcGate::NFC_GATE_TYPE_GATE) {
+			if($unit->getType()==NfcUnit::NFC_GATE_TYPE_GATE) {
 				if(isset($_POST["cardId"])) {
 					if(strlen($_POST["cardId"])==16) {
 						$card = NfcCardHandler::getCardByNfcId($_POST["cardId"]);
@@ -57,7 +57,7 @@ if(isset($_POST["pcbId"])) {
 			} else {
 				$status = 403; // Forbidden
 				$message = Localization::getLocale('invalid_pcbid');
-				SyslogHandler::log("Invalid PCB ID for gate passing", "nfc/gate/passing/create", null, SyslogHandler::SEVERITY_WARNING, ["type" => $unit->getType(), "pcbId" => $_GET["pcbId"], "ip" => $_SERVER['REMOTE_ADDR']]);
+				SyslogHandler::log("Invalid PCB ID for gate passing", "nfc/gate/passing/create", null, SyslogHandler::SEVERITY_WARNING, ["type" => $unit->getType(), "pcbId" => $_POST["pcbId"], "ip" => $_SERVER['REMOTE_ADDR']]);
 			}
 		} else {
 			$status = 403;

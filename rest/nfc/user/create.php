@@ -34,9 +34,9 @@ $authenticated = false;
 
 if(isset($_POST["pcbId"])) {
 	if(strlen($_POST["pcbId"]) == 32) {
-		$unit = NfcGateHandler::getGateByPcbid($_POST["pcbId"]);
+		$unit = NfcUnitHandler::getGateByPcbid($_POST["pcbId"]);
 		if($unit != null) {
-			if($unit->getType()==NfcGate::NFC_GATE_TYPE_TICKETSCANNER) {
+			if($unit->getType()==NfcUnit::NFC_GATE_TYPE_TICKETSCANNER) {
 				if(isset($_POST["cardId"]) && isset($_POST["userId"])) {
 					if(strlen($_POST["cardId"])==16) {
 						$card = NfcCardHandler::getCardByNfcId($_POST["cardId"]);

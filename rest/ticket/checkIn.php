@@ -41,9 +41,9 @@ if (Session::isAuthenticated()) {
 	}
 } elseif(isset($_GET["pcbId"])) {
 	if(strlen($_GET["pcbId"]) == 32) {
-		$unit = NfcGateHandler::getGateByPcbid($_GET["pcbId"]);
+		$unit = NfcUnitHandler::getGateByPcbid($_GET["pcbId"]);
 		if($unit != null) {
-			if($unit->getType()==NfcGate::NFC_GATE_TYPE_TICKETSCANNER) {
+			if($unit->getType()==NfcUnit::NFC_GATE_TYPE_TICKETSCANNER) {
 				$authenticated = true;
 			} else {
 				$status = 403; // Forbidden
