@@ -293,9 +293,9 @@ class TeamHandler {
 		$database = Database::getConnection(Settings::db_name_infected_crew);
 
 		$database->query('UPDATE `' . Settings::db_table_infected_crew_memberof . '`
-										  SET `teamId` = \'0\'
-										  WHERE `eventId` = \'' . ($event != null ? $event->getId() : EventHandler::getCurrentEvent()->getId()) . '\'
-										  AND `teamId` = \'' . $team->getId() . '\';');
+						 SET `teamId` = 0
+						 WHERE `eventId` = ' . ($event != null ? $event->getId() : EventHandler::getCurrentEvent()->getId()) . '
+						 AND `teamId` = ' . $team->getId() . ';');
 	}
 
 	/*
@@ -305,9 +305,9 @@ class TeamHandler {
 		$database = Database::getConnection(Settings::db_name_infected_crew);
 
 		$result = $database->query('SELECT * FROM `' . Settings::db_table_infected_crew_memberof . '`
-																WHERE `eventId` = \'' . ($event != null ? $event->getId() : EventHandler::getCurrentEvent()->getId()) . '\'
-																AND `teamId` = \'' . $team->getId() . '\'
-																AND `teamLeader` != \'0\';');
+								   WHERE `eventId` = ' . ($event != null ? $event->getId() : EventHandler::getCurrentEvent()->getId()) . '
+								   AND `teamId` = ' . $team->getId() . '
+								   AND `teamLeader` != 0;');
 
 		return $result->num_rows > 0;
 	}
@@ -319,12 +319,11 @@ class TeamHandler {
 		$database = Database::getConnection(Settings::db_name_infected_crew);
 
 		$result = $database->query('SELECT `' . Settings::db_table_infected_crew_memberof . '`.* FROM `' . Settings::db_table_infected_crew_memberof . '`
-																INNER JOIN `' . Settings::db_table_infected_crew_teams . '`
-																ON `teamId` = `' . Settings::db_table_infected_crew_teams . '`.`id`
-																WHERE `eventId` = \'' . ($event != null ? $event->getId() : EventHandler::getCurrentEvent()->getId()) . '\'
-																AND `userId` = \'' . $user->getId() . '\'
-																AND `teamLeader` != \'0\'
-																AND `active` != \'0\';');
+								   INNER JOIN `' . Settings::db_table_infected_crew_teams . '` ON `teamId` = `' . Settings::db_table_infected_crew_teams . '`.`id`
+								   WHERE `eventId` = ' . ($event != null ? $event->getId() : EventHandler::getCurrentEvent()->getId()) . '
+								   AND `userId` = ' . $user->getId() . '
+								   AND `teamLeader` != 0
+								   AND `active` != 0;');
 
 		return $result->num_rows > 0;
 	}
@@ -336,10 +335,10 @@ class TeamHandler {
 		$database = Database::getConnection(Settings::db_name_infected_crew);
 
 		$result = $database->query('SELECT `' . Settings::db_table_infected_crew_memberof . '`.* FROM `' . Settings::db_table_infected_crew_memberof . '`
-																WHERE `eventId` = \'' . ($event != null ? $event->getId() : EventHandler::getCurrentEvent()->getId()) . '\'
-																AND `userId` = \'' . $user->getId() . '\'
-																AND `teamId` = \'' . $team->getId() . '\'
-																AND `teamLeader` = \'1\';');
+								   WHERE `eventId` = ' . ($event != null ? $event->getId() : EventHandler::getCurrentEvent()->getId()) . '
+								   AND `userId` = ' . $user->getId() . '
+								   AND `teamId` = ' . $team->getId() . '
+								   AND `teamLeader` = 1;');
 
 		return $result->num_rows > 0;
 	}
@@ -348,10 +347,10 @@ class TeamHandler {
 	 * Return the team leader for a team.
 	 */
 	public static function getTeamLeader(Team $team, Event $event = null): ?User {
-		$database = Database::getConnection(Settings::db_name_infected_crew);
+		$database = Database::getConnection(Settings::db_name_infected);
 
 		$result = $database->query('SELECT * FROM `' . Settings::db_table_infected_users . '`
-								   WHERE `id` = (SELECT `' . Settings::db_table_infected_crew_memberof . '`.`userId` FROM `' . Settings::db_table_infected_crew_memberof . '`
+								   WHERE `id` = (SELECT `' . Settings::db_table_infected_crew_memberof . '`.`userId` FROM `' . Settings::db_name_infected_crew . '`.`' . Settings::db_table_infected_crew_memberof . '`
 												 WHERE `eventId` = ' . ($event != null ? $event->getId() : EventHandler::getCurrentEvent()->getId()) . '
 												 AND `groupId` = ' . $team->getGroup()->getId() . '
 												 AND `teamId` = ' . $team->getId() . '
@@ -373,20 +372,19 @@ class TeamHandler {
 
 		// Remove old leaders of the team, to avoid duplicates.
 		$database->query('UPDATE `' . Settings::db_table_infected_crew_memberof . '`
-											SET `teamLeader` = \'0\'
-											WHERE `eventId` = \'' . ($event != null ? $event->getId() : EventHandler::getCurrentEvent()->getId()) . '\'
-											AND `groupId` = \'' . $team->getGroup()->getId() . '\'
-											AND `teamId` = \'' . $team->getId() . '\';');
+						 SET `teamLeader` = 0
+						 WHERE `eventId` = ' . ($event != null ? $event->getId() : EventHandler::getCurrentEvent()->getId()) . '
+						 AND `groupId` = ' . $team->getGroup()->getId() . '
+						 AND `teamId` = ' . $team->getId() . ';');
 
 		// Make our user the leader of the team, if one where specified.
 		if ($user != null) {
 			$database->query('UPDATE `' . Settings::db_table_infected_crew_memberof . '`
-												SET `teamLeader` = \'1\'
-												WHERE `eventId` = \'' . ($event != null ? $event->getId() : EventHandler::getCurrentEvent()->getId()) . '\'
-												AND `userId` = \'' . $user->getId() . '\'
-												AND `groupId` = \'' . $team->getGroup()->getId() . '\'
-												AND `teamId` = \'' . $team->getId() . '\';');
+							 SET `teamLeader` = 1
+							 WHERE `eventId` = ' . ($event != null ? $event->getId() : EventHandler::getCurrentEvent()->getId()) . '
+							 AND `userId` = ' . $user->getId() . '
+							 AND `groupId` = ' . $team->getGroup()->getId() . '
+							 AND `teamId` = ' . $team->getId() . ';');
 	  }
 	}
 }
-?>
