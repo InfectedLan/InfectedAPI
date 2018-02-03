@@ -351,12 +351,12 @@ class TeamHandler {
 		$database = Database::getConnection(Settings::db_name_infected_crew);
 
 		$result = $database->query('SELECT * FROM `' . Settings::db_table_infected_users . '`
-																WHERE `id` = (SELECT `' . Settings::db_table_infected_crew_memberof . '`.`userId` FROM `' . Settings::db_table_infected_crew_memberof . '`
-																							WHERE `eventId` = \'' . ($event != null ? $event->getId() : EventHandler::getCurrentEvent()->getId()) . '\'
-																							AND `groupId` = \'' . $team-getGroup()->getId() . '\'
-																							AND `teamId` = \'' . $team->getId() . '\'
-																							AND `teamLeader` != \'0\'
-																							LIMIT 1);');
+								   WHERE `id` = (SELECT `' . Settings::db_table_infected_crew_memberof . '`.`userId` FROM `' . Settings::db_table_infected_crew_memberof . '`
+												 WHERE `eventId` = ' . ($event != null ? $event->getId() : EventHandler::getCurrentEvent()->getId()) . '
+												 AND `groupId` = ' . $team->getGroup()->getId() . '
+												 AND `teamId` = ' . $team->getId() . '
+												 AND `teamLeader` != 0
+												 LIMIT 1);');
 
 		return $result->fetch_object('User');
 	}
