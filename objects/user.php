@@ -507,7 +507,7 @@ class User extends DatabaseObject {
 	/*
 	 * Returns the team.
 	 */
-	public function getTeam(Event $event = null): Team {
+	public function getTeam(Event $event = null): ?Team {
 		return TeamHandler::getTeamByUser($this, $event);
 	}
 
