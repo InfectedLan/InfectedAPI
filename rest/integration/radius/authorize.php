@@ -2,7 +2,7 @@
 /**
  * This file is part of InfectedAPI.
  *
- * Copyright (C) 2017 Infected <http://infected.no/>.
+ * Copyright (C) 2018 Infected <https://infected.no/>.
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -46,7 +46,7 @@ if (!empty($_GET['key']) &&
                     $hashedPassword = hash('sha256', $_GET['password']);
 
                     if (hash_equals($hashedPassword, $user->getPassword())) {
-                        if (isAllowedToAuthenticate($user)) {
+                        if (NetworkHandler::isAllowedToAuthorize($user)) {
                             $reply = ['control:SHA2-Password' => $hashedPassword];
                             $message = 'User \'' . $user->getUsername() .  '\' succesfully authorized.';
 
@@ -75,12 +75,6 @@ if (!empty($_GET['key']) &&
 } else {
     $status = 401; // Unauthorized.
 	$message = 'Invalid API key.';
-}
-
-function isAllowedToAuthenticate(User $user) {
-    $event = EventHandler::getCurrentEvent();
-
-    return $user->isGroupMember() || ($event->isOngoing() && $user->hasTicket()); // TODO: Move this to handler.
 }
 
 if ($message != null) {
