@@ -28,7 +28,7 @@ if (Session::isAuthenticated()) {
 	$user = Session::getCurrentUser();
 
 	if ($user->hasPermission('*') ||
-		$user->hasPermission('event.table.labels')) {
+		$user->hasPermission('event.table-labels')) {
 		echo '<!DOCTYPE html>';
 		echo '<html>';
 			echo '<head>';
