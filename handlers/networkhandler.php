@@ -239,10 +239,4 @@ class NetworkHandler {
 
 		return $result->fetch_object('Network');
 	}
-
-    public static function isAllowedToAuthorize(User $user): bool {
-        $event = EventHandler::getCurrentEvent();
-
-        return $user->isGroupMember() || ($event->isOngoing() && $user->hasTicket());
-    }
 }

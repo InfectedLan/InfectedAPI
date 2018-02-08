@@ -58,22 +58,19 @@ if (!empty($_GET['key']) &&
 
                     if ($networkType != null) {
                         // Does the user have network access on the given port type.
-                        if ($user->hasNetworkAccess($networkType)) {
+                        if (NetworkHandler::isAllowedToAuthorize($user) && $user->hasNetworkAccess($networkType)) {
                             $hashedPassword = hash('sha256', $_GET['password']);
 
                             if (hash_equals($hashedPassword, $user->getPassword())) {
-                                if (NetworkHandler::isAllowedToAuthorize($user)) {
-                                    $reply = ['control:SHA2-Password' => $hashedPassword];
-                                    $message = 'User \'' . $user->getUsername() .  '\' succesfully authorized.';
-                                    SyslogHandler::log('User succesfully authorized.', 'rest/integration/radius/authorize', $user);
-                                } else {
-                                    $message = 'You\'re not allowed to use this service.';
-                                }
+                                $reply = ['control:SHA2-Password' => $hashedPassword];
+                                $message = 'User \'' . $user->getUsername() .  '\' succesfully authorized.';
+                                
+                                SyslogHandler::log('User succesfully authorized.', 'rest/integration/radius/authorize', $user);
                             } else {
                                 $message = Localization::getLocale('wrong_username_or_password');
                             }
                         } else {
-                            $message = 'User don\'t have access to this service.';
+                            $message = 'User does not have access to this service.';
                         }
                     } else {
                         $status = 400; // Bad Request.
@@ -101,6 +98,12 @@ if (!empty($_GET['key']) &&
 
 if ($message != null) {
 	$reply['reply:Reply-Message'] = $message;
+}
+
+function isAllowedToAuthorize(User $user): bool {
+    $event = EventHandler::getCurrentEvent();
+
+    return $user->isGroupMember() || ($event->isOngoing() && $user->hasTicket());
 }
 
 http_response_code($status);

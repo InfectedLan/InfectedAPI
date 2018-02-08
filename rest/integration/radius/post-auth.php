@@ -70,7 +70,7 @@ if (!empty($_GET['key']) &&
                                                                                                                                                                                    'VLAN' => $network->getVlanId(),
                                                                                                                                                                                    'Client-MAC-Address' => $clientMacAddress]);
                     } else {
-                        $message = 'User don\'t have access to this network.';
+                        $message = 'User does not have access to this network.';
                     }
                 } else {
                     $status = 400; // Bad Request.
