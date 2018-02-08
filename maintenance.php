@@ -48,7 +48,7 @@ class Maintenance {
 
     public static function disableMaintenance() {
         self::$maintenanceState["maintenance_state"] = false;
-        self::saveMaintenance();
+        self::saveMaintenanceState();
     }
 
     public static function isMaintenance() {
