@@ -53,9 +53,6 @@ if (!empty($_GET['key']) &&
                 $clientMacAddress = $_GET['client-mac-address'];
 
                 if ($networkType != null) {
-                    // Method: Ethernet ("NAS-Port-Type = Ethernet")
-                    // Method: Wireless ("NAS-Port-Type = Wireless-802.11")
-
                     // Does the user have network access on the given port type.
                     if ($user->hasNetworkAccess($networkType)) {
                         $network = $user->getNetwork($networkType);
