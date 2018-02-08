@@ -2,8 +2,15 @@
 secret.php
 paypalsecret.php
 
+#vim is also an ass
+*.swp
+
 # Emacs is an ass
 *~
+
+#ignore maintenance file
+
+maintenance.json
 
 # Htaccess is deprecated
 .htaccess
