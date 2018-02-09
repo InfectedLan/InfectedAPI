@@ -58,7 +58,7 @@ if (!empty($_GET['key']) &&
 
                     if ($networkType != null) {
                         // Does the user have network access on the given port type.
-                        if (NetworkHandler::isAllowedToAuthorize($user) && $user->hasNetworkAccess($networkType)) {
+                        if (isAllowedToAuthorize($user) && $user->hasNetworkAccess($networkType)) {
                             $hashedPassword = hash('sha256', $_GET['password']);
 
                             if (hash_equals($hashedPassword, $user->getPassword())) {
