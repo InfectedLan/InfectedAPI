@@ -65,10 +65,10 @@ if (!empty($_GET['key']) &&
 
                         // We log this to syslog.
                         SyslogHandler::log('User succesfully post-authenticated', 'rest/integration/radius/post-auth', $user, SyslogHandler::SEVERITY_INFO, ['Port-Type' => $networkType->getPortType(),
-                                                                                                                                                                                   'Device-IP-Address' => $deviceIpAddress,
-                                                                                                                                                                                   'Device-MAC-Address' => $deviceMacAddressSsid,
-                                                                                                                                                                                   'VLAN' => $network->getVlanId(),
-                                                                                                                                                                                   'Client-MAC-Address' => $clientMacAddress]);
+                                                                                                                                                                                     'Device-IP-Address' => $deviceIpAddress,
+                                                                                                                                                                                     'Device-MAC-Address' => $deviceMacAddressSsid,
+                                                                                                                                                                                     'VLAN' => $network->getVlanId(),
+                                                                                                                                                                                     'Client-MAC-Address' => $clientMacAddress]);
                     } else {
                         $message = 'User does not have access to this network.';
                     }

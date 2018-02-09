@@ -41,12 +41,10 @@ if (!empty($_GET['key']) &&
 			$user = UserHandler::getUserByIdentifier($identifier);
 
             if ($user->isActivated()) {
-                if (isset($_GET['password']) &&
-                    isset($_GET['port-type']) &&
+                if (isset($_GET['port-type']) &&
                     isset($_GET['device-ip-address']) &&
                     isset($_GET['device-mac-address-ssid']) &&
                     isset($_GET['client-mac-address']) &&
-                    !empty($_GET['password']) &&
                     !empty($_GET['port-type']) &&
                     preg_match('/^(?:(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.){3}(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)$/', $_GET['device-ip-address']) &&
                     !empty($_GET['device-mac-address-ssid']) &&
@@ -59,16 +57,10 @@ if (!empty($_GET['key']) &&
                     if ($networkType != null) {
                         // Does the user have network access on the given port type.
                         if (isAllowedToAuthorize($user) && $user->hasNetworkAccess($networkType)) {
-                            $hashedPassword = hash('sha256', $_GET['password']);
+                            $reply = ['control:SHA2-Password' => $user->getPassword()];
+                            $message = 'User \'' . $user->getUsername() .  '\' succesfully authorized.';
 
-                            if (hash_equals($hashedPassword, $user->getPassword())) {
-                                $reply = ['control:SHA2-Password' => $hashedPassword];
-                                $message = 'User \'' . $user->getUsername() .  '\' succesfully authorized.';
-                                
-                                SyslogHandler::log('User succesfully authorized.', 'rest/integration/radius/authorize', $user);
-                            } else {
-                                $message = Localization::getLocale('wrong_username_or_password');
-                            }
+                            SyslogHandler::log('User succesfully authorized.', 'rest/integration/radius/authorize', $user);
                         } else {
                             $message = 'User does not have access to this service.';
                         }
