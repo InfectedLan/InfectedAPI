@@ -38,7 +38,7 @@ if (Session::isAuthenticated()) {
 		if (!empty($userList)) {
 			foreach ($userList as $userValue) {
 				if ($userValue->isActivated() ||
-					!$userValue->isActivated() && $user->hasPermission('*')) {
+					!$userValue->isActivated() && $user->hasPermission('user.search')) {
 					$users[] = ['id' => $userValue->getId(),
 											'firstname' => $userValue->getFirstname(),
 											'lastname' => $userValue->getLastname(),
