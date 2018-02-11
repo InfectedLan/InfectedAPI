@@ -44,7 +44,7 @@ if (!empty($_GET['key']) &&
                 isset($_GET['device-mac-address-ssid']) &&
                 isset($_GET['client-mac-address']) &&
                 !empty($_GET['port-type']) &&
-                preg_match('/^((\.|^)(25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[1-9][0-9]?|0$)){4}$/', $_GET['device-ip-address']) &&
+                preg_match('/^(?:(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.){3}(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)$/', $_GET['device-ip-address']) &&
                 !empty($_GET['device-mac-address-ssid']) &&
                 preg_match('/^[0-9a-fA-F]{1,2}([\.:-])[0-9a-fA-F]{1,2}(?:\1[0-9a-fA-F]{1,2}){4}$/', $_GET['client-mac-address'])) {
                 $networkType = NetworkHandler::getNetworkTypeByPortType($_GET['port-type']);
@@ -53,9 +53,6 @@ if (!empty($_GET['key']) &&
                 $clientMacAddress = $_GET['client-mac-address'];
 
                 if ($networkType != null) {
-                    // Method: Ethernet ("NAS-Port-Type = Ethernet")
-                    // Method: Wireless ("NAS-Port-Type = Wireless-802.11")
-
                     // Does the user have network access on the given port type.
                     if ($user->hasNetworkAccess($networkType)) {
                         $network = $user->getNetwork($networkType);
@@ -68,12 +65,12 @@ if (!empty($_GET['key']) &&
 
                         // We log this to syslog.
                         SyslogHandler::log('User succesfully post-authenticated', 'rest/integration/radius/post-auth', $user, SyslogHandler::SEVERITY_INFO, ['Port-Type' => $networkType->getPortType(),
-                                                                                                                                                                                   'Device-IP-Address' => $deviceIpAddress,
-                                                                                                                                                                                   'Device-MAC-Address' => $deviceMacAddressSsid,
-                                                                                                                                                                                   'VLAN' => $network->getVlanId(),
-                                                                                                                                                                                   'Client-MAC-Address' => $clientMacAddress]);
+                                                                                                                                                                                     'Device-IP-Address' => $deviceIpAddress,
+                                                                                                                                                                                     'Device-MAC-Address' => $deviceMacAddressSsid,
+                                                                                                                                                                                     'VLAN' => $network->getVlanId(),
+                                                                                                                                                                                     'Client-MAC-Address' => $clientMacAddress]);
                     } else {
-                        $message = 'User don\'t have access to this network.';
+                        $message = 'User does not have access to this network.';
                     }
                 } else {
                     $status = 400; // Bad Request.
