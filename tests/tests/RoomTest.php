@@ -20,6 +20,9 @@
 use PHPUnit\Framework\TestCase;
 
 require_once 'handlers/roomhandler.php';
+require_once 'handlers/nfcloghandler.php';
+require_once 'handlers/nfccardhandler.php';
+require_once 'handlers/nfcunithandler.php';
 require_once 'database.php';
 
 /*
@@ -32,6 +35,7 @@ class RoomTest extends TestCase {
     public function test() {
         $this->integrityTest();
         $this->creationTest();
+        $this->movementTest();
         $this->cleanup();
     }
 
@@ -57,6 +61,35 @@ class RoomTest extends TestCase {
 
         $this->assertEquals(true, RoomHandler::getRoom(5)->isTimeLimited());
         $this->assertEquals(false, RoomHandler::getRoom(4)->isTimeLimited());
+    }
+
+    private function movementTest() {
+        $testRoom = RoomHandler::getRoom(1); //Crew room
+        $testCard = NfcCardHandler::getCard(1);
+        $testUser = $testCard->getUser();
+
+        $toCrewArea = NfcUnitHandler::getGate(2);
+        $fromCrewArea = NfcUnitHandler::getGate(4);
+
+        $currentInRoom = RoomHandler::getUsersInRoom($testRoom);
+        $this->assertEquals(0, count($currentInRoom));
+
+        NfcLogHandler::createLogEntry($testCard, $toCrewArea, true);
+
+        $currentInRoom = RoomHandler::getUsersInRoom($testRoom);
+        $this->assertEquals(1, count($currentInRoom));
+        $this->assertEquals(1, $currentInRoom[0]->getId());
+
+        NfcLogHandler::createLogEntry($testCard, $fromCrewArea, true);
+
+        $currentInRoom = RoomHandler::getUsersInRoom($testRoom);
+        $this->assertEquals(0, count($currentInRoom));
+
+        NfcLogHandler::createLogEntry($testCard, $fromCrewArea, false);
+
+        $currentInRoom = RoomHandler::getUsersInRoom($testRoom);
+        $this->assertEquals(1, count($currentInRoom));
+        $this->assertEquals(1, $currentInRoom[0]->getId());
     }
 
     private function cleanup() {

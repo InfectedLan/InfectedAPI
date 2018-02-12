@@ -40,7 +40,7 @@ class NfcUnitTest extends TestCase {
     private function creation() {
         $unit = NfcUnitHandler::getGatesByEvent();
 
-        $this->assertEquals(3, count($unit));
+        $this->assertEquals(4, count($unit));
         $this->assertEquals('FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF', $unit[0]->getPcbId());
         $this->assertEquals(2, $unit[2]->getType());
     }
