@@ -27,7 +27,7 @@ class QR {
 		$filePath = Settings::api_path . Settings::qr_path . $fileName;
 
 		if (!file_exists($filePath)) {
-			QRcode::png($content, $filePath);
+			QRcode::png($content, $filePath, QR_ECLEVEL_Q, 400, 6);
 		}
 
 		return $fileName;
