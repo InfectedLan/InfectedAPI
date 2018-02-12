@@ -2,7 +2,7 @@
 /**
  * This file is part of InfectedAPI.
  *
- * Copyright (C) 2017 Infected <http://infected.no/>.
+ * Copyright (C) 2018 Infected <https://infected.no/>.
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -26,15 +26,14 @@ $slideList = [];
 
 foreach (SlideHandler::getPublishedSlides() as $slide) {
 	$slideList[] = ['id' => $slide->getId(),
-							    'name' => $slide->getName(),
-						  	  'title' => $slide->getTitle(),
-					  		  'content' => $slide->getContent(),
-							    'startTime' => $slide->getStartTime(),
-							    'endTime' => $slide->getEndTime(),
-							    'isPublished' => $slide->isPublished()];
+					'name' => $slide->getName(),
+				    'title' => $slide->getTitle(),
+				    'content' => $slide->getContent(),
+					'startTime' => $slide->getStartTime(),
+					'endTime' => $slide->getEndTime(),
+					'isPublished' => $slide->isPublished()];
 }
 
 header('Content-Type: application/json');
 echo json_encode(['slideList' => $slideList], JSON_PRETTY_PRINT);
 Database::cleanup();
-?>
