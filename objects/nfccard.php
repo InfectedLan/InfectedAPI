@@ -51,12 +51,5 @@ class NfcCard extends DatabaseObject {
 	public function getNfcId() {
 		return $this->nfcId;
 	}
-	
-	/*
-	 * Returns the title of this entrance.
-	 */
-	public function getTitle() {
-		return $this->title;
-	}
 }
 ?>
