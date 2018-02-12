@@ -20,7 +20,7 @@
 
 require_once 'session.php';
 require_once 'database.php';
-require_once 'handlers/nfcgatehandler.php';
+require_once 'handlers/nfcunithandler.php';
 require_once 'handlers/nfccardhandler.php';
 require_once 'handlers/userhandler.php';
 require_once 'handlers/tickethandler.php';
@@ -32,36 +32,21 @@ $status = http_response_code();
 $message = null;
 $authenticated = false;
 
-if(isset($_POST["pcbId"])) {
+if (Session::isAuthenticated()) {
+    $user = Session::getCurrentUser();
+
+    if ($user->hasPermission('event.nfcmgmt')) {
+        $authenticated = true;
+    } else {
+        $status = 403; // Forbidden
+        $message = Localization::getLocale('you_do_not_have_permission_to_do_that');
+    }
+} elseif(isset($_POST["pcbId"])) {
 	if(strlen($_POST["pcbId"]) == 32) {
 		$unit = NfcUnitHandler::getGateByPcbid($_POST["pcbId"]);
 		if($unit != null) {
 			if($unit->getType()==NfcUnit::NFC_GATE_TYPE_TICKETSCANNER) {
-				if(isset($_POST["cardId"]) && isset($_POST["userId"])) {
-					if(strlen($_POST["cardId"])==16) {
-						$card = NfcCardHandler::getCardByNfcId($_POST["cardId"]);
-						if($card==null) {
-							$user = UserHandler::getUser($_POST["userId"]);
-							if($user!=null) {
-								NfcCardHandler::registerCard($user, $_POST["cardId"]);
-								$status = 200;
-								$result = true;
-							} else {
-								$status = 400; // Bad Request.
-								$message = Localization::getLocale('this_user_does_not_exist');
-							}
-						} else {
-							$status = 400;
-							$message = Localization::getLocale('the_card_is_already_bound');
-						}
-					} else {
-						$status = 400; // Bad Request.
-						$message = Localization::getLocale('invalid_cardid_format');	
-					}
-				} else {
-					$status = 400; // Bad Request.
-					$message = Localization::getLocale('you_have_not_filled_out_the_required_fields');
-				}
+				$authenticated = true;
 			} else {
 				$status = 403; // Forbidden
 				$message = Localization::getLocale('invalid_pcbid');
@@ -82,6 +67,33 @@ if(isset($_POST["pcbId"])) {
 	$message = Localization::getLocale('you_have_not_filled_out_the_required_fields');
 }
 
+if($authenticated) {
+    if(isset($_POST["cardId"]) && isset($_POST["userId"])) {
+        if(strlen($_POST["cardId"])==16) {
+            $card = NfcCardHandler::getCardByNfcId($_POST["cardId"]);
+            if($card==null) {
+                $user = UserHandler::getUser($_POST["userId"]);
+                if($user!=null) {
+                    NfcCardHandler::registerCard($user, $_POST["cardId"]);
+                    $status = 200;
+                    $result = true;
+                } else {
+                    $status = 400; // Bad Request.
+                    $message = Localization::getLocale('this_user_does_not_exist');
+                }
+            } else {
+                $status = 400;
+                $message = Localization::getLocale('the_card_is_already_bound');
+            }
+        } else {
+            $status = 400; // Bad Request.
+            $message = Localization::getLocale('invalid_cardid_format');
+        }
+    } else {
+        $status = 400; // Bad Request.
+        $message = Localization::getLocale('you_have_not_filled_out_the_required_fields');
+    }
+}
 
 http_response_code($status);
 header('Content-Type: application/json');

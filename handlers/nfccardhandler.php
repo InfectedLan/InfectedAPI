@@ -113,5 +113,13 @@ class NfcCardHandler {
 
 		return $cardList;
 	}
+
+	/*
+	 * Returns the room a card is currently in
+	 */
+	public static function getRoomByCard(Nfccard $card) {
+
+	}
+
 }
 ?>

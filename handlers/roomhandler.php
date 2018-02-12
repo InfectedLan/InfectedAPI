@@ -23,6 +23,7 @@ require_once 'objects/room.php';
 require_once 'settings.php';
 require_once 'database.php';
 require_once 'objects/user.php';
+require_once 'objects/nfclogentry.php';
 
 class RoomHandler {
 
@@ -56,10 +57,10 @@ class RoomHandler {
         return $entryList;
     }
 
-    public static function getUsersInRoom(Room $room) : array {
-        $database = Database::getConnection(Settings::db_name_infected);
+    public static function getLogEntriesInRoom(Room $room) : array {
+        $database = Database::getConnection(Settings::db_name_infected_tech);
 
-        $query = 'SELECT `users`.* FROM `users`
+        /*$query = 'SELECT `users`.* FROM `users`
 WHERE `users`.`id` IN (SELECT `userId` FROM `' . Settings::db_name_infected_tech . '`.`' . Settings::db_table_infected_tech_nfccards . '`
                        LEFT JOIN (SELECT * FROM `' . Settings::db_name_infected_tech . '`.`' . Settings::db_table_infected_tech_nfclog . '` 
                                   WHERE `' . Settings::db_table_infected_tech_nfclog . '`.`id` IN (SELECT MAX(`' . Settings::db_table_infected_tech_nfclog . '`.`id`) FROM `' . Settings::db_name_infected_tech . '`.`' . Settings::db_table_infected_tech_nfclog . '` 
@@ -68,12 +69,17 @@ WHERE `users`.`id` IN (SELECT `userId` FROM `' . Settings::db_name_infected_tech
                        WHERE IF(`' . Settings::db_table_infected_tech_nfclog . '`.`legalPass`, `toRoom`, `fromRoom`) = ' . $room->getId() . '
                        ORDER BY `timestamp` DESC)
 GROUP BY `users`.`id`'; //Thanks to halvors for writing this really ugly mudda query for me
+        */
+        $query = 'SELECT `' . Settings::db_table_infected_tech_nfclog . '`.* FROM (SELECT * FROM `' . Settings::db_table_infected_tech_nfclog . '` WHERE `' . Settings::db_table_infected_tech_nfclog . '`.`id` IN (SELECT MAX(`' . Settings::db_table_infected_tech_nfclog . '`.`id`) FROM `' . Settings::db_table_infected_tech_nfclog . '` GROUP BY `' . Settings::db_table_infected_tech_nfclog . '`.`cardId`)) AS `' . Settings::db_table_infected_tech_nfclog . '`
+                      LEFT JOIN `' . Settings::db_table_infected_tech_nfcunits . '` ON `' . Settings::db_table_infected_tech_nfclog . '`.`unitId` = `' . Settings::db_table_infected_tech_nfcunits . '`.`id` 
+                       WHERE IF(`' . Settings::db_table_infected_tech_nfclog . '`.`legalPass`, `toRoom`, `fromRoom`) = ' . $room->getId() . '
+                       ORDER BY `timestamp` DESC';
 
         $result = $database->query($query);
 
         $entryList = [];
 
-        while($object = $result->fetch_object('User')) {
+        while($object = $result->fetch_object('NfcLogEntry')) {
             $entryList[] = $object;
         }
 

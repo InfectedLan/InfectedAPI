@@ -71,25 +71,25 @@ class RoomTest extends TestCase {
         $toCrewArea = NfcUnitHandler::getGate(2);
         $fromCrewArea = NfcUnitHandler::getGate(4);
 
-        $currentInRoom = RoomHandler::getUsersInRoom($testRoom);
+        $currentInRoom = RoomHandler::getLogEntriesInRoom($testRoom);
         $this->assertEquals(0, count($currentInRoom));
 
         NfcLogHandler::createLogEntry($testCard, $toCrewArea, true);
 
-        $currentInRoom = RoomHandler::getUsersInRoom($testRoom);
+        $currentInRoom = RoomHandler::getLogEntriesInRoom($testRoom);
         $this->assertEquals(1, count($currentInRoom));
-        $this->assertEquals(1, $currentInRoom[0]->getId());
+        $this->assertEquals(1, $currentInRoom[0]->getCard()->getId());
 
         NfcLogHandler::createLogEntry($testCard, $fromCrewArea, true);
 
-        $currentInRoom = RoomHandler::getUsersInRoom($testRoom);
+        $currentInRoom = RoomHandler::getLogEntriesInRoom($testRoom);
         $this->assertEquals(0, count($currentInRoom));
 
         NfcLogHandler::createLogEntry($testCard, $fromCrewArea, false);
 
-        $currentInRoom = RoomHandler::getUsersInRoom($testRoom);
+        $currentInRoom = RoomHandler::getLogEntriesInRoom($testRoom);
         $this->assertEquals(1, count($currentInRoom));
-        $this->assertEquals(1, $currentInRoom[0]->getId());
+        $this->assertEquals(1, $currentInRoom[0]->getCard()->getId());
     }
 
     private function cleanup() {

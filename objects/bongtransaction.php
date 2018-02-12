@@ -59,7 +59,7 @@ class BongTransaction extends DatabaseObject {
 	 * Returns when the transaction was processed
 	 */
 	public function getTimestamp() {
-		return $this->amt;
+		return strtotime($this->timestamp);
 	}
 
 	/*
