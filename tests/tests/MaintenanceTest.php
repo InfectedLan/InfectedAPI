@@ -2,7 +2,7 @@
 /**
  * This file is part of InfectedAPI.
  *
- * Copyright (C) 2017 Infected <http://infected.no/>.
+ * Copyright (C) 2015 Infected <http://infected.no/>.
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -17,23 +17,34 @@
  * You should have received a copy of the GNU Lesser General Public
  * License along with this library.  If not, see <http://www.gnu.org/licenses/>.
  */
+use PHPUnit\Framework\TestCase;
 
 require_once 'database.php';
-require_once 'localization.php';
-require_once 'handlers/slidehandler.php';
+require_once 'maintenance.php';
 
-$slideList = [];
+/* 
+ * MaintenanceTest
+ *
+ * Tests the maintenance mode system
+ *
+ */
+class MaintenanceTest extends TestCase {
+	public function test() {
+		$this->mainTest();
+		$this->cleanup();
+	}
 
-foreach (SlideHandler::getSlides() as $slide) {
-	$slideList[] = ['id' => $slide->getId(),
-							    'name' => $slide->getName(),
-							    'title' => $slide->getTitle(),
-							    'content' => $slide->getContent(),
-							    'startTime' => $slide->getStartTime(),
-							    'endTime' => $slide->getEndTime(),
-							    'isPublished' => $slide->isPublished()];
+	private function mainTest() {
+        Maintenance::loadMaintenanceState();
+        $this->assertEquals(false, Maintenance::isMaintenance());
+        Maintenance::setMaintenance(10);
+        $this->assertEquals(true, Maintenance::isMaintenance());
+        Maintenance::disableMaintenance();
+        $this->assertEquals(false, Maintenance::isMaintenance());
+	}
+
+	private function cleanup() {
+
+	}
 }
-
-header('Content-Type: application/json');
-echo json_encode(array('slideList' => $slideList), JSON_PRETTY_PRINT);
-Database::cleanup();
+?>

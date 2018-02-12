@@ -2,7 +2,7 @@
 /**
  * This file is part of InfectedAPI.
  *
- * Copyright (C) 2017 Infected <http://infected.no/>.
+ * Copyright (C) 2018 Infected <https://infected.no/>.
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -17,23 +17,15 @@
  * You should have received a copy of the GNU Lesser General Public
  * License along with this library.  If not, see <http://www.gnu.org/licenses/>.
  */
+require_once('maintenance.php');
+require_once('settings.php');
 
-require_once 'database.php';
-require_once 'localization.php';
-require_once 'handlers/slidehandler.php';
+Maintenance::loadMaintenanceState();
 
-$slideList = [];
-
-foreach (SlideHandler::getSlides() as $slide) {
-	$slideList[] = ['id' => $slide->getId(),
-							    'name' => $slide->getName(),
-							    'title' => $slide->getTitle(),
-							    'content' => $slide->getContent(),
-							    'startTime' => $slide->getStartTime(),
-							    'endTime' => $slide->getEndTime(),
-							    'isPublished' => $slide->isPublished()];
+//This will kill the site before it attempts to do anything, while the page is in maintenance mode
+if(Maintenance::isMaintenance()) {
+    http_response_code(503);
+    readfile(Settings::api_path . "pages/maintenance.html"); //IMPORTANT: This is served from the root of a site.
+    die();
 }
-
-header('Content-Type: application/json');
-echo json_encode(array('slideList' => $slideList), JSON_PRETTY_PRINT);
-Database::cleanup();
+?>

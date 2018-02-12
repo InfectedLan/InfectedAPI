@@ -83,7 +83,7 @@ class Ticket extends EventObject {
 	/*
 	 * Returns the seat that this ticket is seated at.
 	 */
-	public function getSeat(): Seat {
+	public function getSeat(): ?Seat{ //this has to be able to return null
 		return SeatHandler::getSeat($this->seatId);
 	}
 

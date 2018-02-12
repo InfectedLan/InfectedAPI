@@ -17,47 +17,28 @@
  * You should have received a copy of the GNU Lesser General Public
  * License along with this library.  If not, see <http://www.gnu.org/licenses/>.
  */
-
+require_once 'maintenance.php';
 require_once 'session.php';
 require_once 'database.php';
 require_once 'localization.php';
 require_once 'handlers/userhandler.php';
-require_once 'handlers/userpermissionhandler.php';
-require_once 'handlers/permissionhandler.php';
 
 $result = false;
+$status = http_response_code();
 $message = null;
 
 if (Session::isAuthenticated()) {
 	$user = Session::getCurrentUser();
 
-	if ($user->hasPermission('admin.permissions')) {
-		if (isset($_GET['id']) &&
-			is_numeric($_GET['id'])) {
-			$permissionUser = UserHandler::getUser($_GET['id']);
+	if ($user->hasPermission('developer.maintenance')) {
+		if (isset($_POST['duration']) &&
+            is_numeric($_POST['duration'])) {
 
-			$permissions = UserPermissionHandler::getUserPermissions($permissionUser);
-
-			$isOk = true;
-			//User needs all the permissions you are trying to remove
-			foreach($permissions as $permission) {
-				if(!$user->hasPermission($permission->getValue())) {
-					$isOk = false;
-					break;
-				}
-			}
-			if($isOk) {
-				if ($permissionUser != null) {
-					UserPermissionHandler::removeUserPermissions($permissionUser);
-
-					$result = true;
-				} else {
-					$message = Localization::getLocale('this_user_does_not_exist');
-				}
-			} else {
-				$message = Localization::getLocale('you_do_not_have_permission_to_do_that');
-			}
+            Maintenance::setMaintenance($_POST['duration']);
+            $result = true;
+            $status = 200;
 		} else {
+            $status = 400; // Bad Request.
 			$message = Localization::getLocale('you_have_not_filled_out_the_required_fields');
 		}
 	} else {
@@ -67,7 +48,7 @@ if (Session::isAuthenticated()) {
 	$message = Localization::getLocale('you_are_not_logged_in');
 }
 
+http_response_code($status);
 header('Content-Type: application/json');
 echo json_encode(['result' => $result, 'message' => $message], JSON_PRETTY_PRINT);
 Database::cleanup();
-?>

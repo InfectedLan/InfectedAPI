@@ -339,7 +339,7 @@ class UserHandler {
 	 */
 	public static function search(string $query): array {
 		// Sanitize the input and split the query string into an array.
-		$queryList = explode(' ', $query);
+		$queryList = explode(' ', trim($query));
 		$keywordList = [];
 
 		// Build the word list, and add "+" and "*" to the start and end of every word.

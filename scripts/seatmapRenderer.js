@@ -48,15 +48,14 @@ function renderSeatmap(target, seatHandlerFunction, callback) {
 				title = 'Reservert av ' + seatmapData.rows[i].seats[s].occupiedTicket.owner;
 			}
 			//Run the seat handler function if set
-			var customClass = seatmapData.rows[i].seats[s].occupiedTicket.isFriend?"friend":(seatmapData.rows[i].seats[s].occupied ? "taken" : "free");
+			var customClass = (seatmapData.rows[i].seats[s].occupied && seatmapData.rows[i].seats[s].occupiedTicket.isFriend)?"friend":(seatmapData.rows[i].seats[s].occupied ? "taken" : "free");
 
 			if(typeof seatHandlerFunction !== "undefined")
 			{
 				var customClassCheck = seatHandlerFunction( seatmapData.rows[i].seats[s].id,
 															'#seat' + seatmapData.rows[i].seats[s].id,
 															seatmapData.rows[i].seats[s].occupied,
-															seatmapData.rows[i].seats[s].occupiedTicket,
-															seatmapData.rows[i].seats[s].occupiedTicket.isFriend);
+															seatmapData.rows[i].seats[s].occupiedTicket);
 				//Check if we got anything of use
 				if(typeof seatHandlerFunction !== "undefined")
 				{
