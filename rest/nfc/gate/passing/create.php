@@ -26,10 +26,13 @@ require_once 'handlers/userhandler.php';
 require_once 'handlers/tickethandler.php';
 require_once 'localization.php';
 require_once 'handlers/sysloghandler.php';
+require_once 'handlers/nfcroompermissionhandler.php';
+require_once 'handlers/nfcloghandler.php';
 
 $result = false;
 $status = http_response_code();
 $message = null;
+$canPass = false;
 $authenticated = false;
 
 if(isset($_POST["pcbId"])) {
@@ -41,7 +44,12 @@ if(isset($_POST["pcbId"])) {
 					if(strlen($_POST["cardId"])==16) {
 						$card = NfcCardHandler::getCardByNfcId($_POST["cardId"]);
 						if($card!=null) {
-							
+							$roomTo = $unit->getToRoom();
+							$canPass = $roomTo->canEnter($card->getUser());
+
+							NfcLogHandler::createLogEntry($card, $unit, $canPass);
+
+                            $status = 200;
 						} else {
 							$status = 400;
 							$message = Localization::getLocale('the_card_is_already_bound');
@@ -77,5 +85,5 @@ if(isset($_POST["pcbId"])) {
 
 http_response_code($status);
 header('Content-Type: application/json');
-echo json_encode(['result' => $result, 'message' => $message], JSON_PRETTY_PRINT);
+echo json_encode(['result' => $result, 'message' => $message, 'canPass' => $canPass], JSON_PRETTY_PRINT);
 Database::cleanup();

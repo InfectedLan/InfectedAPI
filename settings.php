@@ -125,6 +125,8 @@ class Settings {
 	const db_table_infected_tech_nfccards = 'nfccards';
 	const db_table_infected_tech_nfcunits = 'nfcunits';
 	const db_table_infected_tech_nfclog = 'nfclog';
+	const db_table_infected_tech_rooms = 'rooms';
+	const db_table_infected_tech_roompermissions = 'roomPermissions';
 
 	// InfectedTickets
 	const db_table_infected_tickets_checkedintickets = 'checkedintickets';

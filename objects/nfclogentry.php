@@ -19,6 +19,8 @@
  */
 
 require_once 'objects/databaseobject.php';
+require_once 'objects/nfccard.php';
+require_once 'objects/nfcunit.php';
 require_once 'handlers/nfcunithandler.php';
 require_once 'handlers/nfccardhandler.php';
 
@@ -30,36 +32,43 @@ class NfcLogEntry extends DatabaseObject {
 
 	private $timestamp;
 	private $gateId;
-	private $nfcId;
+	private $cardId;
+	private $legalPass;
 	
 	/*
 	 * Returns the time of this event
 	 */
-	public function getTime() {
+	public function getTime() : int{
 		return strtotime($this->timestamp);
 	}
 
 	/*
 	 * Returns the gate which this entry logs passing
 	 */
-	public function getGate() {
+	public function getGate() : NfcUnit{
 		return NfcUnitHandler::getGate($this->gateId);
 	}
 	
 	/*
 	 * Returns the nfc card that this entry is about
 	 */
-	public function getCard() {
-		return NfcCardHandler::getCard($this->nfcId);
+	public function getCard() : NfcCard{
+		return NfcCardHandler::getCard($this->cardId);
 	}
 
 	/*
 	 * Returns the type of NFC gate. See the constants above.
 	 */
-	public function getType() {
+	public function getType() : int {
 		return $this->type;
 	}
 
+	/*
+	 * Returns if the pass was legal or not
+	 */
+	public function isLegalPass() : bool {
+	    return $this->legalPass == 1;
+    }
 
 }
 ?>

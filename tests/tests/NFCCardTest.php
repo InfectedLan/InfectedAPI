@@ -43,7 +43,7 @@ class NFCCardTest extends TestCase {
 		$nfcid = "E004010203040506";
 
 		$cards = NfcCardHandler::getCards();
-		$this->assertEquals(0, count($cards));
+		$this->assertEquals(1, count($cards));
 	}
 
 	private function getterTest() {
@@ -55,23 +55,23 @@ class NFCCardTest extends TestCase {
 
 
 		$cards = NfcCardHandler::getCardsByUser($me);
-		$this->assertEquals(1, count($cards));
+		$this->assertEquals(2, count($cards));
 
-		$card = $cards[0];
-		$this->assertNotEquals($card, null);
+        $this->assertNotEquals($cards[0], null);
+        $this->assertNotEquals($cards[1], null);
 
 		$cards = NfcCardHandler::getCards();
-		$this->assertEquals(1, count($cards));
+		$this->assertEquals(2, count($cards));
 
-		$card = $cards[0];
-		$this->assertNotEquals($card, null);
+        $this->assertNotEquals($cards[0], null);
+        $this->assertNotEquals($cards[1], null);
 
-		$this->assertEquals($me, $card->getUser());
-		$this->assertEquals($nfcid, $card->getNfcId());
+		$this->assertEquals($me, $cards[1]->getUser());
+		$this->assertEquals($nfcid, $cards[1]->getNfcId());
 
 		$card = NfcCardHandler::getCardByNfcId($nfcid);
 
-		$this->assertEquals($cards[0], $card);
+		$this->assertEquals($cards[1], $card);
 
 		//getCard
 		$newCard = NfcCardHandler::getCard($card->getId());

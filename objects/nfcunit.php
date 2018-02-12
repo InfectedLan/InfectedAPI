@@ -20,6 +20,8 @@
 
 require_once 'objects/databaseobject.php';
 require_once 'handlers/eventhandler.php';
+require_once 'handlers/roomhandler.php';
+require_once 'objects/room.php';
 
 /*
  * Represents a unit that offers some kind of interface between an NFC card and the infected.no API, for example:
@@ -36,6 +38,8 @@ class NfcUnit extends DatabaseObject {
 	private $pcbId;
 	private $name;
 	private $type;
+	private $fromRoom;
+	private $toRoom;
 	
 	/*
 	 * Returns the event this card entry is assigned to
@@ -66,6 +70,19 @@ class NfcUnit extends DatabaseObject {
 		return $this->type;
 	}
 
-
+    /*
+     * Returns the room this unit is in. Should only be used by gates.
+     * If it is called on an unit which is not a gate, it will return null, throwing an exception.
+    */
+    public function getFromRoom() : Room {
+        return $this->type != self::NFC_GATE_TYPE_GATE ? null : RoomHandler::getRoom($this->fromRoom);
+    }
+    /*
+     * Returns the room this unit goes into. Should only be used by gates.
+     * If it is called on an unit which is not a gate, it will return null, throwing an exception.
+     */
+    public function getToRoom() : Room {
+        return $this->type != self::NFC_GATE_TYPE_GATE ? null : RoomHandler::getRoom($this->toRoom);
+    }
 }
 ?>
