@@ -41,11 +41,10 @@ if (Session::isAuthenticated()) {
     $user = Session::getCurrentUser();
 
     if ($user->hasPermission('event.bongmgmt')) {
-        if( isset($_POST['userId']) &&
-            isset($_POST["transactorUserId"])) {
+        if( isset($_POST['userId'])) {
             $targetUser = UserHandler::getUser($_POST['userId']);
             if($targetUser != null) {
-                $transactorUser = UserHandler::getUser($_POST['transactorUserId']);
+                $transactorUser = $user;
                 if($transactorUser != null) {
                     $authenticated = true;
                 } else {
@@ -135,9 +134,9 @@ if($authenticated) {
 
         $type = BongTypeHandler::getBongType($_POST["bongType"]);
         if($type != null) {
-            $funds = BongTransactionHandler::getBongPosession($type, $user);
+            $funds = BongTransactionHandler::getBongPosession($type, $targetUser);
             if($funds+$_POST["amount"]>=0) {
-                BongTransactionHandler::processBongTransaction($type, $user, $_POST["amount"], $transactorUser);
+                BongTransactionHandler::processBongTransaction($type, $targetUser, $_POST["amount"], $transactorUser);
                 $status = 200;
                 $result = true;
             } else {
