@@ -35,7 +35,7 @@ $authenticated = false;
 if (Session::isAuthenticated()) {
     $user = Session::getCurrentUser();
 
-    if ($user->hasPermission('event.nfcmgmt')) {
+    if ($user->hasPermission('nfc.card.management')) {
         $authenticated = true;
     } else {
         $status = 403; // Forbidden

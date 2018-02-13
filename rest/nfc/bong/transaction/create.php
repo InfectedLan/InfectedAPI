@@ -40,7 +40,7 @@ $transactorUser = null;
 if (Session::isAuthenticated()) {
     $user = Session::getCurrentUser();
 
-    if ($user->hasPermission('event.bongmgmt')) {
+    if ($user->hasPermission('nfc.bong.transaction')) {
         if( isset($_POST['userId'])) {
             $targetUser = UserHandler::getUser($_POST['userId']);
             if($targetUser != null) {
