@@ -48,13 +48,14 @@ $tmpFile = Settings::api_path . 'content/cards/tmp/';
 $counter = 0;
 foreach($members as $member) {
     //$randomName = md5(time()) . '.png';
-    $randomizedName = md5($member->getId() . '.' . $member->getGroup()->getId() . '.' . $member->getDisplayName());
-    if($member->hasTeam()) {
-        $randomizedName = md5($randomizedName->getTeam()->getId());
+    $randomName = md5($member->getId() . '.' . $member->getGroup()->getId() . '.' . $member->getDisplayName());
+    if($member->isTeamMember()) {
+        $randomName = md5($randomName . $member->getTeam()->getId());
     }
-    if(!file_exists(Settings::api_path . 'contents/cards'))
-    $image = CardGenerator::generateCard($member);
-    imagepng($image, $tmpFile . $randomName);
+    if(!file_exists($tmpFile . $randomName)) {
+        $image = CardGenerator::generateCard($member);
+        imagepng($image, $tmpFile . $randomName);
+    }
 
     $za->addFile($tmpFile . $randomName, $counter++ . ':' . $member->getFirstName() . '.png');
 }
