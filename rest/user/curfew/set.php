@@ -24,6 +24,7 @@ require_once 'localization.php';
 require_once 'handlers/userhandler.php';
 
 $result = false;
+$status = http_response_code();
 $message = null;
 
 if (Session::isAuthenticated()) {
@@ -36,8 +37,9 @@ if (Session::isAuthenticated()) {
             $swimming = isset($_POST['curfew']) ? $_POST['curfew'] : 0;
 
             if ($editUser != null) {
-                $editUser->setCurfew($curfew);
+                $editUser->setCurfew($_POST['curfew'] == '0'); //inverse
                 $result = true;
+                $status = 200;
             } else {
                 $message = Localization::getLocale('the_user_does_not_exist');
             }
@@ -51,6 +53,7 @@ if (Session::isAuthenticated()) {
     $message = Localization::getLocale('you_are_not_logged_in');
 }
 
+http_response_code($status);
 header('Content-Type: text/plain');
 echo json_encode(['result' => $result, 'message' => $message], JSON_PRETTY_PRINT);
 Database::cleanup();

@@ -19,6 +19,7 @@
  */
 
 require_once 'session.php';
+require_once 'settings.php';
 require_once 'database.php';
 require_once 'handlers/nfcunithandler.php';
 require_once 'handlers/nfccardhandler.php';
@@ -46,6 +47,10 @@ if(isset($_POST["pcbId"])) {
 						if($card!=null) {
 							$roomTo = $unit->getToRoom();
 							$canPass = $roomTo->canEnter($card->getUser());
+
+                            if($user->getAge()<=Settings::curfewLimit) {
+                                $canPass = $canPass && !$user->getCurfew();
+                            }
 
 							NfcLogHandler::createLogEntry($card, $unit, $canPass);
 

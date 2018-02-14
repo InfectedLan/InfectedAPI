@@ -202,5 +202,10 @@ class UserTest extends TestCase {
         $this->assertEquals(false, UserOptionHandler::canBypassCurfew($curfewTestUser));
         UserOptionHandler::setCanBypassCurfew($curfewTestUser, true);
         $this->assertEquals(true, UserOptionHandler::canBypassCurfew($curfewTestUser));
+        UserOptionHandler::setCanBypassCurfew($curfewTestUser, false);
+
+        $this->assertEquals(false, $curfewTestUser->getCurfew());
+        $curfewTestUser->setCurfew(true);
+        $this->assertEquals(true, $curfewTestUser->getCurfew());
     }
 }

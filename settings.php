@@ -178,4 +178,6 @@ class Settings {
 	const ticketTransferTime = 86400; // 1 day (24 * 60 * 60)
 
 	const prioritySeatingReq = 5;
+
+	const curfewLimit = 14;
 }

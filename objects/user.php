@@ -611,10 +611,17 @@ class User extends DatabaseObject {
 		UserHandler::setSteamId($this, $steamId);
 	}
 
-	/*
-	 * Sets curfew state
-	 */
-	public function setCurfew($flag) {
-	    UserOptionHandler::setCanBypassCurfew($this, $flag);
+    /*
+     * Sets curfew state
+     */
+    public function setCurfew($flag) {
+        UserOptionHandler::setCanBypassCurfew($this, $flag);
+    }
+
+    /*
+     * Sets curfew state
+     */
+    public function getCurfew() {
+        return !UserOptionHandler::canBypassCurfew($this);
     }
 }

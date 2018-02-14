@@ -91,6 +91,7 @@ class UserOptionHandler {
 	 * Sets the curfew flag on someone
 	 */
     public static function setCanBypassCurfew(User $user, bool $curfew) {
+        echo 'CURFEW: ' . $curfew;
         $database = Database::getConnection(Settings::db_name_infected);
 
         if (!self::hasUserOption($user)) {
