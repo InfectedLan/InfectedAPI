@@ -20,7 +20,7 @@
 
 require_once 'session.php';
 require_once 'database.php';
-require_once 'handlers/nfcgatehandler.php';
+require_once 'handlers/nfcunithandler.php';
 require_once 'handlers/bongtypehandler.php';
 require_once 'handlers/bongentitlementhandler.php';
 require_once 'handlers/nfccardhandler.php';
@@ -37,10 +37,10 @@ $authenticated = false;
 
 if(isset($_GET["pcbId"])) {
 	if(strlen($_GET["pcbId"]) == 32) {
-		$unit = NfcGateHandler::getGateByPcbid($_GET["pcbId"]);
+		$unit = NfcUnitHandler::getGateByPcbid($_GET["pcbId"]);
 		
 		if($unit != null) {
-			if($unit->getType()==NfcGate::NFC_GATE_TYPE_POS) {
+			if($unit->getType()==NfcUnit::NFC_GATE_TYPE_POS) {
 				if(isset($_GET["cardId"])) {
 					if(strlen($_GET["cardId"]) == 16) {
 						$card = NfcCardHandler::getCardByNfcId($_GET["cardId"]);
