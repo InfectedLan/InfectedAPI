@@ -48,9 +48,9 @@ $tmpFile = Settings::api_path . 'content/cards/tmp/';
 $counter = 0;
 foreach($members as $member) {
     //$randomName = md5(time()) . '.png';
-    $randomName = md5($member->getId() . '.' . $member->getGroup()->getId() . '.' . $member->getDisplayName());
+    $randomName = md5($member->getId() . '.' . $member->getGroup()->getId() . '.' . $member->getGroup()->getName() . '.' . $member->getDisplayName());
     if($member->isTeamMember()) {
-        $randomName = md5($randomName . $member->getTeam()->getId());
+        $randomName = md5($randomName . $member->getTeam()->getId() . '.' . $member->getTeam()->getName());
     }
     if(!file_exists($tmpFile . $randomName)) {
         $image = CardGenerator::generateCard($member);

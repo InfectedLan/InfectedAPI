@@ -258,5 +258,10 @@
       "id": "66",
       "value": "developer.maintenance",
       "description": "Lar deg tvinge vedlikeholdsmodus av nettsiden"
+  },
+  {
+    "id":"68",
+    "value": "nfc.curfew",
+    "description": "Lar deg bestemme om brukere blir sperret i bygget i sperretiden"
   }
 ]
