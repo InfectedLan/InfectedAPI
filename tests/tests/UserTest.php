@@ -18,6 +18,7 @@ class UserTest extends TestCase {
 		$this->userSanityTest();
 		$this->friendTest();
 		$this->userCreationTest();
+        $this->curfewTest();
 	}
 
 	private function userSanityTest() {
@@ -193,4 +194,13 @@ class UserTest extends TestCase {
 		$this->assertEquals(0, count($user1->getPendingFriendsFrom()));
 		$this->assertEquals(0, count($user2->getPendingFriendsFrom()));
 	}
+
+	private function curfewTest() {
+        $curfewTestUser = UserHandler::getUser(1);
+        $this->assertEquals(false, UserOptionHandler::canBypassCurfew());
+        UserOptionHandler::setCanBypassCurfew($curfewTestUser, false);
+        $this->assertEquals(false, UserOptionHandler::canBypassCurfew());
+        UserOptionHandler::setCanBypassCurfew($curfewTestUser, true);
+        $this->assertEquals(true, UserOptionHandler::canBypassCurfew());
+    }
 }

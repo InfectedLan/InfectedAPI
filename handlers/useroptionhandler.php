@@ -61,17 +61,47 @@ class UserOptionHandler {
 		return $result->num_rows > 0;
 	}
 
-	/*
-	 * Returns true if the user has the prank option set.
-	 */
-	public static function hasUserEasterEgg(User $user): bool {
-		$database = Database::getConnection(Settings::db_name_infected);
+    /*
+     * Returns true if the user has the prank option set.
+     */
+    public static function hasUserEasterEgg(User $user): bool {
+        $database = Database::getConnection(Settings::db_name_infected);
 
-		$result = $database->query('SELECT * FROM `' . Settings::db_table_infected_useroptions . '`
+        $result = $database->query('SELECT * FROM `' . Settings::db_table_infected_useroptions . '`
 																WHERE `userId` = \'' . $user->getId() . '\'
 																AND `easterEgg` = \'1\';');
 
-		return $result->num_rows > 0;
-	}
+        return $result->num_rows > 0;
+    }
+
+    /*
+	 * Returns true if the user can bypass curfew
+	 */
+    public static function canBypassCurfew(User $user): bool {
+        $database = Database::getConnection(Settings::db_name_infected);
+
+        $result = $database->query('SELECT * FROM `' . Settings::db_table_infected_useroptions . '`
+																WHERE `userId` = \'' . $user->getId() . '\'
+																AND `bypassCurfew` = \'1\';');
+
+        return $result->num_rows > 0;
+    }
+
+    /*
+	 * Sets the curfew flag on someone
+	 */
+    public static function setCanBypassCurfew(User $user, bool $curfew) {
+        $database = Database::getConnection(Settings::db_name_infected);
+
+        if (!self::hasUserOption($user)) {
+            $database->query('INSERT INTO `' . Settings::db_table_infected_useroptions . '` (`userId`, `bypassCurfew`)
+												VALUES (\'' . $user->getId() . '\',
+																\'' . $database->real_escape_string($curfew) . '\');');
+        } else {
+            $database->query('UPDATE `' . Settings::db_table_infected_useroptions . '`
+												SET `bypassCurfew` = \'' . $database->real_escape_string($curfew) . '\'
+												WHERE `userId` = \'' . $user->getId() . '\';');
+        }
+    }
 }
 ?>
