@@ -56,7 +56,19 @@ class ChatPlugin extends WebSocketPlugin {
 
         case 'chatMessage':
             if ($this->server->isAuthenticated($connection)) {
-                $this->sendChatMessage($connection, $args[0], urldecode($args[1]));
+                $user = $this->server->getUser($connection);
+                $event = EventHandler::getCurrentEvent();
+                $startTime = $event->getStartTime();
+                if(time() < $startTime) {
+                    if($user->hasPermission('compo.management')) {
+                        $this->server->send($connection, '{"intent": "chat", "data": [' . $args[0] . ', "<i>Du chatter før lanet startet, folk kan ikke svare</i>"]}');
+                        $this->sendChatMessage($connection, $args[0], urldecode($args[1]));
+                    } else {
+                        $this->server->send($connection, '{"intent": "chat", "data": [' . $args[0] . ', "<b>Du har ikke tilgang til å chatte her før lanet har startet</b>"]}');
+                    }
+                } else {
+                    $this->sendChatMessage($connection, $args[0], urldecode($args[1]));
+                }
             } else {
                 echo "Disconnecting user due to no authentication: " . $this->server->getUser($connection)->getUsername() . "\n";
 

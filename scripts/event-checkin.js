@@ -59,29 +59,48 @@ function loadData() {
 										   	   '<td>E-post:</td>' +
 										   	   '<td>' + user.email + '</td>' +
 										   '</tr>' +
-										   '<tr>' +
-										   	   '<td>Phone:</td>' +
-										   	   '<td>' + user.phone + '</td>' +
-										   '</tr>' +
+											'<tr>' +
+												'<td>Phone:</td>' +
+												'<td>' + user.phone + '</td>' +
+											'</tr>' +
+											'<tr>' +
+												'<td>Skriv inn en NFC-id:</td>' +
+												'<td><input type="text" placeholder="NFC-id" id="nfc-id-field" /> </td>' +
+											'</tr>' +
 
 									   '</table>' +
-									   '<input type="button" value="Godkjenn" onClick="acceptTicket(' + ticketId + ')">');
+									   '<input type="button" value="Godkjenn" onClick="acceptTicket(' + ticketId + ', ' + user.id + ')">');
 		} else {
 			error(data.message);
 		}
 	});
 }
 
-function acceptTicket(id) {
-	$.getJSON('../api/json/ticket/checkInTicket.php?id=' + encodeURIComponent(id), function(data) {
-		if (data.result) {
-			// Remove the user information.
-			$("#ticketDetails").empty();
+function acceptTicket(id, userId) {
+	var cardId = $("#nfc-id-field").val();
+	if(cardId.length==0) {
+		error("Skriv inn en gyldig kort-id");
+		return;
+	}
+	if(cardId.length != 16) {
+		cardId = cardId.padEnd(16, '0');
+	}
 
-			// Display confirmation message to the user.
-			info(data.message);
+	$.post('../api/rest/nfc/user/create.php', "cardId=" + cardId + "&userId=" + userId, function(data) {
+		if(data.result) {
+			$.get('../api/rest/ticket/checkIn.php', "ticketId=" + id, function(data) {
+				if(data.result) {
+                    $("#ticketDetails").empty();
+
+                    // Display confirmation message to the user.
+                    info(data.message);
+				} else {
+					error(data.message);
+				}
+			});
 		} else {
 			error(data.message);
 		}
 	});
+
 }

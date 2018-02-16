@@ -108,6 +108,7 @@ class Settings {
 	const db_table_infected_crew_pages = 'pages';
 	const db_table_infected_crew_teams = 'teams';
   	const db_table_infected_crew_castingpages = 'castingPages';
+  	const db_table_infected_crew_customusertitles = 'customUserTitles';
 
 	// InfectedInfo
 	const db_table_infected_info_slides = 'slides';

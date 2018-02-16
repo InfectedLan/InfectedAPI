@@ -56,7 +56,7 @@ class Chat extends DatabaseObject {
 	/*
 	 * Returns the last chat messages, amount specified by count.
 	 */
-	public function getLastMessages(int $count): string {
+	public function getLastMessages(int $count): array {
 		return ChatHandler::getLastChatMessages($this, $count);
 	}
 

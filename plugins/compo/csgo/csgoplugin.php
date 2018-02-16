@@ -40,16 +40,16 @@ class CsgoPlugin extends CompoPlugin {
         }
         return null;
     }
-    public function hasVoteScreen() {
-	return true;
+    public function hasVoteScreen(): bool {
+	    return true;
     }
-    public function getTurnArray(Match $match) {
+    public function getTurnArray(Match $match): array {
 	if($match->getId() == 226/* || $match->getId() == 225 || $match->getId() == 221*/) {
 	    return [0, 1, 1, 0, 1, 0, 2];
 	}
 	return [0, 1, 0, 1, 1, 0, 2];
     }
-    public function getTurnMask(Match $match) {
+    public function getTurnMask(Match $match): array {
 	if($match->getId() == 226/* || $match->getId() == 225 || $match->getId() == 221*/) {
 	    return [0, 0, 1, 1, 0, 0, 2];
 	}

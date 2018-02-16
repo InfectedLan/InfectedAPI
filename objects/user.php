@@ -36,6 +36,7 @@ require_once 'handlers/userhistoryhandler.php';
 require_once 'handlers/userpermissionhandler.php';
 require_once 'handlers/usernotehandler.php';
 require_once 'handlers/networkhandler.php';
+require_once 'handlers/customusertitlehandler.php';
 require_once 'objects/databaseobject.php';
 
 class User extends DatabaseObject {
@@ -623,5 +624,26 @@ class User extends DatabaseObject {
      */
     public function getCurfew() {
         return !UserOptionHandler::canBypassCurfew($this);
+    }
+
+    /*
+     * Returns if the user has a custom title
+     */
+    public function hasCustomTitle() {
+        return CustomUserTitleHandler::hasCustomTitle($this);
+    }
+
+    /*
+     * Returns the users custom title
+     */
+    public function getCustomTitle() {
+        return CustomUserTitleHandler::getCustomTitle($this);
+    }
+
+    /*
+     * Sets the users custom title
+     */
+    public function setCustomTitle($title) {
+        CustomUserTitleHandler::setCustomTitle($this, $title);
     }
 }

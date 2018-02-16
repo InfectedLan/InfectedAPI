@@ -262,6 +262,6 @@
   {
     "id":"68",
     "value": "nfc.curfew",
-    "description": "Lar deg bestemme om brukere blir sperret i bygget i sperretiden"
+    "description": "Lar deg bestemme om brukere blir sperret i bygget i portforbud-tiden"
   }
 ]

@@ -41,48 +41,49 @@ class CardGenerator {
         //Fetch and blit infected logo, after negating it
         $logo = imagecreatefromjpeg(Settings::api_path . "/content/static/logo_infected_600x211.jpg");
 
-        self::blitImage($image, $logo, 0.2, 0, 0.6);
+        self::blitImage($image, $logo, 0.2, 0.050, 0.6);
 
         //Fetch and blit avatar
         $avatar = $user->getAvatar();
         $avatarImage = imagecreatefromjpeg(Settings::api_path . $avatar->getHd());
 
-        self::blitImage($image, $avatarImage, 0.1, 0.15, 0.8);
+        self::blitImage($image, $avatarImage, 0.1, 0.15+0.050, 0.8);
 
-        $printedHeight = self::blitText($image, $user->getFullName(), self::HEIGHT/30, $black, self::xToNormalized(0.05), self::yToNormalized(0.60), 25);
+        $printedHeight = self::blitText($image, $user->getFullName(), self::HEIGHT/25, $black, self::xToNormalized(0.05), self::yToNormalized(0.650), 20);
 
         $specialRole = "Medlem";
-        if ($user->hasSpecialRole()) {
-            $specialRole = $user->getRole();
-        } else if($user->isTeamMember()) {
-            $specialRole = 'Medlem av ' . ucwords($user->getGroup()->getName()) . ':' . ucwords($user->getTeam()->getName());
-        }
 
-        if($user->getGroup()->getId() == 50) {
-            if($user->isGroupLeader()) {
-                $specialRole = 'Arrangementsansvarlig';
+        if($user->hasCustomTitle()) {
+            $specialRole = $user->getCustomTitle();
+        } else {
+            if ($user->hasSpecialRole()) {
+                $specialRole = $user->getRole();
+            } else if($user->isTeamMember()) {
+                $specialRole = 'Medlem av ' . ucwords($user->getGroup()->getName()) . ':' . ucwords($user->getTeam()->getName());
             }
-            else if( $user->isTeamLeader()) {
-                $specialRole =  'Ansvarlig ' . ucwords($user->getTeam()->getName());
-            }
-            else if($user->isTeamMember()) {
-                $specialRole =  ucwords($user->getTeam()->getName());
-            }
-        } else if($user->getGroup()->getId() == 52 ) {
-            if($user->isGroupLeader()) {
-                $specialRole = "Sikkerhetsansvarlig";
-            }
-        }
 
-        if($user->getId() == 1) {
-            $specialRole = 'Webansvarlig';
+            if($user->getGroup()->getId() == 50) {
+                if($user->isGroupLeader()) {
+                    $specialRole = 'Arrangementsansvarlig';
+                }
+                else if( $user->isTeamLeader()) {
+                    $specialRole =  'Ansvarlig ' . ucwords($user->getTeam()->getName());
+                }
+                else if($user->isTeamMember()) {
+                    $specialRole =  ucwords($user->getTeam()->getName());
+                }
+            } else if($user->getGroup()->getId() == 52 ) {
+                if($user->isGroupLeader()) {
+                    $specialRole = "Sikkerhetsansvarlig";
+                }
+            }
         }
-        self::blitText($image, $specialRole, self::HEIGHT/50, $black, self::xToNormalized(0.05), self::yToNormalized(0.60) + $printedHeight, 28);
+        self::blitText($image, $specialRole, self::HEIGHT/35, $black, self::xToNormalized(0.05), self::yToNormalized(0.60+0.05) + $printedHeight, 28);
         //self::blitText($image, $user->getAge(), self::HEIGHT/50, $black, self::xToNormalized(0.05), self::yToNormalized(0.75), 35);
 
         $validStr = $event->getSeason() . " " . date("Y", $event->getStartTime());
 
-        self::blitText($image, $validStr , self::HEIGHT/50, $black, self::xToNormalized(0.05), self::yToNormalized(0.85), 35);
+        self::blitText($image, $validStr , self::HEIGHT/35, $black, self::xToNormalized(0.05), self::yToNormalized(0.85), 35);
 
 
         //Draw QR code
@@ -90,7 +91,7 @@ class CardGenerator {
         $qrcodepath =  Settings::api_path . "/content/qrcache/" . QR::getCode('infected-user:' . $user->getId());
 
         $qrImage = imagecreatefrompng($qrcodepath);
-        self::blitImage($image, $qrImage, 0.65, 0.65, 0.35);
+        self::blitImage($image, $qrImage, 0.75, 0.75, 0.20, 0.15, 0.15, 0.7, 0.7);
 
         //Draw crew
 
@@ -139,16 +140,16 @@ class CardGenerator {
         return $image;
     }
 
-    private static function blitImage($image, $source, $nx, $ny, $nw) {
+    private static function blitImage($image, $source, $nx, $ny, $nw, $sx_n = 0, $sy_n = 0, $sw_n = 1, $sh_n = 1) {
         imagecopyresized($image, $source,
             self::xToNormalized($nx),
             self::yToNormalized($ny),
-            0,
-            0,
+            imagesx($source)*$sx_n,
+            imagesy($source)*$sy_n,
             self::xToNormalized($nw),
             (imagesy($source)/imagesx($source))*self::xToNormalized($nw),
-            imagesx($source),
-            imagesy($source));
+            imagesx($source)*$sw_n,
+            imagesy($source)*$sh_n);
     }
 
     private static function blitText($image, $text, $fontsize, $color, $x, $y, $wrap_limit = 100) {
@@ -160,7 +161,7 @@ class CardGenerator {
             imagettftext($image, $fontsize, 0, $x, $y + $delta_y, $color, self::CARDFONT, $line);
             $delta_y =  $delta_y +$fontsize /*$dimensions[3]*5*/;
         }
-        return $delta_y;
+        return  $delta_y;
     }
 
     private static function blitTextOneline($image, $text, $fontsize, $color, $x, $y) {
