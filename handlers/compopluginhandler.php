@@ -26,7 +26,7 @@ class CompoPluginHandler {
   /**
    * Returns object for the plugin, or the default if none existing. Will cache.
    */
-  public static function getPluginObjectOrDefault(string $pluginName): object {
+  public static function getPluginObjectOrDefault(string $pluginName) {
   	if (!isset(self::$cachedPlugins[$pluginName])) { //please note isset will return false if the key exists, but the value is null. This is not a case we need to care for in this example.
 	    $obj = null;
 
@@ -76,7 +76,7 @@ class CompoPluginHandler {
   /**
    * Returns javascripts for the plugin, or the default if none existing. Will cache.
    */
-  public static function getPluginJavascriptOrDefault(string $pluginName): object  {
+  public static function getPluginJavascriptOrDefault(string $pluginName)  {
     if (!isset(self::$cachedJavascripts[$pluginName])) { //please note isset will return false if the key exists, but the value is null. This is not a case we need to care for in this example.
       $arr = null;
 

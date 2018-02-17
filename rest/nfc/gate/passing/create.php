@@ -61,7 +61,7 @@ if(isset($_POST["pcbId"])) {
 						}
 					} else {
 						$status = 400; // Bad Request.
-						$message = Localization::getLocale('invalid_cardid_format');	
+						$message = Localization::getLocale('invalid_cardid_format');
 					}
 				} else {
 					$status = 400; // Bad Request.

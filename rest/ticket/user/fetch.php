@@ -20,11 +20,11 @@
 
 require_once 'session.php';
 require_once 'database.php';
-require_once 'handlers/nfcgatehandler.php';
+require_once 'handlers/nfcunithandler.php';
 require_once 'handlers/tickethandler.php';
 require_once 'localization.php';
 require_once 'handlers/sysloghandler.php';
-require_once 'objects/nfcgate.php';
+require_once 'objects/nfcunit.php';
 
 $result = false;
 $status = http_response_code();

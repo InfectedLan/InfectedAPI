@@ -92,6 +92,10 @@ function acceptTicket(id, userId) {
 				if(data.result) {
                     $("#ticketDetails").empty();
 
+                    $.post('../api/rest/nfc/gate/passing/create.php', "", function(data) {
+
+					});
+
                     // Display confirmation message to the user.
                     info(data.message);
 				} else {

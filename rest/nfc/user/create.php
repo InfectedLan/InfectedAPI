@@ -35,7 +35,7 @@ $authenticated = false;
 if (Session::isAuthenticated()) {
     $user = Session::getCurrentUser();
 
-    if ($user->hasPermission('nfc.card.management')) {
+    if ($user->hasPermission('nfc.card.management') || $user->hasPermission('event.checkin')) {
         $authenticated = true;
     } else {
         $status = 403; // Forbidden
@@ -71,7 +71,7 @@ if($authenticated) {
     if(isset($_POST["cardId"]) && isset($_POST["userId"])) {
         if(strlen($_POST["cardId"])==16) {
             $card = NfcCardHandler::getCardByNfcId($_POST["cardId"]);
-            if($card==null) {
+            if(true) {
                 $user = UserHandler::getUser($_POST["userId"]);
                 if($user!=null) {
                     NfcCardHandler::registerCard($user, $_POST["cardId"]);
