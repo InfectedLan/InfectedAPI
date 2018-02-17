@@ -2,7 +2,7 @@
 /**
  * This file is part of InfectedAPI.
  *
- * Copyright (C) 2015 Infected <http://infected.no/>.
+ * Copyright (C) 2018 Infected <https://infected.no/>.
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -42,8 +42,8 @@ class NFCCardTest extends TestCase {
 		$me = UserHandler::getUser(1);
 		$nfcid = "E004010203040506";
 
-		$cards = NfcCardHandler::getCardsForCurrentEvent();
-		$this->assertEquals(0, count($cards));
+		$cards = NfcCardHandler::getCards();
+		$this->assertEquals(1, count($cards));
 	}
 
 	private function getterTest() {
@@ -51,17 +51,27 @@ class NFCCardTest extends TestCase {
 		$me = UserHandler::getUser(1);
 		$nfcid = "E004010203040506";
 
-		NfcCardHandler::registerCard($me,EventHandler::getCurrentEvent(), $nfcid);
+		NfcCardHandler::registerCard($me, $nfcid);
 
 
-		$cards = NfcCardHandler::getCardsByUserForCurrentEvent($me);
-		$this->assertEquals(1, count($cards));
+		$cards = NfcCardHandler::getCardsByUser($me);
+		$this->assertEquals(2, count($cards));
 
-		$card = $cards[0];
-		$this->assertNotEquals($card, null);
+        $this->assertNotEquals($cards[0], null);
+        $this->assertNotEquals($cards[1], null);
 
-		$this->assertEquals($me, $card->getUser());
-		$this->assertEquals($nfcid, $card->getNfcId());
+		$cards = NfcCardHandler::getCards();
+		$this->assertEquals(2, count($cards));
+
+        $this->assertNotEquals($cards[0], null);
+        $this->assertNotEquals($cards[1], null);
+
+		$this->assertEquals($me, $cards[1]->getUser());
+		$this->assertEquals($nfcid, $cards[1]->getNfcId());
+
+		$card = NfcCardHandler::getCardByNfcId($nfcid);
+
+		$this->assertEquals($cards[1], $card);
 
 		//getCard
 		$newCard = NfcCardHandler::getCard($card->getId());

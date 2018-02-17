@@ -2,7 +2,7 @@
 /**
  * This file is part of InfectedAPI.
  *
- * Copyright (C) 2017 Infected <http://infected.no/>.
+ * Copyright (C) 2018 Infected <https://infected.no/>.
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -28,11 +28,11 @@ class AgendaHandler {
 	/*
 	 * Get an agenda by the internal id.
 	 */
-	public static function getAgenda(int $id): ?Aganda {
+	public static function getAgenda(int $id): ?Agenda {
 		$database = Database::getConnection(Settings::db_name_infected_main);
 
 		$result = $database->query('SELECT * FROM `' . Settings::db_table_infected_main_agenda . '`
-																WHERE `id` = \'' . $database->real_escape_string($id) . '\';');
+								   WHERE `id` = ' . $database->real_escape_string($id) . ';');
 
 		return $result->fetch_object('Agenda');
 	}
@@ -44,8 +44,8 @@ class AgendaHandler {
 		$database = Database::getConnection(Settings::db_name_infected_main);
 
 		$result = $database->query('SELECT * FROM `' . Settings::db_table_infected_main_agenda . '`
-																WHERE `eventId` = \'' . ($event != null ? $event->getId() : EventHandler::getCurrentEvent()->getId()) . '\'
-																ORDER BY `startTime`;');
+								   WHERE `eventId` = ' . ($event != null ? $event->getId() : EventHandler::getCurrentEvent()->getId()) . '
+								   ORDER BY `startTime`;');
 
 		$agendaList = [];
 
@@ -63,9 +63,9 @@ class AgendaHandler {
 		$database = Database::getConnection(Settings::db_name_infected_main);
 
 		$result = $database->query('SELECT * FROM `' . Settings::db_table_infected_main_agenda . '`
-											  				WHERE `eventId` = \'' . ($event != null ? $event->getId() : EventHandler::getCurrentEvent()->getId()) . '\'
-											  				AND `published` = \'1\'
-											  				ORDER BY `startTime`;');
+								   WHERE `eventId` = ' . ($event != null ? $event->getId() : EventHandler::getCurrentEvent()->getId()) . '
+								   AND `published` = 1
+								   ORDER BY `startTime`;');
 
 		$agendaList = [];
 
@@ -83,10 +83,10 @@ class AgendaHandler {
 		$database = Database::getConnection(Settings::db_name_infected_main);
 
 		$result = $database->query('SELECT * FROM `' . Settings::db_table_infected_main_agenda . '`
-																WHERE `eventId` = \'' . ($event != null ? $event->getId() : EventHandler::getCurrentEvent()->getId()) . '\'
-																AND DATE_ADD(`startTime`, INTERVAL 1 HOUR) >= NOW()
-																AND `published` = \'1\'
-																ORDER BY `startTime`;');
+								   WHERE `eventId` = ' . ($event != null ? $event->getId() : EventHandler::getCurrentEvent()->getId()) . '
+								   AND DATE_ADD(`startTime`, INTERVAL 1 HOUR) >= NOW()
+								   AND `published` = 1
+								   ORDER BY `startTime`;');
 
 		$agendaList = [];
 
@@ -104,12 +104,12 @@ class AgendaHandler {
 		$database = Database::getConnection(Settings::db_name_infected_main);
 
 		$database->query('INSERT INTO `' . Settings::db_table_infected_main_agenda . '` (`eventId`, `name`, `title`, `description`, `startTime`, `published`)
-										  VALUES (\'' . $event->getId() . '\',
-														  \'' . $database->real_escape_string($name) . '\',
-														  \'' . $database->real_escape_string($title) . '\',
-														  \'' . $database->real_escape_string($description) . '\',
-														  \'' . $database->real_escape_string($startTime) . '\',
-															\'1\');');
+						 VALUES (\'' . $event->getId() . '\',
+							     \'' . $database->real_escape_string($name) . '\',
+								 \'' . $database->real_escape_string($title) . '\',
+								 \'' . $database->real_escape_string($description) . '\',
+								 \'' . $database->real_escape_string($startTime) . '\',
+								1);');
 
 		return self::getAgenda($database->insert_id);
 	}
@@ -121,11 +121,11 @@ class AgendaHandler {
 		$database = Database::getConnection(Settings::db_name_infected_main);
 
 		$database->query('UPDATE `' . Settings::db_table_infected_main_agenda . '`
-										  SET `title` = \'' . $database->real_escape_string($title) . '\',
-												  `description` = \'' . $database->real_escape_string($description) . '\',
-												  `startTime` = \'' . $database->real_escape_string($startTime) . '\',
-												  `published` = \'' . $database->real_escape_string($published) . '\'
-										  WHERE `id` = \'' . $agenda->getId() . '\';');
+						 SET `title` = \'' . $database->real_escape_string($title) . '\',
+						  	 `description` = \'' . $database->real_escape_string($description) . '\',
+							 `startTime` = \'' . $database->real_escape_string($startTime) . '\',
+							 `published` = \'' . $database->real_escape_string($published) . '\'
+						 WHERE `id` = ' . $agenda->getId() . ';');
 	}
 
 	/*
@@ -135,7 +135,6 @@ class AgendaHandler {
 		$database = Database::getConnection(Settings::db_name_infected_main);
 
 		$database->query('DELETE FROM `' . Settings::db_table_infected_main_agenda . '`
-						  				WHERE `id` = \'' . $agenda->getId() . '\';');
+						 WHERE `id` = ' . $agenda->getId() . ';');
 	}
 }
-?>

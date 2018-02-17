@@ -24,7 +24,6 @@ require_once 'handlers/useroptionhandler.php';
 require_once 'handlers/citydictionary.php';
 require_once 'handlers/registrationcodehandler.php';
 require_once 'handlers/permissionhandler.php';
-require_once 'handlers/userpermissionhandler.php';
 require_once 'handlers/emergencycontacthandler.php';
 require_once 'handlers/tickethandler.php';
 require_once 'handlers/eventhandler.php';
@@ -32,10 +31,12 @@ require_once 'handlers/passwordresetcodehandler.php';
 require_once 'handlers/avatarhandler.php';
 require_once 'handlers/grouphandler.php';
 require_once 'handlers/teamhandler.php';
+require_once 'handlers/userfriendhandler.php';
 require_once 'handlers/userhistoryhandler.php';
+require_once 'handlers/userpermissionhandler.php';
 require_once 'handlers/usernotehandler.php';
-require_once 'handlers/friendhandler.php';
 require_once 'handlers/networkhandler.php';
+require_once 'handlers/customusertitlehandler.php';
 require_once 'objects/databaseobject.php';
 
 class User extends DatabaseObject {
@@ -276,20 +277,59 @@ class User extends DatabaseObject {
 		return EmergencyContactHandler::getEmergencyContactByUser($this);
 	}
 
-	public function getFriends(): array {
-		return FriendHandler::getFriendsByUser($this);
-	}
-
+	/*
+	 * Returns true if the this user is friend with the given one.
+	 */
 	public function isFriendsWith(User $friend): bool {
-		return FriendHandler::isUserFriendsWith($this, $friend);
+		return UserFriendHandler::isUserFriendsWith($this, $friend);
 	}
 
+	/*
+	 * Fetches a list of this users friends.
+	 */
+	public function getFriends(): array {
+		return UserFriendHandler::getFriendsByUser($this);
+	}
+
+	/*
+	 * Fetches a list of this users pending friendships.
+	 */
+	public function getPendingFriendsTo(): array {
+		return UserFriendHandler::getPendingFriendRequestsToUser($this);
+	}
+	/*
+	 * Fetches a list of this users pending friendships.
+	 */
+	public function getPendingFriendsFrom(): array {
+		return UserFriendHandler::getPendingFriendRequestsFromUser($this);
+	}
+
+	/*
+	 * Adds a new friend for this user.
+	 */
 	public function addFriend(User $friend) {
-		FriendHandler::addUserFriend($this, $friend);
+		UserFriendHandler::addUserFriend($this, $friend);
 	}
 
+	/*
+	 * Removes friendship with this given friend.
+	 */
 	public function removeFriend(User $friend) {
-		FriendHandler::removeUserFriend($this, $friend);
+		UserFriendHandler::removeUserFriend($this, $friend);
+	}
+
+	/*
+	 * Adds a new friend for this user.
+	 */
+	public function acceptFriend(User $friend) {
+		UserFriendHandler::updateUserFriend($this, $friend);
+	}
+
+	/*
+	 * Removes friendship with this given friend.
+	 */
+	public function rejectFriend(User $friend) {
+		UserFriendHandler::updateUserFriend($this, $friend, UserFriendHandler::STATE_REJECTED);
 	}
 
 	/*
@@ -358,7 +398,7 @@ class User extends DatabaseObject {
 		$code = PasswordResetCodeHandler::createPasswordResetCode($this);
 
 		// Send an email to the user with a link for resetting the password.
-		$url = 'https://' . $_SERVER['HTTP_HOST'] . '/v3/index.php?page=password-reset&code=' . $code;
+		$url = 'https://' . $_SERVER['HTTP_HOST'] . '/v2/index.php?page=reset-password&code=' . $code;
 		$message = [];
 		$message[] = '<!DOCTYPE html>';
 		$message[] = '<html>';
@@ -388,7 +428,7 @@ class User extends DatabaseObject {
 			$message[] = '<body>';
 				$message[] = '<h3>Hei!</h3>';
 				$message[] = '<p>' . $text . '</p>';
-				$message[] = '<p>Med vennlig hilsen <a href="http://infected.no/">Infected</a>.</p>';
+				$message[] = '<p>Med vennlig hilsen <a href="' . $_SERVER['HTTP_HOST'] . '">Infected</a>.</p>';
 			$message[] = '</body>';
 		$message[] = '</html>';
 
@@ -468,7 +508,7 @@ class User extends DatabaseObject {
 	/*
 	 * Returns the team.
 	 */
-	public function getTeam(Event $event = null): Team {
+	public function getTeam(Event $event = null): ?Team {
 		return TeamHandler::getTeamByUser($this, $event);
 	}
 
@@ -571,4 +611,39 @@ class User extends DatabaseObject {
 	public function setSteamId(string $steamId) {
 		UserHandler::setSteamId($this, $steamId);
 	}
+
+    /*
+     * Sets curfew state
+     */
+    public function setCurfew($flag) {
+        UserOptionHandler::setCanBypassCurfew($this, $flag);
+    }
+
+    /*
+     * Sets curfew state
+     */
+    public function getCurfew() {
+        return !UserOptionHandler::canBypassCurfew($this);
+    }
+
+    /*
+     * Returns if the user has a custom title
+     */
+    public function hasCustomTitle() {
+        return CustomUserTitleHandler::hasCustomTitle($this);
+    }
+
+    /*
+     * Returns the users custom title
+     */
+    public function getCustomTitle() {
+        return CustomUserTitleHandler::getCustomTitle($this);
+    }
+
+    /*
+     * Sets the users custom title
+     */
+    public function setCustomTitle($title) {
+        CustomUserTitleHandler::setCustomTitle($this, $title);
+    }
 }

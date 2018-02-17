@@ -233,5 +233,35 @@
     "id": "63",
     "value": "stats.ticketsale",
     "description": "Gir deg tilgang til billetsalgs statistikk."
+  },
+  {
+    "id": "64",
+    "value": "nfc.bong.management",
+    "description": "Lar brukeren administrere bonger"
+  },
+  {
+    "id": "68",
+    "value": "nfc.bong.transaction",
+    "description": "Lar brukeren utføre transaksjoner på bonger(Både gi og ta) utenfor kassesystemet"
+  },
+  {
+    "id": "65",
+    "value": "nfc.card.management",
+    "description": "Lar brukeren administrere nfc-kort"
+  },
+  {
+    "id": "67",
+    "value": "nfc.overview",
+    "description": "Lar brukeren se en oversikt over NFC-systemet(romoversikt, tilkobla kort, osv)"
+  },
+  {
+      "id": "66",
+      "value": "developer.maintenance",
+      "description": "Lar deg tvinge vedlikeholdsmodus av nettsiden"
+  },
+  {
+    "id":"68",
+    "value": "nfc.curfew",
+    "description": "Lar deg bestemme om brukere blir sperret i bygget i portforbud-tiden"
   }
 ]

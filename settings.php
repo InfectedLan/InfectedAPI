@@ -43,6 +43,7 @@ class Settings {
 	// Tells where images should be stored.
 	const qr_path = '../api/content/qrcache/';
 	const avatar_path = '../api/content/avatars/';
+	const api_relative_avatar_path = 'content/avatars/';
 
 	/* PHP */
 	const php_version = '7.2.0';
@@ -72,6 +73,9 @@ class Settings {
 	const db_table_infected_userpermissions = 'userpermissions';
 	const db_table_infected_users = 'users';
 	const db_table_infected_syslogs = 'syslogs';
+	const db_table_infected_bongTypes = 'bongTypes';
+	const db_table_infected_bongTransactions = 'bongTransactions';
+	const db_table_infected_bongEntitlements = 'bongEntitlements';
 
 	// InfectedCompo
 	const db_table_infected_compo_servers = 'servers';
@@ -104,6 +108,7 @@ class Settings {
 	const db_table_infected_crew_pages = 'pages';
 	const db_table_infected_crew_teams = 'teams';
   	const db_table_infected_crew_castingpages = 'castingPages';
+  	const db_table_infected_crew_customusertitles = 'customUserTitles';
 
 	// InfectedInfo
 	const db_table_infected_info_slides = 'slides';
@@ -120,10 +125,10 @@ class Settings {
 	const db_table_infected_tech_networks = 'networks';
 	const db_table_infected_tech_networktypes = 'networktypes';
 	const db_table_infected_tech_nfccards = 'nfccards';
-	const db_table_infected_tech_nfcgates = 'nfcgates';
+	const db_table_infected_tech_nfcunits = 'nfcunits';
 	const db_table_infected_tech_nfclog = 'nfclog';
-	const db_table_infected_tech_bongTypes = 'bongTypes';
-	const db_table_infected_tech_bongTransactions = 'bongTransactions';
+	const db_table_infected_tech_rooms = 'rooms';
+	const db_table_infected_tech_roompermissions = 'roomPermissions';
 
 	// InfectedTickets
 	const db_table_infected_tickets_checkedintickets = 'checkedintickets';
@@ -174,4 +179,6 @@ class Settings {
 	const ticketTransferTime = 86400; // 1 day (24 * 60 * 60)
 
 	const prioritySeatingReq = 5;
+
+	const curfewLimit = 14;
 }

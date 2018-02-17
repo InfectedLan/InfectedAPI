@@ -24,7 +24,8 @@ require_once 'objects/avatar.php';
 require_once 'objects/user.php';
 
 class AvatarHandler {
-    const STATE_NEW = 1;
+	const STATE_NEW = 0;
+    const STATE_PENDING = 1;
     const STATE_ACCEPTED = 2;
     const STATE_REJECTED = 3;
 
@@ -76,7 +77,7 @@ class AvatarHandler {
 		$database = Database::getConnection(Settings::db_name_infected_crew);
 
 		$result = $database->query('SELECT * FROM `' . Settings::db_table_infected_crew_avatars . '`
-								   WHERE `state` = ' . self::STATE_NEW . ';');
+								   WHERE `state` = ' . self::STATE_PENDING . ';');
 
 		$avatarList = [];
 
@@ -107,7 +108,7 @@ class AvatarHandler {
 
 		$result = $database->query('SELECT * FROM `' . Settings::db_table_infected_crew_avatars . '`
                                    WHERE `userId` = ' . $user->getId() . '
-                                   AND (`state` = ' . self::STATE_NEW . ' OR `state` = ' . self::STATE_ACCEPTED . ');');
+                                   AND (`state` = ' . self::STATE_PENDING . ' OR `state` = ' . self::STATE_ACCEPTED . ');');
 
 		return $result->num_rows > 0;
 	}
@@ -136,7 +137,7 @@ class AvatarHandler {
                                            \'' . $fileName . '\',
                                            ' . self::STATE_NEW . ');');
 
-		return Settings::api_path . Settings::avatar_path . 'temp/' . $fileName;
+		return Settings::api_path . Settings::api_relative_avatar_path . 'temp/' . $fileName;
 	}
 
 	/*
@@ -200,6 +201,6 @@ class AvatarHandler {
 			$file = 'default_child.png';
 		}
 
-		return Settings::avatar_path . 'default/' . $file;
+		return Settings::api_relative_avatar_path . 'default/' . $file;
 	}
 }

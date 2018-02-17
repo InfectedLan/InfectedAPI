@@ -148,7 +148,7 @@
   "you_cannot_remove_this_event": "Du kan ikke fjerne dette arrangementet.",
   "you_cannot_unqueue_applications_from_previous_events": "Du kan ikke ta søknader fra tidligere arrangementer ut av køen.",
   "you_do_not_have_permission_to_do_that": "Du har ikke rettigheter til dette.",
-  "you_do_not_have_permission_to_do_this_you_will only be able to run this from command line": "Du har ikke rettigheter til å gjøre det, du kan kun kjøre denne fra CLI.",
+  "you_do_not_have_permission_to_do_this_you_will_only_be_able_to_run_this_from_command_line": "Du har ikke rettigheter til å gjøre det, du kan kun kjøre denne fra CLI.",
   "you_do_not_own_this_ticket": "Du eier ikke denne billetten.",
   "you_have_already_submitted_an_application_to_value_you_can_apply_again_if_your_application_should_be_denied": "Du har allerede søkt til %s. Du kan søke igjen hvis søknaden din skulle bli avslått.",
   "you_have_entered_an_invalid_gender": "Du har oppgitt et ugyldig kjønn.",
@@ -175,5 +175,14 @@
   "your_email_was_sent_to_the_selected_user": "Din e-post ble sendt til den valgte brukeren.",
   "your_email_was_sent_to_the_selected_users": "Din e-post ble sendt til de valgte brukerene.",
   "your_password_is_now_changed": "Passordet ditt er nå endret.",
-  "zip_code": "Postnummer"
+  "zip_code": "Postnummer",
+  "invalid_pcbid": "Ugyldig pcbid",
+  "the_card_is_already_bound": "Kortet er allerede bundet til en konto",
+  "invalid_cardid_format": "Ugyldig format på kortets NFC-id",
+  "this_card_is_not_bound": "Dette NFC-kortet er ikke bundet til en konto",
+  "the_transactor_card_is_not_bound": "Det transaksjonsansvarlige kortet er ikke bundet. Har det blitt slettet?",
+  "the_transactor_user_does_not_exist": "Den transaksjonsansvarlige brukeren eksisterer ikke.",
+  "the_user_bound_to_the_card_does_not_exist": "Brukeren knyttet til dette kortet eksisterer ikke",
+  "the_bong_type_doesnt_exist": "Bong-typen som ble spesifisert eksisterer ikke",
+  "not_enough_bongs": "Brukeren har ikke nok bonger for å dekke denne transaksjonen"
 }

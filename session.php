@@ -62,10 +62,10 @@ class Session {
 		  return null;
     }
 
-    $sessionData = exec("cat /var/lib/php5/sessions/sess_" . $sessionId); //I am not debugging regex at 0:35 in the morning, and it is temp anyways
-    $regex = '/userId\|s:\d+:"(.+)";/';
+    $sessionData = exec("cat /var/lib/php/sessions/sess_" . $sessionId); //I am not debugging regex at 0:35 in the morning, and it is temp anyways
+    $regex = '/userId\|i:(.+);/';
 
-    //echo "Got session data: " . $sessionData . "\n";
+    echo "Got session data: " . $sessionData . "\n";
 
     preg_match($regex, $sessionData, $matches);
 

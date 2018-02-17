@@ -2,7 +2,7 @@
 /**
  * This file is part of InfectedAPI.
  *
- * Copyright (C) 2015 Infected <http://infected.no/>.
+ * Copyright (C) 2018 Infected <https://infected.no/>.
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -27,9 +27,13 @@ require_once 'handlers/eventhandler.php';
 
 class NfcCardHandler {
 	/*
-	 * Registers a NFC card for a user
+	 * Registers a NFC card for a user. If event is not specified, the current one is returned
 	*/
-	public static function registerCard(User $user, Event $event, $nfcid) {
+	public static function registerCard(User $user, $nfcid, Event $event = null) {
+		if($event == null) {
+			$event = EventHandler::getCurrentEvent();
+		}
+
 		$database = Database::getConnection(Settings::db_name_infected_tech);
 
 		$result = $database->query('INSERT INTO `' . Settings::db_table_infected_tech_nfccards . '` (`userId`, `eventId`, `nfcId`)
@@ -42,7 +46,7 @@ class NfcCardHandler {
 	}
 
 	/*
-	 * Returns the card with the given id.
+	 * Returns the card with the given database id.
 	 */
 	public static function getCard($id) {
 		$database = Database::getConnection(Settings::db_name_infected_tech);
@@ -54,9 +58,28 @@ class NfcCardHandler {
 	}
 
 	/*
-	 * Returns a list of all nfc cards by their event.
+	 * Returns the card with the given card id. If the event is not specified, the current event is used.
 	 */
-	public static function getCardsByEvent(Event $event) {
+	public static function getCardByNfcId(string $nfcId, Event $event = null) {
+		if($event==null) {
+			$event = EventHandler::getCurrentEvent();
+		}
+		$database = Database::getConnection(Settings::db_name_infected_tech);
+
+		$result = $database->query('SELECT * FROM `'. Settings::db_table_infected_tech_nfccards . '`
+																WHERE `nfcId` = \'' . $database->real_escape_string($nfcId) . '\' 
+																AND	`eventId` = \'' . $event->getId() . '\';');
+
+		return $result->fetch_object('NfcCard');
+	}
+
+	/*
+	 * Returns a list of all nfc cards by a specified event, or the current one if none is specified
+	 */
+	public static function getCards(Event $event = null) {
+		if($event==null) {
+			$event = EventHandler::getCurrentEvent();
+		}
 		$database = Database::getConnection(Settings::db_name_infected_tech);
 
 		$result = $database->query('SELECT * FROM `' . Settings::db_table_infected_tech_nfccards . '` WHERE `eventId` = \'' . $database->real_escape_string($event->getId()) . '\';');
@@ -71,9 +94,12 @@ class NfcCardHandler {
 	}
 
 	/*
-	 * Returns the NFC card given an user and an event
+	 * Returns the NFC card given a user and optionally an event
 	 */
-	public static function getCardsByUserAndEvent(Event $event, User $user) {
+	public static function getCardsByUser(User $user, Event $event = null) {
+		if($event==null) {
+			$event = EventHandler::getCurrentEvent();
+		}
 		$database = Database::getConnection(Settings::db_name_infected_tech);
 
 		$result = $database->query('SELECT * FROM `'. Settings::db_table_infected_tech_nfccards . '`
@@ -89,17 +115,11 @@ class NfcCardHandler {
 	}
 
 	/*
-	 * Returns a user's NFC card for the current event
+	 * Returns the room a card is currently in
 	 */
-	public static function getCardsByUserForCurrentEvent(User $user) {
-		return self::getCardsByUserAndEvent(EventHandler::getCurrentEvent(), $user);
+	public static function getRoomByCard(Nfccard $card) {
+
 	}
 
-	/*
-	 * Returns a list of all nfc cards for the current event
-	 */
-	public static function getCardsForCurrentEvent() {
-		return self::getCardsByEvent(EventHandler::getCurrentEvent());
-	}
 }
 ?>
