@@ -19,6 +19,7 @@
  */
 
 require_once 'settings.php';
+require_once 'databaseconstants.php';
 require_once 'database.php';
 require_once 'objects/location.php';
 
@@ -29,7 +30,7 @@ class LocationHandler {
 	public static function getLocation(int $id): ?Location {
 		$database = Database::getConnection(Settings::db_name_infected);
 
-		$result = $database->query('SELECT * FROM `'. Settings::db_table_infected_locations . '`
+		$result = $database->query('SELECT * FROM `'. DatabaseConstants::db_table_infected_locations . '`
 																WHERE `id` = \'' . $database->real_escape_string($id) . '\';');
 
 		return $result->fetch_object('Location');
@@ -41,7 +42,7 @@ class LocationHandler {
 	public static function getLocations(): array {
 		$database = Database::getConnection(Settings::db_name_infected);
 
-		$result = $database->query('SELECT * FROM `' . Settings::db_table_infected_locations . '`;');
+		$result = $database->query('SELECT * FROM `' . DatabaseConstants::db_table_infected_locations . '`;');
 
 		$locationList = [];
 

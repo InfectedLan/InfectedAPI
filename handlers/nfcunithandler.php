@@ -19,6 +19,7 @@
  */
 
 require_once 'settings.php';
+require_once 'databaseconstants.php';
 require_once 'database.php';
 require_once 'objects/nfcunit.php';
 require_once 'objects/event.php';
@@ -31,7 +32,7 @@ class NfcUnitHandler {
 	public static function getGate($id) {
 		$database = Database::getConnection(Settings::db_name_infected_tech);
 
-		$result = $database->query('SELECT * FROM `'. Settings::db_table_infected_tech_nfcunits . '`
+		$result = $database->query('SELECT * FROM `'. DatabaseConstants::db_table_infected_tech_nfcunits . '`
 																WHERE `id` = \'' . $database->real_escape_string($id) . '\';');
 
 		return $result->fetch_object('NfcUnit');
@@ -43,7 +44,7 @@ class NfcUnitHandler {
 	public static function getGateByPcbid(string $pcbid) {
 		$database = Database::getConnection(Settings::db_name_infected_tech);
 
-		$result = $database->query('SELECT * FROM `'. Settings::db_table_infected_tech_nfcunits . '`
+		$result = $database->query('SELECT * FROM `'. DatabaseConstants::db_table_infected_tech_nfcunits . '`
 																WHERE `pcbId` = \'' . $database->real_escape_string($pcbid) . '\';');
 
 		return $result->fetch_object('NfcUnit');
@@ -59,7 +60,7 @@ class NfcUnitHandler {
 
 		$database = Database::getConnection(Settings::db_name_infected_tech);
 
-		$result = $database->query('SELECT * FROM `' . Settings::db_table_infected_tech_nfcunits . '` WHERE `eventId` = \'' . $event->getId() . '\';');
+		$result = $database->query('SELECT * FROM `' . DatabaseConstants::db_table_infected_tech_nfcunits . '` WHERE `eventId` = \'' . $event->getId() . '\';');
 
 		$gateList = [];
 

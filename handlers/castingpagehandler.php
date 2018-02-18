@@ -19,6 +19,7 @@
  */
 
 require_once 'settings.php';
+require_once 'databaseconstants.php';
 require_once 'database.php';
 require_once 'handlers/eventhandler.php';
 require_once 'objects/castingpage.php';
@@ -32,7 +33,7 @@ class CastingPageHandler {
 	public static function getCastingPage(int $id): ?CastingPage {
 		$database = Database::getConnection(Settings::db_name_infected_crew);
 
-		$result = $database->query('SELECT * FROM `' . Settings::db_table_infected_crew_castingpages . '`
+		$result = $database->query('SELECT * FROM `' . DatabaseConstants::db_table_infected_crew_castingpages . '`
 																WHERE `id` = \'' . $id . '\';');
 
 		return $result->fetch_object('CastingPage');
@@ -44,7 +45,7 @@ class CastingPageHandler {
 	public static function getCastingPages(Event $event = null): array {
 		$database = Database::getConnection(Settings::db_name_infected_crew);
 
-		$result = $database->query('SELECT * FROM `' . Settings::db_table_infected_crew_castingpages . '`
+		$result = $database->query('SELECT * FROM `' . DatabaseConstants::db_table_infected_crew_castingpages . '`
 																WHERE `eventId` = \'' . ($event != null ? $event->getId() : EventHandler::getCurrentEvent()->getId()) . '\';');
 
 		$serverList = [];
@@ -62,7 +63,7 @@ class CastingPageHandler {
 	public static function createCastingPage(Event $event, string $name, string $data, string $template): int {
     $database = Database::getConnection(Settings::db_name_infected_crew);
 
-    $database->query('INSERT INTO `' . Settings::db_table_infected_crew_castingpages . '`(`eventId`, `name`, `data`, `template`)
+    $database->query('INSERT INTO `' . DatabaseConstants::db_table_infected_crew_castingpages . '`(`eventId`, `name`, `data`, `template`)
 											VALUES (\'' . $event->getId() . '\',
 															\'' . $database->real_escape_string($name) . '\',
 															\'' . $database->real_escape_string($data) . '\',
@@ -77,7 +78,7 @@ class CastingPageHandler {
   public static function deleteCastingPage(CastingPage $castingPage) {
     $database = Database::getConnection(Settings::db_name_infected_crew);
 
-    $database->query('DELETE FROM `' . Settings::db_table_infected_crew_castingpages . '`
+    $database->query('DELETE FROM `' . DatabaseConstants::db_table_infected_crew_castingpages . '`
 											WHERE `id` = \'' . $castingPage->getId() . '\';');
   }
 
@@ -87,7 +88,7 @@ class CastingPageHandler {
 	public static function setData(CastingPage $castingPage, string $data) {
     $database = Database::getConnection(Settings::db_name_infected_crew);
 
-    $result = $database->query('UPDATE `' . Settings::db_table_infected_crew_castingpages . '`
+    $result = $database->query('UPDATE `' . DatabaseConstants::db_table_infected_crew_castingpages . '`
 																SET `data` = \'' . $database->real_escape_string($data) . '\'
 																WHERE `` = \'' . $castingPage->getId() . '\';');
 	}
@@ -98,7 +99,7 @@ class CastingPageHandler {
 	public static function setName(CastingPage $castingPage, string $name) {
     $database = Database::getConnection(Settings::db_name_infected_crew);
 
-    $result = $database->query('UPDATE `' . Settings::db_table_infected_crew_castingpages . '`
+    $result = $database->query('UPDATE `' . DatabaseConstants::db_table_infected_crew_castingpages . '`
 																SET `name` = \'' . $database->real_escape_string($name) . '\'
 																WHERE `` = \'' . $castingPage->getId() . '\';');
 	}
@@ -109,7 +110,7 @@ class CastingPageHandler {
   public static function setTemplate(CastingPage $castingPage, string $template) {
     $database = Database::getConnection(Settings::db_name_infected_crew);
 
-    $result = $database->query('UPDATE `' . Settings::db_table_infected_crew_castingpages . '`
+    $result = $database->query('UPDATE `' . DatabaseConstants::db_table_infected_crew_castingpages . '`
 																SET `template` = \'' . $database->real_escape_string($template) . '\'
 																WHERE `` = \'' . $castingPage->getId() . '\';');
   }

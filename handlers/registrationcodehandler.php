@@ -19,6 +19,7 @@
  */
 
 require_once 'settings.php';
+require_once 'databaseconstants.php';
 require_once 'database.php';
 require_once 'objects/user.php';
 
@@ -29,7 +30,7 @@ class RegistrationCodeHandler {
 	public static function getRegistrationCode(User $user): ?string {
 		$database = Database::getConnection(Settings::db_name_infected);
 
-		$result = $database->query('SELECT `code` FROM `' . Settings::db_table_infected_registrationcodes . '`
+		$result = $database->query('SELECT `code` FROM `' . DatabaseConstants::db_table_infected_registrationcodes . '`
 																WHERE `userId` = \'' . $user->getId() . '\';');
 
 		$row = $result->fetch_array();
@@ -43,7 +44,7 @@ class RegistrationCodeHandler {
 	public static function getRegistrationCodes(): array {
 		$database = Database::getConnection(Settings::db_name_infected);
 
-		$result = $database->query('SELECT `code` FROM `' . Settings::db_table_infected_registrationcodes . '`;');
+		$result = $database->query('SELECT `code` FROM `' . DatabaseConstants::db_table_infected_registrationcodes . '`;');
 
 
 		$codeList = [];
@@ -61,7 +62,7 @@ class RegistrationCodeHandler {
 	public static function hasRegistrationCode(string $code): bool {
 		$database = Database::getConnection(Settings::db_name_infected);
 
-		$result = $database->query('SELECT `id` FROM `' . Settings::db_table_infected_registrationcodes . '`
+		$result = $database->query('SELECT `id` FROM `' . DatabaseConstants::db_table_infected_registrationcodes . '`
 																WHERE `code` = \'' . $database->real_escape_string($code) . '\';');
 
 		return $result->num_rows > 0;
@@ -73,7 +74,7 @@ class RegistrationCodeHandler {
 	public static function hasRegistrationCodeByUser(User $user): bool {
 		$database = Database::getConnection(Settings::db_name_infected);
 
-		$result = $database->query('SELECT `id` FROM `' . Settings::db_table_infected_registrationcodes . '`
+		$result = $database->query('SELECT `id` FROM `' . DatabaseConstants::db_table_infected_registrationcodes . '`
 																WHERE `userId` = \'' . $user->getId() . '\';');
 
 		return $result->num_rows > 0;
@@ -87,7 +88,7 @@ class RegistrationCodeHandler {
 
 		$database = Database::getConnection(Settings::db_name_infected);
 
-		$database->query('INSERT INTO `' . Settings::db_table_infected_registrationcodes . '` (`userId`, `code`)
+		$database->query('INSERT INTO `' . DatabaseConstants::db_table_infected_registrationcodes . '` (`userId`, `code`)
 										  VALUES (\'' . $user->getId() . '\',
 												  		\'' . $code . '\');');
 
@@ -100,7 +101,7 @@ class RegistrationCodeHandler {
 	public static function removeRegistrationCode(string $code) {
 		$database = Database::getConnection(Settings::db_name_infected);
 
-		$database->query('DELETE FROM `' . Settings::db_table_infected_registrationcodes . '`
+		$database->query('DELETE FROM `' . DatabaseConstants::db_table_infected_registrationcodes . '`
 						  				WHERE `code` = \'' . $database->real_escape_string($code) . '\';');
 	}
 
@@ -110,7 +111,7 @@ class RegistrationCodeHandler {
 	public static function removeRegistrationCodeByUser(User $user) {
 		$database = Database::getConnection(Settings::db_name_infected);
 
-		$database->query('DELETE FROM `' . Settings::db_table_infected_registrationcodes . '`
+		$database->query('DELETE FROM `' . DatabaseConstants::db_table_infected_registrationcodes . '`
 						  				WHERE `userId` = \'' . $user->getId() . '\';');
 	}
 }

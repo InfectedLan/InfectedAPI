@@ -19,6 +19,7 @@
  */
 
 require_once 'settings.php';
+require_once 'databaseconstants.php';
 require_once 'database.php';
 
 class UserNoteHandler {
@@ -28,7 +29,7 @@ class UserNoteHandler {
 	public static function getUserNote(int $id): ?string {
 		$database = Database::getConnection(Settings::db_name_infected);
 
-		$result = $database->query('SELECT * FROM `' . Settings::db_table_infected_usernotes . '`
+		$result = $database->query('SELECT * FROM `' . DatabaseConstants::db_table_infected_usernotes . '`
 																WHERE `id` = \'' . $database->real_escape_string($id) . '\';');
 
 		$row = $result->fetch_array();
@@ -42,7 +43,7 @@ class UserNoteHandler {
 	public static function hasUserNoteByUser(User $user): bool {
 		$database = Database::getConnection(Settings::db_name_infected);
 
-		$result = $database->query('SELECT * FROM `' . Settings::db_table_infected_usernotes . '`
+		$result = $database->query('SELECT * FROM `' . DatabaseConstants::db_table_infected_usernotes . '`
 																WHERE `userId` = \'' . $user->getId() . '\';');
 
 		return $result->num_rows > 0;
@@ -54,7 +55,7 @@ class UserNoteHandler {
 	public static function getUserNoteByUser(User $user): ?string {
 		$database = Database::getConnection(Settings::db_name_infected);
 
-		$result = $database->query('SELECT * FROM `' . Settings::db_table_infected_usernotes . '`
+		$result = $database->query('SELECT * FROM `' . DatabaseConstants::db_table_infected_usernotes . '`
 																WHERE `userId` = \'' . $user->getId() . '\';');
 
 		$row = $result->fetch_array();
@@ -85,7 +86,7 @@ class UserNoteHandler {
 	public static function createUserNote(User $user, string $content) {
 		$database = Database::getConnection(Settings::db_name_infected);
 
-		$database->query('INSERT INTO `' . Settings::db_table_infected_usernotes . '` (`userId`, `content`)
+		$database->query('INSERT INTO `' . DatabaseConstants::db_table_infected_usernotes . '` (`userId`, `content`)
 											VALUES (\'' . $user->getId() . '\',
 															\'' . $database->real_escape_string($content) . '\');');
 	}
@@ -96,7 +97,7 @@ class UserNoteHandler {
 	public static function updateUserNote(User $user, string $content) {
 		$database = Database::getConnection(Settings::db_name_infected);
 
-		$database->query('UPDATE `' . Settings::db_table_infected_usernotes . '`
+		$database->query('UPDATE `' . DatabaseConstants::db_table_infected_usernotes . '`
 											SET `content` = \'' . $database->real_escape_string($content) . '\'
 											WHERE `userId` = \'' . $user->getId() . '\';');
 	}
@@ -107,7 +108,7 @@ class UserNoteHandler {
 	public static function removeUserNote(User $user) {
 		$database = Database::getConnection(Settings::db_name_infected);
 
-		$database->query('DELETE FROM `' . Settings::db_table_infected_usernotes . '`
+		$database->query('DELETE FROM `' . DatabaseConstants::db_table_infected_usernotes . '`
 						  				WHERE `userId` = \'' . $user->getId() . '\';');
 	}
 }

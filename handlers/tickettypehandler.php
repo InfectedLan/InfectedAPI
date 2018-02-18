@@ -19,6 +19,7 @@
  */
 
 require_once 'settings.php';
+require_once 'databaseconstants.php';
 require_once 'database.php';
 require_once 'objects/tickettype.php';
 
@@ -29,7 +30,7 @@ class TicketTypeHandler {
 	public static function getTicketType(int $id): ?TicketType {
 		$database = Database::getConnection(Settings::db_name_infected_tickets);
 
-		$result = $database->query('SELECT * FROM `' . Settings::db_table_infected_tickets_tickettypes . '`
+		$result = $database->query('SELECT * FROM `' . DatabaseConstants::db_table_infected_tickets_tickettypes . '`
 																WHERE `id` = \'' . $database->real_escape_string($id) . '\';');
 
 		return $result->fetch_object('TicketType');
@@ -41,7 +42,7 @@ class TicketTypeHandler {
 	public static function getTicketTypes(): array {
 		$database = Database::getConnection(Settings::db_name_infected_tickets);
 
-		$result = $database->query('SELECT * FROM `' . Settings::db_table_infected_tickets_tickettypes . '`;');
+		$result = $database->query('SELECT * FROM `' . DatabaseConstants::db_table_infected_tickets_tickettypes . '`;');
 
 		$ticketTypeList = [];
 

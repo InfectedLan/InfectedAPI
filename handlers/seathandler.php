@@ -19,6 +19,7 @@
  */
 
 require_once 'settings.php';
+require_once 'databaseconstants.php';
 require_once 'database.php';
 require_once 'handlers/eventhandler.php';
 require_once 'handlers/tickethandler.php';
@@ -32,7 +33,7 @@ class SeatHandler {
 	public static function getSeat(int $id): ?Seat {
 		$database = Database::getConnection(Settings::db_name_infected_tickets);
 
-		$result = $database->query('SELECT * FROM `' . Settings::db_table_infected_tickets_seats . '`
+		$result = $database->query('SELECT * FROM `' . DatabaseConstants::db_table_infected_tickets_seats . '`
 																WHERE `id` = \'' . $database->real_escape_string($id) . '\';');
 
 		return $result->fetch_object('Seat');
@@ -44,7 +45,7 @@ class SeatHandler {
 	public static function getSeats(): array {
 		$database = Database::getConnection(Settings::db_name_infected_tickets);
 
-		$result = $database->query('SELECT * FROM `' . Settings::db_table_infected_tickets_seats . '`;');
+		$result = $database->query('SELECT * FROM `' . DatabaseConstants::db_table_infected_tickets_seats . '`;');
 
 		$seatList = [];
 
@@ -61,7 +62,7 @@ class SeatHandler {
 	public static function getSeatsByRow(Row $row): array {
 		$database = Database::getConnection(Settings::db_name_infected_tickets);
 
-		$result = $database->query('SELECT * FROM `' . Settings::db_table_infected_tickets_seats . '`
+		$result = $database->query('SELECT * FROM `' . DatabaseConstants::db_table_infected_tickets_seats . '`
 																WHERE `rowId` = \'' . $row->getId() . '\';');
 
 		$seatList = [];
@@ -81,7 +82,7 @@ class SeatHandler {
 
 		if ($number == null) {
 			// Find out what seat number we are at.
-			$result = $database->query('SELECT `number` FROM `' . Settings::db_table_infected_tickets_seats . '`
+			$result = $database->query('SELECT `number` FROM `' . DatabaseConstants::db_table_infected_tickets_seats . '`
 									   WHERE `rowId` = \'' . $row->getId() . '\'
 									   ORDER BY `number` DESC
 									   LIMIT 1;');
@@ -90,7 +91,7 @@ class SeatHandler {
 			$number = $seatRow['number'] + 1;
 		}
 
-		$database->query('INSERT INTO `' . Settings::db_table_infected_tickets_seats . '` (`rowId`, `number`)
+		$database->query('INSERT INTO `' . DatabaseConstants::db_table_infected_tickets_seats . '` (`rowId`, `number`)
 						 VALUES (\'' . $row->getId() . '\',
 						 		 \'' . $database->real_escape_string($number) . '\');');
 
@@ -103,7 +104,7 @@ class SeatHandler {
 	public static function removeSeat(Seat $seat) {
 		$database = Database::getConnection(Settings::db_name_infected_tickets);
 
-		$result = $database->query('DELETE FROM `' . Settings::db_table_infected_tickets_seats . '`
+		$result = $database->query('DELETE FROM `' . DatabaseConstants::db_table_infected_tickets_seats . '`
 								   WHERE `id` = \'' . $seat->getId() . '\';');
 	}
 
@@ -113,7 +114,7 @@ class SeatHandler {
 	public static function hasTicket(Seat $seat): bool {
 		$database = Database::getConnection(Settings::db_name_infected_tickets);
 
-		$result = $database->query('SELECT `id` FROM `' . Settings::db_table_infected_tickets_tickets . '`
+		$result = $database->query('SELECT `id` FROM `' . DatabaseConstants::db_table_infected_tickets_tickets . '`
 																WHERE `seatId` = \'' . $seat->getId() . '\';');
 
 		return $result->num_rows > 0;
@@ -125,7 +126,7 @@ class SeatHandler {
 	public static function getTicket(Seat $seat): ?Ticket {
 		$database = Database::getConnection(Settings::db_name_infected_tickets);
 
-		$result = $database->query('SELECT * FROM `' . Settings::db_table_infected_tickets_tickets . '`
+		$result = $database->query('SELECT * FROM `' . DatabaseConstants::db_table_infected_tickets_tickets . '`
 																WHERE `seatId` = \'' . $seat->getId() . '\';');
 
 		return $result->fetch_object('Ticket');

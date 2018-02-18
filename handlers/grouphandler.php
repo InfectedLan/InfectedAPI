@@ -19,6 +19,7 @@
  */
 
 require_once 'settings.php';
+require_once 'databaseconstants.php';
 require_once 'database.php';
 require_once 'handlers/eventhandler.php';
 require_once 'objects/event.php';
@@ -32,7 +33,7 @@ class GroupHandler {
 	public static function getGroup(int $id): ?Group {
 		$database = Database::getConnection(Settings::db_name_infected_crew);
 
-		$result = $database->query('SELECT * FROM `' . Settings::db_table_infected_crew_groups . '`
+		$result = $database->query('SELECT * FROM `' . DatabaseConstants::db_table_infected_crew_groups . '`
 																WHERE `id` = \'' . $database->real_escape_string($id) . '\';');
 
 		return $result->fetch_object('Group');
@@ -46,15 +47,15 @@ class GroupHandler {
 
 		if ($event != null && $event != EventHandler::getCurrentEvent()) {
 			// Fetch all teams for previous events. Ignoring the active field, because we want historical events too.
-			$result = $database->query('SELECT * FROM `' . Settings::db_table_infected_crew_groups . '`
-																	WHERE `id` = (SELECT `groupId` FROM `' . Settings::db_table_infected_crew_memberof . '`
+			$result = $database->query('SELECT * FROM `' . DatabaseConstants::db_table_infected_crew_groups . '`
+																	WHERE `id` = (SELECT `groupId` FROM `' . DatabaseConstants::db_table_infected_crew_memberof . '`
 																								WHERE `eventId` = \'' . $event->getId() . '\'
 																								AND `userId` = \'' . $user->getId() . '\'
 																								LIMIT 1);');
 		} else {
 			// Fetch all teams for current event.
-			$result = $database->query('SELECT * FROM `' . Settings::db_table_infected_crew_groups . '`
-																	WHERE `id` = (SELECT `groupId` FROM `' . Settings::db_table_infected_crew_memberof . '`
+			$result = $database->query('SELECT * FROM `' . DatabaseConstants::db_table_infected_crew_groups . '`
+																	WHERE `id` = (SELECT `groupId` FROM `' . DatabaseConstants::db_table_infected_crew_memberof . '`
 																								WHERE `eventId` = \'' . EventHandler::getCurrentEvent()->getId() . '\'
 																								AND `userId` = \'' . $user->getId() . '\'
 																								LIMIT 1)
@@ -72,14 +73,14 @@ class GroupHandler {
 
 		if ($event != null && $event != EventHandler::getCurrentEvent()) {
 			// Fetch all teams for previous events. Ignoring the active field, because we want historical events too.
-			$result = $database->query('SELECT * FROM `' . Settings::db_table_infected_crew_groups . '`
-																	WHERE `id` IN (SELECT `groupId` FROM `' . Settings::db_table_infected_crew_memberof . '`
+			$result = $database->query('SELECT * FROM `' . DatabaseConstants::db_table_infected_crew_groups . '`
+																	WHERE `id` IN (SELECT `groupId` FROM `' . DatabaseConstants::db_table_infected_crew_memberof . '`
 																								 WHERE `eventId` = \'' . $event->getId() . '\')
 																	ORDER BY `name`;');
 
 		} else {
 			// Fetch all teams for current event.
-			$result = $database->query('SELECT * FROM `' . Settings::db_table_infected_crew_groups . '`
+			$result = $database->query('SELECT * FROM `' . DatabaseConstants::db_table_infected_crew_groups . '`
 																	WHERE `active` = \'1\'
 																	ORDER BY `name`;');
 		}
@@ -99,7 +100,7 @@ class GroupHandler {
 	public static function createGroup(string $name, string $title, string $description, User $leaderUser = null): Group {
 		$database = Database::getConnection(Settings::db_name_infected_crew);
 
-		$database->query('INSERT INTO `' . Settings::db_table_infected_crew_groups . '` (`name`, `title`, `description`, `active`)
+		$database->query('INSERT INTO `' . DatabaseConstants::db_table_infected_crew_groups . '` (`name`, `title`, `description`, `active`)
 										  VALUES (\'' . $database->real_escape_string($name) . '\',
 														  \'' . $database->real_escape_string($title) . '\',
 														  \'' . $database->real_escape_string($description) . '\',
@@ -120,7 +121,7 @@ class GroupHandler {
 	public static function updateGroup(Group $group, string $name, string $title, string $description, User $leaderUser = null) {
 		$database = Database::getConnection(Settings::db_name_infected_crew);
 
-		$database->query('UPDATE `' . Settings::db_table_infected_crew_groups . '`
+		$database->query('UPDATE `' . DatabaseConstants::db_table_infected_crew_groups . '`
 			  						  SET `name` = \'' . $database->real_escape_string($name) . '\',
 				  								`title` = \'' . $database->real_escape_string($title) . '\',
 				  								`description` = \'' . $database->real_escape_string($description) . '\'
@@ -135,7 +136,7 @@ class GroupHandler {
 	public static function removeGroup(Group $group) {
 		$database = Database::getConnection(Settings::db_name_infected_crew);
 
-		$database->query('UPDATE `' . Settings::db_table_infected_crew_groups . '`
+		$database->query('UPDATE `' . DatabaseConstants::db_table_infected_crew_groups . '`
 			  						  SET `active` = \'0\'
 			  						  WHERE `id` = \'' . $group->getId() . '\';');
 
@@ -149,15 +150,15 @@ class GroupHandler {
 		$database = Database::getConnection(Settings::db_name_infected_crew);
 
 		if ($event != null && $event != EventHandler::getCurrentEvent()) {
-			$result = $database->query('SELECT * FROM `' . Settings::db_table_infected_crew_memberof . '`
-																	INNER JOIN `' . Settings::db_table_infected_crew_groups . '`
-																	ON `groupId` = `' . Settings::db_table_infected_crew_groups . '`.`id`
+			$result = $database->query('SELECT * FROM `' . DatabaseConstants::db_table_infected_crew_memberof . '`
+																	INNER JOIN `' . DatabaseConstants::db_table_infected_crew_groups . '`
+																	ON `groupId` = `' . DatabaseConstants::db_table_infected_crew_groups . '`.`id`
 																	WHERE `eventId` = \'' . ($event != null ? $event->getId() : EventHandler::getCurrentEvent()->getId()) . '\'
 																	AND `userId` = \'' . $user->getId() . '\';');
 		} else {
-			$result = $database->query('SELECT * FROM `' . Settings::db_table_infected_crew_memberof . '`
-																	INNER JOIN `' . Settings::db_table_infected_crew_groups . '`
-																	ON `groupId` = `' . Settings::db_table_infected_crew_groups . '`.`id`
+			$result = $database->query('SELECT * FROM `' . DatabaseConstants::db_table_infected_crew_memberof . '`
+																	INNER JOIN `' . DatabaseConstants::db_table_infected_crew_groups . '`
+																	ON `groupId` = `' . DatabaseConstants::db_table_infected_crew_groups . '`.`id`
 																	WHERE `eventId` = \'' . ($event != null ? $event->getId() : EventHandler::getCurrentEvent()->getId()) . '\'
 																	AND `userId` = \'' . $user->getId() . '\'
 																	AND `active` = \'1\';');
@@ -172,7 +173,7 @@ class GroupHandler {
 	public static function isGroupMemberOf(User $user, Group $group, Event $event = null): bool {
 		$database = Database::getConnection(Settings::db_name_infected_crew);
 
-		$result = $database->query('SELECT * FROM `' . Settings::db_table_infected_crew_memberof . '`
+		$result = $database->query('SELECT * FROM `' . DatabaseConstants::db_table_infected_crew_memberof . '`
 																WHERE `eventId` = \'' . ($event != null ? $event->getId() : EventHandler::getCurrentEvent()->getId()) . '\'
 																AND `userId` = \'' . $user->getId() . '\'
 																AND `groupId` = \'' . $group->getId() . '\';');
@@ -187,7 +188,7 @@ class GroupHandler {
 		$database = Database::getConnection(Settings::db_name_infected_crew);
 
 		if (!$group->isMember($user)) {
-			$database->query('INSERT INTO `' . Settings::db_table_infected_crew_memberof . '` (`eventId`, `userId`, `groupId`, `teamId`, `groupLeader`, `teamLeader`)
+			$database->query('INSERT INTO `' . DatabaseConstants::db_table_infected_crew_memberof . '` (`eventId`, `userId`, `groupId`, `teamId`, `groupLeader`, `teamLeader`)
 											  VALUES (\'' . ($event != null ? $event->getId() : EventHandler::getCurrentEvent()->getId()) . '\',
 																\'' . $user->getId() . '\',
 													  		\'' . $group->getId() . '\',
@@ -203,7 +204,7 @@ class GroupHandler {
 	public static function removeGroupMember(User $user, Group $group, Event $event = null) {
 		$database = Database::getConnection(Settings::db_name_infected_crew);
 
-		$database->query('DELETE FROM `' . Settings::db_table_infected_crew_memberof . '`
+		$database->query('DELETE FROM `' . DatabaseConstants::db_table_infected_crew_memberof . '`
 										  WHERE `eventId` = \'' . ($event != null ? $event->getId() : EventHandler::getCurrentEvent()->getId()) . '\'
 											AND `userId` = \'' . $user->getId() . '\'
 											AND `groupId` = \'' . $group->getId() . '\';');
@@ -215,12 +216,12 @@ class GroupHandler {
 	public static function getGroupMembers(Group $group, Event $event = null): array {
 		$database = Database::getConnection(Settings::db_name_infected);
 
-		$result = $database->query('SELECT `' . Settings::db_table_infected_users . '`.* FROM `' . Settings::db_table_infected_users . '`
-																LEFT JOIN `' . Settings::db_name_infected_crew . '`.`' . Settings::db_table_infected_crew_memberof . '`
-																ON `' . Settings::db_table_infected_users . '`.`id` = `userId`
+		$result = $database->query('SELECT `' . DatabaseConstants::db_table_infected_users . '`.* FROM `' . DatabaseConstants::db_table_infected_users . '`
+																LEFT JOIN `' . Settings::db_name_infected_crew . '`.`' . DatabaseConstants::db_table_infected_crew_memberof . '`
+																ON `' . DatabaseConstants::db_table_infected_users . '`.`id` = `userId`
 																WHERE `eventId` = \'' . ($event != null ? $event->getId() : EventHandler::getCurrentEvent()->getId()) . '\'
 																AND `groupId` = \'' . $group->getId() . '\'
-																GROUP BY `' . Settings::db_table_infected_users . '`.`id`
+																GROUP BY `' . DatabaseConstants::db_table_infected_users . '`.`id`
 																ORDER BY `firstname` ASC;');
 
 		$memberList = [];
@@ -238,7 +239,7 @@ class GroupHandler {
 	public static function removeGroupMembers(Group $group, Event $event = null) {
 		$database = Database::getConnection(Settings::db_name_infected_crew);
 
-		$database->query('DELETE FROM `' . Settings::db_table_infected_crew_memberof . '`
+		$database->query('DELETE FROM `' . DatabaseConstants::db_table_infected_crew_memberof . '`
 											WHERE `eventId` = \'' . ($event != null ? $event->getId() : EventHandler::getCurrentEvent()->getId()) . '\'
 											AND `groupId` = \'' . $group->getId() . '\';');
 	}
@@ -249,7 +250,7 @@ class GroupHandler {
 	public static function hasGroupLeader(Group $group, Event $event = null): bool {
 		$database = Database::getConnection(Settings::db_name_infected_crew);
 
-		$result = $database->query('SELECT * FROM `' . Settings::db_table_infected_crew_memberof . '`
+		$result = $database->query('SELECT * FROM `' . DatabaseConstants::db_table_infected_crew_memberof . '`
 																WHERE `eventId` = \'' . ($event != null ? $event->getId() : EventHandler::getCurrentEvent()->getId()) . '\'
 																AND `groupId` = \'' . $group->getId() . '\'
 																AND `groupLeader` != \'0\';');
@@ -263,9 +264,9 @@ class GroupHandler {
 	public static function isGroupLeader(User $user, Event $event = null): bool {
 		$database = Database::getConnection(Settings::db_name_infected_crew);
 
-		$result = $database->query('SELECT `' . Settings::db_table_infected_crew_memberof . '`.* FROM `' . Settings::db_table_infected_crew_memberof . '`
-																INNER JOIN `' . Settings::db_table_infected_crew_groups . '`
-																ON `groupId` = `' . Settings::db_table_infected_crew_groups . '`.`id`
+		$result = $database->query('SELECT `' . DatabaseConstants::db_table_infected_crew_memberof . '`.* FROM `' . DatabaseConstants::db_table_infected_crew_memberof . '`
+																INNER JOIN `' . DatabaseConstants::db_table_infected_crew_groups . '`
+																ON `groupId` = `' . DatabaseConstants::db_table_infected_crew_groups . '`.`id`
 																WHERE `eventId` = \'' . ($event != null ? $event->getId() : EventHandler::getCurrentEvent()->getId()) . '\'
 																AND `userId` = \'' . $user->getId() . '\'
 																AND `groupLeader` != \'0\'
@@ -280,7 +281,7 @@ class GroupHandler {
 	public static function isGroupLeaderOf(User $user, Group $group, Event $event = null): bool {
 		$database = Database::getConnection(Settings::db_name_infected_crew);
 
-		$result = $database->query('SELECT * FROM `' . Settings::db_table_infected_crew_memberof . '`
+		$result = $database->query('SELECT * FROM `' . DatabaseConstants::db_table_infected_crew_memberof . '`
 																WHERE `eventId` = \'' . ($event != null ? $event->getId() : EventHandler::getCurrentEvent()->getId()) . '\'
 																AND `userId` = \'' . $user->getId() . '\'
 																AND `groupId` = \'' . $group->getId() . '\'
@@ -295,8 +296,8 @@ class GroupHandler {
 	public static function getGroupLeader(Group $group, Event $event = null): ?User {
 		$database = Database::getConnection(Settings::db_name_infected);
 
-		$result = $database->query('SELECT * FROM `' . Settings::db_table_infected_users . '`
-																WHERE `id` = (SELECT `userId` FROM `' . Settings::db_name_infected_crew . '`.`' . Settings::db_table_infected_crew_memberof . '`
+		$result = $database->query('SELECT * FROM `' . DatabaseConstants::db_table_infected_users . '`
+																WHERE `id` = (SELECT `userId` FROM `' . Settings::db_name_infected_crew . '`.`' . DatabaseConstants::db_table_infected_crew_memberof . '`
 																							WHERE `eventId` = \'' . ($event != null ? $event->getId() : EventHandler::getCurrentEvent()->getId()) . '\'
 																							AND `groupId` = \'' . $group->getId() . '\'
 																							AND `groupLeader` != \'0\'
@@ -316,14 +317,14 @@ class GroupHandler {
 		$database = Database::getConnection(Settings::db_name_infected_crew);
 
 		// Remove old leaders of the group, to avoid duplicates.
-		$database->query('UPDATE `' . Settings::db_table_infected_crew_memberof . '`
+		$database->query('UPDATE `' . DatabaseConstants::db_table_infected_crew_memberof . '`
 											SET `groupLeader` = \'0\'
 											WHERE `eventId` = \'' . ($event != null ? $event->getId() : EventHandler::getCurrentEvent()->getId()) . '\'
 											AND `groupId` = \'' . $group->getId() . '\';');
 
 		// Make our user the leader of the group, if one where specified.
 		if ($user != null) {
-			$database->query('UPDATE `' . Settings::db_table_infected_crew_memberof . '`
+			$database->query('UPDATE `' . DatabaseConstants::db_table_infected_crew_memberof . '`
 												SET `groupLeader` = \'1\'
 												WHERE `eventId` = \'' . ($event != null ? $event->getId() : EventHandler::getCurrentEvent()->getId()) . '\'
 												AND `userId` = \'' . $user->getId() . '\'

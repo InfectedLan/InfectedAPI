@@ -19,6 +19,7 @@
  */
 
 require_once 'settings.php';
+require_once 'databaseconstants.php';
 require_once 'database.php';
 require_once 'objects/sectionpage.php';
 
@@ -29,7 +30,7 @@ class SectionPageHandler {
 	public static function getSectionPage(int $id): ?SectionPage {
 		$database = Database::getConnection(Settings::db_name_infected_main);
 
-		$result = $database->query('SELECT * FROM `' . Settings::db_table_infected_main_sectionpages . '`
+		$result = $database->query('SELECT * FROM `' . DatabaseConstants::db_table_infected_main_sectionpages . '`
 																WHERE id = \'' . $database->real_escape_string($id) . '\';');
 
 		return $result->fetch_object('SectionPage');
@@ -41,7 +42,7 @@ class SectionPageHandler {
 	public static function getSectionPageByName(string $name): ?SectionPage {
 		$database = Database::getConnection(Settings::db_name_infected_main);
 
-		$result = $database->query('SELECT * FROM `' . Settings::db_table_infected_main_sectionpages . '`
+		$result = $database->query('SELECT * FROM `' . DatabaseConstants::db_table_infected_main_sectionpages . '`
 																WHERE `name` = \'' . $database->real_escape_string($name) . '\';');
 
 		return $result->fetch_object('SectionPage');
@@ -53,7 +54,7 @@ class SectionPageHandler {
 	public static function getSectionPages(): array {
 		$database = Database::getConnection(Settings::db_name_infected_main);
 
-		$result = $database->query('SELECT * FROM `' . Settings::db_table_infected_main_sectionpages . '`;');
+		$result = $database->query('SELECT * FROM `' . DatabaseConstants::db_table_infected_main_sectionpages . '`;');
 
 		$pageList = [];
 
@@ -70,7 +71,7 @@ class SectionPageHandler {
 	public static function createSectionPage(string $name, string $title, string $content): SectionPage {
 		$database = Database::getConnection(Settings::db_name_infected_main);
 
-		$database->query('INSERT INTO `' . Settings::db_table_infected_main_sectionpages . '` (`name`, `title`, `content`)
+		$database->query('INSERT INTO `' . DatabaseConstants::db_table_infected_main_sectionpages . '` (`name`, `title`, `content`)
 										  VALUES (\'' . $database->real_escape_string($name) . '\',
 														  \'' . $database->real_escape_string($title) . '\',
 														  \'' . $database->real_escape_string($content) . '\')');
@@ -84,7 +85,7 @@ class SectionPageHandler {
 	public static function updatePage(SectionPage $sectionPage, string $title, string $content) {
 		$database = Database::getConnection(Settings::db_name_infected_main);
 
-		$database->query('UPDATE `' . Settings::db_table_infected_main_sectionpages . '`
+		$database->query('UPDATE `' . DatabaseConstants::db_table_infected_main_sectionpages . '`
 										  SET `title` = \'' . $database->real_escape_string($title) . '\',
 											  	`content` = \'' . $database->real_escape_string($content) . '\'
 										  WHERE `id` = \'' . $sectionPage->getId() . '\';');
@@ -96,7 +97,7 @@ class SectionPageHandler {
 	public static function removeSectionPage(SectionPage $sectionPage) {
 		$database = Database::getConnection(Settings::db_name_infected_main);
 
-		$database->query('DELETE FROM `' . Settings::db_table_infected_main_sectionpages . '`
+		$database->query('DELETE FROM `' . DatabaseConstants::db_table_infected_main_sectionpages . '`
 						  				WHERE `id` = \'' . $page->getId() . '\';');
 	}
 }

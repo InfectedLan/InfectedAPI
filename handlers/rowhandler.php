@@ -19,6 +19,7 @@
  */
 
 require_once 'settings.php';
+require_once 'databaseconstants.php';
 require_once 'database.php';
 require_once 'handlers/entrancehandler.php';
 require_once 'handlers/seathandler.php';
@@ -33,7 +34,7 @@ class RowHandler {
 	public static function getRow(int $id): ?Row {
 		$database = Database::getConnection(Settings::db_name_infected_tickets);
 
-		$result = $database->query('SELECT * FROM `' . Settings::db_table_infected_tickets_rows . '`
+		$result = $database->query('SELECT * FROM `' . DatabaseConstants::db_table_infected_tickets_rows . '`
 																WHERE `id` = \'' . $database->real_escape_string($id) . '\';');
 
 		return $result->fetch_object('Row');
@@ -45,7 +46,7 @@ class RowHandler {
 	public static function getRows(): array {
 		$database = Database::getConnection(Settings::db_name_infected_tickets);
 
-		$result = $database->query('SELECT * FROM `' . Settings::db_table_infected_tickets_rows . '`;');
+		$result = $database->query('SELECT * FROM `' . DatabaseConstants::db_table_infected_tickets_rows . '`;');
 
 		$rowList = [];
 
@@ -62,7 +63,7 @@ class RowHandler {
 	public static function getRowsBySeatmap(Seatmap $seatmap): array {
 		$database = Database::getConnection(Settings::db_name_infected_tickets);
 
-		$result = $database->query('SELECT * FROM `' . Settings::db_table_infected_tickets_rows . '`
+		$result = $database->query('SELECT * FROM `' . DatabaseConstants::db_table_infected_tickets_rows . '`
 																WHERE `seatmapId` = \'' . $seatmap->getId() . '\';');
 
 		$rowList = [];
@@ -83,12 +84,12 @@ class RowHandler {
 		$entrance = EntranceHandler::getEntrance(2); // TODO: Make it not statically set entrance
 
 		// Find out what row is max row
-		$result = $database->query('SELECT COUNT(*) FROM `' . Settings::db_table_infected_tickets_rows . '` as count
+		$result = $database->query('SELECT COUNT(*) FROM `' . DatabaseConstants::db_table_infected_tickets_rows . '` as count
 																WHERE `seatmapId` = \'' . $seatmap->getId() . '\';');
 
 		$newRowNumber = $result->fetch_array()['COUNT(*)'] + 1;
 
-		$database->query('INSERT INTO `' . Settings::db_table_infected_tickets_rows . '` (`seatmapId`, `entranceId`, `number`, `x`, `y`, `isHorizontal`)
+		$database->query('INSERT INTO `' . DatabaseConstants::db_table_infected_tickets_rows . '` (`seatmapId`, `entranceId`, `number`, `x`, `y`, `isHorizontal`)
 											VALUES (\'' . $seatmap->getId() . '\',
 															\'' . $entrance->getId() . '\',
 															\'' . $database->real_escape_string($newRowNumber) . '\',
@@ -104,7 +105,7 @@ class RowHandler {
 	public static function updateRow(Row $row, int $x, int $y) {
 		$database = Database::getConnection(Settings::db_name_infected_tickets);
 
-		$database->query('UPDATE `' . Settings::db_table_infected_tickets_rows . '`
+		$database->query('UPDATE `' . DatabaseConstants::db_table_infected_tickets_rows . '`
 										  SET `x` = \'' . $database->real_escape_string($x) . '\',
 											  	`y` = \'' . $database->real_escape_string($y) . '\'
 										  WHERE `id` = \'' . $row->getId() . '\';');
@@ -116,7 +117,7 @@ class RowHandler {
 	public static function removeRow(Row $row) {
 		$database = Database::getConnection(Settings::db_name_infected_tickets);
 
-		$result = $database->query('DELETE FROM `' . Settings::db_table_infected_tickets_rows . '`
+		$result = $database->query('DELETE FROM `' . DatabaseConstants::db_table_infected_tickets_rows . '`
 																WHERE `id` = ' . $row->getId() . ';');
 
 		foreach (SeatHandler::getSeatsByRow($row) as $seat) {

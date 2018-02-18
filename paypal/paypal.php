@@ -20,7 +20,7 @@
 
 require_once 'session.php';
 require_once 'paypal/callerservice.php';
-require_once 'paypalsecret.php';
+require_once 'config/paypalsecret.php';
 require_once 'handlers/sysloghandler.php';
 
 class PayPal {

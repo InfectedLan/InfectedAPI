@@ -19,6 +19,7 @@
  */
 
 require_once 'settings.php';
+require_once 'databaseconstants.php';
 require_once 'database.php';
 require_once 'objects/voteoption.php';
 require_once 'objects/compo.php';
@@ -31,7 +32,7 @@ class VoteOptionHandler {
 	public static function getVoteOption(int $id): ?VoteOption {
 		$database = Database::getConnection(Settings::db_name_infected_compo);
 
-		$result = $database->query('SELECT * FROM `' . Settings::db_table_infected_compo_voteoptions . '`
+		$result = $database->query('SELECT * FROM `' . DatabaseConstants::db_table_infected_compo_voteoptions . '`
 																WHERE `id` = \'' . $id . '\';');
 
 		return $result->fetch_object('VoteOption');
@@ -43,7 +44,7 @@ class VoteOptionHandler {
 	public static function getVoteOptionsByCompo(Compo $compo): array {
 		$database = Database::getConnection(Settings::db_name_infected_compo);
 
-		$result = $database->query('SELECT * FROM `' . Settings::db_table_infected_compo_voteoptions . '`
+		$result = $database->query('SELECT * FROM `' . DatabaseConstants::db_table_infected_compo_voteoptions . '`
 																WHERE `compoId` = \'' . $compo->getId() . '\';');
 
 		$voteOptionList = [];
@@ -61,7 +62,7 @@ class VoteOptionHandler {
 	public static function isVoted(VoteOption $voteOption, Match $match): bool {
 		$database = Database::getConnection(Settings::db_name_infected_compo);
 
-		$result = $database->query('SELECT `id` FROM `' . Settings::db_table_infected_compo_votes . '`
+		$result = $database->query('SELECT `id` FROM `' . DatabaseConstants::db_table_infected_compo_votes . '`
 																WHERE `voteOptionId` = \'' . $voteOption->getId() . '\'
 																AND `consumerId` = \'' . $match->getId() . '\';');
 
@@ -74,7 +75,7 @@ class VoteOptionHandler {
 	public static function getVoteType(VoteOption $voteOption, Match $match): int {
 		$database = Database::getConnection(Settings::db_name_infected_compo);
 
-		$result = $database->query('SELECT `type` FROM `' . Settings::db_table_infected_compo_votes . '`
+		$result = $database->query('SELECT `type` FROM `' . DatabaseConstants::db_table_infected_compo_votes . '`
 																WHERE `voteOptionId` = \'' . $voteOption->getId() . '\'
 																AND `consumerId` = \'' . $match->getId() . '\';');
 

@@ -19,7 +19,7 @@
  */
 
 require_once 'database.php';
-require_once 'secret.php';
+require_once 'config/secret.php';
 require_once 'handlers/networkhandler.php';
 require_once 'handlers/sysloghandler.php';
 require_once 'handlers/userhandler.php';

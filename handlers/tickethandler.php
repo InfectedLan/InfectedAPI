@@ -19,6 +19,7 @@
  */
 
 require_once 'settings.php';
+require_once 'databaseconstants.php';
 require_once 'database.php';
 require_once 'handlers/eventhandler.php';
 require_once 'objects/ticket.php';
@@ -35,7 +36,7 @@ class TicketHandler {
 	public static function getTicket(int $id): ?Ticket {
 		$database = Database::getConnection(Settings::db_name_infected_tickets);
 
-		$result = $database->query('SELECT * FROM `' . Settings::db_table_infected_tickets_tickets . '`
+		$result = $database->query('SELECT * FROM `' . DatabaseConstants::db_table_infected_tickets_tickets . '`
 																WHERE `id` = \'' . $database->real_escape_string($id) . '\';');
 
 		return $result->fetch_object('Ticket');
@@ -47,7 +48,7 @@ class TicketHandler {
 	public static function hasTicketByUser(User $user, Event $event = null): bool {
 		$database = Database::getConnection(Settings::db_name_infected_tickets);
 
-		$result = $database->query('SELECT * FROM `' . Settings::db_table_infected_tickets_tickets . '`
+		$result = $database->query('SELECT * FROM `' . DatabaseConstants::db_table_infected_tickets_tickets . '`
 																WHERE `eventId` = \'' . ($event != null ? $event->getId() : EventHandler::getCurrentEvent()->getId()) . '\'
 																AND `userId` = \'' . $user->getId() . '\'
 																LIMIT 1;');
@@ -61,7 +62,7 @@ class TicketHandler {
 	public static function getTicketByUser(User $user, Event $event = null): ?Ticket {
 		$database = Database::getConnection(Settings::db_name_infected_tickets);
 
-		$result = $database->query('SELECT * FROM `' . Settings::db_table_infected_tickets_tickets . '`
+		$result = $database->query('SELECT * FROM `' . DatabaseConstants::db_table_infected_tickets_tickets . '`
 																WHERE `eventId` = \'' . ($event != null ? $event->getId() : EventHandler::getCurrentEvent()->getId()) . '\'
 																AND `userId` = \'' . $user->getId() . '\'
 																LIMIT 1;');
@@ -75,7 +76,7 @@ class TicketHandler {
 	public static function getTicketsByUser(User $user, Event $event = null): array {
 		$database = Database::getConnection(Settings::db_name_infected_tickets);
 
-		$result = $database->query('SELECT * FROM `' . Settings::db_table_infected_tickets_tickets . '`
+		$result = $database->query('SELECT * FROM `' . DatabaseConstants::db_table_infected_tickets_tickets . '`
 																WHERE `eventId` = \'' . ($event != null ? $event->getId() : EventHandler::getCurrentEvent()->getId()) . '\'
 																AND `userId` = \'' . $user->getId() . '\';');
 
@@ -94,7 +95,7 @@ class TicketHandler {
 	public static function getTickets(Event $event = null): array {
 		$database = Database::getConnection(Settings::db_name_infected_tickets);
 
-		$result = $database->query('SELECT * FROM `' . Settings::db_table_infected_tickets_tickets . '`
+		$result = $database->query('SELECT * FROM `' . DatabaseConstants::db_table_infected_tickets_tickets . '`
 																WHERE `eventId` = \'' . ($event != null ? $event->getId() : EventHandler::getCurrentEvent()->getId()) . '\';');
 
 		$ticketList = [];
@@ -112,7 +113,7 @@ class TicketHandler {
 	public static function hasTicketsByUserAndAllEvents(User $user): bool {
 		$database = Database::getConnection(Settings::db_name_infected_tickets);
 
-		$result = $database->query('SELECT * FROM `' . Settings::db_table_infected_tickets_tickets . '`
+		$result = $database->query('SELECT * FROM `' . DatabaseConstants::db_table_infected_tickets_tickets . '`
 																WHERE `userId` = \'' . $user->getId() . '\';');
 
 		return $result->num_rows > 0;
@@ -124,7 +125,7 @@ class TicketHandler {
 	public static function getTicketsByUserAndAllEvents(User $user): array {
 		$database = Database::getConnection(Settings::db_name_infected_tickets);
 
-		$result = $database->query('SELECT * FROM `' . Settings::db_table_infected_tickets_tickets . '`
+		$result = $database->query('SELECT * FROM `' . DatabaseConstants::db_table_infected_tickets_tickets . '`
 																WHERE `userId` = \'' . $user->getId() . '\';');
 
 		$ticketList = [];
@@ -142,7 +143,7 @@ class TicketHandler {
 	public static function getTicketsSeatableByUser(User $user, Event $event = null): array {
 		$database = Database::getConnection(Settings::db_name_infected_tickets);
 
-		$result = $database->query('SELECT * FROM `' . Settings::db_table_infected_tickets_tickets . '`
+		$result = $database->query('SELECT * FROM `' . DatabaseConstants::db_table_infected_tickets_tickets . '`
 																WHERE `eventId` = \'' . ($event != null ? $event->getId() : EventHandler::getCurrentEvent()->getId()) . '\'
 																AND (`seaterId` = \'' . $user->getId() . '\' OR (`userId` = \'' . $user->getId() . '\' AND `seaterId` = \'0\'));');
 
@@ -161,7 +162,7 @@ class TicketHandler {
 	public static function createTicket(User $user, TicketType $ticketType, Payment $payment): Ticket {
 		$database = Database::getConnection(Settings::db_name_infected_tickets);
 
-		$result = $database->query('INSERT INTO `' . Settings::db_table_infected_tickets_tickets . '` (`eventId`, `typeId`, `buyerId`, `paymentId`, `userId`, `seaterId`, `seatId`)
+		$result = $database->query('INSERT INTO `' . DatabaseConstants::db_table_infected_tickets_tickets . '` (`eventId`, `typeId`, `buyerId`, `paymentId`, `userId`, `seaterId`, `seatId`)
 																VALUES (\'' . EventHandler::getCurrentEvent()->getId() . '\',
 																				\'' . $ticketType->getId() . '\',
 																				\'' . $user->getId() . '\',
@@ -180,7 +181,7 @@ class TicketHandler {
 			$database = Database::getConnection(Settings::db_name_infected_tickets);
 
 			// Change the user of the ticket.
-			$database->query('UPDATE `' . Settings::db_table_infected_tickets_tickets . '`
+			$database->query('UPDATE `' . DatabaseConstants::db_table_infected_tickets_tickets . '`
 											  SET `userId` = \'' . $user->getId() . '\'
 											  WHERE `id` = \'' . $ticket->getId() . '\';');
 		}
@@ -192,7 +193,7 @@ class TicketHandler {
 	public static function updateTicketSeater(Ticket $ticket, User $seater) {
 		$database = Database::getConnection(Settings::db_name_infected_tickets);
 
-		$database->query('UPDATE `' . Settings::db_table_infected_tickets_tickets . '`
+		$database->query('UPDATE `' . DatabaseConstants::db_table_infected_tickets_tickets . '`
 										  SET `seaterId` = \'' . ($seater != null ? $seater->getId() : 0) . '\'
 										  WHERE `id` = \'' . $ticket->getId() . '\';');
 	}
@@ -203,7 +204,7 @@ class TicketHandler {
 	public static function updateTicketSeat(Ticket $ticket, Seat $seat) {
 		$database = Database::getConnection(Settings::db_name_infected_tickets);
 
-		$result = $database->query('UPDATE `' . Settings::db_table_infected_tickets_tickets . '`
+		$result = $database->query('UPDATE `' . DatabaseConstants::db_table_infected_tickets_tickets . '`
 																SET `seatId` = \'' . ($seat != null ? $seat->getId() : 0) . '\'
 																WHERE `id` = \'' . $ticket->getId() . '\';');
 	}
@@ -214,7 +215,7 @@ class TicketHandler {
 	public static function removeTicket(Ticket $ticket) {
 		$database = Database::getConnection(Settings::db_name_infected_tickets);
 
-		$result = $database->query('DELETE FROM `' . Settings::db_table_infected_tickets_storesessions . '`
+		$result = $database->query('DELETE FROM `' . DatabaseConstants::db_table_infected_tickets_storesessions . '`
 																WHERE `id` = \'' . $storeSession->getId() . '\';');
 	}
 
@@ -224,7 +225,7 @@ class TicketHandler {
 	public static function checkInTicket(Ticket $ticket) {
 		$database = Database::getConnection(Settings::db_name_infected_tickets);
 
-		$reuslt = $database->query('INSERT INTO `' . Settings::db_table_infected_tickets_checkedintickets . '` (`ticketId`)
+		$reuslt = $database->query('INSERT INTO `' . DatabaseConstants::db_table_infected_tech_roompermissions . '` (`ticketId`)
 																VALUES (\'' . $ticket->getId() . '\');');
 	}
 
@@ -234,7 +235,7 @@ class TicketHandler {
 	public static function isTicketCheckedIn(Ticket $ticket): bool {
 		$database = Database::getConnection(Settings::db_name_infected_tickets);
 
-		$result = $database->query('SELECT `id` FROM `' . Settings::db_table_infected_tickets_checkedintickets . '`
+		$result = $database->query('SELECT `id` FROM `' . DatabaseConstants::db_table_infected_tech_roompermissions . '`
 																WHERE `ticketId` = \'' . $ticket->getId() . '\';');
 
 		return $result->num_rows > 0;

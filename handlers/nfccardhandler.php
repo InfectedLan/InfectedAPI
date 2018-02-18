@@ -19,6 +19,7 @@
  */
 
 require_once 'settings.php';
+require_once 'databaseconstants.php';
 require_once 'database.php';
 require_once 'objects/nfccard.php';
 require_once 'objects/event.php';
@@ -36,9 +37,9 @@ class NfcCardHandler {
 
 		$database = Database::getConnection(Settings::db_name_infected_tech);
 
-		$result = $database->query('INSERT INTO `' . Settings::db_table_infected_tech_nfccards . '` (`userId`, `eventId`, `nfcId`)
+		$result = $database->query('INSERT INTO `' . DatabaseConstants::db_table_infected_tech_nfccards . '` (`userId`, `eventId`, `nfcId`)
 																VALUES (\'' . $user->getId() . '\',
-																				\'' . $event->getId() . '\', 
+																				\'' . $event->getId() . '\',
 																				\'' . $database->real_escape_string($nfcid) . '\');');
 
 
@@ -51,7 +52,7 @@ class NfcCardHandler {
 	public static function getCard($id) {
 		$database = Database::getConnection(Settings::db_name_infected_tech);
 
-		$result = $database->query('SELECT * FROM `'. Settings::db_table_infected_tech_nfccards . '`
+		$result = $database->query('SELECT * FROM `'. DatabaseConstants::db_table_infected_tech_nfccards . '`
 																WHERE `id` = \'' . $database->real_escape_string($id) . '\';');
 
 		return $result->fetch_object('NfcCard');
@@ -66,8 +67,8 @@ class NfcCardHandler {
 		}
 		$database = Database::getConnection(Settings::db_name_infected_tech);
 
-		$result = $database->query('SELECT * FROM `'. Settings::db_table_infected_tech_nfccards . '`
-																WHERE `nfcId` = \'' . $database->real_escape_string($nfcId) . '\' 
+		$result = $database->query('SELECT * FROM `'. DatabaseConstants::db_table_infected_tech_nfccards . '`
+																WHERE `nfcId` = \'' . $database->real_escape_string($nfcId) . '\'
 																AND	`eventId` = \'' . $event->getId() . '\';');
 
 		return $result->fetch_object('NfcCard');
@@ -82,7 +83,7 @@ class NfcCardHandler {
 		}
 		$database = Database::getConnection(Settings::db_name_infected_tech);
 
-		$result = $database->query('SELECT * FROM `' . Settings::db_table_infected_tech_nfccards . '` WHERE `eventId` = \'' . $database->real_escape_string($event->getId()) . '\';');
+		$result = $database->query('SELECT * FROM `' . DatabaseConstants::db_table_infected_tech_nfccards . '` WHERE `eventId` = \'' . $database->real_escape_string($event->getId()) . '\';');
 
 		$cardList = [];
 
@@ -102,7 +103,7 @@ class NfcCardHandler {
 		}
 		$database = Database::getConnection(Settings::db_name_infected_tech);
 
-		$result = $database->query('SELECT * FROM `'. Settings::db_table_infected_tech_nfccards . '`
+		$result = $database->query('SELECT * FROM `'. DatabaseConstants::db_table_infected_tech_nfccards . '`
 																WHERE `eventId` = \'' . $database->real_escape_string($event->getId()) . '\' AND `userId` = \'' . $database->real_escape_string($user->getId()) . '\';');
 
 		$cardList = [];

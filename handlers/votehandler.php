@@ -19,6 +19,7 @@
  */
 
 require_once 'settings.php';
+require_once 'databaseconstants.php';
 require_once 'database.php';
 require_once 'objects/vote.php';
 require_once 'objects/voteoption.php';
@@ -33,7 +34,7 @@ class VoteHandler {
 	public static function getVote(int $id): ?Vote {
 		$database = Database::getConnection(Settings::db_name_infected_compo);
 
-		$result = $database->query('SELECT * FROM `' . Settings::db_table_infected_compo_votes . '`
+		$result = $database->query('SELECT * FROM `' . DatabaseConstants::db_table_infected_compo_votes . '`
 																WHERE `id` = \'$id\';');
 
 		return $result->fetch_object('Vote');
@@ -42,7 +43,7 @@ class VoteHandler {
 	public static function getNumBanned(int $matchId): int {
 		$database = Database::getConnection(Settings::db_name_infected_compo);
 
-		$result = $database->query('SELECT `id` FROM `' . Settings::db_table_infected_compo_votes . '`
+		$result = $database->query('SELECT `id` FROM `' . DatabaseConstants::db_table_infected_compo_votes . '`
 																WHERE `consumerId` = ' . $database->real_escape_string($matchId) . ';');
 
 		return $result->num_rows;
@@ -68,7 +69,7 @@ class VoteHandler {
 	public static function banMap(VoteOption $voteOption, int $consumer, int $type) {
 		$database = Database::getConnection(Settings::db_name_infected_compo);
 
-		$database->query('INSERT INTO `' . Settings::db_table_infected_compo_votes . '` (`consumerId`, `voteOptionId`,`type`)
+		$database->query('INSERT INTO `' . DatabaseConstants::db_table_infected_compo_votes . '` (`consumerId`, `voteOptionId`,`type`)
 											VALUES (\'' . $database->real_escape_string($consumer) . '\',
 															\'' . $voteOption->getId() . '\',
 															\'' . $database->real_escape_string($type) . '\');');

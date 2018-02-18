@@ -19,6 +19,7 @@
  */
 
 require_once 'settings.php';
+require_once 'databaseconstants.php';
 require_once 'database.php';
 require_once 'objects/bongtype.php';
 require_once 'handlers/eventhandler.php';
@@ -30,7 +31,7 @@ class BongTypeHandler {
 	public static function getBongType($id) {
 		$database = Database::getConnection(Settings::db_name_infected);
 
-		$result = $database->query('SELECT * FROM `'. Settings::db_table_infected_bongTypes . '`
+		$result = $database->query('SELECT * FROM `'. DatabaseConstants::db_table_infected_bongTypes . '`
 																WHERE `id` = \'' . $database->real_escape_string($id) . '\';');
 
 		return $result->fetch_object('BongType');
@@ -45,7 +46,7 @@ class BongTypeHandler {
 		}
 		$database = Database::getConnection(Settings::db_name_infected);
 
-		$database->query('INSERT INTO `' . Settings::db_table_infected_bongTypes . '` (`name`, `description`, `eventId`) VALUES (\'' . $database->real_escape_string($name) . '\', \'' . $database->real_escape_string($description) . '\', ' . $event->getId() . ');');
+		$database->query('INSERT INTO `' . DatabaseConstants::db_table_infected_bongTypes . '` (`name`, `description`, `eventId`) VALUES (\'' . $database->real_escape_string($name) . '\', \'' . $database->real_escape_string($description) . '\', ' . $event->getId() . ');');
 
 		return self::getBongType($database->insert_id);
 	}
@@ -60,7 +61,7 @@ class BongTypeHandler {
 
 		$database = Database::getConnection(Settings::db_name_infected);
 
-		$result = $database->query('SELECT * FROM `' . Settings::db_table_infected_bongTypes . '` WHERE `eventId` = ' . $event->getId() . ';');
+		$result = $database->query('SELECT * FROM `' . DatabaseConstants::db_table_infected_bongTypes . '` WHERE `eventId` = ' . $event->getId() . ';');
 
 		$bongList = [];
 

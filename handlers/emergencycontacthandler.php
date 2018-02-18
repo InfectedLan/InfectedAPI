@@ -19,6 +19,7 @@
  */
 
 require_once 'settings.php';
+require_once 'databaseconstants.php';
 require_once 'database.php';
 require_once 'objects/emergencycontact.php';
 require_once 'objects/user.php';
@@ -30,7 +31,7 @@ class EmergencyContactHandler {
 	public static function getEmergencyContact(int $id): ?EmergencyContact {
 		$database = Database::getConnection(Settings::db_name_infected);
 
-		$result = $database->query('SELECT * FROM `'. Settings::db_table_infected_emergencycontacts . '`
+		$result = $database->query('SELECT * FROM `'. DatabaseConstants::db_table_infected_emergencycontacts . '`
 																WHERE `id` = \'' . $database->real_escape_string($id) . '\';');
 
 		return $result->fetch_object('EmergencyContact');
@@ -42,7 +43,7 @@ class EmergencyContactHandler {
 	public static function getEmergencyContactByUser(User $user): ?EmergencyContact {
 		$database = Database::getConnection(Settings::db_name_infected);
 
-		$result = $database->query('SELECT * FROM `'. Settings::db_table_infected_emergencycontacts . '`
+		$result = $database->query('SELECT * FROM `'. DatabaseConstants::db_table_infected_emergencycontacts . '`
 																WHERE `userId` = \'' . $user->getId() . '\';');
 
 		return $result->fetch_object('EmergencyContact');
@@ -54,7 +55,7 @@ class EmergencyContactHandler {
 	public static function getEmergencyContacts(): array {
 		$database = Database::getConnection(Settings::db_name_infected);
 
-		$result = $database->query('SELECT * FROM `' . Settings::db_table_infected_emergencycontacts . '`;');
+		$result = $database->query('SELECT * FROM `' . DatabaseConstants::db_table_infected_emergencycontacts . '`;');
 
 		$emergencyContactsList = [];
 
@@ -71,7 +72,7 @@ class EmergencyContactHandler {
 	public static function hasEmergencyContactByUser(User $user): bool {
 		$database = Database::getConnection(Settings::db_name_infected);
 
-		$result = $database->query('SELECT `id` FROM `'. Settings::db_table_infected_emergencycontacts . '`
+		$result = $database->query('SELECT `id` FROM `'. DatabaseConstants::db_table_infected_emergencycontacts . '`
 																WHERE `userId` = \'' . $user->getId() . '\';');
 
 		return $result->num_rows > 0;
@@ -84,7 +85,7 @@ class EmergencyContactHandler {
 		if (!self::hasEmergencyContactByUser($user)) {
 			$database = Database::getConnection(Settings::db_name_infected);
 
-			$database->query('INSERT INTO `' . Settings::db_table_infected_emergencycontacts . '` (`userId`, `phone`)
+			$database->query('INSERT INTO `' . DatabaseConstants::db_table_infected_emergencycontacts . '` (`userId`, `phone`)
 											  VALUES (\'' . $user->getId() . '\',
 													  		\'' . $database->real_escape_string($phone) . '\');');
 		} else {
@@ -102,7 +103,7 @@ class EmergencyContactHandler {
 	public static function updateEmergencyContact(User $user, int $phone) {
 		$database = Database::getConnection(Settings::db_name_infected);
 
-		$database->query('UPDATE `' . Settings::db_table_infected_emergencycontacts . '`
+		$database->query('UPDATE `' . DatabaseConstants::db_table_infected_emergencycontacts . '`
 										  SET `phone` = \'' . $database->real_escape_string($phone) . '\'
 										  WHERE `userId` = \'' . $user->getId() . '\';');
 	}
@@ -113,7 +114,7 @@ class EmergencyContactHandler {
 	public static function removeEmergencyContact(User $user) {
 		$database = Database::getConnection(Settings::db_name_infected);
 
-		$database->query('DELETE FROM `' . Settings::db_table_infected_emergencycontacts . '`
+		$database->query('DELETE FROM `' . DatabaseConstants::db_table_infected_emergencycontacts . '`
 						  				WHERE `userId` = \'' . $user->getId() . '\';');
 	}
 }

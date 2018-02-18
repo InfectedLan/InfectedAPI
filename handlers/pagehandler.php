@@ -19,6 +19,7 @@
  */
 
 require_once 'settings.php';
+require_once 'databaseconstants.php';
 require_once 'database.php';
 require_once 'objects/page.php';
 
@@ -29,7 +30,7 @@ class PageHandler {
 	public static function getPage(int $id): ?Page {
 		$database = Database::getConnection(Settings::db_name_infected_main);
 
-		$result = $database->query('SELECT * FROM `' . Settings::db_table_infected_main_pages . '`
+		$result = $database->query('SELECT * FROM `' . DatabaseConstants::db_table_infected_main_pages . '`
 																WHERE id = \'' . $database->real_escape_string($id) . '\';');
 
 		return $result->fetch_object('Page');
@@ -41,7 +42,7 @@ class PageHandler {
 	public static function getPageByName(string $name): ?Page {
 		$database = Database::getConnection(Settings::db_name_infected_main);
 
-		$result = $database->query('SELECT * FROM `' . Settings::db_table_infected_main_pages . '`
+		$result = $database->query('SELECT * FROM `' . DatabaseConstants::db_table_infected_main_pages . '`
 																WHERE `name` = \'' . $database->real_escape_string($name) . '\';');
 
 		return $result->fetch_object('Page');
@@ -53,7 +54,7 @@ class PageHandler {
 	public static function getPages(): array {
 		$database = Database::getConnection(Settings::db_name_infected_main);
 
-		$result = $database->query('SELECT * FROM `' . Settings::db_table_infected_main_pages . '`;');
+		$result = $database->query('SELECT * FROM `' . DatabaseConstants::db_table_infected_main_pages . '`;');
 
 		$pageList = [];
 
@@ -70,7 +71,7 @@ class PageHandler {
 	public static function createPage(string $name, string $title, string $content): Page {
 		$database = Database::getConnection(Settings::db_name_infected_main);
 
-		$database->query('INSERT INTO `' . Settings::db_table_infected_main_pages . '` (`name`, `title`, `content`)
+		$database->query('INSERT INTO `' . DatabaseConstants::db_table_infected_main_pages . '` (`name`, `title`, `content`)
 										  VALUES (\'' . $database->real_escape_string($name) . '\',
 														  \'' . $database->real_escape_string($title) . '\',
 														  \'' . $database->real_escape_string($content) . '\')');
@@ -84,7 +85,7 @@ class PageHandler {
 	public static function updatePage(Page $page, string $title, string $content) {
 		$database = Database::getConnection(Settings::db_name_infected_main);
 
-		$database->query('UPDATE `' . Settings::db_table_infected_main_pages . '`
+		$database->query('UPDATE `' . DatabaseConstants::db_table_infected_main_pages . '`
 										  SET `title` = \'' . $database->real_escape_string($title) . '\',
 											  	`content` = \'' . $database->real_escape_string($content) . '\'
 										  WHERE `id` = \'' . $page->getId() . '\';');
@@ -96,7 +97,7 @@ class PageHandler {
 	public static function removePage(Page $page) {
 		$database = Database::getConnection(Settings::db_name_infected_main);
 
-		$database->query('DELETE FROM `' . Settings::db_table_infected_main_pages . '`
+		$database->query('DELETE FROM `' . DatabaseConstants::db_table_infected_main_pages . '`
 						  				WHERE `id` = \'' . $page->getId() . '\';');
 	}
 }

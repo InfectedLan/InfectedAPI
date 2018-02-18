@@ -19,6 +19,7 @@
  */
 
 require_once 'settings.php';
+require_once 'databaseconstants.php';
 require_once 'database.php';
 require_once 'handlers/chathandler.php';
 require_once 'handlers/eventhandler.php';
@@ -38,7 +39,7 @@ class ClanHandler {
 	public static function getClan(int $id): ?Clan {
 		$database = Database::getConnection(Settings::db_name_infected_compo);
 
-		$result = $database->query('SELECT * FROM `' . Settings::db_table_infected_compo_clans . '`
+		$result = $database->query('SELECT * FROM `' . DatabaseConstants::db_table_infected_compo_clans . '`
 																WHERE `id` = \'' . $database->real_escape_string($id) . '\';');
 
 		return $result->fetch_object('Clan');
@@ -51,8 +52,8 @@ class ClanHandler {
 		$event = EventHandler::getCurrentEvent();
 		$database = Database::getConnection(Settings::db_name_infected_compo);
 
-		$result = $database->query('SELECT * FROM `' . Settings::db_table_infected_compo_clans . '`
-																WHERE `id` IN (SELECT `clanId` FROM `' . Settings::db_table_infected_compo_memberof . '`
+		$result = $database->query('SELECT * FROM `' . DatabaseConstants::db_table_infected_compo_clans . '`
+																WHERE `id` IN (SELECT `clanId` FROM `' . DatabaseConstants::db_table_infected_compo_memberof . '`
 																						   WHERE `userId` = \'' . $user->getId() . '\');');
 
 		$clanList = [];
@@ -72,8 +73,8 @@ class ClanHandler {
 	public static function getClansByCompo(Compo $compo): array {
 		$database = Database::getConnection(Settings::db_name_infected_compo);
 
-		$result = $database->query('SELECT * FROM `' . Settings::db_table_infected_compo_clans . '`
-																WHERE `id` IN (SELECT `clanId` FROM `' . Settings::db_table_infected_compo_participantof . '`
+		$result = $database->query('SELECT * FROM `' . DatabaseConstants::db_table_infected_compo_clans . '`
+																WHERE `id` IN (SELECT `clanId` FROM `' . DatabaseConstants::db_table_infected_compo_participantof . '`
 																			  			 WHERE `compoId` = \'' . $compo->getId() . '\');');
 
 		$clanList = [];
@@ -105,7 +106,7 @@ class ClanHandler {
   public static function isQualified(Clan $clan, Compo $compo): bool {
     $database = Database::getConnection(Settings::db_name_infected_compo);
 
-    $result = $database->query('SELECT * FROM `' . Settings::db_table_infected_compo_participantof . '`
+    $result = $database->query('SELECT * FROM `' . DatabaseConstants::db_table_infected_compo_participantof . '`
 																WHERE `clanId` = \'' . $clan->getId() . '\'
 																AND `compoId` = \'' . $compo->getId() . '\'
 																AND `qualified` = \'1\';');
@@ -116,12 +117,12 @@ class ClanHandler {
   public static function setQualified(Clan $clan, int $state) {
     $database = Database::getConnection(Settings::db_name_infected_compo);
 
-    $database->query('UPDATE `' . Settings::db_table_infected_compo_participantof . '`
+    $database->query('UPDATE `' . DatabaseConstants::db_table_infected_compo_participantof . '`
 											SET `qualified` = \'' . ($state ? 1 : 0) . '\'
 											WHERE `clanId` = \'' . $clan->getId() . '\';');
 
 		//Cleanup just to be sure
-    $database->query('DELETE FROM `' . Settings::db_table_infected_compo_qualificationQueue . '`
+    $database->query('DELETE FROM `' . DatabaseConstants::db_table_infected_compo_qualificationQueue . '`
 											WHERE `clan` = \'' . $clan->getId() . '\';');
   }
 
@@ -131,8 +132,8 @@ class ClanHandler {
 	public static function getClanMembers(Clan $clan): array {
 		$database = Database::getConnection(Settings::db_name_infected);
 
-		$result = $database->query('SELECT * FROM `' . Settings::db_table_infected_users . '`
-																WHERE `id` IN (SELECT `userId` FROM `' . Settings::db_name_infected_compo . '`.`' . Settings::db_table_infected_compo_memberof . '`
+		$result = $database->query('SELECT * FROM `' . DatabaseConstants::db_table_infected_users . '`
+																WHERE `id` IN (SELECT `userId` FROM `' . Settings::db_name_infected_compo . '`.`' . DatabaseConstants::db_table_infected_compo_memberof . '`
 																			   			 WHERE `clanId` = \'' . $clan->getId() . '\');');
 
 		$memberList = [];
@@ -150,8 +151,8 @@ class ClanHandler {
 	public static function getClanMemberCount(Clan $clan): int {
 		$database = Database::getConnection(Settings::db_name_infected);
 
-		$result = $database->query('SELECT * FROM `' . Settings::db_table_infected_users . '`
-																WHERE `id` IN (SELECT `userId` FROM `' . Settings::db_name_infected_compo . '`.`' . Settings::db_table_infected_compo_memberof . '`
+		$result = $database->query('SELECT * FROM `' . DatabaseConstants::db_table_infected_users . '`
+																WHERE `id` IN (SELECT `userId` FROM `' . Settings::db_name_infected_compo . '`.`' . DatabaseConstants::db_table_infected_compo_memberof . '`
 																			   			 WHERE `clanId` = \'' . $clan->getId() . '\');');
 
 		return $result->num_rows;
@@ -163,8 +164,8 @@ class ClanHandler {
 	public static function getPlayingClanMembers(Clan $clan): array {
 		$database = Database::getConnection(Settings::db_name_infected);
 
-		$result = $database->query('SELECT * FROM `' . Settings::db_table_infected_users . '`
-																WHERE `id` IN (SELECT `userId` FROM `' . Settings::db_name_infected_compo . '`.`' . Settings::db_table_infected_compo_memberof . '`
+		$result = $database->query('SELECT * FROM `' . DatabaseConstants::db_table_infected_users . '`
+																WHERE `id` IN (SELECT `userId` FROM `' . Settings::db_name_infected_compo . '`.`' . DatabaseConstants::db_table_infected_compo_memberof . '`
 																						   WHERE `clanId` = \'' . $clan->getId() . '\'
 																						   AND `stepInId` = \'0\');');
 
@@ -183,8 +184,8 @@ class ClanHandler {
 	public static function getStepInClanMembers(Clan $clan): array {
 		$database = Database::getConnection(Settings::db_name_infected);
 
-		$result = $database->query('SELECT * FROM `' . Settings::db_table_infected_users . '`
-																WHERE `id` IN (SELECT `userId` FROM `' . Settings::db_name_infected_compo . '`.`' . Settings::db_table_infected_compo_memberof . '`
+		$result = $database->query('SELECT * FROM `' . DatabaseConstants::db_table_infected_users . '`
+																WHERE `id` IN (SELECT `userId` FROM `' . Settings::db_name_infected_compo . '`.`' . DatabaseConstants::db_table_infected_compo_memberof . '`
 																						   WHERE `clanId` = \'' . $clan->getId() . '\'
 																						   AND `stepInId` = \'1\');');
 
@@ -203,7 +204,7 @@ class ClanHandler {
 	public static function isClanMember(Clan $clan, User $user): bool {
 		$database = Database::getConnection(Settings::db_name_infected_compo);
 
-		$result = $database->query('SELECT `id` FROM `' . Settings::db_table_infected_compo_memberof . '`
+		$result = $database->query('SELECT `id` FROM `' . DatabaseConstants::db_table_infected_compo_memberof . '`
 																WHERE `clanId` = \'' . $clan->getId() . '\'
 																AND `userId` = \'' . $user->getId() . '\';');
 
@@ -216,7 +217,7 @@ class ClanHandler {
 	public static function isStepInClanMember(Clan $clan, User $user): bool {
 		$database = Database::getConnection(Settings::db_name_infected_compo);
 
-		$result = $database->query('SELECT `id` FROM `' . Settings::db_table_infected_compo_memberof . '`
+		$result = $database->query('SELECT `id` FROM `' . DatabaseConstants::db_table_infected_compo_memberof . '`
 																WHERE `clanId` = \'' . $clan->getId() . '\'
 																AND `userId` = \'' . $user->getId() . '\'
 																AND `stepInId` = \'1\';');
@@ -230,7 +231,7 @@ class ClanHandler {
 	public static function setStepInClanMemberState(Clan $clan, User $user, int $state) {
 		$database = Database::getConnection(Settings::db_name_infected_compo);
 
-		$result = $database->query('UPDATE `' . Settings::db_table_infected_compo_memberof . '`
+		$result = $database->query('UPDATE `' . DatabaseConstants::db_table_infected_compo_memberof . '`
 																SET `stepInId` = \'' . $database->real_escape_string($state) . '\'
 																WHERE `clanId` = \'' . $clan->getId() . '\'
 																AND `userId` = \'' . $user->getId() . '\';');
@@ -242,7 +243,7 @@ class ClanHandler {
 	public static function createClan(Event $event, string $name, string $tag, Compo $compo, User $user): Clan {
 		$database = Database::getConnection(Settings::db_name_infected_compo);
 
-		$database->query('INSERT INTO `' . Settings::db_table_infected_compo_clans . '` (`eventId`, `chiefId`, `name`, `tag`)
+		$database->query('INSERT INTO `' . DatabaseConstants::db_table_infected_compo_clans . '` (`eventId`, `chiefId`, `name`, `tag`)
 										  VALUES (\'' . $event->getId() . '\',
 														  \'' . $user->getId() . '\',
 														  \'' . $database->real_escape_string(htmlentities($name, ENT_QUOTES, 'UTF-8')) . '\',
@@ -251,15 +252,15 @@ class ClanHandler {
 		// Fetch the id of the clan we just added.
 		$clan = self::getClan($database->insert_id);
 
-		$database->query('INSERT INTO `' . Settings::db_table_infected_compo_participantof . '` (`clanId`, `compoId`, `qualified`)
+		$database->query('INSERT INTO `' . DatabaseConstants::db_table_infected_compo_participantof . '` (`clanId`, `compoId`, `qualified`)
 										  VALUES (\'' . $database->real_escape_string($clan->getId()) . '\',
 												  		\'' . $compo->getId() . '\', \'0\');');
 
-		$database->query('INSERT INTO `' . Settings::db_table_infected_compo_memberof . '` (`clanId`, `userId`, `stepinId`)
+		$database->query('INSERT INTO `' . DatabaseConstants::db_table_infected_compo_memberof . '` (`clanId`, `userId`, `stepinId`)
 										  VALUES (\'' . $database->real_escape_string($clan->getId()) . '\',
 												  		\'' . $user->getId() . '\', 0);');
 
-		$result = $database->query('SELECT * FROM `' . Settings::db_table_infected_compo_clans . '`
+		$result = $database->query('SELECT * FROM `' . DatabaseConstants::db_table_infected_compo_clans . '`
 																WHERE `id` = \'' . $database->real_escape_string($clan->getId()) . '\';');
 
 		// Allow user to talk in global chat.
@@ -275,7 +276,7 @@ class ClanHandler {
 	public static function updateClan(Clan $clan, string $name, string $tag) {
 		$database = Database::getConnection(Settings::db_name_infected_compo);
 
-		$database->query('UPDATE `' . Settings::db_table_infected_compo_clans . '`
+		$database->query('UPDATE `' . DatabaseConstants::db_table_infected_compo_clans . '`
 										  SET `name` = \'' . $database->real_escape_string($name) . '\',
 											  	`tag` = \'' . $database->real_escape_string($tag) . '\'
 										  WHERE `id` = \'' . $clan->getId() . '\';');
@@ -287,16 +288,16 @@ class ClanHandler {
 	public static function removeClan(Clan $clan) {
 		$database = Database::getConnection(Settings::db_name_infected_compo);
 
-		$database->query('DELETE FROM `' . Settings::db_table_infected_compo_clans . '`
+		$database->query('DELETE FROM `' . DatabaseConstants::db_table_infected_compo_clans . '`
 						  				WHERE `id` = \'' . $clan->getId() . '\';');
 
-		$database->query('DELETE FROM `' . Settings::db_table_infected_compo_invites . '`
+		$database->query('DELETE FROM `' . DatabaseConstants::db_table_infected_compo_invites . '`
 											WHERE `clanId` = \'' . $clan->getId() . '\';');
 
-		$database->query('DELETE FROM `' . Settings::db_table_infected_compo_participantof . '`
+		$database->query('DELETE FROM `' . DatabaseConstants::db_table_infected_compo_participantof . '`
 											WHERE `clanId` = \'' . $clan->getId() . '\';');
 
-		$database->query('DELETE FROM `' . Settings::db_table_infected_compo_participantOfMatch . '`
+		$database->query('DELETE FROM `' . DatabaseConstants::db_table_infected_compo_participantofMatch . '`
 											WHERE `participantId` = \'' . $clan->getId() . '\'
 											AND `type` = \'' . MatchHandler::PARTICIPANTOF_STATE_CLAN . '\';');
 	}
@@ -307,7 +308,7 @@ class ClanHandler {
 	public static function kickFromClan(Clan $clan, User $user) {
 		$database = Database::getConnection(Settings::db_name_infected_compo);
 
-		$result = $database->query('DELETE FROM `' . Settings::db_table_infected_compo_memberof . '`
+		$result = $database->query('DELETE FROM `' . DatabaseConstants::db_table_infected_compo_memberof . '`
 																WHERE `userId` = \'' . $user->getId() . '\'
 																AND `clanId` = \'' . $clan->getId() . '\';');
 	}
@@ -320,7 +321,7 @@ class ClanHandler {
 
       $database = Database::getConnection(Settings::db_name_infected_compo);
 
-      $database->query('INSERT INTO `' . Settings::db_table_infected_compo_qualificationQueue . '` (`clan`, `compo`, `time`)
+      $database->query('INSERT INTO `' . DatabaseConstants::db_table_infected_compo_qualificationQueue . '` (`clan`, `compo`, `time`)
 												VALUES (\'' . $clan->getId() . '\',
 																\'' . $compo->getId() . '\',
 																\'' . date('Y-m-d H:i:s') . '\');');
@@ -332,14 +333,14 @@ class ClanHandler {
   public static function removeFromQualificationQueue(Clan $clan) {
       $database = Database::getConnection(Settings::db_name_infected_compo);
 
-      $database->query('DELETE FROM `' . Settings::db_table_infected_compo_qualificationQueue . '`
+      $database->query('DELETE FROM `' . DatabaseConstants::db_table_infected_compo_qualificationQueue . '`
 												WHERE `clan` = \'' . $clan->getId() . '\';');
   }
 
   public static function isInQualificationQueue(Clan $clan): bool {
     $database = Database::getConnection(Settings::db_name_infected_compo);
 
-    $result = $database->query('SELECT * FROM `' . Settings::db_table_infected_compo_qualificationQueue . '`
+    $result = $database->query('SELECT * FROM `' . DatabaseConstants::db_table_infected_compo_qualificationQueue . '`
 																WHERE `clan` = \'' . $clan->getId() . '\';');
 
     return $result->num_rows > 0;

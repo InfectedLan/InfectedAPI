@@ -29,7 +29,7 @@ class TaskManager {
 	public static function getTask(int $id): ?object {
 		$database = Database::getConnection(Settings::db_name_infected);
 
-		$result = $database->query('SELECT * FROM `'. Settings::db_table_infected_tasks . '`
+		$result = $database->query('SELECT * FROM `'. DatabaseConstants::db_table_infected_tasks . '`
 																WHERE `id` = \'' . $database->real_escape_string($id) . '\';');
 
 		$row = $result->fetch_array();
@@ -43,7 +43,7 @@ class TaskManager {
 	public static function getTasks(): array {
 		$database = Database::getConnection(Settings::db_name_infected);
 
-		$result = $database->query('SELECT * FROM `'. Settings::db_table_infected_tasks . '`;');
+		$result = $database->query('SELECT * FROM `'. DatabaseConstants::db_table_infected_tasks . '`;');
 
 		$taskList = [];
 
@@ -60,7 +60,7 @@ class TaskManager {
 	public static function createTask(ITask $task) {
 		$database = Database::getConnection(Settings::db_name_infected);
 
-		$database->query('INSERT INTO `' . Settings::db_table_infected_tasks . '` (`object`)
+		$database->query('INSERT INTO `' . DatabaseConstants::db_table_infected_tasks . '` (`object`)
 						  				VALUES (\'' . serialize($task) . '\');');
 	}
 
@@ -70,7 +70,7 @@ class TaskManager {
 	public static function removeTask(int $id) {
 		$database = Database::getConnection(Settings::db_name_infected);
 
-		$database->query('DELETE FROM `' . Settings::db_table_infected_tasks . '`
+		$database->query('DELETE FROM `' . DatabaseConstants::db_table_infected_tasks . '`
 						  				WHERE `id` = \'' . $id . '\';');
 	}
 }

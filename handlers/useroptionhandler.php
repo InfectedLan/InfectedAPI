@@ -19,6 +19,7 @@
  */
 
 require_once 'settings.php';
+require_once 'databaseconstants.php';
 require_once 'database.php';
 require_once 'objects/user.php';
 
@@ -29,7 +30,7 @@ class UserOptionHandler {
 	public static function hasUserOption(User $user): bool {
 		$database = Database::getConnection(Settings::db_name_infected);
 
-		$result = $database->query('SELECT * FROM `' . Settings::db_table_infected_useroptions . '`
+		$result = $database->query('SELECT * FROM `' . DatabaseConstants::db_table_infected_useroptions . '`
 																WHERE `userId` = \'' . $user->getId() . '\';');
 
 		return $result->num_rows > 0;
@@ -41,7 +42,7 @@ class UserOptionHandler {
 	public static function hasUserPrivatePhone(User $user): bool {
 		$database = Database::getConnection(Settings::db_name_infected);
 
-		$result = $database->query('SELECT * FROM `' . Settings::db_table_infected_useroptions . '`
+		$result = $database->query('SELECT * FROM `' . DatabaseConstants::db_table_infected_useroptions . '`
 																WHERE `userId` = \'' . $user->getId() . '\'
 																AND `privatePhone` = \'1\';');
 
@@ -54,7 +55,7 @@ class UserOptionHandler {
 	public static function isUserReservedFromNotifications(User $user): bool {
 		$database = Database::getConnection(Settings::db_name_infected);
 
-		$result = $database->query('SELECT * FROM `' . Settings::db_table_infected_useroptions . '`
+		$result = $database->query('SELECT * FROM `' . DatabaseConstants::db_table_infected_useroptions . '`
 																WHERE `userId` = \'' . $user->getId() . '\'
 																AND `reserveFromNotifications` = \'1\';');
 
@@ -67,7 +68,7 @@ class UserOptionHandler {
     public static function hasUserEasterEgg(User $user): bool {
         $database = Database::getConnection(Settings::db_name_infected);
 
-        $result = $database->query('SELECT * FROM `' . Settings::db_table_infected_useroptions . '`
+        $result = $database->query('SELECT * FROM `' . DatabaseConstants::db_table_infected_useroptions . '`
 																WHERE `userId` = \'' . $user->getId() . '\'
 																AND `easterEgg` = \'1\';');
 
@@ -80,7 +81,7 @@ class UserOptionHandler {
     public static function canBypassCurfew(User $user): bool {
         $database = Database::getConnection(Settings::db_name_infected);
 
-        $result = $database->query('SELECT * FROM `' . Settings::db_table_infected_useroptions . '`
+        $result = $database->query('SELECT * FROM `' . DatabaseConstants::db_table_infected_useroptions . '`
 																WHERE `userId` = \'' . $user->getId() . '\'
 																AND `bypassCurfew` = \'1\';');
 
@@ -95,11 +96,11 @@ class UserOptionHandler {
         $database = Database::getConnection(Settings::db_name_infected);
 
         if (!self::hasUserOption($user)) {
-            $database->query('INSERT INTO `' . Settings::db_table_infected_useroptions . '` (`userId`, `bypassCurfew`)
+            $database->query('INSERT INTO `' . DatabaseConstants::db_table_infected_useroptions . '` (`userId`, `bypassCurfew`)
 												VALUES (\'' . $user->getId() . '\',
 																\'' . $database->real_escape_string($curfew) . '\');');
         } else {
-            $database->query('UPDATE `' . Settings::db_table_infected_useroptions . '`
+            $database->query('UPDATE `' . DatabaseConstants::db_table_infected_useroptions . '`
 												SET `bypassCurfew` = \'' . $database->real_escape_string($curfew) . '\'
 												WHERE `userId` = \'' . $user->getId() . '\';');
         }

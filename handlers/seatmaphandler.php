@@ -19,6 +19,7 @@
  */
 
 require_once 'settings.php';
+require_once 'databaseconstants.php';
 require_once 'database.php';
 require_once 'handlers/eventhandler.php';
 require_once 'handlers/rowhandler.php';
@@ -32,7 +33,7 @@ class SeatmapHandler {
 	public static function getSeatmap(int $id): ?Seatmap {
 		$database = Database::getConnection(Settings::db_name_infected_tickets);
 
-		$result = $database->query('SELECT * FROM `' . Settings::db_table_infected_tickets_seatmaps . '`
+		$result = $database->query('SELECT * FROM `' . DatabaseConstants::db_table_infected_tickets_seatmaps . '`
 																WHERE `id` = \'' . $database->real_escape_string($id) . '\';');
 
 		return $result->fetch_object('Seatmap');
@@ -44,7 +45,7 @@ class SeatmapHandler {
 	public static function getSeatmaps(): array {
 		$database = Database::getConnection(Settings::db_name_infected_tickets);
 
-		$result = $database->query('SELECT * FROM `' . Settings::db_table_infected_tickets_seatmaps . '`;');
+		$result = $database->query('SELECT * FROM `' . DatabaseConstants::db_table_infected_tickets_seatmaps . '`;');
 
 		$seatmapList = [];
 
@@ -61,7 +62,7 @@ class SeatmapHandler {
 	public static function createSeatmap(string $name, ?string $backgroundImage): Seatmap {
 		$database = Database::getConnection(Settings::db_name_infected_tickets);
 
-		$database->query('INSERT INTO ' . Settings::db_table_infected_tickets_seatmaps . '(`humanName`, `backgroundImage`)
+		$database->query('INSERT INTO ' . DatabaseConstants::db_table_infected_tickets_seatmaps . '(`humanName`, `backgroundImage`)
 						  		VALUES (\'' . $database->real_escape_string($name) . '\',
 								  		\'' . $database->real_escape_string($backgroundImage) . '\')');
 
@@ -119,7 +120,7 @@ class SeatmapHandler {
 		$database = Database::getConnection(Settings::db_name_infected);
 
 		// TODO: Use joins here to join with event table. Somehow.
-		$result = $database->query('SELECT `id` FROM `' . Settings::db_table_infected_events . '`
+		$result = $database->query('SELECT `id` FROM `' . DatabaseConstants::db_table_infected_events . '`
 																WHERE `seatmapId` = \'' . $seatmap->getId() . '\';');
 
 		$row = $result->fetch_array();
@@ -133,7 +134,7 @@ class SeatmapHandler {
 	public static function setBackground(Seatmap $seatmap, string $filename) {
 		$database = Database::getConnection(Settings::db_name_infected_tickets);
 
-		$database->query('UPDATE `' . Settings::db_table_infected_tickets_seatmaps . '`
+		$database->query('UPDATE `' . DatabaseConstants::db_table_infected_tickets_seatmaps . '`
 						  				SET `backgroundImage` = \'' . $database->real_escape_string($filename) . '\'
 						  				WHERE `id` = \'' . $seatmap->getId() . '\';');
 	}

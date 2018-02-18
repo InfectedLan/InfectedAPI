@@ -19,6 +19,7 @@
  */
 
 require_once 'settings.php';
+require_once 'databaseconstants.php';
 require_once 'database.php';
 require_once 'objects/chat.php';
 require_once 'objects/user.php';
@@ -33,7 +34,7 @@ class ChatHandler {
 	public static function getChat(int $id): ?Chat {
 		$database = Database::getConnection(Settings::db_name_infected_compo);
 
-		$result = $database->query('SELECT * FROM `' . Settings::db_table_infected_compo_chats . '`
+		$result = $database->query('SELECT * FROM `' . DatabaseConstants::db_table_infected_compo_chats . '`
 																WHERE `id` = \'' . $database->real_escape_string($id) . '\';');
 
 		return $result->fetch_object('Chat');
@@ -45,7 +46,7 @@ class ChatHandler {
 	public static function getChats(): array {
 		$database = Database::getConnection(Settings::db_name_infected_compo);
 
-		$result = $database->query('SELECT * FROM `' . Settings::db_table_infected_compo_chats . '`;');
+		$result = $database->query('SELECT * FROM `' . DatabaseConstants::db_table_infected_compo_chats . '`;');
 
 		$chatList = [];
 
@@ -62,7 +63,7 @@ class ChatHandler {
 	public static function createChat(string $name, string $title): Chat {
 		$database = Database::getConnection(Settings::db_name_infected_compo);
 
-		$database->query('INSERT INTO `' . Settings::db_table_infected_compo_chats . '` (`name`, `title`)
+		$database->query('INSERT INTO `' . DatabaseConstants::db_table_infected_compo_chats . '` (`name`, `title`)
 						  				VALUES (\'' . $database->real_escape_string($name) . '\',
 															\'' . $database->real_escape_string($title) . '\');');
 
@@ -75,7 +76,7 @@ class ChatHandler {
 	public static function removeChat(Chat $chat) {
 		$database = Database::getConnection(Settings::db_name_infected_compo);
 
-		$database->query('DELETE FROM `' . Settings::db_table_infected_compo_chats . '`
+		$database->query('DELETE FROM `' . DatabaseConstants::db_table_infected_compo_chats . '`
 						  				WHERE `id` = \'' . $chat->getId() . '\';');
 
 		// Remove all chat messages for this chat.
@@ -92,7 +93,7 @@ class ChatHandler {
 	    return true; //Remove later
 		$database = Database::getConnection(Settings::db_name_infected_compo);
 
-		$result = $database->query('SELECT `id` FROM `' . Settings::db_table_infected_compo_memberofchat . '`
+		$result = $database->query('SELECT `id` FROM `' . DatabaseConstants::db_table_infected_compo_memberofchat . '`
 																WHERE `userId` = \'' . $user->getId() . '\'
 																AND `chatId` = \'' . $chat->getId() . '\';');
 
@@ -105,8 +106,8 @@ class ChatHandler {
 	public static function getChatMembers(Chat $chat): array {
 		$database = Database::getConnection(Settings::db_name_infected);
 
-		$result = $database->query('SELECT * FROM `' . Settings::db_table_infected_users . '`
-																WHERE `id` = (SELECT `userId` FROM `' . Settings::db_name_infected_compo . '`.`' . Settings::db_table_infected_compo_memberofchat . '`
+		$result = $database->query('SELECT * FROM `' . DatabaseConstants::db_table_infected_users . '`
+																WHERE `id` = (SELECT `userId` FROM `' . Settings::db_name_infected_compo . '`.`' . DatabaseConstants::db_table_infected_compo_memberofchat . '`
 																							WHERE `chatId` = \'' . $chat->getId() . '\');');
 
 		$chatMemberList = [];
@@ -124,7 +125,7 @@ class ChatHandler {
 	public static function addChatMember(Chat $chat, User $user) {
 		$database = Database::getConnection(Settings::db_name_infected_compo);
 
-		$database->query('INSERT INTO `' . Settings::db_table_infected_compo_memberofchat . '` (`userId`, `chatId`)
+		$database->query('INSERT INTO `' . DatabaseConstants::db_table_infected_compo_memberofchat . '` (`userId`, `chatId`)
 										  VALUES (\'' . $user->getId() . '\',
 												  		\'' . $chat->getId() . '\');');
 	}
@@ -135,7 +136,7 @@ class ChatHandler {
 	public static function addChatMemberById(int $chatId, int $userId) {
 	    $database = Database::getConnection(Settings::db_name_infected_compo);
 
-	    $database->query('INSERT INTO `' . Settings::db_table_infected_compo_memberofchat . '` (`userId`, `chatId`)
+	    $database->query('INSERT INTO `' . DatabaseConstants::db_table_infected_compo_memberofchat . '` (`userId`, `chatId`)
 										  VALUES (\'' . $database->real_escape_string($userId) . '\',
 												  		\'' . $database->real_escape_string($chatId) . '\');');
 	}
@@ -146,7 +147,7 @@ class ChatHandler {
 	public static function removeChatMember(Chat $chat, User $user) {
 		$database = Database::getConnection(Settings::db_name_infected_compo);
 
-		$database->query('DELETE FROM `' . Settings::db_table_infected_compo_memberofchat . '`
+		$database->query('DELETE FROM `' . DatabaseConstants::db_table_infected_compo_memberofchat . '`
 											WHERE `userId` = \'' . $user->getId() . '\'
 											AND `chatId` = \'' . $chat->getId() . '\';');
 	}
@@ -158,7 +159,7 @@ class ChatHandler {
 		$database = Database::getConnection(Settings::db_name_infected_compo);
 
 		foreach ($userList as $user) {
-			$database->query('INSERT INTO `' . Settings::db_table_infected_compo_memberofchat . '` (`userId`, `chatId`)
+			$database->query('INSERT INTO `' . DatabaseConstants::db_table_infected_compo_memberofchat . '` (`userId`, `chatId`)
 												VALUES (\'' . $user->getId() . '\',
 																\'' . $chat->getId() . '\');');
 		}
@@ -170,7 +171,7 @@ class ChatHandler {
 	public static function removeChatMembers(Chat $chat) {
 		$database = Database::getConnection(Settings::db_name_infected_compo);
 
-		$database->query('DELETE FROM `' . Settings::db_table_infected_compo_memberofchat . '`
+		$database->query('DELETE FROM `' . DatabaseConstants::db_table_infected_compo_memberofchat . '`
 											WHERE `chatId` = \'' . $chat->getId() . '\';');
 	}
 
@@ -180,7 +181,7 @@ class ChatHandler {
 	public static function getChatMessage(int $id): ?ChatMessage {
 		$database = Database::getConnection(Settings::db_name_infected_compo);
 
-		$result = $database->query('SELECT * FROM `' . Settings::db_table_infected_compo_chatmessages . '`
+		$result = $database->query('SELECT * FROM `' . DatabaseConstants::db_table_infected_compo_chatmessages . '`
 																WHERE `id` = \'' . $database->real_escape_string($id) . '\';');
 
 		return $result->fetch_object('ChatMessage');
@@ -192,7 +193,7 @@ class ChatHandler {
 	public static function getChatMessages(): array {
 		$database = Database::getConnection(Settings::db_name_infected_compo);
 
-		$result = $database->query('SELECT * FROM `' . Settings::db_table_infected_compo_chatmessages . '`;');
+		$result = $database->query('SELECT * FROM `' . DatabaseConstants::db_table_infected_compo_chatmessages . '`;');
 
 		$chatMessageList = [];
 
@@ -209,7 +210,7 @@ class ChatHandler {
 	public static function getLastChatMessage(Chat $chat): ?ChatMessage {
 		$database = Database::getConnection(Settings::db_name_infected_compo);
 
-		$result = $database->query('SELECT * FROM `' . Settings::db_table_infected_compo_chatmessages . '`
+		$result = $database->query('SELECT * FROM `' . DatabaseConstants::db_table_infected_compo_chatmessages . '`
 																WHERE `chatId` = \'' . $chat->getId() . '\'
 																ORDER BY `id` DESC
 																LIMIT 1;');
@@ -223,7 +224,7 @@ class ChatHandler {
 	public static function getLastChatMessages(Chat $chat, int $count): array {
 		$database = Database::getConnection(Settings::db_name_infected_compo);
 
-		$result = $database->query('SELECT * FROM `' . Settings::db_table_infected_compo_chatmessages . '`
+		$result = $database->query('SELECT * FROM `' . DatabaseConstants::db_table_infected_compo_chatmessages . '`
 																WHERE `chatId` = \'' . $chat->getId() . '\'
 																ORDER BY `id` DESC
 																LIMIT ' . $database->real_escape_string($count) . ';');
@@ -243,7 +244,7 @@ class ChatHandler {
 	public static function removeChatMessages(Chat $chat) {
 		$database = Database::getConnection(Settings::db_name_infected_compo);
 
-		$database->query('DELETE FROM `' . Settings::db_table_infected_compo_chatmessages . '`
+		$database->query('DELETE FROM `' . DatabaseConstants::db_table_infected_compo_chatmessages . '`
 						  				WHERE `chatId` = \'' . $chat->getId() . '\';');
 
 	}
@@ -254,7 +255,7 @@ class ChatHandler {
 	public static function sendChatMessage(Chat $chat, User $user, string $message) {
 		$database = Database::getConnection(Settings::db_name_infected_compo);
 
-		$database->query('INSERT INTO `' . Settings::db_table_infected_compo_chatmessages . '` (`userId`, `chatId`, `time`, `message`)
+		$database->query('INSERT INTO `' . DatabaseConstants::db_table_infected_compo_chatmessages . '` (`userId`, `chatId`, `time`, `message`)
 										  VALUES (\'' . $user->getId() . '\',
 														  \'' . $chat->getId() . '\',
 														  \'' . date('Y-m-d H:i:s') . '\',

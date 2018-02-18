@@ -19,6 +19,7 @@
  */
 
 require_once 'settings.php';
+require_once 'databaseconstants.php';
 require_once 'database.php';
 require_once 'objects/entrance.php';
 
@@ -29,7 +30,7 @@ class EntranceHandler {
 	public static function getEntrance(int $id): ?Entrance {
 		$database = Database::getConnection(Settings::db_name_infected_tickets);
 
-		$result = $database->query('SELECT * FROM `' . Settings::db_table_infected_tickets_entrances . '`
+		$result = $database->query('SELECT * FROM `' . DatabaseConstants::db_table_infected_tickets_entrances . '`
 																WHERE `id` = \'' . $database->real_escape_string($id) . '\';');
 
 		return $result->fetch_object('Entrance');
@@ -41,7 +42,7 @@ class EntranceHandler {
 	public static function getEntranceByName(string $name): ?Entrance {
 		$database = Database::getConnection(Settings::db_name_infected_tickets);
 
-		$result = $database->query('SELECT * FROM `' . Settings::db_table_infected_tickets_entrances . '`
+		$result = $database->query('SELECT * FROM `' . DatabaseConstants::db_table_infected_tickets_entrances . '`
 																WHERE `name` = \'' . $database->real_escape_string($name) . '\';');
 
 		return $result->fetch_object('Entrance');

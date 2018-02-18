@@ -19,6 +19,7 @@
  */
 
 require_once 'settings.php';
+require_once 'databaseconstants.php';
 require_once 'database.php';
 require_once 'objects/user.php';
 
@@ -33,7 +34,7 @@ class UserFriendHandler {
 	public static function isUserFriendsWith(User $user, User $friend): bool {
 		$database = Database::getConnection(Settings::db_name_infected);
 
-		$result = $database->query('SELECT * FROM `' . Settings::db_table_infected_userfriends . '`
+		$result = $database->query('SELECT * FROM `' . DatabaseConstants::db_table_infected_userfriends . '`
 								   WHERE ((`fromId` = ' . $user->getId() . ' AND `toId` = ' . $friend->getId() . ')
 								   		  OR (`toId` = ' . $user->getId() . ' AND `fromId` = ' . $friend->getId() . '))
 								   AND `state` = ' . self::STATE_ACCEPTED . ';');
@@ -47,12 +48,12 @@ class UserFriendHandler {
 	public static function getFriendsByUser(User $user, int $state = self::STATE_ACCEPTED): array {
 		$database = Database::getConnection(Settings::db_name_infected);
 
-		$result = $database->query('SELECT * FROM `' . Settings::db_table_infected_users . '`
-								   WHERE `id` IN (SELECT `toId` FROM `' . Settings::db_table_infected_userfriends . '`
+		$result = $database->query('SELECT * FROM `' . DatabaseConstants::db_table_infected_users . '`
+								   WHERE `id` IN (SELECT `toId` FROM `' . DatabaseConstants::db_table_infected_userfriends . '`
 												  WHERE `fromId` = ' . $user->getId() . '
 												  AND `state` = ' . $state . '
 												  UNION
-												  SELECT `fromId` FROM `' . Settings::db_table_infected_userfriends . '`
+												  SELECT `fromId` FROM `' . DatabaseConstants::db_table_infected_userfriends . '`
 												  WHERE `toId` = ' . $user->getId() . '
 												  AND `state` = ' . $state . ')
 							  	   ORDER BY `firstname`, `lastname`;');
@@ -72,8 +73,8 @@ class UserFriendHandler {
     public static function getPendingFriendRequestsToUser(User $user): array {
         $database = Database::getConnection(Settings::db_name_infected);
 
-        $result = $database->query('SELECT * FROM `' . Settings::db_table_infected_users . '`
-                                   WHERE `id` IN (SELECT `fromId` FROM `' . Settings::db_table_infected_userfriends . '`
+        $result = $database->query('SELECT * FROM `' . DatabaseConstants::db_table_infected_users . '`
+                                   WHERE `id` IN (SELECT `fromId` FROM `' . DatabaseConstants::db_table_infected_userfriends . '`
                                                   WHERE `toId` = ' . $user->getId() . '
                                                   AND `state` = ' . self::STATE_PENDING . ')
                                      ORDER BY `firstname`, `lastname`;');
@@ -93,8 +94,8 @@ class UserFriendHandler {
     public static function getPendingFriendRequestsFromUser(User $user): array {
         $database = Database::getConnection(Settings::db_name_infected);
 
-        $result = $database->query('SELECT * FROM `' . Settings::db_table_infected_users . '`
-                                   WHERE `id` IN (SELECT `toId` FROM `' . Settings::db_table_infected_userfriends . '`
+        $result = $database->query('SELECT * FROM `' . DatabaseConstants::db_table_infected_users . '`
+                                   WHERE `id` IN (SELECT `toId` FROM `' . DatabaseConstants::db_table_infected_userfriends . '`
                                                   WHERE `fromId` = ' . $user->getId() . '
                                                   AND `state` = ' . self::STATE_PENDING . ')
                                      ORDER BY `firstname`, `lastname`;');
@@ -114,7 +115,7 @@ class UserFriendHandler {
 	public static function addUserFriend(User $user, User $friend) {
 		$database = Database::getConnection(Settings::db_name_infected);
 
-		$database->query('INSERT INTO `' . Settings::db_table_infected_userfriends . '` (`fromId`, `toId`, `datetime`, `state`)
+		$database->query('INSERT INTO `' . DatabaseConstants::db_table_infected_userfriends . '` (`fromId`, `toId`, `datetime`, `state`)
 						 VALUES (' . $user->getId() . ',
 							     ' . $friend->getId() . ',
 								 \'' . date('Y-m-d H:i:s') . '\',
@@ -127,7 +128,7 @@ class UserFriendHandler {
 	public static function removeUserFriend(User $user, User $friend) {
 		$database = Database::getConnection(Settings::db_name_infected);
 
-		$database->query('DELETE FROM `' . Settings::db_table_infected_userfriends . '`
+		$database->query('DELETE FROM `' . DatabaseConstants::db_table_infected_userfriends . '`
 						 WHERE (`fromId` = ' . $user->getId() . ' AND `toId` = ' . $friend->getId() . ')
 					     OR (`toId` = ' . $user->getId() . ' AND `fromId` = ' . $friend->getId() . ');');
 	}
@@ -138,7 +139,7 @@ class UserFriendHandler {
 	public static function updateUserFriend(User $user, User $friend, int $state = self::STATE_ACCEPTED) {
 		$database = Database::getConnection(Settings::db_name_infected);
 
-		$database->query('UPDATE `' . Settings::db_table_infected_userfriends . '`
+		$database->query('UPDATE `' . DatabaseConstants::db_table_infected_userfriends . '`
 						 SET `state` = ' . $state . '
 						 WHERE (`fromId` = ' . $user->getId() . ' AND `toId` = ' . $friend->getId() . ')
 					     OR (`toId` = ' . $user->getId() . ' AND `fromId` = ' . $friend->getId() . ');');

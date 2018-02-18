@@ -17,6 +17,7 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
+require_once 'databaseconstants.php';
 require_once 'objects/compoplugin.php'; // Not really required, but is used in a hack to make the default plugin use the baseclass for compo plugins
 
 class CompoPluginHandler {

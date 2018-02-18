@@ -22,7 +22,7 @@ require_once 'settings.php';
 class Maintenance {
 
     private static $maintenanceState = [];
-    private const maintenanceFilename = "maintenance.json";
+    private const maintenanceFilename = "config/maintenance.json";
 
     private static function saveMaintenanceState() {
         $file = fopen(Settings::api_path . Maintenance::maintenanceFilename,"w");

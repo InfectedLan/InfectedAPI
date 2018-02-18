@@ -19,6 +19,7 @@
  */
 
 require_once 'settings.php';
+require_once 'databaseconstants.php';
 require_once 'database.php';
 require_once 'objects/event.php';
 require_once 'objects/user.php';
@@ -30,7 +31,7 @@ class EventHandler {
 	public static function getEvent(int $id): ?Event {
 		$database = Database::getConnection(Settings::db_name_infected);
 
-		$result = $database->query('SELECT * FROM `'. Settings::db_table_infected_events . '`
+		$result = $database->query('SELECT * FROM `'. DatabaseConstants::db_table_infected_events . '`
 																WHERE `id` = \'' . $database->real_escape_string($id) . '\';');
 
 		return $result->fetch_object('Event');
@@ -42,7 +43,7 @@ class EventHandler {
 	public static function hasEvent(int $id): bool {
 		$database = Database::getConnection(Settings::db_name_infected);
 
-		$result = $database->query('SELECT * FROM `'. Settings::db_table_infected_events . '`
+		$result = $database->query('SELECT * FROM `'. DatabaseConstants::db_table_infected_events . '`
 																WHERE `id` = \'' . $database->real_escape_string($id) . '\';');
 
 		return $result->num_rows > 0;
@@ -54,8 +55,8 @@ class EventHandler {
 	public static function getNextEvent(): ?Event {
 		$database = Database::getConnection(Settings::db_name_infected);
 
-		$result = $database->query('SELECT * FROM `' . Settings::db_table_infected_events . '`
-																WHERE `id` > (SELECT `id` FROM `' . Settings::db_table_infected_events . '`
+		$result = $database->query('SELECT * FROM `' . DatabaseConstants::db_table_infected_events . '`
+																WHERE `id` > (SELECT `id` FROM `' . DatabaseConstants::db_table_infected_events . '`
 																						  WHERE `endTime` > NOW()
 																						  ORDER BY `startTime` ASC
 																						  LIMIT 1)
@@ -71,7 +72,7 @@ class EventHandler {
 	public static function getCurrentEvent(): ?Event {
 		$database = Database::getConnection(Settings::db_name_infected);
 
-		$result = $database->query('SELECT * FROM `' . Settings::db_table_infected_events . '`
+		$result = $database->query('SELECT * FROM `' . DatabaseConstants::db_table_infected_events . '`
 																WHERE DATE_ADD(DATE(`endTime`), INTERVAL 1 DAY) >= NOW()
 																ORDER BY `startTime`
 																LIMIT 1;');
@@ -85,8 +86,8 @@ class EventHandler {
 	public static function getPreviousEvent(): ?Event {
 		$database = Database::getConnection(Settings::db_name_infected);
 
-		$result = $database->query('SELECT * FROM `' . Settings::db_table_infected_events . '`
-																WHERE `id` < (SELECT `id` FROM `' . Settings::db_table_infected_events . '`
+		$result = $database->query('SELECT * FROM `' . DatabaseConstants::db_table_infected_events . '`
+																WHERE `id` < (SELECT `id` FROM `' . DatabaseConstants::db_table_infected_events . '`
 																						  WHERE `endTime` > NOW()
 																						  ORDER BY `startTime`
 																						  LIMIT 1)
@@ -102,7 +103,7 @@ class EventHandler {
 	public static function getEvents(): array {
 		$database = Database::getConnection(Settings::db_name_infected);
 
-		$result = $database->query('SELECT * FROM `' . Settings::db_table_infected_events . '`;');
+		$result = $database->query('SELECT * FROM `' . DatabaseConstants::db_table_infected_events . '`;');
 
 		$eventList = [];
 
@@ -119,7 +120,7 @@ class EventHandler {
 	public static function getEventsByYear(int $year): array {
 		$database = Database::getConnection(Settings::db_name_infected);
 
-		$result = $database->query('SELECT * FROM `' . Settings::db_table_infected_events . '`
+		$result = $database->query('SELECT * FROM `' . DatabaseConstants::db_table_infected_events . '`
 																WHERE EXTRACT(YEAR FROM `startTime`) = \'' . $year . '\';');
 
 		$eventList = [];
@@ -140,7 +141,7 @@ class EventHandler {
 
 		$database = Database::getConnection(Settings::db_name_infected);
 
-		$database->query('INSERT INTO `' . Settings::db_table_infected_events . '` (`locationId`, `participants`, `bookingTime`, `prioritySeatingTime`, `seatingTime`, `startTime`, `endTime`, `seatmapId`, `ticketTypeId`)
+		$database->query('INSERT INTO `' . DatabaseConstants::db_table_infected_events . '` (`locationId`, `participants`, `bookingTime`, `prioritySeatingTime`, `seatingTime`, `startTime`, `endTime`, `seatmapId`, `ticketTypeId`)
 										  VALUES (\'' . $location->getId() . '\',
 														  \'' . $database->real_escape_string($participantCount) . '\',
 														  \'' . $database->real_escape_string($bookingTime) . '\',
@@ -160,7 +161,7 @@ class EventHandler {
 	public static function updateEvent(Event $event, Location $location, int $participantCount, string $bookingTime, string $prioritySeatingTime, string $seatingTime, string $startTime, string $endTime) {
 	  $database = Database::getConnection(Settings::db_name_infected);
 
-		$database->query('UPDATE `' . Settings::db_table_infected_events . '`
+		$database->query('UPDATE `' . DatabaseConstants::db_table_infected_events . '`
                                 SET `locationId` = \'' . $location->getId() . '\',
                                     `participants` = \'' . $database->real_escape_string($participantCount) . '\',
                                     `bookingTime` = \'' . $database->real_escape_string($bookingTime) . '\',
@@ -177,7 +178,7 @@ class EventHandler {
 	public static function removeEvent(Event $event) {
 		$database = Database::getConnection(Settings::db_name_infected);
 
-		$database->query('DELETE FROM `' . Settings::db_table_infected_events . '`
+		$database->query('DELETE FROM `' . DatabaseConstants::db_table_infected_events . '`
 						  				WHERE `id` = \'' . $event->getId() . '\';');
 	}
 
@@ -187,8 +188,8 @@ class EventHandler {
 	public static function getMembersByEvent(Event $event): array {
 		$database = Database::getConnection(Settings::db_name_infected);
 
-		$result = $database->query('SELECT `' . Settings::db_table_infected_users . '`.* FROM `' . Settings::db_table_infected_users . '`
-													LEFT JOIN `' . Settings::db_name_infected_crew . '`.`' . Settings::db_table_infected_crew_memberof . '` ON `' . Settings::db_table_infected_users . '`.`id` = `' . Settings::db_name_infected_crew . '`.`' . Settings::db_table_infected_crew_memberof . '`.`userId`
+		$result = $database->query('SELECT `' . DatabaseConstants::db_table_infected_users . '`.* FROM `' . DatabaseConstants::db_table_infected_users . '`
+													LEFT JOIN `' . Settings::db_name_infected_crew . '`.`' . DatabaseConstants::db_table_infected_crew_memberof . '` ON `' . DatabaseConstants::db_table_infected_users . '`.`id` = `' . Settings::db_name_infected_crew . '`.`' . DatabaseConstants::db_table_infected_crew_memberof . '`.`userId`
 													WHERE `eventId` = ' . $event->getId() . ';');
 
 		$eventList = [];
@@ -206,15 +207,15 @@ class EventHandler {
 	public static function getParticipantsByEvent(Event $event): array {
 		$database = Database::getConnection(Settings::db_name_infected);
 
-		$result = $database->query('SELECT `' . Settings::db_table_infected_users . '`.* FROM `' . Settings::db_table_infected_users . '`
-							LEFT JOIN `' . Settings::db_name_infected_tickets . '`.`' . Settings::db_table_infected_tickets_tickets . '`
-							    ON `' . Settings::db_table_infected_users . '`.`id` = `' . Settings::db_table_infected_tickets_tickets . '`.`userId`
-							LEFT JOIN `' . Settings::db_name_infected_crew . '`.`' . Settings::db_table_infected_crew_memberof . '`
-							    ON (`' . Settings::db_table_infected_users . '`.`id` = `' . Settings::db_table_infected_crew_memberof . '`.`userId`
-									    AND `' . Settings::db_table_infected_crew_memberof . '`.`eventId` = ' . $event->getId() . ')
-							WHERE `' . Settings::db_table_infected_tickets_tickets . '`.`eventId` = ' . $event->getId() . '
+		$result = $database->query('SELECT `' . DatabaseConstants::db_table_infected_users . '`.* FROM `' . DatabaseConstants::db_table_infected_users . '`
+							LEFT JOIN `' . Settings::db_name_infected_tickets . '`.`' . DatabaseConstants::db_table_infected_tickets_tickets . '`
+							    ON `' . DatabaseConstants::db_table_infected_users . '`.`id` = `' . DatabaseConstants::db_table_infected_tickets_tickets . '`.`userId`
+							LEFT JOIN `' . Settings::db_name_infected_crew . '`.`' . DatabaseConstants::db_table_infected_crew_memberof . '`
+							    ON (`' . DatabaseConstants::db_table_infected_users . '`.`id` = `' . DatabaseConstants::db_table_infected_crew_memberof . '`.`userId`
+									    AND `' . DatabaseConstants::db_table_infected_crew_memberof . '`.`eventId` = ' . $event->getId() . ')
+							WHERE `' . DatabaseConstants::db_table_infected_tickets_tickets . '`.`eventId` = ' . $event->getId() . '
 							AND `groupId` IS NULL
-							GROUP BY `' . Settings::db_table_infected_users . '`.`id`;');
+							GROUP BY `' . DatabaseConstants::db_table_infected_users . '`.`id`;');
 
 		$eventList = [];
 
@@ -239,14 +240,14 @@ class EventHandler {
 			$eventIdList[] = $event->getId();
 		}
 
-		$result = $database->query('SELECT * FROM (SELECT `' . Settings::db_table_infected_users . '`.*, `eventId` FROM `' . Settings::db_table_infected_users . '`
-																					     LEFT JOIN `' . Settings::db_name_infected_crew . '`.`' . Settings::db_table_infected_crew_memberof . '`
-																					     ON `' . Settings::db_table_infected_users . '`.`id` = `userId`
+		$result = $database->query('SELECT * FROM (SELECT `' . DatabaseConstants::db_table_infected_users . '`.*, `eventId` FROM `' . DatabaseConstants::db_table_infected_users . '`
+																					     LEFT JOIN `' . Settings::db_name_infected_crew . '`.`' . DatabaseConstants::db_table_infected_crew_memberof . '`
+																					     ON `' . DatabaseConstants::db_table_infected_users . '`.`id` = `userId`
 																					     WHERE `groupId` IS NOT NULL
 																					     UNION ALL
-																				   	   SELECT `' . Settings::db_table_infected_users . '`.*, `eventId` FROM `' . Settings::db_table_infected_users . '`
-																				   	   LEFT JOIN `' . Settings::db_name_infected_tickets . '`.`' . Settings::db_table_infected_tickets_tickets . '`
-																					     ON `' . Settings::db_table_infected_users . '`.`id` = `userId`
+																				   	   SELECT `' . DatabaseConstants::db_table_infected_users . '`.*, `eventId` FROM `' . DatabaseConstants::db_table_infected_users . '`
+																				   	   LEFT JOIN `' . Settings::db_name_infected_tickets . '`.`' . DatabaseConstants::db_table_infected_tickets_tickets . '`
+																					     ON `' . DatabaseConstants::db_table_infected_users . '`.`id` = `userId`
 																					     WHERE `userId` IS NOT NULL) AS `users`
 																WHERE `eventId` IN (\'' . implode(', ', $eventIdList) . '\')
 																AND TIMESTAMPDIFF(YEAR, `birthdate`, \'' . $dateLimit . '\') <= \'' . $ageLimit . '\'

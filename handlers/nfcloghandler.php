@@ -18,6 +18,7 @@
  * License along with this library.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+require_once 'databaseconstants.php';
 require_once 'handlers/nfccardhandler.php';
 require_once 'handlers/nfcunithandler.php';
 require_once 'objects/nfccard.php';
@@ -27,38 +28,38 @@ require_once 'settings.php';
 require_once 'database.php';
 
 class NfcLogHandler {
-    
-    public static function getLogEntry(int $id): NfcLogEntry {
-        $database = Database::getConnection(Settings::db_name_infected_tech);
 
-        $result = $database->query('SELECT * FROM `' . Settings::db_table_infected_tech_nfclog . '` WHERE `id` = \'' . $database->real_escape_string($id) . '\';');
+	public static function getLogEntry(int $id): NfcLogEntry {
+		$database = Database::getConnection(Settings::db_name_infected_tech);
 
-        return $result->fetch_object('NfcLogEntry');
-    }
+		$result = $database->query('SELECT * FROM `' . DatabaseConstants::db_table_infected_tech_nfclog . '` WHERE `id` = \'' . $database->real_escape_string($id) . '\';');
 
-    public static function createLogEntry(NfcCard $card, NfcUnit $unit, bool $legalPass): NfcLogEntry {
-        $database = Database::getConnection(Settings::db_name_infected_tech);
+		return $result->fetch_object('NfcLogEntry');
+	}
 
-        $database->query('INSERT INTO `' . Settings::db_table_infected_tech_nfclog . '` (`timestamp`, `unitId`, `cardId`, `legalPass`) VALUES (\'' . date('Y-m-d H:i:s') . '\', \'' .
-                                                                                                                                                    $database->real_escape_string($unit->getId()) . '\', \'' .
-                                                                                                                                                    $database->real_escape_string( $card->getId()) . '\', ' .
-                                                                                                                                                    ($legalPass ? 1 : 0) . ');');
+	public static function createLogEntry(NfcCard $card, NfcUnit $unit, bool $legalPass): NfcLogEntry {
+		$database = Database::getConnection(Settings::db_name_infected_tech);
 
-        return self::getLogEntry($database->insert_id);
-    }
+		$database->query('INSERT INTO `' . DatabaseConstants::db_table_infected_tech_nfclog . '` (`timestamp`, `unitId`, `cardId`, `legalPass`) VALUES (\'' . date('Y-m-d H:i:s') . '\', \'' .
+																																					$database->real_escape_string($unit->getId()) . '\', \'' .
+																																					$database->real_escape_string( $card->getId()) . '\', ' .
+																																					($legalPass ? 1 : 0) . ');');
 
-    public static function getLogEntriesByUnit(NfcUnit $unit) : array {
-        $database = Database::getConnection(Settings::db_name_infected_tech);
+		return self::getLogEntry($database->insert_id);
+	}
 
-        $result = $database->query('SELECT * FROM `' . Settings::db_table_infected_tech_nfclog . '` WHERE `unitId` = ' . $database->real_escape_string($unit->getId()) . ';');
+	public static function getLogEntriesByUnit(NfcUnit $unit) : array {
+		$database = Database::getConnection(Settings::db_name_infected_tech);
 
-        $entryList = [];
+		$result = $database->query('SELECT * FROM `' . DatabaseConstants::db_table_infected_tech_nfclog . '` WHERE `unitId` = ' . $database->real_escape_string($unit->getId()) . ';');
 
-        while($object = $result->fetch_object('NfcLogEntry')) {
-            $entryList[] = $object;
-        }
+		$entryList = [];
 
-        return $entryList;
-    }
+		while($object = $result->fetch_object('NfcLogEntry')) {
+			$entryList[] = $object;
+		}
+
+		return $entryList;
+	}
 }
 ?>

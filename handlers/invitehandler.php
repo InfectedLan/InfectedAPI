@@ -19,6 +19,7 @@
  */
 
 require_once 'settings.php';
+require_once 'databaseconstants.php';
 require_once 'database.php';
 require_once 'handlers/clanhandler.php';
 require_once 'objects/invite.php';
@@ -32,7 +33,7 @@ class InviteHandler {
 	public static function getInvite(int $id): ?Invite {
 		$database = Database::getConnection(Settings::db_name_infected_compo);
 
-		$result = $database->query('SELECT * FROM `' . Settings::db_table_infected_compo_invites . '`
+		$result = $database->query('SELECT * FROM `' . DatabaseConstants::db_table_infected_compo_invites . '`
 																WHERE `id` = \'' . $id . '\';');
 
 		return $result->fetch_object('Invite');
@@ -44,7 +45,7 @@ class InviteHandler {
 	public static function getInvites(): array {
 		$database = Database::getConnection(Settings::db_name_infected_compo);
 
-		$result = $database->query('SELECT * FROM `'  . Settings::db_table_infected_compo_invites . '`;');
+		$result = $database->query('SELECT * FROM `'  . DatabaseConstants::db_table_infected_compo_invites . '`;');
 
 		$inviteList = [];
 
@@ -61,7 +62,7 @@ class InviteHandler {
 	public static function getInvitesByUser(User $user): array {
 		$database = Database::getConnection(Settings::db_name_infected_compo);
 
-		$result = $database->query('SELECT * FROM `'  . Settings::db_table_infected_compo_invites . '`
+		$result = $database->query('SELECT * FROM `'  . DatabaseConstants::db_table_infected_compo_invites . '`
 																WHERE `userId` = \'' . $user->getId() . '\';');
 
 		$inviteList = [];
@@ -79,7 +80,7 @@ class InviteHandler {
 	public static function getInvitesByClan(Clan $clan): array {
 		$database = Database::getConnection(Settings::db_name_infected_compo);
 
-		$result = $database->query('SELECT * FROM `' . Settings::db_table_infected_compo_invites . '`
+		$result = $database->query('SELECT * FROM `' . DatabaseConstants::db_table_infected_compo_invites . '`
 																WHERE `clanId` = \'' . $clan->getId() . '\';');
 
 		$inviteList = [];
@@ -97,7 +98,7 @@ class InviteHandler {
 	public static function createInvite(Clan $clan, User $user, Event $event = null): Invite {
 		$database = Database::getConnection(Settings::db_name_infected_compo);
 
-		$database->query('INSERT INTO `' . Settings::db_table_infected_compo_invites . '` (`eventId`, `userId`, `clanId`)
+		$database->query('INSERT INTO `' . DatabaseConstants::db_table_infected_compo_invites . '` (`eventId`, `userId`, `clanId`)
 										  VALUES (\'' . ($event != null ? $event->getId() : EventHandler::getCurrentEvent()->getId()) . '\',
 														  \'' . $user->getId() . '\',
 														  \'' . $clan->getId() . '\');');
@@ -111,7 +112,7 @@ class InviteHandler {
 	public static function acceptInvite(Invite $invite) {
 		$database = Database::getConnection(Settings::db_name_infected_compo);
 
-		$database->query('DELETE FROM `' . Settings::db_table_infected_compo_invites . '`
+		$database->query('DELETE FROM `' . DatabaseConstants::db_table_infected_compo_invites . '`
 						  				WHERE `id` = \'' . $invite->getId() . '\';');
 
 		$clan = $invite->getClan();
@@ -119,7 +120,7 @@ class InviteHandler {
     $compo = $clan->getCompo();
 		$stepInId = count($memberList) < $compo->getTeamSize() ? 0 : 1;
 
-		$database->query('INSERT INTO `' . Settings::db_table_infected_compo_memberof . '` (`userId`, `clanId`, `stepInId`)
+		$database->query('INSERT INTO `' . DatabaseConstants::db_table_infected_compo_memberof . '` (`userId`, `clanId`, `stepInId`)
 											VALUES (\'' . $invite->getUser()->getId() . '\',
 															\'' . $clan->getId() . '\',
 															\'' . $stepInId . '\');');
@@ -160,7 +161,7 @@ class InviteHandler {
 	public static function declineInvite(Invite $invite) {
 		$database = Database::getConnection(Settings::db_name_infected_compo);
 
-		$database->query('DELETE FROM `' . Settings::db_table_infected_compo_invites . '`
+		$database->query('DELETE FROM `' . DatabaseConstants::db_table_infected_compo_invites . '`
 											WHERE `id` = \'' . $invite->getId() . '\';');
 	}
 }

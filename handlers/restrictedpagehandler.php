@@ -19,6 +19,7 @@
  */
 
 require_once 'session.php';
+require_once 'databaseconstants.php';
 require_once 'settings.php';
 require_once 'database.php';
 require_once 'handlers/eventhandler.php';
@@ -33,7 +34,7 @@ class RestrictedPageHandler {
 	public static function getPage(int $id): ?RestrictedPage {
 		$database = Database::getConnection(Settings::db_name_infected_crew);
 
-		$result = $database->query('SELECT * FROM `' . Settings::db_table_infected_crew_pages . '`
+		$result = $database->query('SELECT * FROM `' . DatabaseConstants::db_table_infected_crew_pages . '`
 																WHERE `id` = \'' . $database->real_escape_string($id) . '\';');
 
 		return $result->fetch_object('RestrictedPage');
@@ -51,22 +52,22 @@ class RestrictedPageHandler {
 				$database = Database::getConnection(Settings::db_name_infected_crew);
 
   			if ($user->hasPermission('*')) {
-					$result = $database->query('SELECT * FROM `' . Settings::db_table_infected_crew_pages . '`
+					$result = $database->query('SELECT * FROM `' . DatabaseConstants::db_table_infected_crew_pages . '`
 																			WHERE `eventId` = \'' . EventHandler::getCurrentEvent()->getId() . '\'
 																			AND `name` = \'' . $database->real_escape_string($name) . '\';');
   			} else if ($user->isGroupLeader()) {
-					$result = $database->query('SELECT * FROM `' . Settings::db_table_infected_crew_pages . '`
+					$result = $database->query('SELECT * FROM `' . DatabaseConstants::db_table_infected_crew_pages . '`
 																			WHERE `eventId` = \'' . EventHandler::getCurrentEvent()->getId() . '\'
 																			AND `name` = \'' . $database->real_escape_string($name) . '\'
 																			AND (`groupId` = \'0\' OR `groupId` = \'' . $user->getGroup()->getId() . '\');');
 				} else if ($user->isTeamMember()) {
-					$result = $database->query('SELECT * FROM `' . Settings::db_table_infected_crew_pages . '`
+					$result = $database->query('SELECT * FROM `' . DatabaseConstants::db_table_infected_crew_pages . '`
 																			WHERE `eventId` = \'' . EventHandler::getCurrentEvent()->getId() . '\'
 																			AND `name` = \'' . $database->real_escape_string($name) . '\'
 																			AND (`groupId` = \'0\' OR `groupId` = \'' . $user->getGroup()->getId() . '\')
 																			AND (`teamId` = \'0\' OR `teamId` = \'' . $user->getTeam()->getId() . '\');');
 				} else {
-					$result = $database->query('SELECT * FROM `' . Settings::db_table_infected_crew_pages . '`
+					$result = $database->query('SELECT * FROM `' . DatabaseConstants::db_table_infected_crew_pages . '`
 																			WHERE `eventId` = \'' . EventHandler::getCurrentEvent()->getId() . '\'
 																			AND `name` = \'' . $database->real_escape_string($name) . '\'
 																			AND (`groupId` = \'0\' OR `groupId` = \'' . $user->getGroup()->getId() . '\')
@@ -86,7 +87,7 @@ class RestrictedPageHandler {
 	public static function getPages(): array {
 		$database = Database::getConnection(Settings::db_name_infected_crew);
 
-		$result = $database->query('SELECT * FROM `' . Settings::db_table_infected_crew_pages . '`
+		$result = $database->query('SELECT * FROM `' . DatabaseConstants::db_table_infected_crew_pages . '`
 																WHERE `eventId` = \'' . EventHandler::getCurrentEvent()->getId() . '\';');
 
 		$restrictedPageList = [];
@@ -104,7 +105,7 @@ class RestrictedPageHandler {
 	public static function getPagesForGroup(Group $group): array {
 		$database = Database::getConnection(Settings::db_name_infected_crew);
 
-		$result = $database->query('SELECT * FROM `' . Settings::db_table_infected_crew_pages . '`
+		$result = $database->query('SELECT * FROM `' . DatabaseConstants::db_table_infected_crew_pages . '`
 																WHERE `eventId` = \'' . EventHandler::getCurrentEvent()->getId() . '\'
 																AND `groupId` = \'' . $group->getId() . '\'
 																AND `teamId` = \'0\';');
@@ -124,7 +125,7 @@ class RestrictedPageHandler {
 	public static function getAllPagesForGroup(Group $group): array {
 		$database = Database::getConnection(Settings::db_name_infected_crew);
 
-		$result = $database->query('SELECT * FROM `' . Settings::db_table_infected_crew_pages . '`
+		$result = $database->query('SELECT * FROM `' . DatabaseConstants::db_table_infected_crew_pages . '`
 																WHERE `eventId` = \'' . EventHandler::getCurrentEvent()->getId() . '\'
 																AND `groupId` = \'' . $group->getId() . '\';');
 
@@ -144,7 +145,7 @@ class RestrictedPageHandler {
 	public static function getPagesForGroupAndTeam(Group $group, Team $team): array {
 		$database = Database::getConnection(Settings::db_name_infected_crew);
 
-		$result = $database->query('SELECT * FROM `' . Settings::db_table_infected_crew_pages . '`
+		$result = $database->query('SELECT * FROM `' . DatabaseConstants::db_table_infected_crew_pages . '`
 																WHERE `eventId` = \'' . EventHandler::getCurrentEvent()->getId() . '\'
 																AND `groupId` = \'' . $group->getId() . '\'
 																AND (`teamId` = \'' . $team->getId() . '\' OR `teamId` = \'0\');');
@@ -164,7 +165,7 @@ class RestrictedPageHandler {
 	public static function createPage(string $name, string $title, string $content, Group $group = null, Team $team = null): RestrictedPage {
 		$database = Database::getConnection(Settings::db_name_infected_crew);
 
-		$database->query('INSERT INTO `' . Settings::db_table_infected_crew_pages . '` (`eventId`, `name`, `title`, `content`, `groupId`, `teamId`)
+		$database->query('INSERT INTO `' . DatabaseConstants::db_table_infected_crew_pages . '` (`eventId`, `name`, `title`, `content`, `groupId`, `teamId`)
 										  VALUES (\'' . EventHandler::getCurrentEvent()->getId() . '\',
 														  \'' . $database->real_escape_string($name) . '\',
 														  \'' . $database->real_escape_string($title) . '\',
@@ -181,7 +182,7 @@ class RestrictedPageHandler {
 	public static function updatePage(RestrictedPage $page, string $title, string $content, Group $group = null, Team $team = null) {
 		$database = Database::getConnection(Settings::db_name_infected_crew);
 
-		$database->query('UPDATE `' . Settings::db_table_infected_crew_pages . '`
+		$database->query('UPDATE `' . DatabaseConstants::db_table_infected_crew_pages . '`
 										  SET `title` = \'' . $database->real_escape_string($title) . '\',
 											  	`content` = \'' . $database->real_escape_string($content) . '\',
 													`groupId` = \'' . ($group != null ? $group->getId() : '0') . '\',
@@ -195,7 +196,7 @@ class RestrictedPageHandler {
 	public static function removePage(RestrictedPage $page) {
 		$database = Database::getConnection(Settings::db_name_infected_crew);
 
-		$database->query('DELETE FROM `' . Settings::db_table_infected_crew_pages . '`
+		$database->query('DELETE FROM `' . DatabaseConstants::db_table_infected_crew_pages . '`
 						  				WHERE `id` = \'' . $page->getId() . '\';');
 	}
 }

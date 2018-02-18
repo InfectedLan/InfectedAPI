@@ -19,6 +19,7 @@
  */
 
 require_once 'settings.php';
+require_once 'databaseconstants.php';
 require_once 'database.php';
 require_once 'handlers/tickethandler.php';
 require_once 'handlers/eventhandler.php';
@@ -33,7 +34,7 @@ class TicketTransferHandler {
 	public static function getTransferFromTicket(Ticket $ticket): ?TicketTransfer {
 		$database = Database::getConnection(Settings::db_name_infected_tickets);
 
-		$result = $database->query('SELECT * FROM `' . Settings::db_table_infected_tickets_tickettransfers . '`
+		$result = $database->query('SELECT * FROM `' . DatabaseConstants::db_table_infected_tickets_tickettransfers . '`
 																WHERE `ticketId` = \'' . $ticket->getId() . '\'
 																ORDER BY `datetime` DESC
 																LIMIT 1;');
@@ -47,7 +48,7 @@ class TicketTransferHandler {
 	public static function getTicketTransfer(int $id): ?TicketTransfer {
 		$database = Database::getConnection(Settings::db_name_infected_tickets);
 
-		$result = $database->query('SELECT * FROM `' . Settings::db_table_infected_tickets_tickettransfers . '`
+		$result = $database->query('SELECT * FROM `' . DatabaseConstants::db_table_infected_tickets_tickettransfers . '`
 																WHERE `id` = \'' . $id . '\'
 																ORDER BY `datetime` DESC
 																LIMIT 1;');
@@ -63,7 +64,7 @@ class TicketTransferHandler {
 
 		$database = Database::getConnection(Settings::db_name_infected_tickets);
 
-		$result = $database->query('SELECT * FROM `' . Settings::db_table_infected_tickets_tickettransfers . '`
+		$result = $database->query('SELECT * FROM `' . DatabaseConstants::db_table_infected_tickets_tickettransfers . '`
 																WHERE `fromId` = \'' . $user->getId() . '\'
 																AND `revertable` = \'1\'
 																AND `datetime` > \'' . date('Y-m-d H:i:s', $wantedTimeLimit) . '\';');
@@ -83,7 +84,7 @@ class TicketTransferHandler {
 	public static function createTransfer(Ticket $ticket, User $user, bool $revertable): TicketTransfer {
 		$database = Database::getConnection(Settings::db_name_infected_tickets);
 
-		$database->query('INSERT INTO `' . Settings::db_table_infected_tickets_tickettransfers . '` (`ticketId`, `fromId`, `toId`, `datetime`, `revertable`)
+		$database->query('INSERT INTO `' . DatabaseConstants::db_table_infected_tickets_tickettransfers . '` (`ticketId`, `fromId`, `toId`, `datetime`, `revertable`)
 										  VALUES (\'' . $ticket->getId() . '\',
 														  \'' . $ticket->getUser()->getId() . '\',
 														  \'' . $user->getId() . '\',
@@ -99,7 +100,7 @@ class TicketTransferHandler {
 	public static function freezeTransfer(TicketTransfer $ticketTransfer) {
 		$database = Database::getConnection(Settings::db_name_infected_tickets);
 
-		$result = $database->query('UPDATE `' . Settings::db_table_infected_tickets_tickettransfers .  '`
+		$result = $database->query('UPDATE `' . DatabaseConstants::db_table_infected_tickets_tickettransfers .  '`
 																SET `revertable` = \'0\'
 																WHERE `id` = \'' . $ticketTransfer->getId() . '\';');
 	}

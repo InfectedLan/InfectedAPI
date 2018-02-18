@@ -19,6 +19,7 @@
  */
 
 require_once 'settings.php';
+require_once 'databaseconstants.php';
 require_once 'database.php';
 require_once 'objects/bongtransaction.php';
 require_once 'objects/bongtype.php';
@@ -26,20 +27,20 @@ require_once 'handlers/eventhandler.php';
 require_once 'handlers/bongentitlementhandler.php';
 
 class BongTransactionHandler {
-	
-	/* 
+
+	/*
 	 * Returns a single transaction
 	 */
 	public static function getBongTransaction(int $id) {
 		$database = Database::getConnection(Settings::db_name_infected);
 
-		$result = $database->query('SELECT * FROM `'. Settings::db_table_infected_bongTransactions . '`
+		$result = $database->query('SELECT * FROM `'. DatabaseConstants::db_table_infected_bongTransactions . '`
 																WHERE `id` = \'' . $database->real_escape_string($id) . '\';');
 
 		return $result->fetch_object('BongTransaction');
 	}
 
-	/* 
+	/*
 	 * Returns a list of all bong transactions for the given bong and optionally user
 	 */
 	public static function getBongTransactions(BongType $type, User $user = null) {
@@ -48,14 +49,14 @@ class BongTransactionHandler {
 		$transactionList = [];
 
 		if($user==null) {
-			$result = $database->query('SELECT * FROM `'. Settings::db_table_infected_bongTransactions . '`
+			$result = $database->query('SELECT * FROM `'. DatabaseConstants::db_table_infected_bongTransactions . '`
 																WHERE `bongType` = \'' . $type->getId() . '\';');
 			while ($object = $result->fetch_object('BongTransaction')) {
 				$transactionList[] = $object;
 			}
 
 		} else {
-			$result = $database->query('SELECT * FROM `'. Settings::db_table_infected_bongTransactions . '`
+			$result = $database->query('SELECT * FROM `'. DatabaseConstants::db_table_infected_bongTransactions . '`
 																WHERE `bongType` = \'' . $type->getId() . '\' AND `userId` =  ' . $user->getId() . ';');
 			while ($object = $result->fetch_object('BongTransaction')) {
 				$transactionList[] = $object;
@@ -97,7 +98,7 @@ class BongTransactionHandler {
 	public static function processBongTransaction(BongType $type, User $user, int $amount, User $responsible) {
 		$database = Database::getConnection(Settings::db_name_infected);
 
-		$result = $database->query('INSERT INTO `' . Settings::db_table_infected_bongTransactions . '` (`bongType`, `amt`, `transactionHandler`, `timestamp`, `userId`) VALUES (' . $type->getId() . ', ' . $database->real_escape_string($amount) . ', ' .  $responsible->getId(). ', \'' . date('Y-m-d H:i:s') . '\', ' . $user->getId() . ');');
+		$result = $database->query('INSERT INTO `' . DatabaseConstants::db_table_infected_bongTransactions . '` (`bongType`, `amt`, `transactionHandler`, `timestamp`, `userId`) VALUES (' . $type->getId() . ', ' . $database->real_escape_string($amount) . ', ' .  $responsible->getId(). ', \'' . date('Y-m-d H:i:s') . '\', ' . $user->getId() . ');');
 
 	}
 }

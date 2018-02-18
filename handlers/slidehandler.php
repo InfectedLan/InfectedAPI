@@ -19,105 +19,106 @@
  */
 
 require_once 'settings.php';
+require_once 'databaseconstants.php';
 require_once 'database.php';
 require_once 'handlers/eventhandler.php';
 require_once 'objects/slide.php';
 require_once 'objects/event.php';
 
 class SlideHandler {
-    /*
-     * Get a slide by the internal id.
-     */
-    public static function getSlide(int $id): ?Slide {
-        $database = Database::getConnection(Settings::db_name_infected_info);
+	/*
+	 * Get a slide by the internal id.
+	 */
+	public static function getSlide(int $id): ?Slide {
+		$database = Database::getConnection(Settings::db_name_infected_info);
 
-        $result = $database->query('SELECT * FROM `' . Settings::db_table_infected_info_slides . '`
+		$result = $database->query('SELECT * FROM `' . DatabaseConstants::db_table_infected_info_slides . '`
 								   WHERE `id` = ' . $database->real_escape_string($id) . ';');
 
-        return $result->fetch_object('Slide');
-    }
+		return $result->fetch_object('Slide');
+	}
 
-    /*
-     * Get a list of all slides.
-     */
-    public static function getSlides(Event $event = null): array {
-        $database = Database::getConnection(Settings::db_name_infected_info);
+	/*
+	 * Get a list of all slides.
+	 */
+	public static function getSlides(Event $event = null): array {
+		$database = Database::getConnection(Settings::db_name_infected_info);
 
-        $result = $database->query('SELECT * FROM `' . Settings::db_table_infected_info_slides . '`
+		$result = $database->query('SELECT * FROM `' . DatabaseConstants::db_table_infected_info_slides . '`
 								   WHERE `eventId` = ' . ($event != null ? $event->getId() : EventHandler::getCurrentEvent()->getId()) . '
 								   ORDER BY `startTime`;');
 
-        $slideList = [];
+		$slideList = [];
 
-        while ($object = $result->fetch_object('Slide')) {
-            $slideList[] = $object;
-        }
+		while ($object = $result->fetch_object('Slide')) {
+			$slideList[] = $object;
+		}
 
-        return $slideList;
-    }
+		return $slideList;
+	}
 
-    /*
-     * Get a list of all published slides.
-     */
-    public static function getPublishedSlides(Event $event = null): array {
-        $database = Database::getConnection(Settings::db_name_infected_info);
+	/*
+	 * Get a list of all published slides.
+	 */
+	public static function getPublishedSlides(Event $event = null): array {
+		$database = Database::getConnection(Settings::db_name_infected_info);
 
-        $result = $database->query('SELECT * FROM `' . Settings::db_table_infected_info_slides . '`
+		$result = $database->query('SELECT * FROM `' . DatabaseConstants::db_table_infected_info_slides . '`
 								   WHERE `eventId` = ' . ($event != null ? $event->getId() : EventHandler::getCurrentEvent()->getId()) . '
 								   AND `startTime` <= NOW()
 								   AND `endTime` >= NOW()
 								   AND `published` = 1
 								   ORDER BY `startTime`;');
 
-        $slideList = [];
+		$slideList = [];
 
-        while ($object = $result->fetch_object('Slide')) {
-            $slideList[] = $object;
-        }
+		while ($object = $result->fetch_object('Slide')) {
+			$slideList[] = $object;
+		}
 
-        return $slideList;
-    }
+		return $slideList;
+	}
 
-    /*
-     * Create a new slide entry.
-     */
-    public static function createSlide(Event $event = null, string $name, string $title, string $content, string $startTime, string $endTime, bool $published): Slide {
-        $database = Database::getConnection(Settings::db_name_infected_info);
+	/*
+	 * Create a new slide entry.
+	 */
+	public static function createSlide(Event $event = null, string $name, string $title, string $content, string $startTime, string $endTime, bool $published): Slide {
+		$database = Database::getConnection(Settings::db_name_infected_info);
 
-        $database->query('INSERT INTO `' . Settings::db_table_infected_info_slides . '` (`eventId`, `name`, `title`, `content`, `startTime`, `endTime`, `published`)
+		$database->query('INSERT INTO `' . DatabaseConstants::db_table_infected_info_slides . '` (`eventId`, `name`, `title`, `content`, `startTime`, `endTime`, `published`)
 						 VALUES (' . ($event != null ? $event->getId() : EventHandler::getCurrentEvent()->getId()) . ',
-							     \'' . $database->real_escape_string($name) . '\',
+								 \'' . $database->real_escape_string($name) . '\',
 								 \'' . $database->real_escape_string($title) . '\',
 								 \'' . $database->real_escape_string($content) . '\',
 								 \'' . $database->real_escape_string($startTime) . '\',
 								 \'' . $database->real_escape_string($endTime) . '\',
 								 \'' . $database->real_escape_string($published) . '\');');
 
-        return self::getSlide($database->insert_id);
-    }
+		return self::getSlide($database->insert_id);
+	}
 
-    /*
-     * Update a slide.
-     */
-    public static function updateSlide(Slide $slide, string $title, string $content, string $startTime, string $endTime, bool $published) {
-        $database = Database::getConnection(Settings::db_name_infected_info);
+	/*
+	 * Update a slide.
+	 */
+	public static function updateSlide(Slide $slide, string $title, string $content, string $startTime, string $endTime, bool $published) {
+		$database = Database::getConnection(Settings::db_name_infected_info);
 
-        $database->query('UPDATE `' . Settings::db_table_infected_info_slides . '`
+		$database->query('UPDATE `' . DatabaseConstants::db_table_infected_info_slides . '`
 						 SET `title` = \'' . $database->real_escape_string($title) . '\',
-						  	 `content` = \'' . $database->real_escape_string($content) . '\',
+							 `content` = \'' . $database->real_escape_string($content) . '\',
 							 `startTime` = \'' . $database->real_escape_string($startTime) . '\',
 							 `endTime` = \'' . $database->real_escape_string($endTime) . '\',
 							 `published` = \'' . $database->real_escape_string($published) . '\'
 						 WHERE `id` = ' . $slide->getId() . ';');
-    }
+	}
 
-    /*
-     * Remove a slide.
-     */
-    public static function removeSlide(Slide $slide) {
-        $database = Database::getConnection(Settings::db_name_infected_info);
+	/*
+	 * Remove a slide.
+	 */
+	public static function removeSlide(Slide $slide) {
+		$database = Database::getConnection(Settings::db_name_infected_info);
 
-        $database->query('DELETE FROM `' . Settings::db_table_infected_info_slides . '`
+		$database->query('DELETE FROM `' . DatabaseConstants::db_table_infected_info_slides . '`
 						 WHERE `id` = ' . $slide->getId() . ';');
-    }
+	}
 }

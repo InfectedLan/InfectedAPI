@@ -19,6 +19,7 @@
  */
 
 require_once 'settings.php';
+require_once 'databaseconstants.php';
 require_once 'database.php';
 require_once 'objects/network.php';
 require_once 'objects/networktype.php';
@@ -30,7 +31,7 @@ class NetworkHandler {
 	public static function getNetwork(int $id): ?Network {
 		$database = Database::getConnection(Settings::db_name_infected_tech);
 
-		$result = $database->query('SELECT * FROM `'. Settings::db_table_infected_tech_networks . '`
+		$result = $database->query('SELECT * FROM `'. DatabaseConstants::db_table_infected_tech_networks . '`
 								   WHERE `id` = \'' . $database->real_escape_string($id) . '\';');
 
 		return $result->fetch_object('Network');
@@ -42,7 +43,7 @@ class NetworkHandler {
 	public static function getNetworks(): array {
 		$database = Database::getConnection(Settings::db_name_infected_tech);
 
-		$result = $database->query('SELECT * FROM `' . Settings::db_table_infected_tech_networks . '`;');
+		$result = $database->query('SELECT * FROM `' . DatabaseConstants::db_table_infected_tech_networks . '`;');
 
 		$networkList = [];
 
@@ -59,7 +60,7 @@ class NetworkHandler {
 	public static function createNetwork(string $name, string $title, string $description, int $vlanId = 0): Network {
 		$database = Database::getConnection(Settings::db_name_infected_tech);
 
-		$database->query('INSERT INTO `' . Settings::db_table_infected_tech_networks . '` (`name`, `title`, `description`, `vlanId`)
+		$database->query('INSERT INTO `' . DatabaseConstants::db_table_infected_tech_networks . '` (`name`, `title`, `description`, `vlanId`)
 					     VALUES (\'' . $database->real_escape_string($name) . '\',
 							 	 \'' . $database->real_escape_string($title) . '\',
 								 \'' . $database->real_escape_string($description) . '\',
@@ -74,7 +75,7 @@ class NetworkHandler {
 	public static function updateNetwork(Network $network, string $name, string $title, ?string $description, int $vlanId = 0): Network {
 	  	$database = Database::getConnection(Settings::db_name_infected_tech);
 
-		$database->query('UPDATE `' . Settings::db_table_infected_tech_networks . '`
+		$database->query('UPDATE `' . DatabaseConstants::db_table_infected_tech_networks . '`
 					     SET `name` = \'' . $database->real_escape_string($name) . '\',
 							 `title` = \'' . $database->real_escape_string($title) . '\',
 							 `description` = \'' . $database->real_escape_string($description) . '\',
@@ -90,7 +91,7 @@ class NetworkHandler {
 	public static function removeNetwork(Network $network) {
 		$database = Database::getConnection(Settings::db_name_infected_tech);
 
-		$database->query('DELETE FROM `' . Settings::db_table_infected_tech_networks . '`
+		$database->query('DELETE FROM `' . DatabaseConstants::db_table_infected_tech_networks . '`
 						 WHERE `id` = \'' . $network->getId() . '\';');
 	}
 
@@ -100,7 +101,7 @@ class NetworkHandler {
 	public static function getNetworkType(int $id): ?NetworkType {
 		$database = Database::getConnection(Settings::db_name_infected_tech);
 
-		$result = $database->query('SELECT * FROM `'. Settings::db_table_infected_tech_networktypes . '`
+		$result = $database->query('SELECT * FROM `'. DatabaseConstants::db_table_infected_tech_networktypes . '`
 								   WHERE `id` = \'' . $database->real_escape_string($id) . '\';');
 
 		return $result->fetch_object('NetworkType');
@@ -112,7 +113,7 @@ class NetworkHandler {
 	public static function getNetworkTypes(): array {
 		$database = Database::getConnection(Settings::db_name_infected_tech);
 
-		$result = $database->query('SELECT * FROM `' . Settings::db_table_infected_tech_networktypes . '`;');
+		$result = $database->query('SELECT * FROM `' . DatabaseConstants::db_table_infected_tech_networktypes . '`;');
 
 		$networkTypeList = [];
 
@@ -129,7 +130,7 @@ class NetworkHandler {
 	public static function createNetworkType(string $name, string $title, string $portType): NetworkType {
 		$database = Database::getConnection(Settings::db_name_infected_tech);
 
-		$database->query('INSERT INTO `' . Settings::db_table_infected_tech_networktypes . '` (`name`, `title`, `portType`)
+		$database->query('INSERT INTO `' . DatabaseConstants::db_table_infected_tech_networktypes . '` (`name`, `title`, `portType`)
 						 VALUES (\'' . $database->real_escape_string($name) . '\',
 								 \'' . $database->real_escape_string($title) . '\',
 								 \'' . $database->real_escape_string($portType) . '\');');
@@ -143,7 +144,7 @@ class NetworkHandler {
 	public static function updateNetworkType(NetworkType $networkType, string $name, string $title, string $portType): NetworkType {
 		$database = Database::getConnection(Settings::db_name_infected_tech);
 
-		$database->query('UPDATE `' . Settings::db_table_infected_tech_networktypes . '`
+		$database->query('UPDATE `' . DatabaseConstants::db_table_infected_tech_networktypes . '`
 						 SET `name` = \'' . $database->real_escape_string($name) . '\',
 							 `title` = \'' . $database->real_escape_string($title) . '\',
 							 `portType` = \'' . $database->real_escape_string($portType) . '\'
@@ -158,7 +159,7 @@ class NetworkHandler {
 	public static function removeNetworkType(NetworkType $networkType) {
 		$database = Database::getConnection(Settings::db_name_infected_tech);
 
-		$database->query('DELETE FROM `' . Settings::db_table_infected_tech_networktypes . '`
+		$database->query('DELETE FROM `' . DatabaseConstants::db_table_infected_tech_networktypes . '`
 						 WHERE `id` = \'' . $networkType->getId() . '\';');
 	}
 
@@ -168,7 +169,7 @@ class NetworkHandler {
 	public static function getNetworkTypeByPortType(string $portType): ?NetworkType {
 		$database = Database::getConnection(Settings::db_name_infected_tech);
 
-		$result = $database->query('SELECT * FROM `'. Settings::db_table_infected_tech_networktypes . '`
+		$result = $database->query('SELECT * FROM `'. DatabaseConstants::db_table_infected_tech_networktypes . '`
 								   WHERE `portType` = \'' . $database->real_escape_string($portType) . '\';');
 
 		return $result->fetch_object('NetworkType');
@@ -180,15 +181,15 @@ class NetworkHandler {
 	public static function hasNetworkAccess(User $user, NetworkType $networkType, Event $event = null): bool {
 		$database = Database::getConnection(Settings::db_name_infected_tech);
 
-		$result = $database->query('SELECT * FROM `' . Settings::db_table_infected_tech_networkaccess . '`
+		$result = $database->query('SELECT * FROM `' . DatabaseConstants::db_table_infected_tech_networkaccess . '`
 								   WHERE (`userId` = \'' . $user->getId() . '\'
 									      OR (`userId` IS NULL
-											  AND (`groupId` IN (SELECT `groupId` FROM `' . Settings::db_name_infected_crew . '`.`' . Settings::db_table_infected_crew_memberof . '`
+											  AND (`groupId` IN (SELECT `groupId` FROM `' . Settings::db_name_infected_crew . '`.`' . DatabaseConstants::db_table_infected_crew_memberof . '`
 																 WHERE `eventId` = \'' . ($event != null ? $event->getId() : EventHandler::getCurrentEvent()->getId()) . '\'
 																 AND `userId` = \'' . $user->getId() . '\'
 																 ORDER BY `groupId` DESC)
 												   OR `groupId` = 0)
-										      AND (`teamId` IN (SELECT `teamId` FROM `' . Settings::db_name_infected_crew . '`.`' . Settings::db_table_infected_crew_memberof . '`
+										      AND (`teamId` IN (SELECT `teamId` FROM `' . Settings::db_name_infected_crew . '`.`' . DatabaseConstants::db_table_infected_crew_memberof . '`
 																WHERE `eventId` = \'' . ($event != null ? $event->getId() : EventHandler::getCurrentEvent()->getId()) . '\'
 																AND `userId` = \'' . $user->getId() . '\'
 																ORDER BY `teamId` DESC)
@@ -212,16 +213,16 @@ class NetworkHandler {
 	public static function getNetworkByUser(User $user, NetworkType $networkType, Event $event = null): Network {
 		$database = Database::getConnection(Settings::db_name_infected_tech);
 
-		$result = $database->query('SELECT * FROM `' . Settings::db_table_infected_tech_networks . '`
-								   WHERE `id` = (SELECT `networkId` FROM `' . Settings::db_table_infected_tech_networkaccess . '`
+		$result = $database->query('SELECT * FROM `' . DatabaseConstants::db_table_infected_tech_networks . '`
+								   WHERE `id` = (SELECT `networkId` FROM `' . DatabaseConstants::db_table_infected_tech_networkaccess . '`
 											     WHERE (`userId` = ' . $user->getId() . '
 													    OR (`userId` IS NULL
-														    AND (`groupId` IN (SELECT `groupId` FROM `' . Settings::db_name_infected_crew . '`.`' . Settings::db_table_infected_crew_memberof . '`
+														    AND (`groupId` IN (SELECT `groupId` FROM `' . Settings::db_name_infected_crew . '`.`' . DatabaseConstants::db_table_infected_crew_memberof . '`
 																		   	   WHERE `eventId` = ' . ($event != null ? $event->getId() : EventHandler::getCurrentEvent()->getId()) . '
 																		   	   AND `userId` = ' . $user->getId() . '
 																		   	   ORDER BY `groupId` DESC)
 															     OR `groupId` = 0)
-														    AND (`teamId` IN (SELECT `teamId` FROM `' . Settings::db_name_infected_crew . '`.`' . Settings::db_table_infected_crew_memberof . '`
+														    AND (`teamId` IN (SELECT `teamId` FROM `' . Settings::db_name_infected_crew . '`.`' . DatabaseConstants::db_table_infected_crew_memberof . '`
 																		      WHERE `eventId` = ' . ($event != null ? $event->getId() : EventHandler::getCurrentEvent()->getId()) . '
 																		      AND `userId` = ' . $user->getId() . '
 																		      ORDER BY `teamId` DESC)

@@ -19,6 +19,7 @@
  */
 
 require_once 'settings.php';
+require_once 'databaseconstants.php';
 require_once 'database.php';
 require_once 'objects/user.php';
 require_once 'objects/event.php';
@@ -30,15 +31,15 @@ class UserHistoryHandler {
 	public static function getParticipatedEvents(User $user): array {
 	  $database = Database::getConnection(Settings::db_name_infected);
 
-	  $result = $database->query('SELECT * FROM (SELECT `' . Settings::db_table_infected_events . '`.* FROM `' . Settings::db_table_infected_events . '`
-										  												 WHERE `' . Settings::db_table_infected_events . '`.`id` IN (SELECT `eventId` FROM `' . Settings::db_name_infected_crew . '`.`' . Settings::db_table_infected_crew_memberof . '`
+	  $result = $database->query('SELECT * FROM (SELECT `' . DatabaseConstants::db_table_infected_events . '`.* FROM `' . DatabaseConstants::db_table_infected_events . '`
+										  												 WHERE `' . DatabaseConstants::db_table_infected_events . '`.`id` IN (SELECT `eventId` FROM `' . Settings::db_name_infected_crew . '`.`' . DatabaseConstants::db_table_infected_crew_memberof . '`
 										  																														 												 WHERE `userId` = \'' . $user->getId() . '\')
 										  												 UNION ALL
-										  												 SELECT `' . Settings::db_table_infected_events . '`.* FROM `' . Settings::db_table_infected_events . '`
-										  												 WHERE `' . Settings::db_table_infected_events . '`.`id` IN (SELECT `eventId` FROM `' . Settings::db_name_infected_tickets . '`.`' . Settings::db_table_infected_tickets_tickets . '`
+										  												 SELECT `' . DatabaseConstants::db_table_infected_events . '`.* FROM `' . DatabaseConstants::db_table_infected_events . '`
+										  												 WHERE `' . DatabaseConstants::db_table_infected_events . '`.`id` IN (SELECT `eventId` FROM `' . Settings::db_name_infected_tickets . '`.`' . DatabaseConstants::db_table_infected_tickets_tickets . '`
 										  																														 												 WHERE `userId` = \'' . $user->getId() . '\')
-																							 ) AS `' . Settings::db_table_infected_events . '`
-																							 GROUP BY `' . Settings::db_table_infected_events . '`.`id`;');
+																							 ) AS `' . DatabaseConstants::db_table_infected_events . '`
+																							 GROUP BY `' . DatabaseConstants::db_table_infected_events . '`.`id`;');
 
 	  $eventList = [];
 

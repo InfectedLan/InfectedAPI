@@ -19,6 +19,7 @@
  */
 
 require_once 'settings.php';
+require_once 'databaseconstants.php';
 require_once 'database.php';
 require_once 'objects/avatar.php';
 require_once 'objects/user.php';
@@ -35,7 +36,7 @@ class AvatarHandler {
 	public static function getAvatar(int $id): ?Avatar {
 		$database = Database::getConnection(Settings::db_name_infected_crew);
 
-		$result = $database->query('SELECT * FROM `' . Settings::db_table_infected_crew_avatars . '`
+		$result = $database->query('SELECT * FROM `' . DatabaseConstants::db_table_infected_crew_avatars . '`
 																WHERE `id` = \'' . $database->real_escape_string($id) . '\';');
 
 		return $result->fetch_object('Avatar');
@@ -47,7 +48,7 @@ class AvatarHandler {
 	public static function getAvatarByUser(User $user): ?Avatar {
 		$database = Database::getConnection(Settings::db_name_infected_crew);
 
-		$result = $database->query('SELECT * FROM `' . Settings::db_table_infected_crew_avatars . '`
+		$result = $database->query('SELECT * FROM `' . DatabaseConstants::db_table_infected_crew_avatars . '`
 								   WHERE `userId` = ' . $user->getId() . ';');
 
 		return $result->fetch_object('Avatar');
@@ -59,7 +60,7 @@ class AvatarHandler {
 	public static function getAvatars(): array {
 		$database = Database::getConnection(Settings::db_name_infected_crew);
 
-		$result = $database->query('SELECT * FROM `' . Settings::db_table_infected_crew_avatars . '`;');
+		$result = $database->query('SELECT * FROM `' . DatabaseConstants::db_table_infected_crew_avatars . '`;');
 
 		$avatarList = [];
 
@@ -76,7 +77,7 @@ class AvatarHandler {
 	public static function getPendingAvatars(): array {
 		$database = Database::getConnection(Settings::db_name_infected_crew);
 
-		$result = $database->query('SELECT * FROM `' . Settings::db_table_infected_crew_avatars . '`
+		$result = $database->query('SELECT * FROM `' . DatabaseConstants::db_table_infected_crew_avatars . '`
 								   WHERE `state` = ' . self::STATE_PENDING . ';');
 
 		$avatarList = [];
@@ -94,7 +95,7 @@ class AvatarHandler {
 	public static function hasAvatar(User $user): bool {
 		$database = Database::getConnection(Settings::db_name_infected_crew);
 
-		$result = $database->query('SELECT * FROM `' . Settings::db_table_infected_crew_avatars . '`
+		$result = $database->query('SELECT * FROM `' . DatabaseConstants::db_table_infected_crew_avatars . '`
 								   WHERE `userId` = ' . $user->getId() . ';');
 
 		return $result->num_rows > 0;
@@ -106,7 +107,7 @@ class AvatarHandler {
 	public static function hasCroppedAvatar(User $user): bool {
 		$database = Database::getConnection(Settings::db_name_infected_crew);
 
-		$result = $database->query('SELECT * FROM `' . Settings::db_table_infected_crew_avatars . '`
+		$result = $database->query('SELECT * FROM `' . DatabaseConstants::db_table_infected_crew_avatars . '`
                                    WHERE `userId` = ' . $user->getId() . '
                                    AND (`state` = ' . self::STATE_PENDING . ' OR `state` = ' . self::STATE_ACCEPTED . ');');
 
@@ -119,7 +120,7 @@ class AvatarHandler {
 	public static function hasValidAvatar(User $user):bool {
 		$database = Database::getConnection(Settings::db_name_infected_crew);
 
-		$result = $database->query('SELECT * FROM `' . Settings::db_table_infected_crew_avatars . '`
+		$result = $database->query('SELECT * FROM `' . DatabaseConstants::db_table_infected_crew_avatars . '`
                                    WHERE `userId` = ' . $user->getId() . '
                                    AND `state` = ' . self::STATE_ACCEPTED . ';');
 
@@ -132,7 +133,7 @@ class AvatarHandler {
 	public static function createAvatar(string $fileName, User $user): string {
 		$database = Database::getConnection(Settings::db_name_infected_crew);
 
-		$result = $database->query('INSERT INTO `' . Settings::db_table_infected_crew_avatars . '` (`userId`, `fileName`, `state`)
+		$result = $database->query('INSERT INTO `' . DatabaseConstants::db_table_infected_crew_avatars . '` (`userId`, `fileName`, `state`)
                                    VALUES (\'' . $user->getId() . '\',
                                            \'' . $fileName . '\',
                                            ' . self::STATE_NEW . ');');
@@ -146,7 +147,7 @@ class AvatarHandler {
 	public static function updateAvatar(Avatar $avatar, int $state, string $fileName) {
 		$database = Database::getConnection(Settings::db_name_infected_crew);
 
-		$database->query('UPDATE `' . Settings::db_table_infected_crew_avatars . '`
+		$database->query('UPDATE `' . DatabaseConstants::db_table_infected_crew_avatars . '`
                          SET `state` = ' . $database->real_escape_string($state) . ',
                              `fileName` = \'' . $database->real_escape_string($fileName) . '\'
                          WHERE `id` = ' . $avatar->getId() . ';');
@@ -158,7 +159,7 @@ class AvatarHandler {
 	public static function removeAvatar(Avatar $avatar) {
 		$database = Database::getConnection(Settings::db_name_infected_crew);
 
-		$database->query('DELETE FROM `' . Settings::db_table_infected_crew_avatars . '`
+		$database->query('DELETE FROM `' . DatabaseConstants::db_table_infected_crew_avatars . '`
 						 WHERE `id` = ' . $avatar->getId() . ';');
 
 		// Delete all avatars.
@@ -171,7 +172,7 @@ class AvatarHandler {
 	public static function acceptAvatar(Avatar $avatar) {
 		$database = Database::getConnection(Settings::db_name_infected_crew);
 
-		$database->query('UPDATE `' . Settings::db_table_infected_crew_avatars . '`
+		$database->query('UPDATE `' . DatabaseConstants::db_table_infected_crew_avatars . '`
                          SET `state` = ' . self::STATE_ACCEPTED . '
                          WHERE `id` = ' . $avatar->getId() . ';');
 	}
@@ -182,7 +183,7 @@ class AvatarHandler {
 	public static function rejectAvatar(Avatar $avatar) {
 		$database = Database::getConnection(Settings::db_name_infected_crew);
 
-		$database->query('UPDATE `' . Settings::db_table_infected_crew_avatars . '`
+		$database->query('UPDATE `' . DatabaseConstants::db_table_infected_crew_avatars . '`
                          SET `state` = ' . self::STATE_REJECTED . '
                          WHERE `id` = ' . $avatar->getId() . ';');
 	}
