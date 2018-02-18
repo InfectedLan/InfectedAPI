@@ -1,6 +1,7 @@
 # Don't commit secret files
 secret.php
 paypalsecret.php
+config
 
 #vim is also an ass
 *.swp

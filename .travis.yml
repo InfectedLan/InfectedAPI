@@ -19,7 +19,8 @@ install:
   - ssh-add ~/.ssh/id_rsa
   - 'date'
   - 'git clone https://github.com/InfectedLan/InfectedDeployment.git deployment'
-  - 'echo "<?php class Secret { const db_username = \"root\"; const db_password= \"\";  } ?>" > secret.php'
+  - 'mkdir config'
+  - 'echo "<?php class Secret { const db_username = \"root\"; const db_password= \"\";  } ?>" > config/secret.php'
   - ''
   - 'cat secret.php'
   - 'mysql --version'
