@@ -22,7 +22,7 @@ install:
   - 'mkdir config'
   - 'echo "<?php class Secret { const db_username = \"root\"; const db_password= \"\";  } ?>" > config/secret.php'
   - ''
-  - 'cat secret.php'
+  - 'cat config/secret.php'
   - 'mysql --version'
   - 'tests/install/installDb.sh deployment/test_infected_no.sql test_infected_no'
   - 'tests/install/installDb.sh deployment/test_infected_no_compo.sql test_infected_no_compo'
