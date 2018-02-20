@@ -42,17 +42,18 @@ if (!empty($_GET['key']) &&
 
             if ($user->isActivated()) {
                 if (isset($_GET['port-type']) &&
-                    isset($_GET['device-ip-address']) &&
-                    isset($_GET['device-mac-address-ssid']) &&
-                    isset($_GET['client-mac-address']) &&
-                    !empty($_GET['port-type']) &&
-                    preg_match('/^(?:(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.){3}(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)$/', $_GET['device-ip-address']) &&
-                    !empty($_GET['device-mac-address-ssid']) &&
-                    preg_match('/^[0-9a-fA-F]{1,2}([\.:-])[0-9a-fA-F]{1,2}(?:\1[0-9a-fA-F]{1,2}){4}$/', $_GET['client-mac-address'])) {
+                    //isset($_GET['device-ip-address']) &&
+                    //isset($_GET['device-mac-address-ssid']) &&
+                    //isset($_GET['client-mac-address']) &&
+                    !empty($_GET['port-type']) //&&
+                    //preg_match('/^(?:(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.){3}(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)$/', $_GET['device-ip-address']) &&
+                    //!empty($_GET['device-mac-address-ssid']) &&
+                    //preg_match('/^[0-9a-fA-F]{1,2}([\.:-])[0-9a-fA-F]{1,2}(?:\1[0-9a-fA-F]{1,2}){4}$/', $_GET['client-mac-address'])
+                    ) {
                     $networkType = NetworkHandler::getNetworkTypeByPortType($_GET['port-type']);
-                    $deviceIpAddress = $_GET['device-ip-address'];
-                    $deviceMacAddressSsid = $_GET['device-mac-address-ssid'];
-                    $clientMacAddress = $_GET['client-mac-address'];
+                    //$deviceIpAddress = $_GET['device-ip-address'];
+                    //$deviceMacAddressSsid = $_GET['device-mac-address-ssid'];
+                    //$clientMacAddress = $_GET['client-mac-address'];
 
                     if ($networkType != null) {
                         // Does the user have network access on the given port type.
