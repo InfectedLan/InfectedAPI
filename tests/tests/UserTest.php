@@ -16,7 +16,9 @@ require_once 'objects/user.php';
 class UserTest extends TestCase {
 	public function test() {
 		$this->userSanityTest();
+		$this->friendTest();
 		$this->userCreationTest();
+        $this->curfewTest();
 	}
 
 	private function userSanityTest() {
@@ -103,4 +105,107 @@ class UserTest extends TestCase {
 
 		Database::cleanup();
 	}
+
+	private function friendTest() {
+		$user1 = UserHandler::getUser(1);
+		$user2 = UserHandler::getUser(2);
+
+		$this->assertEquals(true, $user1->isFriendsWith($user2));
+		$this->assertEquals(true, $user2->isFriendsWith($user1));
+
+		$this->assertEquals(1, count($user1->getFriends()));
+		$this->assertEquals(1, count($user2->getFriends()));
+
+		$this->assertEquals(0, count($user1->getPendingFriendsTo()));
+		$this->assertEquals(0, count($user2->getPendingFriendsTo()));
+
+		$this->assertEquals(0, count($user1->getPendingFriendsFrom()));
+		$this->assertEquals(0, count($user2->getPendingFriendsFrom()));
+
+		$user1->removeFriend($user2);
+
+		$this->assertEquals(false, $user1->isFriendsWith($user2));
+		$this->assertEquals(false, $user2->isFriendsWith($user1));
+
+		$this->assertEquals(0, count($user1->getFriends()));
+		$this->assertEquals(0, count($user2->getFriends()));
+
+		$this->assertEquals(0, count($user1->getPendingFriendsTo()));
+		$this->assertEquals(0, count($user2->getPendingFriendsTo()));
+
+		$this->assertEquals(0, count($user1->getPendingFriendsFrom()));
+		$this->assertEquals(0, count($user2->getPendingFriendsFrom()));
+
+		$user1->addFriend($user2);
+
+		$this->assertEquals(false, $user1->isFriendsWith($user2));
+		$this->assertEquals(false, $user2->isFriendsWith($user1));
+
+		$this->assertEquals(0, count($user1->getFriends()));
+		$this->assertEquals(0, count($user2->getFriends()));
+
+		$this->assertEquals(0, count($user1->getPendingFriendsTo()));
+		$this->assertEquals(1, count($user2->getPendingFriendsTo()));
+
+		$this->assertEquals(1, count($user1->getPendingFriendsFrom()));
+		$this->assertEquals(0, count($user2->getPendingFriendsFrom()));
+
+		$user1->acceptFriend($user2);
+
+		$this->assertEquals(true, $user1->isFriendsWith($user2));
+		$this->assertEquals(true, $user2->isFriendsWith($user1));
+
+		$this->assertEquals(1, count($user1->getFriends()));
+		$this->assertEquals(1, count($user2->getFriends()));
+
+		$this->assertEquals(0, count($user1->getPendingFriendsTo()));
+		$this->assertEquals(0, count($user2->getPendingFriendsTo()));
+
+		$this->assertEquals(0, count($user1->getPendingFriendsFrom()));
+		$this->assertEquals(0, count($user2->getPendingFriendsFrom()));
+
+		$user1->removeFriend($user2);
+
+		$this->assertEquals(false, $user1->isFriendsWith($user2));
+		$this->assertEquals(false, $user2->isFriendsWith($user1));
+
+		$this->assertEquals(0, count($user1->getFriends()));
+		$this->assertEquals(0, count($user2->getFriends()));
+
+		$this->assertEquals(0, count($user1->getPendingFriendsTo()));
+		$this->assertEquals(0, count($user2->getPendingFriendsTo()));
+
+		$this->assertEquals(0, count($user1->getPendingFriendsFrom()));
+		$this->assertEquals(0, count($user2->getPendingFriendsFrom()));
+
+		$user1->addFriend($user2);
+
+		$user1->rejectFriend($user2);
+
+		$this->assertEquals(false, $user1->isFriendsWith($user2));
+		$this->assertEquals(false, $user2->isFriendsWith($user1));
+
+		$this->assertEquals(0, count($user1->getFriends()));
+		$this->assertEquals(0, count($user2->getFriends()));
+
+		$this->assertEquals(0, count($user1->getPendingFriendsTo()));
+		$this->assertEquals(0, count($user2->getPendingFriendsTo()));
+
+		$this->assertEquals(0, count($user1->getPendingFriendsFrom()));
+		$this->assertEquals(0, count($user2->getPendingFriendsFrom()));
+	}
+
+	private function curfewTest() {
+        $curfewTestUser = UserHandler::getUser(1);
+        $this->assertEquals(false, UserOptionHandler::canBypassCurfew($curfewTestUser));
+        UserOptionHandler::setCanBypassCurfew($curfewTestUser, false);
+        $this->assertEquals(false, UserOptionHandler::canBypassCurfew($curfewTestUser));
+        UserOptionHandler::setCanBypassCurfew($curfewTestUser, true);
+        $this->assertEquals(true, UserOptionHandler::canBypassCurfew($curfewTestUser));
+        UserOptionHandler::setCanBypassCurfew($curfewTestUser, false);
+
+        $this->assertEquals(false, $curfewTestUser->getCurfew());
+        $curfewTestUser->setCurfew(true);
+        $this->assertEquals(true, $curfewTestUser->getCurfew());
+    }
 }

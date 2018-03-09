@@ -298,7 +298,7 @@ class ClanHandler {
 
 		$database->query('DELETE FROM `' . Settings::db_table_infected_compo_participantOfMatch . '`
 											WHERE `participantId` = \'' . $clan->getId() . '\'
-											AND `type` = \'' . MatchHandler::participantof_state_clan . '\';');
+											AND `type` = \'' . MatchHandler::PARTICIPANTOF_STATE_CLAN . '\';');
 	}
 
 	/*

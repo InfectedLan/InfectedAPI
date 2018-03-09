@@ -2,7 +2,7 @@
 /**
  * This file is part of InfectedAPI.
  *
- * Copyright (C) 2017 Infected <http://infected.no/>.
+ * Copyright (C) 2018 Infected <https://infected.no/>.
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -40,29 +40,41 @@ if (!empty($_GET['key']) &&
 		if (UserHandler::hasUser($identifier)) {
 			$user = UserHandler::getUserByIdentifier($identifier);
 
-            if (isset($_GET['password']) &&
-                !empty($_GET['password'])) {
-                if ($user->isActivated()) {
-                    $hashedPassword = hash('sha256', $_GET['password']);
+            if ($user->isActivated()) {
+                if (isset($_GET['port-type']) &&
+                    //isset($_GET['device-ip-address']) &&
+                    //isset($_GET['device-mac-address-ssid']) &&
+                    //isset($_GET['client-mac-address']) &&
+                    !empty($_GET['port-type']) //&&
+                    //preg_match('/^(?:(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.){3}(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)$/', $_GET['device-ip-address']) &&
+                    //!empty($_GET['device-mac-address-ssid']) &&
+                    //preg_match('/^[0-9a-fA-F]{1,2}([\.:-])[0-9a-fA-F]{1,2}(?:\1[0-9a-fA-F]{1,2}){4}$/', $_GET['client-mac-address'])
+                    ) {
+                    $networkType = NetworkHandler::getNetworkTypeByPortType($_GET['port-type']);
+                    //$deviceIpAddress = $_GET['device-ip-address'];
+                    //$deviceMacAddressSsid = $_GET['device-mac-address-ssid'];
+                    //$clientMacAddress = $_GET['client-mac-address'];
 
-                    if (hash_equals($hashedPassword, $user->getPassword())) {
-                        if (isAllowedToAuthenticate($user)) {
-                            $reply = ['control:SHA2-Password' => $hashedPassword];
+                    if ($networkType != null) {
+                        // Does the user have network access on the given port type.
+                        if (isAllowedToAuthorize($user) && $user->hasNetworkAccess($networkType)) {
+                            $reply = ['control:SHA2-Password' => $user->getPassword()];
                             $message = 'User \'' . $user->getUsername() .  '\' succesfully authorized.';
 
                             SyslogHandler::log('User succesfully authorized.', 'rest/integration/radius/authorize', $user);
                         } else {
-                            $message = 'You\'re not allowed to use this service.';
+                            $message = 'User does not have access to this service.';
                         }
                     } else {
-                        $message = Localization::getLocale('wrong_username_or_password');
+                        $status = 400; // Bad Request.
+                        $message = 'Invalid port-type for authorization.';
                     }
                 } else {
-                    $message = Localization::getLocale('you_must_activate_your_user_account_in_order_to_logg_in');
+                    $status = 400; // Bad Request.
+                    $message = 'Invalid input data for authorization.';
                 }
             } else {
-                $status = 400; // Bad Request.
-                $message = 'Invalid input data for authorization.';
+                $message = Localization::getLocale('you_must_activate_your_user_account_in_order_to_log_in');
             }
 		} else {
             $status = 404; // Not found.
@@ -77,14 +89,14 @@ if (!empty($_GET['key']) &&
 	$message = 'Invalid API key.';
 }
 
-function isAllowedToAuthenticate(User $user) {
-    $event = EventHandler::getCurrentEvent();
-
-    return $user->isGroupMember() || ($event->isOngoing() && $user->hasTicket()); // TODO: Move this to handler.
-}
-
 if ($message != null) {
 	$reply['reply:Reply-Message'] = $message;
+}
+
+function isAllowedToAuthorize(User $user): bool {
+    $event = EventHandler::getCurrentEvent();
+
+    return $user->isGroupMember() || ($event->isOngoing() && $user->hasTicket());
 }
 
 http_response_code($status);

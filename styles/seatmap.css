@@ -39,6 +39,15 @@
 .current {
 	background: gray;
 }
+
+.friend {
+	background: pink;
+}
+
+.reserved {
+	background: #6eb0f5;
+}
+
 .seat {
 	cursor: pointer;
 	width: 27px;

@@ -339,7 +339,7 @@ class UserHandler {
 	 */
 	public static function search(string $query): array {
 		// Sanitize the input and split the query string into an array.
-		$queryList = explode(' ', $query);
+		$queryList = explode(' ', trim($query));
 		$keywordList = [];
 
 		// Build the word list, and add "+" and "*" to the start and end of every word.
@@ -358,7 +358,7 @@ class UserHandler {
                                    WHERE MATCH (`firstname`, `lastname`, `username`, `nickname`)
                                    AGAINST (\'' . $database->real_escape_string(implode(' ', $keywordList)) . '\' IN BOOLEAN MODE)
                                    OR `email` = \'' . $database->real_escape_string($queryList[0]) . '\'
-                                   OR `phone` = ' . $database->real_escape_string($queryList[0]) . '
+                                   OR `phone` = \'' . $database->real_escape_string($queryList[0]) . '\'
                                    LIMIT 15;');
 
 		$userList = [];

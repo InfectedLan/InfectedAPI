@@ -80,6 +80,10 @@ class SyslogHandler {
                               \'' . $database->real_escape_string(json_encode($metadata)) . '\',
                               \'' . date('Y-m-d H:i:s') . '\',
                               \'' . $database->real_escape_string($user != null ? $user->getId() : 0) . '\');');
+    //For discord logging
+    $techDatabase = Database::getConnection(Settings::db_name_infected_tech);
+
+    $techDatabase->query('INSERT INTO `' . Settings::db_table_infected_tech_discordMessageQueue . '` (`entryId`, `read`) VALUES (' . $database->insert_id . ', 0)');
   }
 
   public static function getSeverityString(int $severity): ?string {

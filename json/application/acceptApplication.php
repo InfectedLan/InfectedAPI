@@ -34,11 +34,10 @@ if (Session::isAuthenticated()) {
 		if (isset($_GET['id']) &&
 			is_numeric($_GET['id'])) {
 			$application = ApplicationHandler::getApplication($_GET['id']);
-			$comment = $_GET['comment'];
 
 			if ($application != null) {
 				if ($application->getEvent()->equals(EventHandler::getCurrentEvent())) {
-					$application->accept($user, $comment, true);
+					$application->accept($user, true);
 					$result = true;
 				} else {
 					$message = Localization::getLocale('you_can_not_approve_applications_from_previous_events');

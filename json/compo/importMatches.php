@@ -104,7 +104,7 @@ if (isset($_GET['id']) &&
 
                     if (substr(htmlspecialchars_decode($clan->getName()), 0, 21) == $participant) {
         				      //echo "is match\n";
-        					    MatchHandler::addMatchParticipant(MatchHandler::participantof_state_clan, $clan->getId(), $match);
+        					    MatchHandler::addMatchParticipant(MatchHandler::PARTICIPANTOF_STATE_CLAN, $clan->getId(), $match);
         				    }
         				  }
         			  }

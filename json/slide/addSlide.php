@@ -48,9 +48,8 @@ if (Session::isAuthenticated()) {
 			$content = $_GET['content'];
 			$startTime = $_GET['startDate'] . ' ' . $_GET['startTime'];
 			$endTime = $_GET['endDate'] . ' ' . $_GET['endTime'];
-			$published = 1;
 
-			SlideHandler::createSlide(EventHandler::getCurrentEvent(), $name, $title, $content, $startTime, $endTime, $published);
+			SlideHandler::createSlide(null, $name, $title, $content, $startTime, $endTime, true);
 			$result = true;
 		} else {
 			$message = Localization::getLocale('you_have_not_filled_out_the_required_fields');

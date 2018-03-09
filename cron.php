@@ -49,6 +49,6 @@ if (Utils::isCli()) {
 		$task->run();
 	}
 } else {
-	echo Localization::getLocale("you_do_not_have_permission_to_do_this_you_will only be able to run this from command line");
+	echo Localization::getLocale("you_do_not_have_permission_to_do_this_you_will_only_be_able_to_run_this_from_command_line");
 }
 ?>

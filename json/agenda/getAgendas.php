@@ -2,7 +2,7 @@
 /**
  * This file is part of InfectedAPI.
  *
- * Copyright (C) 2017 Infected <http://infected.no/>.
+ * Copyright (C) 2018 Infected <https://infected.no/>.
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -26,14 +26,13 @@ $agendaList = [];
 
 foreach (AgendaHandler::getAgendas() as $agenda) {
 	$agendaList[] = ['id' => $agenda->getId(),
-									 'name' => $agenda->getName(),
-								 	 'title' => $agenda->getTitle(),
-								 	 'description' => $agenda->getDescription(),
-									 'startTime' => DateUtils::getDayFromInt(date('w', $agenda->getStartTime())) . ' ' . date('H:i', $agenda->getStartTime()),
-									 'isHappening' => $agenda->isHappening()];
+					 'name' => $agenda->getName(),
+					 'title' => $agenda->getTitle(),
+					 'description' => $agenda->getDescription(),
+					 'startTime' => DateUtils::getDayFromInt(date('w', $agenda->getStartTime())) . ' ' . date('H:i', $agenda->getStartTime()),
+					 'isHappening' => $agenda->isHappening()];
 }
 
 header('Content-Type: application/json');
 echo json_encode(array('agendaList' => $agendaList), JSON_PRETTY_PRINT);
 Database::cleanup();
-?>

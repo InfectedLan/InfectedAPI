@@ -67,54 +67,85 @@ require_once 'adminplugin.php';
 class Server extends WebSocketServer {
   public $authenticatedUsers;
   public $plugins;
-  
+
+  private $discordKey;
   private $intentHandlers;
 
-  function __construct($addr, $port, $bufferLength = 2048) {
+  function __construct($addr, $port, $discordKey, $bufferLength = 2048) {
     parent::__construct($addr, $port, $bufferLength);
 
     $this->authenticatedUsers = new SplObjectStorage();
     $this->intentHandlers = array();
     $this->plugins = array();
+    $this->discordKey = $discordKey;
   }
 
   protected function process(WebSocketUser $connection, $message) {
       //$this->send($connection, "You sendt" . $message);
       echo "INCOMING: " . $message . "\n";
 
-      $parsedJson = json_decode($message);
-      if(empty($message) || !isset($message)) {
-	  echo "Got empty packet!?!\n";
-	  return;
+      try {
+          $parsedJson = json_decode($message);
+          if(empty($message) || !isset($message)) {
+              echo "Got empty packet!?!\n";
+              return;
+          }
+          switch ($parsedJson->intent) {
+              case 'auth':
+                  $user = Session::getUserFromSessionId($parsedJson->data[0]);
+
+                  if ($user != null) {
+                      $this->registerUser($user, $connection);
+                      $this->send($connection, '{"intent": "authResult", "data": [true]}');
+                      echo "Authenticated user: " . $user->getId() . "\n";
+                  } else {
+                      echo "Disconnecting user due to failure to authenticate\n";
+
+                      $this->send($connection, '{"intent": "authResult", "data": [false]}');
+                      $this->disconnect($connection);
+                  }
+                  break;
+              case 'keepAlive':
+
+                  break;
+              default:
+                  if(isset($this->intentHandlers[$parsedJson->intent])) {
+
+                      $this->intentHandlers[$parsedJson->intent]->handleIntent($parsedJson->intent, $parsedJson->data, $connection);
+                  } else {
+                      echo 'Got unhandled intent: ' . $parsedJson->intent . "\n";
+                  }
+
+                  break;
+          }
+
+      } catch(Exception $e) {
+          echo 'Exception happened while procssing packet...\n';
+          $this->reportToDiscord("New websocket message", "An exception ocurred");
       }
-      switch ($parsedJson->intent) {
-      case 'auth':
-	  $user = Session::getUserFromSessionId($parsedJson->data[0]);
+  }
 
-	  if ($user != null) {
-	      $this->registerUser($user, $connection);
-	      $this->send($connection, '{"intent": "authResult", "data": [true]}');
-	      echo "Authenticated user: " . $user->getId() . "\n";
-	  } else {
-	      echo "Disconnecting user due to failure to authenticate\n";
+  private function reportToDiscord(string $title, string $message, array $args = []) {
+      $payload = ["username" => "Loggine-websocket",
+          "icon_emoji" => ":warning:",
+          "tts" => false,
+          "embed" => [
+              "title" => $title,
+              "description" => $message,
+              "fields" => $args
+          ]
+          ];
+      $strPayload = json_encode($payload);
+      $ch = curl_init($this->discordKey);
+      curl_setopt($ch, CURLOPT_CUSTOMREQUEST, "POST");
+      curl_setopt($ch, CURLOPT_POSTFIELDS, $strPayload);
+      curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+      curl_setopt($ch, CURLOPT_HTTPHEADER, array(
+              'Content-Type: application/json',
+              'Content-Length: ' . strlen($strPayload))
+      );
 
-	      $this->send($connection, '{"intent": "authResult", "data": [false]}');
-	      $this->disconnect($connection);
-	  }
-	  break;
-      case 'keepAlive':
-	  
-	  break;
-      default:
-	  if(isset($this->intentHandlers[$parsedJson->intent])) {
-
-	      $this->intentHandlers[$parsedJson->intent]->handleIntent($parsedJson->intent, $parsedJson->data, $connection);
-	  } else {
-	      echo 'Got unhandled intent: ' . $parsedJson->intent . "\n";
-	  }
-
-	  break;
-      }
+      $result = curl_exec($ch);
   }
 
   public function registerIntent($intent, $handler) {
@@ -182,7 +213,12 @@ function readln() {
     return fgetc(STDIN);
 }
 
-$server = new Server("0.0.0.0", "1337");
+if(count($argv) != 2 ) {
+    echo 'Lacks discord key \n';
+    die();
+}
+
+$server = new Server("0.0.0.0", "1337", $argv[1]);
 //Plugins
 $adminPlugin = new AdminPlugin($server);
 $chatPlugin = new ChatPlugin($server);
