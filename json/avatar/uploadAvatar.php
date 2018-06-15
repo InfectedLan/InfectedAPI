@@ -65,7 +65,12 @@ try {
             $message = Localization::getLocale('the_image_is_too_small_it_must_be_at_least_value_pixels', Settings::avatar_minimum_width . ' x ' . Settings::avatar_minimum_height);
           }
         } else {
-          $message = Localization::getLocale('an_internal_error_occurred_when_uploading_image', $_FILES['file']['error']);
+          $error = $_FILES['file']['error'];
+          if($error == 1) {
+            $message = Localization::getLocale('the_file_size_is_too_large');
+          } else {
+            $message = Localization::getLocale('an_internal_error_occurred_when_uploading_image', $error);
+          }
         }
       } else {
         $message = Localization::getLocale('invalid_file_format');

@@ -144,7 +144,7 @@ class User extends DatabaseObject {
 	/*
 	 * Returns the users city, based on the postalcode.
 	 */
-	public function getCity(): string {
+	public function getCity(): ?string {
 		return CityDictionary::getCity($this->getPostalCode());
 	}
 
@@ -487,7 +487,7 @@ class User extends DatabaseObject {
 	/*
 	 * Returns the users group.
 	 */
-	public function getGroup(Event $event = null): Group {
+	public function getGroup(Event $event = null): ?Group {
 		return GroupHandler::getGroupByUser($this, $event);
 	}
 
@@ -549,7 +549,7 @@ class User extends DatabaseObject {
 			return 'Deltaker';
 		}
 
-		return 'Ingen';
+		return 'Bruker';
 	}
 
 	/*

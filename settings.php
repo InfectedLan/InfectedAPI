@@ -18,84 +18,184 @@
  * License along with this library.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-class Settings {
-	/* Metadata */
-	const name = 'Infected';
-	const description = 'Infected er et av Akershus største datatreff (LAN-party), og holder til i kulturhuset i Asker kommune.';
-	const keywords = 'infected, lan, party, asker, kulturhus, ungdom, gaming';
-	const authors = 'halvors og petterroa';
+//Detect and modify based on environment
 
-	/* Configuration */
-	const domain = 'test.infected.no';
+$environment = getenv('DEV_ENVIRONMENT');
+if(empty($environment)) {
+	//echo "Assuming test.infected.no due to missing environment variable";
+	class Settings {
+		/* Metadata */
+		const name = 'Infected';
+		const description = 'Infected er et av Akershus største datatreff (LAN-party), og holder til i kulturhuset i Asker kommune.';
+		const keywords = 'infected, lan, party, asker, kulturhus, ungdom, gaming';
+		const authors = 'halvors og petterroa';
 
-	// Email information.
-	const enableEmail = true;
-	const emailName = self::name;
-	const email = 'no-reply@' . self::domain;
+		/* Configuration */
+		const domain = 'test.infected.no';
 
-	// Full path to the API location.
-	const api_path = '/home/' . self::domain . '/public_html/api/';
+		// Email information.
+		const enableEmail = true;
+		const emailName = self::name;
+		const email = 'no-reply@' . self::domain;
 
-	// Permissions file.
-	const file_json_permissions = self::api_path . 'json/permissions.json';
-	const file_json_postalcodes = self::api_path . 'json/postalcodes.json';
+		// Full path to the API location.
+		const api_path = '/home/' . self::domain . '/public_html/api/';
+		const config_dir = '/srv/config/';
 
-	// Tells where images should be stored.
-	const qr_path = '../api/content/qrcache/';
-	const avatar_path = '../api/content/avatars/';
-	const api_relative_avatar_path = 'content/avatars/';
+		// Permissions file.
+		const file_json_permissions = self::api_path . 'json/permissions.json';
+		const file_json_postalcodes = self::api_path . 'json/postalcodes.json';
 
-	/* PHP */
-	const php_version = '7.2.0';
+		// Tells where images should be stored.
+		const qr_path = '../api/content/qrcache/';
+		const avatar_path = '../api/content/avatars/';
+		//const api_relative_avatar_path = 'content/avatars/';
 
-	/* Database */
-	const db_host = 'localhost';
-	
-	const db_name_infected = 'test_infected_no';
-	const db_name_infected_compo = 'test_infected_no_compo';
-	const db_name_infected_crew = 'test_infected_no_crew';
-	const db_name_infected_info = 'test_infected_no_info';
-	const db_name_infected_main = 'test_infected_no_main';
-	const db_name_infected_tech = 'test_infected_no_tech';
-	const db_name_infected_tickets = 'test_infected_no_tickets';
+		/* PHP */
+		const php_version = '7.2.0';
 
-	/* Compo */
-	// Match participant of state.
-	const compo_match_participant_type_clan = 0;
-	const compo_match_participant_type_match_winner = 1;
-	const compo_match_participant_type_match_looser = 2;
-  	const compo_match_participant_type_match_walkover = 3;
+		/* Database */
+		const db_host = 'localhost';
+		
+		const db_name_infected = 'test_infected_no';
+		const db_name_infected_compo = 'test_infected_no_compo';
+		const db_name_infected_crew = 'test_infected_no_crew';
+		const db_name_infected_info = 'test_infected_no_info';
+		const db_name_infected_main = 'test_infected_no_main';
+		const db_name_infected_tech = 'test_infected_no_tech';
+		const db_name_infected_tickets = 'test_infected_no_tickets';
 
-	/* Crew */
-	// Avatar sizes.
-	const avatar_thumb_w = 150;
-	const avatar_thumb_h = 133;
+		/* Compo */
+		// Match participant of state.
+		const compo_match_participant_type_clan = 0;
+		const compo_match_participant_type_match_winner = 1;
+		const compo_match_participant_type_match_looser = 2;
+	  	const compo_match_participant_type_match_walkover = 3;
 
-	const avatar_sd_w = 800;
-	const avatar_sd_h = 600;
+		/* Crew */
+		// Avatar sizes.
+		const avatar_thumb_w = 150;
+		const avatar_thumb_h = 133;
 
-	const avatar_hd_w = 1200;
-	const avatar_hd_h = 900;
+		const avatar_sd_w = 800;
+		const avatar_sd_h = 600;
 
-	const thumbnail_compression_rate = 100;
-	const sd_compression_rate = 100;
-	const hd_compression_rate = 100;
+		const avatar_hd_w = 1200;
+		const avatar_hd_h = 900;
 
-	const avatar_minimum_width = 600;
-	const avatar_minimum_height = 450;
+		const thumbnail_compression_rate = 100;
+		const sd_compression_rate = 100;
+		const hd_compression_rate = 100;
 
-	/* Tickets */
-	// How long time before the tickets event should allow it to be refunded?
-	const refundBeforeEventTime = 1209600; // 14 days (14 * 24 * 60 * 60)
+		const avatar_minimum_width = 600;
+		const avatar_minimum_height = 450;
 
-	// How long a time should the ticket be stored on your account before payment is successful?
-	const storeSessionTime = 3600; // 1 Hour (60 * 60)
+		/* Tickets */
+		// How long time before the tickets event should allow it to be refunded?
+		const refundBeforeEventTime = 1209600; // 14 days (14 * 24 * 60 * 60)
 
-	// How long time after ticket is transfered should we allow the former owner to revert the transaction?
-	const ticketFee = 20; // Radar membership ticket fee.
-	const ticketTransferTime = 86400; // 1 day (24 * 60 * 60)
+		// How long a time should the ticket be stored on your account before payment is successful?
+		const storeSessionTime = 3600; // 1 Hour (60 * 60)
 
-	const prioritySeatingReq = 5;
+		// How long time after ticket is transfered should we allow the former owner to revert the transaction?
+		const ticketFee = 20; // Radar membership ticket fee.
+		const ticketTransferTime = 86400; // 1 day (24 * 60 * 60)
 
-	const curfewLimit = 14;
+		const prioritySeatingReq = 5;
+
+		const curfewLimit = 14;
+	}
+
+} else {
+	if($environment == "docker") {
+		//echo("Detected docker environment<br />");
+		class Settings {
+			/* Metadata */
+			const name = 'Infected(DEVELOP)';
+			const description = 'Infected er et av Akershus største datatreff (LAN-party), og holder til i kulturhuset i Asker kommune.';
+			const keywords = 'infected, lan, party, asker, kulturhus, ungdom, gaming';
+			const authors = 'halvors og petterroa';
+
+			/* Configuration */
+			const domain = 'infected.dev';
+
+			// Email information.
+			const enableEmail = true;
+			const emailName = self::name;
+			const email = 'no-reply@' . self::domain;
+
+			// Full path to the API location.
+			const api_path = '/srv/infected/InfectedAPI/';
+			const config_dir = '/srv/config/';
+			const dynamic_path = '/srv/infected/dynamic/';
+
+			// Permissions file.
+			const file_json_permissions = self::api_path . 'json/permissions.json';
+			const file_json_postalcodes = self::api_path . 'json/postalcodes.json';
+
+			// Tells where images should be stored.
+			const qr_path = '../api/content/dynamic/qrcache/';
+			const avatar_path = '../api/content/dynamic/avatars/';
+			//Path to avatars on drive
+			//const api_relative_avatar_path = '../dynamic/avatars/';
+			const dynamic_relative_avatar_path = 'avatars/';
+
+
+			/* PHP */
+			const php_version = '7.2.0';
+
+			/* Database */
+			const db_host = 'mysql';
+			
+			const db_name_infected = 'test_infected_no';
+			const db_name_infected_compo = 'test_infected_no_compo';
+			const db_name_infected_crew = 'test_infected_no_crew';
+			const db_name_infected_info = 'test_infected_no_info';
+			const db_name_infected_main = 'test_infected_no_main';
+			const db_name_infected_tech = 'test_infected_no_tech';
+			const db_name_infected_tickets = 'test_infected_no_tickets';
+
+			/* Compo */
+			// Match participant of state.
+			const compo_match_participant_type_clan = 0;
+			const compo_match_participant_type_match_winner = 1;
+			const compo_match_participant_type_match_looser = 2;
+		  	const compo_match_participant_type_match_walkover = 3;
+
+			/* Crew */
+			// Avatar sizes.
+			const avatar_thumb_w = 150;
+			const avatar_thumb_h = 133;
+
+			const avatar_sd_w = 800;
+			const avatar_sd_h = 600;
+
+			const avatar_hd_w = 1200;
+			const avatar_hd_h = 900;
+
+			const thumbnail_compression_rate = 100;
+			const sd_compression_rate = 100;
+			const hd_compression_rate = 100;
+
+			const avatar_minimum_width = 600;
+			const avatar_minimum_height = 450;
+
+			/* Tickets */
+			// How long time before the tickets event should allow it to be refunded?
+			const refundBeforeEventTime = 1209600; // 14 days (14 * 24 * 60 * 60)
+
+			// How long a time should the ticket be stored on your account before payment is successful?
+			const storeSessionTime = 3600; // 1 Hour (60 * 60)
+
+			// How long time after ticket is transfered should we allow the former owner to revert the transaction?
+			const ticketFee = 20; // Radar membership ticket fee.
+			const ticketTransferTime = 86400; // 1 day (24 * 60 * 60)
+
+			const prioritySeatingReq = 5;
+
+			const curfewLimit = 14;
+		}
+	} else {
+		echo "Unknown development environment found: " . $environment . " - please update settings.php";
+	}
 }

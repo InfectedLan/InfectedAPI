@@ -19,7 +19,7 @@
  */
 
 require_once 'settings.php';
-require_once 'config/secret.php';
+require_once Settings::config_dir . 'secret.php';
 
 class Database {
 	private static $connList = [];

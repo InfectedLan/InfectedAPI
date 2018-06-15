@@ -287,15 +287,15 @@ class ApplicationHandler {
 	 */
 	public static function createApplication(Group $group, User $user, string $content, Event $event = null): Application {
 		$database = Database::getConnection(Settings::db_name_infected_crew);
-
-		$database->query('INSERT INTO `' . DatabaseConstants::db_table_infected_crew_applications . '` (`eventId`, `groupId`, `userId`, `openedTime`, `state`, `content`, `updatedByUserId`)
+		$database->query('INSERT INTO `' . DatabaseConstants::db_table_infected_crew_applications . '` (`eventId`, `groupId`, `userId`, `openedTime`, `state`, `content`, `updatedByUserId`, `comment`)
 						 VALUES (' . ($event != null ? $event->getId() : EventHandler::getCurrentEvent()->getId()) . ',
 							     ' . $group->getId() . ',
 								 ' . $user->getId() . ',
 								 \'' . date('Y-m-d H:i:s') . '\',
 								 ' . self::STATE_NEW . ',
 								 \'' . $database->real_escape_string($content) . '\',
-                                 0);');
+                                 0,
+                             	 \'\'	);');
 
 		$application = self::getApplication($database->insert_id);
 

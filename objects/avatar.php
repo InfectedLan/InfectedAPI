@@ -55,7 +55,7 @@ class Avatar extends DatabaseObject {
 	 * Returns the avatar image file type.
 	 */
 	public function getFile($quality): string {
-		return Settings::api_relative_avatar_path . $quality . '/' . $this->fileName;
+		return Settings::dynamic_relative_avatar_path . $quality . '/' . $this->fileName;
 	}
 
 	/*
@@ -113,11 +113,11 @@ class Avatar extends DatabaseObject {
 	public function deleteFiles() { // Do not use.
 		if ($this->state == 0) {
 			//This picture is not cropped
-			unlink(Settings::api_path . $this->getTemp());
+			unlink(Settings::dynamic_path . $this->getTemp());
 		} else {
-			unlink(Settings::api_path . $this->getSd());
-			unlink(Settings::api_path . $this->getHd());
-			unlink(Settings::api_path . $this->getThumbnail());
+			unlink(Settings::dynamic_path . $this->getSd());
+			unlink(Settings::dynamic_path . $this->getHd());
+			unlink(Settings::dynamic_path . $this->getThumbnail());
 		}
 	}
 

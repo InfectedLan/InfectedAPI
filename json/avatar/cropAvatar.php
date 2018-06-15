@@ -52,10 +52,10 @@ if (Session::isAuthenticated()) {
 					$image = 0;
 
 					if ($extension == 'png') {
-						$image = imagecreatefrompng(Settings::api_path . $avatar->getTemp());
+						$image = imagecreatefrompng(Settings::dynamic_path . $avatar->getTemp());
 					} else if ($extension == 'jpeg' ||
 							   $extension == 'jpg') {
-						$image = imagecreatefromjpeg(Settings::api_path . $avatar->getTemp())	;
+						$image = imagecreatefromjpeg(Settings::dynamic_path . $avatar->getTemp())	;
 					}
 
 					if ($image != 0) {
@@ -70,22 +70,22 @@ if (Session::isAuthenticated()) {
 							// Render to tumbnail
 							$target = imagecreatetruecolor(Settings::avatar_thumb_w, Settings::avatar_thumb_h);
 							imagecopyresized($target, $image, 0, 0, $x*$scalefactor, $y*$scalefactor, Settings::avatar_thumb_w, Settings::avatar_thumb_h, $w*$scalefactor, $h*$scalefactor);
-							$imagePath = Settings::api_path . $avatar->getThumbnail();
+							$imagePath = Settings::dynamic_path . $avatar->getThumbnail();
 							imagejpeg($target, str_replace_last($extension, 'jpg', $imagePath), Settings::thumbnail_compression_rate);
 
 							// Render to sd
 							$target = imagecreatetruecolor(Settings::avatar_sd_w, Settings::avatar_sd_h);
 							imagecopyresized($target, $image, 0, 0, $x*$scalefactor, $y*$scalefactor, Settings::avatar_sd_w, Settings::avatar_sd_h, $w*$scalefactor, $h*$scalefactor);
-							$imagePath = Settings::api_path . $avatar->getSd();
+							$imagePath = Settings::dynamic_path . $avatar->getSd();
 							imagejpeg($target, str_replace_last($extension, 'jpg', $imagePath), Settings::sd_compression_rate);
 
 							// Render to hq
 							$target = imagecreatetruecolor(Settings::avatar_hd_w, Settings::avatar_hd_h);
 							imagecopyresized($target, $image, 0, 0, $x*$scalefactor, $y*$scalefactor, Settings::avatar_hd_w, Settings::avatar_hd_h, $w*$scalefactor, $h*$scalefactor);
-							$imagePath = Settings::api_path . $avatar->getHd();
+							$imagePath = Settings::dynamic_path . $avatar->getHd();
 							imagejpeg($target, str_replace_last($extension, 'jpg', $imagePath), Settings::hd_compression_rate);
 
-							unlink(Settings::api_path . $avatar->getTemp());
+							unlink(Settings::dynamic_path . $avatar->getTemp());
 
 							$avatar->setFileName(str_replace_last($extension, 'jpg', $avatar->getFileName()));
 							$avatar->setState(1);

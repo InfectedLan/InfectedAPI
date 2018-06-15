@@ -132,13 +132,12 @@ class AvatarHandler {
 	 */
 	public static function createAvatar(string $fileName, User $user): string {
 		$database = Database::getConnection(Settings::db_name_infected_crew);
-
 		$result = $database->query('INSERT INTO `' . DatabaseConstants::db_table_infected_crew_avatars . '` (`userId`, `fileName`, `state`)
                                    VALUES (\'' . $user->getId() . '\',
                                            \'' . $fileName . '\',
                                            ' . self::STATE_NEW . ');');
 
-		return Settings::api_path . Settings::api_relative_avatar_path . 'temp/' . $fileName;
+		return Settings::dynamic_path . Settings::dynamic_relative_avatar_path . 'temp/' . $fileName;
 	}
 
 	/*
@@ -202,6 +201,6 @@ class AvatarHandler {
 			$file = 'default_child.png';
 		}
 
-		return Settings::api_relative_avatar_path . 'default/' . $file;
+		return Settings::dynamic_relative_avatar_path . 'default/' . $file;
 	}
 }

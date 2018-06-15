@@ -50,6 +50,7 @@ class Session {
 		if (self::isAuthenticated()) {
 			return UserHandler::getUser($_SESSION['userId']);
 		}
+		return null;
 	}
 
   /*

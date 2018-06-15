@@ -71,6 +71,7 @@ class DatabaseConstants {
     const db_table_infected_tech_nfclog = 'nfclog';
     const db_table_infected_tech_rooms = 'rooms';
     const db_table_infected_tech_roompermissions = 'roomPermissions';
+    const db_table_infected_tech_discordMessageQueue = 'discordMessageQueue';
 
     // InfectedTickets
     const db_table_infected_tickets_checkedintickets = 'checkedintickets';
