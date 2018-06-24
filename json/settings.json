@@ -1,0 +1,58 @@
+{
+	/* 
+	
+	INFECTED BASE CONFIGURATION
+
+	Note: This configuration file does NOT represent the production configuration, and can in fact be found on github.
+
+	*/
+	/* This value is special, as it is not a setting - it specifies the next file in the chain to load */
+	"chainload": "/srv/config/settings.json",
+	"name": "Flavourless Infected",
+	"description": "Infected er et av Akershus største datatreff (LAN-party), og holder til i kulturhuset i Asker kommune.",
+	"keywords": "infected, lan, party, asker, kulturhus, ungdom, gaming",
+	"authors" : "halvors, petterroa, brageskj",
+
+	/* PHP */
+	"php_version" : "7.2.0",
+
+	/* Compo */
+	/* Match participant of state. */
+	"compo_match_participant_type_clan" : 0,
+	"compo_match_participant_type_match_winner" : 1,
+	"compo_match_participant_type_match_looser" : 2,
+  	"compo_match_participant_type_match_walkover" : 3,
+
+	/* Crew */
+	/* Avatar sizes. */
+	"avatar_thumb_w" : 150,
+	"avatar_thumb_h" : 133,
+
+	"avatar_sd_w" : 800,
+	"avatar_sd_h" : 600,
+
+	"avatar_hd_w" : 1200,
+	"avatar_hd_h" : 900,
+
+	"thumbnail_compression_rate" : 100,
+	"sd_compression_rate" : 100,
+	"hd_compression_rate" : 100,
+
+	"avatar_minimum_width" : 600,
+	"avatar_minimum_height" : 450,
+
+	/* Tickets */
+	/* How long time before the tickets event should allow it to be refunded? */ 
+	"refundBeforeEventTime" : 1209600, /* 14 days (14 * 24 * 60 * 60) */
+
+	/* How long a time should the ticket be stored on your account before payment is successful? */
+	"storeSessionTime" : 3600, /* 1 Hour (60 * 60) */
+
+	/* How long time after ticket is transfered should we allow the former owner to revert the transaction? */
+	"ticketFee" : 20, /* Radar membership ticket fee. */
+	"ticketTransferTime" : 86400, /* 1 day (24 * 60 * 60) */
+
+	"prioritySeatingReq" : 5,
+
+	"curfewLimit" : 14
+}

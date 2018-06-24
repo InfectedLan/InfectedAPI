@@ -2,7 +2,7 @@
 /**
  * This file is part of InfectedAPI.
  *
- * Copyright (C) 2017 Infected <http://infected.no/>.
+ * Copyright (C) 2018 Infected <http://infected.no/>.
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -18,184 +18,53 @@
  * License along with this library.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-//Detect and modify based on environment
+//New settings system which loads settings from json files, and allows inheritance, making modifications in production easier. All "sane defaults" are located in json/settings.json, while the values that need attention can be stored in /srv/config/settings.json, or even further files if needed.
 
-$environment = getenv('DEV_ENVIRONMENT');
-if(empty($environment)) {
-	//echo "Assuming test.infected.no due to missing environment variable";
-	class Settings {
-		/* Metadata */
-		const name = 'Infected';
-		const description = 'Infected er et av Akershus største datatreff (LAN-party), og holder til i kulturhuset i Asker kommune.';
-		const keywords = 'infected, lan, party, asker, kulturhus, ungdom, gaming';
-		const authors = 'halvors og petterroa';
+class Settings {
+	private $config = [];
+	private $files = [];
+	public static function refreshSettings() {
+		$config = [];
+		$files = [];
 
-		/* Configuration */
-		const domain = 'test.infected.no';
+		$nextFile = "json/settings.json";
+		while(!empty($nextFile)) {
+			if(strpos($nextFile, "/") !== 0) {
+				//Does not start with /, is not absolute, so we need to fix it
+				$nextFile = __DIR__ . "/" . $nextFile;
+				//echo "Patched nextFile to " . $nextFile;
+			}
+			$string = trim(file_get_contents($nextFile), "\xEF\xBB\xBF");
+			//Remove comments
+			$string = preg_replace('!/\*.*?\*/!s', '', $string);
+			$string = preg_replace('/\n\s*\n/', "\n", $string);
 
-		// Email information.
-		const enableEmail = true;
-		const emailName = self::name;
-		const email = 'no-reply@' . self::domain;
+			//echo $string;
+            //$currentFile = json_decode($string, true);
+            //print_r($currentFile);
+            $files[] = $nextFile;
+            $nextFile = "";
 
-		// Full path to the API location.
-		const api_path = '/home/' . self::domain . '/public_html/api/';
-		const config_dir = '/srv/config/';
-
-		// Permissions file.
-		const file_json_permissions = self::api_path . 'json/permissions.json';
-		const file_json_postalcodes = self::api_path . 'json/postalcodes.json';
-
-		// Tells where images should be stored.
-		const qr_path = '../api/content/qrcache/';
-		const avatar_path = '../api/content/avatars/';
-		//const api_relative_avatar_path = 'content/avatars/';
-
-		/* PHP */
-		const php_version = '7.2.0';
-
-		/* Database */
-		const db_host = 'localhost';
-		
-		const db_name_infected = 'test_infected_no';
-		const db_name_infected_compo = 'test_infected_no_compo';
-		const db_name_infected_crew = 'test_infected_no_crew';
-		const db_name_infected_info = 'test_infected_no_info';
-		const db_name_infected_main = 'test_infected_no_main';
-		const db_name_infected_tech = 'test_infected_no_tech';
-		const db_name_infected_tickets = 'test_infected_no_tickets';
-
-		/* Compo */
-		// Match participant of state.
-		const compo_match_participant_type_clan = 0;
-		const compo_match_participant_type_match_winner = 1;
-		const compo_match_participant_type_match_looser = 2;
-	  	const compo_match_participant_type_match_walkover = 3;
-
-		/* Crew */
-		// Avatar sizes.
-		const avatar_thumb_w = 150;
-		const avatar_thumb_h = 133;
-
-		const avatar_sd_w = 800;
-		const avatar_sd_h = 600;
-
-		const avatar_hd_w = 1200;
-		const avatar_hd_h = 900;
-
-		const thumbnail_compression_rate = 100;
-		const sd_compression_rate = 100;
-		const hd_compression_rate = 100;
-
-		const avatar_minimum_width = 600;
-		const avatar_minimum_height = 450;
-
-		/* Tickets */
-		// How long time before the tickets event should allow it to be refunded?
-		const refundBeforeEventTime = 1209600; // 14 days (14 * 24 * 60 * 60)
-
-		// How long a time should the ticket be stored on your account before payment is successful?
-		const storeSessionTime = 3600; // 1 Hour (60 * 60)
-
-		// How long time after ticket is transfered should we allow the former owner to revert the transaction?
-		const ticketFee = 20; // Radar membership ticket fee.
-		const ticketTransferTime = 86400; // 1 day (24 * 60 * 60)
-
-		const prioritySeatingReq = 5;
-
-		const curfewLimit = 14;
-	}
-
-} else {
-	if($environment == "docker") {
-		//echo("Detected docker environment<br />");
-		class Settings {
-			/* Metadata */
-			const name = 'Infected(DEVELOP)';
-			const description = 'Infected er et av Akershus største datatreff (LAN-party), og holder til i kulturhuset i Asker kommune.';
-			const keywords = 'infected, lan, party, asker, kulturhus, ungdom, gaming';
-			const authors = 'halvors og petterroa';
-
-			/* Configuration */
-			const domain = 'infected.dev';
-
-			// Email information.
-			const enableEmail = true;
-			const emailName = self::name;
-			const email = 'no-reply@' . self::domain;
-
-			// Full path to the API location.
-			const api_path = '/srv/infected/InfectedAPI/';
-			const config_dir = '/srv/config/';
-			const dynamic_path = '/srv/infected/dynamic/';
-
-			// Permissions file.
-			const file_json_permissions = self::api_path . 'json/permissions.json';
-			const file_json_postalcodes = self::api_path . 'json/postalcodes.json';
-
-			// Tells where images should be stored.
-			const qr_path = '../api/content/dynamic/qrcache/';
-			const avatar_path = '../api/content/dynamic/avatars/';
-			//Path to avatars on drive
-			//const api_relative_avatar_path = '../dynamic/avatars/';
-			const dynamic_relative_avatar_path = 'avatars/';
-
-
-			/* PHP */
-			const php_version = '7.2.0';
-
-			/* Database */
-			const db_host = 'mysql';
-			
-			const db_name_infected = 'test_infected_no';
-			const db_name_infected_compo = 'test_infected_no_compo';
-			const db_name_infected_crew = 'test_infected_no_crew';
-			const db_name_infected_info = 'test_infected_no_info';
-			const db_name_infected_main = 'test_infected_no_main';
-			const db_name_infected_tech = 'test_infected_no_tech';
-			const db_name_infected_tickets = 'test_infected_no_tickets';
-
-			/* Compo */
-			// Match participant of state.
-			const compo_match_participant_type_clan = 0;
-			const compo_match_participant_type_match_winner = 1;
-			const compo_match_participant_type_match_looser = 2;
-		  	const compo_match_participant_type_match_walkover = 3;
-
-			/* Crew */
-			// Avatar sizes.
-			const avatar_thumb_w = 150;
-			const avatar_thumb_h = 133;
-
-			const avatar_sd_w = 800;
-			const avatar_sd_h = 600;
-
-			const avatar_hd_w = 1200;
-			const avatar_hd_h = 900;
-
-			const thumbnail_compression_rate = 100;
-			const sd_compression_rate = 100;
-			const hd_compression_rate = 100;
-
-			const avatar_minimum_width = 600;
-			const avatar_minimum_height = 450;
-
-			/* Tickets */
-			// How long time before the tickets event should allow it to be refunded?
-			const refundBeforeEventTime = 1209600; // 14 days (14 * 24 * 60 * 60)
-
-			// How long a time should the ticket be stored on your account before payment is successful?
-			const storeSessionTime = 3600; // 1 Hour (60 * 60)
-
-			// How long time after ticket is transfered should we allow the former owner to revert the transaction?
-			const ticketFee = 20; // Radar membership ticket fee.
-			const ticketTransferTime = 86400; // 1 day (24 * 60 * 60)
-
-			const prioritySeatingReq = 5;
-
-			const curfewLimit = 14;
+            foreach ($currentFile as $key => $value) {
+            	if($key == "chainload") { 
+            		echo "Chainloading " . $value;
+            		$nextFile = $value;
+            	}
+            	else {
+            		$config[$key] = $value;
+            	}
+            }
 		}
-	} else {
-		echo "Unknown development environment found: " . $environment . " - please update settings.php";
+	}
+	public static function getConfigFileList() : array{
+		return $files;
+	}
+	public static function getValue(string $name) { //Any type
+		return $config[$name];
+	}
+	public static function isDocker() : bool {
+		return !empty(getenv('ENVIRONMENT'));
 	}
 }
+
+Settings::refreshSettings();
