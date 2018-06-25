@@ -25,18 +25,18 @@ class Maintenance {
     private const maintenanceFilename = "maintenance.json";
 
     private static function saveMaintenanceState() {
-        $file = fopen(Settings::config_dir . Maintenance::maintenanceFilename,"w+");
+        $file = fopen(Settings::getValue("config_dir") . Maintenance::maintenanceFilename,"w+");
         fwrite($file,json_encode(Maintenance::$maintenanceState));
         fclose($file); 
     }
 
     public static function loadMaintenanceState() {
-        if(!file_exists(Settings::config_dir . Maintenance::maintenanceFilename)) {
+        if(!file_exists(Settings::getValue("config_dir") . Maintenance::maintenanceFilename)) {
             echo "Maintenance file does not exist - creating<br />";
             self::$maintenanceState = [ "maintenance_state" => false, "maintenance_end" => time() ];
             self::saveMaintenanceState();
         } else {
-            $string = trim(file_get_contents(Settings::config_dir . Maintenance::maintenanceFilename), "\xEF\xBB\xBF");
+            $string = trim(file_get_contents(Settings::getValue("config_dir") . Maintenance::maintenanceFilename), "\xEF\xBB\xBF");
             self::$maintenanceState = json_decode($string, true);
         }
     }

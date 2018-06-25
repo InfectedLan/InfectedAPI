@@ -33,13 +33,13 @@ class MailManager {
 	 */
 	public static function sendEmail(User $user, string $subject, string $message) {
 	    // Is email support enabled?
-		if (Settings::enableEmail) {
+		if (Settings::getValue("enableEmail")) {
             // Create PHPMailer object.
             $email = new PHPMailer(true);
 
             try {
                 // Set sender and recipient.
-                $email->SetFrom(Settings::email, Settings::name);
+                $email->SetFrom(Settings::getValue("email"), Settings::getValue("name"));
                 $email->addAddress($user->getEmail(), $user->getFullName());
 
                 // Set to use HTML and UTF-8 as charset.

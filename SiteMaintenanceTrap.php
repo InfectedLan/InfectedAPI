@@ -25,7 +25,7 @@ Maintenance::loadMaintenanceState();
 //This will kill the site before it attempts to do anything, while the page is in maintenance mode
 if(Maintenance::isMaintenance()) {
     http_response_code(503);
-    readfile(Settings::api_path . "pages/maintenance.html"); //IMPORTANT: This is served from the root of a site.
+    readfile(Settings::getValue("api_path") . "pages/maintenance.html"); //IMPORTANT: This is served from the root of a site.
     die();
 }
 ?>

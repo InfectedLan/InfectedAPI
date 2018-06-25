@@ -27,7 +27,7 @@ class TaskManager {
 	 * Get a task by given id.
 	 */
 	public static function getTask(int $id): ?object {
-		$database = Database::getConnection(Settings::db_name_infected);
+		$database = Database::getConnection(Settings::getValue("db_name_infected"));
 
 		$result = $database->query('SELECT * FROM `'. DatabaseConstants::db_table_infected_tasks . '`
 																WHERE `id` = \'' . $database->real_escape_string($id) . '\';');
@@ -41,7 +41,7 @@ class TaskManager {
 	 * Get a list of all the tasks.
 	 */
 	public static function getTasks(): array {
-		$database = Database::getConnection(Settings::db_name_infected);
+		$database = Database::getConnection(Settings::getValue("db_name_infected"));
 
 		$result = $database->query('SELECT * FROM `'. DatabaseConstants::db_table_infected_tasks . '`;');
 
@@ -58,7 +58,7 @@ class TaskManager {
 	 * Create new task.
 	 */
 	public static function createTask(ITask $task) {
-		$database = Database::getConnection(Settings::db_name_infected);
+		$database = Database::getConnection(Settings::getValue("db_name_infected"));
 
 		$database->query('INSERT INTO `' . DatabaseConstants::db_table_infected_tasks . '` (`object`)
 						  				VALUES (\'' . serialize($task) . '\');');
@@ -68,7 +68,7 @@ class TaskManager {
 	 * Remove a task.
 	 */
 	public static function removeTask(int $id) {
-		$database = Database::getConnection(Settings::db_name_infected);
+		$database = Database::getConnection(Settings::getValue("db_name_infected"));
 
 		$database->query('DELETE FROM `' . DatabaseConstants::db_table_infected_tasks . '`
 						  				WHERE `id` = \'' . $id . '\';');

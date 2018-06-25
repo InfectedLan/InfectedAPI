@@ -24,7 +24,7 @@ require_once 'settings.php';
 class QR {
 	public static function getCode(string $content): ?string {
 		$fileName = md5($content) . '.png';
-		$filePath = Settings::api_path . Settings::qr_path . $fileName;
+		$filePath = Settings::getValue("api_path") . Settings::getValue("qr_path") . $fileName;
 
 		if (!file_exists($filePath)) {
 			QRcode::png($content, $filePath, QR_ECLEVEL_Q, 400, 6);

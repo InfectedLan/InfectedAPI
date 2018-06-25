@@ -19,7 +19,7 @@
  */
 
 require_once 'settings.php';
-require_once Settings::config_dir . 'secret.php';
+require_once Settings::getValue("config_dir") . 'secret.php';
 
 class Database {
 	private static $connList = [];
@@ -29,7 +29,7 @@ class Database {
 			return self::$connList[$database];
 		}
 		// Create connection
-		$mysqli = new mysqli(Settings::db_host,
+		$mysqli = new mysqli(Settings::getValue("db_host"),
 												 Secret::db_username,
 												 Secret::db_password,
 												 $database);

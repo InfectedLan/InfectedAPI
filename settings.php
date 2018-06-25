@@ -21,14 +21,16 @@
 //New settings system which loads settings from json files, and allows inheritance, making modifications in production easier. All "sane defaults" are located in json/settings.json, while the values that need attention can be stored in /srv/config/settings.json, or even further files if needed.
 
 class Settings {
-	private $config = [];
-	private $files = [];
+	private static $config = [];
+	private static $files = [];
+	private static $loadTime = 0;
 	public static function refreshSettings() {
-		$config = [];
-		$files = [];
+		self::$config = [];
+		self::$files = [];
 
 		$nextFile = "json/settings.json";
 		while(!empty($nextFile)) {
+		    //echo "Loading " . $nextFile;
 			if(strpos($nextFile, "/") !== 0) {
 				//Does not start with /, is not absolute, so we need to fix it
 				$nextFile = __DIR__ . "/" . $nextFile;
@@ -40,27 +42,26 @@ class Settings {
 			$string = preg_replace('/\n\s*\n/', "\n", $string);
 
 			//echo $string;
-            //$currentFile = json_decode($string, true);
+            $currentFile = json_decode($string, true);
             //print_r($currentFile);
-            $files[] = $nextFile;
+            self::$files[] = $nextFile;
             $nextFile = "";
 
             foreach ($currentFile as $key => $value) {
-            	if($key == "chainload") { 
-            		echo "Chainloading " . $value;
+            	if($key == "chainload") {
             		$nextFile = $value;
             	}
             	else {
-            		$config[$key] = $value;
+            		self::$config[$key] = $value;
             	}
             }
 		}
 	}
 	public static function getConfigFileList() : array{
-		return $files;
+		return self::$files;
 	}
 	public static function getValue(string $name) { //Any type
-		return $config[$name];
+		return self::$config[$name];
 	}
 	public static function isDocker() : bool {
 		return !empty(getenv('ENVIRONMENT'));
