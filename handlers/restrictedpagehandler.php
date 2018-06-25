@@ -32,7 +32,7 @@ class RestrictedPageHandler {
 	 * Get page by the internal id.
 	 */
 	public static function getPage(int $id): ?RestrictedPage {
-		$database = Database::getConnection(Settings::db_name_infected_crew);
+		$database = Database::getConnection(Settings::getValue("db_name_infected_crew"));
 
 		$result = $database->query('SELECT * FROM `' . DatabaseConstants::db_table_infected_crew_pages . '`
 																WHERE `id` = \'' . $database->real_escape_string($id) . '\';');
@@ -49,7 +49,7 @@ class RestrictedPageHandler {
 
 			if ($user->hasPermission('*') ||
 				$user->isGroupMember()) {
-				$database = Database::getConnection(Settings::db_name_infected_crew);
+				$database = Database::getConnection(Settings::getValue("db_name_infected_crew"));
 
   			if ($user->hasPermission('*')) {
 					$result = $database->query('SELECT * FROM `' . DatabaseConstants::db_table_infected_crew_pages . '`
@@ -85,7 +85,7 @@ class RestrictedPageHandler {
 	 * Get a list of all pages.
 	 */
 	public static function getPages(): array {
-		$database = Database::getConnection(Settings::db_name_infected_crew);
+		$database = Database::getConnection(Settings::getValue("db_name_infected_crew"));
 
 		$result = $database->query('SELECT * FROM `' . DatabaseConstants::db_table_infected_crew_pages . '`
 																WHERE `eventId` = \'' . EventHandler::getCurrentEvent()->getId() . '\';');
@@ -103,7 +103,7 @@ class RestrictedPageHandler {
 	 * Get a list of pages for specified group.
 	 */
 	public static function getPagesForGroup(Group $group): array {
-		$database = Database::getConnection(Settings::db_name_infected_crew);
+		$database = Database::getConnection(Settings::getValue("db_name_infected_crew"));
 
 		$result = $database->query('SELECT * FROM `' . DatabaseConstants::db_table_infected_crew_pages . '`
 																WHERE `eventId` = \'' . EventHandler::getCurrentEvent()->getId() . '\'
@@ -123,7 +123,7 @@ class RestrictedPageHandler {
 	 * Get a list of all pages for specified group, ignoring the teamId.
 	 */
 	public static function getAllPagesForGroup(Group $group): array {
-		$database = Database::getConnection(Settings::db_name_infected_crew);
+		$database = Database::getConnection(Settings::getValue("db_name_infected_crew"));
 
 		$result = $database->query('SELECT * FROM `' . DatabaseConstants::db_table_infected_crew_pages . '`
 																WHERE `eventId` = \'' . EventHandler::getCurrentEvent()->getId() . '\'
@@ -143,7 +143,7 @@ class RestrictedPageHandler {
 	 * Get a list of pages for specified team.
 	 */
 	public static function getPagesForGroupAndTeam(Group $group, Team $team): array {
-		$database = Database::getConnection(Settings::db_name_infected_crew);
+		$database = Database::getConnection(Settings::getValue("db_name_infected_crew"));
 
 		$result = $database->query('SELECT * FROM `' . DatabaseConstants::db_table_infected_crew_pages . '`
 																WHERE `eventId` = \'' . EventHandler::getCurrentEvent()->getId() . '\'
@@ -163,7 +163,7 @@ class RestrictedPageHandler {
 	 * Create a new page.
 	 */
 	public static function createPage(string $name, string $title, string $content, Group $group = null, Team $team = null): RestrictedPage {
-		$database = Database::getConnection(Settings::db_name_infected_crew);
+		$database = Database::getConnection(Settings::getValue("db_name_infected_crew"));
 
 		$database->query('INSERT INTO `' . DatabaseConstants::db_table_infected_crew_pages . '` (`eventId`, `name`, `title`, `content`, `groupId`, `teamId`)
 										  VALUES (\'' . EventHandler::getCurrentEvent()->getId() . '\',
@@ -180,7 +180,7 @@ class RestrictedPageHandler {
 	 * Update a page.
 	 */
 	public static function updatePage(RestrictedPage $page, string $title, string $content, Group $group = null, Team $team = null) {
-		$database = Database::getConnection(Settings::db_name_infected_crew);
+		$database = Database::getConnection(Settings::getValue("db_name_infected_crew"));
 
 		$database->query('UPDATE `' . DatabaseConstants::db_table_infected_crew_pages . '`
 										  SET `title` = \'' . $database->real_escape_string($title) . '\',
@@ -194,7 +194,7 @@ class RestrictedPageHandler {
 	 * Remove a page.
 	 */
 	public static function removePage(RestrictedPage $page) {
-		$database = Database::getConnection(Settings::db_name_infected_crew);
+		$database = Database::getConnection(Settings::getValue("db_name_infected_crew"));
 
 		$database->query('DELETE FROM `' . DatabaseConstants::db_table_infected_crew_pages . '`
 						  				WHERE `id` = \'' . $page->getId() . '\';');

@@ -31,7 +31,7 @@ require_once 'database.php';
 class NfcRoomPermissionHandler {
 
 	public static function getPermission(int $id): NfcRoomPermission {
-		$database = Database::getConnection(Settings::db_name_infected_tech);
+		$database = Database::getConnection(Settings::getValue("db_name_infected_tech"));
 
 		$result = $database->query('SELECT * FROM `' . DatabaseConstants::db_table_infected_tech_roompermissions . '` WHERE `id` = \'' . $database->real_escape_string($id) . '\';');
 
@@ -39,7 +39,7 @@ class NfcRoomPermissionHandler {
 	}
 
 	public static function createPermission(Room $room, int $type, int $arg): NfcRoomPermission {
-		$database = Database::getConnection(Settings::db_name_infected_tech);
+		$database = Database::getConnection(Settings::getValue("db_name_infected_tech"));
 
 		$database->query('INSERT INTO `' . DatabaseConstants::db_table_infected_tech_roompermissions . '` (`roomId`, `permissionType`, `permissionArg`) VALUES (\'' . $database->real_escape_string($room->getId()) . '\', ' .
 																																									$database->real_escape_string($type) . ', ' .
@@ -49,7 +49,7 @@ class NfcRoomPermissionHandler {
 	}
 
 	public static function getPermissionsByRoom(Room $room) : array {
-		$database = Database::getConnection(Settings::db_name_infected_tech);
+		$database = Database::getConnection(Settings::getValue("db_name_infected_tech"));
 
 		$result = $database->query('SELECT * FROM `' . DatabaseConstants::db_table_infected_tech_roompermissions . '` WHERE `roomId` = ' . $database->real_escape_string($room->getId()) . ';');
 
@@ -66,7 +66,7 @@ class NfcRoomPermissionHandler {
 	 * Returns if an user is allowed to enter a given room for a given event
 	 */
 	public static function hasUserPermission(Room $room, User $user, Event $event = null) {
-		$database = Database::getConnection(Settings::db_name_infected_tech);
+		$database = Database::getConnection(Settings::getValue("db_name_infected_tech"));
 
 		if($event == null) {
 			$event = EventHandler::getCurrentEvent();

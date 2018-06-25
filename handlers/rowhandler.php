@@ -32,7 +32,7 @@ class RowHandler {
 	 * Return the row by the internal id.
 	 */
 	public static function getRow(int $id): ?Row {
-		$database = Database::getConnection(Settings::db_name_infected_tickets);
+		$database = Database::getConnection(Settings::getValue("db_name_infected_tickets"));
 
 		$result = $database->query('SELECT * FROM `' . DatabaseConstants::db_table_infected_tickets_rows . '`
 																WHERE `id` = \'' . $database->real_escape_string($id) . '\';');
@@ -44,7 +44,7 @@ class RowHandler {
 	 * Returns a list of all rows.
 	 */
 	public static function getRows(): array {
-		$database = Database::getConnection(Settings::db_name_infected_tickets);
+		$database = Database::getConnection(Settings::getValue("db_name_infected_tickets"));
 
 		$result = $database->query('SELECT * FROM `' . DatabaseConstants::db_table_infected_tickets_rows . '`;');
 
@@ -61,7 +61,7 @@ class RowHandler {
 	 * Returns a list of all rows for the specified seatmap.
 	 */
 	public static function getRowsBySeatmap(Seatmap $seatmap): array {
-		$database = Database::getConnection(Settings::db_name_infected_tickets);
+		$database = Database::getConnection(Settings::getValue("db_name_infected_tickets"));
 
 		$result = $database->query('SELECT * FROM `' . DatabaseConstants::db_table_infected_tickets_rows . '`
 																WHERE `seatmapId` = \'' . $seatmap->getId() . '\';');
@@ -79,7 +79,7 @@ class RowHandler {
 	 * Create a new row.
 	 */
 	public static function createRow(Seatmap $seatmap, int $x, int $y): Row {
-		$database = Database::getConnection(Settings::db_name_infected_tickets);
+		$database = Database::getConnection(Settings::getValue("db_name_infected_tickets"));
 
 		$entrance = EntranceHandler::getEntrance(2); // TODO: Make it not statically set entrance
 
@@ -103,7 +103,7 @@ class RowHandler {
 	 * Move the specified row to the specified coordinates.
 	 */
 	public static function updateRow(Row $row, int $x, int $y) {
-		$database = Database::getConnection(Settings::db_name_infected_tickets);
+		$database = Database::getConnection(Settings::getValue("db_name_infected_tickets"));
 
 		$database->query('UPDATE `' . DatabaseConstants::db_table_infected_tickets_rows . '`
 										  SET `x` = \'' . $database->real_escape_string($x) . '\',
@@ -115,7 +115,7 @@ class RowHandler {
 	 * Removes the specified row.
 	 */
 	public static function removeRow(Row $row) {
-		$database = Database::getConnection(Settings::db_name_infected_tickets);
+		$database = Database::getConnection(Settings::getValue("db_name_infected_tickets"));
 
 		$result = $database->query('DELETE FROM `' . DatabaseConstants::db_table_infected_tickets_rows . '`
 																WHERE `id` = ' . $row->getId() . ';');

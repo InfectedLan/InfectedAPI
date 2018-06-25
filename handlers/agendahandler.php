@@ -30,7 +30,7 @@ class AgendaHandler {
 	 * Get an agenda by the internal id.
 	 */
 	public static function getAgenda(int $id): ?Agenda {
-		$database = Database::getConnection(Settings::db_name_infected_main);
+		$database = Database::getConnection(Settings::getValue("db_name_infected_main"));
 
 		$result = $database->query('SELECT * FROM `' . DatabaseConstants::db_table_infected_main_agenda . '`
 								   WHERE `id` = ' . $database->real_escape_string($id) . ';');
@@ -42,7 +42,7 @@ class AgendaHandler {
 	   * Returns agendas.
 	   */
 	public static function getAgendas(Event $event = null): array {
-		$database = Database::getConnection(Settings::db_name_infected_main);
+		$database = Database::getConnection(Settings::getValue("db_name_infected_main"));
 
 		$result = $database->query('SELECT * FROM `' . DatabaseConstants::db_table_infected_main_agenda . '`
 								   WHERE `eventId` = ' . ($event != null ? $event->getId() : EventHandler::getCurrentEvent()->getId()) . '
@@ -61,7 +61,7 @@ class AgendaHandler {
 	 * Returns published agendas.
   	 */
 	public static function getPublishedAgendas(Event $event = null): array {
-		$database = Database::getConnection(Settings::db_name_infected_main);
+		$database = Database::getConnection(Settings::getValue("db_name_infected_main"));
 
 		$result = $database->query('SELECT * FROM `' . DatabaseConstants::db_table_infected_main_agenda . '`
 								   WHERE `eventId` = ' . ($event != null ? $event->getId() : EventHandler::getCurrentEvent()->getId()) . '
@@ -81,7 +81,7 @@ class AgendaHandler {
 	 * Returns only published agendas that have not happend yet.
 	 */
 	public static function getPublishedNotHappendAgendas(Event $event = null): array {
-		$database = Database::getConnection(Settings::db_name_infected_main);
+		$database = Database::getConnection(Settings::getValue("db_name_infected_main"));
 
 		$result = $database->query('SELECT * FROM `' . DatabaseConstants::db_table_infected_main_agenda . '`
 								   WHERE `eventId` = ' . ($event != null ? $event->getId() : EventHandler::getCurrentEvent()->getId()) . '
@@ -102,7 +102,7 @@ class AgendaHandler {
 	 * Create a new agenda entry.
 	 */
 	public static function createAgenda(Event $event, string $name, string $title, string $description, string $startTime): Agenda {
-		$database = Database::getConnection(Settings::db_name_infected_main);
+		$database = Database::getConnection(Settings::getValue("db_name_infected_main"));
 
 		$database->query('INSERT INTO `' . DatabaseConstants::db_table_infected_main_agenda . '` (`eventId`, `name`, `title`, `description`, `startTime`, `published`)
 						 VALUES (\'' . $event->getId() . '\',
@@ -119,7 +119,7 @@ class AgendaHandler {
 	 * Update an agenda.
 	 */
 	public static function updateAgenda(Agenda $agenda, string $title, string $description, string $startTime, bool $published) {
-		$database = Database::getConnection(Settings::db_name_infected_main);
+		$database = Database::getConnection(Settings::getValue("db_name_infected_main"));
 
 		$database->query('UPDATE `' . DatabaseConstants::db_table_infected_main_agenda . '`
 						 SET `title` = \'' . $database->real_escape_string($title) . '\',
@@ -133,7 +133,7 @@ class AgendaHandler {
 	 * Remove an agenda entry.
 	 */
 	public static function removeAgenda(Agenda $agenda) {
-		$database = Database::getConnection(Settings::db_name_infected_main);
+		$database = Database::getConnection(Settings::getValue("db_name_infected_main"));
 
 		$database->query('DELETE FROM `' . DatabaseConstants::db_table_infected_main_agenda . '`
 						 WHERE `id` = ' . $agenda->getId() . ';');

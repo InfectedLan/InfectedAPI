@@ -34,7 +34,7 @@ class AvatarHandler {
 	 * Get an avatar by the internal id.
 	 */
 	public static function getAvatar(int $id): ?Avatar {
-		$database = Database::getConnection(Settings::db_name_infected_crew);
+		$database = Database::getConnection(Settings::getValue("db_name_infected_crew"));
 
 		$result = $database->query('SELECT * FROM `' . DatabaseConstants::db_table_infected_crew_avatars . '`
 																WHERE `id` = \'' . $database->real_escape_string($id) . '\';');
@@ -46,7 +46,7 @@ class AvatarHandler {
 	 * Get an avatar for a specified user.
 	 */
 	public static function getAvatarByUser(User $user): ?Avatar {
-		$database = Database::getConnection(Settings::db_name_infected_crew);
+		$database = Database::getConnection(Settings::getValue("db_name_infected_crew"));
 
 		$result = $database->query('SELECT * FROM `' . DatabaseConstants::db_table_infected_crew_avatars . '`
 								   WHERE `userId` = ' . $user->getId() . ';');
@@ -58,7 +58,7 @@ class AvatarHandler {
 	 * Returns a list of all avatars.
 	 */
 	public static function getAvatars(): array {
-		$database = Database::getConnection(Settings::db_name_infected_crew);
+		$database = Database::getConnection(Settings::getValue("db_name_infected_crew"));
 
 		$result = $database->query('SELECT * FROM `' . DatabaseConstants::db_table_infected_crew_avatars . '`;');
 
@@ -75,7 +75,7 @@ class AvatarHandler {
 	 * Returns a list of all pending avatars.
 	 */
 	public static function getPendingAvatars(): array {
-		$database = Database::getConnection(Settings::db_name_infected_crew);
+		$database = Database::getConnection(Settings::getValue("db_name_infected_crew"));
 
 		$result = $database->query('SELECT * FROM `' . DatabaseConstants::db_table_infected_crew_avatars . '`
 								   WHERE `state` = ' . self::STATE_PENDING . ';');
@@ -93,7 +93,7 @@ class AvatarHandler {
 	 * Returns true if the specificed user have an avatar.
 	 */
 	public static function hasAvatar(User $user): bool {
-		$database = Database::getConnection(Settings::db_name_infected_crew);
+		$database = Database::getConnection(Settings::getValue("db_name_infected_crew"));
 
 		$result = $database->query('SELECT * FROM `' . DatabaseConstants::db_table_infected_crew_avatars . '`
 								   WHERE `userId` = ' . $user->getId() . ';');
@@ -105,7 +105,7 @@ class AvatarHandler {
 	 * Returns true if the specificed user have a cropped avatar.
 	 */
 	public static function hasCroppedAvatar(User $user): bool {
-		$database = Database::getConnection(Settings::db_name_infected_crew);
+		$database = Database::getConnection(Settings::getValue("db_name_infected_crew"));
 
 		$result = $database->query('SELECT * FROM `' . DatabaseConstants::db_table_infected_crew_avatars . '`
                                    WHERE `userId` = ' . $user->getId() . '
@@ -118,7 +118,7 @@ class AvatarHandler {
 	 * Returns true if the specificed user have a valid vatar.
 	 */
 	public static function hasValidAvatar(User $user):bool {
-		$database = Database::getConnection(Settings::db_name_infected_crew);
+		$database = Database::getConnection(Settings::getValue("db_name_infected_crew"));
 
 		$result = $database->query('SELECT * FROM `' . DatabaseConstants::db_table_infected_crew_avatars . '`
                                    WHERE `userId` = ' . $user->getId() . '
@@ -131,20 +131,20 @@ class AvatarHandler {
 	 * Creates an new avatar.
 	 */
 	public static function createAvatar(string $fileName, User $user): string {
-		$database = Database::getConnection(Settings::db_name_infected_crew);
+		$database = Database::getConnection(Settings::getValue("db_name_infected_crew"));
 		$result = $database->query('INSERT INTO `' . DatabaseConstants::db_table_infected_crew_avatars . '` (`userId`, `fileName`, `state`)
                                    VALUES (\'' . $user->getId() . '\',
                                            \'' . $fileName . '\',
                                            ' . self::STATE_NEW . ');');
 
-		return Settings::dynamic_path . Settings::dynamic_relative_avatar_path . 'temp/' . $fileName;
+		return Settings::getValue("dynamic_path") . Settings::getValue("dynamic_relative_avatar_path") . 'temp/' . $fileName;
 	}
 
 	/*
 	 * Updates the specified avatar.
 	 */
 	public static function updateAvatar(Avatar $avatar, int $state, string $fileName) {
-		$database = Database::getConnection(Settings::db_name_infected_crew);
+		$database = Database::getConnection(Settings::getValue("db_name_infected_crew"));
 
 		$database->query('UPDATE `' . DatabaseConstants::db_table_infected_crew_avatars . '`
                          SET `state` = ' . $database->real_escape_string($state) . ',
@@ -156,7 +156,7 @@ class AvatarHandler {
 	 * Deletes an avatar.
 	 */
 	public static function removeAvatar(Avatar $avatar) {
-		$database = Database::getConnection(Settings::db_name_infected_crew);
+		$database = Database::getConnection(Settings::getValue("db_name_infected_crew"));
 
 		$database->query('DELETE FROM `' . DatabaseConstants::db_table_infected_crew_avatars . '`
 						 WHERE `id` = ' . $avatar->getId() . ';');
@@ -169,7 +169,7 @@ class AvatarHandler {
 	 * Accept the specificed avatar.
 	 */
 	public static function acceptAvatar(Avatar $avatar) {
-		$database = Database::getConnection(Settings::db_name_infected_crew);
+		$database = Database::getConnection(Settings::getValue("db_name_infected_crew"));
 
 		$database->query('UPDATE `' . DatabaseConstants::db_table_infected_crew_avatars . '`
                          SET `state` = ' . self::STATE_ACCEPTED . '
@@ -180,7 +180,7 @@ class AvatarHandler {
 	 * Reject the specified avatar.
 	 */
 	public static function rejectAvatar(Avatar $avatar) {
-		$database = Database::getConnection(Settings::db_name_infected_crew);
+		$database = Database::getConnection(Settings::getValue("db_name_infected_crew"));
 
 		$database->query('UPDATE `' . DatabaseConstants::db_table_infected_crew_avatars . '`
                          SET `state` = ' . self::STATE_REJECTED . '
@@ -201,6 +201,6 @@ class AvatarHandler {
 			$file = 'default_child.png';
 		}
 
-		return Settings::dynamic_relative_avatar_path . 'default/' . $file;
+		return Settings::getValue("dynamic_relative_avatar_path") . 'default/' . $file;
 	}
 }

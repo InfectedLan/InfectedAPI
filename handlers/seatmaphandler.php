@@ -31,7 +31,7 @@ class SeatmapHandler {
 	 * Get a seatmap by the internal id.
 	 */
 	public static function getSeatmap(int $id): ?Seatmap {
-		$database = Database::getConnection(Settings::db_name_infected_tickets);
+		$database = Database::getConnection(Settings::getValue("db_name_infected_tickets"));
 
 		$result = $database->query('SELECT * FROM `' . DatabaseConstants::db_table_infected_tickets_seatmaps . '`
 																WHERE `id` = \'' . $database->real_escape_string($id) . '\';');
@@ -43,7 +43,7 @@ class SeatmapHandler {
 	 * Returns a list of all seatmaps.
 	 */
 	public static function getSeatmaps(): array {
-		$database = Database::getConnection(Settings::db_name_infected_tickets);
+		$database = Database::getConnection(Settings::getValue("db_name_infected_tickets"));
 
 		$result = $database->query('SELECT * FROM `' . DatabaseConstants::db_table_infected_tickets_seatmaps . '`;');
 
@@ -60,7 +60,7 @@ class SeatmapHandler {
 	 * Creates a new seatmap.
 	 */
 	public static function createSeatmap(string $name, ?string $backgroundImage): Seatmap {
-		$database = Database::getConnection(Settings::db_name_infected_tickets);
+		$database = Database::getConnection(Settings::getValue("db_name_infected_tickets"));
 
 		$database->query('INSERT INTO ' . DatabaseConstants::db_table_infected_tickets_seatmaps . '(`humanName`, `backgroundImage`)
 						  		VALUES (\'' . $database->real_escape_string($name) . '\',
@@ -117,7 +117,7 @@ class SeatmapHandler {
 	 * Returns a list of all seatmaps.
 	 */
 	public static function getEvent(Seatmap $seatmap): ?Event {
-		$database = Database::getConnection(Settings::db_name_infected);
+		$database = Database::getConnection(Settings::getValue("db_name_infected"));
 
 		// TODO: Use joins here to join with event table. Somehow.
 		$result = $database->query('SELECT `id` FROM `' . DatabaseConstants::db_table_infected_events . '`
@@ -132,7 +132,7 @@ class SeatmapHandler {
 	 * Set the background of the specified seatmap.
 	 */
 	public static function setBackground(Seatmap $seatmap, string $filename) {
-		$database = Database::getConnection(Settings::db_name_infected_tickets);
+		$database = Database::getConnection(Settings::getValue("db_name_infected_tickets"));
 
 		$database->query('UPDATE `' . DatabaseConstants::db_table_infected_tickets_seatmaps . '`
 						  				SET `backgroundImage` = \'' . $database->real_escape_string($filename) . '\'

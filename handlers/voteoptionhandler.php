@@ -30,7 +30,7 @@ class VoteOptionHandler {
 	 * Get a vote option by the internal id.
 	 */
 	public static function getVoteOption(int $id): ?VoteOption {
-		$database = Database::getConnection(Settings::db_name_infected_compo);
+		$database = Database::getConnection(Settings::getValue("db_name_infected_compo"));
 
 		$result = $database->query('SELECT * FROM `' . DatabaseConstants::db_table_infected_compo_voteoptions . '`
 																WHERE `id` = \'' . $id . '\';');
@@ -42,7 +42,7 @@ class VoteOptionHandler {
 	 * Get a vote option for a specified compo.
 	 */
 	public static function getVoteOptionsByCompo(Compo $compo): array {
-		$database = Database::getConnection(Settings::db_name_infected_compo);
+		$database = Database::getConnection(Settings::getValue("db_name_infected_compo"));
 
 		$result = $database->query('SELECT * FROM `' . DatabaseConstants::db_table_infected_compo_voteoptions . '`
 																WHERE `compoId` = \'' . $compo->getId() . '\';');
@@ -60,7 +60,7 @@ class VoteOptionHandler {
 	 * Returns true if specified vote option is voted for the specified match.
 	 */
 	public static function isVoted(VoteOption $voteOption, Match $match): bool {
-		$database = Database::getConnection(Settings::db_name_infected_compo);
+		$database = Database::getConnection(Settings::getValue("db_name_infected_compo"));
 
 		$result = $database->query('SELECT `id` FROM `' . DatabaseConstants::db_table_infected_compo_votes . '`
 																WHERE `voteOptionId` = \'' . $voteOption->getId() . '\'
@@ -73,7 +73,7 @@ class VoteOptionHandler {
 	 * Returns the vote type of the vote option, if any
 	 */
 	public static function getVoteType(VoteOption $voteOption, Match $match): int {
-		$database = Database::getConnection(Settings::db_name_infected_compo);
+		$database = Database::getConnection(Settings::getValue("db_name_infected_compo"));
 
 		$result = $database->query('SELECT `type` FROM `' . DatabaseConstants::db_table_infected_compo_votes . '`
 																WHERE `voteOptionId` = \'' . $voteOption->getId() . '\'

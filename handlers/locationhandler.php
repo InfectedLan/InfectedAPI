@@ -28,7 +28,7 @@ class LocationHandler {
 	 * Returns the location with the given id.
 	 */
 	public static function getLocation(int $id): ?Location {
-		$database = Database::getConnection(Settings::db_name_infected);
+		$database = Database::getConnection(Settings::getValue("db_name_infected"));
 
 		$result = $database->query('SELECT * FROM `'. DatabaseConstants::db_table_infected_locations . '`
 																WHERE `id` = \'' . $database->real_escape_string($id) . '\';');
@@ -40,7 +40,7 @@ class LocationHandler {
 	 * Returns a list of all locations.
 	 */
 	public static function getLocations(): array {
-		$database = Database::getConnection(Settings::db_name_infected);
+		$database = Database::getConnection(Settings::getValue("db_name_infected"));
 
 		$result = $database->query('SELECT * FROM `' . DatabaseConstants::db_table_infected_locations . '`;');
 

@@ -48,7 +48,7 @@ if(isset($_POST["pcbId"])) {
 							$roomTo = $unit->getToRoom();
 							$canPass = $roomTo->canEnter($card->getUser());
 
-                            if($user->getAge()<=Settings::curfewLimit) {
+                            if($user->getAge()<=Settings::getValue("curfewLimit")) {
                                 $canPass = $canPass && !$user->getCurfew();
                             }
 

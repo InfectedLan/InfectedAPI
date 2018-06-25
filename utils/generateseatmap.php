@@ -34,7 +34,7 @@ if (Session::isAuthenticated()) {
 
   	if ($seatmap != null) {
 	    //echo "hi";
-	    $image = imagecreatefrompng(Settings::api_path . 'content/seatmapBackground/' . $seatmap->getBackgroundImage());
+	    $image = imagecreatefrompng(Settings::getValue("api_path") . 'content/seatmapBackground/' . $seatmap->getBackgroundImage());
 
       foreach ($seatmap->getRows() as $row) {
     		doRow($row, $image);

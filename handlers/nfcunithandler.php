@@ -30,7 +30,7 @@ class NfcUnitHandler {
 	 * Returns the gate with the given id.
 	 */
 	public static function getGate($id) {
-		$database = Database::getConnection(Settings::db_name_infected_tech);
+		$database = Database::getConnection(Settings::getValue("db_name_infected_tech"));
 
 		$result = $database->query('SELECT * FROM `'. DatabaseConstants::db_table_infected_tech_nfcunits . '`
 																WHERE `id` = \'' . $database->real_escape_string($id) . '\';');
@@ -42,7 +42,7 @@ class NfcUnitHandler {
 	 * Returns the gate with the given pcbid
 	 */
 	public static function getGateByPcbid(string $pcbid) {
-		$database = Database::getConnection(Settings::db_name_infected_tech);
+		$database = Database::getConnection(Settings::getValue("db_name_infected_tech"));
 
 		$result = $database->query('SELECT * FROM `'. DatabaseConstants::db_table_infected_tech_nfcunits . '`
 																WHERE `pcbId` = \'' . $database->real_escape_string($pcbid) . '\';');
@@ -58,7 +58,7 @@ class NfcUnitHandler {
 			$event = EventHandler::getCurrentEvent();
 		}
 
-		$database = Database::getConnection(Settings::db_name_infected_tech);
+		$database = Database::getConnection(Settings::getValue("db_name_infected_tech"));
 
 		$result = $database->query('SELECT * FROM `' . DatabaseConstants::db_table_infected_tech_nfcunits . '` WHERE `eventId` = \'' . $event->getId() . '\';');
 

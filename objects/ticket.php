@@ -94,7 +94,7 @@ class Ticket extends EventObject {
 		$event = $this->getEvent();
 		$eventName = !empty($event->getTheme()) ? $event->getTheme() : $event->getSeason();
 
-		return strtoupper(Settings::name . '_' . $eventName . '_' . date('Y', $event->getStartTime()) . '_' . $this->getId());
+		return strtoupper(Settings::getValue("name") . '_' . $eventName . '_' . date('Y', $event->getStartTime()) . '_' . $this->getId());
 	}
 
 	// TODO: Implement this in a more generic way?
@@ -123,7 +123,7 @@ class Ticket extends EventObject {
 		$event = $this->getEvent();
 		$timeLeftToEvent = date('U', $event->getStartTime()) - time();
 
-		return $this->getType()->isRefundable() && $timeLeftToEvent >= Settings::refundBeforeEventTime;
+		return $this->getType()->isRefundable() && $timeLeftToEvent >= Settings::getValue("refundBeforeEventTime");
 	}
 
 	/*

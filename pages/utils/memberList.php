@@ -25,7 +25,7 @@ require_once 'handlers/eventhandler.php';
 echo '<!DOCTYPE html>';
 echo '<html>';
 	echo '<head>';
-		echo '<title>' . Settings::name . ' Medlemsliste</title>';
+		echo '<title>' . Settings::getValue("name") . ' Medlemsliste</title>';
 		echo '<meta charset="UTF-8">';
 	echo '</head>';
 	echo '<body>';

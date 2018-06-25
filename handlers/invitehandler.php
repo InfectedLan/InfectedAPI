@@ -31,7 +31,7 @@ class InviteHandler {
 	 * Get a invite by the internal id.
 	 */
 	public static function getInvite(int $id): ?Invite {
-		$database = Database::getConnection(Settings::db_name_infected_compo);
+		$database = Database::getConnection(Settings::getValue("db_name_infected_compo"));
 
 		$result = $database->query('SELECT * FROM `' . DatabaseConstants::db_table_infected_compo_invites . '`
 																WHERE `id` = \'' . $id . '\';');
@@ -43,7 +43,7 @@ class InviteHandler {
 	 * Get all invites.
 	 */
 	public static function getInvites(): array {
-		$database = Database::getConnection(Settings::db_name_infected_compo);
+		$database = Database::getConnection(Settings::getValue("db_name_infected_compo"));
 
 		$result = $database->query('SELECT * FROM `'  . DatabaseConstants::db_table_infected_compo_invites . '`;');
 
@@ -60,7 +60,7 @@ class InviteHandler {
 	 * Get all invites for the specified user.
 	 */
 	public static function getInvitesByUser(User $user): array {
-		$database = Database::getConnection(Settings::db_name_infected_compo);
+		$database = Database::getConnection(Settings::getValue("db_name_infected_compo"));
 
 		$result = $database->query('SELECT * FROM `'  . DatabaseConstants::db_table_infected_compo_invites . '`
 																WHERE `userId` = \'' . $user->getId() . '\';');
@@ -78,7 +78,7 @@ class InviteHandler {
 	 * Get all invites for a clan.
 	 */
 	public static function getInvitesByClan(Clan $clan): array {
-		$database = Database::getConnection(Settings::db_name_infected_compo);
+		$database = Database::getConnection(Settings::getValue("db_name_infected_compo"));
 
 		$result = $database->query('SELECT * FROM `' . DatabaseConstants::db_table_infected_compo_invites . '`
 																WHERE `clanId` = \'' . $clan->getId() . '\';');
@@ -96,7 +96,7 @@ class InviteHandler {
 	 * Invite the specified user to the specifed clan.
 	 */
 	public static function createInvite(Clan $clan, User $user, Event $event = null): Invite {
-		$database = Database::getConnection(Settings::db_name_infected_compo);
+		$database = Database::getConnection(Settings::getValue("db_name_infected_compo"));
 
 		$database->query('INSERT INTO `' . DatabaseConstants::db_table_infected_compo_invites . '` (`eventId`, `userId`, `clanId`)
 										  VALUES (\'' . ($event != null ? $event->getId() : EventHandler::getCurrentEvent()->getId()) . '\',
@@ -110,7 +110,7 @@ class InviteHandler {
 	 * Accept the specified invite.
 	 */
 	public static function acceptInvite(Invite $invite) {
-		$database = Database::getConnection(Settings::db_name_infected_compo);
+		$database = Database::getConnection(Settings::getValue("db_name_infected_compo"));
 
 		$database->query('DELETE FROM `' . DatabaseConstants::db_table_infected_compo_invites . '`
 						  				WHERE `id` = \'' . $invite->getId() . '\';');
@@ -159,7 +159,7 @@ class InviteHandler {
 	 * Decline the specified invite.
 	 */
 	public static function declineInvite(Invite $invite) {
-		$database = Database::getConnection(Settings::db_name_infected_compo);
+		$database = Database::getConnection(Settings::getValue("db_name_infected_compo"));
 
 		$database->query('DELETE FROM `' . DatabaseConstants::db_table_infected_compo_invites . '`
 											WHERE `id` = \'' . $invite->getId() . '\';');

@@ -33,7 +33,7 @@ class CompoHandler {
 	 * Get a compo by the internal id.
 	 */
 	public static function getCompo(int $id): ?Compo {
-		$database = Database::getConnection(Settings::db_name_infected_compo);
+		$database = Database::getConnection(Settings::getValue("db_name_infected_compo"));
 
 		$result = $database->query('SELECT * FROM `' . DatabaseConstants::db_table_infected_compo_compos . '`
 																WHERE `id` = \'' . $database->real_escape_string($id) . '\';');
@@ -45,7 +45,7 @@ class CompoHandler {
 	 * Get compos for the specified event.
 	 */
 	public static function getCompos(Event $event = null): array {
-		$database = Database::getConnection(Settings::db_name_infected_compo);
+		$database = Database::getConnection(Settings::getValue("db_name_infected_compo"));
 
 		$result = $database->query('SELECT * FROM `' . DatabaseConstants::db_table_infected_compo_compos . '`
 																WHERE `eventId` = \'' . ($event != null ? $event->getId() : EventHandler::getCurrentEvent()->getId()) . '\';');
@@ -63,7 +63,7 @@ class CompoHandler {
 	 * Get compo by specified clan.
 	 */
 	public static function getCompoByClan(Clan $clan): ?Compo {
-		$database = Database::getConnection(Settings::db_name_infected_compo);
+		$database = Database::getConnection(Settings::getValue("db_name_infected_compo"));
 
 		$result = $database->query('SELECT * FROM `' . DatabaseConstants::db_table_infected_compo_compos . '`
 																WHERE `id` = (SELECT `compoId` FROM `' . DatabaseConstants::db_table_infected_compo_participantof . '`
@@ -80,7 +80,7 @@ class CompoHandler {
     //First, create a compo chat
     $chat = ChatHandler::createChat($name . '-compo-chat', $title . ' compo chat');
 
-    $database = Database::getConnection(Settings::db_name_infected_compo);
+    $database = Database::getConnection(Settings::getValue("db_name_infected_compo"));
 
     $database->query('INSERT INTO `' . DatabaseConstants::db_table_infected_compo_compos . '` (`eventId`, `name`, `title`, `tag`, `description`, `pluginName`, `startTime`, `registrationEndTime`, `teamSize`, `chatId`, `participantLimit`, `connectionType`, `requiresSteamId`)
 										  VALUES (\'' . EventHandler::getCurrentEvent()->getId() . '\',
@@ -104,7 +104,7 @@ class CompoHandler {
 	 * Update a compo.
 	 */
 	public static function updateCompo(Compo $compo, string $name, string $title, string $tag, string $description, string $pluginName, int $startTime, int $registrationEndTime, int $teamSize, int $participantLimit) {
-		$database = Database::getConnection(Settings::db_name_infected_compo);
+		$database = Database::getConnection(Settings::getValue("db_name_infected_compo"));
 
 		$database->query('UPDATE `' . DatabaseConstants::db_table_infected_compo_compos . '`
 										  SET `name` = \'' . $database->real_escape_string($name) . '\',
@@ -123,7 +123,7 @@ class CompoHandler {
 	 * Returns true if the given compo has generated matches.
 	 */
 	public static function hasGeneratedMatches(Compo $compo): bool {
-		$database = Database::getConnection(Settings::db_name_infected_compo);
+		$database = Database::getConnection(Settings::getValue("db_name_infected_compo"));
 
 		$result = $database->query('SELECT `id` FROM `' . DatabaseConstants::db_table_infected_compo_matches . '`
 																WHERE `compoId` = \'' . $compo->getId() . '\';');

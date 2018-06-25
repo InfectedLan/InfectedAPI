@@ -28,7 +28,7 @@ class UserOptionHandler {
 	 * Returns true if this user has a option.
 	 */
 	public static function hasUserOption(User $user): bool {
-		$database = Database::getConnection(Settings::db_name_infected);
+		$database = Database::getConnection(Settings::getValue("db_name_infected"));
 
 		$result = $database->query('SELECT * FROM `' . DatabaseConstants::db_table_infected_useroptions . '`
 																WHERE `userId` = \'' . $user->getId() . '\';');
@@ -40,7 +40,7 @@ class UserOptionHandler {
 	 * Returns true is the phone number is set to private for the specified user.
 	 */
 	public static function hasUserPrivatePhone(User $user): bool {
-		$database = Database::getConnection(Settings::db_name_infected);
+		$database = Database::getConnection(Settings::getValue("db_name_infected"));
 
 		$result = $database->query('SELECT * FROM `' . DatabaseConstants::db_table_infected_useroptions . '`
 																WHERE `userId` = \'' . $user->getId() . '\'
@@ -53,7 +53,7 @@ class UserOptionHandler {
 	 * Returns true is the phone number is set to private for the specified user.
 	 */
 	public static function isUserReservedFromNotifications(User $user): bool {
-		$database = Database::getConnection(Settings::db_name_infected);
+		$database = Database::getConnection(Settings::getValue("db_name_infected"));
 
 		$result = $database->query('SELECT * FROM `' . DatabaseConstants::db_table_infected_useroptions . '`
 																WHERE `userId` = \'' . $user->getId() . '\'
@@ -66,7 +66,7 @@ class UserOptionHandler {
      * Returns true if the user has the prank option set.
      */
     public static function hasUserEasterEgg(User $user): bool {
-        $database = Database::getConnection(Settings::db_name_infected);
+        $database = Database::getConnection(Settings::getValue("db_name_infected"));
 
         $result = $database->query('SELECT * FROM `' . DatabaseConstants::db_table_infected_useroptions . '`
 																WHERE `userId` = \'' . $user->getId() . '\'
@@ -79,7 +79,7 @@ class UserOptionHandler {
 	 * Returns true if the user can bypass curfew
 	 */
     public static function canBypassCurfew(User $user): bool {
-        $database = Database::getConnection(Settings::db_name_infected);
+        $database = Database::getConnection(Settings::getValue("db_name_infected"));
 
         $result = $database->query('SELECT * FROM `' . DatabaseConstants::db_table_infected_useroptions . '`
 																WHERE `userId` = \'' . $user->getId() . '\'
@@ -93,7 +93,7 @@ class UserOptionHandler {
 	 */
     public static function setCanBypassCurfew(User $user, bool $curfew) {
         echo 'CURFEW: ' . $curfew;
-        $database = Database::getConnection(Settings::db_name_infected);
+        $database = Database::getConnection(Settings::getValue("db_name_infected"));
 
         if (!self::hasUserOption($user)) {
             $database->query('INSERT INTO `' . DatabaseConstants::db_table_infected_useroptions . '` (`userId`, `bypassCurfew`)

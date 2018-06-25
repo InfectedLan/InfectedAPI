@@ -29,7 +29,7 @@ class BongEntitlementHandler {
 	 * Returns the gate with the given id.
 	 */
 	public static function getBongEntitlement(int $id) {
-		$database = Database::getConnection(Settings::db_name_infected);
+		$database = Database::getConnection(Settings::getValue("db_name_infected"));
 
 		$result = $database->query('SELECT * FROM `'. DatabaseConstants::db_table_infected_bongEntitlements . '`
 																WHERE `id` = \'' . $database->real_escape_string($id) . '\';');
@@ -41,7 +41,7 @@ class BongEntitlementHandler {
 	 * Creates a bong entitlement
 	 */
 	public static function createBongEntitlement(BongType $type, int $amount, int $appendType, int $entitlementType, int $entitlementArg) {
-		$database = Database::getConnection(Settings::db_name_infected);
+		$database = Database::getConnection(Settings::getValue("db_name_infected"));
 
 		$database->query('INSERT INTO `' . DatabaseConstants::db_table_infected_bongEntitlements . '` (`bongTypeId`, `entitlementType`, `entitlementArg`, `entitlementAmt`, `appendType`) VALUES (' . $type->getId() . ', ' . $database->real_escape_string($entitlementType) . ', ' . $database->real_escape_string($entitlementArg) . ', ' . $database->real_escape_string($amount) . ', ' . $database->real_escape_string($appendType) . ');');
 
@@ -52,7 +52,7 @@ class BongEntitlementHandler {
 	 * Returns a list of all bong entitlements
 	 */
 	public static function getBongEntitlements(BongType $type, User $user = null) {
-		$database = Database::getConnection(Settings::db_name_infected);
+		$database = Database::getConnection(Settings::getValue("db_name_infected"));
 
 		$entitlementList = [];
 
@@ -89,7 +89,7 @@ class BongEntitlementHandler {
 			$event = EventHandler::getCurrentEvent();
 		}
 
-		$database = Database::getConnection(Settings::db_name_infected);
+		$database = Database::getConnection(Settings::getValue("db_name_infected"));
 
 		$exclusiveNum = 0;
 		$additiveNum = 0;

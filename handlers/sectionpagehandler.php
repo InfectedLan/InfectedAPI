@@ -28,7 +28,7 @@ class SectionPageHandler {
 	 * Return the section page by the internal id.
 	 */
 	public static function getSectionPage(int $id): ?SectionPage {
-		$database = Database::getConnection(Settings::db_name_infected_main);
+		$database = Database::getConnection(Settings::getValue("db_name_infected_main"));
 
 		$result = $database->query('SELECT * FROM `' . DatabaseConstants::db_table_infected_main_sectionpages . '`
 																WHERE id = \'' . $database->real_escape_string($id) . '\';');
@@ -40,7 +40,7 @@ class SectionPageHandler {
 	 * Return the section page by name.
 	 */
 	public static function getSectionPageByName(string $name): ?SectionPage {
-		$database = Database::getConnection(Settings::db_name_infected_main);
+		$database = Database::getConnection(Settings::getValue("db_name_infected_main"));
 
 		$result = $database->query('SELECT * FROM `' . DatabaseConstants::db_table_infected_main_sectionpages . '`
 																WHERE `name` = \'' . $database->real_escape_string($name) . '\';');
@@ -52,7 +52,7 @@ class SectionPageHandler {
 	 * Returns a list of all pages.
 	 */
 	public static function getSectionPages(): array {
-		$database = Database::getConnection(Settings::db_name_infected_main);
+		$database = Database::getConnection(Settings::getValue("db_name_infected_main"));
 
 		$result = $database->query('SELECT * FROM `' . DatabaseConstants::db_table_infected_main_sectionpages . '`;');
 
@@ -69,7 +69,7 @@ class SectionPageHandler {
 	 * Create a new section page.
 	 */
 	public static function createSectionPage(string $name, string $title, string $content): SectionPage {
-		$database = Database::getConnection(Settings::db_name_infected_main);
+		$database = Database::getConnection(Settings::getValue("db_name_infected_main"));
 
 		$database->query('INSERT INTO `' . DatabaseConstants::db_table_infected_main_sectionpages . '` (`name`, `title`, `content`)
 										  VALUES (\'' . $database->real_escape_string($name) . '\',
@@ -83,7 +83,7 @@ class SectionPageHandler {
 	 * Update a section page.
 	 */
 	public static function updatePage(SectionPage $sectionPage, string $title, string $content) {
-		$database = Database::getConnection(Settings::db_name_infected_main);
+		$database = Database::getConnection(Settings::getValue("db_name_infected_main"));
 
 		$database->query('UPDATE `' . DatabaseConstants::db_table_infected_main_sectionpages . '`
 										  SET `title` = \'' . $database->real_escape_string($title) . '\',
@@ -95,7 +95,7 @@ class SectionPageHandler {
 	 * Remove a section page.
 	 */
 	public static function removeSectionPage(SectionPage $sectionPage) {
-		$database = Database::getConnection(Settings::db_name_infected_main);
+		$database = Database::getConnection(Settings::getValue("db_name_infected_main"));
 
 		$database->query('DELETE FROM `' . DatabaseConstants::db_table_infected_main_sectionpages . '`
 						  				WHERE `id` = \'' . $page->getId() . '\';');

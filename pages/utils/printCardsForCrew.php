@@ -39,11 +39,11 @@ $za = new ZipArchive();
 
 $randomizedName = md5(time());
 
-if ($za->open(Settings::api_path . 'content/cards/' . $randomizedName . '.zip', ZipArchive::CREATE)!==TRUE) {
-    exit("cannot open <" . Settings::api_path . 'content/cards/' . $randomizedName . '.zip' . ">\n");
+if ($za->open(Settings::getValue("api_path") . 'content/cards/' . $randomizedName . '.zip', ZipArchive::CREATE)!==TRUE) {
+    exit("cannot open <" . Settings::getValue("api_path") . 'content/cards/' . $randomizedName . '.zip' . ">\n");
 }
 
-$tmpFile = Settings::api_path . 'content/cards/tmp/';
+$tmpFile = Settings::getValue("api_path") . 'content/cards/tmp/';
 
 $counter = 0;
 foreach($members as $member) {
@@ -66,7 +66,7 @@ header('Content-Type: application/zip');
 
 header('Content-Disposition: attachment; filename="' . $group->getName() . '.zip"');
 
-readfile(Settings::api_path . 'content/cards/' . $randomizedName . '.zip');
+readfile(Settings::getValue("api_path") . 'content/cards/' . $randomizedName . '.zip');
 
 
 ?>

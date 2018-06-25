@@ -30,7 +30,7 @@ class SyslogHandler {
 	const SEVERITY_CRITICAL = 4; // HOLY FUCK THE SERVERS ARE BURNING
 
 	public static function getSyslogEntry(int $id): ?SyslogEntry {
-		$database = Database::getConnection(Settings::db_name_infected);
+		$database = Database::getConnection(Settings::getValue("db_name_infected"));
 
 		$result = $database->query('SELECT * FROM `' . DatabaseConstants::db_table_infected_syslogs . '`
 																WHERE `id` = \'' . $database->real_escape_string($id) . '\';');
@@ -39,7 +39,7 @@ class SyslogHandler {
 	}
 
 	public static function getLastEntries(int $count): array {
-		$database = Database::getConnection(Settings::db_name_infected);
+		$database = Database::getConnection(Settings::getValue("db_name_infected"));
 
 		$result = $database->query('SELECT * FROM `' . DatabaseConstants::db_table_infected_syslogs . '`
 																ORDER BY `id` DESC
@@ -55,7 +55,7 @@ class SyslogHandler {
 	}
 
 	public static function getLastEntriesBySource(string $source, int $count): array {
-		$database = Database::getConnection(Settings::db_name_infected);
+		$database = Database::getConnection(Settings::getValue("db_name_infected"));
 
 		$result = $database->query('SELECT * FROM `' . DatabaseConstants::db_table_infected_syslogs . '`
 																WHERE `source` LIKE \'' . $database->real_escape_string($source) . '\'
@@ -72,7 +72,7 @@ class SyslogHandler {
 	}
 
 	public static function log(string $message, string $source, User $user = null, int $severity = self::SEVERITY_INFO, array $metadata = []) {
-		$database = Database::getConnection(Settings::db_name_infected);
+		$database = Database::getConnection(Settings::getValue("db_name_infected"));
 
 		$database->query('INSERT INTO `' . DatabaseConstants::db_table_infected_syslogs . '`(`source`, `severity`, `message`, `metadata`, `date`, `userId`)
 											VALUES (\'' . $database->real_escape_string($source) . '\',
@@ -82,7 +82,7 @@ class SyslogHandler {
 															\'' . date('Y-m-d H:i:s') . '\',
 															\'' . $database->real_escape_string($user != null ? $user->getId() : 0) . '\');');
 		//For discord logging
-		$techDatabase = Database::getConnection(Settings::db_name_infected_tech);
+		$techDatabase = Database::getConnection(Settings::getValue("db_name_infected_tech"));
 
 		$techDatabase->query('INSERT INTO `' . DatabaseConstants::db_table_infected_tech_discordMessageQueue . '` (`entryId`, `read`) VALUES (' . $database->insert_id . ', 0)');
 	}

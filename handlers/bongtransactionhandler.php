@@ -32,7 +32,7 @@ class BongTransactionHandler {
 	 * Returns a single transaction
 	 */
 	public static function getBongTransaction(int $id) {
-		$database = Database::getConnection(Settings::db_name_infected);
+		$database = Database::getConnection(Settings::getValue("db_name_infected"));
 
 		$result = $database->query('SELECT * FROM `'. DatabaseConstants::db_table_infected_bongTransactions . '`
 																WHERE `id` = \'' . $database->real_escape_string($id) . '\';');
@@ -44,7 +44,7 @@ class BongTransactionHandler {
 	 * Returns a list of all bong transactions for the given bong and optionally user
 	 */
 	public static function getBongTransactions(BongType $type, User $user = null) {
-		$database = Database::getConnection(Settings::db_name_infected);
+		$database = Database::getConnection(Settings::getValue("db_name_infected"));
 
 		$transactionList = [];
 
@@ -96,7 +96,7 @@ class BongTransactionHandler {
 	 * Also note that all transactions are connected to the user who had the permissions to process it.
 	 */
 	public static function processBongTransaction(BongType $type, User $user, int $amount, User $responsible) {
-		$database = Database::getConnection(Settings::db_name_infected);
+		$database = Database::getConnection(Settings::getValue("db_name_infected"));
 
 		$result = $database->query('INSERT INTO `' . DatabaseConstants::db_table_infected_bongTransactions . '` (`bongType`, `amt`, `transactionHandler`, `timestamp`, `userId`) VALUES (' . $type->getId() . ', ' . $database->real_escape_string($amount) . ', ' .  $responsible->getId(). ', \'' . date('Y-m-d H:i:s') . '\', ' . $user->getId() . ');');
 

@@ -32,7 +32,7 @@ class UserFriendHandler {
 	 * Returns true is the specified user is friend with the specified friend user.
 	 */
 	public static function isUserFriendsWith(User $user, User $friend): bool {
-		$database = Database::getConnection(Settings::db_name_infected);
+		$database = Database::getConnection(Settings::getValue("db_name_infected"));
 
 		$result = $database->query('SELECT * FROM `' . DatabaseConstants::db_table_infected_userfriends . '`
 								   WHERE ((`fromId` = ' . $user->getId() . ' AND `toId` = ' . $friend->getId() . ')
@@ -46,7 +46,7 @@ class UserFriendHandler {
 	 * Get a list of all users that the specified user is friends with.
 	 */
 	public static function getFriendsByUser(User $user, int $state = self::STATE_ACCEPTED): array {
-		$database = Database::getConnection(Settings::db_name_infected);
+		$database = Database::getConnection(Settings::getValue("db_name_infected"));
 
 		$result = $database->query('SELECT * FROM `' . DatabaseConstants::db_table_infected_users . '`
 								   WHERE `id` IN (SELECT `toId` FROM `' . DatabaseConstants::db_table_infected_userfriends . '`
@@ -71,7 +71,7 @@ class UserFriendHandler {
      * Get a list of all pending friend requests to the given user
      */
     public static function getPendingFriendRequestsToUser(User $user): array {
-        $database = Database::getConnection(Settings::db_name_infected);
+        $database = Database::getConnection(Settings::getValue("db_name_infected"));
 
         $result = $database->query('SELECT * FROM `' . DatabaseConstants::db_table_infected_users . '`
                                    WHERE `id` IN (SELECT `fromId` FROM `' . DatabaseConstants::db_table_infected_userfriends . '`
@@ -92,7 +92,7 @@ class UserFriendHandler {
      * Get a list of all pending friend requests from the given user
      */
     public static function getPendingFriendRequestsFromUser(User $user): array {
-        $database = Database::getConnection(Settings::db_name_infected);
+        $database = Database::getConnection(Settings::getValue("db_name_infected"));
 
         $result = $database->query('SELECT * FROM `' . DatabaseConstants::db_table_infected_users . '`
                                    WHERE `id` IN (SELECT `toId` FROM `' . DatabaseConstants::db_table_infected_userfriends . '`
@@ -113,7 +113,7 @@ class UserFriendHandler {
 	 * Adds a friendship with another user.
 	 */
 	public static function addUserFriend(User $user, User $friend) {
-		$database = Database::getConnection(Settings::db_name_infected);
+		$database = Database::getConnection(Settings::getValue("db_name_infected"));
 
 		$database->query('INSERT INTO `' . DatabaseConstants::db_table_infected_userfriends . '` (`fromId`, `toId`, `datetime`, `state`)
 						 VALUES (' . $user->getId() . ',
@@ -126,7 +126,7 @@ class UserFriendHandler {
 	 * Removes a users friendship.
 	 */
 	public static function removeUserFriend(User $user, User $friend) {
-		$database = Database::getConnection(Settings::db_name_infected);
+		$database = Database::getConnection(Settings::getValue("db_name_infected"));
 
 		$database->query('DELETE FROM `' . DatabaseConstants::db_table_infected_userfriends . '`
 						 WHERE (`fromId` = ' . $user->getId() . ' AND `toId` = ' . $friend->getId() . ')
@@ -137,7 +137,7 @@ class UserFriendHandler {
 	 * Updates the state of a users friendship.
 	 */
 	public static function updateUserFriend(User $user, User $friend, int $state = self::STATE_ACCEPTED) {
-		$database = Database::getConnection(Settings::db_name_infected);
+		$database = Database::getConnection(Settings::getValue("db_name_infected"));
 
 		$database->query('UPDATE `' . DatabaseConstants::db_table_infected_userfriends . '`
 						 SET `state` = ' . $state . '

@@ -41,7 +41,7 @@ try {
       if ($_FILES['file']['size'] < 15 * 1024 * 1024) {
         if (in_array($extension, $allowedExts)) {
           if ($_FILES['file']['error'] == 0) {
-            move_uploaded_file($_FILES['file']['tmp_name'], Settings::api_path . "content/castingAssets/" .  $_FILES['file']['name']);
+            move_uploaded_file($_FILES['file']['tmp_name'], Settings::getValue("api_path") . "content/castingAssets/" .  $_FILES['file']['name']);
             $uploadedName = $_FILES['file']['name'];
             $result = true;
           } else {

@@ -28,7 +28,7 @@ class CustomUserTitleHandler {
 	 * Returns is the user has a custom title
 	 */
 	public static function hasCustomTitle(User $user): bool {
-		$database = Database::getConnection(Settings::db_name_infected_crew);
+		$database = Database::getConnection(Settings::getValue("db_name_infected_crew"));
 
 		$result = $database->query('SELECT * FROM `' . DatabaseConstants::db_table_infected_crew_customusertitles . '`
 																WHERE `userId` = \'' . $user->getId() . '\';');
@@ -40,7 +40,7 @@ class CustomUserTitleHandler {
 	 * Returns the custom title for the user, or nothing
 	 */
 	public static function getCustomTitle(User $user): string {
-		$database = Database::getConnection(Settings::db_name_infected_crew);
+		$database = Database::getConnection(Settings::getValue("db_name_infected_crew"));
 
 		$result = $database->query('SELECT `title` FROM `' . DatabaseConstants::db_table_infected_crew_customusertitles . '`
 																WHERE `userId` = \'' . $user->getId() . '\';');
@@ -51,10 +51,10 @@ class CustomUserTitleHandler {
 	 * Sets the custom title of a user
 	 */
 	public static function setCustomTitle(User $user, string $title) {
-		$database = Database::getConnection(Settings::db_name_infected_crew);
+		$database = Database::getConnection(Settings::getValue("db_name_infected_crew"));
 
 		if(self::hasCustomTitle($user)) {
-			$result = $database->query('UPDATE `' . Settings::db_table_infected_customusertitles . '` SET `` = \'' . $database->real_escape_string($title) . '\'
+			$result = $database->query('UPDATE `' . Settings::getValue("db_table_infected_customusertitles") . '` SET `` = \'' . $database->real_escape_string($title) . '\'
 																WHERE `userId` = \'' . $user->getId() . '\';');
 		} else {
 			$result = $database->query('INSERT INTO `' . DatabaseConstants::db_table_infected_crew_customusertitles . '` (`userId`, `title`) VALUES \'' . $user->getId() . '\', \'' . $database->real_escape_string($title) . '\';');

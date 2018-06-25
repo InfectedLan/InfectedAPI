@@ -110,7 +110,7 @@ class Clan extends EventObject {
 		}
 
 		// TODO: Move this database stuff, should really be in a handler.
-		$database = Database::getConnection(Settings::db_name_infected_compo);
+		$database = Database::getConnection(Settings::getValue("db_name_infected_compo"));
 
 		$result = $database->query('SELECT * FROM `' . DatabaseConstants::db_table_infected_compo_participantof . '`
 								   WHERE `clanId` = \'' . $this->getId() . '\'

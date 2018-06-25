@@ -31,7 +31,7 @@ class CompoPluginHandler {
   	if (!isset(self::$cachedPlugins[$pluginName])) { //please note isset will return false if the key exists, but the value is null. This is not a case we need to care for in this example.
 	    $obj = null;
 
-      if (!file_exists(Settings::api_path . "plugins/compo/" . $pluginName . ".json")) {
+      if (!file_exists(Settings::getValue("api_path") . "plugins/compo/" . $pluginName . ".json")) {
     		$obj = self::loadPluginObject("default");
       } else {
     		$obj = self::loadPluginObject($pluginName);
@@ -52,7 +52,7 @@ class CompoPluginHandler {
     if (!isset(self::$cachedMetadata[$pluginName])) { //please note isset will return false if the key exists, but the value is null. This is not a case we need to care for in this example.
       $obj = null;
 
-      if (!file_exists(Settings::api_path . "plugins/compo/" . $pluginName . ".json")) {
+      if (!file_exists(Settings::getValue("api_path") . "plugins/compo/" . $pluginName . ".json")) {
   	     $obj = ["name" => "Default plugin", "description" => "pretty default.", "javascript" => [], "pages" => [], "classname" => "default"];
       } else {
   	     $obj = self::getPluginMetadata($pluginName);
@@ -69,7 +69,7 @@ class CompoPluginHandler {
    * Returns plugin metadata
    */
   public static function getPluginMetadata(string $pluginName) { //object or array
-    $string = file_get_contents(Settings::api_path . "plugins/compo/" . $pluginName . ".json");
+    $string = file_get_contents(Settings::getValue("api_path") . "plugins/compo/" . $pluginName . ".json");
 
     return json_decode($string, true);
   }
@@ -81,7 +81,7 @@ class CompoPluginHandler {
     if (!isset(self::$cachedJavascripts[$pluginName])) { //please note isset will return false if the key exists, but the value is null. This is not a case we need to care for in this example.
       $arr = null;
 
-      if (!file_exists(Settings::api_path . "plugins/compo/" . $pluginName . ".json")) {
+      if (!file_exists(Settings::getValue("api_path") . "plugins/compo/" . $pluginName . ".json")) {
   	     $arr = self::loadPluginScripts("default");
       } else {
   	     $arr = self::loadPluginScripts($pluginName);
@@ -99,14 +99,14 @@ class CompoPluginHandler {
    * Returns true if plugin exists
    */
   public static function pluginExists(string $pluginName): bool {
-    return file_exists(Settings::api_path . "plugins/compo/" . $pluginName . ".json");
+    return file_exists(Settings::getValue("api_path") . "plugins/compo/" . $pluginName . ".json");
   }
 
   /**
    * Returns an object with the plugin
    */
   public static function loadPluginObject(string $pluginName): ?object {
-    $string = file_get_contents(Settings::api_path . "plugins/compo/" . $pluginName . ".json");
+    $string = file_get_contents(Settings::getValue("api_path") . "plugins/compo/" . $pluginName . ".json");
     $json = json_decode($string, true);
 
     foreach($json["plugin"] as $pluginFile) {
@@ -121,7 +121,7 @@ class CompoPluginHandler {
    * Returns a list of scripts used by this plugin
    */
   public static function loadPluginScripts(string $pluginName) {
-    $string = file_get_contents(Settings::api_path . "plugins/compo/" . $pluginName . ".json");
+    $string = file_get_contents(Settings::getValue("api_path") . "plugins/compo/" . $pluginName . ".json");
     $json = json_decode($string, true);
 
     return $json["javascript"];

@@ -52,10 +52,10 @@ if (Session::isAuthenticated()) {
 					$image = 0;
 
 					if ($extension == 'png') {
-						$image = imagecreatefrompng(Settings::dynamic_path . $avatar->getTemp());
+						$image = imagecreatefrompng(Settings::getValue("dynamic_path") . $avatar->getTemp());
 					} else if ($extension == 'jpeg' ||
 							   $extension == 'jpg') {
-						$image = imagecreatefromjpeg(Settings::dynamic_path . $avatar->getTemp())	;
+						$image = imagecreatefromjpeg(Settings::getValue("dynamic_path") . $avatar->getTemp())	;
 					}
 
 					if ($image != 0) {
@@ -65,27 +65,27 @@ if (Session::isAuthenticated()) {
 						$cropWidth = ceil($w * $scalefactor);
 						$cropHeight = ceil($h * $scalefactor);
 
-						if ($cropWidth >= Settings::avatar_minimum_width &&
-							$cropHeight >= Settings::avatar_minimum_height) {
+						if ($cropWidth >= Settings::getValue("avatar_minimum_width") &&
+							$cropHeight >= Settings::getValue("avatar_minimum_height")) {
 							// Render to tumbnail
-							$target = imagecreatetruecolor(Settings::avatar_thumb_w, Settings::avatar_thumb_h);
-							imagecopyresized($target, $image, 0, 0, $x*$scalefactor, $y*$scalefactor, Settings::avatar_thumb_w, Settings::avatar_thumb_h, $w*$scalefactor, $h*$scalefactor);
-							$imagePath = Settings::dynamic_path . $avatar->getThumbnail();
-							imagejpeg($target, str_replace_last($extension, 'jpg', $imagePath), Settings::thumbnail_compression_rate);
+							$target = imagecreatetruecolor(Settings::getValue("avatar_thumb_w"), Settings::getValue("avatar_thumb_h"));
+							imagecopyresized($target, $image, 0, 0, $x*$scalefactor, $y*$scalefactor, Settings::getValue("avatar_thumb_w"), Settings::getValue("avatar_thumb_h"), $w*$scalefactor, $h*$scalefactor);
+							$imagePath = Settings::getValue("dynamic_path") . $avatar->getThumbnail();
+							imagejpeg($target, str_replace_last($extension, 'jpg', $imagePath), Settings::getValue("thumbnail_compression_rate"));
 
 							// Render to sd
-							$target = imagecreatetruecolor(Settings::avatar_sd_w, Settings::avatar_sd_h);
-							imagecopyresized($target, $image, 0, 0, $x*$scalefactor, $y*$scalefactor, Settings::avatar_sd_w, Settings::avatar_sd_h, $w*$scalefactor, $h*$scalefactor);
-							$imagePath = Settings::dynamic_path . $avatar->getSd();
-							imagejpeg($target, str_replace_last($extension, 'jpg', $imagePath), Settings::sd_compression_rate);
+							$target = imagecreatetruecolor(Settings::getValue("avatar_sd_w"), Settings::getValue("avatar_sd_h"));
+							imagecopyresized($target, $image, 0, 0, $x*$scalefactor, $y*$scalefactor, Settings::getValue("avatar_sd_w"), Settings::getValue("avatar_sd_h"), $w*$scalefactor, $h*$scalefactor);
+							$imagePath = Settings::getValue("dynamic_path") . $avatar->getSd();
+							imagejpeg($target, str_replace_last($extension, 'jpg', $imagePath), Settings::getValue("sd_compression_rate"));
 
 							// Render to hq
-							$target = imagecreatetruecolor(Settings::avatar_hd_w, Settings::avatar_hd_h);
-							imagecopyresized($target, $image, 0, 0, $x*$scalefactor, $y*$scalefactor, Settings::avatar_hd_w, Settings::avatar_hd_h, $w*$scalefactor, $h*$scalefactor);
-							$imagePath = Settings::dynamic_path . $avatar->getHd();
-							imagejpeg($target, str_replace_last($extension, 'jpg', $imagePath), Settings::hd_compression_rate);
+							$target = imagecreatetruecolor(Settings::getValue("avatar_hd_w"), Settings::getValue("avatar_hd_h"));
+							imagecopyresized($target, $image, 0, 0, $x*$scalefactor, $y*$scalefactor, Settings::getValue("avatar_hd_w"), Settings::getValue("avatar_hd_h"), $w*$scalefactor, $h*$scalefactor);
+							$imagePath = Settings::getValue("dynamic_path") . $avatar->getHd();
+							imagejpeg($target, str_replace_last($extension, 'jpg', $imagePath), Settings::getValue("hd_compression_rate"));
 
-							unlink(Settings::dynamic_path . $avatar->getTemp());
+							unlink(Settings::getValue("dynamic_path") . $avatar->getTemp());
 
 							$avatar->setFileName(str_replace_last($extension, 'jpg', $avatar->getFileName()));
 							$avatar->setState(1);

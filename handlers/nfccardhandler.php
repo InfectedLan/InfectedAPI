@@ -35,7 +35,7 @@ class NfcCardHandler {
 			$event = EventHandler::getCurrentEvent();
 		}
 
-		$database = Database::getConnection(Settings::db_name_infected_tech);
+		$database = Database::getConnection(Settings::getValue("db_name_infected_tech"));
 
 		$result = $database->query('INSERT INTO `' . DatabaseConstants::db_table_infected_tech_nfccards . '` (`userId`, `eventId`, `nfcId`)
 																VALUES (\'' . $user->getId() . '\',
@@ -50,7 +50,7 @@ class NfcCardHandler {
 	 * Returns the card with the given database id.
 	 */
 	public static function getCard($id) {
-		$database = Database::getConnection(Settings::db_name_infected_tech);
+		$database = Database::getConnection(Settings::getValue("db_name_infected_tech"));
 
 		$result = $database->query('SELECT * FROM `'. DatabaseConstants::db_table_infected_tech_nfccards . '`
 																WHERE `id` = \'' . $database->real_escape_string($id) . '\';');
@@ -65,7 +65,7 @@ class NfcCardHandler {
 		if($event==null) {
 			$event = EventHandler::getCurrentEvent();
 		}
-		$database = Database::getConnection(Settings::db_name_infected_tech);
+		$database = Database::getConnection(Settings::getValue("db_name_infected_tech"));
 
 		$result = $database->query('SELECT * FROM `'. DatabaseConstants::db_table_infected_tech_nfccards . '`
 																WHERE `nfcId` = \'' . $database->real_escape_string($nfcId) . '\'
@@ -81,7 +81,7 @@ class NfcCardHandler {
 		if($event==null) {
 			$event = EventHandler::getCurrentEvent();
 		}
-		$database = Database::getConnection(Settings::db_name_infected_tech);
+		$database = Database::getConnection(Settings::getValue("db_name_infected_tech"));
 
 		$result = $database->query('SELECT * FROM `' . DatabaseConstants::db_table_infected_tech_nfccards . '` WHERE `eventId` = \'' . $database->real_escape_string($event->getId()) . '\';');
 
@@ -101,7 +101,7 @@ class NfcCardHandler {
 		if($event==null) {
 			$event = EventHandler::getCurrentEvent();
 		}
-		$database = Database::getConnection(Settings::db_name_infected_tech);
+		$database = Database::getConnection(Settings::getValue("db_name_infected_tech"));
 
 		$result = $database->query('SELECT * FROM `'. DatabaseConstants::db_table_infected_tech_nfccards . '`
 																WHERE `eventId` = \'' . $database->real_escape_string($event->getId()) . '\' AND `userId` = \'' . $database->real_escape_string($user->getId()) . '\';');

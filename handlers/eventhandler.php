@@ -29,7 +29,7 @@ class EventHandler {
 	 * Returns the event with the given id.
 	 */
 	public static function getEvent(int $id): ?Event {
-		$database = Database::getConnection(Settings::db_name_infected);
+		$database = Database::getConnection(Settings::getValue("db_name_infected"));
 
 		$result = $database->query('SELECT * FROM `'. DatabaseConstants::db_table_infected_events . '`
 																WHERE `id` = \'' . $database->real_escape_string($id) . '\';');
@@ -41,7 +41,7 @@ class EventHandler {
 	 * Returns true if we got an event with the given id.
 	 */
 	public static function hasEvent(int $id): bool {
-		$database = Database::getConnection(Settings::db_name_infected);
+		$database = Database::getConnection(Settings::getValue("db_name_infected"));
 
 		$result = $database->query('SELECT * FROM `'. DatabaseConstants::db_table_infected_events . '`
 																WHERE `id` = \'' . $database->real_escape_string($id) . '\';');
@@ -53,7 +53,7 @@ class EventHandler {
 	 * Returns the event after the current event.
 	 */
 	public static function getNextEvent(): ?Event {
-		$database = Database::getConnection(Settings::db_name_infected);
+		$database = Database::getConnection(Settings::getValue("db_name_infected"));
 
 		$result = $database->query('SELECT * FROM `' . DatabaseConstants::db_table_infected_events . '`
 																WHERE `id` > (SELECT `id` FROM `' . DatabaseConstants::db_table_infected_events . '`
@@ -70,7 +70,7 @@ class EventHandler {
 	 * Returns the event that is closest in time, which means the next or on-going event.
 	 */
 	public static function getCurrentEvent(): ?Event {
-		$database = Database::getConnection(Settings::db_name_infected);
+		$database = Database::getConnection(Settings::getValue("db_name_infected"));
 
 		$result = $database->query('SELECT * FROM `' . DatabaseConstants::db_table_infected_events . '`
 																WHERE DATE_ADD(DATE(`endTime`), INTERVAL 1 DAY) >= NOW()
@@ -84,7 +84,7 @@ class EventHandler {
 	 * Returns the event before the current event.
 	 */
 	public static function getPreviousEvent(): ?Event {
-		$database = Database::getConnection(Settings::db_name_infected);
+		$database = Database::getConnection(Settings::getValue("db_name_infected"));
 
 		$result = $database->query('SELECT * FROM `' . DatabaseConstants::db_table_infected_events . '`
 																WHERE `id` < (SELECT `id` FROM `' . DatabaseConstants::db_table_infected_events . '`
@@ -101,7 +101,7 @@ class EventHandler {
 	 * Returns a list of all registred events.
 	 */
 	public static function getEvents(): array {
-		$database = Database::getConnection(Settings::db_name_infected);
+		$database = Database::getConnection(Settings::getValue("db_name_infected"));
 
 		$result = $database->query('SELECT * FROM `' . DatabaseConstants::db_table_infected_events . '`;');
 
@@ -118,7 +118,7 @@ class EventHandler {
 	 * Returns a list of all registred events.
 	 */
 	public static function getEventsByYear(int $year): array {
-		$database = Database::getConnection(Settings::db_name_infected);
+		$database = Database::getConnection(Settings::getValue("db_name_infected"));
 
 		$result = $database->query('SELECT * FROM `' . DatabaseConstants::db_table_infected_events . '`
 																WHERE EXTRACT(YEAR FROM `startTime`) = \'' . $year . '\';');
@@ -136,10 +136,10 @@ class EventHandler {
 	 * Create new event
 	 */
 	public static function createEvent(Location $location, int $participantCount, string $bookingTime, string $prioritySeatingTime, string $seatingTime, string $startTime, string $endTime): Event {
-	    $name = Settings::name . ' ' . Localization::getLocale(date('m', strtotime($startTime)) == 2 ? 'winter' : 'autumn') . ' ' . date('Y', strtotime($startTime));
+	    $name = Settings::getValue("name") . ' ' . Localization::getLocale(date('m', strtotime($startTime)) == 2 ? 'winter' : 'autumn') . ' ' . date('Y', strtotime($startTime));
 		$seatmap = SeatmapHandler::createSeatmap($name, null);
 
-		$database = Database::getConnection(Settings::db_name_infected);
+		$database = Database::getConnection(Settings::getValue("db_name_infected"));
 
 		$database->query('INSERT INTO `' . DatabaseConstants::db_table_infected_events . '` (`locationId`, `participants`, `bookingTime`, `prioritySeatingTime`, `seatingTime`, `startTime`, `endTime`, `seatmapId`, `ticketTypeId`)
 										  VALUES (\'' . $location->getId() . '\',
@@ -159,7 +159,7 @@ class EventHandler {
 	 * Update an event
 	 */
 	public static function updateEvent(Event $event, Location $location, int $participantCount, string $bookingTime, string $prioritySeatingTime, string $seatingTime, string $startTime, string $endTime) {
-	  $database = Database::getConnection(Settings::db_name_infected);
+	  $database = Database::getConnection(Settings::getValue("db_name_infected"));
 
 		$database->query('UPDATE `' . DatabaseConstants::db_table_infected_events . '`
                                 SET `locationId` = \'' . $location->getId() . '\',
@@ -176,7 +176,7 @@ class EventHandler {
 	 * Remove an event
 	 */
 	public static function removeEvent(Event $event) {
-		$database = Database::getConnection(Settings::db_name_infected);
+		$database = Database::getConnection(Settings::getValue("db_name_infected"));
 
 		$database->query('DELETE FROM `' . DatabaseConstants::db_table_infected_events . '`
 						  				WHERE `id` = \'' . $event->getId() . '\';');
@@ -186,10 +186,10 @@ class EventHandler {
 	 * Returns a list of everyone in a group for the specified event
 	 */
 	public static function getMembersByEvent(Event $event): array {
-		$database = Database::getConnection(Settings::db_name_infected);
+		$database = Database::getConnection(Settings::getValue("db_name_infected"));
 
 		$result = $database->query('SELECT `' . DatabaseConstants::db_table_infected_users . '`.* FROM `' . DatabaseConstants::db_table_infected_users . '`
-													LEFT JOIN `' . Settings::db_name_infected_crew . '`.`' . DatabaseConstants::db_table_infected_crew_memberof . '` ON `' . DatabaseConstants::db_table_infected_users . '`.`id` = `' . Settings::db_name_infected_crew . '`.`' . DatabaseConstants::db_table_infected_crew_memberof . '`.`userId`
+													LEFT JOIN `' . Settings::getValue("db_name_infected_crew") . '`.`' . DatabaseConstants::db_table_infected_crew_memberof . '` ON `' . DatabaseConstants::db_table_infected_users . '`.`id` = `' . Settings::getValue("db_name_infected_crew") . '`.`' . DatabaseConstants::db_table_infected_crew_memberof . '`.`userId`
 													WHERE `eventId` = ' . $event->getId() . ';');
 
 		$eventList = [];
@@ -205,12 +205,12 @@ class EventHandler {
 	 * Returns list of people owning tickets for the specified event, that arent in a group
 	 */
 	public static function getParticipantsByEvent(Event $event): array {
-		$database = Database::getConnection(Settings::db_name_infected);
+		$database = Database::getConnection(Settings::getValue("db_name_infected"));
 
 		$result = $database->query('SELECT `' . DatabaseConstants::db_table_infected_users . '`.* FROM `' . DatabaseConstants::db_table_infected_users . '`
-							LEFT JOIN `' . Settings::db_name_infected_tickets . '`.`' . DatabaseConstants::db_table_infected_tickets_tickets . '`
+							LEFT JOIN `' . Settings::getValue("db_name_infected_tickets") . '`.`' . DatabaseConstants::db_table_infected_tickets_tickets . '`
 							    ON `' . DatabaseConstants::db_table_infected_users . '`.`id` = `' . DatabaseConstants::db_table_infected_tickets_tickets . '`.`userId`
-							LEFT JOIN `' . Settings::db_name_infected_crew . '`.`' . DatabaseConstants::db_table_infected_crew_memberof . '`
+							LEFT JOIN `' . Settings::getValue("db_name_infected_crew") . '`.`' . DatabaseConstants::db_table_infected_crew_memberof . '`
 							    ON (`' . DatabaseConstants::db_table_infected_users . '`.`id` = `' . DatabaseConstants::db_table_infected_crew_memberof . '`.`userId`
 									    AND `' . DatabaseConstants::db_table_infected_crew_memberof . '`.`eventId` = ' . $event->getId() . ')
 							WHERE `' . DatabaseConstants::db_table_infected_tickets_tickets . '`.`eventId` = ' . $event->getId() . '
@@ -230,7 +230,7 @@ class EventHandler {
 	 * Returns members and participants for given events.
 	 */
 	public static function getMembersAndParticipantsByEvents(array $eventList, int $ageLimit): array {
-		$database = Database::getConnection(Settings::db_name_infected);
+		$database = Database::getConnection(Settings::getValue("db_name_infected"));
 
 		// Extract event id's from the event list.
 		$dateLimit = date('Y-m-d', end($eventList)->getStartTime());
@@ -241,12 +241,12 @@ class EventHandler {
 		}
 
 		$result = $database->query('SELECT * FROM (SELECT `' . DatabaseConstants::db_table_infected_users . '`.*, `eventId` FROM `' . DatabaseConstants::db_table_infected_users . '`
-																					     LEFT JOIN `' . Settings::db_name_infected_crew . '`.`' . DatabaseConstants::db_table_infected_crew_memberof . '`
+																					     LEFT JOIN `' . Settings::getValue("db_name_infected_crew") . '`.`' . DatabaseConstants::db_table_infected_crew_memberof . '`
 																					     ON `' . DatabaseConstants::db_table_infected_users . '`.`id` = `userId`
 																					     WHERE `groupId` IS NOT NULL
 																					     UNION ALL
 																				   	   SELECT `' . DatabaseConstants::db_table_infected_users . '`.*, `eventId` FROM `' . DatabaseConstants::db_table_infected_users . '`
-																				   	   LEFT JOIN `' . Settings::db_name_infected_tickets . '`.`' . DatabaseConstants::db_table_infected_tickets_tickets . '`
+																				   	   LEFT JOIN `' . Settings::getValue("db_name_infected_tickets") . '`.`' . DatabaseConstants::db_table_infected_tickets_tickets . '`
 																					     ON `' . DatabaseConstants::db_table_infected_users . '`.`id` = `userId`
 																					     WHERE `userId` IS NOT NULL) AS `users`
 																WHERE `eventId` IN (\'' . implode(', ', $eventIdList) . '\')

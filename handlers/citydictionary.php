@@ -26,7 +26,7 @@ class CityDictionary {
 	 * Returns the city from given postalcode.
 	 */
 	public static function getCity(int $code): ?string {
-		$json = json_decode(file_get_contents(Settings::file_json_postalcodes));
+		$json = json_decode(file_get_contents(Settings::getValue("file_json_postalcodes")));
 
 		foreach ($json as $key => $data) {
 			if ($data->code == $code) {
@@ -41,7 +41,7 @@ class CityDictionary {
 	 * Return true if the specified postal code exists.
 	 */
 	public static function isValidPostalCode(int $code): bool {
-		$json = json_decode(file_get_contents(Settings::file_json_postalcodes));
+		$json = json_decode(file_get_contents(Settings::getValue("file_json_postalcodes")));
 
 		foreach ($json as $key => $data) {
 			if ($data->code == $code) {
@@ -56,7 +56,7 @@ class CityDictionary {
 	 * Returns the postalcode for given city.
 	 */
 	public static function getPostalCode(string $city): int {
-		$json = json_decode(file_get_contents(Settings::file_json_postalcodes));
+		$json = json_decode(file_get_contents(Settings::getValue("file_json_postalcodes")));
 
 		foreach ($json as $key => $data) {
 			if ($data->city == $city) {

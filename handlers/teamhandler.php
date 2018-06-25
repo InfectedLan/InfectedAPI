@@ -32,7 +32,7 @@ class TeamHandler {
 	 * Get the team by the internal id.
 	 */
 	public static function getTeam(int $id): ?Team {
-		$database = Database::getConnection(Settings::db_name_infected_crew);
+		$database = Database::getConnection(Settings::getValue("db_name_infected_crew"));
 
 		$result = $database->query('SELECT * FROM `' . DatabaseConstants::db_table_infected_crew_teams . '`
 																WHERE `id` = \'' . $database->real_escape_string($id) . '\';');
@@ -44,7 +44,7 @@ class TeamHandler {
 	 * Returns the team for the specified user.
 	 */
 	public static function getTeamByUser(User $user, Event $event = null): ?Team {
-		$database = Database::getConnection(Settings::db_name_infected_crew);
+		$database = Database::getConnection(Settings::getValue("db_name_infected_crew"));
 
 		if ($event != null && $event != EventHandler::getCurrentEvent()) {
 			// Fetch all teams for previous events. Ignoring the active field, because we want historical events too.
@@ -72,7 +72,7 @@ class TeamHandler {
 	 * Returns a list of all teams.
 	 */
 	public static function getTeams(Event $event = null): array {
-		$database = Database::getConnection(Settings::db_name_infected_crew);
+		$database = Database::getConnection(Settings::getValue("db_name_infected_crew"));
 
 		if ($event != null && $event != EventHandler::getCurrentEvent()) {
 			// Fetch all teams for previous events. Ignoring the active field, because we want historical events too.
@@ -101,7 +101,7 @@ class TeamHandler {
 	 * Returns a list of all teams in the specified group.
 	 */
 	public static function getTeamsByGroup(Group $group, Event $event = null): array {
-		$database = Database::getConnection(Settings::db_name_infected_crew);
+		$database = Database::getConnection(Settings::getValue("db_name_infected_crew"));
 
 		if ($event != null && $event != EventHandler::getCurrentEvent()) {
 			// Fetch all teams for previous events. Ignoring the active field, because we want historical events too.
@@ -131,7 +131,7 @@ class TeamHandler {
 	 * Create a new team
 	 */
 	public static function createTeam(Group $group, string $name, string $title, string $description): Team {
-		$database = Database::getConnection(Settings::db_name_infected_crew);
+		$database = Database::getConnection(Settings::getValue("db_name_infected_crew"));
 
 		$database->query('INSERT INTO `' . DatabaseConstants::db_table_infected_crew_teams . '` (`groupId`, `name`, `title`, `description`, `active`)
 										  VALUES (\'' . $group->getId() . '\',
@@ -153,7 +153,7 @@ class TeamHandler {
 	 * Update a team.
 	 */
 	public static function updateTeam(Team $team, Group $group, string $name, string $title, string $description, User $leaderUser = null) {
-		$database = Database::getConnection(Settings::db_name_infected_crew);
+		$database = Database::getConnection(Settings::getValue("db_name_infected_crew"));
 
 		$database->query('UPDATE `' . DatabaseConstants::db_table_infected_crew_teams . '`
 										  SET `groupId` = \'' . $group->getId() . '\',
@@ -169,7 +169,7 @@ class TeamHandler {
 	 * Remove a team.
 	 */
 	public static function removeTeam(Team $team) {
-		$database = Database::getConnection(Settings::db_name_infected_crew);
+		$database = Database::getConnection(Settings::getValue("db_name_infected_crew"));
 
 		$database->query('UPDATE `' . DatabaseConstants::db_table_infected_crew_teams . '`
 										  SET `active` = \'0\'
@@ -180,7 +180,7 @@ class TeamHandler {
 	 * Remove all teams linked to a specified group.
 	 */
 	public static function removeTeams(Group $group) {
-		$database = Database::getConnection(Settings::db_name_infected_crew);
+		$database = Database::getConnection(Settings::getValue("db_name_infected_crew"));
 
 		$database->query('UPDATE `' . DatabaseConstants::db_table_infected_crew_teams . '`
 										  SET `active` = \'0\'
@@ -191,7 +191,7 @@ class TeamHandler {
 	 * Is member of a team.
 	 */
 	public static function isTeamMember(User $user, Event $event = null): bool {
-		$database = Database::getConnection(Settings::db_name_infected_crew);
+		$database = Database::getConnection(Settings::getValue("db_name_infected_crew"));
 
 		if ($event != null && $event != EventHandler::getCurrentEvent()) {
 			$result = $database->query('SELECT * FROM `' . DatabaseConstants::db_table_infected_crew_memberof . '`
@@ -215,7 +215,7 @@ class TeamHandler {
 	 * Is member of a team.
 	 */
 	public static function isTeamMemberOf(User $user, Team $team, Event $event = null): bool {
-		$database = Database::getConnection(Settings::db_name_infected_crew);
+		$database = Database::getConnection(Settings::getValue("db_name_infected_crew"));
 
 		$result = $database->query('SELECT * FROM `' . DatabaseConstants::db_table_infected_crew_memberof . '`
 																WHERE `eventId` = \'' . ($event != null ? $event->getId() : EventHandler::getCurrentEvent()->getId()) . '\'
@@ -229,7 +229,7 @@ class TeamHandler {
 	 * Sets the users team.
 	 */
 	public static function addTeamMember(User $user, Team $team, Event $event = null) {
-		$database = Database::getConnection(Settings::db_name_infected_crew);
+		$database = Database::getConnection(Settings::getValue("db_name_infected_crew"));
 
 		$group = $team->getGroup();
 
@@ -256,7 +256,7 @@ class TeamHandler {
 	 * Removes a user from a team.
 	 */
 	public static function removeTeamMember(User $user, Team $team, Event $event = null) {
-		$database = Database::getConnection(Settings::db_name_infected_crew);
+		$database = Database::getConnection(Settings::getValue("db_name_infected_crew"));
 
 		$database->query('UPDATE `' . DatabaseConstants::db_table_infected_crew_memberof . '`
 										  SET `teamId` = \'0\'
@@ -269,10 +269,10 @@ class TeamHandler {
 	 * Returns an array of users that are members of this team in the given event.
 	 */
 	public static function getTeamMembers(Team $team, Event $event = null): array {
-		$database = Database::getConnection(Settings::db_name_infected);
+		$database = Database::getConnection(Settings::getValue("db_name_infected"));
 
 		$result = $database->query('SELECT `' . DatabaseConstants::db_table_infected_users . '`.* FROM `' . DatabaseConstants::db_table_infected_users . '`
-																INNER JOIN `' . Settings::db_name_infected_crew . '`.`' . DatabaseConstants::db_table_infected_crew_memberof . '`
+																INNER JOIN `' . Settings::getValue("db_name_infected_crew") . '`.`' . DatabaseConstants::db_table_infected_crew_memberof . '`
 																ON `' . DatabaseConstants::db_table_infected_users . '`.`id` = `userId`
 																WHERE `eventId` = \'' . ($event != null ? $event->getId() : EventHandler::getCurrentEvent()->getId()) . '\'
 																AND `teamId` = \'' . $team->getId() . '\'
@@ -291,7 +291,7 @@ class TeamHandler {
 	 * Removes all users from the specified team.
 	 */
 	public static function removeTeamMembers(Team $team, Event $event = null) {
-		$database = Database::getConnection(Settings::db_name_infected_crew);
+		$database = Database::getConnection(Settings::getValue("db_name_infected_crew"));
 
 		$database->query('UPDATE `' . DatabaseConstants::db_table_infected_crew_memberof . '`
 						 SET `teamId` = 0
@@ -303,7 +303,7 @@ class TeamHandler {
 	 * Return true if user has a leader for the given team.
 	 */
 	public static function hasTeamLeader(Team $team, Event $event = null): bool {
-		$database = Database::getConnection(Settings::db_name_infected_crew);
+		$database = Database::getConnection(Settings::getValue("db_name_infected_crew"));
 
 		$result = $database->query('SELECT * FROM `' . DatabaseConstants::db_table_infected_crew_memberof . '`
 								   WHERE `eventId` = ' . ($event != null ? $event->getId() : EventHandler::getCurrentEvent()->getId()) . '
@@ -317,7 +317,7 @@ class TeamHandler {
 	 * Return true if user is leader for a team.
 	 */
 	public static function isTeamLeader(User $user, Event $event = null): bool {
-		$database = Database::getConnection(Settings::db_name_infected_crew);
+		$database = Database::getConnection(Settings::getValue("db_name_infected_crew"));
 
 		$result = $database->query('SELECT `' . DatabaseConstants::db_table_infected_crew_memberof . '`.* FROM `' . DatabaseConstants::db_table_infected_crew_memberof . '`
 								   INNER JOIN `' . DatabaseConstants::db_table_infected_crew_teams . '` ON `teamId` = `' . DatabaseConstants::db_table_infected_crew_teams . '`.`id`
@@ -333,7 +333,7 @@ class TeamHandler {
 	 * Return true if user is leader for a team.
 	 */
 	public static function isTeamLeaderOf(User $user, Team $team, Event $event = null): bool {
-		$database = Database::getConnection(Settings::db_name_infected_crew);
+		$database = Database::getConnection(Settings::getValue("db_name_infected_crew"));
 
 		$result = $database->query('SELECT `' . DatabaseConstants::db_table_infected_crew_memberof . '`.* FROM `' . DatabaseConstants::db_table_infected_crew_memberof . '`
 								   WHERE `eventId` = ' . ($event != null ? $event->getId() : EventHandler::getCurrentEvent()->getId()) . '
@@ -348,10 +348,10 @@ class TeamHandler {
 	 * Return the team leader for a team.
 	 */
 	public static function getTeamLeader(Team $team, Event $event = null): ?User {
-		$database = Database::getConnection(Settings::db_name_infected);
+		$database = Database::getConnection(Settings::getValue("db_name_infected"));
 
 		$result = $database->query('SELECT * FROM `' . DatabaseConstants::db_table_infected_users . '`
-								   WHERE `id` = (SELECT `' . DatabaseConstants::db_table_infected_crew_memberof . '`.`userId` FROM `' . Settings::db_name_infected_crew . '`.`' . DatabaseConstants::db_table_infected_crew_memberof . '`
+								   WHERE `id` = (SELECT `' . DatabaseConstants::db_table_infected_crew_memberof . '`.`userId` FROM `' . Settings::getValue("db_name_infected_crew") . '`.`' . DatabaseConstants::db_table_infected_crew_memberof . '`
 												 WHERE `eventId` = ' . ($event != null ? $event->getId() : EventHandler::getCurrentEvent()->getId()) . '
 												 AND `groupId` = ' . $team->getGroup()->getId() . '
 												 AND `teamId` = ' . $team->getId() . '
@@ -369,7 +369,7 @@ class TeamHandler {
 			self::addTeamMember($user, $team);
 		}
 
-		$database = Database::getConnection(Settings::db_name_infected_crew);
+		$database = Database::getConnection(Settings::getValue("db_name_infected_crew"));
 
 		// Remove old leaders of the team, to avoid duplicates.
 		$database->query('UPDATE `' . DatabaseConstants::db_table_infected_crew_memberof . '`

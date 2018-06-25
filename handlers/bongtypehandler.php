@@ -29,7 +29,7 @@ class BongTypeHandler {
 	 * Returns the gate with the given id.
 	 */
 	public static function getBongType($id) {
-		$database = Database::getConnection(Settings::db_name_infected);
+		$database = Database::getConnection(Settings::getValue("db_name_infected"));
 
 		$result = $database->query('SELECT * FROM `'. DatabaseConstants::db_table_infected_bongTypes . '`
 																WHERE `id` = \'' . $database->real_escape_string($id) . '\';');
@@ -44,7 +44,7 @@ class BongTypeHandler {
 		if($event==null) {
 			$event = EventHandler::getCurrentEvent();
 		}
-		$database = Database::getConnection(Settings::db_name_infected);
+		$database = Database::getConnection(Settings::getValue("db_name_infected"));
 
 		$database->query('INSERT INTO `' . DatabaseConstants::db_table_infected_bongTypes . '` (`name`, `description`, `eventId`) VALUES (\'' . $database->real_escape_string($name) . '\', \'' . $database->real_escape_string($description) . '\', ' . $event->getId() . ');');
 
@@ -59,7 +59,7 @@ class BongTypeHandler {
 			$event = EventHandler::getCurrentEvent();
 		}
 
-		$database = Database::getConnection(Settings::db_name_infected);
+		$database = Database::getConnection(Settings::getValue("db_name_infected"));
 
 		$result = $database->query('SELECT * FROM `' . DatabaseConstants::db_table_infected_bongTypes . '` WHERE `eventId` = ' . $event->getId() . ';');
 

@@ -52,7 +52,7 @@
  *
  */
 require_once '../settings.php';
-set_include_path(get_include_path() . PATH_SEPARATOR . substr(Settings::api_path, 0, strlen(Settings::api_path)-1));
+set_include_path(get_include_path() . PATH_SEPARATOR . substr(Settings::getValue("api_path"), 0, strlen(Settings::getValue("api_path"))-1));
 echo "Set include path to " . get_include_path() . "\n";
 set_time_limit(0); //Make sure the script runs forever
 

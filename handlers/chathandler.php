@@ -32,7 +32,7 @@ class ChatHandler {
 	 * Get a chat by the internal id.
 	 */
 	public static function getChat(int $id): ?Chat {
-		$database = Database::getConnection(Settings::db_name_infected_compo);
+		$database = Database::getConnection(Settings::getValue("db_name_infected_compo"));
 
 		$result = $database->query('SELECT * FROM `' . DatabaseConstants::db_table_infected_compo_chats . '`
 																WHERE `id` = \'' . $database->real_escape_string($id) . '\';');
@@ -44,7 +44,7 @@ class ChatHandler {
 	 * Return all chats.
 	 */
 	public static function getChats(): array {
-		$database = Database::getConnection(Settings::db_name_infected_compo);
+		$database = Database::getConnection(Settings::getValue("db_name_infected_compo"));
 
 		$result = $database->query('SELECT * FROM `' . DatabaseConstants::db_table_infected_compo_chats . '`;');
 
@@ -61,7 +61,7 @@ class ChatHandler {
 	 * Creates a new chat and returns the object.
 	 */
 	public static function createChat(string $name, string $title): Chat {
-		$database = Database::getConnection(Settings::db_name_infected_compo);
+		$database = Database::getConnection(Settings::getValue("db_name_infected_compo"));
 
 		$database->query('INSERT INTO `' . DatabaseConstants::db_table_infected_compo_chats . '` (`name`, `title`)
 						  				VALUES (\'' . $database->real_escape_string($name) . '\',
@@ -74,7 +74,7 @@ class ChatHandler {
 	 * Remove a chat.
 	 */
 	public static function removeChat(Chat $chat) {
-		$database = Database::getConnection(Settings::db_name_infected_compo);
+		$database = Database::getConnection(Settings::getValue("db_name_infected_compo"));
 
 		$database->query('DELETE FROM `' . DatabaseConstants::db_table_infected_compo_chats . '`
 						  				WHERE `id` = \'' . $chat->getId() . '\';');
@@ -91,7 +91,7 @@ class ChatHandler {
 	 */
 	public static function isChatMember(Chat $chat, User $user): bool {
 	    return true; //Remove later
-		$database = Database::getConnection(Settings::db_name_infected_compo);
+		$database = Database::getConnection(Settings::getValue("db_name_infected_compo"));
 
 		$result = $database->query('SELECT `id` FROM `' . DatabaseConstants::db_table_infected_compo_memberofchat . '`
 																WHERE `userId` = \'' . $user->getId() . '\'
@@ -104,10 +104,10 @@ class ChatHandler {
 	 * Returns an array of all members in the specificed chat.
 	 */
 	public static function getChatMembers(Chat $chat): array {
-		$database = Database::getConnection(Settings::db_name_infected);
+		$database = Database::getConnection(Settings::getValue("db_name_infected"));
 
 		$result = $database->query('SELECT * FROM `' . DatabaseConstants::db_table_infected_users . '`
-																WHERE `id` = (SELECT `userId` FROM `' . Settings::db_name_infected_compo . '`.`' . DatabaseConstants::db_table_infected_compo_memberofchat . '`
+																WHERE `id` = (SELECT `userId` FROM `' . Settings::getValue("db_name_infected_compo") . '`.`' . DatabaseConstants::db_table_infected_compo_memberofchat . '`
 																							WHERE `chatId` = \'' . $chat->getId() . '\');');
 
 		$chatMemberList = [];
@@ -123,7 +123,7 @@ class ChatHandler {
 	 * Add the given user to the specified chat.
 	 */
 	public static function addChatMember(Chat $chat, User $user) {
-		$database = Database::getConnection(Settings::db_name_infected_compo);
+		$database = Database::getConnection(Settings::getValue("db_name_infected_compo"));
 
 		$database->query('INSERT INTO `' . DatabaseConstants::db_table_infected_compo_memberofchat . '` (`userId`, `chatId`)
 										  VALUES (\'' . $user->getId() . '\',
@@ -134,7 +134,7 @@ class ChatHandler {
 	 * Same as above, but with id's to save 2 queries
 	 */
 	public static function addChatMemberById(int $chatId, int $userId) {
-	    $database = Database::getConnection(Settings::db_name_infected_compo);
+	    $database = Database::getConnection(Settings::getValue("db_name_infected_compo"));
 
 	    $database->query('INSERT INTO `' . DatabaseConstants::db_table_infected_compo_memberofchat . '` (`userId`, `chatId`)
 										  VALUES (\'' . $database->real_escape_string($userId) . '\',
@@ -145,7 +145,7 @@ class ChatHandler {
 	 * Remove the given user from the specified chat.
 	 */
 	public static function removeChatMember(Chat $chat, User $user) {
-		$database = Database::getConnection(Settings::db_name_infected_compo);
+		$database = Database::getConnection(Settings::getValue("db_name_infected_compo"));
 
 		$database->query('DELETE FROM `' . DatabaseConstants::db_table_infected_compo_memberofchat . '`
 											WHERE `userId` = \'' . $user->getId() . '\'
@@ -156,7 +156,7 @@ class ChatHandler {
 	 * Add the given user to the specified chat.
 	 */
 	public static function addChatMembers(Chat $chat, array $userList) {
-		$database = Database::getConnection(Settings::db_name_infected_compo);
+		$database = Database::getConnection(Settings::getValue("db_name_infected_compo"));
 
 		foreach ($userList as $user) {
 			$database->query('INSERT INTO `' . DatabaseConstants::db_table_infected_compo_memberofchat . '` (`userId`, `chatId`)
@@ -169,7 +169,7 @@ class ChatHandler {
 	 * Remove members from the given chat.
 	 */
 	public static function removeChatMembers(Chat $chat) {
-		$database = Database::getConnection(Settings::db_name_infected_compo);
+		$database = Database::getConnection(Settings::getValue("db_name_infected_compo"));
 
 		$database->query('DELETE FROM `' . DatabaseConstants::db_table_infected_compo_memberofchat . '`
 											WHERE `chatId` = \'' . $chat->getId() . '\';');
@@ -179,7 +179,7 @@ class ChatHandler {
 	 * Return the chat message with the given id.
 	 */
 	public static function getChatMessage(int $id): ?ChatMessage {
-		$database = Database::getConnection(Settings::db_name_infected_compo);
+		$database = Database::getConnection(Settings::getValue("db_name_infected_compo"));
 
 		$result = $database->query('SELECT * FROM `' . DatabaseConstants::db_table_infected_compo_chatmessages . '`
 																WHERE `id` = \'' . $database->real_escape_string($id) . '\';');
@@ -191,7 +191,7 @@ class ChatHandler {
 	 * Return the chat message with the given id.
 	 */
 	public static function getChatMessages(): array {
-		$database = Database::getConnection(Settings::db_name_infected_compo);
+		$database = Database::getConnection(Settings::getValue("db_name_infected_compo"));
 
 		$result = $database->query('SELECT * FROM `' . DatabaseConstants::db_table_infected_compo_chatmessages . '`;');
 
@@ -208,7 +208,7 @@ class ChatHandler {
 	 * Returns the last chat messages for the given chat.
 	 */
 	public static function getLastChatMessage(Chat $chat): ?ChatMessage {
-		$database = Database::getConnection(Settings::db_name_infected_compo);
+		$database = Database::getConnection(Settings::getValue("db_name_infected_compo"));
 
 		$result = $database->query('SELECT * FROM `' . DatabaseConstants::db_table_infected_compo_chatmessages . '`
 																WHERE `chatId` = \'' . $chat->getId() . '\'
@@ -222,7 +222,7 @@ class ChatHandler {
 	 * Returns an array of the last given number of chat messages for given chat.
 	 */
 	public static function getLastChatMessages(Chat $chat, int $count): array {
-		$database = Database::getConnection(Settings::db_name_infected_compo);
+		$database = Database::getConnection(Settings::getValue("db_name_infected_compo"));
 
 		$result = $database->query('SELECT * FROM `' . DatabaseConstants::db_table_infected_compo_chatmessages . '`
 																WHERE `chatId` = \'' . $chat->getId() . '\'
@@ -242,7 +242,7 @@ class ChatHandler {
 	 * Remove chat messages for given chat.
 	 */
 	public static function removeChatMessages(Chat $chat) {
-		$database = Database::getConnection(Settings::db_name_infected_compo);
+		$database = Database::getConnection(Settings::getValue("db_name_infected_compo"));
 
 		$database->query('DELETE FROM `' . DatabaseConstants::db_table_infected_compo_chatmessages . '`
 						  				WHERE `chatId` = \'' . $chat->getId() . '\';');
@@ -253,7 +253,7 @@ class ChatHandler {
 	 * Send a massage to this chat from the given user.
 	 */
 	public static function sendChatMessage(Chat $chat, User $user, string $message) {
-		$database = Database::getConnection(Settings::db_name_infected_compo);
+		$database = Database::getConnection(Settings::getValue("db_name_infected_compo"));
 
 		$database->query('INSERT INTO `' . DatabaseConstants::db_table_infected_compo_chatmessages . '` (`userId`, `chatId`, `time`, `message`)
 										  VALUES (\'' . $user->getId() . '\',

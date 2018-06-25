@@ -29,7 +29,7 @@ require_once 'objects/nfclogentry.php';
 class RoomHandler {
 
 		public static function getRoom(int $id): Room {
-				$database = Database::getConnection(Settings::db_name_infected_tech);
+				$database = Database::getConnection(Settings::getValue("db_name_infected_tech"));
 
 				$result = $database->query('SELECT * FROM `' . DatabaseConstants::db_table_infected_tech_rooms . '` WHERE `id` = \'' . $database->real_escape_string($id) . '\';');
 
@@ -37,7 +37,7 @@ class RoomHandler {
 		}
 
 		public static function createRoom(String $name, bool $timeLimited): Room {
-				$database = Database::getConnection(Settings::db_name_infected_tech);
+				$database = Database::getConnection(Settings::getValue("db_name_infected_tech"));
 
 				$database->query('INSERT INTO `' . DatabaseConstants::db_table_infected_tech_rooms . '` (`name`, `timeLimited`) VALUES (\'' . $database->real_escape_string($name) . '\', ' . ($timeLimited ? 1 : 0) . ');');
 
@@ -45,7 +45,7 @@ class RoomHandler {
 		}
 
 		public static function getRooms() : array {
-				$database = Database::getConnection(Settings::db_name_infected_tech);
+				$database = Database::getConnection(Settings::getValue("db_name_infected_tech"));
 
 				$result = $database->query('SELECT * FROM `' . DatabaseConstants::db_table_infected_tech_rooms . '`;');
 
@@ -59,14 +59,14 @@ class RoomHandler {
 		}
 
 		public static function getLogEntriesInRoom(Room $room) : array {
-				$database = Database::getConnection(Settings::db_name_infected_tech);
+				$database = Database::getConnection(Settings::getValue("db_name_infected_tech"));
 
 				/*$query = 'SELECT `users`.* FROM `users`
-WHERE `users`.`id` IN (SELECT `userId` FROM `' . Settings::db_name_infected_tech . '`.`' . DatabaseConstants::db_table_infected_tech_nfccards . '`
-											 LEFT JOIN (SELECT * FROM `' . Settings::db_name_infected_tech . '`.`' . DatabaseConstants::db_table_infected_tech_nfclog . '`
-																	WHERE `' . DatabaseConstants::db_table_infected_tech_nfclog . '`.`id` IN (SELECT MAX(`' . DatabaseConstants::db_table_infected_tech_nfclog . '`.`id`) FROM `' . Settings::db_name_infected_tech . '`.`' . DatabaseConstants::db_table_infected_tech_nfclog . '`
+WHERE `users`.`id` IN (SELECT `userId` FROM `' . Settings::getValue("db_name_infected_tech") . '`.`' . DatabaseConstants::db_table_infected_tech_nfccards . '`
+											 LEFT JOIN (SELECT * FROM `' . Settings::getValue("db_name_infected_tech") . '`.`' . DatabaseConstants::db_table_infected_tech_nfclog . '`
+																	WHERE `' . DatabaseConstants::db_table_infected_tech_nfclog . '`.`id` IN (SELECT MAX(`' . DatabaseConstants::db_table_infected_tech_nfclog . '`.`id`) FROM `' . Settings::getValue("db_name_infected_tech") . '`.`' . DatabaseConstants::db_table_infected_tech_nfclog . '`
 																													GROUP BY `' . DatabaseConstants::db_table_infected_tech_nfclog . '`.`cardId`)) AS `' . DatabaseConstants::db_table_infected_tech_nfclog . '` ON `' . DatabaseConstants::db_table_infected_tech_nfccards . '`.`id` = `' . DatabaseConstants::db_table_infected_tech_nfclog . '`.`cardId`
-											 LEFT JOIN `' . Settings::db_name_infected_tech . '`.`' . DatabaseConstants::db_table_infected_tech_nfcunits . '` ON `' . DatabaseConstants::db_table_infected_tech_nfclog . '`.`unitId` = `' . DatabaseConstants::db_table_infected_tech_nfcunits . '`.`id`
+											 LEFT JOIN `' . Settings::getValue("db_name_infected_tech") . '`.`' . DatabaseConstants::db_table_infected_tech_nfcunits . '` ON `' . DatabaseConstants::db_table_infected_tech_nfclog . '`.`unitId` = `' . DatabaseConstants::db_table_infected_tech_nfcunits . '`.`id`
 											 WHERE IF(`' . DatabaseConstants::db_table_infected_tech_nfclog . '`.`legalPass`, `toRoom`, `fromRoom`) = ' . $room->getId() . '
 											 ORDER BY `timestamp` DESC)
 GROUP BY `users`.`id`'; //Thanks to halvors for writing this really ugly mudda query for me

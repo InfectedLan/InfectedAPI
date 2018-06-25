@@ -30,7 +30,7 @@ class UserPermissionHandler {
 	 * Returns true if user has the given permission, otherwise false.
 	 */
 	public static function hasUserPermission(User $user, Permission $permission, Event $event = null): bool {
-		$database = Database::getConnection(Settings::db_name_infected);
+		$database = Database::getConnection(Settings::getValue("db_name_infected"));
 
 		$result = $database->query('SELECT * FROM `' . DatabaseConstants::db_table_infected_userpermissions . '`
                                    WHERE (`eventId` = 0 OR `eventId` = ' . ($event != null ? $event->getId() : EventHandler::getCurrentEvent()->getId()) . ')
@@ -45,12 +45,12 @@ class UserPermissionHandler {
 	 * Returns true if user has the given permission value and event, otherwise false.
 	 */
 	public static function hasUserPermissionByValue(User $user, string $value, Event $event = null): bool {
-		$database = Database::getConnection(Settings::db_name_infected);
+		$database = Database::getConnection(Settings::getValue("db_name_infected"));
 
 		$result = $database->query('SELECT * FROM `' . DatabaseConstants::db_table_infected_userpermissions . '`
                                    WHERE (`eventId` = 0 OR `eventId` = ' . ($event != null ? $event->getId() : EventHandler::getCurrentEvent()->getId()) . ')
                                    AND `userId` = ' . $user->getId() . '
-                                   AND `permissionId` = (SELECT `id` FROM `' . Settings::db_table_infected_permissions . '`
+                                   AND `permissionId` = (SELECT `id` FROM `' . Settings::getValue("db_table_infected_permissions") . '`
                                                          WHERE `value` = ' . $database->real_escape_string($value) . '
                                                          LIMIT 1)
                                    GROUP BY `permissionId`;');
@@ -62,7 +62,7 @@ class UserPermissionHandler {
 	 * Returns true if the specified user has any permissions.
 	 */
 	public static function hasUserPermissions(User $user, Event $event = null): bool {
-		$database = Database::getConnection(Settings::db_name_infected);
+		$database = Database::getConnection(Settings::getValue("db_name_infected"));
 
 		$result = $database->query('SELECT * FROM `' . DatabaseConstants::db_table_infected_userpermissions . '`
                                    WHERE (`eventId` = 0 OR `eventId` = ' . ($event != null ? $event->getId() : EventHandler::getCurrentEvent()->getId()) . ')
@@ -76,7 +76,7 @@ class UserPermissionHandler {
 	 * Returns a list of permissions for the specified user and event.
 	 */
 	public static function getUserPermissions(User $user, Event $event = null): array {
-		$database = Database::getConnection(Settings::db_name_infected);
+		$database = Database::getConnection(Settings::getValue("db_name_infected"));
 
 		$result = $database->query('SELECT `permissionId` FROM `' . DatabaseConstants::db_table_infected_userpermissions . '`
 								   WHERE (`eventId` = 0 OR `eventId` = ' . ($event != null ? $event->getId() : EventHandler::getCurrentEvent()->getId()) . ')
@@ -96,7 +96,7 @@ class UserPermissionHandler {
 	 */
 	public static function createUserPermission(User $user, Permission $permission, Event $event = null) {
 		if (!self::hasUserPermission($user, $permission)) {
-			$database = Database::getConnection(Settings::db_name_infected);
+			$database = Database::getConnection(Settings::getValue("db_name_infected"));
 
 			$database->query('INSERT INTO `' . DatabaseConstants::db_table_infected_userpermissions . '` (`eventId`, `userId`, `permissionId`)
                              VALUES (' . ($event != null ? $event->getId() : EventHandler::getCurrentEvent()->getId()) . ',
@@ -109,7 +109,7 @@ class UserPermissionHandler {
 	 * Remove a user permission by event.
 	 */
 	public static function removeUserPermission(User $user, Permission $permission, Event $event = null) {
-		$database = Database::getConnection(Settings::db_name_infected);
+		$database = Database::getConnection(Settings::getValue("db_name_infected"));
 
 		$database->query('DELETE FROM `' . DatabaseConstants::db_table_infected_userpermissions . '`
                          WHERE `eventId` = ' . ($event != null ? $event->getId() : EventHandler::getCurrentEvent()->getId()) . '
@@ -121,7 +121,7 @@ class UserPermissionHandler {
 	 * Removes all permissions for the specified user.
 	 */
 	public static function removeUserPermissions(User $user, Event $event = null) {
-		$database = Database::getConnection(Settings::db_name_infected);
+		$database = Database::getConnection(Settings::getValue("db_name_infected"));
 
 		$database->query('DELETE FROM `' . DatabaseConstants::db_table_infected_userpermissions . '`
                          WHERE `eventId` = ' . ($event != null ? $event->getId() : EventHandler::getCurrentEvent()->getId()) . '

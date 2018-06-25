@@ -28,7 +28,7 @@ class PasswordResetCodeHandler {
 	 * Get the password reset code by the internal id.
 	 */
 	public static function getPasswordResetCode(int $id): ?string {
-		$database = Database::getConnection(Settings::db_name_infected);
+		$database = Database::getConnection(Settings::getValue("db_name_infected"));
 
 		$result = $database->query('SELECT `code` FROM `' . DatabaseConstants::db_table_infected_passwordresetcodes . '`
 								  WHERE `id` = ' . $database->real_escape_string($id) . ';');
@@ -42,7 +42,7 @@ class PasswordResetCodeHandler {
 	 * Returns a list of all password reset codes.
 	 */
 	public static function getPasswordResetCodes(): array {
-		$database = Database::getConnection(Settings::db_name_infected);
+		$database = Database::getConnection(Settings::getValue("db_name_infected"));
 
 		$result = $database->query('SELECT `code` FROM `' . DatabaseConstants::db_table_infected_passwordresetcodes . '`;');
 
@@ -59,7 +59,7 @@ class PasswordResetCodeHandler {
 	 * Returns true if we've got the specified code.
 	 */
 	public static function hasPasswordResetCode(string $code): bool {
-		$database = Database::getConnection(Settings::db_name_infected);
+		$database = Database::getConnection(Settings::getValue("db_name_infected"));
 
 		$result = $database->query('SELECT * FROM `' . DatabaseConstants::db_table_infected_passwordresetcodes . '`
 								   WHERE `code` = \'' . $database->real_escape_string($code) . '\';');
@@ -71,7 +71,7 @@ class PasswordResetCodeHandler {
 	 * Returns true if we've got a code for the specified user.
 	 */
 	public static function hasPasswordResetCodeByUser(User $user): bool {
-		$database = Database::getConnection(Settings::db_name_infected);
+		$database = Database::getConnection(Settings::getValue("db_name_infected"));
 
 		$result = $database->query('SELECT * FROM `' . DatabaseConstants::db_table_infected_passwordresetcodes . '`
 								   WHERE `userId` = ' . $user->getId() . ';');
@@ -85,7 +85,7 @@ class PasswordResetCodeHandler {
 	public static function createPasswordResetCode(User $user): ?string {
 		$code = bin2hex(openssl_random_pseudo_bytes(16));
 
-		$database = Database::getConnection(Settings::db_name_infected);
+		$database = Database::getConnection(Settings::getValue("db_name_infected"));
 
 		if (!self::hasPasswordResetCodeByUser($user)) {
 			$database->query('INSERT INTO `' . DatabaseConstants::db_table_infected_passwordresetcodes . '` (`userId`, `code`)
@@ -104,7 +104,7 @@ class PasswordResetCodeHandler {
 	 * Remove the specified password reset code.
 	 */
 	public static function removePasswordResetCode(string $code) {
-		$database = Database::getConnection(Settings::db_name_infected);
+		$database = Database::getConnection(Settings::getValue("db_name_infected"));
 
 		$database->query('DELETE FROM `' . DatabaseConstants::db_table_infected_passwordresetcodes . '`
 						 WHERE `code` = \'' . $database->real_escape_string($code) . '\';');
@@ -114,7 +114,7 @@ class PasswordResetCodeHandler {
 	 * Remove the password reset code for the specified user.
 	 */
 	public static function removePasswordResetCodeByUser(User $user) {
-		$database = Database::getConnection(Settings::db_name_infected);
+		$database = Database::getConnection(Settings::getValue("db_name_infected"));
 
 		$database->query('DELETE FROM `' . DatabaseConstants::db_table_infected_passwordresetcodes . '`
 						 WHERE `userId` = ' . $user->getId() . ';');
@@ -124,7 +124,7 @@ class PasswordResetCodeHandler {
 	 * Returns the user with the specified password reset code.
 	 */
 	public static function getUserFromPasswordResetCode($code): ?User {
-		$database = Database::getConnection(Settings::db_name_infected);
+		$database = Database::getConnection(Settings::getValue("db_name_infected"));
 
 		$result = $database->query('SELECT * FROM `' . DatabaseConstants::db_table_infected_users . '`
 								   WHERE `id` = (SELECT `userId` FROM `' . DatabaseConstants::db_table_infected_passwordresetcodes . '`

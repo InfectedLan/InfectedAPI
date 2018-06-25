@@ -112,7 +112,7 @@ class Event extends DatabaseObject {
 	 * Returns the title for this event.
 	 */
 	public function getTitle(): string {
-		return Settings::name . ' ' . $this->getSeason() . ' ' . date('Y', $this->getStartTime());
+		return Settings::getValue("name") . ' ' . $this->getSeason() . ' ' . date('Y', $this->getStartTime());
 	}
 
 	/*

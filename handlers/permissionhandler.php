@@ -27,7 +27,7 @@ class PermissionHandler {
 	 * Get the permission by the internal id.
 	 */
 	public static function getPermission(int $id): ?Permission {
-		$json = json_decode(file_get_contents(Settings::file_json_permissions));
+		$json = json_decode(file_get_contents(Settings::getValue("file_json_permissions")));
 
 		foreach ($json as $key => $data) {
 			if ($data->id = $id) {
@@ -42,7 +42,7 @@ class PermissionHandler {
 	 * Returns the permission with the given value.
 	 */
 	public static function getPermissionByValue(string $value): ?Permission {
-		$json = json_decode(file_get_contents(Settings::file_json_permissions));
+		$json = json_decode(file_get_contents(Settings::getValue("file_json_permissions")));
 
 		foreach ($json as $key => $data) {
 			if ($data->value == $value) {
@@ -57,7 +57,7 @@ class PermissionHandler {
 	 * Returns a list of all permissions.
 	 */
 	public static function getPermissions(): array {
-		$json = json_decode(file_get_contents(Settings::file_json_permissions));
+		$json = json_decode(file_get_contents(Settings::getValue("file_json_permissions")));
 		$permissionList = [];
 
 		foreach ($json as $key => $data) {
@@ -71,7 +71,7 @@ class PermissionHandler {
 	 * Returns a list of all permissions.
 	 */
 	public static function getPermissionsByValues(array $values): array {
-		$json = json_decode(file_get_contents(Settings::file_json_permissions));
+		$json = json_decode(file_get_contents(Settings::getValue("file_json_permissions")));
 		$permissionList = [];
 
 		foreach ($json as $key => $data) {

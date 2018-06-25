@@ -595,7 +595,7 @@ class User extends DatabaseObject {
 	}
 
 	public function isEligibleForPreSeating(): bool {
-		return count(TicketHandler::getTicketsSeatableByUser($this)) >= Settings::prioritySeatingReq;
+		return count(TicketHandler::getTicketsSeatableByUser($this)) >= Settings::getValue("prioritySeatingReq");
 	}
 
 	/*

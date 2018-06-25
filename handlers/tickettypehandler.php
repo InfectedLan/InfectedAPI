@@ -28,7 +28,7 @@ class TicketTypeHandler {
 	 * Get a ticket type by the internal id.
 	 */
 	public static function getTicketType(int $id): ?TicketType {
-		$database = Database::getConnection(Settings::db_name_infected_tickets);
+		$database = Database::getConnection(Settings::getValue("db_name_infected_tickets"));
 
 		$result = $database->query('SELECT * FROM `' . DatabaseConstants::db_table_infected_tickets_tickettypes . '`
 																WHERE `id` = \'' . $database->real_escape_string($id) . '\';');
@@ -40,7 +40,7 @@ class TicketTypeHandler {
 	 * Get a list of all ticket types.
 	 */
 	public static function getTicketTypes(): array {
-		$database = Database::getConnection(Settings::db_name_infected_tickets);
+		$database = Database::getConnection(Settings::getValue("db_name_infected_tickets"));
 
 		$result = $database->query('SELECT * FROM `' . DatabaseConstants::db_table_infected_tickets_tickettypes . '`;');
 

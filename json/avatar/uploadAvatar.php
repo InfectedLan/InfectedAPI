@@ -52,7 +52,7 @@ try {
             $image = imagecreatefromjpeg($_FILES['file']['tmp_name']);
           }
 
-          if (imagesx($image) >= Settings::avatar_minimum_width && imagesy($image) >= Settings::avatar_minimum_height) {
+          if (imagesx($image) >= Settings::getValue("avatar_minimum_width") && imagesy($image) >= Settings::getValue("avatar_minimum_height")) {
             $name = bin2hex(openssl_random_pseudo_bytes(16)) . $user->getUsername();
             $path = AvatarHandler::createAvatar($name . '.' . $extension, $user);
             move_uploaded_file($_FILES['file']['tmp_name'], $path);
@@ -62,7 +62,7 @@ try {
                                                                                                         'extension' => $extension]);
             $result = true;
           } else {
-            $message = Localization::getLocale('the_image_is_too_small_it_must_be_at_least_value_pixels', Settings::avatar_minimum_width . ' x ' . Settings::avatar_minimum_height);
+            $message = Localization::getLocale('the_image_is_too_small_it_must_be_at_least_value_pixels', Settings::getValue("avatar_minimum_width") . ' x ' . Settings::getValue("avatar_minimum_height"));
           }
         } else {
           $error = $_FILES['file']['error'];

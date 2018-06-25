@@ -39,13 +39,13 @@ class CardGenerator {
     	imagefill($image, 0, 0, $white);
 
         //Fetch and blit infected logo, after negating it
-        $logo = imagecreatefromjpeg(Settings::api_path . "/content/static/logo_infected_600x211.jpg");
+        $logo = imagecreatefromjpeg(Settings::getValue("api_path") . "/content/static/logo_infected_600x211.jpg");
 
         self::blitImage($image, $logo, 0.2, 0.050, 0.6);
 
         //Fetch and blit avatar
         $avatar = $user->getAvatar();
-        $avatarImage = imagecreatefromjpeg(Settings::api_path . $avatar->getHd());
+        $avatarImage = imagecreatefromjpeg(Settings::getValue("api_path") . $avatar->getHd());
 
         self::blitImage($image, $avatarImage, 0.1, 0.15+0.050, 0.8);
 
@@ -88,7 +88,7 @@ class CardGenerator {
 
         //Draw QR code
 
-        $qrcodepath =  Settings::api_path . "/content/qrcache/" . QR::getCode('infected-user:' . $user->getId());
+        $qrcodepath =  Settings::getValue("api_path") . "/content/qrcache/" . QR::getCode('infected-user:' . $user->getId());
 
         $qrImage = imagecreatefrompng($qrcodepath);
         self::blitImage($image, $qrImage, 0.75, 0.75, 0.20, 0.15, 0.15, 0.7, 0.7);

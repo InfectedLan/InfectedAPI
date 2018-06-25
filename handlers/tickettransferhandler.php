@@ -32,7 +32,7 @@ class TicketTransferHandler {
 	 * Get a ticket transer by the ticket
 	 */
 	public static function getTransferFromTicket(Ticket $ticket): ?TicketTransfer {
-		$database = Database::getConnection(Settings::db_name_infected_tickets);
+		$database = Database::getConnection(Settings::getValue("db_name_infected_tickets"));
 
 		$result = $database->query('SELECT * FROM `' . DatabaseConstants::db_table_infected_tickets_tickettransfers . '`
 																WHERE `ticketId` = \'' . $ticket->getId() . '\'
@@ -46,7 +46,7 @@ class TicketTransferHandler {
 	 * Get a ticket transer by the internal id.
 	 */
 	public static function getTicketTransfer(int $id): ?TicketTransfer {
-		$database = Database::getConnection(Settings::db_name_infected_tickets);
+		$database = Database::getConnection(Settings::getValue("db_name_infected_tickets"));
 
 		$result = $database->query('SELECT * FROM `' . DatabaseConstants::db_table_infected_tickets_tickettransfers . '`
 																WHERE `id` = \'' . $id . '\'
@@ -60,9 +60,9 @@ class TicketTransferHandler {
 	 * Returns list of transfers that are eligible for reverting.
 	 */
 	public static function getRevertableTransfers(User $user): array {
- 		$wantedTimeLimit = time() - Settings::ticketTransferTime;
+ 		$wantedTimeLimit = time() - Settings::getValue("ticketTransferTime");
 
-		$database = Database::getConnection(Settings::db_name_infected_tickets);
+		$database = Database::getConnection(Settings::getValue("db_name_infected_tickets"));
 
 		$result = $database->query('SELECT * FROM `' . DatabaseConstants::db_table_infected_tickets_tickettransfers . '`
 																WHERE `fromId` = \'' . $user->getId() . '\'
@@ -82,7 +82,7 @@ class TicketTransferHandler {
 	 * Create a new ticket transfer.
 	 */
 	public static function createTransfer(Ticket $ticket, User $user, bool $revertable): TicketTransfer {
-		$database = Database::getConnection(Settings::db_name_infected_tickets);
+		$database = Database::getConnection(Settings::getValue("db_name_infected_tickets"));
 
 		$database->query('INSERT INTO `' . DatabaseConstants::db_table_infected_tickets_tickettransfers . '` (`ticketId`, `fromId`, `toId`, `datetime`, `revertable`)
 										  VALUES (\'' . $ticket->getId() . '\',
@@ -98,7 +98,7 @@ class TicketTransferHandler {
 	 * Freeze a specific ticketransfer.
 	 */
 	public static function freezeTransfer(TicketTransfer $ticketTransfer) {
-		$database = Database::getConnection(Settings::db_name_infected_tickets);
+		$database = Database::getConnection(Settings::getValue("db_name_infected_tickets"));
 
 		$result = $database->query('UPDATE `' . DatabaseConstants::db_table_infected_tickets_tickettransfers .  '`
 																SET `revertable` = \'0\'
@@ -142,7 +142,7 @@ class TicketTransferHandler {
 	 */
 	public static function revertTransfer(Ticket $ticket, User $user) {
 		$ticketTransfer = self::getTransferFromTicket($ticket);
-		$timeLimit = Settings::ticketTransferTime;
+		$timeLimit = Settings::getValue("ticketTransferTime");
 
 		// Check that the ticket is for current event, we don't allow reverting transfers for old tickets.
 		if ($ticket->getEvent()->equals(EventHandler::getCurrentEvent())) {
