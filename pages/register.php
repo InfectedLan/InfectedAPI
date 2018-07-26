@@ -112,6 +112,10 @@ if (!Session::isAuthenticated()) {
 				echo '<td><i>(' . Localization::getLocale('required_if_you_are_under_the_age_of_value', 18) . ')</i></td>';
 			echo '</tr>';
 			echo '<tr>';
+				echo '<td>Jeg godtar <a href="index.php?page=tos">Vilkår for bruk</a></td>';
+				echo '<td><input type="checkbox" id="tos"></td>';
+			echo '</tr>';
+			echo '<tr>';
 				echo '<td><input type="submit" value="' . Localization::getLocale('sign_up') . '"></td>';
 			echo '</tr>';
 		echo '</table>';

@@ -20,7 +20,11 @@
 $(document).ready(function() {
 	$('.register').on('submit', function(event) {
 		event.preventDefault();
-		register(this);
+		if($("#tos").checked()) {
+            register(this);
+        } else {
+			alert("Du må akseptere vilkår for bruk for å kunne registrere.");
+		}
 	});
 });
 
